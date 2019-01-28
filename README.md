@@ -4,7 +4,7 @@ OX Talk is a mail based chat app. This app provides the user interface for an IM
 
 ## Relevant information
 - [Documentation](https://confluence-public.open-xchange.com/display/COIPublic/OX+Talk+Mobile+App)
-- The IMAP / SMTP interactions are managed by the [delta_chat_core](https://gitlab.open-xchange.com/mobile/talk/tree/develop/delta_chat_core) plugin
+- The IMAP / SMTP interactions are managed by the [delta_chat_core plugin](https://github.com/open-xchange/flutter-deltachat-core)
 
 ## Requirements
 - As Flutter is still under development the newest version of Flutter and the Flutter plugin is required (at least until 1.0 is reached)
