@@ -1,4 +1,4 @@
-# ox_talk
+# OX Talk
 
 OX Talk is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
 
