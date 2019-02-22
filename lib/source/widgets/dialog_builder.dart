@@ -40,37 +40,43 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:flutter/material.dart';
 
-class ChatListRepository extends Repository<ChatList> {
-
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
-
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
+class DialogBuilder {
+  static showConfirmationDialog(
+      {@required BuildContext context,
+      @required String title,
+      @required String content,
+      @required String positiveButton,
+      @required Function positiveAction,
+      String negativeButton,
+      Function negativeAction}) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: new Text(content),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : "Cancel"),
+              onPressed: () {
+                if (negativeAction != null) {
+                  negativeAction();
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text(positiveButton),
+              onPressed: () {
+                positiveAction();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
-
-  @override
-  error(error) {
-    super.error(error);
-  }
-
-
 }

@@ -41,11 +41,12 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/source/form/validatable_text_form_field.dart';
+import 'package:ox_talk/source/widgets/validatable_text_form_field.dart';
+import 'package:ox_talk/source/l10n/localizations.dart';
 import 'package:ox_talk/source/login/login_bloc.dart';
 import 'package:ox_talk/source/login/login_events.dart';
 import 'package:ox_talk/source/login/login_state.dart';
-import 'package:ox_talk/source/ui/progress_handler.dart';
+import 'package:ox_talk/source/widgets/progress_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Login extends StatefulWidget {
@@ -61,18 +62,33 @@ class _LoginState extends State<Login> {
   final LoginBloc _loginBloc = LoginBloc();
   final _simpleLoginKey = GlobalKey<FormState>();
   final _advancedLoginKey = GlobalKey<FormState>();
-  final emailField =
-      ValidatableTextFormField("Email address", "Enter your email address", textFormType: TextFormType.email, inputType: TextInputType.emailAddress);
-  final passwordField = ValidatableTextFormField("Password", "Enter your password", textFormType: TextFormType.password);
-  final imapLoginNameField = ValidatableTextFormField("IMAP login-name", "");
-  final imapServerField = ValidatableTextFormField("IMAP server", "");
-  final imapPortField = ValidatableTextFormField("IMAP port", "", textFormType: TextFormType.port, inputType: TextInputType.numberWithOptions());
-  final smtpLoginNameField = ValidatableTextFormField("SMTP login-name", "");
-  final smtpPasswordField = ValidatableTextFormField("SMTP password", "", textFormType: TextFormType.password, needValidation: false);
-  final smtpServerField = ValidatableTextFormField("SMTP server", "");
-  final smtpPortField = ValidatableTextFormField("SMTP port", "", textFormType: TextFormType.port, inputType: TextInputType.numberWithOptions());
+  ValidatableTextFormField emailField = ValidatableTextFormField(
+        (context) => AppLocalizations.of(context).emailAddress,
+    hintText: (context) => AppLocalizations.of(context).loginHintEmail,
+    textFormType: TextFormType.email,
+    inputType: TextInputType.emailAddress,
+  );
+  ValidatableTextFormField passwordField = ValidatableTextFormField(
+  (context) => AppLocalizations.of(context).password,
+  hintText: (context) => AppLocalizations.of(context).loginHintPassword,
+  textFormType: TextFormType.password,
+  );
+  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
+  ValidatableTextFormField imapServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapServer);
+  ValidatableTextFormField imapPortField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapPort);
+  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
+  ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
+  (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
+  textFormType: TextFormType.password,
+  needValidation: false,
+  );
+  ValidatableTextFormField smtpServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpServer);
+  ValidatableTextFormField smtpPortField = ValidatableTextFormField(
+  (context) => AppLocalizations.of(context).loginLabelSmtpPort,
+  textFormType: TextFormType.port,
+  inputType: TextInputType.numberWithOptions(),
+  );
 
-  List<String> _securityOptions = List();
   String _selectedImapSecurity;
   String _selectedSmtpSecurity;
   bool _showAdvanced = false;
@@ -82,9 +98,6 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    _securityOptions.addAll(["Automatic", "SSL/TLS", "StartTLS", "Off"]);
-    _selectedImapSecurity = _securityOptions.elementAt(0);
-    _selectedSmtpSecurity = _securityOptions.elementAt(0);
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
     loginObservable.listen((event) => handleLoginStateChange(event));
   }
@@ -144,7 +157,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Login to COI"),
+          title: Text(AppLocalizations.of(context).loginTitle),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: _loginPressed)],
         ),
         body: createBuilder());
@@ -155,13 +168,15 @@ class _LoginState extends State<Login> {
       child: Column(
         children: <Widget>[
           Container(
-              padding: const EdgeInsets.all(12.0),
-              color: Colors.blueGrey,
-              child: Text(
-                  "For known email providers additional settings are setup automatically. Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.",
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white))),
+            padding: const EdgeInsets.all(12.0),
+            color: Colors.blueGrey,
+            child: Text(
+              AppLocalizations.of(context).loginInformation,
+              softWrap: true,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
           Container(
               padding: const EdgeInsets.only(
                 left: 20.0,
@@ -181,7 +196,7 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Advanced",
+                  AppLocalizations.of(context).advanced,
                   style: TextStyle(fontSize: 16.0),
                 ),
                 _showAdvanced ? Icon(Icons.arrow_drop_up) : Icon(Icons.arrow_drop_down)
@@ -202,35 +217,31 @@ class _LoginState extends State<Login> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text("Inbox"),
+              Text(AppLocalizations.of(context).inbox),
               imapLoginNameField,
               imapServerField,
               imapPortField,
               Padding(padding: EdgeInsets.only(top: 12.0)),
-              Text("IMAP Security"),
+              Text(AppLocalizations.of(context).loginLabelImapSecurity),
               DropdownButton(
                   value: _selectedImapSecurity,
-                  items: _securityOptions.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(value: value, child: Text(value));
-                  }).toList(),
+                  items: getSecurityOptions(),
                   onChanged: (String newValue) {
                     setState(() {
                       _selectedImapSecurity = newValue;
                     });
                   }),
               Padding(padding: EdgeInsets.only(top: 12.0)),
-              Text("Outbox"),
+              Text(AppLocalizations.of(context).outbox),
               smtpLoginNameField,
               smtpPasswordField,
               smtpServerField,
               smtpPortField,
               Padding(padding: EdgeInsets.only(top: 12.0)),
-              Text("SMTP Security"),
+              Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
               DropdownButton(
                   value: _selectedSmtpSecurity,
-                  items: _securityOptions.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(value: value, child: Text(value));
-                  }).toList(),
+                  items: getSecurityOptions(),
                   onChanged: (String newValue) {
                     setState(() {
                       _selectedSmtpSecurity = newValue;
@@ -240,4 +251,16 @@ class _LoginState extends State<Login> {
           ),
         ));
   }
+
+  List<DropdownMenuItem<String>> getSecurityOptions() {
+    return [
+      AppLocalizations.of(context).automatic,
+      AppLocalizations.of(context).sslTls,
+      AppLocalizations.of(context).startTLS,
+      AppLocalizations.of(context).off,
+    ].map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(value: value, child: Text(value));
+    }).toList();
+  }
+
 }

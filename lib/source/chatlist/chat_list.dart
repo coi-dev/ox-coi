@@ -40,31 +40,38 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/main.dart';
 import 'package:ox_talk/source/base/base_root_child.dart';
+import 'package:ox_talk/source/chatlist/chat_list_bloc.dart';
+import 'package:ox_talk/source/chatlist/chat_list_event.dart';
 import 'package:ox_talk/source/chatlist/chat_list_item.dart';
-import 'package:ox_talk/source/data/chat_repository.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/chatlist/chat_list_state.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
-import 'package:ox_talk/source/ui/default_colors.dart';
-import 'package:ox_talk/source/ui/dimensions.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/utils/dimensions.dart';
 
 class ChatListView extends BaseRootChild {
-
   _ChatListState createState() => _ChatListState();
 
   @override
   Color getColor() {
-    return DefaultColors.chatColor;
+    return chatMain;
   }
 
   @override
   FloatingActionButton getFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       child: new Icon(Icons.create),
-      onPressed: () {},
+      onPressed: () {
+        _showCreateChatView(context);
+      },
     );
+  }
+
+  _showCreateChatView(BuildContext context) {
+    Navigator.pushNamed(context, OxTalkApp.ROUTES_CHAT_CREATE);
   }
 
   @override
@@ -81,70 +88,44 @@ class ChatListView extends BaseRootChild {
   IconData getNavigationIcon() {
     return Icons.chat;
   }
-
 }
 
 class _ChatListState extends State<ChatListView> {
-  Repository<Chat> chatRepository;
-  List<int> chatIds = List();
-  int _listenerId;
+  ChatListBloc _chatListBloc = ChatListBloc();
 
   @override
   void initState() {
     super.initState();
-    setupChatLists();
-    setupChatListListener();
+    _chatListBloc.dispatch(RequestChatList());
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.all(Dimensions.listItemPadding),
-      itemCount: chatIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var chatId = chatIds[index];
-        var _chat = chatRepository.get(chatId);
-        return ChatListItem(_chat);
+    return BlocBuilder(
+      bloc: _chatListBloc,
+      builder: (context, state) {
+        if (state is ChatListStateSuccess) {
+          return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
+        } else if (state is! ChatListStateFailure) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Icon(Icons.error);
+        }
       },
     );
   }
 
-  void setupChatLists() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-
-    chatRepository = ChatRepository(Chat.getCreator());
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-
-    chatRepository.putIfAbsent(ids: chatIds);
-
-    setState(() {});
-  }
-
-  void setupChatListListener() async {
-    DeltaChatCore core = DeltaChatCore();
-    _listenerId = await core.listen(Dc.eventChatModified, _success);
-  }
-
-  void _success(Event event) {
-    chatIds.clear();
-    setState(() {});
-    setupChatLists();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    tearDownChatListListener();
-  }
-
-  void tearDownChatListListener() {
-    DeltaChatCore core = DeltaChatCore();
-    core.removeListener(Dc.eventChatModified, _listenerId);
+  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues) {
+    return ListView.builder(
+      padding: EdgeInsets.all(listItemPadding),
+      itemCount: chatIds.length,
+      itemBuilder: (BuildContext context, int index) {
+        var chatId = chatIds[index];
+        var key = "$chatId-${chatLastUpdateValues[index]}";
+        return ChatListItem(chatId, key);
+      },
+    );
   }
 }

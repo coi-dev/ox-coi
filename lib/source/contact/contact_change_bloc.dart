@@ -44,11 +44,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/source/contact/contact_change.dart';
 import 'package:ox_talk/source/contact/contact_change_event.dart';
 import 'package:ox_talk/source/contact/contact_change_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
-import 'package:ox_talk/source/error/error.dart';
+import 'package:ox_talk/source/utils/error.dart';
 
 class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
   final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
@@ -61,28 +62,28 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
     if (event is ChangeContact) {
       yield ContactChangeStateLoading();
       try {
-        _changeContact(event.name, event.mail, event.add);
+        _changeContact(event.name, event.mail, event.contactAction);
       } catch (error) {
         yield ContactChangeStateFailure(error: error.toString());
       }
     } else if (event is ContactAdded) {
-      yield ContactChangeStateSuccess(add: true, delete: false);
+      yield ContactChangeStateSuccess(add: true, delete: false, id: event.id);
     } else if (event is ContactEdited) {
-      yield ContactChangeStateSuccess(add: false, delete: false);
+      yield ContactChangeStateSuccess(add: false, delete: false, id: null);
     } else if (event is DeleteContact) {
       _deleteContact(event.id);
     } else if (event is ContactDeleted) {
-      yield ContactChangeStateSuccess(add: false, delete: true);
+      yield ContactChangeStateSuccess(add: false, delete: true, id: null);
     } else if (event is ContactDeleteFailed) {
-      yield ContactChangeStateFailure(error: Error.contactDelete);
+      yield ContactChangeStateFailure(error: contactDelete);
     }
   }
 
-  void _changeContact(String name, String address, bool add) async {
+  void _changeContact(String name, String address, ContactAction contactAction) async {
     Context context = Context();
     int id = await context.createContact(name, address);
-    if (add) {
-      dispatch(ContactAdded());
+    if (contactAction == ContactAction.add) {
+      dispatch(ContactAdded(id));
     } else {
       Contact contact = contactRepository.get(id);
       contact.prepareReloadValue(Contact.methodContactGetName);

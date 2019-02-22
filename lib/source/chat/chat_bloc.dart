@@ -40,19 +40,53 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
-import 'package:ox_talk/source/profile/user.dart';
+import 'dart:async';
+import 'dart:ui';
 
-class UserRepository extends Repository<User> {
-  UserRepository(RepositoryItemCreator creator) : super(creator);
+import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/source/chat/chat_event.dart';
+import 'package:ox_talk/source/chat/chat_state.dart';
+import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/data/repository_manager.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+
+class ChatBloc extends Bloc<ChatEvent, ChatState> {
+  Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
+  int _chatId;
+  bool _isGroup = false;
+  bool get isGroup => _isGroup;
+
   @override
-  success(Event event) {
-    super.success(event);
+  ChatState get initialState => ChatStateInitial();
+
+  @override
+  Stream<ChatState> mapEventToState(ChatState currentState, ChatEvent event) async* {
+    if (event is RequestChat) {
+      yield ChatStateLoading();
+      try {
+        _chatId = event.chatId;
+        _setupChat();
+      } catch (error) {
+        yield ChatStateFailure(error: error.toString());
+      }
+    } else if (event is ChatLoaded) {
+      yield ChatStateSuccess(
+        name: event.name,
+        subTitle: event.subTitle,
+        color: event.color,
+        isGroupChat: event.isGroupChat,
+      );
+    }
   }
 
-  @override
-  error(error) {
-    super.error(error);
+  void _setupChat() async {
+    Chat chat = chatRepository.get(_chatId);
+    String name = await chat.getName();
+    String subTitle = await chat.getSubtitle();
+    int colorValue = await chat.getColor();
+    _isGroup = await chat.isGroup();
+    Color color = rgbColorFromInt(colorValue);
+    dispatch(ChatLoaded(name, subTitle, color, _isGroup));
   }
 }

@@ -41,13 +41,17 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/source/profile/user.dart';
+import 'package:ox_talk/source/data/config.dart';
 
 abstract class UserEvent {}
 
 class RequestUser extends UserEvent {}
 
-class UserLoaded extends UserEvent{}
+class UserLoaded extends UserEvent {
+  final Config config;
+
+  UserLoaded({@required this.config});
+}
 
 class UserPersonalDataChanged extends UserEvent {
   final String username;
@@ -58,9 +62,8 @@ class UserPersonalDataChanged extends UserEvent {
 }
 
 class UserAccountDataChanged extends UserEvent {
-//  final String email;
-//  final String password;
   final String imapLogin;
+  final String imapPassword;
   final String imapServer;
   final int imapPort;
   final String smtpLogin;
@@ -68,16 +71,19 @@ class UserAccountDataChanged extends UserEvent {
   final String smtpServer;
   final int smtpPort;
 
-  UserAccountDataChanged({
-//    @required this.email,
-//    @required this.password,
-    @required this.imapLogin,
-    @required this.imapServer,
-    @required this.imapPort,
-    @required this.smtpLogin,
-    @required this.smtpPassword,
-    @required this.smtpServer,
-    @required this.smtpPort});
+  UserAccountDataChanged(
+      {@required this.imapLogin,
+      @required this.imapPassword,
+      @required this.imapServer,
+      @required this.imapPort,
+      @required this.smtpLogin,
+      @required this.smtpPassword,
+      @required this.smtpServer,
+      @required this.smtpPort});
 }
 
-class UserChanged extends UserEvent {}
+class UserChanged extends UserEvent {
+  final Config config;
+
+  UserChanged({@required this.config});
+}

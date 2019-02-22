@@ -46,15 +46,12 @@ import 'package:ox_talk/source/data/chat_message_repository.dart';
 import 'package:ox_talk/source/data/chat_repository.dart';
 import 'package:ox_talk/source/data/contact_repository.dart';
 import 'package:ox_talk/source/data/repository.dart';
-import 'package:ox_talk/source/data/user_repository.dart';
-import 'package:ox_talk/source/profile/user.dart';
 
 enum RepositoryType {
   chatList,
   chat,
   chatMessage,
   contact,
-  user
 }
 
 class RepositoryManager {
@@ -70,7 +67,7 @@ class RepositoryManager {
       Repository repository;
       switch (type) {
         case RepositoryType.chatList:
-          repository = ChatListRepository(ChatList.getCreator());
+          repository = ChatListRepository((id) => ChatList());
           break;
         case RepositoryType.chat:
           repository = ChatRepository(Chat.getCreator());
@@ -80,9 +77,6 @@ class RepositoryManager {
           break;
         case RepositoryType.contact:
           repository = ContactRepository(Contact.getCreator());
-          break;
-        case RepositoryType.user:
-          repository = UserRepository(User.getCreator());
           break;
       }
       if (repository != null) {

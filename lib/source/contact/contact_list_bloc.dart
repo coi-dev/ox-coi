@@ -74,12 +74,12 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
   @override
   void dispose() {
     super.dispose();
-    contactRepository.removeListener(hashCode, Dc.eventContactsChanged);
+    contactRepository.removeListener(hashCode, Event.contactsChanged);
     streamSubscription.cancel();
   }
 
   void setupContactListener() async {
-    contactRepository.addListener(hashCode, Dc.eventContactsChanged);
+    contactRepository.addListener(hashCode, Event.contactsChanged);
     streamSubscription = contactRepository.observable.listen((event) => dispatch(ContactsChanged()));
   }
 

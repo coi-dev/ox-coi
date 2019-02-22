@@ -39,14 +39,20 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+import 'dart:ui';
 
 abstract class ContactItemEvent {}
 
-class RequestContact extends ContactItemEvent {}
+class RequestContact extends ContactItemEvent {
+  final int contactId;
+
+  RequestContact(this.contactId);
+}
 
 class ContactLoaded extends ContactItemEvent {
   final String name;
-  final String mail;
+  final String email;
+  final Color color;
 
-  ContactLoaded(this.name, this.mail);
+  ContactLoaded(this.name, this.email, this.color);
 }

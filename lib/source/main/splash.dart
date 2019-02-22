@@ -47,7 +47,7 @@ class Splash extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("LOADING"),
+        child: CircularProgressIndicator(),
       ),
     );
   }

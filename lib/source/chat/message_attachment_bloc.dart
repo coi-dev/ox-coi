@@ -40,37 +40,44 @@
  * for more details.
  */
 
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:open_file/open_file.dart';
+import 'package:ox_talk/source/chat/message_attachment_event.dart';
+import 'package:ox_talk/source/chat/message_attachment_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/data/repository_manager.dart';
 
-class ChatListRepository extends Repository<ChatList> {
-
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
+class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
+  Repository<ChatMsg> _messagesRepository;
 
   @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
+  MessageAttachmentState get initialState => MessageAttachmentStateInitial();
+
+  @override
+  Stream<MessageAttachmentState> mapEventToState(MessageAttachmentState currentState, MessageAttachmentEvent event) async* {
+    if (event is RequestAttachment) {
+      _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+      yield MessageAttachmentStateLoading();
+      try {
+        _openFile(event.messageId);
+        dispatch(AttachmentLoaded());
+      } catch (error) {
+        yield MessageAttachmentStateFailure(error: error.toString());
       }
+    } else if (event is AttachmentLoaded) {
+      yield MessageAttachmentStateSuccess();
     }
-    update(ids: chatIds);
   }
 
-  @override
-  error(error) {
-    super.error(error);
+  void _openFile(int messageId) async {
+    ChatMsg message = _getMessage(messageId);
+    OpenFile.open(await message.getFile());
   }
 
-
+  ChatMsg _getMessage(int messageId) {
+    return _messagesRepository.get(messageId);
+  }
 }

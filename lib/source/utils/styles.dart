@@ -40,37 +40,12 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:flutter/material.dart';
 
-class ChatListRepository extends Repository<ChatList> {
-
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
-
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
-
-  @override
-  error(error) {
-    super.error(error);
-  }
-
-
-}
+const progressText = TextStyle(
+  color: Colors.white,
+  fontSize: 14.0,
+  fontFamily: "Roboto",
+  fontWeight: FontWeight.normal,
+  decoration: TextDecoration.none,
+);

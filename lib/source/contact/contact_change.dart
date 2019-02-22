@@ -40,23 +40,35 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ox_talk/source/chat/chat.dart';
 import 'package:ox_talk/source/contact/contact_change_bloc.dart';
 import 'package:ox_talk/source/contact/contact_change_event.dart';
 import 'package:ox_talk/source/contact/contact_change_state.dart';
-import 'package:ox_talk/source/form/validatable_text_form_field.dart';
-import 'package:ox_talk/source/ui/default_colors.dart';
-import 'package:ox_talk/source/error/error.dart';
+import 'package:ox_talk/source/data/chat_repository.dart';
+import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/utils/error.dart';
+import 'package:ox_talk/source/widgets/validatable_text_form_field.dart';
+import 'package:ox_talk/source/l10n/localizations.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/utils/toast.dart';
 import 'package:rxdart/rxdart.dart';
 
+enum ContactAction {
+  add,
+  edit,
+  delete,
+}
+
 class ContactChange extends StatefulWidget {
-  final bool add;
+  final ContactAction contactAction;
   final int id;
   final String name;
   final String email;
+  final bool createChat;
 
-  ContactChange({@required this.add, this.id, this.name, this.email});
+  ContactChange({@required this.contactAction, this.id, this.name, this.email, this.createChat = false});
 
   @override
   _ContactChangeState createState() => _ContactChangeState();
@@ -64,67 +76,79 @@ class ContactChange extends StatefulWidget {
 
 class _ContactChangeState extends State<ContactChange> {
   GlobalKey<FormState> _formKey = GlobalKey();
-  ValidatableTextFormField _nameField = ValidatableTextFormField("Name", "Enter a name for the contact");
+  ValidatableTextFormField _nameField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).name,
+    hintText: (context) => AppLocalizations.of(context).contactChangeNameHint,
+  );
   ValidatableTextFormField _emailField;
 
   String title;
   String deleteButton;
-  String editToast;
+  String changeToast;
   String deleteToast;
   String deleteFailedToast;
 
   ContactChangeBloc _contactChangeBloc = ContactChangeBloc();
 
+  Repository<Chat> chatRepository;
+
   @override
   void initState() {
     super.initState();
-    if (widget.add) {
-      title = "Add Contact";
-      editToast = "Contact successfully added";
-      _emailField = ValidatableTextFormField("Email address", "Enter a valid email address",
-          textFormType: TextFormType.email, inputType: TextInputType.emailAddress);
-    } else {
-      deleteButton = "Delete Contact";
-      title = "Edit Name";
-      editToast = "Contact successfully edited";
-      deleteToast = "Contact successfully deleted";
-      deleteFailedToast = "Could not delete contact. Please delete active chats first.";
-      _nameField.controller.text = widget.name != null ? widget.name : "";
+    if (widget.contactAction == ContactAction.add) {
+      _emailField = ValidatableTextFormField(
+        (context) => AppLocalizations.of(context).emailAddress,
+        textFormType: TextFormType.email,
+        inputType: TextInputType.emailAddress,
+      );
     }
     final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
     contactAddedObservable.listen((state) => handleContactChanged(state));
+    chatRepository = ChatRepository(Chat.getCreator());
   }
 
-  handleContactChanged(ContactChangeState state) {
+  handleContactChanged(ContactChangeState state) async {
     if (state is ContactChangeStateSuccess) {
-      if (state.delete) {
-        _showToast(deleteToast);
+      if (!widget.createChat) {
+        if (state.delete) {
+          showToast(deleteToast);
+        } else {
+          showToast(changeToast);
+        }
+        Navigator.pop(context);
       } else {
-        _showToast(editToast);
+        if (state.id != null) {
+          Context coreContext = Context();
+          var chatId = await coreContext.createChatByContactId(state.id);
+          chatRepository.putIfAbsent(id: chatId);
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName('/'));
+        }
       }
-      Navigator.pop(context);
-    } else if (state is ContactChangeStateFailure && state.error == Error.contactDelete) {
-      _showToast(deleteFailedToast);
+    } else if (state is ContactChangeStateFailure && state.error == contactDelete) {
+      showToast(deleteFailedToast);
     }
-  }
-
-  _showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      timeInSecForIos: 4,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.contactAction == ContactAction.add) {
+      title = AppLocalizations.of(context).contactChangeAddTitle;
+      changeToast = AppLocalizations.of(context).contactChangeAddToast;
+    } else {
+      deleteButton = AppLocalizations.of(context).contactChangeDeleteTitle;
+      title = AppLocalizations.of(context).contactChangeEditTitle;
+      changeToast = AppLocalizations.of(context).contactChangeEditToast;
+      deleteToast = AppLocalizations.of(context).contactChangeDeleteToast;
+      deleteFailedToast = AppLocalizations.of(context).contactChangeDeleteFailedToast;
+      _nameField.controller.text = widget.name != null ? widget.name : "";
+    }
     return Scaffold(
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          backgroundColor: DefaultColors.contactColor,
+          backgroundColor: contactMain,
           title: Text(title),
           actions: <Widget>[
             IconButton(
@@ -138,7 +162,7 @@ class _ContactChangeState extends State<ContactChange> {
 
   onSubmit() {
     if (_formKey.currentState.validate()) {
-      _contactChangeBloc.dispatch(ChangeContact(getName(), getEmail(), widget.add));
+      _contactChangeBloc.dispatch(ChangeContact(getName(), getEmail(), widget.contactAction));
     }
   }
 
@@ -155,7 +179,7 @@ class _ContactChangeState extends State<ContactChange> {
                 padding: const EdgeInsets.only(bottom: 16.0, top: 8.0),
                 child: Column(
                   children: <Widget>[
-                    !widget.add
+                    widget.contactAction != ContactAction.add
                         ? Padding(
                             padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
                             child: Row(
@@ -181,7 +205,7 @@ class _ContactChangeState extends State<ContactChange> {
                         Expanded(child: _nameField),
                       ],
                     ),
-                    widget.add
+                    widget.contactAction == ContactAction.add
                         ? Row(
                             children: <Widget>[
                               Icon(Icons.mail),
@@ -195,7 +219,7 @@ class _ContactChangeState extends State<ContactChange> {
                   ],
                 ),
               ),
-              !widget.add
+              widget.contactAction != ContactAction.add
                   ? Center(
                       child: OutlineButton(
                         highlightedBorderColor: Theme.of(context).errorColor,
@@ -218,17 +242,17 @@ class _ContactChangeState extends State<ContactChange> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Delete contact"),
-            content: new Text("Do you really want to delete ${getEmail()} (${getName()})?"),
+            title: Text(AppLocalizations.of(context).contactChangeDeleteTitle),
+            content: new Text(AppLocalizations.of(context).contactChangeDeleteDialogContent(getEmail(), getName())),
             actions: <Widget>[
               new FlatButton(
-                child: new Text("No"),
+                child: new Text(AppLocalizations.of(context).no),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               new FlatButton(
-                child: new Text("Delete"),
+                child: new Text(AppLocalizations.of(context).delete),
                 onPressed: () {
                   _contactChangeBloc.dispatch(DeleteContact(widget.id));
                   Navigator.of(context).pop();
@@ -241,5 +265,5 @@ class _ContactChangeState extends State<ContactChange> {
 
   String getName() => _nameField.controller.text;
 
-  String getEmail() => widget.add ? _emailField.controller.text : widget.email;
+  String getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
 }

@@ -40,37 +40,67 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/source/contact/contact_item_bloc.dart';
+import 'package:ox_talk/source/contact/contact_item_event.dart';
+import 'package:ox_talk/source/contact/contact_item_state.dart';
+import 'package:ox_talk/source/widgets/avatar_list_item.dart';
 
-class ChatListRepository extends Repository<ChatList> {
+class SelectableContactItem extends StatefulWidget {
+  final int _contactId;
+  final Function onTap;
 
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
+  SelectableContactItem(this._contactId, this.onTap, key) : super(key: Key(key));
 
   @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
+  _SelectableContactItemState createState() => _SelectableContactItemState();
+}
+
+class _SelectableContactItemState extends State<SelectableContactItem> {
+  ContactItemBloc _contactBloc = ContactItemBloc();
+  var isSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _contactBloc.dispatch(RequestContact(widget._contactId));
   }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: _contactBloc,
+      builder: (context, state) {
+        if (state is ContactItemStateSuccess) {
+          return AvatarListItem(
+            title: state.name,
+            subTitle: state.email,
+            color: state.color,
+            avatarIcon: isSelected ? Icons.check : null,
+            onTap: onContactTapped,
+          );
+        } else if (state is ContactItemStateFailure) {
+          return new Text(state.error);
+        } else {
+          return AvatarListItem(
+            title: "",
+            subTitle: "",
+            onTap: onContactTapped,
+          );
+        }
+      });
+  }
+
+  onContactTapped(String name, String email) {
+    setState(() {
+      if(isSelected){
+        isSelected = false;
       }
-    }
-    update(ids: chatIds);
+      else{
+        isSelected = true;
+      }
+    });
+    widget.onTap(widget._contactId);
   }
-
-  @override
-  error(error) {
-    super.error(error);
-  }
-
-
 }

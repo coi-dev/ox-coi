@@ -40,16 +40,59 @@
  * for more details.
  */
 
-import 'dart:ui';
-
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/source/base/bloc_progress_state.dart';
+import 'package:ox_talk/source/utils/styles.dart';
 
-class DefaultColors {
+class FullscreenProgress<T extends Bloc> extends StatelessWidget {
+  final String _text;
 
-  static const Color chatColor = Colors.blue;
-  static const Color mailColor = Colors.indigo;
-  static const Color contactColor = Colors.blueGrey;
-  static const Color profileColor = contactColor;
+  final bool _showProgressValues;
 
+  final T _bloc;
 
+  FullscreenProgress(this._bloc, this._text, [this._showProgressValues]);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: _bloc,
+      builder: (BuildContext context, state) {
+        int progress = 0;
+        if (state is ProgressState) {
+          progress = state.progress;
+        }
+        return Container(
+          constraints: BoxConstraints.expand(),
+          color: Color.fromRGBO(0, 0, 0, 0.5),
+          child: buildProgress(progress),
+        );
+      },
+    );
+  }
+
+  Widget buildProgress(int progress) {
+    var column = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Text(_text, style: progressText),
+        ),
+      ],
+    );
+    if (_showProgressValues) {
+      column.children.add(Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Text("${progress / 10}%", style: progressText),
+      ));
+    }
+    return column;
+  }
 }

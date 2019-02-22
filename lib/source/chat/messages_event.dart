@@ -40,31 +40,14 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+abstract class MessagesEvent {}
 
-class User extends Base {
-  static final User _user = new User._internal(1);
-  final int id;
+class RequestMessages extends MessagesEvent {
+  int chatId;
 
-  String username;
-  String status;
-  String avatarPath;
-  String email;
-  String imapLogin;
-  String imapServer;
-  String imapPort;
-  String smtpLogin;
-  String smtpPassword;
-  String smtpServer;
-  String smtpPort;
-
-  User._internal(this.id);
-
-  factory User() {
-    return _user;
-  }
-
-  static Function getCreator() {
-    return (id) => User();
-  }
+  RequestMessages(this.chatId);
 }
+
+class UpdateMessages extends MessagesEvent {}
+
+class MessagesLoaded extends MessagesEvent {}

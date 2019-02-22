@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,8 +40,49 @@
  * for more details.
  */
 
-class Error {
+import 'package:meta/meta.dart';
+import 'package:ox_talk/source/base/bloc_base_state.dart';
 
-  static const contactDelete = "contact-delete-1";
+abstract class MessageAttachmentState extends BaseState {
+  MessageAttachmentState({
+    @required isLoading,
+    @required isSuccess,
+    @required error,
+  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+}
 
+class MessageAttachmentStateInitial extends MessageAttachmentState {
+  MessageAttachmentStateInitial()
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+        );
+}
+
+class MessageAttachmentStateLoading extends MessageAttachmentState {
+  MessageAttachmentStateLoading()
+      : super(
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
+}
+
+class MessageAttachmentStateSuccess extends MessageAttachmentState {
+  MessageAttachmentStateSuccess()
+      : super(
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
+}
+
+class MessageAttachmentStateFailure extends MessageAttachmentState {
+  MessageAttachmentStateFailure({@required error})
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
 }

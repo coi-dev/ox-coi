@@ -40,16 +40,8 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
+abstract class ChatListEvent {}
 
-class TextStyles {
+class RequestChatList extends ChatListEvent {}
 
-  static const progress = TextStyle(
-    color: Colors.white,
-    fontSize: 14.0,
-    fontFamily: "Roboto",
-    fontWeight: FontWeight.normal,
-    decoration: TextDecoration.none,
-  );
-
-}
+class ChatListModified extends ChatListEvent {}

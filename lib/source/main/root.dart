@@ -58,7 +58,7 @@ class _RootState extends State<Root> {
   var childList = List<BaseRootChild>();
 
   _RootState() {
-    childList.addAll([new ChatListView(), new MailListView(), new ContactListView(), new ProfileView()]);
+    childList.addAll([new ChatListView(), new ContactListView(), new ProfileView()]);
   }
 
   @override

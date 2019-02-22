@@ -43,25 +43,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/source/form/validatable_text_form_field.dart';
+import 'package:ox_talk/source/data/config.dart';
+import 'package:ox_talk/source/widgets/validatable_text_form_field.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
-import 'package:ox_talk/source/profile/user.dart';
 import 'package:ox_talk/source/profile/user_bloc.dart';
 import 'package:ox_talk/source/profile/user_event.dart';
 import 'package:ox_talk/source/profile/user_state.dart';
-import 'package:ox_talk/source/ui/default_colors.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/utils/toast.dart';
+import 'package:rxdart/rxdart.dart';
 
 class EditAccountSettings extends StatefulWidget {
-  final String imapLogin;
-  final String imapServer;
-  final String imapPort;
-  final String smtpLogin;
-  final String smtpPassword;
-  final String smtpServer;
-  final String smtpPort;
-
-  EditAccountSettings({@required this.imapLogin, @required this.imapServer, @required this.imapPort, @required this.smtpLogin, @required this.smtpPassword, @required this.smtpServer, @required this.smtpPort});
-
   @override
   _EditAccountSettingsState createState() => _EditAccountSettingsState();
 }
@@ -70,130 +62,158 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
   UserBloc _userBloc = UserBloc();
 
   final _advancedLoginKey = GlobalKey<FormState>();
-  final imapLoginNameField = ValidatableTextFormField("IMAP login-name", "");
-  final imapServerField = ValidatableTextFormField("IMAP server", "");
-  final imapPortField = ValidatableTextFormField("IMAP port", "", textFormType: TextFormType.port, inputType: TextInputType.numberWithOptions());
-  final smtpLoginNameField = ValidatableTextFormField("SMTP login-name", "");
-  final smtpPasswordField = ValidatableTextFormField("SMTP password", "", textFormType: TextFormType.password, needValidation: false);
-  final smtpServerField = ValidatableTextFormField("SMTP server", "");
-  final smtpPortField = ValidatableTextFormField("SMTP port", "", textFormType: TextFormType.port, inputType: TextInputType.numberWithOptions());
-  List<String> _securityOptions = List();
+  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
+  ValidatableTextFormField imapPasswordField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).loginLabelImapPassword,
+    textFormType: TextFormType.password,
+    needValidation: false,
+  );
+  ValidatableTextFormField imapServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapServer);
+  ValidatableTextFormField imapPortField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).loginLabelImapPort,
+    textFormType: TextFormType.port,
+    inputType: TextInputType.numberWithOptions(),
+  );
+  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
+  ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
+    textFormType: TextFormType.password,
+    needValidation: false,
+  );
+  ValidatableTextFormField smtpServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpServer);
+  ValidatableTextFormField smtpPortField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).loginLabelSmtpPort,
+    textFormType: TextFormType.port,
+    inputType: TextInputType.numberWithOptions(),
+  );
   String _selectedImapSecurity;
   String _selectedSmtpSecurity;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _securityOptions.addAll(["Automatic", "SSL/TLS", "StartTLS", "Off"]);
-    _selectedImapSecurity = _securityOptions.elementAt(0);
-    _selectedSmtpSecurity = _securityOptions.elementAt(0);
-
-    imapLoginNameField.controller.text = widget.imapLogin != null ? widget.imapLogin : "";
-    imapServerField.controller.text = widget.imapServer != null ? widget.imapServer : "";
-    imapPortField.controller.text = widget.imapPort != null  ? widget.imapPort : "";
-    smtpLoginNameField.controller.text = widget.smtpLogin != null ? widget.smtpLogin : "";
-    smtpPasswordField.controller.text = widget.smtpPassword != null ? widget.smtpPassword : "";
-    smtpServerField.controller.text = widget.smtpServer != null ? widget.smtpServer : "";
-    smtpPortField.controller.text = widget.smtpPort != null ? widget.smtpPort : "";
-
     _userBloc.dispatch(RequestUser());
+    final userStatesObservable = new Observable<UserState>(_userBloc.state);
+    userStatesObservable.listen((state) => _handleUserStateChange(state));
+  }
+
+  _handleUserStateChange(UserState state) {
+    if (state is UserStateSuccess) {
+      _fillEditAccountDataView(state.config);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: DefaultColors.contactColor,
+          leading: new IconButton(
+            icon: new Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).editAccountSettingsTitle),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: saveAccountData)],
         ),
         body: buildForm());
   }
 
-  Widget buildForm(){
+  Widget buildForm() {
     return BlocBuilder(
         bloc: _userBloc,
-        builder: (context, state){
-          if(state is UserStateSuccess){
-            return buildEditAccountDataView();
-          }else if (state is UserStateFailure) {
-            return new Text(state.error);
-          } else {
-            return new Container();
+        builder: (context, state) {
+          if (state is UserStateFailure) {
+            showToast(state.error);
           }
-        }
-    );
+          return _buildEditAccountDataView();
+        });
   }
 
-  Widget buildEditAccountDataView() {
+  _fillEditAccountDataView(Config config) {
+    imapLoginNameField.controller.text = config.imapLogin;
+    imapServerField.controller.text = config.imapServer;
+    imapPortField.controller.text = config.imapPortAsString;
+    smtpLoginNameField.controller.text = config.smtpLogin;
+    smtpServerField.controller.text = config.imapServer;
+    smtpPortField.controller.text = config.smtpPortAsString;
+  }
+
+  Widget _buildEditAccountDataView() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20.0),
-      child: Form(
-        key: _advancedLoginKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text("Inbox"),
-            imapLoginNameField,
-            imapServerField,
-            imapPortField,
-            Padding(padding: EdgeInsets.only(top: 12.0)),
-            Text("IMAP Security"),
-            DropdownButton(
-              value: _selectedImapSecurity,
-              items: _securityOptions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(value: value, child: Text(value));
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  _selectedImapSecurity = newValue;
-                });
-              }),
-            Padding(padding: EdgeInsets.only(top: 12.0)),
-            Text("Outbox"),
-            smtpLoginNameField,
-            smtpPasswordField,
-            smtpServerField,
-            smtpPortField,
-            Padding(padding: EdgeInsets.only(top: 12.0)),
-            Text("SMTP Security"),
-            DropdownButton(
-              value: _selectedSmtpSecurity,
-              items: _securityOptions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(value: value, child: Text(value));
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  _selectedSmtpSecurity = newValue;
-                });
-              }),
-          ],
-        ),
-      )
-    );
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _advancedLoginKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(AppLocalizations.of(context).inbox),
+              imapLoginNameField,
+              imapPasswordField,
+              imapServerField,
+              imapPortField,
+              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Text(AppLocalizations.of(context).loginLabelImapSecurity),
+              DropdownButton(
+                  value: _selectedImapSecurity,
+                  items: getSecurityOptions(),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      _selectedImapSecurity = newValue;
+                    });
+                  }),
+              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Text(AppLocalizations.of(context).outbox),
+              smtpLoginNameField,
+              smtpPasswordField,
+              smtpServerField,
+              smtpPortField,
+              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
+              DropdownButton(
+                  value: _selectedSmtpSecurity,
+                  items: getSecurityOptions(),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      _selectedSmtpSecurity = newValue;
+                    });
+                  }),
+            ],
+          ),
+        ));
   }
 
   saveAccountData() {
-    if(_advancedLoginKey.currentState.validate()){
+    if (_advancedLoginKey.currentState.validate()) {
       var imapLogin = imapLoginNameField.controller.text;
+      var imapPassword = imapPasswordField.controller.text;
       var imapServer = imapServerField.controller.text;
       var imapPort = imapPortField.controller.text;
       var smtpLogin = smtpLoginNameField.controller.text;
       var smtpPassword = smtpPasswordField.controller.text;
       var smtpServer = smtpServerField.controller.text;
       var smtpPort = smtpPortField.controller.text;
-      _userBloc.dispatch(
-        UserAccountDataChanged(
-          imapLogin: imapLogin,
-          imapServer: imapServer,
-          imapPort: imapPort.isNotEmpty ? int.parse(imapPort) : null,
-          smtpLogin: smtpLogin,
-          smtpPassword: smtpPassword,
-          smtpServer: smtpServer,
-          smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
-        )
-      );
+      _userBloc.dispatch(UserAccountDataChanged(
+        imapLogin: imapLogin,
+        imapPassword: imapPassword,
+        imapServer: imapServer,
+        imapPort: imapPort.isNotEmpty ? int.parse(imapPort) : null,
+        smtpLogin: smtpLogin,
+        smtpPassword: smtpPassword,
+        smtpServer: smtpServer,
+        smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
+      ));
       Navigator.pop(context);
     }
+  }
+
+  List<DropdownMenuItem<String>> getSecurityOptions() {
+    return [
+      AppLocalizations.of(context).automatic,
+      AppLocalizations.of(context).sslTls,
+      AppLocalizations.of(context).startTLS,
+      AppLocalizations.of(context).off,
+    ].map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(value: value, child: Text(value));
+    }).toList();
   }
 }

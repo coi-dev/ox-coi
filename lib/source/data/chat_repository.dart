@@ -49,15 +49,12 @@ class ChatRepository extends Repository<Chat> {
 
   @override
   success(Event event) {
-    // TODO: implement success
-    return null;
+    super.success(event);
   }
 
   @override
   error(error) {
-    // TODO: implement error
-    return null;
+    super.error(error);
   }
-
 
 }

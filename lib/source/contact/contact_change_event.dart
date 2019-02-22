@@ -40,14 +40,16 @@
  * for more details.
  */
 
+import 'package:ox_talk/source/contact/contact_change.dart';
+
 abstract class ContactChangeEvent {}
 
 class ChangeContact extends ContactChangeEvent {
   final String name;
   final String mail;
-  final bool add;
+  final ContactAction contactAction;
 
-  ChangeContact(this.name, this.mail, this.add);
+  ChangeContact(this.name, this.mail, this.contactAction);
 }
 
 class DeleteContact extends ContactChangeEvent {
@@ -56,7 +58,11 @@ class DeleteContact extends ContactChangeEvent {
   DeleteContact(this.id);
 }
 
-class ContactAdded extends ContactChangeEvent {}
+class ContactAdded extends ContactChangeEvent {
+  final int id;
+
+  ContactAdded(this.id);
+}
 
 class ContactEdited extends ContactChangeEvent {}
 

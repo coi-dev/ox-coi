@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/source/ui/dimensions.dart';
+import 'package:ox_talk/source/utils/dimensions.dart';
 
 class MailListItem extends StatelessWidget {
   const MailListItem(this.mail);
@@ -51,7 +51,7 @@ class MailListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: Dimensions.listItemPaddingSmall),
+      padding: const EdgeInsets.only(top: listItemPaddingSmall),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -64,7 +64,7 @@ class MailListItem extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.listItemPadding),
+              padding: EdgeInsets.symmetric(horizontal: listItemPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -92,7 +92,7 @@ class MailListItem extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: Dimensions.listItemPaddingSmall),
+                    padding: const EdgeInsets.only(top: listItemPaddingSmall),
                     child: Text(
                       mail.message,
                       maxLines: 1,
@@ -101,7 +101,7 @@ class MailListItem extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: Dimensions.listItemPaddingSmall),
+                    padding: const EdgeInsets.only(bottom: listItemPaddingSmall),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[

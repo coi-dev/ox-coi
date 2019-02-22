@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,37 +40,4 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
-
-class ChatListRepository extends Repository<ChatList> {
-
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
-
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
-
-  @override
-  error(error) {
-    super.error(error);
-  }
-
-
-}
+const contactDelete = "contact-delete-1";

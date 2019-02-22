@@ -40,31 +40,36 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/source/chat/chat.dart';
 import 'package:ox_talk/source/contact/contact_change.dart';
 import 'package:ox_talk/source/contact/contact_item_bloc.dart';
 import 'package:ox_talk/source/contact/contact_item_event.dart';
 import 'package:ox_talk/source/contact/contact_item_state.dart';
-import 'package:ox_talk/source/ui/dimensions.dart';
+import 'package:ox_talk/source/data/chat_repository.dart';
+import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/widgets/avatar_list_item.dart';
 
 class ContactItem extends StatefulWidget {
   final int _contactId;
+  final bool _createChat;
 
-  ContactItem(this._contactId, key) : super(key: Key(key));
+  ContactItem(this._contactId, this._createChat, key) : super(key: Key(key));
 
   @override
   _ContactItemState createState() => _ContactItemState();
 }
 
 class _ContactItemState extends State<ContactItem> {
-  ContactItemBloc _contactBloc;
+  ContactItemBloc _contactBloc = ContactItemBloc();
+  Repository<Chat> chatRepository = ChatRepository(Chat.getCreator());
 
   @override
   void initState() {
     super.initState();
-    _contactBloc = ContactItemBloc(widget._contactId);
-    _contactBloc.dispatch(RequestContact());
+    _contactBloc.dispatch(RequestContact(widget._contactId));
   }
 
   @override
@@ -73,83 +78,67 @@ class _ContactItemState extends State<ContactItem> {
         bloc: _contactBloc,
         builder: (context, state) {
           if (state is ContactItemStateSuccess) {
-            return buildGestureDetector(state.name, state.email);
+            return AvatarListItem(
+              title: state.name,
+              subTitle: state.email,
+              color: state.color,
+              onTap: onContactTapped,
+            );
           } else if (state is ContactItemStateFailure) {
             return new Text(state.error);
           } else {
-            return new Container();
+            return AvatarListItem(
+              title: "",
+              subTitle: "",
+              onTap: onContactTapped,
+            );
           }
         });
   }
 
-  GestureDetector buildGestureDetector(String name, String email) {
-    return GestureDetector(
-      onTap: () => onContactTapped(name, email),
-      child: Padding(
-        padding: const EdgeInsets.only(top: Dimensions.listItemPaddingSmall),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 24.0,
-              child: Text(getInitials(name, email)),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Dimensions.listItemPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    name != null
-                        ? Text(
-                            name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
-                          )
-                        : Container(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: Dimensions.listItemPaddingSmall),
-                      child: email != null
-                          ? Text(
-                              email,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.black45),
-                            )
-                          : Container(),
-                    ),
-                    Divider(),
-                  ],
+  onContactTapped(String name, String email) async {
+    if (!widget._createChat) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ContactChange(
+                  contactAction: ContactAction.edit,
+                  id: widget._contactId,
+                  email: email,
+                  name: name,
+                )),
+      );
+    } else {
+      return showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Start a chat"),
+              content: new Text("Do you want to start a chat with $name?"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                new FlatButton(
+                  child: new Text("Yes"),
+                  onPressed: () {
+                    createChat();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
   }
 
-  String getInitials(String name, String email) {
-    if (name != null && name.isNotEmpty) {
-      return name.substring(0, 1);
-    }
-    if (email != null && email.isNotEmpty) {
-      return email.substring(0, 1);
-    }
-    return "";
-  }
-
-  onContactTapped(String name, String email) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ContactChange(
-                add: false,
-                id: widget._contactId,
-                email: email,
-                name: name,
-              )),
-    );
+  void createChat() async {
+    Context coreContext = Context();
+    var chatId = await coreContext.createChatByContactId(widget._contactId);
+    chatRepository.putIfAbsent(id: chatId);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)));
   }
 }

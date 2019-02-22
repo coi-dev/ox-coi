@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,68 +40,85 @@
  * for more details.
  */
 
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
 import 'package:ox_talk/source/base/bloc_base_state.dart';
 
-abstract class ContactChangeState extends BaseState {
-  final bool add;
-  final bool delete;
-  final int id;
-
-  ContactChangeState({
+abstract class MessageItemState extends BaseState {
+  MessageItemState({
     @required isLoading,
     @required isSuccess,
     @required error,
-    @required this.add,
-    @required this.delete,
-    @required this.id
   }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
-class ContactChangeStateInitial extends ContactChangeState {
-  ContactChangeStateInitial()
+class MessageItemStateInitial extends MessageItemState {
+  MessageItemStateInitial()
       : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-          add: null,
-          delete: null,
-          id: null,
-        );
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+  );
 }
 
-class ContactChangeStateLoading extends ContactChangeState {
-  ContactChangeStateLoading()
+class MessageItemStateLoading extends MessageItemState {
+  MessageItemStateLoading()
       : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-          add: null,
-          delete: null,
-          id: null,
-        );
+    isLoading: true,
+    isSuccess: false,
+    error: '',
+  );
 }
 
-class ContactChangeStateSuccess extends ContactChangeState {
-  ContactChangeStateSuccess({@required bool add, @required bool delete, @required int id})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-          add: add,
-          delete: delete,
-          id: id,
-        );
+class MessageItemStateSuccess extends MessageItemState {
+  final String contactName;
+  final String contactAddress;
+  final Color contactColor;
+  final String messageText;
+  final String messageTimestamp;
+  final bool messageIsOutgoing;
+  final bool hasFile;
+  final AttachmentWrapper attachmentWrapper;
+
+  MessageItemStateSuccess({
+    @required this.messageText,
+    @required this.messageIsOutgoing,
+    @required this.messageTimestamp,
+    @required this.hasFile,
+    @required this.attachmentWrapper,
+    this.contactName,
+    this.contactAddress,
+    this.contactColor,
+  }) : super(
+    isLoading: false,
+    isSuccess: true,
+    error: '',
+  );
 }
 
-class ContactChangeStateFailure extends ContactChangeState {
-  ContactChangeStateFailure({@required error})
+class MessageItemStateFailure extends MessageItemState {
+  MessageItemStateFailure({@required error})
       : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-          add: null,
-          delete: null,
-          id: null,
-        );
+    isLoading: false,
+    isSuccess: false,
+    error: error,
+  );
+}
+
+class AttachmentWrapper {
+  final String filename;
+  final String path;
+  final String mimeType;
+  final int size;
+  final int type;
+
+  AttachmentWrapper({
+    @required this.filename,
+    @required this.path,
+    @required this.mimeType,
+    @required this.size,
+    @required this.type,
+  });
+
 }

@@ -40,37 +40,62 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_talk/source/base/bloc_base_state.dart';
 
-class ChatListRepository extends Repository<ChatList> {
+abstract class ChatListState extends BaseState {
+  final List<int> chatIds;
+  final List<int> chatLastUpdateValues;
 
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
+  ChatListState({
+    @required isLoading,
+    @required isSuccess,
+    @required error,
+    @required this.chatIds,
+    @required this.chatLastUpdateValues,
+  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+}
 
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
+class ChatListStateInitial extends ChatListState {
+  ChatListStateInitial()
+      : super(
+    isLoading: false,
+    isSuccess: false,
+    error: '',
+    chatIds: null,
+    chatLastUpdateValues: null,
+  );
+}
 
-  @override
-  error(error) {
-    super.error(error);
-  }
+class ChatListStateLoading extends ChatListState {
+  ChatListStateLoading()
+      : super(
+    isLoading: true,
+    isSuccess: false,
+    error: '',
+    chatIds: List(),
+    chatLastUpdateValues: List(),
+  );
+}
 
+class ChatListStateSuccess extends ChatListState {
+  ChatListStateSuccess({@required List<int> chatIds, @required List<int> chatLastUpdateValues})
+      : super(
+    isLoading: false,
+    isSuccess: true,
+    error: '',
+    chatIds: chatIds,
+    chatLastUpdateValues: chatLastUpdateValues,
+  );
+}
 
+class ChatListStateFailure extends ChatListState {
+  ChatListStateFailure({@required error})
+      : super(
+    isLoading: false,
+    isSuccess: false,
+    error: error,
+    chatIds: null,
+    chatLastUpdateValues: null,
+  );
 }

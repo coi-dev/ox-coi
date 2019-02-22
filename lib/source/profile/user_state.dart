@@ -42,56 +42,56 @@
 
 import 'package:meta/meta.dart';
 import 'package:ox_talk/source/base/bloc_base_state.dart';
-import 'package:ox_talk/source/profile/user.dart';
+import 'package:ox_talk/source/data/config.dart';
 
 abstract class UserState extends BaseState {
-  final User user;
+  final Config config;
 
   UserState({
     @required isLoading,
     @required isSuccess,
     @required error,
-    @required this.user,
+    @required this.config,
   }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
 class UserStateInitial extends UserState {
   UserStateInitial()
       : super(
-    isLoading: false,
-    isSuccess: false,
-    error: '',
-    user: null
-  );
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+          config: null,
+        );
 }
 
 class UserStateLoading extends UserState {
   UserStateLoading()
       : super(
-    isLoading: true,
-    isSuccess: false,
-    error: '',
-    user: null
-  );
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+          config: null,
+        );
 }
 
 class UserStateSuccess extends UserState {
-  UserStateSuccess({@required User user})
+  UserStateSuccess({@required Config config})
       : super(
-    isLoading: false,
-    isSuccess: true,
-    error: '',
-    user: user
-  );
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+          config: config,
+        );
 }
 
 class UserStateFailure extends UserState {
   UserStateFailure({
     @required error,
   }) : super(
-    isLoading: false,
-    isSuccess: false,
-    error: error,
-    user: null
-  );
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+          config: null,
+        );
 }

@@ -50,7 +50,7 @@ import 'package:ox_talk/source/contact/contact_import_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   static const PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN = "PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN11";
@@ -106,10 +106,10 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   }
 
   Future<bool> hasContactPermission() async {
-    bool readContacts = await SimplePermissions.checkPermission(Permission.ReadContacts);
-    if (!readContacts) {
-      PermissionStatus requestPermission = await SimplePermissions.requestPermission(Permission.ReadContacts);
-      return requestPermission == PermissionStatus.authorized;
+    PermissionStatus readContactsStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.contacts);
+    if (readContactsStatus != PermissionStatus.granted) {
+      Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+      return permissions[PermissionGroup.contacts] == PermissionStatus.granted;
     } else {
       return true;
     }

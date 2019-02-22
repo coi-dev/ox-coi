@@ -41,6 +41,7 @@
  */
 
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
@@ -48,12 +49,13 @@ import 'package:ox_talk/source/contact/contact_item_event.dart';
 import 'package:ox_talk/source/contact/contact_item_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
+import 'package:ox_talk/source/utils/colors.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
-  final int _contactId;
   final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
+  int _contactId;
 
-  ContactItemBloc(this._contactId);
+  ContactItemBloc();
 
   @override
   ContactItemState get initialState => ContactItemStateInitial();
@@ -61,6 +63,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   @override
   Stream<ContactItemState> mapEventToState(ContactItemState currentState, ContactItemEvent event) async* {
     if (event is RequestContact) {
+      this._contactId = event.contactId;
       yield ContactItemStateLoading();
       try {
         _setupContact();
@@ -68,7 +71,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
         yield ContactItemStateFailure(error: error.toString());
       }
     } else if (event is ContactLoaded) {
-      yield ContactItemStateSuccess(name: event.name, mail: event.mail);
+      yield ContactItemStateSuccess(name: event.name, email: event.email, color: event.color);
     }
   }
 
@@ -76,7 +79,8 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     Contact contact = contactRepository.get(_contactId);
     String name = await contact.getName();
     String mail = await contact.getAddress();
-    dispatch(ContactLoaded(name, mail));
+    int colorValue = await contact.getColor();
+    Color color = rgbColorFromInt(colorValue);
+    dispatch(ContactLoaded(name, mail, color));
   }
-
 }

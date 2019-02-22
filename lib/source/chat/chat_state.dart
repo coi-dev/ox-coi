@@ -40,37 +40,56 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'dart:ui';
 
-class ChatListRepository extends Repository<ChatList> {
+import 'package:meta/meta.dart';
+import 'package:ox_talk/source/base/bloc_base_state.dart';
 
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
+abstract class ChatState extends BaseState {
+  ChatState({
+    @required isLoading,
+    @required isSuccess,
+    @required error,
+  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+}
 
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
+class ChatStateInitial extends ChatState {
+  ChatStateInitial()
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+        );
+}
 
-  @override
-  error(error) {
-    super.error(error);
-  }
+class ChatStateLoading extends ChatState {
+  ChatStateLoading()
+      : super(
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
+}
 
+class ChatStateSuccess extends ChatState {
+  final String name;
+  final String subTitle;
+  final Color color;
+  final bool isGroupChat;
 
+  ChatStateSuccess({@required this.name, @required this.subTitle, @required this.color, @required this.isGroupChat})
+      : super(
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
+}
+
+class ChatStateFailure extends ChatState {
+  ChatStateFailure({@required error})
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
 }

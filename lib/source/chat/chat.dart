@@ -40,118 +40,150 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_talk/source/data/chat_message_repository.dart';
-import 'chat_message_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/source/chat/chat_bloc.dart';
+import 'package:ox_talk/source/chat/chat_event.dart';
+import 'package:ox_talk/source/chat/chat_state.dart';
+import 'package:ox_talk/source/chat/messages_bloc.dart';
+import 'package:ox_talk/source/chat/messages_event.dart';
+import 'package:ox_talk/source/chat/messages_state.dart';
+import 'package:ox_talk/source/widgets/avatar.dart';
+
+import 'message_item.dart';
 
 class ChatScreen extends StatefulWidget {
-  final Chat _chat;
+  final int _chatId;
 
-  ChatScreen(this._chat);
+  ChatScreen(this._chatId);
 
   @override
   _ChatScreenState createState() => new _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
-  Context _context = Context();
-  List<int> messageIds = <int>[];
-  ChatMessageRepository messageRepository;
+class _ChatScreenState extends State<ChatScreen> {
+  ChatBloc _chatBloc = ChatBloc();
+  MessagesBloc _messagesBloc = MessagesBloc();
+
   final TextEditingController _textController = new TextEditingController();
   bool _isComposing = false;
-  int _id;
-  String _name;
-  String _subtitle;
-  int _chatMessageListenerId;
 
   @override
   void initState() {
     super.initState();
-    setupChat();
-    setupChatListener();
-  }
-
-  void setupChat() async {
-    _id = widget._chat.getId();
-    _name = await widget._chat.getName();
-    _subtitle = await widget._chat.getSubtitle();
-
-    setState(() {});
-    setupMessages();
-  }
-
-  void setupMessages() async {
-    messageIds = List.from(await _context.getChatMessages(_id));
-    messageRepository = ChatMessageRepository(ChatMsg.getCreator());
-    messageRepository.putIfAbsent(ids: messageIds);
-    messageIds = messageIds.reversed.toList();
-    setState(() {});
+    _chatBloc.dispatch(RequestChat(widget._chatId));
+    _messagesBloc.dispatch(RequestMessages(widget._chatId));
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: Row(
-            children: <Widget>[
-              CircleAvatar(
-                radius: 24.0,
-                //TODO: Add avatar if available
-                child: Text(getInitial()),
-              ),
-              Padding(padding: EdgeInsets.only(left: 8.0)),
-              Flexible(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _name != null
-                      ? Text(
-                          _name,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        )
-                      : Container(),
-                  _subtitle != null ? Text(_subtitle, style: TextStyle(fontSize: 14)) : Container(),
-                ],
-              ))
-            ],
-          ),
+          title: buildTitle(),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.videocam),
-              onPressed: _handleVideoCall(),
+              onPressed: null,
               color: Colors.white,
             ),
-            IconButton(icon: Icon(Icons.phone), onPressed: _handleVoiceCall(), color: Colors.white)
+            IconButton(
+              icon: Icon(Icons.phone),
+              onPressed: null,
+              color: Colors.white,
+            ),
           ],
           elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         ),
         body: new Column(children: <Widget>[
-          new Flexible(
-              child: new ListView.builder(
-            padding: new EdgeInsets.all(8.0),
-            reverse: true,
-            itemCount: messageIds.length,
-            itemBuilder: (BuildContext context, int index) {
-              var messageId = messageIds[index];
-              var _message = messageRepository.get(messageId);
-              return ChatMessageItem(
-                _message,
-              );
-            },
-          )),
+          new Flexible(child: buildListView()),
           new Divider(height: 1.0),
           new Container(
             decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
           ),
         ]));
+  }
+
+  Widget buildTitle() {
+    return BlocBuilder(
+      bloc: _chatBloc,
+      builder: (context, state) {
+        String name;
+        String subTitle;
+        Color color;
+        if (state is ChatStateSuccess) {
+          name = state.name;
+          subTitle = state.subTitle;
+          color = state.color;
+        } else {
+          name = "";
+          subTitle = "";
+        }
+        return Row(
+          children: <Widget>[
+            Avatar(
+              initials: getInitials(name, subTitle),
+              color: color,
+            ),
+            Padding(padding: EdgeInsets.only(left: 16.0)),
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    name,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      _chatBloc.isGroup
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Icon(
+                                Icons.group,
+                                size: 18,
+                              ))
+                          : Container(),
+                      Text(subTitle, style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildListView() {
+    return BlocBuilder(
+      bloc: _messagesBloc,
+      builder: (context, state) {
+        if (state is MessagesStateSuccess) {
+          return new ListView.builder(
+            padding: new EdgeInsets.all(8.0),
+            reverse: true,
+            itemCount: state.messageIds.length,
+            itemBuilder: (BuildContext context, int index) {
+              int messageId = state.messageIds[index];
+              var key = "$messageId-${state.messageLastUpdateValues[index]}";
+              return ChatMessageItem(widget._chatId, messageId, _chatBloc.isGroup, key);
+            },
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 
   Widget _buildTextComposer() {
@@ -161,8 +193,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           margin: const EdgeInsets.symmetric(horizontal: 8.0),
           child: new Row(children: <Widget>[
             new IconButton(
-              icon: new Icon(Icons.add, color: Theme.of(context).accentColor),
-              onPressed: _handleAttachments(),
+              icon: new Icon(Icons.add),
+              onPressed: null,
             ),
             new Flexible(
                 child: Container(
@@ -181,21 +213,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
               ),
             )),
-            new Container(
-                margin: new EdgeInsets.symmetric(horizontal: 4.0),
-                child: _isComposing
-                    ? new IconButton(
-                        icon: new Icon(Icons.send),
-                        onPressed: () => _handleSubmitted(_textController.text),
-                      )
-                    : new IconButton(
-                        icon: new Icon(Icons.keyboard_voice),
-                        onPressed: () => _handleVoiceMessage(),
-                      )),
-            new IconButton(
-              icon: new Icon(Icons.camera_alt),
-              onPressed: () => _handleCamera(),
-            )
+            _isComposing
+                ? new IconButton(
+                    icon: new Icon(Icons.send),
+                    onPressed: () => _handleSubmitted(_textController.text),
+                  )
+                : new IconButton(
+                    icon: new Icon(Icons.keyboard_voice),
+                    onPressed: null,
+                  ),
+            !_isComposing
+                ? new IconButton(
+                    icon: new Icon(Icons.camera_alt),
+                    onPressed: null,
+                  )
+                : Container(),
           ]),
           decoration: Theme.of(context).platform == TargetPlatform.iOS
               ? new BoxDecoration(border: new Border(top: new BorderSide(color: Colors.grey[200])))
@@ -203,61 +235,21 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     );
   }
 
-  String getInitial() {
-    if (_name != null && _name.isNotEmpty) {
-      return _name.substring(0, 1);
-    }
-    return "";
-  }
-
-  void _handleSubmitted(String text) async {
+  void _handleSubmitted(String text) {
     _textController.clear();
-    int id = await _context.createChatMessage(_id, text);
-    messageIds.clear();
+    _messagesBloc.submitMessage(text);
     setState(() {
       _isComposing = false;
-      FocusScope.of(context).requestFocus(new FocusNode());
     });
-    await Future.delayed(const Duration(milliseconds: 200));
-    setupMessages();
   }
 
-  _handleAttachments() {}
-
-  _handleVoiceMessage() {}
-
-  _handleCamera() {}
-
-  _handleVideoCall() {}
-
-  _handleVoiceCall() {}
-
-  void setupChatListener() async {
-    DeltaChatCore core = DeltaChatCore();
-    _chatMessageListenerId = await core.listen(Dc.eventIncomingMsg, _success);
-  }
-
-  void _success(Event event) {
-    debugPrint("fhaar: SUCCESS!!!");
-
-    messageIds.clear();
-    setState(() {});
-    reload();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    tearDownChatListener();
-  }
-
-  void tearDownChatListener() {
-    DeltaChatCore core = DeltaChatCore();
-    core.removeListener(Dc.eventIncomingMsg, _chatMessageListenerId);
-  }
-
-  void reload() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    setupMessages();
+  String getInitials(String name, String subTitle) {
+    if (name != null && name.isNotEmpty) {
+      return name.substring(0, 1);
+    }
+    if (subTitle != null && subTitle.isNotEmpty) {
+      return subTitle.substring(0, 1);
+    }
+    return "";
   }
 }

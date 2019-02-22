@@ -42,28 +42,69 @@
 
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/source/chat/messages_event.dart';
+import 'package:ox_talk/source/chat/messages_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/data/repository_manager.dart';
 
-class ContactRepository extends Repository<Contact> {
-  ContactRepository(RepositoryItemCreator<Contact> creator) : super(creator);
+class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
+  StreamSubscription streamSubscription;
+  Repository<ChatMsg> messageRepository;
+  int _chatId;
 
   @override
-  success(Event event) async {
-    if (event.eventId == Event.contactsChanged) {
-      await setupContactsAfterUpdate();
+  MessagesState get initialState => MessagesStateInitial();
+
+  @override
+  Stream<MessagesState> mapEventToState(MessagesState currentState, MessagesEvent event) async* {
+    if (event is RequestMessages) {
+      yield MessagesStateLoading();
+      try {
+        _chatId = event.chatId;
+        messageRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
+        _setupMessagesListener();
+        _setupMessages();
+      } catch (error) {
+        yield MessagesStateFailure(error: error.toString());
+      }
+    } else if (event is UpdateMessages) {
+      try {
+        _setupMessages();
+      } catch (error) {
+        yield MessagesStateFailure(error: error.toString());
+      }
+    } else if (event is MessagesLoaded) {
+      yield MessagesStateSuccess(
+        messageIds: messageRepository.getAllIds().reversed.toList(growable: false),
+        messageLastUpdateValues: messageRepository.getAllLastUpdateValues(),
+      );
     }
-    super.success(event);
-  }
-
-  Future<void> setupContactsAfterUpdate() async {
-    Context context = Context();
-    List<int> contactIds = List.from(await context.getContacts(2, null));
-    update(ids: contactIds);
   }
 
   @override
-  error(error) {
-    super.error(error);
+  void dispose() {
+    super.dispose();
+    messageRepository.removeListener(hashCode, Event.incomingMsg);
+    streamSubscription.cancel();
+  }
+
+  void _setupMessagesListener() async {
+    messageRepository.addListener(hashCode, Event.incomingMsg);
+    streamSubscription = messageRepository.observable.listen((event) => dispatch(UpdateMessages()));
+  }
+
+  void _setupMessages() async {
+    Context context = Context();
+    List<int> messageIds = List.from(await context.getChatMessages(_chatId));
+    messageRepository.putIfAbsent(ids: messageIds);
+    dispatch(MessagesLoaded());
+  }
+
+  void submitMessage(String text) async {
+    Context context = Context();
+    await context.createChatMessage(_chatId, text);
+    dispatch(UpdateMessages());
   }
 }

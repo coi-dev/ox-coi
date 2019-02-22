@@ -42,27 +42,31 @@
 
 import 'dart:io';
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/main.dart';
 import 'package:ox_talk/source/base/base_root_child.dart';
+import 'package:ox_talk/source/data/config.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
-import 'package:ox_talk/source/profile/edit_account_settings.dart';
 import 'package:ox_talk/source/profile/edit_user_settings.dart';
-import 'package:ox_talk/source/profile/user.dart';
 import 'package:ox_talk/source/profile/user_bloc.dart';
 import 'package:ox_talk/source/profile/user_event.dart';
 import 'package:ox_talk/source/profile/user_state.dart';
-import 'package:ox_talk/source/ui/default_colors.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/utils/dimensions.dart';
+import 'package:ox_talk/source/utils/widget.dart';
 
 class ProfileView extends BaseRootChild {
-
-  _ProfileState createState() => _ProfileState();
+  @override
+  _ProfileState createState() {
+    final state = _ProfileState();
+    addActions([state.getAccountSettingsAction()]);
+    return state;
+  }
 
   @override
   Color getColor() {
-    return DefaultColors.profileColor;
+    return profileMain;
   }
 
   @override
@@ -84,14 +88,13 @@ class ProfileView extends BaseRootChild {
   IconData getNavigationIcon() {
     return Icons.account_circle;
   }
-
 }
 
 class _ProfileState extends State<ProfileView> {
   UserBloc _userBloc = UserBloc();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _userBloc.dispatch(RequestUser());
   }
@@ -99,112 +102,97 @@ class _ProfileState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _userBloc,
-      builder: (context, state){
-        if(state is UserStateSuccess){
-          return buildProfileView(state.user);
-        }else if (state is UserStateFailure) {
-          return new Text(state.error);
-        } else {
-          return new Container();
-        }
-      }
-    );
+        bloc: _userBloc,
+        builder: (context, state) {
+          if (state is UserStateSuccess) {
+            return buildProfileView(state.config);
+          } else if (state is UserStateFailure) {
+            return new Text(state.error);
+          } else {
+            return new Container();
+          }
+        });
   }
 
-  Widget buildProfileView(User user){
-    return SingleChildScrollView(
-      child: Center(
+  Widget buildProfileView(Config config) {
+    return Container(
+      constraints: BoxConstraints.expand(),
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 24.0)),
-            user.avatarPath.isEmpty ? CircleAvatar(
-              maxRadius: 45,
-              child: Icon(
-                Icons.person,
-                size: 60,
-              ),
-            ):
-            CircleAvatar(
-              maxRadius: 45,
-              backgroundImage: FileImage(File(user.avatarPath)),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 24.0),
+              child: buildAvatar(config),
             ),
-            Padding(padding: EdgeInsets.only(top: 12.0)),
-            user.username.isNotEmpty ? Text(
-              user.username,
-              style: TextStyle(
-                  fontSize: 24
-              ),
-            ) : Container(),
-            Padding(padding: EdgeInsets.only(top: 12.0)),
-            user.email.isNotEmpty ? Text(
-              user.email,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600
-              ),
-            ) : Container(),
-            Padding(padding: EdgeInsets.only(top: 12.0)),
-            user.status.isNotEmpty ? Text(
-              user.status,
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ) : Text(
-              AppLocalizations.of(context).profileStatusPlaceholder,
-              style: TextStyle(
-                fontSize: 16,
-              ),
+            getTextOrPlaceHolder(
+              text: config.username,
+              style: TextStyle(fontSize: 24),
+              align: TextAlign.center,
+              placeholderText: AppLocalizations.of(context).profileUsernamePlaceholder,
+              placeholderStyle: TextStyle(fontSize: 24, color: textDisabled),
+              placeHolderAlign: TextAlign.center,
             ),
-            Padding(padding: EdgeInsets.only(top: 16.0)),
-            RaisedButton(
-              onPressed: () => editUserSettings(user.avatarPath, user.username, user.status),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                  "Edit user settings" //No translation because design is not ready and maybe there is no button with text
+                config.email,
+                style: TextStyle(fontSize: 16),
               ),
             ),
-            RaisedButton(
-              onPressed: () => editAccountSettings(user),
-              child: Text(
-                  "Edit account settings" //No translation because design is not ready and maybe there is no button with text
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 36.0),
+              child: getTextOrPlaceHolder(
+                text: config.status,
+                align: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+                placeholderText: AppLocalizations.of(context).profileStatusPlaceholder,
+                placeholderStyle: TextStyle(fontSize: 16, color: textDisabled),
+                placeHolderAlign: TextAlign.center,
               ),
-            )
+            ),
+            buildOutlineButton(
+              context: context,
+              color: Theme.of(context).primaryColor,
+              child: Text(AppLocalizations.of(context).profileEditButton),
+              onPressed: editUserSettings,
+            ),
           ],
         ),
       ),
     );
   }
 
-  editUserSettings(String avatarPath, String username, String status) async{
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditUserSettings(
-          avatarPath: avatarPath,
-          username: username,
-          status: status,
-        )
-      ),
+  CircleAvatar buildAvatar(Config user) {
+    return user.avatarPath.isEmpty
+        ? CircleAvatar(
+            maxRadius: profileAvatarMaxRadius,
+            child: Icon(
+              Icons.person,
+              size: 60,
+            ),
+          )
+        : CircleAvatar(
+            maxRadius: profileAvatarMaxRadius,
+            backgroundImage: FileImage(File(user.avatarPath)),
+          );
+  }
+
+  Widget getAccountSettingsAction() {
+    return IconButton(
+      icon: Icon(Icons.settings),
+      onPressed: () => _editAccountSettings(context),
     );
-
   }
 
-  //TODO: call editAccountSettings screen
-  editAccountSettings(User user) {
+  _editAccountSettings(BuildContext context) {
+    Navigator.pushNamed(context, OxTalkApp.ROUTES_PROFILE_EDIT);
+  }
+
+  editUserSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => EditAccountSettings(
-          imapLogin: user.imapLogin,
-          imapServer: user.imapServer,
-          imapPort: user.imapPort,
-          smtpLogin: user.smtpLogin,
-          smtpPassword: user.smtpPassword,
-          smtpServer: user.smtpServer,
-          smtpPort: user.smtpPort,
-        )
-    ),);
+      MaterialPageRoute(builder: (context) => EditUserSettings()),
+    );
   }
-
 }

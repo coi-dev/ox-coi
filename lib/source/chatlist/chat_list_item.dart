@@ -40,95 +40,70 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/source/chat/chat.dart';
-import 'package:ox_talk/source/ui/dimensions.dart';
+import 'package:ox_talk/source/chat/chat_bloc.dart';
+import 'package:ox_talk/source/chat/chat_event.dart';
+import 'package:ox_talk/source/chat/chat_state.dart';
+import 'package:ox_talk/source/widgets/avatar_list_item.dart';
+import 'package:ox_talk/source/utils/colors.dart';
 
-class ChatListItem extends StatefulWidget
-{
-  final Chat _chat;
+class ChatListItem extends StatefulWidget {
+  final int _chatId;
 
-  ChatListItem(this._chat);
+  ChatListItem(this._chatId, key) : super(key: Key(key));
 
   @override
   _ChatListItemState createState() => _ChatListItemState();
 }
 
-class _ChatListItemState  extends State<ChatListItem>
-{
-  String _name;
-  String _subtitle;
+class _ChatListItemState extends State<ChatListItem> {
+  ChatBloc _chatBloc = ChatBloc();
 
   @override
   void initState() {
     super.initState();
-    setupChatItem();
-  }
-
-  void setupChatItem() async {
-    _name = await widget._chat.getName();
-    _subtitle = await widget._chat.getSubtitle();
-    setState(() {});
+    _chatBloc.dispatch(RequestChat(widget._chatId));
   }
 
   @override
   Widget build(BuildContext context) {
-  return GestureDetector(
-    onTap:() => chatItemTapped(),
-    child: Padding(
-    padding: const EdgeInsets.only(top: Dimensions.listItemPaddingSmall),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CircleAvatar(
-            radius: 24.0,
-            child: Text(getInitial()),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.listItemPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: _name != null ? Text(
-                          _name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
-                        ) : Container(),
-                      ),
-                    ],
-                  ),
-                  _subtitle != null ?
-                  Text(_subtitle)
-                      : Container(),
-                  Divider(),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    )
-  );
+    return BlocBuilder(
+      bloc: _chatBloc,
+      builder: (context, state) {
+        String name;
+        String subTitle;
+        Color color;
+        if (state is ChatStateSuccess) {
+          name = state.name;
+          subTitle = state.subTitle;
+          color = state.color;
+        } else {
+          name = "";
+          subTitle = "";
+        }
+        return AvatarListItem(
+          title: name,
+          subTitle: subTitle,
+          color: color,
+          subTitleIcon: _chatBloc.isGroup
+              ? Icon(
+                  Icons.group,
+                  size: 18,
+                )
+              : Container(),
+          onTap: chatItemTapped,
+        );
+      },
+    );
+    /*;*/
   }
 
-  String getInitial() {
-    if (_name != null && _name.isNotEmpty) {
-      return _name.substring(0, 1);
-    }
-    return "";
-  }
-
-  chatItemTapped() {
+  chatItemTapped(String name, String subtitle) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatScreen(widget._chat)),
+      MaterialPageRoute(builder: (context) => ChatScreen(widget._chatId)),
     );
   }
 }

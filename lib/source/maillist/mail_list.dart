@@ -44,8 +44,8 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/source/base/base_root_child.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
 import 'package:ox_talk/source/maillist/mail_list_item.dart';
-import 'package:ox_talk/source/ui/default_colors.dart';
-import 'package:ox_talk/source/ui/dimensions.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/utils/dimensions.dart';
 
 class MailListView extends BaseRootChild {
 
@@ -53,7 +53,7 @@ class MailListView extends BaseRootChild {
 
   @override
   Color getColor() {
-    return DefaultColors.mailColor;
+    return mailMain;
   }
 
   @override
@@ -85,7 +85,7 @@ class _MailListState extends State<MailListView> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.all(Dimensions.listItemPadding),
+      padding: EdgeInsets.all(listItemPadding),
       itemBuilder: (BuildContext context, int index) {
         Mail contact = Mail("name $index", "subject $index", "message $index", false, false, false, false);
         return MailListItem(contact);

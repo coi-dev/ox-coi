@@ -40,43 +40,32 @@
  * for more details.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
-class DialogUtil {
-  static showConfirmationDialog(
-      {@required BuildContext context,
-      @required String title,
-      @required String content,
-      @required String positiveButton,
-      @required Function positiveAction,
-      String negativeButton,
-      Function negativeAction}) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: new Text(content),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : "Cancel"),
-              onPressed: () {
-                if (negativeAction != null) {
-                  negativeAction();
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text(positiveButton),
-              onPressed: () {
-                positiveAction();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+const Color chatMain = Colors.blue;
+const Color mailMain = Colors.indigo;
+const Color contactMain = Colors.blueGrey;
+const Color profileMain = contactMain;
+
+const Color textDisabled = Colors.black26;
+
+Color rgbColorFromInt(int color, [int alpha]) {
+  if (alpha == null) {
+    alpha = 255;
   }
+  return Color.fromARGB(alpha, _red(color), _green(color), _blue(color));
+}
+
+int _red(int color) {
+  return (color >> 16) & 0xFF;
+}
+
+int _green(int color) {
+  return (color >> 8) & 0xFF;
+}
+
+int _blue(int color) {
+  return color & 0xFF;
 }

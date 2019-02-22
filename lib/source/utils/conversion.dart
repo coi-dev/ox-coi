@@ -40,15 +40,21 @@
  * for more details.
  */
 
-class Dimensions {
+const _kilobyte = 1024;
+const _megabyte = 1024 * _kilobyte;
 
-  static const listItemPadding = 8.0;
-
-  static const listItemPaddingSmall = 4.0;
-
-  static const defaultBorderPadding = 20.0;
-
-  static const profileAvatarMaxRadius = 45.0;
-
-  static const editAvatarIconSize = 40.0;
+String byteToPrintableSize(int size) {
+  String unit;
+  double result;
+  if (size < _kilobyte) {
+    result = size as double;
+    unit = "Byte";
+  } else if (size < _megabyte) {
+    result = size / _kilobyte;
+    unit = "KB";
+  } else {
+    result = size / _megabyte;
+    unit = "MB";
+  }
+  return "${result.toStringAsFixed(2)} $unit";
 }

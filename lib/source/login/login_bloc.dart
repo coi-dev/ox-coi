@@ -42,6 +42,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/source/data/config.dart';
 import 'package:ox_talk/source/login/login_events.dart';
 import 'package:ox_talk/source/login/login_state.dart';
 
@@ -77,30 +78,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   void dispose() {
     super.dispose();
-    _core.removeListener(Dc.eventConfigureProgress, _listenerId);
+    _core.removeListener(Event.configureProgress, _listenerId);
   }
 
   void _setupConfig(LoginButtonPressed event) {
-    setConfigValueIfPresent(Context.configAddress, event.email);
-    setConfigValueIfPresent(Context.configMailPassword, event.password);
-    setConfigValueIfPresent(Context.configMailUser, event.imapLogin);
-    setConfigValueIfPresent(Context.configMailServer, event.imapServer);
-    setConfigValueIfPresent(Context.configMailPassword, event.imapPort);
-    setConfigValueIfPresent(Context.configSendUser, event.smtpLogin);
-    setConfigValueIfPresent(Context.configSendPassword, event.smtpPassword);
-    setConfigValueIfPresent(Context.configSendServer, event.smtpServer);
-    setConfigValueIfPresent(Context.configSendPort, event.smtpPort);
-  }
-
-  void setConfigValueIfPresent(String key, var value) async {
-    if (value == null || (value is String && value.isEmpty)) {
-      return;
-    }
-    await _context.setConfigValue(key, value);
+    Config config = Config();
+    config.setValue(Context.configAddress, event.email);
+    config.setValue(Context.configMailPassword, event.password);
+    config.setValue(Context.configMailUser, event.imapLogin);
+    config.setValue(Context.configMailServer, event.imapServer);
+    config.setValue(Context.configMailPassword, event.imapPort);
+    config.setValue(Context.configSendUser, event.smtpLogin);
+    config.setValue(Context.configSendPassword, event.smtpPassword);
+    config.setValue(Context.configSendServer, event.smtpServer);
+    config.setValue(Context.configSendPort, event.smtpPort);
   }
 
   void registerListener() async {
-    _listenerId = await _core.listen(Dc.eventConfigureProgress, _successCallback, _errorCallback);
+    _listenerId = await _core.listen(Event.configureProgress, _successCallback, _errorCallback);
   }
 
   bool _loginSuccess(int progress) {

@@ -40,37 +40,40 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:flutter/material.dart';
 
-class ChatListRepository extends Repository<ChatList> {
+OutlineButton buildOutlineButton({
+  BuildContext context,
+  Function onPressed,
+  Widget child,
+  Color color,
+}) {
+  return OutlineButton(
+    highlightedBorderColor: color,
+    borderSide: BorderSide(color: color),
+    textColor: color,
+    onPressed: onPressed,
+    child: child,
+  );
+}
 
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
-
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
-
-  @override
-  error(error) {
-    super.error(error);
-  }
-
-
+Widget getTextOrPlaceHolder({
+  @required String text,
+  TextStyle style,
+  TextAlign align,
+  @required String placeholderText,
+  TextStyle placeholderStyle,
+  TextAlign placeHolderAlign,
+}) {
+  return text != null && text.isNotEmpty
+      ? Text(
+          text,
+          style: style,
+          textAlign: align,
+        )
+      : Text(
+          placeholderText,
+          style: placeholderStyle,
+          textAlign: placeHolderAlign,
+        );
 }

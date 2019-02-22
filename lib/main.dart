@@ -40,17 +40,20 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_talk/source/base/bloc_delegate.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:ox_talk/source/log/bloc_delegate.dart';
+import 'package:ox_talk/source/chatlist/create_chat.dart';
 import 'package:ox_talk/source/contact/contact_change.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
 import 'package:ox_talk/source/login/login.dart';
 import 'package:ox_talk/source/main/root.dart';
 import 'package:ox_talk/source/main/splash.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:ox_talk/source/profile/edit_user_settings.dart';
+import 'package:ox_talk/source/profile/edit_account_settings.dart';
 
 void main() {
   BlocSupervisor().delegate = DebugBlocDelegate();
@@ -58,11 +61,11 @@ void main() {
 }
 
 class OxTalkApp extends StatelessWidget {
-
   static const String ROUTES_ROOT = "/";
 
   static const ROUTES_CONTACT_ADD = '/contactAdd';
-  static const ROUTES_EDIT_USER = '/editUser';
+  static const ROUTES_PROFILE_EDIT = '/profileEdit';
+  static const ROUTES_CHAT_CREATE = '/chatCreate';
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,11 @@ class OxTalkApp extends StatelessWidget {
       initialRoute: ROUTES_ROOT,
       routes: {
         ROUTES_ROOT: (context) => _OxTalk(),
-        ROUTES_CONTACT_ADD: (context) => ContactChange(add: true,),
+        ROUTES_CONTACT_ADD: (context) => ContactChange(
+              contactAction: ContactAction.add,
+            ),
+        ROUTES_PROFILE_EDIT: (context) => EditAccountSettings(),
+        ROUTES_CHAT_CREATE: (context) => CreateChat(),
       },
     );
   }
@@ -93,8 +100,8 @@ class _OxTalk extends StatefulWidget {
 }
 
 class _OxTalkState extends State<_OxTalk> {
-  DeltaChatCore _core;
-  Context _context;
+  DeltaChatCore _core = DeltaChatCore();
+  Context _context = Context();
   bool _coreLoaded = false;
   bool _configured = false;
 
@@ -114,13 +121,19 @@ class _OxTalkState extends State<_OxTalk> {
   }
 
   void _initCoreAndContext() async {
-    _core = DeltaChatCore();
     await _core.init();
-    _context = Context();
     await _isConfigured();
+    await _setupDefaultValues();
     setState(() {
       _coreLoaded = true;
     });
+  }
+
+  Future _setupDefaultValues() async {
+    String status = await _context.getConfigValue(Context.configSelfStatus);
+    if (status == AppLocalizations.of(context).deltaChatStatusDefaultValue) {
+      await _context.setConfigValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
+    }
   }
 
   Future _isConfigured() async {
@@ -140,5 +153,4 @@ class _OxTalkState extends State<_OxTalk> {
       _configured = true;
     });
   }
-
 }

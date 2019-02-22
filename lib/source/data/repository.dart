@@ -60,7 +60,12 @@ abstract class Repository<T extends Base> {
   Observable get observable => Observable(_behaviorSubject.stream);
 
   T get(int id) {
-    return _items[id];
+    var item = _items[id];
+    if (item == null) {
+      _putIfAbsent(id);
+      item = _items[id];
+    }
+    return item;
   }
 
   List<T> getAll() {

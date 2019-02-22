@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_talk/source/l10n/localizations.dart';
 
 enum TextFormType {
   normal,
@@ -51,16 +52,16 @@ enum TextFormType {
 
 class ValidatableTextFormField extends StatefulWidget {
   final TextFormType textFormType;
-  final String labelText;
-  final String hintText;
+  final Function labelText;
+  final Function hintText;
   final bool autoFocus;
   final TextInputType inputType;
   final TextEditingController controller = TextEditingController();
   final bool needValidation;
 
   ValidatableTextFormField(
-    this.labelText,
-    this.hintText, {
+    this.labelText, {
+    this.hintText,
     Key key,
     this.textFormType = TextFormType.normal,
     this.inputType = TextInputType.text,
@@ -89,17 +90,17 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
         validator: (value) {
           if (widget.needValidation) {
             if (widget.textFormType == TextFormType.email && !isEmail(value)) {
-              return 'It is not a valid email!';
+              return AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail;
             } else if (widget.textFormType == TextFormType.port) {
               if (!isValidPort(value)) {
-                return 'Please enter a valid port (1-65535)';
+                return AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort;
               }
             }
           }
         },
         decoration: InputDecoration(
-          labelText: widget.labelText,
-          hintText: widget.hintText,
+          labelText: widget.labelText(context),
+          hintText: widget.hintText != null ? widget.hintText(context) : "",
         ));
   }
 
@@ -112,13 +113,13 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
         validator: (value) {
           if (widget.needValidation) {
             if (value.isEmpty) {
-              return 'Please enter your password!';
+              return AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword;
             }
           }
         },
         decoration: InputDecoration(
-          labelText: widget.labelText,
-          hintText: widget.hintText,
+          labelText: widget.labelText(context),
+          hintText: widget.hintText != null ? widget.hintText(context) : "",
           suffixIcon: IconButton(icon: Icon(!_passwordIsVisible ? Icons.visibility_off : Icons.visibility), onPressed: _togglePasswordVisibility),
         ));
   }

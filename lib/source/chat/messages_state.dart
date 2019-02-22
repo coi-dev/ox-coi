@@ -40,59 +40,53 @@
  * for more details.
  */
 
-import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/source/base/bloc_progress_state.dart';
-import 'package:ox_talk/source/ui/styles.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:meta/meta.dart';
+import 'package:ox_talk/source/base/bloc_base_state.dart';
 
-class FullscreenProgress<T extends Bloc> extends StatelessWidget {
-  final String _text;
+abstract class MessagesState extends BaseState {
+  MessagesState({
+    @required isLoading,
+    @required isSuccess,
+    @required error,
+  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+}
 
-  final bool _showProgressValues;
-
-  final T _bloc;
-
-  FullscreenProgress(this._bloc, this._text, [this._showProgressValues]);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _bloc,
-      builder: (BuildContext context, state) {
-        int progress = 0;
-        if (state is ProgressState) {
-          progress = state.progress;
-        }
-        return Container(
-          constraints: BoxConstraints.expand(),
-          color: Color.fromRGBO(0, 0, 0, 0.5),
-          child: buildProgress(progress),
+class MessagesStateInitial extends MessagesState {
+  MessagesStateInitial()
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: '',
         );
-      },
-    );
-  }
+}
 
-  Widget buildProgress(int progress) {
-    var column = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 8.0),
-          child: Text(_text, style: TextStyles.progress),
-        ),
-      ],
-    );
-    if (_showProgressValues) {
-      column.children.add(Padding(
-        padding: EdgeInsets.only(top: 8.0),
-        child: Text("${progress / 10}%", style: TextStyles.progress),
-      ));
-    }
-    return column;
-  }
+class MessagesStateLoading extends MessagesState {
+  MessagesStateLoading()
+      : super(
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
+}
+
+class MessagesStateSuccess extends MessagesState {
+  final List<int> messageIds;
+  final List<int> messageLastUpdateValues;
+
+  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues})
+      : super(
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
+}
+
+class MessagesStateFailure extends MessagesState {
+  MessagesStateFailure({@required error})
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
 }

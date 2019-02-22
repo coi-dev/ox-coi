@@ -39,20 +39,16 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+import 'dart:ui';
 
 import 'package:meta/meta.dart';
 import 'package:ox_talk/source/base/bloc_base_state.dart';
 
 abstract class ContactItemState extends BaseState {
-  final String name;
-  final String email;
-
   ContactItemState({
     @required isLoading,
     @required isSuccess,
     @required error,
-    @required this.name,
-    @required this.email,
   }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
@@ -62,8 +58,6 @@ class ContactItemStateInitial extends ContactItemState {
           isLoading: false,
           isSuccess: false,
           error: '',
-          name: null,
-          email: null,
         );
 }
 
@@ -73,19 +67,19 @@ class ContactItemStateLoading extends ContactItemState {
           isLoading: true,
           isSuccess: false,
           error: '',
-          name: null,
-          email: null,
         );
 }
 
 class ContactItemStateSuccess extends ContactItemState {
-  ContactItemStateSuccess({@required String name, @required String mail})
+  final String name;
+  final String email;
+  final Color color;
+
+  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color})
       : super(
           isLoading: false,
           isSuccess: true,
           error: '',
-          name: name,
-          email: mail,
         );
 }
 
@@ -95,7 +89,5 @@ class ContactItemStateFailure extends ContactItemState {
           isLoading: false,
           isSuccess: false,
           error: error,
-          name: null,
-          email: null,
         );
 }

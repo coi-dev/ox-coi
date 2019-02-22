@@ -40,37 +40,21 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'dart:ui';
 
-class ChatListRepository extends Repository<ChatList> {
+abstract class ChatEvent {}
 
-  ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
+class RequestChat extends ChatEvent {
+  int chatId;
 
-  @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
-      await setupChatListAfterUpdate();
-    }
-    super.success(event);
-  }
-  Future<void> setupChatListAfterUpdate() async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
-    }
-    update(ids: chatIds);
-  }
+  RequestChat(this.chatId);
+}
 
-  @override
-  error(error) {
-    super.error(error);
-  }
+class ChatLoaded extends ChatEvent {
+  final String name;
+  final String subTitle;
+  final Color color;
+  final bool isGroupChat;
 
-
+  ChatLoaded(this.name, this.subTitle, this.color, this.isGroupChat);
 }

@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ox_talk/main.dart';
 import 'package:ox_talk/source/base/base_root_child.dart';
 import 'package:ox_talk/source/contact/contact_import_bloc.dart';
@@ -53,9 +52,10 @@ import 'package:ox_talk/source/contact/contact_list_bloc.dart';
 import 'package:ox_talk/source/contact/contact_list_event.dart';
 import 'package:ox_talk/source/contact/contact_list_state.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
-import 'package:ox_talk/source/ui/default_colors.dart';
-import 'package:ox_talk/source/ui/dialog_util.dart';
-import 'package:ox_talk/source/ui/dimensions.dart';
+import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/widgets/dialog_builder.dart';
+import 'package:ox_talk/source/utils/dimensions.dart';
+import 'package:ox_talk/source/utils/toast.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends BaseRootChild {
@@ -68,7 +68,7 @@ class ContactListView extends BaseRootChild {
 
   @override
   Color getColor() {
-    return DefaultColors.contactColor;
+    return contactMain;
   }
 
   @override
@@ -81,23 +81,23 @@ class ContactListView extends BaseRootChild {
     );
   }
 
+  _showAddContactView(BuildContext context) {
+    Navigator.pushNamed(context, OxTalkApp.ROUTES_CONTACT_ADD);
+  }
+
   @override
   String getTitle(BuildContext context) {
-    return AppLocalizations.of(context).contactsTitle;
+    return AppLocalizations.of(context).contactTitle;
   }
 
   @override
   String getNavigationText(BuildContext context) {
-    return AppLocalizations.of(context).contactsTitle;
+    return AppLocalizations.of(context).contactTitle;
   }
 
   @override
   IconData getNavigationIcon() {
     return Icons.contacts;
-  }
-
-  _showAddContactView(BuildContext context) {
-    Navigator.pushNamed(context, OxTalkApp.ROUTES_CONTACT_ADD);
   }
 }
 
@@ -123,11 +123,11 @@ class _ContactListState extends State<ContactListView> {
 
   handleContactImport(ContactImportState state) {
     if (state is ContactsImportSuccess) {
-      String contactImportSuccess = "${state.changedCount} system contacts imported";
-      _showToast(contactImportSuccess);
+      String contactImportSuccess = AppLocalizations.of(context).contactImportSuccess(state.changedCount);
+      showToast(contactImportSuccess);
     } else if (state is ContactsImportFailure) {
-      String contactImportFailure = "Import failed, missing permissions";
-      _showToast(contactImportFailure);
+      String contactImportFailure = AppLocalizations.of(context).contactImportFailure;
+      showToast(contactImportFailure);
     }
   }
 
@@ -143,9 +143,7 @@ class _ContactListState extends State<ContactListView> {
             child: CircularProgressIndicator(),
           );
         } else {
-          return Center(
-            child: Text("Loading error"),
-          );
+          return Icon(Icons.error);
         }
       },
     );
@@ -159,13 +157,13 @@ class _ContactListState extends State<ContactListView> {
   }
 
   void _showImportDialog(bool initialImport, BuildContext context) {
-    var importTitle = "Import system contacts";
-    var importText = "Would you like to import your system contacts?";
-    var content = initialImport
-        ? "$importText This action can be also done later via the import button in the top action bar."
-        : "$importText Re-importing your contacts will not create duplicates.";
-    var importPositive = "Import";
-    DialogUtil.showConfirmationDialog(
+    var importTitle = AppLocalizations.of(context).contactImportDialogTitle;
+    var importText = AppLocalizations.of(context).contactImportDialogContent;
+    var importTextInitial = AppLocalizations.of(context).contactImportDialogContentExtensionInitial;
+    var importTextRepeat = AppLocalizations.of(context).contactImportDialogContentExtensionRepeat;
+    var content = "$importText ${initialImport ? importTextInitial : importTextRepeat}";
+    var importPositive = AppLocalizations.of(context).import;
+    DialogBuilder.showConfirmationDialog(
       context: context,
       title: importTitle,
       content: content,
@@ -178,20 +176,13 @@ class _ContactListState extends State<ContactListView> {
 
   Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
     return ListView.builder(
-        padding: EdgeInsets.all(Dimensions.listItemPadding),
+        padding: EdgeInsets.all(listItemPadding),
         itemCount: contactIds.length,
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];
           var key = "$contactId-${contactLastUpdateValues[index]}";
-          return ContactItem(contactId, key);
+          return ContactItem(contactId, false, key);
         });
   }
 
-  _showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      timeInSecForIos: 4,
-    );
-  }
 }
