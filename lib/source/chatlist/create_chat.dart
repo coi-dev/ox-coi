@@ -81,7 +81,6 @@ class _CreateChatState extends State<CreateChat> {
     );
   }
 
-  @override
   Widget buildForm() {
     return BlocBuilder(
       bloc: _contactListBloc,

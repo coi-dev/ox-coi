@@ -69,17 +69,12 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
 
   File _image;
   String _path = "";
-  AnimationController _controller;
   //ImagePickerHandler _imagePicker;
 
   @override
   void initState() {
     super.initState();
     _userBloc.dispatch(RequestUser());
-    _controller = new AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
 
     //_imagePicker = new ImagePickerHandler(this, _controller);
     //_imagePicker.build(0xFFEE6969,0xFFFFFFFF,false);
@@ -182,7 +177,6 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
     );
   }
 
-  @override
   userImage(File _newImage) {
     setState(() {
       _image = _newImage;

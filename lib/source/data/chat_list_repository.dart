@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/source/data/repository.dart';
 

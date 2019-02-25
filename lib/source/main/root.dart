@@ -44,7 +44,6 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/source/base/base_root_child.dart';
 import 'package:ox_talk/source/chatlist/chat_list.dart';
 import 'package:ox_talk/source/contact/contact_list.dart';
-import 'package:ox_talk/source/maillist/mail_list.dart';
 import 'package:ox_talk/source/profile/profile.dart';
 
 class Root extends StatefulWidget {
