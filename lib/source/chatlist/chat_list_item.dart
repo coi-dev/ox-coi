@@ -47,7 +47,6 @@ import 'package:ox_talk/source/chat/chat_bloc.dart';
 import 'package:ox_talk/source/chat/chat_event.dart';
 import 'package:ox_talk/source/chat/chat_state.dart';
 import 'package:ox_talk/source/widgets/avatar_list_item.dart';
-import 'package:ox_talk/source/utils/colors.dart';
 
 class ChatListItem extends StatefulWidget {
   final int _chatId;

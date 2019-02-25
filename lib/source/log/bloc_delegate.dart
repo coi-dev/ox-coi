@@ -47,4 +47,9 @@ class DebugBlocDelegate implements BlocDelegate {
   void onTransition(Transition transition) {
     print(transition.toString());
   }
+
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    print("Error: $error (Stacktrace: $stacktrace)");
+  }
 }
