@@ -1,0 +1,17 @@
+digraph G {
+	node [	
+		shape = polygon,
+		sides = 4,
+		style = filled,
+		fontname = "Helvetica-Outline" 
+		];
+	"UI / Widget" -> "BloC"
+	"BloC" -> "UI / Widget"
+
+	"BloC" -> "Plugin"
+	"BloC" -> "Repository / Data Object"
+	"Repository / Data Object" -> "BloC"
+
+	"Repository / Data Object" -> "Plugin"
+	"Plugin" -> "Repository / Data Object"
+}
