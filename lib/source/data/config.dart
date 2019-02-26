@@ -47,7 +47,6 @@ class Config {
 
   Context _context = Context();
   int _lastUpdate = -1;
-
   String username;
   String status;
   String avatarPath;
@@ -58,6 +57,8 @@ class Config {
   String smtpLogin;
   String smtpServer;
   int smtpPort;
+
+  int get lastUpdate => _lastUpdate;
 
   Config._internal();
 
@@ -82,6 +83,11 @@ class Config {
     smtpLogin = await _context.getConfigValue(Context.configSendUser);
     smtpServer = await _context.getConfigValue(Context.configSendServer);
     smtpPort = await _context.getConfigValue(Context.configSendPort, ObjectType.int);
+    setLastUpdate();
+  }
+
+  void setLastUpdate() {
+    _lastUpdate = DateTime.now().millisecondsSinceEpoch;
   }
 
   reload() async {
@@ -89,10 +95,14 @@ class Config {
     await load();
   }
 
-  void setValue(String key, var value, [allowNullEmptyAndValues]) {
-    if (allowNullEmptyAndValues == null || !allowNullEmptyAndValues) {
+  void setValue(String key, var value, [bool allowNullAndEmptyValues, ObjectType enforceType]) {
+    if (allowNullAndEmptyValues == null || !allowNullAndEmptyValues) {
       if ((value == null || (value is String && value.isEmpty))) {
         return;
+      }
+    } else {
+      if (enforceType == null) {
+        throw ArgumentError("allowNullAndEmptyValues is true but no specific type was set via enforceType.");
       }
     }
 
@@ -128,7 +138,12 @@ class Config {
         smtpPort = value;
         break;
     }
-    _context.setConfigValue(key, value);
+    if (enforceType != null) {
+      _context.setConfigValue(key, value, enforceType);
+    } else {
+      _context.setConfigValue(key, value);
+    }
+    setLastUpdate();
   }
 
   String get smtpPortAsString => imapPort > 0 ? imapPort : "";

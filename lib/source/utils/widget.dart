@@ -42,6 +42,14 @@
 
 import 'package:flutter/material.dart';
 
+Key createKey(var value) {
+  if (value is String) {
+    return Key(value);
+  } else {
+    return Key(value.toString());
+  }
+}
+
 OutlineButton buildOutlineButton({
   BuildContext context,
   Function onPressed,
@@ -57,7 +65,7 @@ OutlineButton buildOutlineButton({
   );
 }
 
-Widget getTextOrPlaceHolder({
+Widget buildTextOrPlaceHolder({
   @required String text,
   TextStyle style,
   TextAlign align,

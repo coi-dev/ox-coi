@@ -125,7 +125,7 @@ class _ProfileState extends State<ProfileView> {
               padding: EdgeInsets.symmetric(vertical: 24.0),
               child: buildAvatar(config),
             ),
-            getTextOrPlaceHolder(
+            buildTextOrPlaceHolder(
               text: config.username,
               style: TextStyle(fontSize: 24),
               align: TextAlign.center,
@@ -142,7 +142,7 @@ class _ProfileState extends State<ProfileView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 36.0),
-              child: getTextOrPlaceHolder(
+              child: buildTextOrPlaceHolder(
                 text: config.status,
                 align: TextAlign.center,
                 style: TextStyle(fontSize: 16),
@@ -163,8 +163,9 @@ class _ProfileState extends State<ProfileView> {
     );
   }
 
-  CircleAvatar buildAvatar(Config user) {
-    return user.avatarPath.isEmpty
+  CircleAvatar buildAvatar(Config config) {
+    var hasAvatarPath = config.avatarPath == null || config.avatarPath.isEmpty;
+    return hasAvatarPath
         ? CircleAvatar(
             maxRadius: profileAvatarMaxRadius,
             child: Icon(
@@ -173,8 +174,9 @@ class _ProfileState extends State<ProfileView> {
             ),
           )
         : CircleAvatar(
+            key: createKey(config.lastUpdate),
             maxRadius: profileAvatarMaxRadius,
-            backgroundImage: FileImage(File(user.avatarPath)),
+            backgroundImage: FileImage(File(config.avatarPath)),
           );
   }
 

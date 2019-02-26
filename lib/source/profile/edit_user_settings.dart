@@ -40,12 +40,12 @@
  * for more details.
  */
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:image_picker_ui/image_picker_handler.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:ox_talk/source/data/config.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
 import 'package:ox_talk/source/profile/user_bloc.dart';
@@ -53,7 +53,6 @@ import 'package:ox_talk/source/profile/user_event.dart';
 import 'package:ox_talk/source/profile/user_state.dart';
 import 'package:ox_talk/source/utils/colors.dart';
 import 'package:ox_talk/source/utils/dimensions.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditUserSettings extends StatefulWidget {
@@ -61,24 +60,18 @@ class EditUserSettings extends StatefulWidget {
   _EditUserSettingsState createState() => _EditUserSettingsState();
 }
 
-class _EditUserSettingsState extends State<EditUserSettings> with TickerProviderStateMixin {//, ImagePickerListener {
+class _EditUserSettingsState extends State<EditUserSettings> with TickerProviderStateMixin {
   UserBloc _userBloc = UserBloc();
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _statusController = TextEditingController();
 
-  File _image;
-  String _path = "";
-  //ImagePickerHandler _imagePicker;
+  File _avatar;
 
   @override
   void initState() {
     super.initState();
     _userBloc.dispatch(RequestUser());
-
-    //_imagePicker = new ImagePickerHandler(this, _controller);
-    //_imagePicker.build(0xFFEE6969,0xFFFFFFFF,false);
-
     final userStatesObservable = new Observable<UserState>(_userBloc.state);
     userStatesObservable.listen((state) => _handleUserStateChange(state));
   }
@@ -88,7 +81,10 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
       Config config = state.config;
       _usernameController.text = config.username;
       _statusController.text = config.status;
-      _path = config.avatarPath;
+      String avatarPath = config.avatarPath;
+      if (avatarPath != null && avatarPath.isNotEmpty) {
+        _avatar = File(config.avatarPath);
+      }
     }
   }
 
@@ -102,7 +98,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).editUserSettingsTitle),
-          actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: saveChanges)],
+          actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: _saveChanges)],
         ),
         body: buildForm());
   }
@@ -129,13 +125,13 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 24.0)),
             new GestureDetector(
-                onTap: () => null,//_imagePicker.showDialog(context),
+                onTap: () => _showAvatarSourceChooser(),
                 child: Stack(
                   children: <Widget>[
-                    _path.isNotEmpty
+                    _avatar != null
                         ? CircleAvatar(
                             maxRadius: profileAvatarMaxRadius,
-                            backgroundImage: FileImage(File('$_path')),
+                            backgroundImage: FileImage(_avatar),
                           )
                         : CircleAvatar(
                             maxRadius: profileAvatarMaxRadius,
@@ -177,31 +173,60 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
     );
   }
 
-  userImage(File _newImage) {
+  _showAvatarSourceChooser() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo),
+                title: Text("Gallery"),
+                onTap: () => _getNewAvatarPath(ImageSource.gallery),
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text("Camera"),
+                onTap: () => _getNewAvatarPath(ImageSource.camera),
+              ),
+              ListTile(
+                leading: Icon(Icons.delete),
+                title: Text("Remove current image"),
+                onTap: () => _removeAvatar(),
+              )
+            ],
+          );
+        });
+  }
+
+  _getNewAvatarPath(ImageSource source) async {
+    Navigator.pop(context);
+    File newAvatar = await ImagePicker.pickImage(source: source);
+    File croppedAvatar = await ImageCropper.cropImage(
+      sourcePath: newAvatar.path,
+      ratioX: 1.0,
+      ratioY: 1.0,
+      maxWidth: 512,
+      maxHeight: 512,
+    );
+    if (croppedAvatar != null) {
+      setState(() {
+        _avatar = croppedAvatar;
+      });
+    }
+  }
+
+  _removeAvatar() {
+    Navigator.pop(context);
     setState(() {
-      _image = _newImage;
-      _path = _newImage.path;
+      _avatar = null;
     });
   }
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<String> saveImage(File image) async {
-    final path = await _localPath;
-    File newImage = await image.copy('$path/userAvatar.jpg');
-    return newImage.path;
-  }
-
-  void saveChanges() async {
-    if (_image != null) {
-      _path = await saveImage(_image);
-    }
-
-    _userBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: _path));
-
+  void _saveChanges() async {
+    String avatarPath = _avatar != null ? _avatar.path : null;
+    _userBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
     Navigator.pop(context);
   }
 }
