@@ -150,7 +150,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                 size: 18,
                               ))
                           : Container(),
-                      Text(subTitle, style: TextStyle(fontSize: 14)),
+                      Expanded(
+                        child: Text(
+                          subTitle,
+                          style: TextStyle(fontSize: 14),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ],
                   ),
                 ],
