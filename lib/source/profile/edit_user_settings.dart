@@ -203,17 +203,19 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   _getNewAvatarPath(ImageSource source) async {
     Navigator.pop(context);
     File newAvatar = await ImagePicker.pickImage(source: source);
-    File croppedAvatar = await ImageCropper.cropImage(
-      sourcePath: newAvatar.path,
-      ratioX: 1.0,
-      ratioY: 1.0,
-      maxWidth: 512,
-      maxHeight: 512,
-    );
-    if (croppedAvatar != null) {
-      setState(() {
-        _avatar = croppedAvatar;
-      });
+    if (newAvatar != null) {
+      File croppedAvatar = await ImageCropper.cropImage(
+        sourcePath: newAvatar.path,
+        ratioX: 1.0,
+        ratioY: 1.0,
+        maxWidth: 512,
+        maxHeight: 512,
+      );
+      if (croppedAvatar != null) {
+        setState(() {
+          _avatar = croppedAvatar;
+        });
+      }
     }
   }
 
