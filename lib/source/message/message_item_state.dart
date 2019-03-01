@@ -56,29 +56,27 @@ abstract class MessageItemState extends BaseState {
 class MessageItemStateInitial extends MessageItemState {
   MessageItemStateInitial()
       : super(
-    isLoading: false,
-    isSuccess: false,
-    error: '',
-  );
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+        );
 }
 
 class MessageItemStateLoading extends MessageItemState {
   MessageItemStateLoading()
       : super(
-    isLoading: true,
-    isSuccess: false,
-    error: '',
-  );
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
 }
 
 class MessageItemStateSuccess extends MessageItemState {
-  final String contactName;
-  final String contactAddress;
-  final Color contactColor;
   final String messageText;
   final String messageTimestamp;
   final bool messageIsOutgoing;
   final bool hasFile;
+  final ContactWrapper contactWrapper;
   final AttachmentWrapper attachmentWrapper;
 
   MessageItemStateSuccess({
@@ -87,23 +85,35 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.messageTimestamp,
     @required this.hasFile,
     @required this.attachmentWrapper,
-    this.contactName,
-    this.contactAddress,
-    this.contactColor,
+    @required this.contactWrapper,
   }) : super(
-    isLoading: false,
-    isSuccess: true,
-    error: '',
-  );
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
 }
 
 class MessageItemStateFailure extends MessageItemState {
   MessageItemStateFailure({@required error})
       : super(
-    isLoading: false,
-    isSuccess: false,
-    error: error,
-  );
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
+}
+
+class ContactWrapper {
+  final int contactId;
+  final String contactName;
+  final String contactAddress;
+  final Color contactColor;
+
+  ContactWrapper({
+    @required this.contactId,
+    @required this.contactName,
+    @required this.contactAddress,
+    @required this.contactColor,
+  });
 }
 
 class AttachmentWrapper {
@@ -120,5 +130,4 @@ class AttachmentWrapper {
     @required this.size,
     @required this.type,
   });
-
 }

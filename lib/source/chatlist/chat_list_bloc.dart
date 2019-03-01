@@ -44,20 +44,26 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/source/message/messages_bloc.dart';
+import 'package:ox_talk/source/message/messages_event.dart';
+import 'package:ox_talk/source/message/messages_state.dart';
 import 'package:ox_talk/source/chatlist/chat_list_event.dart';
 import 'package:ox_talk/source/chatlist/chat_list_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
+import 'package:rxdart/rxdart.dart';
+
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final Repository<ChatList> chatListRepository = RepositoryManager.get(RepositoryType.chatList);
   final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
   StreamSubscription streamSubscription;
+  MessagesBloc _messagesBloc = MessagesBloc();
 
   @override
   ChatListState get initialState => ChatListStateInitial();
 
   @override
-  Stream<ChatListState> mapEventToState(ChatListState currentState, ChatListEvent event) async*{
+  Stream<ChatListState> mapEventToState(ChatListState currentState, ChatListEvent event) async* {
     if (event is RequestChatList) {
       yield ChatListStateLoading();
       try {
@@ -66,36 +72,49 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       } catch (error) {
         yield ChatListStateFailure(error: error.toString());
       }
-    }else if(event is ChatListModified){
-      yield ChatListStateSuccess(chatIds: chatRepository.getAllIds(), chatLastUpdateValues: chatRepository.getAllLastUpdateValues());
+    } else if (event is ChatListModified) {
+      yield ChatListStateSuccess(
+          chatIds: chatRepository.getAllIds(),
+          chatLastUpdateValues: chatRepository.getAllLastUpdateValues(),
+          messageIds: event.messageIds,
+          messagesLastUpdateValues: event.messagesLastUpdateValues);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    chatListRepository.removeListener(hashCode, Event.chatModified);
+    chatListRepository.removeListener(hashCode, Event.msgsChanged);
+    chatListRepository.removeListener(hashCode, Event.contactsChanged);
     streamSubscription.cancel();
   }
 
-  void setupChatList() async{
+  void setupChatList() async {
     ChatList chatList = ChatList();
     int chatCount = await chatList.getChatCnt();
     List<int> chatIds = List();
-
-    if (chatCount > 0) {
-      for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
-        chatIds.add(chatId);
-      }
+    for (int i = 0; i < chatCount; i++) {
+      int chatId = await chatList.getChat(i);
+      chatIds.add(chatId);
     }
-
     chatRepository.putIfAbsent(ids: chatIds);
-    dispatch(ChatListModified());
+
+    _messagesBloc.dispatch(RequestMessages(1));
+    final userStatesObservable = new Observable<MessagesState>(_messagesBloc.state);
+    userStatesObservable.listen((state) => _handleMessagesStateChange(state));
+  }
+
+  _handleMessagesStateChange(MessagesState state) {
+    if (state is MessagesStateSuccess) {
+      dispatch(ChatListModified(state.messageIds, state.messageLastUpdateValues));
+    }
   }
 
   void setupChatListListener() {
-    chatListRepository.addListener(hashCode, Event.chatModified);
-    streamSubscription = chatListRepository.observable.listen((event) => dispatch(ChatListModified()));
+    if (streamSubscription == null) {
+      chatListRepository.addListener(hashCode, Event.msgsChanged);
+      chatListRepository.addListener(hashCode, Event.contactsChanged);
+      streamSubscription = chatListRepository.observable.listen((event) => dispatch(RequestChatList()));
+    }
   }
 }

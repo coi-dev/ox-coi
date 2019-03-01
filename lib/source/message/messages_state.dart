@@ -40,7 +40,6 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:meta/meta.dart';
 import 'package:ox_talk/source/base/bloc_base_state.dart';
 

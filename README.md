@@ -2,20 +2,27 @@
 
 OX Talk is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
 
-## Relevant information
-- [Documentation](https://confluence-public.open-xchange.com/display/COIPublic/OX+Talk+Mobile+App)
+- **Android state:** Currently in development
+- **iOS state:** Pending
+
+## Information
+- [Documentation](https://github.com/open-xchange/ox-talk/wiki/Developer-Documentation)
 - The IMAP / SMTP interactions are managed by the [delta_chat_core plugin](https://github.com/open-xchange/flutter-deltachat-core)
 
 ## Requirements
-- Flutter 1.0 is used
+- The latest Flutter stable version is used (if problems occur try the [Flutter Dev Channel](https://github.com/flutter/flutter/wiki/Flutter-build-release-channels))
+- The [delta_chat_core plugin](https://github.com/open-xchange/flutter-deltachat-core) needs to be checked out right beside the OX Talk app (the repositories should be located in the same folder) and please follow the requirements given by that project
 
-## Execution of the Flutter app
-As for now (08.11.2018) it is required to execute the example app inside the project from console using ```flutter run --target-platform android-arm``` as the DCC is written as 32 bit program and Flutter is a 
-64 bit program (see https://github.com/flutter/flutter/issues/15530). When using an IDE use ```--target-platform android-arm``` as additional argument in your run configuration.
+## Execution
+- Build and run the project via your IDE / Flutter CLI
 
 ## Development
-To be able to edit / extend the ox_talk app the following steps are important after checking out / altering the project:
-- No special requirements
+To be able to edit / extend this project the following steps are important:
+
+- Perform all actions mentioned under **Execution**
+- Implement your changes
+- Add tests and code for the test suite
+- Create a pull request
 
 ### Flutter 
 

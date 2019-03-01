@@ -4,23 +4,24 @@ description: OX Talk is a mail based chat app.
 version: 0.1.0+398 # x.y.z+build-number
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  bloc: ^0.8.0
-  contacts_service: ^0.2.0
+  bloc: ^0.9.3
+  contacts_service: ^0.2.1
   cupertino_icons: ^0.1.2
-  date_format: ^1.0.5
-  flutter_bloc: ^0.5.1
-  fluttertoast: ^3.0.0
-  rxdart: ^0.20.0
-  #image_picker_ui: ^0.2.0
+  date_format: ^1.0.6
+  flutter_bloc: ^0.7.0
+  fluttertoast: ^3.0.1
+  rxdart: ^0.20.0 # ^0.21.0 exists but 0.20.0 is used for compatibility reasons with bloc: ^0.9.3
+  image_cropper: ^1.0.0
+  image_picker: ^0.5.0+3
   open_file: ^1.2.2+2
-  path_provider: ^0.4.1
+  path_provider: ^0.5.0+1
   permission_handler: ^3.0.0
   shared_preferences: ^0.5.1+1
   delta_chat_core:

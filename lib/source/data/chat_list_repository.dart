@@ -40,20 +40,22 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/source/data/repository.dart';
 
 class ChatListRepository extends Repository<ChatList> {
-
   ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
 
   @override
-  success(Event event) async{
-    if (event.eventId == Event.chatModified) {
+  success(Event event) async {
+    if (event.eventId == Event.msgsChanged) {
       await setupChatListAfterUpdate();
     }
     super.success(event);
   }
+
   Future<void> setupChatListAfterUpdate() async {
     ChatList chatList = ChatList();
     int chatCount = await chatList.getChatCnt();
@@ -71,6 +73,4 @@ class ChatListRepository extends Repository<ChatList> {
   error(error) {
     super.error(error);
   }
-
-
 }

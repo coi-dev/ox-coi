@@ -40,44 +40,26 @@
  * for more details.
  */
 
-import 'dart:async';
+abstract class ChangeChatEvent {}
 
-import 'package:bloc/bloc.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:open_file/open_file.dart';
-import 'package:ox_talk/source/chat/message_attachment_event.dart';
-import 'package:ox_talk/source/chat/message_attachment_state.dart';
-import 'package:ox_talk/source/data/repository.dart';
-import 'package:ox_talk/source/data/repository_manager.dart';
+class CreateChat extends ChangeChatEvent {
+  final int contactId;
+  final int messageId;
+  final int chatId;
+  final bool verified;
+  final String name;
 
-class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
-  Repository<ChatMsg> _messagesRepository;
+  CreateChat({
+    this.contactId,
+    this.messageId,
+    this.chatId,
+    this.verified,
+    this.name,
+  });
+}
 
-  @override
-  MessageAttachmentState get initialState => MessageAttachmentStateInitial();
+class ChatCreated extends ChangeChatEvent {
+  final int chatId;
 
-  @override
-  Stream<MessageAttachmentState> mapEventToState(MessageAttachmentState currentState, MessageAttachmentEvent event) async* {
-    if (event is RequestAttachment) {
-      _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
-      yield MessageAttachmentStateLoading();
-      try {
-        _openFile(event.messageId);
-        dispatch(AttachmentLoaded());
-      } catch (error) {
-        yield MessageAttachmentStateFailure(error: error.toString());
-      }
-    } else if (event is AttachmentLoaded) {
-      yield MessageAttachmentStateSuccess();
-    }
-  }
-
-  void _openFile(int messageId) async {
-    ChatMsg message = _getMessage(messageId);
-    OpenFile.open(await message.getFile());
-  }
-
-  ChatMsg _getMessage(int messageId) {
-    return _messagesRepository.get(messageId);
-  }
+  ChatCreated({this.chatId});
 }

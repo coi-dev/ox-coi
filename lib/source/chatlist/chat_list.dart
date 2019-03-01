@@ -46,6 +46,7 @@ import 'package:ox_talk/main.dart';
 import 'package:ox_talk/source/base/base_root_child.dart';
 import 'package:ox_talk/source/chatlist/chat_list_bloc.dart';
 import 'package:ox_talk/source/chatlist/chat_list_event.dart';
+import 'package:ox_talk/source/chatlist/chat_list_invite_item.dart';
 import 'package:ox_talk/source/chatlist/chat_list_item.dart';
 import 'package:ox_talk/source/chatlist/chat_list_state.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
@@ -105,7 +106,7 @@ class _ChatListState extends State<ChatListView> {
       bloc: _chatListBloc,
       builder: (context, state) {
         if (state is ChatListStateSuccess) {
-          return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
+          return buildListViewItems(state.chatIds, state.chatLastUpdateValues, state.messageIds, state.messagesLastUpdateValues);
         } else if (state is! ChatListStateFailure) {
           return Center(
             child: CircularProgressIndicator(),
@@ -117,15 +118,70 @@ class _ChatListState extends State<ChatListView> {
     );
   }
 
-  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues) {
+  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues, List<int> messageIds, List<int> messagesLastUpdateValues) {
     return ListView.builder(
       padding: EdgeInsets.all(listItemPadding),
-      itemCount: chatIds.length,
+      itemCount: messageIds != null ? chatIds.length + messageIds.length : chatIds.length,
       itemBuilder: (BuildContext context, int index) {
-        var chatId = chatIds[index];
-        var key = "$chatId-${chatLastUpdateValues[index]}";
-        return ChatListItem(chatId, key);
+        if (messageIds != null) {
+          if (index < messageIds.length) {
+            var messageId = messageIds[index];
+            var key = "$messageId-${messagesLastUpdateValues[index]}";
+            return buildInviteItem(index, messageId, key);
+          } else {
+            return buildChatListItem(messageIds, index, chatIds, chatLastUpdateValues);
+          }
+        } else {
+          var chatId = chatIds[index];
+          var key = "$chatId-${chatLastUpdateValues[index]}";
+          return ChatListItem(chatId, key);
+        }
       },
     );
+  }
+
+  Widget buildInviteItem(int index, int messageId, String key) {
+    if (index == 0) {
+      return Column(
+        children: <Widget>[
+          createHeader(invite: true),
+          ChatListInviteItem(1, messageId, key),
+        ],
+      );
+    } else {
+      return ChatListInviteItem(1, messageId, key);
+    }
+  }
+
+  Widget createHeader({bool invite = false, bool chats = false}) {
+    if (invite) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: Text("Open requests"),
+      );
+    } else if (chats) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: Text("Active chats"),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget buildChatListItem(List<int> messageIds, int index, List<int> chatIds, List<int> chatLastUpdateValues) {
+    var newIndex = messageIds != null ? index - messageIds.length : index;
+    var chatId = chatIds[newIndex];
+    var key = "$chatId-${chatLastUpdateValues[newIndex]}";
+    if (index == messageIds.length && index != 0) {
+      return Column(
+        children: <Widget>[
+          createHeader(chats: true),
+          ChatListItem(chatId, key),
+        ],
+      );
+    } else {
+      return ChatListItem(chatId, key);
+    }
   }
 }

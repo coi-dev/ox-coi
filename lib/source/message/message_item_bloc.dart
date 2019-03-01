@@ -45,19 +45,19 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/chat/message_item_event.dart';
-import 'package:ox_talk/source/chat/message_item_state.dart';
+import 'package:ox_talk/source/message/message_item_event.dart';
+import 'package:ox_talk/source/message/message_item_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
-import 'package:ox_talk/source/utils/date.dart';
 import 'package:ox_talk/source/utils/colors.dart';
+import 'package:ox_talk/source/utils/date.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
   Repository<ChatMsg> _messagesRepository;
   int _messageId;
   int _contactId;
-  bool _isGroupChat;
+  bool _addContact;
 
   @override
   MessageItemState get initialState => MessageItemStateInitial();
@@ -67,10 +67,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     if (event is RequestMessage) {
       yield MessageItemStateLoading();
       try {
-        _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+        var chatId = event.chatId;
+        _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
         _messageId = event.messageId;
-        _isGroupChat = event.isGroupChat;
-        if (_isGroupChat) {
+        _addContact = event.isGroupChat || chatId == ChatList.specialInvite;
+        if (_addContact) {
           _setupContact();
         }
         _setupMessage();
@@ -84,9 +85,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       String text = await message.getText();
       bool hasFile = await message.hasFile();
       String timestamp = getTimeFromTimestamp(await message.getTimestamp());
-      AttachmentWrapper attachment;
+      AttachmentWrapper attachmentWrapper;
       if (hasFile) {
-        attachment = AttachmentWrapper(
+        attachmentWrapper = AttachmentWrapper(
           filename: await message.getFileName(),
           path: await message.getFile(),
           mimeType: await message.getFileMime(),
@@ -94,27 +95,36 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           type: await message.getType(),
         );
       }
-      if (_isGroupChat) {
+
+      ContactWrapper contactWrapper;
+      if (_addContact) {
         Contact contact = _getContact();
+        int contactId = contact.getId();
         String contactName = await contact.getName();
         String contactAddress = await contact.getAddress();
         Color contactColor = rgbColorFromInt(await contact.getColor());
+        contactWrapper = ContactWrapper(
+          contactId: contactId,
+          contactName: contactName,
+          contactAddress: contactAddress,
+          contactColor: contactColor,
+        );
         yield MessageItemStateSuccess(
-            attachmentWrapper: attachment,
-            contactName: contactName,
-            contactAddress: contactAddress,
-            contactColor: contactColor,
-            messageIsOutgoing: isOutgoing,
-            messageText: text,
-            hasFile: hasFile,
-            messageTimestamp: timestamp);
-      } else {
-        yield MessageItemStateSuccess(
-          attachmentWrapper: attachment,
           messageIsOutgoing: isOutgoing,
           messageText: text,
           hasFile: hasFile,
           messageTimestamp: timestamp,
+          attachmentWrapper: attachmentWrapper,
+          contactWrapper: contactWrapper,
+        );
+      } else {
+        yield MessageItemStateSuccess(
+          messageIsOutgoing: isOutgoing,
+          messageText: text,
+          hasFile: hasFile,
+          messageTimestamp: timestamp,
+          attachmentWrapper: attachmentWrapper,
+          contactWrapper: contactWrapper,
         );
       }
     }

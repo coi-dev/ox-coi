@@ -40,37 +40,30 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/source/chat/chat.dart';
+import 'package:ox_talk/source/chat/create_group_chat.dart';
+import 'package:ox_talk/source/contact/contact_change.dart';
+import 'package:ox_talk/source/contact/contact_item.dart';
 import 'package:ox_talk/source/contact/contact_list_bloc.dart';
 import 'package:ox_talk/source/contact/contact_list_event.dart';
 import 'package:ox_talk/source/contact/contact_list_state.dart';
-import 'package:ox_talk/source/contact/selectable_contact_item.dart';
-import 'package:ox_talk/source/data/chat_repository.dart';
-import 'package:ox_talk/source/data/repository.dart';
+import 'package:ox_talk/source/l10n/localizations.dart';
 import 'package:ox_talk/source/utils/colors.dart';
 import 'package:ox_talk/source/utils/dimensions.dart';
-import 'package:ox_talk/source/l10n/localizations.dart';
 
-class CreateGroupChat extends StatefulWidget {
+class CreateChat extends StatefulWidget {
   @override
-  _CreateGroupChatState createState() => _CreateGroupChatState();
+  _CreateChatState createState() => _CreateChatState();
 }
 
-class _CreateGroupChatState extends State<CreateGroupChat> {
+class _CreateChatState extends State<CreateChat> {
   ContactListBloc _contactListBloc = ContactListBloc();
-  TextEditingController _controller = new TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey();
-  List<int> selectedItems = new List();
-  Repository<Chat> chatRepository;
 
   @override
   void initState(){
     super.initState();
     _contactListBloc.dispatch(RequestContacts());
-    chatRepository = ChatRepository(Chat.getCreator());
   }
 
   @override
@@ -83,24 +76,17 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
           ),
           backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createGroupTitle),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () => onSubmit(),
-            )
-          ],
         ),
         body: buildForm()
     );
   }
 
-  @override
   Widget buildForm() {
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          return buildCompleteForm(state.contactIds, state.contactLastUpdateValues);
+          return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
         } else if (state is! ContactListStateFailure) {
           return Center(
             child: CircularProgressIndicator(),
@@ -112,29 +98,23 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
     );
   }
 
-  Widget buildCompleteForm(List<int> contactIds, List<int> contactLastUpdateValues) {
+  Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: defaultBorderPadding, top: 12.0, right: defaultBorderPadding),
-          child: Form(
-            key: _formKey,
-            child: TextFormField(
-              decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context).createGroupTextFieldLabel,
-                  hintText: AppLocalizations.of(context).createGroupTextFieldHint
-              ),
-              validator: (value) {
-                if (value.isEmpty){
-                  return AppLocalizations.of(context).validatableTextFormFieldHintEmptyString;
-                }
-              },
-              controller: _controller,
-            )
-          ,)
+        SizedBox(
+          width: double.infinity,
+          child: FlatButton(
+            onPressed: () => newContactTapped(),
+            child: Text(AppLocalizations.of(context).createChatNewContactButtonText)
+          ),
         ),
-        Padding(padding: EdgeInsets.only(top: 12.0)),
-        Text(AppLocalizations.of(context).createGroupSelectContactsInfo),
+        SizedBox(
+          width: double.infinity,
+          child: FlatButton(
+            onPressed: () => createGroupTapped(),
+            child: Text(AppLocalizations.of(context).createChatCreateGroupButtonText)
+          ),
+        ),
         Flexible(
           child: ListView.builder(
             padding: EdgeInsets.all(listItemPadding),
@@ -142,31 +122,29 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
             itemBuilder: (BuildContext context, int index) {
               var contactId = contactIds[index];
               var key = "$contactId-${contactLastUpdateValues[index]}";
-              return SelectableContactItem(contactId, itemTapped, key);
+              return ContactItem(contactId, true, key);
             }
-          )
+          ),
         )
       ],
     );
   }
 
-  itemTapped(int id){
-    if(selectedItems.contains(id)){
-      selectedItems.remove(id);
-    }else{
-      selectedItems.add(id);
-    }
+  newContactTapped(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactChange(contactAction: ContactAction.add, createChat: true,)
+      )
+    );
   }
 
-  onSubmit() async{
-    if(_formKey.currentState.validate()){
-      Context coreContext = Context();
-      int chatId = await coreContext.createGroupChat(false, _controller.text);
-      for(int i = 0; i < selectedItems.length; i++){
-        coreContext.addContactToChat(chatId, selectedItems[i]);
-      }
-      chatRepository.putIfAbsent(id: chatId);
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName('/'));
-    }
+  createGroupTapped() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CreateGroupChat()
+        )
+    );
   }
 }

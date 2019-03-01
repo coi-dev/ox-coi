@@ -45,13 +45,13 @@ import 'dart:io';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/source/chat/message_attachment_bloc.dart';
-import 'package:ox_talk/source/chat/message_attachment_event.dart';
-import 'package:ox_talk/source/chat/message_item_bloc.dart';
-import 'package:ox_talk/source/chat/message_item_event.dart';
-import 'package:ox_talk/source/chat/message_item_state.dart';
-import 'package:ox_talk/source/widgets/avatar.dart';
+import 'package:ox_talk/source/message/message_attachment_bloc.dart';
+import 'package:ox_talk/source/message/message_attachment_event.dart';
+import 'package:ox_talk/source/message/message_item_bloc.dart';
+import 'package:ox_talk/source/message/message_item_event.dart';
+import 'package:ox_talk/source/message/message_item_state.dart';
 import 'package:ox_talk/source/utils/conversion.dart';
+import 'package:ox_talk/source/widgets/avatar.dart';
 
 class ChatMessageItem extends StatefulWidget {
   final int _chatId;
@@ -198,10 +198,16 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
   }
 
   Widget buildReceivedMessage(bool isGroupChat, MessageItemStateSuccess state) {
-    String name = state.contactName;
-    String email = state.contactAddress;
+    ContactWrapper contactWrapper = state.contactWrapper;
+    String name;
+    String email;
+    Color color;
+    if (contactWrapper != null) {
+      name = contactWrapper.contactName;
+      email = contactWrapper.contactAddress;
+      color = contactWrapper.contactColor;
+    }
     String text = state.messageText;
-    Color color = state.contactColor;
     String time = state.messageTimestamp;
     bool hasFile = state.hasFile;
     return FractionallySizedBox(

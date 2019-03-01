@@ -67,15 +67,19 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
         yield ContactChangeStateFailure(error: error.toString());
       }
     } else if (event is ContactAdded) {
-      yield ContactChangeStateSuccess(add: true, delete: false, id: event.id);
+      yield ContactChangeStateSuccess(add: true, delete: false, blocked: false, id: event.id);
     } else if (event is ContactEdited) {
-      yield ContactChangeStateSuccess(add: false, delete: false, id: null);
+      yield ContactChangeStateSuccess(add: false, delete: false, blocked: false, id: null);
     } else if (event is DeleteContact) {
       _deleteContact(event.id);
     } else if (event is ContactDeleted) {
-      yield ContactChangeStateSuccess(add: false, delete: true, id: null);
+      yield ContactChangeStateSuccess(add: false, delete: true, blocked: false, id: null);
     } else if (event is ContactDeleteFailed) {
       yield ContactChangeStateFailure(error: contactDelete);
+    } else if (event is BlockContact) {
+      _blockContact(event.id);
+    } else if (event is ContactBlocked) {
+      yield ContactChangeStateSuccess(add: false, delete: false, blocked: true, id: null);
     }
   }
 
@@ -100,5 +104,12 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
     } else {
       dispatch(ContactDeleteFailed());
     }
+  }
+
+  void _blockContact(int id) async {
+    contactRepository.remove(id);
+    Context context = Context();
+    await context.blockContact(id);
+    dispatch(ContactBlocked());
   }
 }
