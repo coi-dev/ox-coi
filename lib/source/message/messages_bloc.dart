@@ -77,8 +77,8 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
       }
     } else if (event is MessagesLoaded) {
       yield MessagesStateSuccess(
-        messageIds: messageRepository.getAllIds(),
-        messageLastUpdateValues: messageRepository.getAllLastUpdateValues(),
+        messageIds: messageRepository.getAllIds().reversed.toList(growable: false),
+        messageLastUpdateValues: messageRepository.getAllLastUpdateValues().reversed.toList(growable: false),
       );
     }
   }
