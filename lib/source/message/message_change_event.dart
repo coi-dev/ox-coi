@@ -40,40 +40,13 @@
  * for more details.
  */
 
-import 'package:ox_talk/source/contact/contact_change.dart';
+abstract class MessageChangeEvent {}
 
-abstract class ContactChangeEvent {}
+class DeleteMessage extends MessageChangeEvent {
+  final int chatId;
+  final int messageId;
 
-class ChangeContact extends ContactChangeEvent {
-  final String name;
-  final String mail;
-  final ContactAction contactAction;
-
-  ChangeContact(this.name, this.mail, this.contactAction);
+  DeleteMessage(this.chatId, this.messageId);
 }
 
-class DeleteContact extends ContactChangeEvent {
-  final int id;
-
-  DeleteContact(this.id);
-}
-
-class ContactAdded extends ContactChangeEvent {
-  final int id;
-
-  ContactAdded(this.id);
-}
-
-class ContactEdited extends ContactChangeEvent {}
-
-class ContactDeleted extends ContactChangeEvent {}
-
-class ContactDeleteFailed extends ContactChangeEvent {}
-
-class BlockContact extends ContactChangeEvent {
-  final int id;
-
-  BlockContact(this.id);
-}
-
-class ContactBlocked extends ContactChangeEvent {}
+class MessageDeleted extends MessageChangeEvent {}

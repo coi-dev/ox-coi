@@ -46,16 +46,18 @@ import 'package:ox_talk/source/base/bloc_base_state.dart';
 abstract class ContactChangeState extends BaseState {
   final bool add;
   final bool delete;
+  final bool blocked;
   final int id;
 
-  ContactChangeState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-    @required this.add,
-    @required this.delete,
-    @required this.id
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+  ContactChangeState(
+      {@required isLoading,
+      @required isSuccess,
+      @required error,
+      @required this.add,
+      @required this.delete,
+      @required this.blocked,
+      @required this.id})
+      : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
 class ContactChangeStateInitial extends ContactChangeState {
@@ -66,6 +68,7 @@ class ContactChangeStateInitial extends ContactChangeState {
           error: '',
           add: null,
           delete: null,
+          blocked: null,
           id: null,
         );
 }
@@ -78,18 +81,20 @@ class ContactChangeStateLoading extends ContactChangeState {
           error: '',
           add: null,
           delete: null,
+          blocked: null,
           id: null,
         );
 }
 
 class ContactChangeStateSuccess extends ContactChangeState {
-  ContactChangeStateSuccess({@required bool add, @required bool delete, @required int id})
+  ContactChangeStateSuccess({@required bool add, @required bool delete, @required bool blocked, @required int id})
       : super(
           isLoading: false,
           isSuccess: true,
           error: '',
           add: add,
           delete: delete,
+          blocked: blocked,
           id: id,
         );
 }
@@ -102,6 +107,7 @@ class ContactChangeStateFailure extends ContactChangeState {
           error: error,
           add: null,
           delete: null,
+          blocked: null,
           id: null,
         );
 }

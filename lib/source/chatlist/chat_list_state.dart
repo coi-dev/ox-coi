@@ -44,58 +44,54 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/source/base/bloc_base_state.dart';
 
 abstract class ChatListState extends BaseState {
-  final List<int> chatIds;
-  final List<int> chatLastUpdateValues;
-
   ChatListState({
     @required isLoading,
     @required isSuccess,
     @required error,
-    @required this.chatIds,
-    @required this.chatLastUpdateValues,
   }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
 class ChatListStateInitial extends ChatListState {
   ChatListStateInitial()
       : super(
-    isLoading: false,
-    isSuccess: false,
-    error: '',
-    chatIds: null,
-    chatLastUpdateValues: null,
-  );
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+        );
 }
 
 class ChatListStateLoading extends ChatListState {
   ChatListStateLoading()
       : super(
-    isLoading: true,
-    isSuccess: false,
-    error: '',
-    chatIds: List(),
-    chatLastUpdateValues: List(),
-  );
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
 }
 
 class ChatListStateSuccess extends ChatListState {
-  ChatListStateSuccess({@required List<int> chatIds, @required List<int> chatLastUpdateValues})
-      : super(
-    isLoading: false,
-    isSuccess: true,
-    error: '',
-    chatIds: chatIds,
-    chatLastUpdateValues: chatLastUpdateValues,
-  );
+  final List<int> chatIds;
+  final List<int> chatLastUpdateValues;
+  final List<int> messageIds;
+  final List<int> messagesLastUpdateValues;
+
+  ChatListStateSuccess({
+    @required this.chatIds,
+    @required this.chatLastUpdateValues,
+    @required this.messageIds,
+    @required this.messagesLastUpdateValues,
+  }) : super(
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
 }
 
 class ChatListStateFailure extends ChatListState {
   ChatListStateFailure({@required error})
       : super(
-    isLoading: false,
-    isSuccess: false,
-    error: error,
-    chatIds: null,
-    chatLastUpdateValues: null,
-  );
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
 }

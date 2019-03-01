@@ -44,64 +44,37 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/contact/contact_list_event.dart';
-import 'package:ox_talk/source/contact/contact_list_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
+import 'package:ox_talk/source/message/message_change_event.dart';
+import 'package:ox_talk/source/message/message_change_state.dart';
 
-class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
-  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
-  StreamSubscription streamSubscription;
-  List<int> validContactIds = List();
-
-  @override
-  ContactListState get initialState => ContactListStateInitial();
+class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
+  Repository<ChatMsg> messagesRepository;
 
   @override
-  Stream<ContactListState> mapEventToState(ContactListState currentState, ContactListEvent event) async* {
-    if (event is RequestContacts) {
-      yield ContactListStateLoading();
+  MessageChangeState get initialState => MessageChangeStateInitial();
+
+  @override
+  Stream<MessageChangeState> mapEventToState(MessageChangeState currentState, MessageChangeEvent event) async* {
+    if (event is DeleteMessage) {
+      yield MessageChangeStateLoading();
       try {
-        setupContactListener();
-        setupContacts();
+        messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+        _deleteMessage(event.messageId, false);
       } catch (error) {
-        yield ContactListStateFailure(error: error.toString());
+        yield MessageChangeStateFailure(error: error.toString());
       }
-    } else if (event is ContactsChanged) {
-      List<int> resultValidContactIds = List();
-      List<int> resultValidContactLastUpdateValues = List();
-      for (int index = 0; index < contactRepository.getAllIds().length; index++) {
-        var contact = contactRepository.get(index);
-        if (validContactIds.contains(contact.getId())) {
-          resultValidContactIds.add(contact.getId());
-          resultValidContactLastUpdateValues.add(contact.lastUpdate);
-        }
-      }
-      yield ContactListStateSuccess(contactIds: resultValidContactIds, contactLastUpdateValues: resultValidContactLastUpdateValues);
+    } else if (event is MessageDeleted) {
+      yield MessageChangeStateSuccess();
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    contactRepository.removeListener(hashCode, Event.contactsChanged);
-    streamSubscription.cancel();
-  }
-
-  void setupContactListener() async {
-    contactRepository.addListener(hashCode, Event.contactsChanged);
-    streamSubscription = contactRepository.observable.listen((event) => dispatchContactsChanged());
-  }
-
-  void dispatchContactsChanged() {
-    validContactIds = contactRepository.getAllIds();
-    dispatch(ContactsChanged());
-  }
-
-  void setupContacts() async {
-    Context _context = Context();
-    validContactIds = List.from(await _context.getContacts(2, null));
-    contactRepository.putIfAbsent(ids: validContactIds);
-    dispatch(ContactsChanged());
+  void _deleteMessage(int messageId, bool deleteInCore) async {
+    messagesRepository.remove(messageId);
+    if (deleteInCore) {
+      //TODO Delete messages from core
+    }
+    dispatch(MessageDeleted());
   }
 }

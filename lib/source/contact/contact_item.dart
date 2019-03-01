@@ -40,17 +40,18 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/source/chat/chat.dart';
+import 'package:ox_talk/source/chat/change_chat_bloc.dart';
+import 'package:ox_talk/source/chat/change_chat_event.dart';
+import 'package:ox_talk/source/chat/change_chat_state.dart';
 import 'package:ox_talk/source/contact/contact_change.dart';
 import 'package:ox_talk/source/contact/contact_item_bloc.dart';
 import 'package:ox_talk/source/contact/contact_item_event.dart';
 import 'package:ox_talk/source/contact/contact_item_state.dart';
-import 'package:ox_talk/source/data/chat_repository.dart';
-import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/widgets/avatar_list_item.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ContactItem extends StatefulWidget {
   final int _contactId;
@@ -64,7 +65,6 @@ class ContactItem extends StatefulWidget {
 
 class _ContactItemState extends State<ContactItem> {
   ContactItemBloc _contactBloc = ContactItemBloc();
-  Repository<Chat> chatRepository = ChatRepository(Chat.getCreator());
 
   @override
   void initState() {
@@ -136,9 +136,15 @@ class _ContactItemState extends State<ContactItem> {
   }
 
   void createChat() async {
-    Context coreContext = Context();
-    var chatId = await coreContext.createChatByContactId(widget._contactId);
-    chatRepository.putIfAbsent(id: chatId);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)));
+    ChangeChatBloc createChatBloc = ChangeChatBloc();
+    final createChatStatesObservable = new Observable<ChangeChatState>(createChatBloc.state);
+    createChatStatesObservable.listen((state) => _handleCreateChatStateChange(state));
+    createChatBloc.dispatch(CreateChat(contactId: widget._contactId));
+  }
+
+  _handleCreateChatStateChange(ChangeChatState state) {
+    if (state is CreateChatStateSuccess) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
+    }
   }
 }

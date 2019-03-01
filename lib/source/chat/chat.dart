@@ -46,12 +46,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/source/chat/chat_bloc.dart';
 import 'package:ox_talk/source/chat/chat_event.dart';
 import 'package:ox_talk/source/chat/chat_state.dart';
-import 'package:ox_talk/source/chat/messages_bloc.dart';
-import 'package:ox_talk/source/chat/messages_event.dart';
-import 'package:ox_talk/source/chat/messages_state.dart';
+import 'package:ox_talk/source/message/messages_bloc.dart';
+import 'package:ox_talk/source/message/messages_event.dart';
+import 'package:ox_talk/source/message/messages_state.dart';
 import 'package:ox_talk/source/widgets/avatar.dart';
 
-import 'message_item.dart';
+import 'package:ox_talk/source/message/message_item.dart';
 
 class ChatScreen extends StatefulWidget {
   final int _chatId;

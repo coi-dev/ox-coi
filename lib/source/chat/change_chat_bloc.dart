@@ -44,64 +44,47 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/contact/contact_list_event.dart';
-import 'package:ox_talk/source/contact/contact_list_state.dart';
+import 'package:ox_talk/source/chat/change_chat_event.dart';
+import 'package:ox_talk/source/chat/change_chat_state.dart';
+import 'package:ox_talk/source/data/chat_repository.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
 
-class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
-  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
-  StreamSubscription streamSubscription;
-  List<int> validContactIds = List();
+class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
+  Repository<ChatMsg> messagesRepository;
 
   @override
-  ContactListState get initialState => ContactListStateInitial();
+  ChangeChatState get initialState => CreateChatStateInitial();
 
   @override
-  Stream<ContactListState> mapEventToState(ContactListState currentState, ContactListEvent event) async* {
-    if (event is RequestContacts) {
-      yield ContactListStateLoading();
+  Stream<ChangeChatState> mapEventToState(ChangeChatState currentState, ChangeChatEvent event) async* {
+    if (event is CreateChat) {
+      yield CreateChatStateLoading();
       try {
-        setupContactListener();
-        setupContacts();
+        messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+        _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name);
       } catch (error) {
-        yield ContactListStateFailure(error: error.toString());
+        yield CreateChatStateFailure(error: error.toString());
       }
-    } else if (event is ContactsChanged) {
-      List<int> resultValidContactIds = List();
-      List<int> resultValidContactLastUpdateValues = List();
-      for (int index = 0; index < contactRepository.getAllIds().length; index++) {
-        var contact = contactRepository.get(index);
-        if (validContactIds.contains(contact.getId())) {
-          resultValidContactIds.add(contact.getId());
-          resultValidContactLastUpdateValues.add(contact.lastUpdate);
-        }
-      }
-      yield ContactListStateSuccess(contactIds: resultValidContactIds, contactLastUpdateValues: resultValidContactLastUpdateValues);
+    } else if (event is ChatCreated) {
+      yield CreateChatStateSuccess(chatId: event.chatId);
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    contactRepository.removeListener(hashCode, Event.contactsChanged);
-    streamSubscription.cancel();
+  void _createChat({int contactId, int messageId, bool verified, String name}) async {
+    Context context = Context();
+    var chatId;
+    if (contactId != null) {
+      chatId = await context.createChatByContactId(contactId);
+    } else if (messageId != null) {
+      messagesRepository.remove(messageId);
+      chatId = await context.createChatByMessageId(messageId);
+    } else if (verified != null && name != null) {
+      chatId = await context.createGroupChat(verified, name);
+    }
+    Repository<Chat> chatRepository = ChatRepository(Chat.getCreator());
+    chatRepository.putIfAbsent(id: chatId);
+    dispatch(ChatCreated(chatId: chatId));
   }
 
-  void setupContactListener() async {
-    contactRepository.addListener(hashCode, Event.contactsChanged);
-    streamSubscription = contactRepository.observable.listen((event) => dispatchContactsChanged());
-  }
-
-  void dispatchContactsChanged() {
-    validContactIds = contactRepository.getAllIds();
-    dispatch(ContactsChanged());
-  }
-
-  void setupContacts() async {
-    Context _context = Context();
-    validContactIds = List.from(await _context.getContacts(2, null));
-    contactRepository.putIfAbsent(ids: validContactIds);
-    dispatch(ContactsChanged());
-  }
 }

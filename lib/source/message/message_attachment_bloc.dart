@@ -44,67 +44,40 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/source/chat/messages_event.dart';
-import 'package:ox_talk/source/chat/messages_state.dart';
+import 'package:open_file/open_file.dart';
+import 'package:ox_talk/source/message/message_attachment_event.dart';
+import 'package:ox_talk/source/message/message_attachment_state.dart';
 import 'package:ox_talk/source/data/repository.dart';
 import 'package:ox_talk/source/data/repository_manager.dart';
 
-class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
-  StreamSubscription streamSubscription;
-  Repository<ChatMsg> messageRepository;
-  int _chatId;
+class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
+  Repository<ChatMsg> _messagesRepository;
 
   @override
-  MessagesState get initialState => MessagesStateInitial();
+  MessageAttachmentState get initialState => MessageAttachmentStateInitial();
 
   @override
-  Stream<MessagesState> mapEventToState(MessagesState currentState, MessagesEvent event) async* {
-    if (event is RequestMessages) {
-      yield MessagesStateLoading();
+  Stream<MessageAttachmentState> mapEventToState(MessageAttachmentState currentState, MessageAttachmentEvent event) async* {
+    if (event is RequestAttachment) {
+      _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+      yield MessageAttachmentStateLoading();
       try {
-        _chatId = event.chatId;
-        messageRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
-        _setupMessagesListener();
-        _setupMessages();
+        _openFile(event.messageId);
+        dispatch(AttachmentLoaded());
       } catch (error) {
-        yield MessagesStateFailure(error: error.toString());
+        yield MessageAttachmentStateFailure(error: error.toString());
       }
-    } else if (event is UpdateMessages) {
-      try {
-        _setupMessages();
-      } catch (error) {
-        yield MessagesStateFailure(error: error.toString());
-      }
-    } else if (event is MessagesLoaded) {
-      yield MessagesStateSuccess(
-        messageIds: messageRepository.getAllIds().reversed.toList(growable: false),
-        messageLastUpdateValues: messageRepository.getAllLastUpdateValues(),
-      );
+    } else if (event is AttachmentLoaded) {
+      yield MessageAttachmentStateSuccess();
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    messageRepository.removeListener(hashCode, Event.incomingMsg);
-    streamSubscription.cancel();
+  void _openFile(int messageId) async {
+    ChatMsg message = _getMessage(messageId);
+    OpenFile.open(await message.getFile());
   }
 
-  void _setupMessagesListener() async {
-    messageRepository.addListener(hashCode, Event.incomingMsg);
-    streamSubscription = messageRepository.observable.listen((event) => dispatch(UpdateMessages()));
-  }
-
-  void _setupMessages() async {
-    Context context = Context();
-    List<int> messageIds = List.from(await context.getChatMessages(_chatId));
-    messageRepository.putIfAbsent(ids: messageIds);
-    dispatch(MessagesLoaded());
-  }
-
-  void submitMessage(String text) async {
-    Context context = Context();
-    await context.createChatMessage(_chatId, text);
-    dispatch(UpdateMessages());
+  ChatMsg _getMessage(int messageId) {
+    return _messagesRepository.get(messageId);
   }
 }

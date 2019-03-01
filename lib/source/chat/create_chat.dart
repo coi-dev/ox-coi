@@ -42,7 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/source/chatlist/create_group_chat.dart';
+import 'package:ox_talk/source/chat/create_group_chat.dart';
 import 'package:ox_talk/source/contact/contact_change.dart';
 import 'package:ox_talk/source/contact/contact_item.dart';
 import 'package:ox_talk/source/contact/contact_list_bloc.dart';

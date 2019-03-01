@@ -40,40 +40,51 @@
  * for more details.
  */
 
-import 'package:ox_talk/source/contact/contact_change.dart';
+import 'package:meta/meta.dart';
+import 'package:ox_talk/source/base/bloc_base_state.dart';
 
-abstract class ContactChangeEvent {}
-
-class ChangeContact extends ContactChangeEvent {
-  final String name;
-  final String mail;
-  final ContactAction contactAction;
-
-  ChangeContact(this.name, this.mail, this.contactAction);
+abstract class ChangeChatState extends BaseState {
+  ChangeChatState({
+    @required isLoading,
+    @required isSuccess,
+    @required error,
+  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
-class DeleteContact extends ContactChangeEvent {
-  final int id;
-
-  DeleteContact(this.id);
+class CreateChatStateInitial extends ChangeChatState {
+  CreateChatStateInitial()
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+        );
 }
 
-class ContactAdded extends ContactChangeEvent {
-  final int id;
-
-  ContactAdded(this.id);
+class CreateChatStateLoading extends ChangeChatState {
+  CreateChatStateLoading()
+      : super(
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
 }
 
-class ContactEdited extends ContactChangeEvent {}
+class CreateChatStateSuccess extends ChangeChatState {
+  final int chatId;
 
-class ContactDeleted extends ContactChangeEvent {}
-
-class ContactDeleteFailed extends ContactChangeEvent {}
-
-class BlockContact extends ContactChangeEvent {
-  final int id;
-
-  BlockContact(this.id);
+  CreateChatStateSuccess({@required this.chatId})
+      : super(
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
 }
 
-class ContactBlocked extends ContactChangeEvent {}
+class CreateChatStateFailure extends ChangeChatState {
+  CreateChatStateFailure({@required error})
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
+}

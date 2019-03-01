@@ -44,4 +44,9 @@ abstract class ChatListEvent {}
 
 class RequestChatList extends ChatListEvent {}
 
-class ChatListModified extends ChatListEvent {}
+class ChatListModified extends ChatListEvent {
+  final List<int> messageIds;
+  final List<int> messagesLastUpdateValues;
+
+  ChatListModified(this.messageIds, this.messagesLastUpdateValues);
+}

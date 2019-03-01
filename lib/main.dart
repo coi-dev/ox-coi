@@ -47,7 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ox_talk/source/log/bloc_delegate.dart';
-import 'package:ox_talk/source/chatlist/create_chat.dart';
+import 'package:ox_talk/source/chat/create_chat.dart';
 import 'package:ox_talk/source/contact/contact_change.dart';
 import 'package:ox_talk/source/l10n/localizations.dart';
 import 'package:ox_talk/source/login/login.dart';
