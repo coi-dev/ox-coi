@@ -75,7 +75,7 @@ class _CreateChatState extends State<CreateChat> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: chatMain,
-          title: Text(AppLocalizations.of(context).createGroupTitle),
+          title: Text(AppLocalizations.of(context).createChatTitle),
         ),
         body: buildForm()
     );
