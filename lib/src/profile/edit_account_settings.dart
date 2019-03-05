@@ -44,13 +44,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/profile/user_bloc.dart';
 import 'package:ox_talk/src/profile/user_event.dart';
 import 'package:ox_talk/src/profile/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditAccountSettings extends StatefulWidget {
@@ -140,7 +141,10 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
 
   Widget _buildEditAccountDataView() {
     return SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: formHorizontalPadding,
+          vertical: formVerticalPadding,
+        ),
         child: Form(
           key: _advancedLoginKey,
           child: Column(
@@ -151,7 +155,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
               imapPasswordField,
               imapServerField,
               imapPortField,
-              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).loginLabelImapSecurity),
               DropdownButton(
                   value: _selectedImapSecurity,
@@ -161,13 +165,13 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
                       _selectedImapSecurity = newValue;
                     });
                   }),
-              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).outbox),
               smtpLoginNameField,
               smtpPasswordField,
               smtpServerField,
               smtpPortField,
-              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
               DropdownButton(
                   value: _selectedSmtpSecurity,

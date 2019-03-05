@@ -48,7 +48,9 @@ import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_change_state.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/error.dart';
+import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/utils/colors.dart';
@@ -169,28 +171,28 @@ class _ContactChangeState extends State<ContactChange> {
   Widget buildForm() {
     return Builder(builder: (BuildContext context) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(bottom: 16.0, top: 8.0),
+                padding: const EdgeInsets.only(bottom: formVerticalPadding),
                 child: Column(
                   children: <Widget>[
                     widget.contactAction != ContactAction.add
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                            padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
                             child: Row(
                               children: <Widget>[
                                 Icon(Icons.mail),
                                 Padding(
-                                  padding: EdgeInsets.only(right: 8.0),
+                                  padding: EdgeInsets.only(right: iconFormPadding),
                                 ),
                                 Text(
                                   widget.email,
-                                  style: TextStyle(fontSize: 16.0),
+                                  style: defaultText,
                                 ),
                               ],
                             ),
@@ -200,7 +202,7 @@ class _ContactChangeState extends State<ContactChange> {
                       children: <Widget>[
                         Icon(Icons.person),
                         Padding(
-                          padding: EdgeInsets.only(right: 8),
+                          padding: EdgeInsets.only(right: iconFormPadding),
                         ),
                         Expanded(child: _nameField),
                       ],
@@ -210,7 +212,7 @@ class _ContactChangeState extends State<ContactChange> {
                             children: <Widget>[
                               Icon(Icons.mail),
                               Padding(
-                                padding: EdgeInsets.only(right: 8),
+                                padding: EdgeInsets.only(right: iconFormPadding),
                               ),
                               Expanded(child: _emailField),
                             ],

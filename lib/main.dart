@@ -79,9 +79,6 @@ class OxTalkApp extends StatelessWidget {
       supportedLocales: [
         const Locale('en', 'US'),
       ],
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       initialRoute: ROUTES_ROOT,
       routes: {
         ROUTES_ROOT: (context) => _OxTalk(),

@@ -41,7 +41,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/chat/change_chat_bloc.dart';
 import 'package:ox_talk/src/chat/change_chat_event.dart';
@@ -49,8 +48,8 @@ import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
-import 'package:ox_talk/src/contact/contact_item_state.dart';
-import 'package:ox_talk/src/widgets/avatar_list_item.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactItem extends StatefulWidget {
@@ -63,7 +62,7 @@ class ContactItem extends StatefulWidget {
   _ContactItemState createState() => _ContactItemState();
 }
 
-class _ContactItemState extends State<ContactItem> {
+class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   ContactItemBloc _contactBloc = ContactItemBloc();
 
   @override
@@ -74,26 +73,7 @@ class _ContactItemState extends State<ContactItem> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-        bloc: _contactBloc,
-        builder: (context, state) {
-          if (state is ContactItemStateSuccess) {
-            return AvatarListItem(
-              title: state.name,
-              subTitle: state.email,
-              color: state.color,
-              onTap: onContactTapped,
-            );
-          } else if (state is ContactItemStateFailure) {
-            return new Text(state.error);
-          } else {
-            return AvatarListItem(
-              title: "",
-              subTitle: "",
-              onTap: onContactTapped,
-            );
-          }
-        });
+    return getBlocBuilder(_contactBloc, onContactTapped);
   }
 
   onContactTapped(String name, String email) async {
@@ -101,7 +81,8 @@ class _ContactItemState extends State<ContactItem> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ContactChange(
+            builder: (context) =>
+                ContactChange(
                   contactAction: ContactAction.edit,
                   id: widget._contactId,
                   email: email,
@@ -109,30 +90,41 @@ class _ContactItemState extends State<ContactItem> {
                 )),
       );
     } else {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Start a chat"),
-              content: new Text("Do you want to start a chat with $name?"),
-              actions: <Widget>[
-                new FlatButton(
-                  child: new Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text("Yes"),
-                  onPressed: () {
-                    createChat();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
+      return buildCreateChatDialog(name, email);
     }
+  }
+
+  Future<void> buildCreateChatDialog(String name, String email) {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          String contact = name.isNotEmpty ? name : email;
+          return AlertDialog(
+            title: Text(AppLocalizations
+                .of(context)
+                .createChatTitle),
+            content: new Text(AppLocalizations.of(context).createChatWith(contact)),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text(AppLocalizations
+                    .of(context)
+                    .cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text(AppLocalizations
+                    .of(context)
+                    .yes),
+                onPressed: () {
+                  createChat();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   void createChat() async {

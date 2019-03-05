@@ -41,11 +41,45 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 
+// Global
+const twoLineHeaderTitle = TextStyle(fontSize: 18);
+
+const twoLineHeaderSubTitle = TextStyle(fontSize: 15);
+
+const defaultText = TextStyle(fontSize: 16);
+
+const defaultDisabledText = TextStyle(
+  fontSize: 16,
+  color: textDisabled,
+);
+
+const bigText = TextStyle(fontSize: 20);
+
+const hugeText = TextStyle(
+  fontSize: 24,
+);
+
+const hugeDisabledText = TextStyle(
+  fontSize: 24,
+  color: textDisabled,
+);
+
+// Progress
 const progressText = TextStyle(
-  color: Colors.white,
-  fontSize: 14.0,
+  color: textColorInverted,
+  fontSize: 16.0,
   fontFamily: "Roboto",
   fontWeight: FontWeight.normal,
   decoration: TextDecoration.none,
+);
+
+// Chat
+const chatItemTitle = TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0);
+
+// Messages
+final messageTimeText = TextStyle(
+  color: messageTimeForeground,
+  fontSize: 12,
 );

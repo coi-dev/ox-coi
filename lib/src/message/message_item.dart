@@ -50,7 +50,10 @@ import 'package:ox_talk/src/message/message_attachment_event.dart';
 import 'package:ox_talk/src/message/message_item_bloc.dart';
 import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/conversion.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/avatar.dart';
 
 class ChatMessageItem extends StatefulWidget {
@@ -80,7 +83,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
           return Container(
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
             child: state.messageIsOutgoing
                 ? buildSentMessage(state)
                 : buildReceivedMessage(
@@ -109,9 +112,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              decoration: buildBoxDecoration(Colors.blue[50]),
+              decoration: buildBoxDecoration(messageSentBackground),
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(messagesInnerPadding),
                 child: hasFile ? buildAttachmentMessage(state.attachmentWrapper, time) : buildTextMessage(text, time),
               ),
             ),
@@ -124,12 +127,12 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
         shape: BoxShape.rectangle,
         boxShadow: [
           new BoxShadow(
-            color: Colors.grey,
-            blurRadius: 2.0,
+            color: messageBoxGrey,
+            blurRadius: messagesBlurRadius,
           ),
         ],
         color: color,
-        borderRadius: BorderRadius.all(Radius.circular(8.0)));
+        borderRadius: BorderRadius.all(Radius.circular(messagesBoxRadius)));
   }
 
   Widget buildAttachmentMessage(AttachmentWrapper attachment, String time) {
@@ -146,7 +149,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
       children: <Widget>[
         Icon(
           Icons.attach_file,
-          size: 30.0,
+          size: messagesFileIconSize,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +159,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
             Text(byteToPrintableSize(attachment.size)),
           ],
         ),
-        Padding(padding: EdgeInsets.only(left: 8.0)),
+        Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
         buildTime(time),
       ],
     );
@@ -169,7 +172,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Image.file(file),
-        Padding(padding: EdgeInsets.only(top: 4.0)),
+        Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
         buildTime(time),
       ],
     );
@@ -183,18 +186,14 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
         Flexible(
           child: Text(text),
         ),
-        Padding(padding: EdgeInsets.only(left: 8.0)),
+        Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
         buildTime(time),
       ],
     );
   }
 
   StatelessWidget buildTime(String time) {
-    return Text(time,
-        style: TextStyle(
-          color: Colors.grey[700],
-          fontSize: 12,
-        ));
+    return Text(time, style: messageTimeText);
   }
 
   Widget buildReceivedMessage(bool isGroupChat, MessageItemStateSuccess state) {
@@ -217,7 +216,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
         children: <Widget>[
           isGroupChat
               ? Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
+                  padding: const EdgeInsets.only(right: messagesInnerPadding),
                   child: Avatar(
                     initials: getInitials(name, email),
                     color: color,
@@ -226,8 +225,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
               : Container(),
           Flexible(
             child: Container(
-              padding: EdgeInsets.all(8.0),
-              decoration: buildBoxDecoration(Colors.white),
+              padding: EdgeInsets.all(messagesInnerPadding),
+              decoration: buildBoxDecoration(messageReceivedBackground),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,7 +237,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
                           style: TextStyle(color: color),
                         )
                       : Container(
-                          constraints: BoxConstraints(maxWidth: 0.0),
+                          constraints: BoxConstraints(maxWidth: zero),
                         ),
                   hasFile ? buildAttachmentMessage(state.attachmentWrapper, time) : buildTextMessage(text, time),
                 ],

@@ -146,7 +146,7 @@ class Config {
     setLastUpdate();
   }
 
-  String get smtpPortAsString => imapPort > 0 ? imapPort : "";
+  String get smtpPortAsString => smtpPort > 0 ? smtpPort : "";
 
   String get imapPortAsString => imapPort > 0 ? imapPort : "";
 }

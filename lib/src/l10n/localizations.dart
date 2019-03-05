@@ -88,6 +88,10 @@ class AppLocalizations {
   String get automatic => Intl.message('Automatic', name: 'automatic');
   String get off => Intl.message('Off', name: 'off');
   String get name => Intl.message('Name', name: 'name');
+  String get cancel => Intl.message('Cancel', name: 'cancel');
+  String get block => Intl.message('Block', name: 'block');
+  String get gallery => Intl.message('Gallery', name: 'gallery');
+  String get camera => Intl.message('Camera', name: 'camera');
 
   // Form
   String get validatableTextFormFieldHintInvalidEmail => Intl.message('Please enter a valid e-mail address', name: 'validatableTextFormFieldHintInvalidEmail');
@@ -115,15 +119,19 @@ class AppLocalizations {
   // Mail
   String get mailTitle => Intl.message('Mail', name: 'mailTitle');
 
-  // Chat
+  // Chat / chat list
   String get chatTitle => Intl.message('Chat', name: 'chatTitle');
+  String get chatListInviteHeader => Intl.message('Open requests', name: 'chatListInviteHeader');
+  String get chatListChatsHeader => Intl.message('Active chats', name: 'chatListChatsHeader');
+  String get composePlaceholder => Intl.message('Type something...', name: 'composePlaceholder');
 
-  //Create chat
+  // Create chat
   String get createChatTitle => Intl.message('Create chat', name: 'createChatTitle');
   String get createChatNewContactButtonText => Intl.message('New contact', name: 'createChatNewContactButtonText');
   String get createChatCreateGroupButtonText => Intl.message('Create group', name: 'createChatCreateGroupButtonText');
+  String createChatWith(name) => Intl.message('Start a chat with $name?', name: 'createChatWith', args: [name]);
 
-  //Group
+  // Group
   String get createGroupTitle => Intl.message('Create group chat', name: 'createGroupTitle');
   String get createGroupTextFieldLabel => Intl.message('Group name', name: 'createGroupTextFieldLabel');
   String get createGroupTextFieldHint => Intl.message('Set a group name', name: 'createGroupTextFieldHint');
@@ -160,6 +168,8 @@ class AppLocalizations {
   String get editUserSettingsStatusLabel => Intl.message('Status', name: 'editUserSettingsStatusLabel');
   String get editUserSettingsSaveButton => Intl.message('Save', name: 'editUserSettingsSaveButton');
   String get editUserSettingsStatusDefaultValue => Intl.message('Sent with OX Talk - https://github.com/open-xchange/ox-talk', name: 'editUserSettingsStatusDefaultValue');
+  String get editUserSettingsRemoveImage => Intl.message('Remove current image', name: 'editUserSettingsRemoveImage');
+
 
   // Account settings
   String get editAccountSettingsTitle => Intl.message('Edit account settings', name: 'editAccountSettingsTitle');

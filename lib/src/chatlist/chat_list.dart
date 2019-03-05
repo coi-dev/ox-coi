@@ -156,13 +156,13 @@ class _ChatListState extends State<ChatListView> {
   Widget createHeader({bool invite = false, bool chats = false}) {
     if (invite) {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Text("Open requests"),
+        padding: EdgeInsets.symmetric(vertical: listItemHeaderPadding),
+        child: Text(AppLocalizations.of(context).chatListInviteHeader),
       );
     } else if (chats) {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        child: Text("Active chats"),
+        padding: EdgeInsets.symmetric(vertical: listItemHeaderPadding),
+        child: Text(AppLocalizations.of(context).chatListChatsHeader),
       );
     } else {
       return Container();

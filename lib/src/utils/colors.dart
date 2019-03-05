@@ -44,12 +44,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-const Color chatMain = Colors.blue;
-const Color mailMain = Colors.indigo;
-const Color contactMain = Colors.blueGrey;
-const Color profileMain = contactMain;
-
+// Global
 const Color textDisabled = Colors.black26;
+const Color testLessImportant = Colors.black45;
+const Color appBarIcon = Colors.white;
+const Color textColorInverted = Colors.white;
+const Color transparent = Colors.transparent;
 
 Color rgbColorFromInt(int color, [int alpha]) {
   if (alpha == null) {
@@ -69,3 +69,35 @@ int _green(int color) {
 int _blue(int color) {
   return color & 0xFF;
 }
+
+// Progress
+final Color progressBackground = Colors.black45;
+
+// Login
+const Color loginHintBackground = Colors.blueGrey;
+
+// List
+const Color listAvatarForegroundColor = Colors.white;
+final Color listAvatarDefaultBackgroundColor = Colors.blue[700];
+
+// Chat
+const Color chatMain = Colors.blue;
+final Color chatComposeBorder = Colors.black12;
+
+// Messages
+const Color messageBoxGrey = Colors.grey;
+final Color messageSentBackground = Colors.blue[50];
+const Color messageReceivedBackground = Colors.white;
+final Color messageTimeForeground = Colors.grey[700];
+
+// Mail
+const Color mailMain = Colors.indigo;
+
+// Contact
+const Color contactMain = Colors.blueGrey;
+const Color avatarDefaultBackground = Colors.blue;
+
+// Profile
+const Color profileMain = contactMain;
+final Color editUserAvatarPlaceholderIconColor = Colors.white54;
+const Color editUserAvatarEditIconColor = Colors.white;

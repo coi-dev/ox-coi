@@ -43,6 +43,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 
 class Avatar extends StatelessWidget {
   final String imagePath;
@@ -58,9 +60,9 @@ class Avatar extends StatelessWidget {
       avatarImage = FileImage(File(imagePath));
     }
     return CircleAvatar(
-      radius: 24,
-      foregroundColor: Colors.white,
-      backgroundColor: color != null ? color : Colors.blue[700],
+      radius: listAvatarRadius,
+      foregroundColor: listAvatarForegroundColor,
+      backgroundColor: color != null ? color : listAvatarDefaultBackgroundColor,
       child: avatarImage != null ? avatarImage : showInitials(),
     );
   }

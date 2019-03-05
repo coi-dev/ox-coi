@@ -43,6 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
@@ -50,9 +51,9 @@ import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/contact/selectable_contact_item.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
 
 class CreateGroupChat extends StatefulWidget {
   @override
@@ -67,7 +68,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
   Repository<Chat> chatRepository;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _contactListBloc.dispatch(RequestContacts());
     chatRepository = ChatRepository(Chat.getCreator());
@@ -90,8 +91,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
             )
           ],
         ),
-        body: buildForm()
-    );
+        body: buildForm());
   }
 
   Widget buildForm() {
@@ -115,57 +115,53 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(left: defaultBorderPadding, top: 12.0, right: defaultBorderPadding),
-          child: Form(
-            key: _formKey,
-            child: TextFormField(
-              decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context).createGroupTextFieldLabel,
-                  hintText: AppLocalizations.of(context).createGroupTextFieldHint
+            padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).createGroupTextFieldLabel,
+                    hintText: AppLocalizations.of(context).createGroupTextFieldHint),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return AppLocalizations.of(context).validatableTextFormFieldHintEmptyString;
+                  }
+                },
+                controller: _controller,
               ),
-              validator: (value) {
-                if (value.isEmpty){
-                  return AppLocalizations.of(context).validatableTextFormFieldHintEmptyString;
-                }
-              },
-              controller: _controller,
-            )
-          ,)
-        ),
-        Padding(padding: EdgeInsets.only(top: 12.0)),
+            )),
+        Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
         Text(AppLocalizations.of(context).createGroupSelectContactsInfo),
         Flexible(
-          child: ListView.builder(
-            padding: EdgeInsets.all(listItemPadding),
-            itemCount: contactIds.length,
-            itemBuilder: (BuildContext context, int index) {
-              var contactId = contactIds[index];
-              var key = "$contactId-${contactLastUpdateValues[index]}";
-              return SelectableContactItem(contactId, itemTapped, key);
-            }
-          )
-        )
+            child: ListView.builder(
+                padding: EdgeInsets.all(listItemPadding),
+                itemCount: contactIds.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var contactId = contactIds[index];
+                  var key = "$contactId-${contactLastUpdateValues[index]}";
+                  return SelectableContactItem(contactId, itemTapped, key);
+                }))
       ],
     );
   }
 
-  itemTapped(int id){
-    if(selectedItems.contains(id)){
+  itemTapped(int id) {
+    if (selectedItems.contains(id)) {
       selectedItems.remove(id);
-    }else{
+    } else {
       selectedItems.add(id);
     }
   }
 
-  onSubmit() async{
-    if(_formKey.currentState.validate()){
+  onSubmit() async {
+    if (_formKey.currentState.validate()) {
       Context coreContext = Context();
       int chatId = await coreContext.createGroupChat(false, _controller.text);
-      for(int i = 0; i < selectedItems.length; i++){
+      for (int i = 0; i < selectedItems.length; i++) {
         coreContext.addContactToChat(chatId, selectedItems[i]);
       }
       chatRepository.putIfAbsent(id: chatId);
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName('/'));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(OxTalkApp.ROUTES_ROOT));
     }
   }
 }

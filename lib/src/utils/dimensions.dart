@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,12 +40,56 @@
  * for more details.
  */
 
+import 'dart:core';
+
+// Global
+const zero = 0.0;
+const dividerHeight = 1.0;
+
+// Progress
+const verticalPaddingSmall = 8.0;
+const verticalPadding = 16.0;
+
+// List
+const listItemHeaderPadding = 8.0;
+const listItemPaddingBig = 16.0;
 const listItemPadding = 8.0;
-
 const listItemPaddingSmall = 4.0;
+const listAvatarRadius = 24.0;
 
-const defaultBorderPadding = 20.0;
+// AppBar
+const appBarAvatarTextPadding = 16.0;
 
+// Icons
+const iconTextPadding = 4.0;
+const iconFormPadding = 8.0;
+const iconSize = 18.0;
+
+// Chat
+const composerHorizontalPadding = 8.0;
+const composerTextFieldPadding = 8.0;
+const composeTextBorderRadius = 24.0;
+
+// Forms
+const formHorizontalPadding = 16.0;
+const formVerticalPadding = 16.0;
+
+// Messages
+const messagesHorizontalPadding = 8.0;
+const messagesVerticalPadding = 8.0;
+const messagesInnerPadding = 8.0;
+const messagesContentTimePadding = 8.0;
+const messagesBoxRadius = 8.0;
+const messagesBlurRadius = 2.0;
+const messagesFileIconSize = 30.0;
+
+// Profile
+const profileVerticalPadding = 8.0;
+const profileSectionsVerticalPadding = 36.0;
+const profileAvatarPlaceholderIconSize = 60.0;
 const profileAvatarMaxRadius = 64.0;
 
-const editAvatarIconSize = 40.0;
+const editUserAvatarVerticalPadding = 24.0;
+const editUserAvatarEditIconSize = 36.0;
+const editUserAvatarImageMaxSize = 512;
+const editUserAvatarRation = 1.0;

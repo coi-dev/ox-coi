@@ -41,8 +41,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/widgets/avatar.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/styles.dart';
+import 'package:ox_talk/src/widgets/avatar.dart';
 
 class AvatarListItem extends StatelessWidget {
   final String title;
@@ -55,7 +57,14 @@ class AvatarListItem extends StatelessWidget {
   final IconData avatarIcon;
 
   AvatarListItem(
-      {@required this.title, @required this.subTitle, @required this.onTap, this.avatarIcon, this.imagePath, this.color, this.titleIcon, this.subTitleIcon});
+      {@required this.title,
+      @required this.subTitle,
+      @required this.onTap,
+      this.avatarIcon,
+      this.imagePath,
+      this.color,
+      this.titleIcon,
+      this.subTitleIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -66,16 +75,17 @@ class AvatarListItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            avatarIcon == null ? Avatar(
-              imagePath: imagePath,
-              initials: getInitials(),
-              color: color,
-            ) :  CircleAvatar(
-              radius: 24,
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.grey,
-              child: Icon(avatarIcon),
-            ),
+            avatarIcon == null
+                ? Avatar(
+                    imagePath: imagePath,
+                    initials: getInitials(),
+                    color: color,
+                  )
+                : CircleAvatar(
+                    radius: listAvatarRadius,
+                    foregroundColor: listAvatarForegroundColor,
+                    child: Icon(avatarIcon),
+                  ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: listItemPadding),
@@ -85,7 +95,7 @@ class AvatarListItem extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 4),
+                          padding: const EdgeInsets.only(right: iconTextPadding),
                           child: titleIcon != null ? titleIcon : Container(),
                         ),
                         Expanded(child: getTitle()),
@@ -98,7 +108,7 @@ class AvatarListItem extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: 4),
+                          padding: const EdgeInsets.only(right: iconTextPadding),
                           child: subTitleIcon != null ? subTitleIcon : Container(),
                         ),
                         Expanded(child: getSubTitle()),
@@ -121,7 +131,7 @@ class AvatarListItem extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
+            style: chatItemTitle,
           )
         : Container();
   }
@@ -132,7 +142,7 @@ class AvatarListItem extends StatelessWidget {
             subTitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.black45),
+            style: TextStyle(color: testLessImportant),
           )
         : Container();
   }
@@ -146,5 +156,4 @@ class AvatarListItem extends StatelessWidget {
     }
     return "";
   }
-
 }

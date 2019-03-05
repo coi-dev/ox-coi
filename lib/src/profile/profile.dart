@@ -54,6 +54,7 @@ import 'package:ox_talk/src/profile/user_event.dart';
 import 'package:ox_talk/src/profile/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/widget.dart';
 
 class ProfileView extends BaseRootChild {
@@ -122,32 +123,32 @@ class _ProfileState extends State<ProfileView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 24.0),
+              padding: EdgeInsets.symmetric(vertical: profileSectionsVerticalPadding),
               child: buildAvatar(config),
             ),
             buildTextOrPlaceHolder(
               text: config.username,
-              style: TextStyle(fontSize: 24),
+              style: hugeText,
               align: TextAlign.center,
               placeholderText: AppLocalizations.of(context).profileUsernamePlaceholder,
-              placeholderStyle: TextStyle(fontSize: 24, color: textDisabled),
+              placeholderStyle: hugeDisabledText,
               placeHolderAlign: TextAlign.center,
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: profileVerticalPadding),
               child: Text(
                 config.email,
-                style: TextStyle(fontSize: 16),
+                style: defaultText,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 36.0),
+              padding: const EdgeInsets.symmetric(vertical: profileSectionsVerticalPadding),
               child: buildTextOrPlaceHolder(
                 text: config.status,
                 align: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: defaultText,
                 placeholderText: AppLocalizations.of(context).profileStatusPlaceholder,
-                placeholderStyle: TextStyle(fontSize: 16, color: textDisabled),
+                placeholderStyle: defaultDisabledText,
                 placeHolderAlign: TextAlign.center,
               ),
             ),
@@ -170,7 +171,7 @@ class _ProfileState extends State<ProfileView> {
             maxRadius: profileAvatarMaxRadius,
             child: Icon(
               Icons.person,
-              size: 60,
+              size: profileAvatarPlaceholderIconSize,
             ),
           )
         : CircleAvatar(

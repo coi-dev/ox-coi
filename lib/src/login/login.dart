@@ -41,12 +41,15 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login_bloc.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
+import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Login extends StatefulWidget {
@@ -63,30 +66,30 @@ class _LoginState extends State<Login> {
   final _simpleLoginKey = GlobalKey<FormState>();
   final _advancedLoginKey = GlobalKey<FormState>();
   ValidatableTextFormField emailField = ValidatableTextFormField(
-        (context) => AppLocalizations.of(context).emailAddress,
+    (context) => AppLocalizations.of(context).emailAddress,
     hintText: (context) => AppLocalizations.of(context).loginHintEmail,
     textFormType: TextFormType.email,
     inputType: TextInputType.emailAddress,
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
-  (context) => AppLocalizations.of(context).password,
-  hintText: (context) => AppLocalizations.of(context).loginHintPassword,
-  textFormType: TextFormType.password,
+    (context) => AppLocalizations.of(context).password,
+    hintText: (context) => AppLocalizations.of(context).loginHintPassword,
+    textFormType: TextFormType.password,
   );
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
   ValidatableTextFormField imapServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapServer);
   ValidatableTextFormField imapPortField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapPort);
   ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
   ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
-  (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
-  textFormType: TextFormType.password,
-  needValidation: false,
+    (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
+    textFormType: TextFormType.password,
+    needValidation: false,
   );
   ValidatableTextFormField smtpServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpServer);
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(
-  (context) => AppLocalizations.of(context).loginLabelSmtpPort,
-  textFormType: TextFormType.port,
-  inputType: TextInputType.numberWithOptions(),
+    (context) => AppLocalizations.of(context).loginLabelSmtpPort,
+    textFormType: TextFormType.port,
+    inputType: TextInputType.numberWithOptions(),
   );
 
   String _selectedImapSecurity;
@@ -134,7 +137,7 @@ class _LoginState extends State<Login> {
     bool advancedLoginIsValid = _advancedLoginKey.currentState != null ? _advancedLoginKey.currentState.validate() : true;
 
     if (simpleLoginIsValid && advancedLoginIsValid) {
-      _progress = FullscreenProgress(_loginBloc, "Logging in, this may take a moment.", true);
+      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).loginProgressMessage, true);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);
@@ -168,20 +171,17 @@ class _LoginState extends State<Login> {
       child: Column(
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(12.0),
-            color: Colors.blueGrey,
+            padding: const EdgeInsets.all(formVerticalPadding),
+            color: loginHintBackground,
             child: Text(
               AppLocalizations.of(context).loginInformation,
               softWrap: true,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: textColorInverted),
             ),
           ),
           Container(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
               child: Form(
                 key: _simpleLoginKey,
                 child: Column(
@@ -190,14 +190,14 @@ class _LoginState extends State<Login> {
               )),
           OutlineButton(
             onPressed: _advancedPressed,
-            borderSide: BorderSide(color: Colors.transparent),
-            highlightedBorderColor: Colors.transparent,
+            borderSide: BorderSide(color: transparent),
+            highlightedBorderColor: transparent,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
                   AppLocalizations.of(context).advanced,
-                  style: TextStyle(fontSize: 16.0),
+                  style: defaultText,
                 ),
                 _showAdvanced ? Icon(Icons.arrow_drop_up) : Icon(Icons.arrow_drop_down)
               ],
@@ -211,7 +211,7 @@ class _LoginState extends State<Login> {
 
   Container buildAdvancedForm() {
     return Container(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
         child: Form(
           key: _advancedLoginKey,
           child: Column(
@@ -221,7 +221,7 @@ class _LoginState extends State<Login> {
               imapLoginNameField,
               imapServerField,
               imapPortField,
-              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).loginLabelImapSecurity),
               DropdownButton(
                   value: _selectedImapSecurity,
@@ -231,13 +231,13 @@ class _LoginState extends State<Login> {
                       _selectedImapSecurity = newValue;
                     });
                   }),
-              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).outbox),
               smtpLoginNameField,
               smtpPasswordField,
               smtpServerField,
               smtpPortField,
-              Padding(padding: EdgeInsets.only(top: 12.0)),
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
               DropdownButton(
                   value: _selectedSmtpSecurity,
@@ -262,5 +262,4 @@ class _LoginState extends State<Login> {
       return DropdownMenuItem<String>(value: value, child: Text(value));
     }).toList();
   }
-
 }

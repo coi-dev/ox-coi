@@ -41,11 +41,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
+import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
-import 'package:ox_talk/src/contact/contact_item_state.dart';
-import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 
 class SelectableContactItem extends StatefulWidget {
   final int _contactId;
@@ -57,7 +55,7 @@ class SelectableContactItem extends StatefulWidget {
   _SelectableContactItemState createState() => _SelectableContactItemState();
 }
 
-class _SelectableContactItemState extends State<SelectableContactItem> {
+class _SelectableContactItemState extends State<SelectableContactItem> with ContactItemBuilder {
   ContactItemBloc _contactBloc = ContactItemBloc();
   var isSelected = false;
 
@@ -69,35 +67,14 @@ class _SelectableContactItemState extends State<SelectableContactItem> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _contactBloc,
-      builder: (context, state) {
-        if (state is ContactItemStateSuccess) {
-          return AvatarListItem(
-            title: state.name,
-            subTitle: state.email,
-            color: state.color,
-            avatarIcon: isSelected ? Icons.check : null,
-            onTap: onContactTapped,
-          );
-        } else if (state is ContactItemStateFailure) {
-          return new Text(state.error);
-        } else {
-          return AvatarListItem(
-            title: "",
-            subTitle: "",
-            onTap: onContactTapped,
-          );
-        }
-      });
+    return getBlocBuilder(_contactBloc, onContactTapped, isSelected);
   }
 
   onContactTapped(String name, String email) {
     setState(() {
-      if(isSelected){
+      if (isSelected) {
         isSelected = false;
-      }
-      else{
+      } else {
         isSelected = true;
       }
     });

@@ -159,7 +159,7 @@ class MailListItem extends StatelessWidget {
   }
 }
 
-//TODO Remove dummy chat class
+//TODO Remove dummy mail class
 class Mail {
   final String name;
 

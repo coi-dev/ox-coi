@@ -46,12 +46,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/message/message_item.dart';
 import 'package:ox_talk/src/message/messages_bloc.dart';
 import 'package:ox_talk/src/message/messages_event.dart';
 import 'package:ox_talk/src/message/messages_state.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/avatar.dart';
-
-import 'package:ox_talk/src/message/message_item.dart';
 
 class ChatScreen extends StatefulWidget {
   final int _chatId;
@@ -85,19 +88,18 @@ class _ChatScreenState extends State<ChatScreen> {
             IconButton(
               icon: Icon(Icons.videocam),
               onPressed: null,
-              color: Colors.white,
+              color: appBarIcon,
             ),
             IconButton(
               icon: Icon(Icons.phone),
               onPressed: null,
-              color: Colors.white,
+              color: appBarIcon,
             ),
           ],
-          elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         ),
         body: new Column(children: <Widget>[
           new Flexible(child: buildListView()),
-          new Divider(height: 1.0),
+          new Divider(height: dividerHeight),
           new Container(
             decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
@@ -126,7 +128,7 @@ class _ChatScreenState extends State<ChatScreen> {
               initials: getInitials(name, subTitle),
               color: color,
             ),
-            Padding(padding: EdgeInsets.only(left: 16.0)),
+            Padding(padding: EdgeInsets.only(left: appBarAvatarTextPadding)),
             Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -136,24 +138,22 @@ class _ChatScreenState extends State<ChatScreen> {
                     name,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                    style: twoLineHeaderTitle,
                   ),
                   Row(
                     children: <Widget>[
                       _chatBloc.isGroup
                           ? Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
+                              padding: const EdgeInsets.only(right: iconTextPadding),
                               child: Icon(
                                 Icons.group,
-                                size: 18,
+                                size: iconSize,
                               ))
                           : Container(),
                       Expanded(
                         child: Text(
                           subTitle,
-                          style: TextStyle(fontSize: 14),
+                          style: twoLineHeaderSubTitle,
                           softWrap: true,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -175,7 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
       builder: (context, state) {
         if (state is MessagesStateSuccess) {
           return new ListView.builder(
-            padding: new EdgeInsets.all(8.0),
+            padding: new EdgeInsets.all(listItemPadding),
             reverse: true,
             itemCount: state.messageIds.length,
             itemBuilder: (BuildContext context, int index) {
@@ -197,48 +197,49 @@ class _ChatScreenState extends State<ChatScreen> {
     return new IconTheme(
       data: new IconThemeData(color: Theme.of(context).accentColor),
       child: new Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: new Row(children: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.add),
-              onPressed: null,
+        margin: const EdgeInsets.symmetric(horizontal: composerHorizontalPadding),
+        child: new Row(children: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.add),
+            onPressed: null,
+          ),
+          new Flexible(
+              child: Container(
+            padding: EdgeInsets.all(composerTextFieldPadding),
+            decoration: BoxDecoration(
+              border: Border.all(color: chatComposeBorder),
+              borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
             ),
-            new Flexible(
-                child: Container(
-              padding: EdgeInsets.all(8.0),
-              decoration: BoxDecoration(border: Border.all(color: Colors.black12), borderRadius: BorderRadius.all(Radius.circular(50.0))),
-              child: new TextField(
-                controller: _textController,
-                onChanged: (String text) {
-                  setState(() {
-                    _isComposing = text.length > 0;
-                  });
-                },
-                onSubmitted: _isComposing ? _handleSubmitted : null,
-                decoration: new InputDecoration.collapsed(
-                  hintText: "Type something...",
-                ),
+            child: new TextField(
+              controller: _textController,
+              onChanged: (String text) {
+                setState(() {
+                  _isComposing = text.length > 0;
+                });
+              },
+              onSubmitted: _isComposing ? _handleSubmitted : null,
+              decoration: new InputDecoration.collapsed(
+                hintText: AppLocalizations.of(context).composePlaceholder,
               ),
-            )),
-            _isComposing
-                ? new IconButton(
-                    icon: new Icon(Icons.send),
-                    onPressed: () => _handleSubmitted(_textController.text),
-                  )
-                : new IconButton(
-                    icon: new Icon(Icons.keyboard_voice),
-                    onPressed: null,
-                  ),
-            !_isComposing
-                ? new IconButton(
-                    icon: new Icon(Icons.camera_alt),
-                    onPressed: null,
-                  )
-                : Container(),
-          ]),
-          decoration: Theme.of(context).platform == TargetPlatform.iOS
-              ? new BoxDecoration(border: new Border(top: new BorderSide(color: Colors.grey[200])))
-              : null),
+            ),
+          )),
+          _isComposing
+              ? new IconButton(
+                  icon: new Icon(Icons.send),
+                  onPressed: () => _handleSubmitted(_textController.text),
+                )
+              : new IconButton(
+                  icon: new Icon(Icons.keyboard_voice),
+                  onPressed: null,
+                ),
+          !_isComposing
+              ? new IconButton(
+                  icon: new Icon(Icons.camera_alt),
+                  onPressed: null,
+                )
+              : Container(),
+        ]),
+      ),
     );
   }
 

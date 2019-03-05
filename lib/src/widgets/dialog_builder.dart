@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
 
 class DialogBuilder {
   static showConfirmationDialog(
@@ -59,7 +60,7 @@ class DialogBuilder {
           content: new Text(content),
           actions: <Widget>[
             new FlatButton(
-              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : "Cancel"),
+              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : AppLocalizations.of(context).cancel),
               onPressed: () {
                 if (negativeAction != null) {
                   negativeAction();

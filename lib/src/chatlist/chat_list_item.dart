@@ -46,6 +46,7 @@ import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 
 class ChatListItem extends StatefulWidget {
@@ -89,7 +90,7 @@ class _ChatListItemState extends State<ChatListItem> {
           subTitleIcon: _chatBloc.isGroup
               ? Icon(
                   Icons.group,
-                  size: 18,
+                  size: iconSize,
                 )
               : Container(),
           onTap: chatItemTapped,

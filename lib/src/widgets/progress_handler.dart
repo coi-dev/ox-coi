@@ -44,6 +44,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/base/bloc_progress_state.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 
 class FullscreenProgress<T extends Bloc> extends StatelessWidget {
@@ -66,7 +68,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         }
         return Container(
           constraints: BoxConstraints.expand(),
-          color: Color.fromRGBO(0, 0, 0, 0.5),
+          color: progressBackground,
           child: buildProgress(progress),
         );
       },
@@ -79,17 +81,17 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(textColorInverted),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 8.0),
+          padding: EdgeInsets.only(top: verticalPadding),
           child: Text(_text, style: progressText),
         ),
       ],
     );
     if (_showProgressValues) {
       column.children.add(Padding(
-        padding: EdgeInsets.only(top: 8.0),
+        padding: EdgeInsets.only(top: verticalPaddingSmall),
         child: Text("${progress / 10}%", style: progressText),
       ));
     }

@@ -68,6 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } else if (event is LoginProgress) {
       if (_loginSuccess(event.progress)) {
+        _updateConfig();
         yield LoginStateSuccess();
       } else if (_loginFailed(event.progress)) {
         yield LoginStateFailure(error: event.error);
@@ -94,6 +95,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     config.setValue(Context.configSendPassword, event.smtpPassword);
     config.setValue(Context.configSendServer, event.smtpServer);
     config.setValue(Context.configSendPort, event.smtpPort);
+  }
+
+  void _updateConfig() {
+    Config config = Config();
+    config.reload();
   }
 
   void registerListener() async {

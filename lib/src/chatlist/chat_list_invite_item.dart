@@ -48,12 +48,14 @@ import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/message/message_change_bloc.dart';
 import 'package:ox_talk/src/message/message_change_event.dart';
 import 'package:ox_talk/src/message/message_change_state.dart';
 import 'package:ox_talk/src/message/message_item_bloc.dart';
 import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -90,7 +92,7 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
           _contactId = contactWrapper.contactId;
           name = contactWrapper.contactAddress;
           subTitle = state.messageText;
-          color = Colors.blue;
+          color = avatarDefaultBackground;
         } else {
           name = "";
           subTitle = "";
@@ -110,24 +112,24 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Start a chat with $name?"),
+            title: Text(AppLocalizations.of(context).createChatWith(name)),
             content: new Text(message),
             actions: <Widget>[
               new FlatButton(
-                child: new Text("Cancel"),
+                child: new Text(AppLocalizations.of(context).cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               new FlatButton(
-                child: new Text("Block"),
+                child: new Text(AppLocalizations.of(context).block),
                 onPressed: () {
                   blockUser();
                   Navigator.of(context).pop();
                 },
               ),
               new FlatButton(
-                child: new Text("Yes"),
+                child: new Text(AppLocalizations.of(context).yes),
                 onPressed: () {
                   createChat();
                   Navigator.of(context).pop();

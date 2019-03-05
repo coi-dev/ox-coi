@@ -123,7 +123,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 24.0)),
+            Padding(padding: EdgeInsets.only(top: editUserAvatarVerticalPadding)),
             new GestureDetector(
                 onTap: () => _showAvatarSourceChooser(),
                 child: Stack(
@@ -137,22 +137,23 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
                             maxRadius: profileAvatarMaxRadius,
                             child: Icon(
                               Icons.person,
-                              size: 60.0,
+                              size: profileAvatarPlaceholderIconSize,
+                              color: editUserAvatarPlaceholderIconColor,
                             ),
                           ),
                     CircleAvatar(
                       maxRadius: profileAvatarMaxRadius,
-                      backgroundColor: Colors.black26,
+                      backgroundColor: transparent,
                       child: Icon(
                         Icons.edit,
-                        size: editAvatarIconSize,
-                        color: Colors.white,
+                        size: editUserAvatarEditIconSize,
+                        color: editUserAvatarEditIconColor,
                       ),
                     ),
                   ],
                 )),
             Padding(
-              padding: EdgeInsets.only(left: defaultBorderPadding, right: defaultBorderPadding),
+              padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
               child: Column(
                 children: <Widget>[
                   TextFormField(
@@ -182,17 +183,17 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.photo),
-                title: Text("Gallery"),
+                title: Text(AppLocalizations.of(context).gallery),
                 onTap: () => _getNewAvatarPath(ImageSource.gallery),
               ),
               ListTile(
                 leading: Icon(Icons.camera_alt),
-                title: Text("Camera"),
+                title: Text(AppLocalizations.of(context).camera),
                 onTap: () => _getNewAvatarPath(ImageSource.camera),
               ),
               ListTile(
                 leading: Icon(Icons.delete),
-                title: Text("Remove current image"),
+                title: Text(AppLocalizations.of(context).editUserSettingsRemoveImage),
                 onTap: () => _removeAvatar(),
               )
             ],
@@ -206,10 +207,10 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
     if (newAvatar != null) {
       File croppedAvatar = await ImageCropper.cropImage(
         sourcePath: newAvatar.path,
-        ratioX: 1.0,
-        ratioY: 1.0,
-        maxWidth: 512,
-        maxHeight: 512,
+        ratioX: editUserAvatarRation,
+        ratioY: editUserAvatarRation,
+        maxWidth: editUserAvatarImageMaxSize,
+        maxHeight: editUserAvatarImageMaxSize,
       );
       if (croppedAvatar != null) {
         setState(() {
