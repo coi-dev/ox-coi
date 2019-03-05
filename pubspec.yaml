@@ -1,7 +1,7 @@
 name: ox_talk
 description: OX Talk is a mail based chat app.
 
-version: 0.1.0+398 # x.y.z+build-number
+version: 0.2.0+400 # x.y.z+build-number
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
