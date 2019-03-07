@@ -48,6 +48,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/profile/user_bloc.dart';
 import 'package:ox_talk/src/profile/user_event.dart';
 import 'package:ox_talk/src/profile/user_state.dart';
@@ -62,6 +63,7 @@ class EditUserSettings extends StatefulWidget {
 
 class _EditUserSettingsState extends State<EditUserSettings> with TickerProviderStateMixin {
   UserBloc _userBloc = UserBloc();
+  Navigation navigation = Navigation();
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _statusController = TextEditingController();
@@ -94,7 +96,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).editUserSettingsTitle),
@@ -202,7 +204,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   }
 
   _getNewAvatarPath(ImageSource source) async {
-    Navigator.pop(context);
+    navigation.pop(context);
     File newAvatar = await ImagePicker.pickImage(source: source);
     if (newAvatar != null) {
       File croppedAvatar = await ImageCropper.cropImage(
@@ -221,7 +223,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   }
 
   _removeAvatar() {
-    Navigator.pop(context);
+    navigation.pop(context);
     setState(() {
       _avatar = null;
     });
@@ -230,6 +232,6 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   void _saveChanges() async {
     String avatarPath = _avatar != null ? _avatar.path : null;
     _userBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
-    Navigator.pop(context);
+    navigation.pop(context);
   }
 }

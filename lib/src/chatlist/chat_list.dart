@@ -52,9 +52,11 @@ import 'package:ox_talk/src/chatlist/chat_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 
 class ChatListView extends BaseRootChild {
   _ChatListState createState() => _ChatListState();
+  final Navigation navigation = Navigation();
 
   @override
   Color getColor() {
@@ -72,7 +74,7 @@ class ChatListView extends BaseRootChild {
   }
 
   _showCreateChatView(BuildContext context) {
-    Navigator.pushNamed(context, OxTalkApp.ROUTES_CHAT_CREATE);
+    navigation.pushNamed(context, Navigation.ROUTES_CHAT_CREATE);
   }
 
   @override

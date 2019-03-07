@@ -49,6 +49,7 @@ import 'package:ox_talk/src/contact/contact_change_state.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/error.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
@@ -77,6 +78,7 @@ class ContactChange extends StatefulWidget {
 }
 
 class _ContactChangeState extends State<ContactChange> {
+  Navigation navigation = Navigation();
   GlobalKey<FormState> _formKey = GlobalKey();
   ValidatableTextFormField _nameField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).name,
@@ -117,13 +119,13 @@ class _ContactChangeState extends State<ContactChange> {
         } else {
           showToast(changeToast);
         }
-        Navigator.pop(context);
+        navigation.pop(context);
       } else {
         if (state.id != null) {
           Context coreContext = Context();
           var chatId = await coreContext.createChatByContactId(state.id);
           chatRepository.putIfAbsent(id: chatId);
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName('/'));
+          navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.ROUTES_ROOT));
         }
       }
     } else if (state is ContactChangeStateFailure && state.error == contactDelete) {
@@ -148,7 +150,7 @@ class _ContactChangeState extends State<ContactChange> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: contactMain,
           title: Text(title),
@@ -250,14 +252,14 @@ class _ContactChangeState extends State<ContactChange> {
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).no),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  navigation.pop(context);
                 },
               ),
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).delete),
                 onPressed: () {
                   _contactChangeBloc.dispatch(DeleteContact(widget.id));
-                  Navigator.of(context).pop();
+                  navigation.pop(context);
                 },
               ),
             ],

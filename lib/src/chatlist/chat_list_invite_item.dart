@@ -56,6 +56,7 @@ import 'package:ox_talk/src/message/message_item_bloc.dart';
 import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -71,6 +72,7 @@ class ChatListInviteItem extends StatefulWidget {
 
 class _ChatListInviteItemState extends State<ChatListInviteItem> {
   MessageItemBloc _messageItemBloc = MessageItemBloc();
+  Navigation navigation = Navigation();
   int _contactId;
 
   @override
@@ -118,21 +120,21 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).cancel),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  navigation.pop(context);
                 },
               ),
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).block),
                 onPressed: () {
                   blockUser();
-                  Navigator.of(context).pop();
+                  navigation.pop(context);
                 },
               ),
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).yes),
                 onPressed: () {
                   createChat();
-                  Navigator.of(context).pop();
+                  navigation.pop(context);
                 },
               ),
             ],
@@ -149,7 +151,7 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
 
   _handleChangeChatStateChange(ChangeChatState state) {
     if (state is CreateChatStateSuccess) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
+      navigation.push(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
     }
   }
 

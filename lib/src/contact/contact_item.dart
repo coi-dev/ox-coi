@@ -50,6 +50,9 @@ import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
+import 'package:ox_talk/src/contact/contact_item_state.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactItem extends StatefulWidget {
@@ -64,6 +67,7 @@ class ContactItem extends StatefulWidget {
 
 class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   ContactItemBloc _contactBloc = ContactItemBloc();
+  Navigation navigation = Navigation();
 
   @override
   void initState() {
@@ -78,7 +82,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   onContactTapped(String name, String email) async {
     if (!widget._createChat) {
-      Navigator.push(
+      navigation.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
@@ -136,7 +140,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   _handleCreateChatStateChange(ChangeChatState state) {
     if (state is CreateChatStateSuccess) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
+      navigation.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
     }
   }
 }

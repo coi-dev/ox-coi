@@ -53,7 +53,6 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   int _selectedIndex = 0;
-
   var childList = List<BaseRootChild>();
 
   _RootState() {
@@ -63,13 +62,21 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     BaseRootChild child = childList[_selectedIndex];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: child.getColor(),
         title: Text(child.getTitle(context)),
           actions: child.getActions(context),
       ),
-      body: child,
+      body:
+      AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(child: child, opacity: animation);
+        },
+        child: child,
+      ),
       bottomNavigationBar: _buildBottomBar(),
       floatingActionButton: child.getFloatingActionButton(context),
     );

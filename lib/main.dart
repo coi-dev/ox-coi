@@ -54,6 +54,7 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login.dart';
 import 'package:ox_talk/src/main/root.dart';
 import 'package:ox_talk/src/main/splash.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/profile/edit_account_settings.dart';
 
 void main() {
@@ -62,11 +63,7 @@ void main() {
 }
 
 class OxTalkApp extends StatelessWidget {
-  static const String ROUTES_ROOT = "/";
-
-  static const ROUTES_CONTACT_ADD = '/contactAdd';
-  static const ROUTES_PROFILE_EDIT = '/profileEdit';
-  static const ROUTES_CHAT_CREATE = '/chatCreate';
+  final Navigation navigation = Navigation();
 
   @override
   Widget build(BuildContext context) {
@@ -79,25 +76,21 @@ class OxTalkApp extends StatelessWidget {
       supportedLocales: [
         const Locale('en', 'US'),
       ],
-      initialRoute: ROUTES_ROOT,
-      routes: {
-        ROUTES_ROOT: (context) => _OxTalk(),
-        ROUTES_CONTACT_ADD: (context) => ContactChange(
-              contactAction: ContactAction.add,
-            ),
-        ROUTES_PROFILE_EDIT: (context) => EditAccountSettings(),
-        ROUTES_CHAT_CREATE: (context) => CreateChat(),
-      },
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: Navigation.ROUTES_ROOT,
+      routes: navigation.routeMapping,
     );
   }
 }
 
-class _OxTalk extends StatefulWidget {
+class OxTalk extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _OxTalkState();
 }
 
-class _OxTalkState extends State<_OxTalk> {
+class _OxTalkState extends State<OxTalk> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
   bool _coreLoaded = false;

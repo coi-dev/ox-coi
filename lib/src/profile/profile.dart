@@ -56,6 +56,7 @@ import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/widget.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 
 class ProfileView extends BaseRootChild {
   @override
@@ -93,6 +94,7 @@ class ProfileView extends BaseRootChild {
 
 class _ProfileState extends State<ProfileView> {
   UserBloc _userBloc = UserBloc();
+  Navigation navigation = Navigation();
 
   @override
   void initState() {
@@ -189,11 +191,11 @@ class _ProfileState extends State<ProfileView> {
   }
 
   _editAccountSettings(BuildContext context) {
-    Navigator.pushNamed(context, OxTalkApp.ROUTES_PROFILE_EDIT);
+    navigation.pushNamed(context, Navigation.ROUTES_PROFILE_EDIT);
   }
 
   editUserSettings() {
-    Navigator.push(
+    navigation.push(
       context,
       MaterialPageRoute(builder: (context) => EditUserSettings()),
     );

@@ -56,9 +56,12 @@ import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/widgets/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends BaseRootChild {
+  Navigation navigation = Navigation();
+
   @override
   _ContactListState createState() {
     final state = _ContactListState();
@@ -82,7 +85,7 @@ class ContactListView extends BaseRootChild {
   }
 
   _showAddContactView(BuildContext context) {
-    Navigator.pushNamed(context, OxTalkApp.ROUTES_CONTACT_ADD);
+    navigation.pushNamed(context, Navigation.ROUTES_CONTACT_ADD);
   }
 
   @override

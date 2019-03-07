@@ -49,6 +49,7 @@ import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
@@ -59,6 +60,7 @@ class CreateChat extends StatefulWidget {
 
 class _CreateChatState extends State<CreateChat> {
   ContactListBloc _contactListBloc = ContactListBloc();
+  Navigation navigation = Navigation();
 
   @override
   void initState(){
@@ -72,7 +74,7 @@ class _CreateChatState extends State<CreateChat> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createChatTitle),
@@ -131,7 +133,7 @@ class _CreateChatState extends State<CreateChat> {
   }
 
   newContactTapped(){
-    Navigator.push(
+    navigation.push(
       context,
       MaterialPageRoute(
         builder: (context) => ContactChange(contactAction: ContactAction.add, createChat: true,)
@@ -140,7 +142,7 @@ class _CreateChatState extends State<CreateChat> {
   }
 
   createGroupTapped() {
-    Navigator.push(
+    navigation.push(
         context,
         MaterialPageRoute(
             builder: (context) => CreateGroupChat()

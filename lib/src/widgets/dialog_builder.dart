@@ -42,8 +42,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 
 class DialogBuilder {
+  static Navigation navigation = Navigation();
   static showConfirmationDialog(
       {@required BuildContext context,
       @required String title,
@@ -65,14 +67,14 @@ class DialogBuilder {
                 if (negativeAction != null) {
                   negativeAction();
                 }
-                Navigator.of(context).pop();
+                navigation.pop(context);
               },
             ),
             new FlatButton(
               child: new Text(positiveButton),
               onPressed: () {
                 positiveAction();
-                Navigator.of(context).pop();
+                navigation.pop(context);
               },
             ),
           ],

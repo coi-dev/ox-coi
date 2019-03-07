@@ -52,6 +52,7 @@ import 'package:ox_talk/src/contact/selectable_contact_item.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
@@ -66,6 +67,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
   GlobalKey<FormState> _formKey = GlobalKey();
   List<int> selectedItems = new List();
   Repository<Chat> chatRepository;
+  Navigation navigation = Navigation();
 
   @override
   void initState() {
@@ -80,7 +82,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createGroupTitle),
@@ -161,7 +163,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
         coreContext.addContactToChat(chatId, selectedItems[i]);
       }
       chatRepository.putIfAbsent(id: chatId);
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(OxTalkApp.ROUTES_ROOT));
+      navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.ROUTES_ROOT));
     }
   }
 }

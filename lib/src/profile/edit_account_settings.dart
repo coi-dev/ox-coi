@@ -44,6 +44,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/data/config.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/profile/user_bloc.dart';
 import 'package:ox_talk/src/profile/user_event.dart';
@@ -51,7 +53,6 @@ import 'package:ox_talk/src/profile/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
-import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditAccountSettings extends StatefulWidget {
@@ -61,6 +62,7 @@ class EditAccountSettings extends StatefulWidget {
 
 class _EditAccountSettingsState extends State<EditAccountSettings> {
   UserBloc _userBloc = UserBloc();
+  Navigation navigation = Navigation();
 
   final _advancedLoginKey = GlobalKey<FormState>();
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
@@ -110,7 +112,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).editAccountSettingsTitle),
@@ -206,7 +208,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
         smtpServer: smtpServer,
         smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
       ));
-      Navigator.pop(context);
+      navigation.pop(context);
     }
   }
 

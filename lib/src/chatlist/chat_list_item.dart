@@ -47,6 +47,7 @@ import 'package:ox_talk/src/chat/chat_bloc.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 
 class ChatListItem extends StatefulWidget {
@@ -60,6 +61,7 @@ class ChatListItem extends StatefulWidget {
 
 class _ChatListItemState extends State<ChatListItem> {
   ChatBloc _chatBloc = ChatBloc();
+  Navigation navigation = Navigation();
 
   @override
   void initState() {
@@ -101,9 +103,9 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   chatItemTapped(String name, String subtitle) {
-    Navigator.push(
+    navigation.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatScreen(widget._chatId)),
+      MaterialPageRoute(builder: (context) => ChatScreen(widget._chatId),),
     );
   }
 }
