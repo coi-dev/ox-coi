@@ -67,14 +67,14 @@ class DialogBuilder {
                 if (negativeAction != null) {
                   negativeAction();
                 }
-                navigation.pop(context);
+                navigation.pop(context, "DialogBuilder");
               },
             ),
             new FlatButton(
               child: new Text(positiveButton),
               onPressed: () {
                 positiveAction();
-                navigation.pop(context);
+                navigation.pop(context, "DialogBuilder");
               },
             ),
           ],

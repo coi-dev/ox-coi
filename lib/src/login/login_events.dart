@@ -50,10 +50,12 @@ class LoginButtonPressed extends LoginEvent {
   final String imapLogin;
   final String imapServer;
   final int imapPort;
+  final int imapSecurity;
   final String smtpLogin;
   final String smtpPassword;
   final String smtpServer;
   final int smtpPort;
+  final int smtpSecurity;
 
   LoginButtonPressed(
       {@required this.email,
@@ -61,10 +63,12 @@ class LoginButtonPressed extends LoginEvent {
       @required this.imapLogin,
       @required this.imapServer,
       @required this.imapPort,
+      @required this.imapSecurity,
       @required this.smtpLogin,
       @required this.smtpPassword,
       @required this.smtpServer,
-      @required this.smtpPort});
+      @required this.smtpPort,
+      @required this.smtpSecurity});
 }
 
 class LoginProgress extends LoginEvent {

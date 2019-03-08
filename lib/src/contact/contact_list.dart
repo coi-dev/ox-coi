@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
 import 'package:ox_talk/src/contact/contact_import_bloc.dart';
 import 'package:ox_talk/src/contact/contact_import_event.dart';
@@ -60,7 +59,7 @@ import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends BaseRootChild {
-  Navigation navigation = Navigation();
+  final Navigation navigation = Navigation();
 
   @override
   _ContactListState createState() {

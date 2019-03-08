@@ -53,6 +53,7 @@ import 'package:ox_talk/src/profile/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/utils/protocol_security_converter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditAccountSettings extends StatefulWidget {
@@ -112,7 +113,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context),
+            onPressed: () => navigation.pop(context, "EditAccountSettings"),
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).editAccountSettingsTitle),
@@ -139,6 +140,8 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
     smtpLoginNameField.controller.text = config.smtpLogin;
     smtpServerField.controller.text = config.imapServer;
     smtpPortField.controller.text = config.smtpPortAsString;
+    _selectedImapSecurity = convertProtocolIntToString(context, config.imapSecurity);
+    _selectedSmtpSecurity = convertProtocolIntToString(context, config.smtpSecurity);
   }
 
   Widget _buildEditAccountDataView() {
@@ -194,21 +197,26 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
       var imapPassword = imapPasswordField.controller.text;
       var imapServer = imapServerField.controller.text;
       var imapPort = imapPortField.controller.text;
+      var imapSecurity = convertProtocolStringToInt(context, _selectedImapSecurity);
       var smtpLogin = smtpLoginNameField.controller.text;
       var smtpPassword = smtpPasswordField.controller.text;
       var smtpServer = smtpServerField.controller.text;
       var smtpPort = smtpPortField.controller.text;
+      var smtpSecurity = convertProtocolStringToInt(context, _selectedSmtpSecurity);
+
       _userBloc.dispatch(UserAccountDataChanged(
         imapLogin: imapLogin,
         imapPassword: imapPassword,
         imapServer: imapServer,
         imapPort: imapPort.isNotEmpty ? int.parse(imapPort) : null,
+        imapSecurity: imapSecurity,
         smtpLogin: smtpLogin,
         smtpPassword: smtpPassword,
         smtpServer: smtpServer,
         smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
+        smtpSecurity:smtpSecurity,
       ));
-      navigation.pop(context);
+      navigation.pop(context, "EditAccountSettings");
     }
   }
 

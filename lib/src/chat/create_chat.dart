@@ -74,7 +74,7 @@ class _CreateChatState extends State<CreateChat> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context),
+            onPressed: () => navigation.pop(context, "CreateChat"),
           ),
           backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createChatTitle),
@@ -136,17 +136,19 @@ class _CreateChatState extends State<CreateChat> {
     navigation.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ContactChange(contactAction: ContactAction.add, createChat: true,)
-      )
+        builder: (context) => ContactChange(contactAction: ContactAction.add, createChat: true,),
+      ),
+      "ContactChange"
     );
   }
 
   createGroupTapped() {
     navigation.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CreateGroupChat()
-        )
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateGroupChat(),
+      ),
+      "CreateGroupChat"
     );
   }
 }

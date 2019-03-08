@@ -67,8 +67,8 @@ class Navigation{
     ROUTES_CHAT_CREATE: (context) => CreateChat(),
   };
 
-  void push(BuildContext context, MaterialPageRoute route) {
-    debugPrint("Navigation.push");
+  void push(BuildContext context, MaterialPageRoute route, String routeToPage) {
+    debugPrint("Navigation.push to $routeToPage");
     Navigator.push(context, route);
   }
 
@@ -77,18 +77,18 @@ class Navigation{
     Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  void pop(BuildContext context){
-    debugPrint("Navigation.pop");
+  void pop(BuildContext context, String popFromPage){
+    debugPrint("Navigation.pop from $popFromPage");
     Navigator.pop(context);
   }
 
-  void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate) {
-    debugPrint("Navigation.pushAndRemoveUntil to $newRoute until $predicate");
+  void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate, String routeToPage) {
+    debugPrint("Navigation.pushAndRemoveUntil to $routeToPage until $predicate");
     Navigator.pushAndRemoveUntil(context, newRoute, predicate);
   }
 
-  void pushReplacement(BuildContext context, Route newRoute) {
-    debugPrint("Navigation.pushReplacement");
+  void pushReplacement(BuildContext context, Route newRoute, String routeToPage) {
+    debugPrint("Navigation.pushReplacement to $routeToPage");
     Navigator.pushReplacement(context, newRoute);
   }
 }

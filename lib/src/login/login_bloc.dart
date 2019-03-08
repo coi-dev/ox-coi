@@ -47,6 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
+import 'package:ox_talk/src/utils/protocol_security_converter.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   DeltaChatCore _core = DeltaChatCore();
@@ -95,6 +96,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     config.setValue(Context.configSendPassword, event.smtpPassword);
     config.setValue(Context.configSendServer, event.smtpServer);
     config.setValue(Context.configSendPort, event.smtpPort);
+    int imapSecurity = event.imapSecurity;
+    int smtpSecurity = event.smtpSecurity;
+    int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
+
+    config.setValue(Context.configServerFlags, serverFlags, false, ObjectType.int);
   }
 
   void _updateConfig() {

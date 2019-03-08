@@ -96,7 +96,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context),
+            onPressed: () => navigation.pop(context, "EditUserSettings"),
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).editUserSettingsTitle),
@@ -204,7 +204,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   }
 
   _getNewAvatarPath(ImageSource source) async {
-    navigation.pop(context);
+    navigation.pop(context, "EditUserSettings - ModalBottomSheet");
     File newAvatar = await ImagePicker.pickImage(source: source);
     if (newAvatar != null) {
       File croppedAvatar = await ImageCropper.cropImage(
@@ -223,7 +223,7 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   }
 
   _removeAvatar() {
-    navigation.pop(context);
+    navigation.pop(context, "EditUserSettings - ModalBottomSheet");
     setState(() {
       _avatar = null;
     });
@@ -232,6 +232,6 @@ class _EditUserSettingsState extends State<EditUserSettings> with TickerProvider
   void _saveChanges() async {
     String avatarPath = _avatar != null ? _avatar.path : null;
     _userBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
-    navigation.pop(context);
+    navigation.pop(context, "EditUserSettings");
   }
 }

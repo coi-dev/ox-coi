@@ -43,7 +43,6 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
@@ -82,7 +81,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context),
+            onPressed: () => navigation.pop(context, "CreateGroupChat"),
           ),
           backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createGroupTitle),
@@ -163,7 +162,12 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
         coreContext.addContactToChat(chatId, selectedItems[i]);
       }
       chatRepository.putIfAbsent(id: chatId);
-      navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.ROUTES_ROOT));
+      navigation.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => ChatScreen(chatId), settings: RouteSettings(name: "ChatScreen")),
+        ModalRoute.withName(Navigation.ROUTES_ROOT),
+        "ChatScreen"
+      );
     }
   }
 }

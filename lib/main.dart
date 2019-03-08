@@ -48,14 +48,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/log/bloc_delegate.dart';
-import 'package:ox_talk/src/chat/create_chat.dart';
-import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login.dart';
 import 'package:ox_talk/src/main/root.dart';
 import 'package:ox_talk/src/main/splash.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/profile/edit_account_settings.dart';
 
 void main() {
   BlocSupervisor().delegate = DebugBlocDelegate();

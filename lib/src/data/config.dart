@@ -41,6 +41,7 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/src/utils/protocol_security_converter.dart';
 
 class Config {
   static Config _instance;
@@ -54,9 +55,11 @@ class Config {
   String imapLogin;
   String imapServer;
   int imapPort;
+  int imapSecurity;
   String smtpLogin;
   String smtpServer;
   int smtpPort;
+  int smtpSecurity;
 
   int get lastUpdate => _lastUpdate;
 
@@ -83,6 +86,10 @@ class Config {
     smtpLogin = await _context.getConfigValue(Context.configSendUser);
     smtpServer = await _context.getConfigValue(Context.configSendServer);
     smtpPort = await _context.getConfigValue(Context.configSendPort, ObjectType.int);
+    int serverFlags = await _context.getConfigValue(Context.configServerFlags, ObjectType.int);
+    imapSecurity = getSavedImapSecurityOption(serverFlags);
+    smtpSecurity = getSavedSmtpSecurityOption(serverFlags);
+    
     setLastUpdate();
   }
 
@@ -137,6 +144,18 @@ class Config {
       case Context.configSendPort:
         smtpPort = value;
         break;
+      case Context.configServerFlags:
+        int sel = 0;
+        if((value & Context.serverFlagsImapSsl) != 0) sel = 1;
+        if((value & Context.serverFlagsImapStartTls) != 0) sel = 2;
+        if((value & Context.serverFlagsImapPlain) !=0 ) sel = 3;
+        imapSecurity = sel;
+
+        sel = 0;
+        if((value & Context.serverFlagsSmtpSsl) != 0) sel = 1;
+        if((value & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
+        if((value & Context.serverFlagsSmtpPlain) != 0) sel = 3;
+        smtpSecurity = sel;
     }
     if (enforceType != null) {
       _context.setConfigValue(key, value, enforceType);
@@ -146,7 +165,7 @@ class Config {
     setLastUpdate();
   }
 
-  String get smtpPortAsString => smtpPort > 0 ? smtpPort : "";
+  String get smtpPortAsString => smtpPort != null ? (smtpPort > 0 ? smtpPort.toString() : "") : null;
 
-  String get imapPortAsString => imapPort > 0 ? imapPort : "";
+  String get imapPortAsString => imapPort != null ? (imapPort > 0 ? imapPort.toString() : "") : null;
 }

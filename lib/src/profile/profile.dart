@@ -44,7 +44,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
@@ -198,6 +197,7 @@ class _ProfileState extends State<ProfileView> {
     navigation.push(
       context,
       MaterialPageRoute(builder: (context) => EditUserSettings()),
+      "EditUserSettings"
     );
   }
 }

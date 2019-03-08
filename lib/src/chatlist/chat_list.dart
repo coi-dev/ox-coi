@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
 import 'package:ox_talk/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_talk/src/chatlist/chat_list_event.dart';

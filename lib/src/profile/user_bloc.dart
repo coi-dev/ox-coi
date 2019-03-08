@@ -47,6 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/profile/user_event.dart';
 import 'package:ox_talk/src/profile/user_state.dart';
+import 'package:ox_talk/src/utils/protocol_security_converter.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   @override
@@ -100,11 +101,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     config.setValue(Context.configMailUser, event.imapLogin, true, ObjectType.String);
     config.setValue(Context.configMailPassword, event.imapPassword, true, ObjectType.String);
     config.setValue(Context.configMailServer, event.imapServer, true, ObjectType.String);
-    config.setValue(Context.configMailPort, event.imapPort, true, ObjectType.int);
+    config.setValue(Context.configMailPort, event.imapPort, true, ObjectType.String);
     config.setValue(Context.configSendUser, event.smtpLogin, true, ObjectType.String);
     config.setValue(Context.configSendPassword, event.smtpPassword, true, ObjectType.String);
     config.setValue(Context.configSendServer, event.smtpServer, true, ObjectType.String);
-    config.setValue(Context.configSendPort, event.smtpPort, true, ObjectType.int);
+    config.setValue(Context.configSendPort, event.smtpPort, true, ObjectType.String);
+    int imapSecurity = event.imapSecurity;
+    int smtpSecurity = event.smtpSecurity;
+    int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
+
+    config.setValue(Context.configServerFlags, serverFlags, false, ObjectType.int);
     dispatch(UserChanged(config: config));
   }
 }

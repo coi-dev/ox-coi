@@ -50,9 +50,7 @@ import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
-import 'package:ox_talk/src/contact/contact_item_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactItem extends StatefulWidget {
@@ -92,6 +90,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
                   email: email,
                   name: name,
                 )),
+        "ContactChange"
       );
     } else {
       return buildCreateChatDialog(name, email);
@@ -140,7 +139,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   _handleCreateChatStateChange(ChangeChatState state) {
     if (state is CreateChatStateSuccess) {
-      navigation.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
+      navigation.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatScreen");
     }
   }
 }

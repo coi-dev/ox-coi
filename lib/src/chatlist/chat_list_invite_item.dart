@@ -120,21 +120,21 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).cancel),
                 onPressed: () {
-                  navigation.pop(context);
+                  navigation.pop(context, "InviteItemTappedDialog");
                 },
               ),
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).block),
                 onPressed: () {
                   blockUser();
-                  navigation.pop(context);
+                  navigation.pop(context, "InviteItemTappedDialog");
                 },
               ),
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).yes),
                 onPressed: () {
                   createChat();
-                  navigation.pop(context);
+                  navigation.pop(context, "InviteItemTappedDialog");
                 },
               ),
             ],
@@ -151,7 +151,7 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
 
   _handleChangeChatStateChange(ChangeChatState state) {
     if (state is CreateChatStateSuccess) {
-      navigation.push(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)));
+      navigation.push(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatListInviteItem");
     }
   }
 

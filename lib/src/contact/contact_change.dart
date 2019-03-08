@@ -121,13 +121,13 @@ class _ContactChangeState extends State<ContactChange> {
         } else {
           showToast(changeToast);
         }
-        navigation.pop(context);
+        navigation.pop(context, "ContactChanged");
       } else {
         if (state.id != null) {
           Context coreContext = Context();
           var chatId = await coreContext.createChatByContactId(state.id);
           chatRepository.putIfAbsent(id: chatId);
-          navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.ROUTES_ROOT));
+          navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatScreen");
         }
       }
     } else if (state is ContactChangeStateFailure && state.error == contactDelete) {
@@ -151,7 +151,7 @@ class _ContactChangeState extends State<ContactChange> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context),
+            onPressed: () => navigation.pop(context, "ContactChange"),
           ),
           backgroundColor: contactMain,
           title: Text(title),
@@ -253,14 +253,14 @@ class _ContactChangeState extends State<ContactChange> {
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).no),
                 onPressed: () {
-                  navigation.pop(context);
+                  navigation.pop(context, "ContactChange");
                 },
               ),
               new FlatButton(
                 child: new Text(AppLocalizations.of(context).delete),
                 onPressed: () {
                   _contactChangeBloc.dispatch(DeleteContact(widget.id));
-                  navigation.pop(context);
+                  navigation.pop(context, "ContactChange");
                 },
               ),
             ],

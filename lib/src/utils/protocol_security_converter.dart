@@ -40,73 +40,52 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/chat.dart';
-import 'package:ox_talk/src/chat/chat_bloc.dart';
-import 'package:ox_talk/src/chat/chat_event.dart';
-import 'package:ox_talk/src/chat/chat_state.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/widgets/avatar_list_item.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
 
-class ChatListItem extends StatefulWidget {
-  final int _chatId;
+enum ProtocolType{imap,smtp}
 
-  ChatListItem(this._chatId, key) : super(key: Key(key));
-
-  @override
-  _ChatListItemState createState() => _ChatListItemState();
+int convertProtocolStringToInt(BuildContext context, String value){
+  int newValue = 0;
+  if(value == AppLocalizations.of(context).sslTls) newValue = 1;
+  else if(value == AppLocalizations.of(context).startTLS) newValue = 2;
+  else if(value == AppLocalizations.of(context).off) newValue = 3;
+  return newValue;
 }
 
-class _ChatListItemState extends State<ChatListItem> {
-  ChatBloc _chatBloc = ChatBloc();
-  Navigation navigation = Navigation();
+String convertProtocolIntToString(BuildContext context, int value) {
+  String newValue;
+  if(value == 1) newValue = AppLocalizations.of(context).sslTls;
+  else if(value == 2) newValue = AppLocalizations.of(context).startTLS;
+  else if(value == 3) newValue = AppLocalizations.of(context).off;
+  else newValue = AppLocalizations.of(context).automatic;
+  return newValue;
+}
 
-  @override
-  void initState() {
-    super.initState();
-    _chatBloc.dispatch(RequestChat(widget._chatId));
-  }
+int getSavedImapSecurityOption(int serverFlags){
+  int sel = 0;
+  if((serverFlags & Context.serverFlagsImapSsl) != 0) sel = 1;
+  if((serverFlags & Context.serverFlagsImapStartTls) != 0) sel = 2;
+  if((serverFlags & Context.serverFlagsImapPlain) !=0 ) sel = 3;
+  return sel;
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _chatBloc,
-      builder: (context, state) {
-        String name;
-        String subTitle;
-        Color color;
-        if (state is ChatStateSuccess) {
-          name = state.name;
-          subTitle = state.subTitle;
-          color = state.color;
-        } else {
-          name = "";
-          subTitle = "";
-        }
-        return AvatarListItem(
-          title: name,
-          subTitle: subTitle,
-          color: color,
-          subTitleIcon: _chatBloc.isGroup
-              ? Icon(
-                  Icons.group,
-                  size: iconSize,
-                )
-              : Container(),
-          onTap: chatItemTapped,
-        );
-      },
-    );
-    /*;*/
-  }
+int getSavedSmtpSecurityOption(int serverFlags){
+  int sel = 0;
+  if((serverFlags & Context.serverFlagsSmtpSsl) != 0) sel = 1;
+  if((serverFlags & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
+  if((serverFlags & Context.serverFlagsSmtpPlain) != 0) sel = 3;
+  return sel;
+}
 
-  chatItemTapped(String name, String subtitle) {
-    navigation.push(
-      context,
-      MaterialPageRoute(builder: (context) => ChatScreen(widget._chatId),),
-      "ChatScreen"
-    );
-  }
+int createServerFlagInteger(int imapOption, int smtpOption){
+  int serverFlags = 0;
+  if(imapOption == 1) serverFlags |= Context.serverFlagsImapSsl;
+  if(imapOption == 2) serverFlags |= Context.serverFlagsImapStartTls;
+  if(imapOption == 3) serverFlags |= Context.serverFlagsImapPlain;
+  if(smtpOption == 1) serverFlags |= Context.serverFlagsSmtpSsl;
+  if(smtpOption == 2) serverFlags |= Context.serverFlagsSmtpStartTls;
+  if(smtpOption == 3) serverFlags |= Context.serverFlagsSmtpPlain;
+  return serverFlags;
 }

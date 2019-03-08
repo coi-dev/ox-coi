@@ -66,20 +66,24 @@ class UserAccountDataChanged extends UserEvent {
   final String imapPassword;
   final String imapServer;
   final int imapPort;
+  final int imapSecurity;
   final String smtpLogin;
   final String smtpPassword;
   final String smtpServer;
   final int smtpPort;
+  final int smtpSecurity;
 
   UserAccountDataChanged(
       {@required this.imapLogin,
       @required this.imapPassword,
       @required this.imapServer,
       @required this.imapPort,
+      @required this.imapSecurity,
       @required this.smtpLogin,
       @required this.smtpPassword,
       @required this.smtpServer,
-      @required this.smtpPort});
+      @required this.smtpPort,
+      @required this.smtpSecurity,});
 }
 
 class UserChanged extends UserEvent {

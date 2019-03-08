@@ -48,6 +48,7 @@ import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
+import 'package:ox_talk/src/utils/protocol_security_converter.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -128,10 +129,12 @@ class _LoginState extends State<Login> {
     var imapLogin = imapLoginNameField.controller.text;
     var imapServer = imapServerField.controller.text;
     var imapPort = imapPortField.controller.text;
+    var imapSecurity = convertProtocolStringToInt(context, _selectedImapSecurity);
     var smtpLogin = smtpLoginNameField.controller.text;
     var smtpPassword = smtpPasswordField.controller.text;
     var smtpServer = smtpServerField.controller.text;
     var smtpPort = smtpPortField.controller.text;
+    var smtpSecurity = convertProtocolStringToInt(context, _selectedSmtpSecurity);
 
     bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
     bool advancedLoginIsValid = _advancedLoginKey.currentState != null ? _advancedLoginKey.currentState.validate() : true;
@@ -148,10 +151,12 @@ class _LoginState extends State<Login> {
         imapLogin: imapLogin,
         imapServer: imapServer,
         imapPort: imapPort.isNotEmpty ? int.parse(imapPort) : null,
+        imapSecurity: imapSecurity,
         smtpLogin: smtpLogin,
         smtpPassword: smtpPassword,
         smtpServer: smtpServer,
         smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
+        smtpSecurity: smtpSecurity,
       ));
     }
   }
@@ -224,7 +229,7 @@ class _LoginState extends State<Login> {
               Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).loginLabelImapSecurity),
               DropdownButton(
-                  value: _selectedImapSecurity,
+                  value: _selectedImapSecurity == null ? AppLocalizations.of(context).automatic : _selectedImapSecurity,
                   items: getSecurityOptions(),
                   onChanged: (String newValue) {
                     setState(() {
@@ -240,7 +245,7 @@ class _LoginState extends State<Login> {
               Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
               DropdownButton(
-                  value: _selectedSmtpSecurity,
+                  value: _selectedSmtpSecurity == null ? AppLocalizations.of(context).automatic : _selectedSmtpSecurity,
                   items: getSecurityOptions(),
                   onChanged: (String newValue) {
                     setState(() {
