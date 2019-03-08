@@ -70,12 +70,10 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     } else if (event is ContactsChanged) {
       List<int> resultValidContactIds = List();
       List<int> resultValidContactLastUpdateValues = List();
-      for (int index = 0; index < contactRepository.getAllIds().length; index++) {
-        var contact = contactRepository.get(index);
-        if (validContactIds.contains(contact.getId())) {
-          resultValidContactIds.add(contact.getId());
-          resultValidContactLastUpdateValues.add(contact.lastUpdate);
-        }
+      for (int index = 0; index < validContactIds.length; index++) {
+        var contact = contactRepository.get(validContactIds[index]);
+        resultValidContactIds.add(contact.getId());
+        resultValidContactLastUpdateValues.add(contact.lastUpdate);
       }
       yield ContactListStateSuccess(contactIds: resultValidContactIds, contactLastUpdateValues: resultValidContactLastUpdateValues);
     }
@@ -93,14 +91,18 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     streamSubscription = contactRepository.observable.listen((event) => dispatchContactsChanged());
   }
 
-  void dispatchContactsChanged() {
-    validContactIds = contactRepository.getAllIds();
+  void dispatchContactsChanged() async {
+    await _updateValidContactIds();
     dispatch(ContactsChanged());
   }
 
-  void setupContacts() async {
+  Future _updateValidContactIds() async {
     Context _context = Context();
     validContactIds = List.from(await _context.getContacts(2, null));
+  }
+
+  void setupContacts() async {
+    await _updateValidContactIds();
     contactRepository.putIfAbsent(ids: validContactIds);
     dispatch(ContactsChanged());
   }

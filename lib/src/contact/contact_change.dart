@@ -105,6 +105,8 @@ class _ContactChangeState extends State<ContactChange> {
         textFormType: TextFormType.email,
         inputType: TextInputType.emailAddress,
       );
+    } else {
+      _nameField.controller.text = widget.name != null ? widget.name : "";
     }
     final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
     contactAddedObservable.listen((state) => handleContactChanged(state));
@@ -144,7 +146,6 @@ class _ContactChangeState extends State<ContactChange> {
       changeToast = AppLocalizations.of(context).contactChangeEditToast;
       deleteToast = AppLocalizations.of(context).contactChangeDeleteToast;
       deleteFailedToast = AppLocalizations.of(context).contactChangeDeleteFailedToast;
-      _nameField.controller.text = widget.name != null ? widget.name : "";
     }
     return Scaffold(
         appBar: AppBar(

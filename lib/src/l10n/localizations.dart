@@ -69,11 +69,11 @@ class AppLocalizations {
   //translation complete
 
   // No translation
-  String get sslTls => "SSL/TLS";
-  String get startTLS => "StartTLS";
+  String get sslTls => 'SSL/TLS';
+  String get startTLS => 'StartTLS';
 
   // No translation + DCC default values which should get adjusted
-  String get deltaChatStatusDefaultValue => "Sent with my Delta Chat Messenger: https://delta.chat";
+  String get deltaChatStatusDefaultValue => 'Sent with my Delta Chat Messenger: https://delta.chat';
 
   // Global
   String get yes => Intl.message('Yes', name: 'yes');
@@ -146,8 +146,8 @@ class AppLocalizations {
   String get contactChangeDeleteTitle => Intl.message('Delete Contact', name: 'contactChangeDeleteTitle');
   String get contactChangeDeleteToast => Intl.message('Contact successfully deleted', name: 'contactChangeDeleteToast');
   String get contactChangeDeleteFailedToast => Intl.message('Could not delete contact.', name: 'contactChangeDeleteFailedToast');
-  String contactChangeDeleteDialogContent(email, name) => Intl.message('"Do you really want to delete $email ($name)?', name: 'contactChangeDeleteDialogContent', args: [email, name]);
-  String get contactChangeNameHint => Intl.message('"Enter the contact name"', name: 'contactChangeNameHint');
+  String contactChangeDeleteDialogContent(email, name) => Intl.message('Do you really want to delete $email ($name)?', name: 'contactChangeDeleteDialogContent', args: [email, name]);
+  String get contactChangeNameHint => Intl.message('Enter the contact name', name: 'contactChangeNameHint');
 
   String get contactImportDialogTitle => Intl.message('Import system contacts', name: 'contactImportDialogTitle');
   String get contactImportDialogContent => Intl.message('Would you like to import your system contacts?', name: 'contactImportDialogContent');
