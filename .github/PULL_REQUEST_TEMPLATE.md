@@ -1,12 +1,3 @@
----
-name: Pull request
-about: Create a pull request to improve or extend the code
-title: ''
-labels: ''
-assignees: ''
-
----
-
 **Link to the given issue**
 A pull request should nearly always have a corresponding issue entry.
 
