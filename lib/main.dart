@@ -47,6 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ox_talk/src/data/config.dart';
+import 'package:ox_talk/src/l10n/core_localitazions.dart';
 import 'package:ox_talk/src/log/bloc_delegate.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login.dart';
@@ -110,6 +111,7 @@ class _OxTalkState extends State<OxTalk> {
 
   void _initCoreAndContext() async {
     await _core.init();
+    await _core.setCoreStrings(getCoreStringMap(context));
     await _isConfigured();
     await _setupDefaultValues();
     setState(() {
@@ -119,7 +121,7 @@ class _OxTalkState extends State<OxTalk> {
 
   Future _setupDefaultValues() async {
     String status = await _context.getConfigValue(Context.configSelfStatus);
-    if (status == AppLocalizations.of(context).deltaChatStatusDefaultValue) {
+    if (status == AppLocalizations.of(context).coreChatStatusDefaultValue) {
       Config config = Config();
       config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
     }
