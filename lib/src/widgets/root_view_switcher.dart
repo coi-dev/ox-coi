@@ -41,62 +41,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
-import 'package:ox_talk/src/chatlist/chat_list.dart';
-import 'package:ox_talk/src/contact/contact_list.dart';
-import 'package:ox_talk/src/profile/profile.dart';
-import 'package:ox_talk/src/widgets/root_view_switcher.dart';
 
-class Root extends StatefulWidget {
-  @override
-  _RootState createState() => _RootState();
-}
+class RootViewSwitcher extends AnimatedSwitcher {
+  static const defaultDuration = Duration(milliseconds: 200);
 
-class _RootState extends State<Root> {
-  int _selectedIndex = 0;
-  var childList = List<BaseRootChild>();
-
-  _RootState() {
-    childList.addAll([new ChatListView(), new ContactListView(), new ProfileView()]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    BaseRootChild child = childList[_selectedIndex];
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: child.getColor(),
-        title: Text(child.getTitle(context)),
-        actions: child.getActions(context),
-      ),
-      body: RootViewSwitcher(child),
-      bottomNavigationBar: _buildBottomBar(),
-      floatingActionButton: child.getFloatingActionButton(context),
-    );
-  }
-
-  Widget _buildBottomBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: getBottomBarItems(),
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-    );
-  }
-
-  List<BottomNavigationBarItem> getBottomBarItems() {
-    var bottomBarItems = List<BottomNavigationBarItem>();
-    childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
-          icon: Icon(item.getNavigationIcon()),
-          title: Text(item.getNavigationText(context)),
-        )));
-    return bottomBarItems;
-  }
-
-  _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  RootViewSwitcher(Widget child)
+      : super(
+            duration: defaultDuration,
+            transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(child: child, opacity: animation),
+            child: child);
 }

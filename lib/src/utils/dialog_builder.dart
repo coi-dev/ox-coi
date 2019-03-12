@@ -44,42 +44,40 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 
-class DialogBuilder {
-  static Navigation navigation = Navigation();
-  static showConfirmationDialog(
-      {@required BuildContext context,
-      @required String title,
-      @required String content,
-      @required String positiveButton,
-      @required Function positiveAction,
-      String negativeButton,
-      Function negativeAction}) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: new Text(content),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : AppLocalizations.of(context).cancel),
-              onPressed: () {
-                if (negativeAction != null) {
-                  negativeAction();
-                }
-                navigation.pop(context, "DialogBuilder");
-              },
-            ),
-            new FlatButton(
-              child: new Text(positiveButton),
-              onPressed: () {
-                positiveAction();
-                navigation.pop(context, "DialogBuilder");
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+showConfirmationDialog(
+    {@required BuildContext context,
+    @required String title,
+    @required String content,
+    @required String positiveButton,
+    @required Function positiveAction,
+    String negativeButton,
+    Function negativeAction}) {
+  Navigation navigation = Navigation();
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: new Text(content),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : AppLocalizations.of(context).cancel),
+            onPressed: () {
+              if (negativeAction != null) {
+                negativeAction();
+              }
+              navigation.pop(context, "DialogBuilder");
+            },
+          ),
+          new FlatButton(
+            child: new Text(positiveButton),
+            onPressed: () {
+              positiveAction();
+              navigation.pop(context, "DialogBuilder");
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

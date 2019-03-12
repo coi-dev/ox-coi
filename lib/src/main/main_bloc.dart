@@ -40,63 +40,58 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
-import 'package:ox_talk/src/chatlist/chat_list.dart';
-import 'package:ox_talk/src/contact/contact_list.dart';
-import 'package:ox_talk/src/profile/profile.dart';
-import 'package:ox_talk/src/widgets/root_view_switcher.dart';
+import 'dart:async';
 
-class Root extends StatefulWidget {
-  @override
-  _RootState createState() => _RootState();
-}
+import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_talk/src/data/config.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/main/main_event.dart';
+import 'package:ox_talk/src/main/main_state.dart';
 
-class _RootState extends State<Root> {
-  int _selectedIndex = 0;
-  var childList = List<BaseRootChild>();
-
-  _RootState() {
-    childList.addAll([new ChatListView(), new ContactListView(), new ProfileView()]);
-  }
+class MainBloc extends Bloc<MainEvent, MainState> {
+  DeltaChatCore _core = DeltaChatCore();
+  Context _context = Context();
 
   @override
-  Widget build(BuildContext context) {
-    BaseRootChild child = childList[_selectedIndex];
+  MainState get initialState => MainStateInitial();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: child.getColor(),
-        title: Text(child.getTitle(context)),
-        actions: child.getActions(context),
-      ),
-      body: RootViewSwitcher(child),
-      bottomNavigationBar: _buildBottomBar(),
-      floatingActionButton: child.getFloatingActionButton(context),
-    );
+  @override
+  Stream<MainState> mapEventToState(MainState currentState, MainEvent event) async* {
+    if (event is PrepareApp) {
+      yield MainStateLoading();
+      try {
+        await _initCore();
+        await _setupDefaultValues(event.context);
+        _checkLogin();
+      } catch (error) {
+        yield MainStateFailure(error: error.toString());
+      }
+    } else if (event is AppLoaded) {
+      yield MainStateSuccess(configured: event.configured);
+    }
   }
 
-  Widget _buildBottomBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: getBottomBarItems(),
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
-    );
+  _initCore() async {
+    await _core.init();
   }
 
-  List<BottomNavigationBarItem> getBottomBarItems() {
-    var bottomBarItems = List<BottomNavigationBarItem>();
-    childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
-          icon: Icon(item.getNavigationIcon()),
-          title: Text(item.getNavigationText(context)),
-        )));
-    return bottomBarItems;
+  _setupDefaultValues(BuildContext context) async {
+    String status = await _context.getConfigValue(Context.configSelfStatus);
+    if (status == AppLocalizations.of(context).coreChatStatusDefaultValue) {
+      Config config = Config();
+      config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
+    }
   }
 
-  _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  _checkLogin() async {
+    bool configured = await _context.isConfigured();
+    dispatch(AppLoaded(configured: configured));
   }
+
+  onLoginSuccess() {
+    dispatch(AppLoaded(configured: true));
+  }
+
 }

@@ -40,20 +40,23 @@
  * for more details.
  */
 
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/core_localitazions.dart';
 import 'package:ox_talk/src/log/bloc_delegate.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/log/bloc_delegate.dart';
 import 'package:ox_talk/src/login/login.dart';
+import 'package:ox_talk/src/main/main_bloc.dart';
+import 'package:ox_talk/src/main/main_event.dart';
+import 'package:ox_talk/src/main/main_state.dart';
 import 'package:ox_talk/src/main/root.dart';
 import 'package:ox_talk/src/main/splash.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/widgets/root_view_switcher.dart';
 
 void main() {
   BlocSupervisor().delegate = DebugBlocDelegate();
@@ -71,12 +74,7 @@ class OxTalkApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en', 'US'),
-      ],
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      supportedLocales: AppLocalizations.supportedLocales,
       initialRoute: Navigation.ROUTES_ROOT,
       routes: navigation.routeMapping,
     );
@@ -89,59 +87,31 @@ class OxTalk extends StatefulWidget {
 }
 
 class _OxTalkState extends State<OxTalk> {
-  DeltaChatCore _core = DeltaChatCore();
-  Context _context = Context();
-  bool _coreLoaded = false;
-  bool _configured = false;
+  MainBloc _mainBloc = MainBloc();
 
   @override
   void initState() {
     super.initState();
-    _initCoreAndContext();
+    _mainBloc.dispatch(PrepareApp(context: context));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_coreLoaded) {
-      return new Splash();
-    } else {
-      return _buildMainScreen();
-    }
-  }
-
-  void _initCoreAndContext() async {
-    await _core.init();
-    await _core.setCoreStrings(getCoreStringMap(context));
-    await _isConfigured();
-    await _setupDefaultValues();
-    setState(() {
-      _coreLoaded = true;
-    });
-  }
-
-  Future _setupDefaultValues() async {
-    String status = await _context.getConfigValue(Context.configSelfStatus);
-    if (status == AppLocalizations.of(context).coreChatStatusDefaultValue) {
-      Config config = Config();
-      config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
-    }
-  }
-
-  Future _isConfigured() async {
-    _configured = await _context.isConfigured();
-  }
-
-  Widget _buildMainScreen() {
-    if (_configured) {
-      return new Root();
-    } else {
-      return new Login(loginSuccess);
-    }
-  }
-
-  void loginSuccess() async {
-    setState(() {
-      _configured = true;
-    });
+    return BlocBuilder(
+      bloc: _mainBloc,
+      builder: (context, state) {
+        Widget child;
+        if (state is MainStateSuccess) {
+          if (state.configured) {
+            child = Root();
+          } else {
+            child = Login(_mainBloc.onLoginSuccess);
+          }
+        } else {
+          child = Splash();
+        }
+        return RootViewSwitcher(child);
+      },
+    );
   }
 }

@@ -52,7 +52,7 @@ import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/widgets/dialog_builder.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
@@ -165,7 +165,7 @@ class _ContactListState extends State<ContactListView> {
     var importTextRepeat = AppLocalizations.of(context).contactImportDialogContentExtensionRepeat;
     var content = "$importText ${initialImport ? importTextInitial : importTextRepeat}";
     var importPositive = AppLocalizations.of(context).import;
-    DialogBuilder.showConfirmationDialog(
+    showConfirmationDialog(
       context: context,
       title: importTitle,
       content: content,

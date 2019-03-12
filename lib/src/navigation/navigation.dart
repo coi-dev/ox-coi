@@ -46,21 +46,21 @@ import 'package:ox_talk/src/chat/create_chat.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/profile/edit_account_settings.dart';
 
-class Navigation{
+class Navigation {
   static const String ROUTES_ROOT = '/';
   static const String ROUTES_CONTACT_ADD = '/contactAdd';
   static const String ROUTES_PROFILE_EDIT = '/profileEdit';
   static const String ROUTES_CHAT_CREATE = '/chatCreate';
 
   static Navigation _instance;
+
   factory Navigation() => _instance ??= new Navigation._internal();
 
   Navigation._internal();
 
   final Map<String, WidgetBuilder> routeMapping = {
     ROUTES_ROOT: (context) => OxTalk(),
-    ROUTES_CONTACT_ADD: (context) =>
-        ContactChange(
+    ROUTES_CONTACT_ADD: (context) => ContactChange(
           contactAction: ContactAction.add,
         ),
     ROUTES_PROFILE_EDIT: (context) => EditAccountSettings(),
@@ -72,12 +72,12 @@ class Navigation{
     Navigator.push(context, route);
   }
 
-  void pushNamed(BuildContext context, String routeName, { Object arguments }) {
+  void pushNamed(BuildContext context, String routeName, {Object arguments}) {
     debugPrint("Navigation.pushNamed to $routeName");
     Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  void pop(BuildContext context, String popFromPage){
+  void pop(BuildContext context, String popFromPage) {
     debugPrint("Navigation.pop from $popFromPage");
     Navigator.pop(context);
   }
