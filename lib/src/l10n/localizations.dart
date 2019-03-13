@@ -200,14 +200,11 @@ class AppLocalizations {
   // Mail
   String get mailTitle => Intl.message('Mail', name: 'mailTitle');
 
-  // Chat / chat list
+  // Chat / chat list / invite list
   String get chatTitle => Intl.message('Chat', name: 'chatTitle');
-
-  String get chatListInviteHeader => Intl.message('Open requests', name: 'chatListInviteHeader');
-
-  String get chatListChatsHeader => Intl.message('Active chats', name: 'chatListChatsHeader');
-
   String get composePlaceholder => Intl.message('Type something...', name: 'composePlaceholder');
+  String get inviteEmptyList => Intl.message('No invites', name: 'inviteEmptyList');
+  String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
 
   // Create chat
   String get createChatTitle => Intl.message('Create chat', name: 'createChatTitle');

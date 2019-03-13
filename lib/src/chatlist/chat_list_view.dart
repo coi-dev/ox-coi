@@ -41,60 +41,101 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/src/base/base_root_child.dart';
+import 'package:ox_talk/src/chatlist/chat_list.dart';
 import 'package:ox_talk/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_talk/src/chatlist/chat_list_event.dart';
-import 'package:ox_talk/src/chatlist/chat_list_item.dart';
-import 'package:ox_talk/src/chatlist/chat_list_state.dart';
+import 'package:ox_talk/src/chatlist/invite_list.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 
-class ChatList extends StatefulWidget {
-  @override
-  _ChatListState createState() => _ChatListState();
-}
-
-class _ChatListState extends State<ChatList> {
-  ChatListBloc _chatListBloc = ChatListBloc();
+class ChatListView extends BaseRootChild {
+  _ChatListViewState createState() => _ChatListViewState();
+  final Navigation navigation = Navigation();
 
   @override
-  void initState() {
-    super.initState();
-    _chatListBloc.dispatch(RequestChatList());
+  Color getColor() {
+    return chatMain;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _chatListBloc,
-      builder: (context, state) {
-        if (state is ChatListStateSuccess) {
-          if(state.chatIds.length > 0) {
-            return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
-          }
-          else{
-            return Center(child: Text(AppLocalizations.of(context).chatListEmpty),);
-          }
-        } else if (state is! ChatListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Icon(Icons.error);
-        }
+  FloatingActionButton getFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: new Icon(Icons.create),
+      onPressed: () {
+        _showCreateChatView(context);
       },
     );
   }
 
-  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues) {
-    return ListView.builder(
-      padding: EdgeInsets.all(listItemPadding),
-      itemCount: chatIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var chatId = chatIds[index];
-        var key = "$chatId-${chatLastUpdateValues[index]}";
-        return ChatListItem(chatId, key);
-      },
+  _showCreateChatView(BuildContext context) {
+    navigation.pushNamed(context, Navigation.ROUTES_CHAT_CREATE);
+  }
+
+  @override
+  String getTitle(BuildContext context) {
+    return AppLocalizations.of(context).chatTitle;
+  }
+
+  @override
+  String getNavigationText(BuildContext context) {
+    return AppLocalizations.of(context).chatTitle;
+  }
+
+  @override
+  IconData getNavigationIcon() {
+    return Icons.chat;
+  }
+}
+
+class _ChatListViewState extends State<ChatListView> with SingleTickerProviderStateMixin {
+  ChatListBloc _chatListBloc = ChatListBloc();
+  TabController controller;
+  
+  @override
+  void initState() {
+    super.initState();
+    _chatListBloc.dispatch(RequestChatList());
+    controller = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Container(
+          child: TabBar(
+            tabs: <Widget>[
+              Tab(
+                child: Text(
+                  "Chats",
+                  style: TextStyle(
+                      color: Colors.black
+                  ),
+                ),
+              ),
+              Tab(
+                child:
+                  Text(
+                    "Invites",
+                    style: TextStyle(
+                      color: Colors.black
+                    ),
+                  ),
+              )
+            ],
+            controller: controller,
+          ),
+        ),
+        Expanded(child: TabBarView(
+            controller: controller,
+            children: <Widget>[
+              ChatList(),
+              InviteList(),
+            ]
+        ),)
+      ],
     );
   }
 }

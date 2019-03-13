@@ -42,7 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
-import 'package:ox_talk/src/chatlist/chat_list.dart';
+import 'package:ox_talk/src/chatlist/chat_list_view.dart';
 import 'package:ox_talk/src/contact/contact_list.dart';
 import 'package:ox_talk/src/profile/profile.dart';
 import 'package:ox_talk/src/widgets/root_view_switcher.dart';

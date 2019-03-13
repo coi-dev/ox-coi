@@ -168,4 +168,10 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
       contactChangeBloc.dispatch(BlockContact(_contactId));
     }
   }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _messageItemBloc.dispose();
+  }
 }

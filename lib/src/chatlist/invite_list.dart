@@ -39,55 +39,67 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
-
+ 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/src/chatlist/chat_list_invite_item.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/message/messages_bloc.dart';
+import 'package:ox_talk/src/message/messages_event.dart';
+import 'package:ox_talk/src/message/messages_state.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 
-abstract class ChatListState extends BaseState {
-  ChatListState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+class InviteList extends StatefulWidget {
+  @override
+  _InviteListState createState() => _InviteListState();
 }
 
-class ChatListStateInitial extends ChatListState {
-  ChatListStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
-}
+class _InviteListState extends State<InviteList> {
+  MessagesBloc _messagesBloc = MessagesBloc();
 
-class ChatListStateLoading extends ChatListState {
-  ChatListStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
-}
+  @override
+  void initState(){
+    super.initState();
+    _messagesBloc.dispatch(RequestMessages(1));
+  }
 
-class ChatListStateSuccess extends ChatListState {
-  final List<int> chatIds;
-  final List<int> chatLastUpdateValues;
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+      bloc: _messagesBloc,
+      builder: (context, state) {
+        if (state is MessagesStateSuccess) {
+          if(state.messageIds.length > 0) {
+            return buildListViewItems(state.messageIds, state.messageLastUpdateValues);
+          }else{
+            return Center(child: Text(AppLocalizations.of(context).inviteEmptyList),);
+          }
+        } else if (state is! MessagesLoaded) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Icon(Icons.error);
+        }
+      },
+    );
+  }
 
-  ChatListStateSuccess({
-    @required this.chatIds,
-    @required this.chatLastUpdateValues,
-  }) : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
-}
+  Widget buildListViewItems(List<int> messageIds, List<int> messageLastUpdateValues) {
+    return ListView.builder(
+      padding: EdgeInsets.all(listItemPadding),
+      itemCount: messageIds.length,
+      itemBuilder: (BuildContext context, int index) {
+        var messageId = messageIds[index];
+        var key = "$messageId-${messageLastUpdateValues[index]}";
+        return ChatListInviteItem(1, messageId, key);
+      },
+    );
+  }
 
-class ChatListStateFailure extends ChatListState {
-  ChatListStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  @override
+  void dispose(){
+    super.dispose();
+    _messagesBloc.dispose();
+  }
 }

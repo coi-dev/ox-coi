@@ -91,8 +91,11 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
   }
 
   void _setupMessagesListener() async {
-    messageRepository.addListener(hashCode, Event.incomingMsg);
-    streamSubscription = messageRepository.observable.listen((event) => dispatch(UpdateMessages()));
+    if(streamSubscription == null) {
+      messageRepository.addListener(hashCode, Event.incomingMsg);
+      messageRepository.addListener(hashCode, Event.msgsChanged);
+      streamSubscription = messageRepository.observable.listen((event) => dispatch(UpdateMessages()));
+    }
   }
 
   void _setupMessages() async {
