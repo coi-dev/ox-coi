@@ -48,11 +48,12 @@ import 'package:ox_talk/src/chatlist/chat_list_event.dart';
 import 'package:ox_talk/src/chatlist/chat_list_state.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
+import 'package:ox_talk/src/data/repository_stream_handler.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final Repository<ChatList> chatListRepository = RepositoryManager.get(RepositoryType.chatList);
   final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-  StreamSubscription streamSubscription;
+  RepositoryMultiEventStreamHandler repositoryStreamHandler;
 
   @override
   ChatListState get initialState => ChatListStateInitial();
@@ -76,10 +77,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   @override
   void dispose() {
+    chatListRepository.removeListener(repositoryStreamHandler);
     super.dispose();
-    chatListRepository.removeListener(hashCode, Event.msgsChanged);
-    chatListRepository.removeListener(hashCode, Event.contactsChanged);
-    streamSubscription.cancel();
   }
 
   void setupChatList() async {
@@ -95,10 +94,13 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   void setupChatListListener() {
-    if (streamSubscription == null) {
-      chatListRepository.addListener(hashCode, Event.msgsChanged);
-      chatListRepository.addListener(hashCode, Event.contactsChanged);
-      streamSubscription = chatListRepository.observable.listen((event) => dispatch(RequestChatList()));
+    if (repositoryStreamHandler == null) {
+      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.msgsChanged, Event.contactsChanged], _requestChatList);
+      chatListRepository.addListener(repositoryStreamHandler);
     }
+  }
+
+  _requestChatList() {
+    dispatch(RequestChatList());
   }
 }

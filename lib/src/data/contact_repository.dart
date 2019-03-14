@@ -49,11 +49,11 @@ class ContactRepository extends Repository<Contact> {
   ContactRepository(RepositoryItemCreator<Contact> creator) : super(creator);
 
   @override
-  success(Event event) async {
+  onData(Event event) async {
     if (event.eventId == Event.contactsChanged) {
       await setupContactsAfterUpdate();
     }
-    super.success(event);
+    super.onData(event);
   }
 
   Future<void> setupContactsAfterUpdate() async {
@@ -63,7 +63,7 @@ class ContactRepository extends Repository<Contact> {
   }
 
   @override
-  error(error) {
-    super.error(error);
+  onError(error) {
+    super.onError(error);
   }
 }

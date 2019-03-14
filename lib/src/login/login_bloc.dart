@@ -48,11 +48,13 @@ import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/utils/protocol_security_converter.dart';
+import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
   var _listenerId;
+  PublishSubject<Event> _publishSubject = new PublishSubject();
 
   LoginState get initialState => LoginStateInitial();
 
@@ -81,8 +83,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   void dispose() {
-    super.dispose();
     _core.removeListener(Event.configureProgress, _listenerId);
+    _publishSubject.close();
+    super.dispose();
   }
 
   void _setupConfig(LoginButtonPressed event) {
@@ -109,7 +112,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void registerListener() async {
-    _listenerId = await _core.listen(Event.configureProgress, _successCallback, _errorCallback);
+    _publishSubject.listen(_successCallback, onError: _errorCallback);
+    _listenerId = await _core.listen(Event.configureProgress, _publishSubject);
   }
 
   bool _loginSuccess(int progress) {

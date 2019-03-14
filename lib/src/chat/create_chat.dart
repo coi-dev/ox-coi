@@ -69,6 +69,12 @@ class _CreateChatState extends State<CreateChat> {
   }
 
   @override
+  void dispose() {
+    _contactListBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(

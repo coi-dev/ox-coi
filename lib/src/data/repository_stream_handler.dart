@@ -40,21 +40,58 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/repository.dart';
+import 'dart:async';
 
-class ChatMessageRepository extends Repository<ChatMsg> {
+import 'package:rxdart/rxdart.dart';
 
-  ChatMessageRepository(RepositoryItemCreator<ChatMsg> creator) : super(creator);
+enum Type {
+  publish,
+  behavior,
+  replay,
+}
 
-  @override
-  onData(Event event) {
-    super.onData(event);
+abstract class BaseRepositoryStreamHandler {
+  final Type type;
+
+  final Function onData;
+
+  Function onError;
+
+  StreamController _streamController;
+
+  get streamController => _streamController;
+
+  BaseRepositoryStreamHandler(this.type, this.onData, [this.onError]) {
+    switch (type) {
+      case Type.publish:
+        _streamController = PublishSubject();
+        break;
+      case Type.behavior:
+        _streamController = BehaviorSubject();
+        break;
+      case Type.replay:
+        _streamController = ReplaySubject();
+        break;
+    }
   }
 
-  @override
-  onError(error) {
-    super.onError(error);
+  tearDown() {
+    _streamController.close();
   }
+}
 
+class RepositoryStreamHandler extends BaseRepositoryStreamHandler {
+  final int eventId;
+
+  int listenerId;
+
+  RepositoryStreamHandler(Type type, this.eventId, onData, [onError]) : super(type, onData, onError);
+}
+
+class RepositoryMultiEventStreamHandler extends BaseRepositoryStreamHandler {
+  final List<int> eventIds;
+
+  List<int> listenerIds = List();
+
+  RepositoryMultiEventStreamHandler(Type type, this.eventIds, onData, [onError]) : super(type, onData, onError);
 }

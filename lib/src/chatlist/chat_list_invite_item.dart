@@ -171,7 +171,7 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
 
   @override
   void dispose(){
-    super.dispose();
     _messageItemBloc.dispose();
+    super.dispose();
   }
 }

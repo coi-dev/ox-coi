@@ -64,6 +64,12 @@ class _ChatListState extends State<ChatList> {
   }
 
   @override
+  void dispose() {
+    _chatListBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: _chatListBloc,

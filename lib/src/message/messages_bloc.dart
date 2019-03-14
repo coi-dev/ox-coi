@@ -44,13 +44,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/message/messages_event.dart';
-import 'package:ox_talk/src/message/messages_state.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
+import 'package:ox_talk/src/data/repository_stream_handler.dart';
+import 'package:ox_talk/src/message/messages_event.dart';
+import 'package:ox_talk/src/message/messages_state.dart';
 
 class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
-  StreamSubscription streamSubscription;
+  RepositoryMultiEventStreamHandler repositoryStreamHandler;
   Repository<ChatMsg> messageRepository;
   int _chatId;
 
@@ -85,18 +86,18 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
 
   @override
   void dispose() {
+    messageRepository.removeListener(repositoryStreamHandler);
     super.dispose();
-    messageRepository.removeListener(hashCode, Event.incomingMsg);
-    streamSubscription.cancel();
   }
 
   void _setupMessagesListener() async {
-    if(streamSubscription == null) {
-      messageRepository.addListener(hashCode, Event.incomingMsg);
-      messageRepository.addListener(hashCode, Event.msgsChanged);
-      streamSubscription = messageRepository.observable.listen((event) => dispatch(UpdateMessages()));
+    if (repositoryStreamHandler == null) {
+      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _updateMessages);
+      messageRepository.addListener(repositoryStreamHandler);
     }
   }
+
+  void _updateMessages() => dispatch(UpdateMessages());
 
   void _setupMessages() async {
     Context context = Context();
@@ -108,6 +109,6 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
   void submitMessage(String text) async {
     Context context = Context();
     await context.createChatMessage(_chatId, text);
-    dispatch(UpdateMessages());
+    _updateMessages();
   }
 }

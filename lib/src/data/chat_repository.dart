@@ -48,13 +48,13 @@ class ChatRepository extends Repository<Chat> {
   ChatRepository(RepositoryItemCreator<Chat> creator) : super(creator);
 
   @override
-  success(Event event) {
-    super.success(event);
+  onData(Event event) {
+    super.onData(event);
   }
 
   @override
-  error(error) {
-    super.error(error);
+  onError(error) {
+    super.onError(error);
   }
 
 }

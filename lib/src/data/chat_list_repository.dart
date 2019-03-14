@@ -49,11 +49,11 @@ class ChatListRepository extends Repository<ChatList> {
   ChatListRepository(RepositoryItemCreator<ChatList> creator) : super(creator);
 
   @override
-  success(Event event) async {
+  onData(Event event) async {
     if (event.eventId == Event.msgsChanged) {
       await setupChatListAfterUpdate();
     }
-    super.success(event);
+    super.onData(event);
   }
 
   Future<void> setupChatListAfterUpdate() async {
@@ -70,7 +70,7 @@ class ChatListRepository extends Repository<ChatList> {
   }
 
   @override
-  error(error) {
-    super.error(error);
+  onError(error) {
+    super.onError(error);
   }
 }

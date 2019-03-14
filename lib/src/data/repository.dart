@@ -40,10 +40,11 @@
  * for more details.
  */
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:ox_talk/src/data/repository_stream_handler.dart';
 
 typedef T RepositoryItemCreator<T extends Base>(int id);
 
@@ -51,13 +52,9 @@ abstract class Repository<T extends Base> {
   final RepositoryItemCreator<T> _creator;
   final int id;
   final LinkedHashMap<int, T> _items = LinkedHashMap();
-  final Map<int, Map<int, int>> _eventListeners = Map();
   DeltaChatCore _core = DeltaChatCore();
-  BehaviorSubject<Event> _behaviorSubject = new BehaviorSubject();
 
   Repository(this._creator, [this.id]);
-
-  Observable get observable => Observable(_behaviorSubject.stream);
 
   T get(int id) {
     var item = _items[id];
@@ -131,33 +128,50 @@ abstract class Repository<T extends Base> {
     return _items.containsKey(id);
   }
 
-  void addListener(int key, int eventId) async {
-    int listenerId;
-    Map<int, int> eventConsumers = _eventListeners[eventId];
-    if (eventConsumers == null || eventConsumers.length == 0) {
-      listenerId = await _core.listen(eventId, success, error);
-    } else {
-      listenerId = eventConsumers.values.elementAt(0);
-    }
-    _eventListeners[eventId] = {key: listenerId};
-  }
-
-  void removeListener(int key, int eventId) {
-    Map<int, int> eventConsumers = _eventListeners[eventId];
-    if (eventConsumers.containsKey(key)) {
-      int listenerId = eventConsumers[key];
-      eventConsumers.remove(key);
-      if (eventConsumers.isEmpty) {
-        _core.removeListener(eventId, listenerId);
+  Future<void> addListener(BaseRepositoryStreamHandler streamHandler) async {
+    if (streamHandler is RepositoryStreamHandler) {
+      await _setupCoreListener(streamHandler, streamHandler.eventId);
+    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
+      for (int eventId in streamHandler.eventIds) {
+        await _setupCoreListener(streamHandler, eventId);
       }
     }
   }
 
-  success(Event event) {
-    _behaviorSubject.add(event);
+  Future _setupCoreListener(BaseRepositoryStreamHandler streamHandler, int eventId) async {
+    int listenerId = await _core.listen(eventId, streamHandler.streamController);
+    if (streamHandler is RepositoryStreamHandler) {
+      streamHandler.listenerId = listenerId;
+    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
+      streamHandler.listenerIds.add(listenerId);
+    }
+    streamHandler.streamController.stream.listen((event) {
+      onData(event);
+        streamHandler.onData();
+    }).onError((error) {
+      error(error);
+      if (streamHandler.onError != null) {
+        onError(error);
+      }
+    });
   }
 
-  error(dynamic error) {
-    _behaviorSubject.addError(error);
+  void removeListener(BaseRepositoryStreamHandler streamHandler) {
+    streamHandler.tearDown();
+    if (streamHandler is RepositoryStreamHandler) {
+      tearDownCoreListener(streamHandler.eventId, streamHandler.listenerId);
+    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
+      for (int index = 0; index < streamHandler.listenerIds.length; index++) {
+        tearDownCoreListener(streamHandler.eventIds[index], streamHandler.listenerIds[index]);
+      }
+    }
   }
+
+  void tearDownCoreListener(int eventId, int listenerId) {
+    _core.removeListener(eventId, listenerId);
+  }
+
+  onData(Event event) {}
+
+  onError(dynamic error) {}
 }

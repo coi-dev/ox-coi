@@ -90,13 +90,11 @@ class ChatListView extends BaseRootChild {
 }
 
 class _ChatListViewState extends State<ChatListView> with SingleTickerProviderStateMixin {
-  ChatListBloc _chatListBloc = ChatListBloc();
   TabController controller;
   
   @override
   void initState() {
     super.initState();
-    _chatListBloc.dispatch(RequestChatList());
     controller = TabController(length: 2, vsync: this);
   }
 

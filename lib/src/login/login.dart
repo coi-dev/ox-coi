@@ -108,7 +108,10 @@ class _LoginState extends State<Login> {
 
   void handleLoginStateChange(LoginState state) {
     if (state is LoginStateSuccess || state is LoginStateFailure) {
-      _progressOverlayEntry.remove();
+      if (_progressOverlayEntry != null) {
+        _progressOverlayEntry.remove();
+        _progressOverlayEntry = null;
+      }
     }
     if (state is LoginStateSuccess) {
       widget._success();

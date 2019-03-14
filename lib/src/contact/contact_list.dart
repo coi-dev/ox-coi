@@ -51,11 +51,11 @@ import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends BaseRootChild {
@@ -134,6 +134,13 @@ class _ContactListState extends State<ContactListView> {
   }
 
   @override
+  void dispose() {
+    _contactImportBloc.dispose();
+    _contactListBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: _contactListBloc,
@@ -186,5 +193,4 @@ class _ContactListState extends State<ContactListView> {
           return ContactItem(contactId, false, key);
         });
   }
-
 }

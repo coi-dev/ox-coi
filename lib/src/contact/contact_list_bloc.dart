@@ -48,10 +48,12 @@ import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
+import 'package:ox_talk/src/data/repository_stream_handler.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
   final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
-  StreamSubscription streamSubscription;
+  RepositoryStreamHandler repositoryStreamHandler;
   List<int> validContactIds = List();
 
   @override
@@ -81,17 +83,16 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
 
   @override
   void dispose() {
+    contactRepository.removeListener(repositoryStreamHandler);
     super.dispose();
-    contactRepository.removeListener(hashCode, Event.contactsChanged);
-    streamSubscription.cancel();
   }
 
   void setupContactListener() async {
-    contactRepository.addListener(hashCode, Event.contactsChanged);
-    streamSubscription = contactRepository.observable.listen((event) => dispatchContactsChanged());
+    repositoryStreamHandler = RepositoryStreamHandler(Type.publish, Event.contactsChanged, _dispatchContactsChanged);
+    contactRepository.addListener(repositoryStreamHandler);
   }
 
-  void dispatchContactsChanged() async {
+  void _dispatchContactsChanged() async {
     await _updateValidContactIds();
     dispatch(ContactsChanged());
   }

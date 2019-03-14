@@ -64,6 +64,12 @@ class _InviteListState extends State<InviteList> {
   }
 
   @override
+  void dispose(){
+    _messagesBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder(
       bloc: _messagesBloc,
@@ -97,9 +103,4 @@ class _InviteListState extends State<InviteList> {
     );
   }
 
-  @override
-  void dispose(){
-    super.dispose();
-    _messagesBloc.dispose();
-  }
 }
