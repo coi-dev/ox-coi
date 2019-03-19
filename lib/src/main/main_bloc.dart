@@ -49,6 +49,8 @@ import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/main/main_event.dart';
 import 'package:ox_talk/src/main/main_state.dart';
+import 'package:ox_talk/src/platform/app_information.dart';
+import 'package:ox_talk/src/platform/preferences.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();
@@ -63,7 +65,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       yield MainStateLoading();
       try {
         await _initCore();
-        await _setupDefaultValues(event.context);
+        String appVersion = await getPreference(preferenceAppVersion);
+        if (appVersion == null || appVersion.isEmpty) {
+          await _setupDefaultValues(event.context);
+        }
         _checkLogin();
       } catch (error) {
         yield MainStateFailure(error: error.toString());
@@ -78,11 +83,11 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   _setupDefaultValues(BuildContext context) async {
-    String status = await _context.getConfigValue(Context.configSelfStatus);
-    if (status == AppLocalizations.of(context).coreChatStatusDefaultValue) {
       Config config = Config();
       config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
-    }
+      config.setValue(Context.configShowEmails, Context.showEmailsAcceptedContacts);
+      String version = await getAppVersion();
+      await setPreference(preferenceAppVersion, version);
   }
 
   _checkLogin() async {

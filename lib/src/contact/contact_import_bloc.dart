@@ -49,12 +49,10 @@ import 'package:ox_talk/src/contact/contact_import_event.dart';
 import 'package:ox_talk/src/contact/contact_import_state.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ox_talk/src/platform/preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
-  static const PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN = "PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN11";
-
   final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
 
   @override
@@ -74,14 +72,12 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   }
 
   Future<bool> isInitialContactsOpening() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.get(PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN) == null ||
-        !sharedPreferences.getBool(PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN);
+    bool systemContactImportShown = await getPreference(preferenceSystemContactsImportShown);
+    return systemContactImportShown == null || !systemContactImportShown;
   }
 
   void markContactsAsInitiallyLoaded() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool(PREFERENCE_CONTACTS_SYSTEM_IMPORT_SHOWN, true);
+    await setPreference(preferenceSystemContactsImportShown, true);
   }
 
   void loadSystemContacts() async {

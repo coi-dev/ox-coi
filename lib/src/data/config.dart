@@ -60,6 +60,7 @@ class Config {
   String smtpServer;
   int smtpPort;
   int smtpSecurity;
+  int showEmails;
 
   int get lastUpdate => _lastUpdate;
 
@@ -89,7 +90,7 @@ class Config {
     int serverFlags = await _context.getConfigValue(Context.configServerFlags, ObjectType.int);
     imapSecurity = getSavedImapSecurityOption(serverFlags);
     smtpSecurity = getSavedSmtpSecurityOption(serverFlags);
-    
+    showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
     setLastUpdate();
   }
 
