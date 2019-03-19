@@ -69,6 +69,7 @@ class _RootState extends State<Root> {
         backgroundColor: child.getColor(),
         title: Text(child.getTitle(context)),
         actions: child.getActions(context),
+        elevation: child.getElevation(),
       ),
       body: RootViewSwitcher(child),
       bottomNavigationBar: _buildBottomBar(),

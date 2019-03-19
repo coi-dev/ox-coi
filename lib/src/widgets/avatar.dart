@@ -59,6 +59,12 @@ class Avatar extends StatelessWidget {
     if (imagePath != null && imagePath.isNotEmpty) {
       avatarImage = FileImage(File(imagePath));
     }
+    if (avatarImage == null && (initials == null || initials.isEmpty)) {
+      return Container(
+        height: listAvatarDiameter,
+        width: listAvatarDiameter,
+      );
+    }
     return CircleAvatar(
       radius: listAvatarRadius,
       foregroundColor: listAvatarForegroundColor,

@@ -83,7 +83,6 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context, "CreateGroupChat"),
           ),
-          backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createGroupTitle),
           actions: <Widget>[
             IconButton(

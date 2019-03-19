@@ -76,6 +76,8 @@ class AppLocalizations {
 
   String get startTLS => 'StartTLS';
 
+  String get bigDot => '\u2B24';
+
   // No translation + DCC default values which should get adjusted
   String get coreChatStatusDefaultValue => "Sent with my Delta Chat Messenger: https://delta.chat";
 
@@ -112,44 +114,90 @@ class AppLocalizations {
 
   String get camera => Intl.message('Camera', name: 'camera');
 
+  String get invites => Intl.message('Invites', name: 'invites');
+
+  String get chats => Intl.message('Chats', name: 'chats');
+
   // Core
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
+
   String get coreSelf => Intl.message('Me', name: 'coreSelf');
+
   String get coreDraft => Intl.message('Draft', name: 'coreDraft');
+
   String get coreMembers => Intl.message('%1\$d member(s)', name: 'createChatWith');
+
   String get coreContacts => Intl.message('%1\$d contact(s)', name: 'createChatWith');
+
   String get coreVoiceMessage => Intl.message('Voice message', name: 'coreVoiceMessage');
+
   String get coreContactRequest => Intl.message('Contact request', name: 'coreContactRequest');
+
   String get coreImage => Intl.message('Image', name: 'coreImage');
+
   String get coreVideo => Intl.message('Video', name: 'coreVideo');
+
   String get coreAudio => Intl.message('Audio', name: 'coreAudio');
+
   String get coreFile => Intl.message('File', name: 'coreFile');
+
   String get coreGroupHelloDraft => Intl.message('Hello, I\'ve just created this group for us', name: 'coreGroupHelloDraft');
+
   String get coreGroupNameChanged => Intl.message('Group name changed', name: 'coreGroupNameChanged');
+
   String get coreGroupImageChanged => Intl.message('Group image changed', name: 'coreGroupImageChanged');
+
   String get coreGroupMemberAdded => Intl.message('Member added', name: 'coreGroupMemberAdded');
+
   String get coreGroupMemberRemoved => Intl.message('Member removed', name: 'coreGroupMemberRemoved');
+
   String get coreGroupLeft => Intl.message('Group left', name: 'coreGroupLeft');
+
   String get coreGenericError => Intl.message('Error: ', name: 'coreGenericError');
+
   String get coreGif => Intl.message('Gif', name: 'coreGif');
-  String get coreMessageCannotDecrypt => Intl.message('This message cannot be decrypted.\n\n'
+
+  String get coreMessageCannotDecrypt => Intl.message(
+      'This message cannot be decrypted.\n\n'
       '• It might already help to simply reply to this message and ask the sender to send the message again.\n\n'
-      '• In case you re-installed Delta Chat or another email program on this or another device you may want to send an Autocrypt Setup Message from there.', name: 'coreMessageCannotDecrypt');
+      '• In case you re-installed Delta Chat or another email program on this or another device you may want to send an Autocrypt Setup Message from there.',
+      name: 'coreMessageCannotDecrypt');
+
   String get coreReadReceiptSubject => Intl.message('Read receipt', name: 'coreReadReceiptSubject');
-  String get coreReadReceiptBody => Intl.message('This is a read receipt.\n\nIt means the message was displayed on the recipient\'s device, not necessarily that the content was read.', name: 'coreReadReceiptBody');
+
+  String get coreReadReceiptBody => Intl.message(
+      'This is a read receipt.\n\nIt means the message was displayed on the recipient\'s device, not necessarily that the content was read.',
+      name: 'coreReadReceiptBody');
+
   String get coreGroupImageDeleted => Intl.message('Group image deleted', name: 'coreGroupImageDeleted');
+
   String get coreContactVerified => Intl.message('Contact verified', name: 'coreContactVerified');
+
   String get coreContactNotVerified => Intl.message('Cannot verify contact', name: 'coreContactNotVerified');
+
   String get coreContactSetupChanged => Intl.message('Changed setup for contact', name: 'coreContactSetupChanged');
+
   String get coreArchivedChats => Intl.message('Archived chats', name: 'coreArchivedChats');
+
   String get coreAutoCryptSetupSubject => Intl.message('Autocrypt Setup Message', name: 'coreAutoCryptSetupSubject');
-  String get coreAutoCryptSetupBody => Intl.message('This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\n'
-      'To decrypt and use your setup, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.', name: 'coreAutoCryptSetupBody');
+
+  String get coreAutoCryptSetupBody => Intl.message(
+      'This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\n'
+      'To decrypt and use your setup, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.',
+      name: 'coreAutoCryptSetupBody');
+
   String get coreChatSelf => Intl.message('Messages I sent to myself', name: 'coreChatSelf');
-  String get coreLoginErrorCannotLogin => Intl.message('Cannot login. Please check if the email-address and the password are correct.', name: 'coreLoginErrorCannotLogin');
-  String get coreLoginErrorServerResponse => Intl.message('Response from %1\$s: %1\$2\n\n'
-      'Some providers place additional information in your inbox; you can check them it eg. in the web frontend. Consult your provider or friends if you run into problems.', name: 'coreLoginErrorServerResponse');
+
+  String get coreLoginErrorCannotLogin =>
+      Intl.message('Cannot login. Please check if the email-address and the password are correct.', name: 'coreLoginErrorCannotLogin');
+
+  String get coreLoginErrorServerResponse => Intl.message(
+      'Response from %1\$s: %1\$2\n\n'
+      'Some providers place additional information in your inbox; you can check them it eg. in the web frontend. Consult your provider or friends if you run into problems.',
+      name: 'coreLoginErrorServerResponse');
+
   String get coreActionByUser => Intl.message('%1\$s by %1\$2', name: 'coreActionByUser');
+
   String get coreActionByMe => Intl.message('%1\$s by me', name: 'coreActionByMe');
 
   // Form
@@ -202,8 +250,11 @@ class AppLocalizations {
 
   // Chat / chat list / invite list
   String get chatTitle => Intl.message('Chat', name: 'chatTitle');
+
   String get composePlaceholder => Intl.message('Type something...', name: 'composePlaceholder');
+
   String get inviteEmptyList => Intl.message('No invites', name: 'inviteEmptyList');
+
   String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
 
   // Create chat

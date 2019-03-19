@@ -56,6 +56,7 @@ import 'package:ox_talk/src/main/main_state.dart';
 import 'package:ox_talk/src/main/root.dart';
 import 'package:ox_talk/src/main/splash.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/widgets/root_view_switcher.dart';
 
 void main() {
@@ -69,6 +70,10 @@ class OxTalkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      theme: new ThemeData(
+        primaryColor: chatMain,
+        accentColor: accent,
+      ),
       localizationsDelegates: [
         AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,

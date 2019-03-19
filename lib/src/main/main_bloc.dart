@@ -83,11 +83,11 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   _setupDefaultValues(BuildContext context) async {
-      Config config = Config();
-      config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
-      config.setValue(Context.configShowEmails, Context.showEmailsAcceptedContacts);
-      String version = await getAppVersion();
-      await setPreference(preferenceAppVersion, version);
+    Config config = Config();
+    config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
+    config.setValue(Context.configShowEmails, Context.showEmailsAcceptedContacts);
+    String version = await getAppVersion();
+    await setPreference(preferenceAppVersion, version);
   }
 
   _checkLogin() async {
@@ -98,5 +98,4 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   onLoginSuccess() {
     dispatch(AppLoaded(configured: true));
   }
-
 }

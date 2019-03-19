@@ -82,7 +82,6 @@ class _CreateChatState extends State<CreateChat> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context, "CreateChat"),
           ),
-          backgroundColor: chatMain,
           title: Text(AppLocalizations.of(context).createChatTitle),
         ),
         body: buildForm()

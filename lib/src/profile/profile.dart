@@ -155,7 +155,7 @@ class _ProfileState extends State<ProfileView> {
             ),
             buildOutlineButton(
               context: context,
-              color: Theme.of(context).primaryColor,
+              color: accent,
               child: Text(AppLocalizations.of(context).profileEditButton),
               onPressed: editUserSettings,
             ),

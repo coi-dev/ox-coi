@@ -44,13 +44,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-// Global
-const Color textDisabled = Colors.black26;
-const Color testLessImportant = Colors.black45;
-const Color appBarIcon = Colors.white;
-const Color textColorInverted = Colors.white;
-const Color transparent = Colors.transparent;
-
 Color rgbColorFromInt(int color, [int alpha]) {
   if (alpha == null) {
     alpha = 255;
@@ -70,6 +63,14 @@ int _blue(int color) {
   return color & 0xFF;
 }
 
+// Global
+const Color textDisabled = Colors.black26;
+const Color testLessImportant = Colors.black45;
+const Color appBarIcon = Colors.white;
+const Color textColorInverted = Colors.white;
+const Color transparent = Colors.transparent;
+const Color accent = Colors.pink;
+
 // Progress
 final Color progressBackground = Colors.black45;
 
@@ -78,7 +79,7 @@ const Color loginHintBackground = Colors.blueGrey;
 
 // List
 const Color listAvatarForegroundColor = Colors.white;
-final Color listAvatarDefaultBackgroundColor = Colors.blue[700];
+final Color listAvatarDefaultBackgroundColor = Colors.transparent;
 
 // Chat
 const Color chatMain = Colors.blue;

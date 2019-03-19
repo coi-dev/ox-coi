@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 
 abstract class BaseRootChild extends StatefulWidget {
 
@@ -55,6 +56,10 @@ abstract class BaseRootChild extends StatefulWidget {
   Color getColor();
 
   FloatingActionButton getFloatingActionButton(BuildContext context);
+
+  getElevation() {
+    return appBarElevationDefault;
+  }
 
   List<Widget> getActions(BuildContext context) {
     return _actions;

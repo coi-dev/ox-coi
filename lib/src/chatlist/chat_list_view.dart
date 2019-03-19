@@ -41,14 +41,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
 import 'package:ox_talk/src/chatlist/chat_list.dart';
-import 'package:ox_talk/src/chatlist/chat_list_bloc.dart';
-import 'package:ox_talk/src/chatlist/chat_list_event.dart';
 import 'package:ox_talk/src/chatlist/invite_list.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/message/messages_bloc.dart';
+import 'package:ox_talk/src/message/messages_event.dart';
+import 'package:ox_talk/src/message/messages_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 
 class ChatListView extends BaseRootChild {
   _ChatListViewState createState() => _ChatListViewState();
@@ -87,52 +90,71 @@ class ChatListView extends BaseRootChild {
   IconData getNavigationIcon() {
     return Icons.chat;
   }
+
+  @override
+  getElevation() {
+    return zero;
+  }
 }
 
 class _ChatListViewState extends State<ChatListView> with SingleTickerProviderStateMixin {
   TabController controller;
-  
+
+  MessagesBloc _messagesBloc = MessagesBloc();
+
   @override
   void initState() {
     super.initState();
+    _messagesBloc.dispatch(RequestMessages(1));
     controller = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _messagesBloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
+        PhysicalModel(
+          elevation: appBarElevationDefault,
+          color: chatMain,
           child: TabBar(
             tabs: <Widget>[
               Tab(
                 child: Text(
                   "Chats",
-                  style: TextStyle(
-                      color: Colors.black
-                  ),
                 ),
               ),
               Tab(
-                child:
-                  Text(
-                    "Invites",
-                    style: TextStyle(
-                      color: Colors.black
-                    ),
-                  ),
-              )
+                child: BlocBuilder(
+                  bloc: _messagesBloc,
+                  builder: (context, state) {
+                    var inviteString = AppLocalizations.of(context).invites;
+                    var bigDot = AppLocalizations.of(context).bigDot;
+                    if (state is MessagesStateSuccess && state.messageIds.length > 0) {
+                      inviteString = "$inviteString  $bigDot";
+                    }
+                    return Text(inviteString);
+                  },
+                ),
+              ),
             ],
             controller: controller,
           ),
         ),
-        Expanded(child: TabBarView(
+        Expanded(
+          child: TabBarView(
             controller: controller,
             children: <Widget>[
               ChatList(),
               InviteList(),
-            ]
-        ),)
+            ],
+          ),
+        )
       ],
     );
   }

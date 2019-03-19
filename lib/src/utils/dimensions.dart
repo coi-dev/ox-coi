@@ -56,9 +56,11 @@ const listItemPaddingBig = 16.0;
 const listItemPadding = 8.0;
 const listItemPaddingSmall = 4.0;
 const listAvatarRadius = 24.0;
+const listAvatarDiameter = listAvatarRadius * 2;
 
 // AppBar
 const appBarAvatarTextPadding = 16.0;
+const appBarElevationDefault = 4.0;
 
 // Icons
 const iconTextPadding = 4.0;
