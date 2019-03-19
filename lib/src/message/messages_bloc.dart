@@ -111,4 +111,10 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     await context.createChatMessage(_chatId, text);
     _updateMessages();
   }
+
+  void submitAttachmentMessage(String path, int fileType, [String text]) async{
+    Context _context = Context();
+    await _context.createChatAttachmentMessage(_chatId, path, fileType, text);
+    dispatch(UpdateMessages());
+  }
 }

@@ -72,6 +72,14 @@ const composerHorizontalPadding = 8.0;
 const composerTextFieldPadding = 8.0;
 const composeTextBorderRadius = 24.0;
 
+//Attachment preview
+const attachmentDividerPadding = 4.0;
+const previewMaxSize = 200.0;
+const previewDefaultIconSize = 100.0;
+const previewCloseIconBorderRadius = 20.0;
+const previewCloseIconSize = 30.0;
+const previewFileNamePadding = 4.0;
+
 // Forms
 const formHorizontalPadding = 16.0;
 const formVerticalPadding = 16.0;
@@ -81,7 +89,7 @@ const messagesHorizontalPadding = 8.0;
 const messagesVerticalPadding = 8.0;
 const messagesInnerPadding = 8.0;
 const messagesContentTimePadding = 8.0;
-const messagesBoxRadius = 8.0;
+const messagesBoxRadius = 20.0;
 const messagesBlurRadius = 2.0;
 const messagesFileIconSize = 30.0;
 

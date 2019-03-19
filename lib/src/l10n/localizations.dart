@@ -120,6 +120,20 @@ class AppLocalizations {
 
   String get chats => Intl.message('Chats', name: 'chats');
 
+  String get video => Intl.message('Video', name: 'video');
+
+  String get image => Intl.message('Image', name: 'image');
+
+  String get poll => Intl.message('Poll', name: 'poll');
+
+  String get location => Intl.message('Location', name: 'location');
+
+  String get file => Intl.message('File', name: 'file');
+
+  String get gif => Intl.message('GIF', name: 'gif');
+
+  String get pdf => Intl.message('PDF', name: 'pdf');
+
   // Core
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
 

@@ -112,17 +112,17 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              decoration: buildBoxDecoration(messageSentBackground),
+              decoration: buildSenderBoxDecoration(messageSentBackground),
               child: Padding(
                 padding: EdgeInsets.all(messagesInnerPadding),
-                child: hasFile ? buildAttachmentMessage(state.attachmentWrapper, time) : buildTextMessage(text, time),
+                child: hasFile ? buildAttachmentMessage(state.attachmentWrapper, text, time) : buildTextMessage(text, time),
               ),
             ),
           ],
         ));
   }
 
-  BoxDecoration buildBoxDecoration(Color color) {
+  BoxDecoration buildSenderBoxDecoration(Color color) {
     return BoxDecoration(
         shape: BoxShape.rectangle,
         boxShadow: [
@@ -132,13 +132,26 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
           ),
         ],
         color: color,
-        borderRadius: BorderRadius.all(Radius.circular(messagesBoxRadius)));
+        borderRadius: BorderRadius.only(topRight: Radius.circular(messagesBoxRadius), bottomLeft: Radius.circular(messagesBoxRadius), topLeft: Radius.circular(messagesBoxRadius)));
   }
 
-  Widget buildAttachmentMessage(AttachmentWrapper attachment, String time) {
+  BoxDecoration buildReceiverBoxDecoration(Color color) {
+    return BoxDecoration(
+      shape: BoxShape.rectangle,
+      boxShadow: [
+        new BoxShadow(
+          color: messageBoxGrey,
+          blurRadius: messagesBlurRadius,
+        ),
+      ],
+      color: color,
+      borderRadius: BorderRadius.only(topRight: Radius.circular(messagesBoxRadius), bottomRight: Radius.circular(messagesBoxRadius), bottomLeft: Radius.circular(messagesBoxRadius)));
+  }
+
+  Widget buildAttachmentMessage(AttachmentWrapper attachment, String text, String time) {
     return GestureDetector(
       onTap: _openAttachment,
-      child: attachment.type == ChatMsg.typeImage ? buildImageAttachmentMessage(attachment, time) : buildGenericAttachmentMessage(attachment, time),
+      child: attachment.type == ChatMsg.typeImage ? buildImageAttachmentMessage(attachment, text, time) : buildGenericAttachmentMessage(attachment, time),
     );
   }
 
@@ -165,13 +178,17 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
     );
   }
 
-  Widget buildImageAttachmentMessage(AttachmentWrapper attachment, String time) {
+  Widget buildImageAttachmentMessage(AttachmentWrapper attachment, String text, String time) {
     File file = File(attachment.path);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Image.file(file),
+        text.isNotEmpty ? Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)) : Container(),
+        text.isNotEmpty ? Flexible(
+          child: Text(text),
+        ) : Container(),
         Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
         buildTime(time),
       ],
@@ -226,7 +243,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
           Flexible(
             child: Container(
               padding: EdgeInsets.all(messagesInnerPadding),
-              decoration: buildBoxDecoration(messageReceivedBackground),
+              decoration: buildReceiverBoxDecoration(messageReceivedBackground),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,7 +256,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
                       : Container(
                           constraints: BoxConstraints(maxWidth: zero),
                         ),
-                  hasFile ? buildAttachmentMessage(state.attachmentWrapper, time) : buildTextMessage(text, time),
+                  hasFile ? buildAttachmentMessage(state.attachmentWrapper, text, time) : buildTextMessage(text, time),
                 ],
               ),
             ),
