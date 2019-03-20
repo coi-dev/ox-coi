@@ -160,7 +160,7 @@ class AppLocalizations {
   String get coreMessageCannotDecrypt => Intl.message(
       'This message cannot be decrypted.\n\n'
       '• It might already help to simply reply to this message and ask the sender to send the message again.\n\n'
-      '• In case you re-installed Delta Chat or another email program on this or another device you may want to send an Autocrypt Setup Message from there.',
+      '• In case you re-installed OX Talk or another email program on this or another device you may want to send an Autocrypt Setup Message from there.',
       name: 'coreMessageCannotDecrypt');
 
   String get coreReadReceiptSubject => Intl.message('Read receipt', name: 'coreReadReceiptSubject');
