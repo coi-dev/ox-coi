@@ -47,14 +47,19 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
+import 'package:ox_talk/src/utils/error.dart';
 import 'package:ox_talk/src/utils/protocol_security_converter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
-  var _listenerId;
-  PublishSubject<Event> _publishSubject = new PublishSubject();
+  int _loginListenerId;
+  int _errorListenerId;
+  PublishSubject<Event> _loginSubject = new PublishSubject();
+
+  // ignore: close_sinks
+  BehaviorSubject<Event> _errorSubject = new BehaviorSubject();
 
   LoginState get initialState => LoginStateInitial();
 
@@ -64,7 +69,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginStateLoading(progress: 0);
       try {
         _setupConfig(event);
-        registerListener();
+        _registerListeners();
         _context.configure();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
@@ -74,7 +79,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _updateConfig();
         yield LoginStateSuccess();
       } else if (_loginFailed(event.progress)) {
-        yield LoginStateFailure(error: event.error);
+        String error = event.error;
+        if (error == null) {
+          error = getErrorMessage(_errorSubject.value);
+        }
+        yield LoginStateFailure(error: error);
       } else {
         yield LoginStateLoading(progress: event.progress);
       }
@@ -83,8 +92,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   void dispose() {
-    _core.removeListener(Event.configureProgress, _listenerId);
-    _publishSubject.close();
+    _unregisterListeners();
     super.dispose();
   }
 
@@ -111,9 +119,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     config.reload();
   }
 
-  void registerListener() async {
-    _publishSubject.listen(_successCallback, onError: _errorCallback);
-    _listenerId = await _core.listen(Event.configureProgress, _publishSubject);
+  void _registerListeners() async {
+    if (_loginListenerId == null) {
+      _loginSubject.listen(_successCallback, onError: _errorCallback);
+      _loginListenerId = await _core.listen(Event.configureProgress, _loginSubject);
+      _errorListenerId = await _core.listen(Event.error, _errorSubject);
+    }
+  }
+
+  void _unregisterListeners() {
+    _core.removeListener(Event.configureProgress, _loginListenerId);
+    _core.removeListener(Event.error, _errorListenerId);
   }
 
   bool _loginSuccess(int progress) {
@@ -124,12 +140,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     return progress == 0;
   }
 
-  _successCallback(Event event) {
+  void _successCallback(Event event) {
     int progress = event.data1 as int;
     dispatch(LoginProgress(progress));
   }
 
-  _errorCallback(error) {
+  void _errorCallback(error) async {
     dispatch(LoginProgress(0, error));
   }
 }

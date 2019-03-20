@@ -106,6 +106,8 @@ class AppLocalizations {
 
   String get name => Intl.message('Name', name: 'name');
 
+  String get ok => Intl.message('Ok', name: 'ok');
+
   String get cancel => Intl.message('Cancel', name: 'cancel');
 
   String get block => Intl.message('Block', name: 'block');
@@ -244,6 +246,8 @@ class AppLocalizations {
   String get loginLabelSmtpSecurity => Intl.message('SMTP Security', name: 'loginLabelSmtpSecurity');
 
   String get loginProgressMessage => Intl.message('Logging in, this may take a moment', name: 'loginProgressMessage');
+
+  String get loginErrorDialogTitle => Intl.message('Login failed', name: 'loginErrorDialogTitle');
 
   // Mail
   String get mailTitle => Intl.message('Mail', name: 'mailTitle');

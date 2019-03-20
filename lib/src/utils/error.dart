@@ -40,4 +40,22 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
+
 const contactDelete = "contact-delete-1";
+
+int getErrorType(Event event) {
+  if (_isErrorEvent(event)) {
+    return event.data1;
+  }
+  return -1;
+}
+
+bool _isErrorEvent(Event event) => event.eventId == Event.error;
+
+String getErrorMessage(Event event) {
+  if (_isErrorEvent(event)) {
+    return event.data2;
+  }
+  return "";
+}

@@ -46,9 +46,10 @@ import 'package:ox_talk/src/login/login_bloc.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/protocol_security_converter.dart';
+import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -96,6 +97,7 @@ class _LoginState extends State<Login> {
   String _selectedImapSecurity;
   String _selectedSmtpSecurity;
   bool _showAdvanced = false;
+  bool _showedErrorDialog = false;
   OverlayEntry _progressOverlayEntry;
   FullscreenProgress _progress;
 
@@ -115,6 +117,17 @@ class _LoginState extends State<Login> {
     }
     if (state is LoginStateSuccess) {
       widget._success();
+    } else if (state is LoginStateFailure) {
+      if (!_showedErrorDialog) {
+        _showedErrorDialog = true;
+        showInformationDialog(
+          context: context,
+          title: AppLocalizations
+              .of(context)
+              .loginErrorDialogTitle,
+          content: state.error,
+        );
+      }
     }
   }
 
@@ -147,7 +160,7 @@ class _LoginState extends State<Login> {
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);
-
+      _showedErrorDialog = false;
       _loginBloc.dispatch(LoginButtonPressed(
         email: email,
         password: password,
