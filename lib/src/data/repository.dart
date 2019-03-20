@@ -157,7 +157,6 @@ abstract class Repository<T extends Base> {
   }
 
   void removeListener(BaseRepositoryStreamHandler streamHandler) {
-    streamHandler.tearDown();
     if (streamHandler is RepositoryStreamHandler) {
       tearDownCoreListener(streamHandler.eventId, streamHandler.listenerId);
     } else if (streamHandler is RepositoryMultiEventStreamHandler) {

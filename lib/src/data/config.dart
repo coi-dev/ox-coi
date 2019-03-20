@@ -103,15 +103,10 @@ class Config {
     await load();
   }
 
-  void setValue(String key, var value, [bool allowNullAndEmptyValues, ObjectType enforceType]) {
-    if (allowNullAndEmptyValues == null || !allowNullAndEmptyValues) {
-      if ((value == null || (value is String && value.isEmpty))) {
-        return;
-      }
-    } else {
-      if (enforceType == null) {
-        throw ArgumentError("allowNullAndEmptyValues is true but no specific type was set via enforceType.");
-      }
+  Future<void> setValue(String key, var value) async {
+    ObjectType type = isTypeInt(key) ? ObjectType.int : ObjectType.String;
+    if (key != Context.configDisplayName && key != Context.configSelfAvatar && key != Context.configSelfStatus) {
+      value = convertEmptyStringToNull(value);
     }
 
     switch (key) {
@@ -147,26 +142,31 @@ class Config {
         break;
       case Context.configServerFlags:
         int sel = 0;
-        if((value & Context.serverFlagsImapSsl) != 0) sel = 1;
-        if((value & Context.serverFlagsImapStartTls) != 0) sel = 2;
-        if((value & Context.serverFlagsImapPlain) !=0 ) sel = 3;
+        if ((value & Context.serverFlagsImapSsl) != 0) sel = 1;
+        if ((value & Context.serverFlagsImapStartTls) != 0) sel = 2;
+        if ((value & Context.serverFlagsImapPlain) != 0) sel = 3;
         imapSecurity = sel;
 
         sel = 0;
-        if((value & Context.serverFlagsSmtpSsl) != 0) sel = 1;
-        if((value & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
-        if((value & Context.serverFlagsSmtpPlain) != 0) sel = 3;
+        if ((value & Context.serverFlagsSmtpSsl) != 0) sel = 1;
+        if ((value & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
+        if ((value & Context.serverFlagsSmtpPlain) != 0) sel = 3;
         smtpSecurity = sel;
     }
-    if (enforceType != null) {
-      _context.setConfigValue(key, value, enforceType);
-    } else {
-      _context.setConfigValue(key, value);
-    }
+    await _context.setConfigValue(key, value, type);
     setLastUpdate();
   }
+
+  bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails;
 
   String get smtpPortAsString => smtpPort != null ? (smtpPort > 0 ? smtpPort.toString() : "") : null;
 
   String get imapPortAsString => imapPort != null ? (imapPort > 0 ? imapPort.toString() : "") : null;
+
+  convertEmptyStringToNull(value) {
+    if (value == null || (value is String && value.isEmpty)) {
+      return null;
+    }
+    return value;
+  }
 }

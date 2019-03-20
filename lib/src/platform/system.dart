@@ -40,42 +40,6 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:flutter/services.dart';
 
-abstract class LoginEvent {}
-
-class LoginButtonPressed extends LoginEvent {
-  final String email;
-  final String password;
-  final String imapLogin;
-  final String imapServer;
-  final int imapPort;
-  final int imapSecurity;
-  final String smtpLogin;
-  final String smtpPassword;
-  final String smtpServer;
-  final int smtpPort;
-  final int smtpSecurity;
-
-  LoginButtonPressed(
-      {@required this.email,
-      @required this.password,
-      @required this.imapLogin,
-      @required this.imapServer,
-      @required this.imapPort,
-      @required this.imapSecurity,
-      @required this.smtpLogin,
-      @required this.smtpPassword,
-      @required this.smtpServer,
-      @required this.smtpPort,
-      @required this.smtpSecurity});
-}
-
-class EditButtonPressed extends LoginEvent {}
-
-class LoginProgress extends LoginEvent {
-  final int progress;
-  final error;
-
-  LoginProgress(this.progress, [this.error]);
-}
+hideKeyboard() => SystemChannels.textInput.invokeMethod('TextInput.hide');

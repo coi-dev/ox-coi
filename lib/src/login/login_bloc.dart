@@ -68,7 +68,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is LoginButtonPressed) {
       yield LoginStateLoading(progress: 0);
       try {
-        _setupConfig(event);
+        await _setupConfig(event);
+        _registerListeners();
+        _context.configure();
+      } catch (error) {
+        yield LoginStateFailure(error: error.toString());
+      }
+    } else if (event is EditButtonPressed) {
+      yield LoginStateLoading(progress: 0);
+      try {
         _registerListeners();
         _context.configure();
       } catch (error) {
@@ -96,22 +104,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     super.dispose();
   }
 
-  void _setupConfig(LoginButtonPressed event) {
+  Future<void> _setupConfig(LoginButtonPressed event) async {
     Config config = Config();
-    config.setValue(Context.configAddress, event.email);
-    config.setValue(Context.configMailPassword, event.password);
-    config.setValue(Context.configMailUser, event.imapLogin);
-    config.setValue(Context.configMailServer, event.imapServer);
-    config.setValue(Context.configMailPassword, event.imapPort);
-    config.setValue(Context.configSendUser, event.smtpLogin);
-    config.setValue(Context.configSendPassword, event.smtpPassword);
-    config.setValue(Context.configSendServer, event.smtpServer);
-    config.setValue(Context.configSendPort, event.smtpPort);
+    await config.setValue(Context.configAddress, event.email);
+    await config.setValue(Context.configMailPassword, event.password);
+    await config.setValue(Context.configMailUser, event.imapLogin);
+    await config.setValue(Context.configMailServer, event.imapServer);
+    await config.setValue(Context.configMailPort, event.imapPort);
+    await config.setValue(Context.configSendUser, event.smtpLogin);
+    await config.setValue(Context.configSendPassword, event.smtpPassword);
+    await config.setValue(Context.configSendServer, event.smtpServer);
+    await config.setValue(Context.configSendPort, event.smtpPort);
     int imapSecurity = event.imapSecurity;
     int smtpSecurity = event.smtpSecurity;
     int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
 
-    config.setValue(Context.configServerFlags, serverFlags, false, ObjectType.int);
+    await config.setValue(Context.configServerFlags, serverFlags);
   }
 
   void _updateConfig() {

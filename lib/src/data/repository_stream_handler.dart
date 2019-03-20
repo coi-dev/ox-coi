@@ -74,10 +74,6 @@ abstract class BaseRepositoryStreamHandler {
         break;
     }
   }
-
-  tearDown() {
-    _streamController.close();
-  }
 }
 
 class RepositoryStreamHandler extends BaseRepositoryStreamHandler {

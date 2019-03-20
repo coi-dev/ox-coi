@@ -89,28 +89,28 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   void _saveUserPersonalData(UserPersonalDataChanged event) async {
     Config config = Config();
-    config.setValue(Context.configDisplayName, event.username, true, ObjectType.String);
-    config.setValue(Context.configSelfStatus, event.status, true, ObjectType.String);
+    await config.setValue(Context.configDisplayName, event.username);
+    await config.setValue(Context.configSelfStatus, event.status);
     var avatarPath = event.avatarPath;
-    config.setValue(Context.configSelfAvatar, avatarPath, true, ObjectType.String);
+    await config.setValue(Context.configSelfAvatar, avatarPath);
     dispatch(UserChanged(config: config));
   }
 
-  void _saveUserAccountData(UserAccountDataChanged event) {
+  void _saveUserAccountData(UserAccountDataChanged event) async {
     Config config = Config();
-    config.setValue(Context.configMailUser, event.imapLogin, true, ObjectType.String);
-    config.setValue(Context.configMailPassword, event.imapPassword, true, ObjectType.String);
-    config.setValue(Context.configMailServer, event.imapServer, true, ObjectType.String);
-    config.setValue(Context.configMailPort, event.imapPort, true, ObjectType.String);
-    config.setValue(Context.configSendUser, event.smtpLogin, true, ObjectType.String);
-    config.setValue(Context.configSendPassword, event.smtpPassword, true, ObjectType.String);
-    config.setValue(Context.configSendServer, event.smtpServer, true, ObjectType.String);
-    config.setValue(Context.configSendPort, event.smtpPort, true, ObjectType.String);
+    await config.setValue(Context.configMailUser, event.imapLogin);
+    await config.setValue(Context.configMailPassword, event.imapPassword);
+    await config.setValue(Context.configMailServer, event.imapServer);
+    await config.setValue(Context.configMailPort, event.imapPort);
+    await config.setValue(Context.configSendUser, event.smtpLogin);
+    await config.setValue(Context.configSendPassword, event.smtpPassword);
+    await config.setValue(Context.configSendServer, event.smtpServer);
+    await config.setValue(Context.configSendPort, event.smtpPort);
     int imapSecurity = event.imapSecurity;
     int smtpSecurity = event.smtpSecurity;
     int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
 
-    config.setValue(Context.configServerFlags, serverFlags, false, ObjectType.int);
+    await config.setValue(Context.configServerFlags, serverFlags);
     dispatch(UserChanged(config: config));
   }
 }

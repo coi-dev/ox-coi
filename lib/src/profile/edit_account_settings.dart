@@ -42,18 +42,26 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/login/login_bloc.dart';
+import 'package:ox_talk/src/login/login_events.dart';
+import 'package:ox_talk/src/login/login_state.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/platform/system.dart';
 import 'package:ox_talk/src/profile/user_bloc.dart';
 import 'package:ox_talk/src/profile/user_event.dart';
 import 'package:ox_talk/src/profile/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/utils/protocol_security_converter.dart';
+import 'package:ox_talk/src/utils/styles.dart';
+import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/widgets/progress_handler.dart';
+import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditAccountSettings extends StatefulWidget {
@@ -63,14 +71,17 @@ class EditAccountSettings extends StatefulWidget {
 
 class _EditAccountSettingsState extends State<EditAccountSettings> {
   UserBloc _userBloc = UserBloc();
+  LoginBloc _loginBloc = LoginBloc();
   Navigation navigation = Navigation();
+  OverlayEntry _progressOverlayEntry;
+  FullscreenProgress _progress;
+  bool _showedErrorDialog = false;
 
-  final _advancedLoginKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
   ValidatableTextFormField imapPasswordField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelImapPassword,
+    (context) => AppLocalizations.of(context).password,
     textFormType: TextFormType.password,
-    needValidation: false,
   );
   ValidatableTextFormField imapServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapServer);
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
@@ -92,6 +103,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
   );
   String _selectedImapSecurity;
   String _selectedSmtpSecurity;
+  String _email = "";
 
   @override
   void initState() {
@@ -99,11 +111,36 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
     _userBloc.dispatch(RequestUser());
     final userStatesObservable = new Observable<UserState>(_userBloc.state);
     userStatesObservable.listen((state) => _handleUserStateChange(state));
+
+    final loginObservable = new Observable<LoginState>(_loginBloc.state);
+    loginObservable.listen((event) => handleLoginStateChange(event));
   }
 
   _handleUserStateChange(UserState state) {
     if (state is UserStateSuccess) {
       _fillEditAccountDataView(state.config);
+    }
+  }
+
+  void handleLoginStateChange(LoginState state) {
+    if (state is LoginStateSuccess || state is LoginStateFailure) {
+      if (_progressOverlayEntry != null) {
+        _progressOverlayEntry.remove();
+        _progressOverlayEntry = null;
+      }
+    }
+    if (state is LoginStateSuccess) {
+      showToast(AppLocalizations.of(context).editAccountSettingsSuccess);
+      navigation.pop(context, "EditAccountSettings");
+    } else if (state is LoginStateFailure) {
+      if (!_showedErrorDialog) {
+        _showedErrorDialog = true;
+        showInformationDialog(
+          context: context,
+          title: AppLocalizations.of(context).editAccountSettingsErrorDialogTitle,
+          content: state.error,
+        );
+      }
     }
   }
 
@@ -134,6 +171,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
   }
 
   _fillEditAccountDataView(Config config) {
+    _email = config.email;
     imapLoginNameField.controller.text = config.imapLogin;
     imapServerField.controller.text = config.imapServer;
     imapPortField.controller.text = config.imapPortAsString;
@@ -151,13 +189,29 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
           vertical: formVerticalPadding,
         ),
         child: Form(
-          key: _advancedLoginKey,
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.mail),
+                    Padding(
+                      padding: EdgeInsets.only(right: iconFormPadding),
+                    ),
+                    Text(
+                      _email,
+                      style: defaultText,
+                    ),
+                  ],
+                ),
+              ),
+              imapPasswordField,
+              Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).inbox),
               imapLoginNameField,
-              imapPasswordField,
               imapServerField,
               imapPortField,
               Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
@@ -192,7 +246,8 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
   }
 
   saveAccountData() {
-    if (_advancedLoginKey.currentState.validate()) {
+    hideKeyboard();
+    if (_formKey.currentState.validate()) {
       var imapLogin = imapLoginNameField.controller.text;
       var imapPassword = imapPasswordField.controller.text;
       var imapServer = imapServerField.controller.text;
@@ -214,9 +269,15 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
         smtpPassword: smtpPassword,
         smtpServer: smtpServer,
         smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
-        smtpSecurity:smtpSecurity,
+        smtpSecurity: smtpSecurity,
       ));
-      navigation.pop(context, "EditAccountSettings");
+
+      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).editAccountDataProgressMessage, true);
+      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
+      OverlayState overlayState = Overlay.of(context);
+      overlayState.insert(_progressOverlayEntry);
+      _showedErrorDialog = false;
+      _loginBloc.dispatch(EditButtonPressed());
     }
   }
 

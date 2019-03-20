@@ -340,6 +340,13 @@ class AppLocalizations {
 
   // Account settings
   String get editAccountSettingsTitle => Intl.message('Edit account settings', name: 'editAccountSettingsTitle');
+
+  String get editAccountDataProgressMessage => Intl.message('Applying new settings, this may take a moment', name: 'editAccountDataProgressMessage');
+
+  String get editAccountSettingsSuccess => Intl.message('Account settings succesfully changed', name: 'editAccountSettingsSuccess');
+
+  String get editAccountSettingsErrorDialogTitle => Intl.message('Configuration change aborted', name: 'editAccountSettingsErrorDialogTitle');
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
