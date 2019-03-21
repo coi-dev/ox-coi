@@ -74,7 +74,7 @@ const composeTextBorderRadius = 24.0;
 
 //Attachment preview
 const attachmentDividerPadding = 4.0;
-const previewMaxSize = 200.0;
+const previewMaxSize = 100.0;
 const previewDefaultIconSize = 100.0;
 const previewCloseIconBorderRadius = 20.0;
 const previewCloseIconSize = 30.0;

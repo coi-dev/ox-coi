@@ -164,13 +164,18 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
           Icons.attach_file,
           size: messagesFileIconSize,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(attachment.filename),
-            Text(byteToPrintableSize(attachment.size)),
-          ],
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(attachment.filename,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(byteToPrintableSize(attachment.size)),
+            ],
+          ),
         ),
         Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
         buildTime(time),

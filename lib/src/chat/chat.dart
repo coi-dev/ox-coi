@@ -325,18 +325,15 @@ class _ChatScreenState extends State<ChatScreen> {
           type = Context.msgAudio;
           break;
         case FileType.CUSTOM:
-          if(_selectedExtension == "pdf"){
-            type = Context.msgFile;
-          }
-          else if(_selectedExtension == "gif"){
+          if(_selectedExtension == "gif"){
             type = Context.msgGif;
           }
           else{
-            type = Context.msgUndefined;
+            type = Context.msgFile;
           }
           break;
         case FileType.ANY:
-          type = Context.msgUndefined;
+          type = Context.msgFile;
           break;
       }
       _messagesBloc.submitAttachmentMessage(_filePath, type, text);
