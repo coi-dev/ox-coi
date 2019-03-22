@@ -61,7 +61,7 @@ class EditUserSettings extends StatefulWidget {
   _EditUserSettingsState createState() => _EditUserSettingsState();
 }
 
-class _EditUserSettingsState extends State<EditUserSettings> with TickerProviderStateMixin {
+class _EditUserSettingsState extends State<EditUserSettings> {
   UserBloc _userBloc = UserBloc();
   Navigation navigation = Navigation();
 

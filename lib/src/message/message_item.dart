@@ -67,7 +67,7 @@ class ChatMessageItem extends StatefulWidget {
   _ChatMessageItemState createState() => _ChatMessageItemState();
 }
 
-class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderStateMixin {
+class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAliveClientMixin<ChatMessageItem> {
   MessageItemBloc _messagesBloc = MessageItemBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
 
@@ -76,6 +76,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
     super.initState();
     _messagesBloc.dispatch(RequestMessage(widget._chatId, widget._messageId, widget._isGroupChat));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -284,4 +287,5 @@ class _ChatMessageItemState extends State<ChatMessageItem> with TickerProviderSt
   void _openAttachment() {
     _attachmentBloc.dispatch(RequestAttachment(widget._chatId, widget._messageId));
   }
+
 }
