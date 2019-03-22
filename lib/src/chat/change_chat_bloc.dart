@@ -77,7 +77,7 @@ class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
     if (contactId != null) {
       chatId = await context.createChatByContactId(contactId);
     } else if (messageId != null) {
-      messagesRepository.remove(messageId);
+      messagesRepository.clear();
       chatId = await context.createChatByMessageId(messageId);
     } else if (verified != null && name != null) {
       chatId = await context.createGroupChat(verified, name);

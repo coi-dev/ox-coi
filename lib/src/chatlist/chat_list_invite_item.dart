@@ -156,17 +156,8 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
   }
 
   void blockUser() {
-    MessageChangeBloc messageChangeBloc = MessageChangeBloc();
-    messageChangeBloc.dispatch(DeleteMessage(widget._chatId, widget._messageId));
-    final messageChangeStatesObservable = new Observable<MessageChangeState>(messageChangeBloc.state);
-    messageChangeStatesObservable.listen((state) => _handleMessageChangeStateChange(state));
-  }
-
-  _handleMessageChangeStateChange(MessageChangeState state) {
-    if (state is MessageChangeStateSuccess) {
-      ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-      contactChangeBloc.dispatch(BlockContact(_contactId));
-    }
+    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
+    contactChangeBloc.dispatch(BlockContact(_contactId));
   }
 
   @override

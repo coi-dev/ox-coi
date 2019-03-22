@@ -47,6 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_change_state.dart';
+import 'package:ox_talk/src/data/chat_message_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/utils/error.dart';
@@ -110,6 +111,8 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
     contactRepository.remove(id);
     Context context = Context();
     await context.blockContact(id);
+    Repository<ChatMsg> messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
+    messagesRepository.clear();
     dispatch(ContactBlocked());
   }
 }
