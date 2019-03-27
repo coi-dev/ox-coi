@@ -40,34 +40,51 @@
  * for more details.
  */
 
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/profile/user_event.dart';
-import 'package:ox_talk/src/profile/user_state.dart';
 
-class UserBloc extends Bloc<UserEvent, UserState> {
-  @override
-  UserState get initialState => UserStateInitial();
+abstract class UserChangeEvent {}
 
-  @override
-  Stream<UserState> mapEventToState(UserState currentState, UserEvent event) async* {
-    if (event is RequestUser) {
-      yield UserStateLoading();
-      try {
-        _setupUser();
-      } catch (error) {
-        yield UserStateFailure(error: error.toString());
-      }
-    } else if (event is UserLoaded) {
-      yield UserStateSuccess(config: event.config);
-    }
-  }
+class RequestUser extends UserChangeEvent {}
 
-  void _setupUser() async {
-    Config config = Config();
-    await config.load();
-    dispatch(UserLoaded(config: config));
-  }
+class UserLoaded extends UserChangeEvent {
+  final Config config;
+
+  UserLoaded({@required this.config});
+}
+
+class ChangesApplied extends UserChangeEvent {}
+
+class UserPersonalDataChanged extends UserChangeEvent {
+  final String username;
+  final String status;
+  final String avatarPath;
+
+  UserPersonalDataChanged({@required this.username, @required this.status, @required this.avatarPath});
+}
+
+class UserAccountDataChanged extends UserChangeEvent {
+  final String imapLogin;
+  final String imapPassword;
+  final String imapServer;
+  final int imapPort;
+  final int imapSecurity;
+  final String smtpLogin;
+  final String smtpPassword;
+  final String smtpServer;
+  final int smtpPort;
+  final int smtpSecurity;
+
+  UserAccountDataChanged({
+    @required this.imapLogin,
+    @required this.imapPassword,
+    @required this.imapServer,
+    @required this.imapPort,
+    @required this.imapSecurity,
+    @required this.smtpLogin,
+    @required this.smtpPassword,
+    @required this.smtpServer,
+    @required this.smtpPort,
+    @required this.smtpSecurity,
+  });
 }

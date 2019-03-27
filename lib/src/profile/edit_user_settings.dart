@@ -49,9 +49,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/profile/user_bloc.dart';
-import 'package:ox_talk/src/profile/user_event.dart';
-import 'package:ox_talk/src/profile/user_state.dart';
+import 'package:ox_talk/src/profile/user_change_bloc.dart';
+import 'package:ox_talk/src/profile/user_change_event.dart';
+import 'package:ox_talk/src/profile/user_change_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:rxdart/rxdart.dart';
@@ -62,7 +62,7 @@ class EditUserSettings extends StatefulWidget {
 }
 
 class _EditUserSettingsState extends State<EditUserSettings> {
-  UserBloc _userBloc = UserBloc();
+  UserChangeBloc _userChangeBloc = UserChangeBloc();
   Navigation navigation = Navigation();
 
   TextEditingController _usernameController = TextEditingController();
@@ -73,13 +73,13 @@ class _EditUserSettingsState extends State<EditUserSettings> {
   @override
   void initState() {
     super.initState();
-    _userBloc.dispatch(RequestUser());
-    final userStatesObservable = new Observable<UserState>(_userBloc.state);
-    userStatesObservable.listen((state) => _handleUserStateChange(state));
+    _userChangeBloc.dispatch(RequestUser());
+    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc.state);
+    userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
   }
 
-  _handleUserStateChange(UserState state) {
-    if (state is UserStateSuccess) {
+  _handleUserChangeStateChange(UserChangeState state) {
+    if (state is UserChangeStateSuccess) {
       Config config = state.config;
       _usernameController.text = config.username;
       _statusController.text = config.status;
@@ -87,6 +87,8 @@ class _EditUserSettingsState extends State<EditUserSettings> {
       if (avatarPath != null && avatarPath.isNotEmpty) {
         _avatar = File(config.avatarPath);
       }
+    } else if (state is UserChangeStateApplied) {
+      navigation.pop(context, "EditUserSettings");
     }
   }
 
@@ -107,11 +109,11 @@ class _EditUserSettingsState extends State<EditUserSettings> {
 
   Widget buildForm() {
     return BlocBuilder(
-        bloc: _userBloc,
+        bloc: _userChangeBloc,
         builder: (context, state) {
-          if (state is UserStateSuccess) {
+          if (state is UserChangeStateSuccess) {
             return buildEditUserDataView(state.config);
-          } else if (state is UserStateFailure) {
+          } else if (state is UserChangeStateFailure) {
             return new Text(state.error);
           } else {
             return new Container();
@@ -231,7 +233,6 @@ class _EditUserSettingsState extends State<EditUserSettings> {
 
   void _saveChanges() async {
     String avatarPath = _avatar != null ? _avatar.path : null;
-    _userBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
-    navigation.pop(context, "EditUserSettings");
+    _userChangeBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
   }
 }

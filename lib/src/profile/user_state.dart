@@ -44,54 +44,20 @@ import 'package:meta/meta.dart';
 import 'package:ox_talk/src/base/bloc_base_state.dart';
 import 'package:ox_talk/src/data/config.dart';
 
-abstract class UserState extends BaseState {
-  final Config config;
+abstract class UserState extends BaseState {}
 
-  UserState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-    @required this.config,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
-}
+class UserStateInitial extends UserState {}
 
-class UserStateInitial extends UserState {
-  UserStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-          config: null,
-        );
-}
-
-class UserStateLoading extends UserState {
-  UserStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-          config: null,
-        );
-}
+class UserStateLoading extends UserState {}
 
 class UserStateSuccess extends UserState {
-  UserStateSuccess({@required Config config})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-          config: config,
-        );
+  final Config config;
+
+  UserStateSuccess({@required this.config});
 }
 
 class UserStateFailure extends UserState {
-  UserStateFailure({
-    @required error,
-  }) : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-          config: null,
-        );
+  final String error;
+
+  UserStateFailure({@required this.error});
 }

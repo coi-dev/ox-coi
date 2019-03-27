@@ -51,9 +51,9 @@ import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/platform/system.dart';
-import 'package:ox_talk/src/profile/user_bloc.dart';
-import 'package:ox_talk/src/profile/user_event.dart';
-import 'package:ox_talk/src/profile/user_state.dart';
+import 'package:ox_talk/src/profile/user_change_bloc.dart';
+import 'package:ox_talk/src/profile/user_change_event.dart';
+import 'package:ox_talk/src/profile/user_change_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -70,7 +70,7 @@ class EditAccountSettings extends StatefulWidget {
 }
 
 class _EditAccountSettingsState extends State<EditAccountSettings> {
-  UserBloc _userBloc = UserBloc();
+  UserChangeBloc _userChangeBloc = UserChangeBloc();
   LoginBloc _loginBloc = LoginBloc();
   Navigation navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
@@ -108,17 +108,24 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
   @override
   void initState() {
     super.initState();
-    _userBloc.dispatch(RequestUser());
-    final userStatesObservable = new Observable<UserState>(_userBloc.state);
-    userStatesObservable.listen((state) => _handleUserStateChange(state));
+    _userChangeBloc.dispatch(RequestUser());
+    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc.state);
+    userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
 
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
     loginObservable.listen((event) => handleLoginStateChange(event));
   }
 
-  _handleUserStateChange(UserState state) {
-    if (state is UserStateSuccess) {
+  _handleUserChangeStateChange(UserChangeState state) {
+    if (state is UserChangeStateSuccess) {
       _fillEditAccountDataView(state.config);
+    } else if (state is UserChangeStateApplied) {
+      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).editAccountDataProgressMessage, true);
+      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
+      OverlayState overlayState = Overlay.of(context);
+      overlayState.insert(_progressOverlayEntry);
+      _showedErrorDialog = false;
+      _loginBloc.dispatch(EditButtonPressed());
     }
   }
 
@@ -161,9 +168,9 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
 
   Widget buildForm() {
     return BlocBuilder(
-        bloc: _userBloc,
+        bloc: _userChangeBloc,
         builder: (context, state) {
-          if (state is UserStateFailure) {
+          if (state is UserChangeStateFailure) {
             showToast(state.error);
           }
           return _buildEditAccountDataView();
@@ -259,7 +266,7 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
       var smtpPort = smtpPortField.controller.text;
       var smtpSecurity = convertProtocolStringToInt(context, _selectedSmtpSecurity);
 
-      _userBloc.dispatch(UserAccountDataChanged(
+      _userChangeBloc.dispatch(UserAccountDataChanged(
         imapLogin: imapLogin,
         imapPassword: imapPassword,
         imapServer: imapServer,
@@ -271,13 +278,6 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
         smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
         smtpSecurity: smtpSecurity,
       ));
-
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).editAccountDataProgressMessage, true);
-      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-      OverlayState overlayState = Overlay.of(context);
-      overlayState.insert(_progressOverlayEntry);
-      _showedErrorDialog = false;
-      _loginBloc.dispatch(EditButtonPressed());
     }
   }
 

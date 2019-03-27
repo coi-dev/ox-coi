@@ -40,34 +40,25 @@
  * for more details.
  */
 
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/profile/user_event.dart';
-import 'package:ox_talk/src/profile/user_state.dart';
 
-class UserBloc extends Bloc<UserEvent, UserState> {
-  @override
-  UserState get initialState => UserStateInitial();
+abstract class UserChangeState {}
 
-  @override
-  Stream<UserState> mapEventToState(UserState currentState, UserEvent event) async* {
-    if (event is RequestUser) {
-      yield UserStateLoading();
-      try {
-        _setupUser();
-      } catch (error) {
-        yield UserStateFailure(error: error.toString());
-      }
-    } else if (event is UserLoaded) {
-      yield UserStateSuccess(config: event.config);
-    }
-  }
+class UserChangeStateInitial extends UserChangeState {}
 
-  void _setupUser() async {
-    Config config = Config();
-    await config.load();
-    dispatch(UserLoaded(config: config));
-  }
+class UserChangeStateLoading extends UserChangeState {}
+
+class UserChangeStateSuccess extends UserChangeState {
+  final Config config;
+
+  UserChangeStateSuccess({@required this.config});
 }
+
+class UserChangeStateFailure extends UserChangeState {
+  String error;
+
+  UserChangeStateFailure({@required this.error});
+}
+
+class UserChangeStateApplied extends UserChangeState {}
