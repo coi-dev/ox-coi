@@ -54,6 +54,7 @@ import 'package:ox_talk/src/utils/error.dart';
 
 class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
   final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
+  final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
 
   @override
   ContactChangeState get initialState => ContactChangeStateInitial();
@@ -91,7 +92,10 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
       dispatch(ContactAdded(id));
     } else {
       Contact contact = contactRepository.get(id);
-      contact.prepareReloadValue(Contact.methodContactGetName);
+      contact.set(Contact.methodContactGetName, name);
+      int chatId = await context.getChatByContactId(id);
+      Chat chat = chatRepository.get(chatId);
+      chat.set(Chat.methodChatGetName, name);
       dispatch(ContactEdited());
     }
   }
