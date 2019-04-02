@@ -43,6 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/chat/create_chat.dart';
+import 'package:ox_talk/src/contact/contact_blocked_list.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/profile/edit_account_settings.dart';
 
@@ -51,6 +52,7 @@ class Navigation {
   static const String ROUTES_CONTACT_ADD = '/contactAdd';
   static const String ROUTES_PROFILE_EDIT = '/profileEdit';
   static const String ROUTES_CHAT_CREATE = '/chatCreate';
+  static const String ROUTES_CONTACTS_BLOCKED = '/contactsBlocked';
 
   static Navigation _instance;
 
@@ -65,6 +67,7 @@ class Navigation {
         ),
     ROUTES_PROFILE_EDIT: (context) => EditAccountSettings(),
     ROUTES_CHAT_CREATE: (context) => CreateChat(),
+    ROUTES_CONTACTS_BLOCKED: (context) => ContactBlockedList(),
   };
 
   void push(BuildContext context, MaterialPageRoute route, String routeToPage) {
@@ -77,11 +80,6 @@ class Navigation {
     Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  void pop(BuildContext context, String popFromPage) {
-    debugPrint("Navigation.pop from $popFromPage");
-    Navigator.pop(context);
-  }
-
   void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate, String routeToPage) {
     debugPrint("Navigation.pushAndRemoveUntil to $routeToPage until $predicate");
     Navigator.pushAndRemoveUntil(context, newRoute, predicate);
@@ -90,5 +88,15 @@ class Navigation {
   void pushReplacement(BuildContext context, Route newRoute, String routeToPage) {
     debugPrint("Navigation.pushReplacement to $routeToPage");
     Navigator.pushReplacement(context, newRoute);
+  }
+
+  void pop(BuildContext context, String popFromPage) {
+    debugPrint("Navigation.pop from $popFromPage");
+    Navigator.pop(context);
+  }
+
+  void popUntil(BuildContext context, RoutePredicate predicate, String popFromPage){
+    debugPrint("Navigation.popUntil from $popFromPage");
+    Navigator.popUntil(context, predicate);
   }
 }

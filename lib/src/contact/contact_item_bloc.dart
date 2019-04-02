@@ -47,12 +47,13 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/contact/contact_item_state.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
-  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
+  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
   int _contactId;
 
   ContactItemBloc();

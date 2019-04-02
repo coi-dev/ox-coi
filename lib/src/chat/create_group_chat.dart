@@ -52,7 +52,6 @@ import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 class CreateGroupChat extends StatefulWidget {

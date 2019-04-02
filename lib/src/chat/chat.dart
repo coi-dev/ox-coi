@@ -48,6 +48,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
+import 'package:ox_talk/src/chat/chat_profile_view.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/message/message_item.dart';
@@ -186,48 +187,51 @@ class _ChatScreenState extends State<ChatScreen> {
           name = "";
           subTitle = "";
         }
-        return Row(
-          children: <Widget>[
-            Avatar(
-              initials: getInitials(name, subTitle),
-              color: color,
-            ),
-            Padding(padding: EdgeInsets.only(left: appBarAvatarTextPadding)),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    name,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                    style: twoLineHeaderTitle,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      _chatBloc.isGroup
-                        ? Padding(
-                          padding: const EdgeInsets.only(right: iconTextPadding),
-                          child: Icon(
-                            Icons.group,
-                            size: iconSize,
-                          ))
-                        : Container(),
-                      Expanded(
-                        child: Text(
-                          subTitle,
-                          style: twoLineHeaderSubTitle,
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+        return InkWell(
+          onTap: () => _chatTitleTapped(),
+          child: Row(
+            children: <Widget>[
+              Avatar(
+                initials: getInitials(name, subTitle),
+                color: color,
               ),
-            ),
-          ],
+              Padding(padding: EdgeInsets.only(left: appBarAvatarTextPadding)),
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      name,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: twoLineHeaderTitle,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        _chatBloc.isGroup
+                            ? Padding(
+                            padding: const EdgeInsets.only(right: iconTextPadding),
+                            child: Icon(
+                              Icons.group,
+                              size: iconSize,
+                            ))
+                            : Container(),
+                        Expanded(
+                          child: Text(
+                            subTitle,
+                            style: twoLineHeaderSubTitle,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -414,6 +418,12 @@ class _ChatScreenState extends State<ChatScreen> {
         _isComposing = false;
       }
     });
+  }
+
+  _chatTitleTapped() {
+    navigation.push(context, MaterialPageRoute(
+      builder: (context) => ChatProfileView(widget._chatId)),
+      "ChatProfileView");
   }
 }
 

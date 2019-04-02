@@ -112,6 +112,8 @@ class AppLocalizations {
 
   String get block => Intl.message('Block', name: 'block');
 
+  String get unblock => Intl.message('Unblock', name: 'unblock');
+
   String get gallery => Intl.message('Gallery', name: 'gallery');
 
   String get camera => Intl.message('Camera', name: 'camera');
@@ -275,6 +277,9 @@ class AppLocalizations {
 
   String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
 
+  //Chat profile view
+  String get chatProfileBlockContactButtonText => Intl.message('Block contact', name: 'chatProfileBlockContactButtonText');
+
   // Create chat
   String get createChatTitle => Intl.message('Create chat', name: 'createChatTitle');
 
@@ -328,6 +333,15 @@ class AppLocalizations {
   String contactImportSuccess(count) => Intl.message('$count system contacts imported', name: 'contactImportSuccess', args: [count]);
 
   String get contactImportFailure => Intl.message('Import failed, missing permissions', name: 'contactImportFailure');
+
+  //BlockedContacts
+  String get blockedContactsTitle => Intl.message('Blocked contacts', name: 'blockedContactsTitle');
+
+  String get unblockDialogTitle => Intl.message('Unblock contact', name: 'unblockDialogTitle');
+
+  String unblockDialogText(name) => Intl.message('Do you want to unblock $name?', name: 'unblockDialogText', args: [name]);
+
+  String get blockedListEmpty => Intl.message('No blocked contacts', name: 'blockedListEmpty');
 
   // Profile
   String get profileTitle => Intl.message('Profile', name: 'profileTitle');

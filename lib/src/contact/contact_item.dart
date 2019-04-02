@@ -46,6 +46,8 @@ import 'package:ox_talk/src/chat/change_chat_bloc.dart';
 import 'package:ox_talk/src/chat/change_chat_event.dart';
 import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
+import 'package:ox_talk/src/contact/contact_change_bloc.dart';
+import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
@@ -56,8 +58,9 @@ import 'package:rxdart/rxdart.dart';
 class ContactItem extends StatefulWidget {
   final int _contactId;
   final bool _createChat;
+  final bool _isBlocked;
 
-  ContactItem(this._contactId, this._createChat, key) : super(key: Key(key));
+  ContactItem(this._contactId, this._createChat, this._isBlocked, key) : super(key: Key(key));
 
   @override
   _ContactItemState createState() => _ContactItemState();
@@ -79,21 +82,23 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   }
 
   onContactTapped(String name, String email) async {
-    if (!widget._createChat) {
+    if (widget._createChat) {
+      return buildCreateChatDialog(name, email);
+    } else if(widget._isBlocked){
+      return buildUnblockContactDialog(name, email);
+    } else {
       navigation.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ContactChange(
-                  contactAction: ContactAction.edit,
-                  id: widget._contactId,
-                  email: email,
-                  name: name,
-                )),
+          builder: (context) =>
+            ContactChange(
+              contactAction: ContactAction.edit,
+              id: widget._contactId,
+              email: email,
+              name: name,
+            )),
         "ContactChange"
       );
-    } else {
-      return buildCreateChatDialog(name, email);
     }
   }
 
@@ -141,5 +146,43 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
     if (state is CreateChatStateSuccess) {
       navigation.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatScreen");
     }
+  }
+
+  buildUnblockContactDialog(String name, String email) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        String contact = name.isNotEmpty ? name : email;
+        return AlertDialog(
+          title: Text(AppLocalizations
+            .of(context)
+            .unblockDialogTitle),
+          content: new Text(AppLocalizations.of(context).unblockDialogText(contact)),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(AppLocalizations
+                .of(context)
+                .cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text(AppLocalizations
+                .of(context)
+                .unblock),
+              onPressed: () {
+                unblockContact();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      });
+  }
+
+  void unblockContact() {
+    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
+    contactChangeBloc.dispatch(UnblockContact(widget._contactId));
   }
 }

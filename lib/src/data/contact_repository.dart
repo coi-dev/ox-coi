@@ -46,7 +46,12 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/repository.dart';
 
 class ContactRepository extends Repository<Contact> {
-  ContactRepository(RepositoryItemCreator<Contact> creator) : super(creator);
+  ContactRepository(RepositoryItemCreator<Contact> creator, this._listType) : super(creator);
+
+  final int _listType;
+  static const int validContacts = 0;
+  static const int inviteContacts = 1;
+  static const int blockedContacts = 2;
 
   @override
   onData(Event event) async {
@@ -58,7 +63,15 @@ class ContactRepository extends Repository<Contact> {
 
   Future<void> setupContactsAfterUpdate() async {
     Context context = Context();
-    List<int> contactIds = List.from(await context.getContacts(2, null));
+    List<int> contactIds;
+    if( _listType == validContacts){
+      contactIds = List.from(await context.getContacts(2, null));
+    }else if(_listType == blockedContacts){
+      contactIds = List.from(await context.getBlockedContacts());
+    }else{
+      return;
+    }
+
     update(ids: contactIds);
   }
 

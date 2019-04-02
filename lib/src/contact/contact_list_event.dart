@@ -44,4 +44,14 @@ abstract class ContactListEvent {}
 
 class RequestContacts extends ContactListEvent {}
 
+class RequestBlockedContacts extends ContactListEvent {}
+
 class ContactsChanged extends ContactListEvent {}
+
+class BlockedContactsChanged extends ContactListEvent {}
+
+class RequestChatContacts extends ContactListEvent {
+  int chatId;
+
+  RequestChatContacts(this.chatId);
+}

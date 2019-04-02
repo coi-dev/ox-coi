@@ -64,7 +64,7 @@ class ContactListView extends BaseRootChild {
   @override
   _ContactListState createState() {
     final state = _ContactListState();
-    addActions([state.getImportAction()]);
+    addActions([state.getImportAction(), state.getBlockedUsersAction()]);
     return state;
   }
 
@@ -106,6 +106,7 @@ class ContactListView extends BaseRootChild {
 class _ContactListState extends State<ContactListView> {
   ContactListBloc _contactListBloc = ContactListBloc();
   ContactImportBloc _contactImportBloc = ContactImportBloc();
+  Navigation navigation = Navigation();
 
   @override
   void initState() {
@@ -165,6 +166,17 @@ class _ContactListState extends State<ContactListView> {
     );
   }
 
+  Widget getBlockedUsersAction() {
+    return IconButton(
+      icon: Icon(Icons.block),
+      onPressed: () => _showBlockedUserList(context),
+    );
+  }
+
+  _showBlockedUserList(BuildContext context) {
+    navigation.pushNamed(context, Navigation.ROUTES_CONTACTS_BLOCKED);
+  }
+
   void _showImportDialog(bool initialImport, BuildContext context) {
     var importTitle = AppLocalizations.of(context).contactImportDialogTitle;
     var importText = AppLocalizations.of(context).contactImportDialogContent;
@@ -190,7 +202,7 @@ class _ContactListState extends State<ContactListView> {
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];
           var key = "$contactId-${contactLastUpdateValues[index]}";
-          return ContactItem(contactId, false, key);
+          return ContactItem(contactId, false, false, key);
         });
   }
 }

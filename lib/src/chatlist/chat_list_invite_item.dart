@@ -49,9 +49,6 @@ import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/message/message_change_bloc.dart';
-import 'package:ox_talk/src/message/message_change_event.dart';
-import 'package:ox_talk/src/message/message_change_state.dart';
 import 'package:ox_talk/src/message/message_item_bloc.dart';
 import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
@@ -157,7 +154,7 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
 
   void blockUser() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(_contactId));
+    contactChangeBloc.dispatch(BlockContact(_contactId, null));
   }
 
   @override
