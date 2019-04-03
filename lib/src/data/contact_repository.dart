@@ -68,6 +68,8 @@ class ContactRepository extends Repository<Contact> {
       contactIds = List.from(await context.getContacts(2, null));
     }else if(_listType == blockedContacts){
       contactIds = List.from(await context.getBlockedContacts());
+    }else if(_listType != inviteContacts){
+      contactIds = List.from(await context.getChatContacts(_listType));
     }else{
       return;
     }

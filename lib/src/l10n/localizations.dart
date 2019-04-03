@@ -143,9 +143,9 @@ class AppLocalizations {
 
   String get coreDraft => Intl.message('Draft', name: 'coreDraft');
 
-  String get coreMembers => Intl.message('%1\$d member(s)', name: 'createChatWith');
+  String get coreMembers => Intl.message('%1\$d member(s)', name: 'coreMembers');
 
-  String get coreContacts => Intl.message('%1\$d contact(s)', name: 'createChatWith');
+  String get coreContacts => Intl.message('%1\$d contact(s)', name: 'coreContacts');
 
   String get coreVoiceMessage => Intl.message('Voice message', name: 'coreVoiceMessage');
 
@@ -282,7 +282,13 @@ class AppLocalizations {
   String get recordingVideoMessageFailure => Intl.message('Video recording failed, missing permissions', name: 'recordingVideoMessageFailure');
 
   //Chat profile view
+  String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');
+
   String get chatProfileBlockContactButtonText => Intl.message('Block contact', name: 'chatProfileBlockContactButtonText');
+
+  String get chatProfileClipboardToastMessage => Intl.message('Email copied to clipboard', name: 'chatProfileClipboardToastMessage');
+
+  String chatProfileGroupMemberCounter(memberCount) => Intl.message('$memberCount member(s)', name: 'chatProfileGroupMemberCounter', args: [memberCount]);
 
   // Create chat
   String get createChatTitle => Intl.message('Create chat', name: 'createChatTitle');

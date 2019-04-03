@@ -75,9 +75,10 @@ class ChatStateSuccess extends ChatState {
   final String name;
   final String subTitle;
   final Color color;
+  final bool isSelfTalk;
   final bool isGroupChat;
 
-  ChatStateSuccess({@required this.name, @required this.subTitle, @required this.color, @required this.isGroupChat})
+  ChatStateSuccess({@required this.name, @required this.subTitle, @required this.color, @required this.isSelfTalk, @required this.isGroupChat})
       : super(
           isLoading: false,
           isSuccess: true,

@@ -83,3 +83,8 @@ final messageTimeText = TextStyle(
   color: messageTimeForeground,
   fontSize: 12,
 );
+
+const chatProfileAvatarInitialText = TextStyle(
+  color: Colors.white,
+  fontSize: 50.0
+);

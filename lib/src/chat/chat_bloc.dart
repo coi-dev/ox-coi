@@ -75,6 +75,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         name: event.name,
         subTitle: event.subTitle,
         color: event.color,
+        isSelfTalk: event.isSelfTalk,
         isGroupChat: event.isGroupChat,
       );
     }
@@ -85,8 +86,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     String name = await chat.getName();
     String subTitle = await chat.getSubtitle();
     int colorValue = await chat.getColor();
+    bool isSelfTalk = await chat.isSelfTalk();
     _isGroup = await chat.isGroup();
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ChatLoaded(name, subTitle, color, _isGroup));
+    dispatch(ChatLoaded(name, subTitle, color, isSelfTalk, _isGroup));
   }
 }

@@ -77,6 +77,12 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   }
 
   @override
+  void dispose() {
+    _contactBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return getBlocBuilder(_contactBloc, onContactTapped);
   }

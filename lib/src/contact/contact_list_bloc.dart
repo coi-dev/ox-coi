@@ -86,8 +86,8 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     } else if(event is RequestChatContacts){
       yield ContactListStateLoading();
       try {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-        contactListType = ContactRepository.validContacts;
+        contactRepository = RepositoryManager.get(RepositoryType.contact, event.chatId);
+        contactListType = event.chatId;
         setupChatContacts(event.chatId);
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
@@ -118,7 +118,10 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
       contactIds = List.from(await _context.getContacts(2, null));
     }else if(contactListType == ContactRepository.blockedContacts){
       contactIds = List.from(await _context.getBlockedContacts());
-    }else{
+    }else if(contactListType != ContactRepository.inviteContacts){
+      contactIds = List.from(await _context.getChatContacts(contactListType));
+    }
+    else{
       return;
     }
     contactRepository.putIfAbsent(ids: contactIds);
