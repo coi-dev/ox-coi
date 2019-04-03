@@ -40,16 +40,39 @@
  * for more details.
  */
 
-import 'package:date_format/date_format.dart';
+import 'package:meta/meta.dart';
 
-String getTimeForTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), [HH, ':', nn]);
+enum ChatComposerStateError {
+  missingMicrophonePermission,
+  missingCameraPermission,
 }
 
-String getNowTimestamp() {
-  return DateTime.now().millisecondsSinceEpoch.toString();
+abstract class ChatComposerState {}
+
+class ChatComposerInitial extends ChatComposerState {}
+
+class ChatComposerRecordingAudio extends ChatComposerState {
+  String timer;
+
+  ChatComposerRecordingAudio({@required this.timer});
 }
 
-String getTimerForTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), [nn, ':', ss, ':', SSS]);
+class ChatComposerRecordingAudioStopped extends ChatComposerState {
+  String filePath;
+  bool shouldSend;
+
+  ChatComposerRecordingAudioStopped({@required this.filePath, @required this.shouldSend});
+}
+
+class ChatComposerRecordingAborted extends ChatComposerState {
+  ChatComposerStateError error;
+
+  ChatComposerRecordingAborted({@required this.error});
+}
+
+class ChatComposerRecordingImageOrVideoStopped extends ChatComposerState {
+  String filePath;
+  int type;
+
+  ChatComposerRecordingImageOrVideoStopped({@required this.filePath, @required this.type});
 }

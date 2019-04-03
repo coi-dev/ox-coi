@@ -57,7 +57,8 @@ abstract class BaseRepositoryStreamHandler {
 
   Function onError;
 
-  StreamController _streamController;
+  // ignore: close_sinks
+  StreamController _streamController; // Closed by flutter-deltachat-core/lib/delta_chat_core.dart
 
   get streamController => _streamController;
 

@@ -51,6 +51,7 @@ import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/platform/preferences.dart';
+import 'package:ox_talk/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
@@ -82,8 +83,8 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   }
 
   void loadSystemContacts() async {
-    bool contactPermissionGranted = await hasContactPermission();
-    if (contactPermissionGranted) {
+    bool hasContactPermission = await hasPermission(PermissionGroup.contacts);
+    if (hasContactPermission) {
       Iterable<SystemContacts.Contact> contacts = await SystemContacts.ContactsService.getContacts();
       String addressBook = "";
       contacts.forEach((contact) {
@@ -102,13 +103,4 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     }
   }
 
-  Future<bool> hasContactPermission() async {
-    PermissionStatus readContactsStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.contacts);
-    if (readContactsStatus != PermissionStatus.granted) {
-      Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
-      return permissions[PermissionGroup.contacts] == PermissionStatus.granted;
-    } else {
-      return true;
-    }
-  }
 }

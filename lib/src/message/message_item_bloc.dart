@@ -85,7 +85,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       bool isOutgoing = await message.isOutgoing();
       String text = await message.getText();
       bool hasFile = await message.hasFile();
-      String timestamp = getTimeFromTimestamp(await message.getTimestamp());
+      String timestamp = getTimeForTimestamp(await message.getTimestamp());
       AttachmentWrapper attachmentWrapper;
       if (hasFile) {
         attachmentWrapper = AttachmentWrapper(

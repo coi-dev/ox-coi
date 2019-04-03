@@ -43,10 +43,15 @@
 import 'dart:io';
 
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
+import 'package:ox_talk/src/chat/chat_composer.dart';
+import 'package:ox_talk/src/chat/chat_composer_bloc.dart';
+import 'package:ox_talk/src/chat/chat_composer_event.dart';
+import 'package:ox_talk/src/chat/chat_composer_state.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_profile_view.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
@@ -59,9 +64,10 @@ import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
+import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/avatar.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as Path;
+import 'package:rxdart/rxdart.dart';
 
 class ChatScreen extends StatefulWidget {
   final int _chatId;
@@ -73,22 +79,60 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  ChatBloc _chatBloc = ChatBloc();
   Navigation navigation = Navigation();
+  ChatBloc _chatBloc = ChatBloc();
   MessagesBloc _messagesBloc = MessagesBloc();
+  ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
 
   final TextEditingController _textController = new TextEditingController();
-  bool _isComposing = false;
+  bool _isComposingText = false;
+  String _composingAudioTimer;
   String _filePath = "";
   FileType _selectedFileType;
   String _selectedExtension = "";
   String _fileName = "";
+  GlobalKey _imageVideoKey = GlobalKey();
+
+  OverlayEntry _overlayEntry;
 
   @override
   void initState() {
     super.initState();
     _chatBloc.dispatch(RequestChat(widget._chatId));
     _messagesBloc.dispatch(RequestMessages(widget._chatId));
+    final contactImportObservable = new Observable<ChatComposerState>(_chatComposerBloc.state);
+    contactImportObservable.listen((state) => handleChatComposer(state));
+  }
+
+  void handleChatComposer(ChatComposerState state) {
+    if (state is ChatComposerRecordingAudio) {
+      setState(() {
+        _composingAudioTimer = state.timer;
+      });
+    } else if (state is ChatComposerRecordingAudioStopped) {
+      if (state.filePath != null && state.shouldSend) {
+        _filePath = state.filePath;
+        _onMessageSend(Context.msgVoice);
+      }
+      setState(() {
+        _composingAudioTimer = null;
+      });
+    } else if (state is ChatComposerRecordingImageOrVideoStopped) {
+      if (state.type != 0 && state.filePath != null) {
+        _filePath = state.filePath;
+        _onMessageSend(state.type);
+      }
+    }
+    else if (state is ChatComposerRecordingAborted) {
+      _composingAudioTimer = null;
+      String chatComposeAborted;
+      if (state.error == ChatComposerStateError.missingMicrophonePermission) {
+        chatComposeAborted = AppLocalizations.of(context).recordingAudioMessageFailure;
+      } else if (state.error == ChatComposerStateError.missingCameraPermission) {
+        chatComposeAborted = AppLocalizations.of(context).recordingVideoMessageFailure;
+      }
+      showToast(chatComposeAborted);
+    }
   }
 
   @override
@@ -101,63 +145,64 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: buildTitle(),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.videocam),
-            onPressed: null,
-            color: appBarIcon,
-          ),
-          IconButton(
-            icon: Icon(Icons.phone),
-            onPressed: null,
-            color: appBarIcon,
-          ),
-        ],
-      ),
-      body: new Column(children: <Widget>[
-        new Flexible(child: buildListView()),
-        _filePath.isNotEmpty ?
-           buildPreview() : Container(),
-        new Divider(height: dividerHeight),
-        new Container(
-          decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-          child: _buildTextComposer(),
+        appBar: new AppBar(
+          title: buildTitle(),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.videocam),
+              onPressed: null,
+              color: appBarIcon,
+            ),
+            IconButton(
+              icon: Icon(Icons.phone),
+              onPressed: null,
+              color: appBarIcon,
+            ),
+          ],
         ),
-      ]));
+        body: new Column(children: <Widget>[
+          new Flexible(child: buildListView()),
+          _filePath.isNotEmpty ? buildPreview() : Container(),
+          new Divider(height: dividerHeight),
+          new Container(
+            decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+            child: _buildTextComposer(),
+          ),
+        ]));
   }
 
-  Widget buildPreview(){
+  Widget buildPreview() {
     return Column(
       children: <Widget>[
         Divider(height: dividerHeight),
         Padding(padding: EdgeInsets.all(attachmentDividerPadding)),
         SizedBox(
           height: previewMaxSize,
-          child:
-          Stack(
+          child: Stack(
             fit: StackFit.loose,
             children: <Widget>[
-              _selectedFileType == FileType.IMAGE || _selectedExtension == "gif" ? Image.file(
-                File(_filePath),
-              ) : Center(
-                child: Icon(
-                  Icons.insert_drive_file,
-                  size: previewDefaultIconSize,
-                  color: Colors.grey,
-                ),
-              ),
+              _selectedFileType == FileType.IMAGE || _selectedExtension == "gif"
+                  ? Image.file(
+                      File(_filePath),
+                    )
+                  : Center(
+                      child: Icon(
+                        Icons.insert_drive_file,
+                        size: previewDefaultIconSize,
+                        color: Colors.grey,
+                      ),
+                    ),
               Padding(
                 padding: EdgeInsets.all(iconTextPadding),
                 child: GestureDetector(
                   onTap: () => _closePreview(),
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black38,
-                      borderRadius: BorderRadiusDirectional.circular(previewCloseIconBorderRadius)
+                    decoration: BoxDecoration(color: Colors.black38, borderRadius: BorderRadiusDirectional.circular(previewCloseIconBorderRadius)),
+                    child: Icon(
+                      Icons.close,
+                      size: previewCloseIconSize,
+                      color: Colors.white,
                     ),
-                    child: Icon(Icons.close, size: previewCloseIconSize, color: Colors.white,),
                   ),
                 ),
               ),
@@ -262,91 +307,138 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildTextComposer() {
-    return new IconTheme(
-      data: new IconThemeData(color: Theme.of(context).accentColor),
-      child: new Container(
+    List<Widget> widgets = List();
+    widgets.add(buildLeftComposerPart(
+      type: _getComposerType(),
+      onShowAttachmentChooser: _showAttachmentChooser,
+      onAudioRecordingAbort: _onAudioRecordingAbort,
+    ));
+    widgets.add(buildCenterComposerPart(
+      context: context,
+      type: _getComposerType(),
+      textController: _textController,
+      onTextChanged: _onInputTextChanged,
+      text: _composingAudioTimer,
+    ));
+    widgets.addAll(buildRightComposerPart(
+      onRecordAudioPressed: _onRecordAudioPressed,
+      onRecordVideoPressed: _onRecordVideoPressed,
+      type: _getComposerType(),
+      onSendText: _onMessageSend,
+      imageVideoKey: _imageVideoKey,
+    ));
+    return IconTheme(
+      data: IconThemeData(color: Theme.of(context).accentColor),
+      child: Container(
         margin: const EdgeInsets.symmetric(horizontal: composerHorizontalPadding),
-        child: new Row(children: <Widget>[
-          new IconButton(
-            icon: new Icon(Icons.add),
-            onPressed: () => _showAttachmentChooser(),
-          ),
-          new Flexible(
-              child: Container(
-            padding: EdgeInsets.all(composerTextFieldPadding),
-            decoration: BoxDecoration(
-              border: Border.all(color: chatComposeBorder),
-              borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
-            ),
-            child: new TextField(
-              controller: _textController,
-              onChanged: (String text) {
-                setState(() {
-                  _isComposing = text.length > 0;
-                });
-              },
-              onSubmitted: _isComposing ? _handleSubmitted : null,
-              decoration: new InputDecoration.collapsed(
-                hintText: AppLocalizations.of(context).composePlaceholder,
-              ),
-            ),
-          )),
-          _isComposing
-              ? new IconButton(
-                  icon: new Icon(Icons.send),
-                  onPressed: () => _handleSubmitted(_textController.text),
-                )
-              : new IconButton(
-                  icon: new Icon(Icons.keyboard_voice),
-                  onPressed: null,
-                ),
-          !_isComposing
-              ? new IconButton(
-                  icon: new Icon(Icons.camera_alt),
-                  onPressed: null,
-                )
-              : Container(),
-        ]),
+        child: Row(
+          children: widgets,
+        ),
       ),
     );
   }
 
-  void _handleSubmitted(String text) {
-    _textController.clear();
-    if(_filePath.isEmpty) {
-      _messagesBloc.submitMessage(text);
+  ComposerModeType _getComposerType() {
+    if (_isComposingText) {
+      return ComposerModeType.isComposing;
+    } else {
+      if (_composingAudioTimer != null) {
+        return ComposerModeType.isVoiceRecording;
+      }
     }
-    else{
+    return ComposerModeType.compose;
+  }
+
+  void _onInputTextChanged(String text) {
+    setState(() {
+      _isComposingText = text.length > 0;
+    });
+  }
+
+  void _onMessageSend([int knownType]) {
+    String text = _textController.text;
+    _textController.clear();
+    if (_filePath.isEmpty) {
+      _messagesBloc.submitMessage(text);
+    } else {
       int type = 0;
-      switch(_selectedFileType){
-        case FileType.IMAGE:
-          type = Context.msgImage;
-          break;
-        case FileType.VIDEO:
-          type = Context.msgVideo;
-          break;
-        case FileType.AUDIO:
-          type = Context.msgAudio;
-          break;
-        case FileType.CUSTOM:
-          if(_selectedExtension == "gif"){
-            type = Context.msgGif;
-          }
-          else{
+      if (knownType == null) {
+        switch (_selectedFileType) {
+          case FileType.IMAGE:
+            type = Context.msgImage;
+            break;
+          case FileType.VIDEO:
+            type = Context.msgVideo;
+            break;
+          case FileType.AUDIO:
+            type = Context.msgAudio;
+            break;
+          case FileType.CUSTOM:
+            if (_selectedExtension == "gif") {
+              type = Context.msgGif;
+            } else {
+              type = Context.msgFile;
+            }
+            break;
+          case FileType.ANY:
             type = Context.msgFile;
-          }
-          break;
-        case FileType.ANY:
-          type = Context.msgFile;
-          break;
+            break;
+        }
+      } else {
+        type = knownType;
       }
       _messagesBloc.submitAttachmentMessage(_filePath, type, text);
     }
 
     _closePreview();
     setState(() {
-      _isComposing = false;
+      _isComposingText = false;
     });
+  }
+
+  _onRecordAudioPressed() async {
+    if (ComposerModeType.isVoiceRecording != _getComposerType()) {
+      _chatComposerBloc.dispatch(StartAudioRecording());
+    } else {
+      _chatComposerBloc.dispatch(StopAudioRecording(shouldSend: true));
+    }
+  }
+
+  _onAudioRecordingAbort() {
+    _chatComposerBloc.dispatch(StopAudioRecording(shouldSend: false));
+  }
+
+  _onRecordVideoPressed() {
+    if (hideOverlay()) {
+      return;
+    }
+    _overlayEntry = OverlayEntry(builder: (context) {
+      return Stack(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              hideOverlay();
+            },
+          ),
+          buildCameraChooserOverlay(context, _imageVideoKey, _onCameraStateChange),
+        ],
+      );
+    });
+    Overlay.of(context).insert(this._overlayEntry);
+  }
+
+  bool hideOverlay() {
+    if (_overlayEntry != null) {
+      _overlayEntry.remove();
+      _overlayEntry = null;
+      return true;
+    }
+    return false;
+  }
+
+  _onCameraStateChange(bool pickImage) async {
+    hideOverlay();
+    _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: pickImage));
   }
 
   String getInitials(String name, String subTitle) {
@@ -359,45 +451,44 @@ class _ChatScreenState extends State<ChatScreen> {
     return "";
   }
 
-  _showAttachmentChooser() {
+  void _showAttachmentChooser() {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context){
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.image),
-              title: Text(AppLocalizations.of(context).image),
-              onTap: () => _getFilePath(FileType.IMAGE),
-            ),
-            ListTile(
-              leading: Icon(Icons.video_library),
-              title: Text(AppLocalizations.of(context).video),
-              onTap: () => _getFilePath(FileType.VIDEO),
-            ),
-            ListTile(
-              leading: Icon(Icons.picture_as_pdf),
-              title: Text(AppLocalizations.of(context).pdf),
-              onTap: () => _getFilePath(FileType.CUSTOM, "pdf"),
-            ),
-            ListTile(
-              leading: Icon(Icons.gif),
-              title: Text(AppLocalizations.of(context).gif),
-              onTap: () => _getFilePath(FileType.CUSTOM, "gif"),
-            ),
-            ListTile(
-              leading: Icon(Icons.insert_drive_file),
-              title: Text(AppLocalizations.of(context).file),
-              onTap: () => _getFilePath(FileType.ANY),
-            ),
-          ],
-        );
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.image),
+                title: Text(AppLocalizations.of(context).image),
+                onTap: () => _getFilePath(FileType.IMAGE),
+              ),
+              ListTile(
+                leading: Icon(Icons.video_library),
+                title: Text(AppLocalizations.of(context).video),
+                onTap: () => _getFilePath(FileType.VIDEO),
+              ),
+              ListTile(
+                leading: Icon(Icons.picture_as_pdf),
+                title: Text(AppLocalizations.of(context).pdf),
+                onTap: () => _getFilePath(FileType.CUSTOM, "pdf"),
+              ),
+              ListTile(
+                leading: Icon(Icons.gif),
+                title: Text(AppLocalizations.of(context).gif),
+                onTap: () => _getFilePath(FileType.CUSTOM, "gif"),
+              ),
+              ListTile(
+                leading: Icon(Icons.insert_drive_file),
+                title: Text(AppLocalizations.of(context).file),
+                onTap: () => _getFilePath(FileType.ANY),
+              ),
+            ],
+          );
+        });
   }
 
-  _getFilePath(FileType fileType, [String extension]) async{
+  _getFilePath(FileType fileType, [String extension]) async {
     navigation.pop(context, "Chat - ModalBottomSheet");
     String filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
     _fileName = Path.basename(filePath);
@@ -406,7 +497,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _selectedExtension = extension;
     setState(() {
       _filePath = filePath != null ? filePath : "";
-      _isComposing = _filePath.isEmpty ? false : true;
+      _isComposingText = _filePath.isEmpty ? false : true;
     });
   }
 
@@ -414,8 +505,8 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       _filePath = "";
       _selectedExtension = "";
-      if (_textController.text.isEmpty){
-        _isComposing = false;
+      if (_textController.text.isEmpty) {
+        _isComposingText = false;
       }
     });
   }
@@ -426,4 +517,3 @@ class _ChatScreenState extends State<ChatScreen> {
       "ChatProfileView");
   }
 }
-

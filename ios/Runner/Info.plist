@@ -42,6 +42,13 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSContactsUsageDescription</key>
-    <string>This app requires contacts access to function properly.</string>
+    <string>This app requires contacts access to TODO</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app uses the microphone to record your speech to TODO.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+    	<string>audio</string>
+    </array>
+
 </dict>
 </plist>

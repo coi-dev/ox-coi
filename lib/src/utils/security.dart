@@ -40,16 +40,14 @@
  * for more details.
  */
 
-import 'package:date_format/date_format.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-String getTimeForTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), [HH, ':', nn]);
-}
-
-String getNowTimestamp() {
-  return DateTime.now().millisecondsSinceEpoch.toString();
-}
-
-String getTimerForTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), [nn, ':', ss, ':', SSS]);
+Future<bool> hasPermission(PermissionGroup permissionGroup) async {
+  PermissionStatus readContactsStatus = await PermissionHandler().checkPermissionStatus(permissionGroup);
+  if (readContactsStatus != PermissionStatus.granted) {
+    Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([permissionGroup]);
+    return permissions[permissionGroup] == PermissionStatus.granted;
+  } else {
+    return true;
+  }
 }
