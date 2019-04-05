@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_profile_group_view.dart';
 import 'package:ox_talk/src/chat/chat_profile_single_view.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
-import 'package:ox_talk/src/contact/contact_change_bloc.dart';
-import 'package:ox_talk/src/contact/contact_change_event.dart';
-import 'package:ox_talk/src/contact/contact_item.dart';
-import 'package:ox_talk/src/contact/contact_item_bloc.dart';
-import 'package:ox_talk/src/contact/contact_item_event.dart';
-import 'package:ox_talk/src/contact/contact_item_state.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/styles.dart';
-import 'package:ox_talk/src/utils/toast.dart';
 
 class ChatProfileView extends StatefulWidget {
   final int _chatId;
