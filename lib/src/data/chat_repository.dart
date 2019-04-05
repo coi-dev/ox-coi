@@ -56,16 +56,16 @@ class ChatRepository extends Repository<Chat> {
   }
 
   Future<void> setupChatListAfterUpdate(int chatId) async {
-    if (chatId != 0) {
-      Chat updatedChat = get(chatId);
-      updatedChat.setLastUpdate();
-    }
     ChatList chatList = ChatList();
     int chatCount = await chatList.getChatCnt();
     List<int> chatIds = List();
     for (int i = 0; i < chatCount; i++) {
       int chatId = await chatList.getChat(i);
       chatIds.add(chatId);
+    }
+    if (chatId != 0 && chatIds.contains(chatId)) {
+      Chat updatedChat = get(chatId);
+      updatedChat.setLastUpdate();
     }
     update(ids: chatIds);
   }
