@@ -53,7 +53,7 @@ import 'package:ox_talk/src/data/repository_stream_handler.dart';
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
   Repository<Contact> contactRepository;
-  RepositoryStreamHandler repositoryStreamHandler;
+  RepositoryEventStreamHandler repositoryStreamHandler;
   int contactListType;
 
   @override
@@ -102,7 +102,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
   }
 
   void setupContactListener() async {
-    repositoryStreamHandler = RepositoryStreamHandler(Type.publish, Event.contactsChanged, _dispatchContactsChanged);
+    repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.contactsChanged, _dispatchContactsChanged);
     contactRepository.addListener(repositoryStreamHandler);
   }
 

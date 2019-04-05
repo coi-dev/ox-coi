@@ -44,17 +44,34 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/repository.dart';
 
 class ChatRepository extends Repository<Chat> {
-
   ChatRepository(RepositoryItemCreator<Chat> creator) : super(creator);
 
   @override
-  onData(Event event) {
+  onData(Event event) async {
+    if (event.hasType(Event.incomingMsg) || event.hasType(Event.msgsChanged)) {
+      int chatId = event.data1;
+      await setupChatListAfterUpdate(chatId);
+    }
     super.onData(event);
+  }
+
+  Future<void> setupChatListAfterUpdate(int chatId) async {
+    if (chatId != 0) {
+      Chat updatedChat = get(chatId);
+      updatedChat.setLastUpdate();
+    }
+    ChatList chatList = ChatList();
+    int chatCount = await chatList.getChatCnt();
+    List<int> chatIds = List();
+    for (int i = 0; i < chatCount; i++) {
+      int chatId = await chatList.getChat(i);
+      chatIds.add(chatId);
+    }
+    update(ids: chatIds);
   }
 
   @override
   onError(error) {
     super.onError(error);
   }
-
 }

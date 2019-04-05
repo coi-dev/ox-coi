@@ -128,26 +128,17 @@ abstract class Repository<T extends Base> {
     return _items.containsKey(id);
   }
 
-  Future<void> addListener(BaseRepositoryStreamHandler streamHandler) async {
-    if (streamHandler is RepositoryStreamHandler) {
+  Future<void> addListener(BaseRepositoryEventStreamHandler streamHandler) async {
+    if (streamHandler is RepositoryEventStreamHandler) {
       await _setupCoreListener(streamHandler, streamHandler.eventId);
     } else if (streamHandler is RepositoryMultiEventStreamHandler) {
       for (int eventId in streamHandler.eventIds) {
         await _setupCoreListener(streamHandler, eventId);
       }
     }
-  }
-
-  Future _setupCoreListener(BaseRepositoryStreamHandler streamHandler, int eventId) async {
-    int listenerId = await _core.listen(eventId, streamHandler.streamController);
-    if (streamHandler is RepositoryStreamHandler) {
-      streamHandler.listenerId = listenerId;
-    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
-      streamHandler.listenerIds.add(listenerId);
-    }
-    streamHandler.streamController.stream.listen((event) {
-      onData(event);
-        streamHandler.onData();
+    streamHandler.streamController.stream.listen((event) async {
+      await onData(event);
+      streamHandler.onData();
     }).onError((error) {
       error(error);
       if (streamHandler.onError != null) {
@@ -156,8 +147,17 @@ abstract class Repository<T extends Base> {
     });
   }
 
-  void removeListener(BaseRepositoryStreamHandler streamHandler) {
-    if (streamHandler is RepositoryStreamHandler) {
+  Future _setupCoreListener(BaseRepositoryEventStreamHandler streamHandler, int eventId) async {
+    int listenerId = await _core.listen(eventId, streamHandler.streamController);
+    if (streamHandler is RepositoryEventStreamHandler) {
+      streamHandler.listenerId = listenerId;
+    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
+      streamHandler.listenerIds.add(listenerId);
+    }
+  }
+
+  void removeListener(BaseRepositoryEventStreamHandler streamHandler) {
+    if (streamHandler is RepositoryEventStreamHandler) {
       tearDownCoreListener(streamHandler.eventId, streamHandler.listenerId);
     } else if (streamHandler is RepositoryMultiEventStreamHandler) {
       for (int index = 0; index < streamHandler.listenerIds.length; index++) {

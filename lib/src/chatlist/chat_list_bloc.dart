@@ -51,7 +51,6 @@ import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/data/repository_stream_handler.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
-  final Repository<ChatList> chatListRepository = RepositoryManager.get(RepositoryType.chatList);
   final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
   RepositoryMultiEventStreamHandler repositoryStreamHandler;
 
@@ -70,14 +69,15 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       }
     } else if (event is ChatListModified) {
       yield ChatListStateSuccess(
-          chatIds: chatRepository.getAllIds(),
-          chatLastUpdateValues: chatRepository.getAllLastUpdateValues());
+        chatIds: chatRepository.getAllIds(),
+        chatLastUpdateValues: chatRepository.getAllLastUpdateValues(),
+      );
     }
   }
 
   @override
   void dispose() {
-    chatListRepository.removeListener(repositoryStreamHandler);
+    chatRepository.removeListener(repositoryStreamHandler);
     super.dispose();
   }
 
@@ -95,12 +95,12 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   void setupChatListListener() {
     if (repositoryStreamHandler == null) {
-      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.msgsChanged, Event.contactsChanged], _requestChatList);
-      chatListRepository.addListener(repositoryStreamHandler);
+      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _chatListModified);
+      chatRepository.addListener(repositoryStreamHandler);
     }
   }
 
-  _requestChatList() {
-    dispatch(RequestChatList());
+  _chatListModified() {
+    dispatch(ChatListModified());
   }
 }

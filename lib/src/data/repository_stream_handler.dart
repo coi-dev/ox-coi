@@ -50,7 +50,7 @@ enum Type {
   replay,
 }
 
-abstract class BaseRepositoryStreamHandler {
+abstract class BaseRepositoryEventStreamHandler {
   final Type type;
 
   final Function onData;
@@ -62,7 +62,7 @@ abstract class BaseRepositoryStreamHandler {
 
   get streamController => _streamController;
 
-  BaseRepositoryStreamHandler(this.type, this.onData, [this.onError]) {
+  BaseRepositoryEventStreamHandler(this.type, this.onData, [this.onError]) {
     switch (type) {
       case Type.publish:
         _streamController = PublishSubject();
@@ -77,15 +77,15 @@ abstract class BaseRepositoryStreamHandler {
   }
 }
 
-class RepositoryStreamHandler extends BaseRepositoryStreamHandler {
+class RepositoryEventStreamHandler extends BaseRepositoryEventStreamHandler {
   final int eventId;
 
   int listenerId;
 
-  RepositoryStreamHandler(Type type, this.eventId, onData, [onError]) : super(type, onData, onError);
+  RepositoryEventStreamHandler(Type type, this.eventId, onData, [onError]) : super(type, onData, onError);
 }
 
-class RepositoryMultiEventStreamHandler extends BaseRepositoryStreamHandler {
+class RepositoryMultiEventStreamHandler extends BaseRepositoryEventStreamHandler {
   final List<int> eventIds;
 
   List<int> listenerIds = List();
