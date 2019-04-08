@@ -136,6 +136,8 @@ class AppLocalizations {
 
   String get pdf => Intl.message('PDF', name: 'pdf');
 
+  String get copiedToClipboard => Intl.message('Copied to clipboard', name: 'copiedToClipboard');
+
   // Core
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
 
@@ -268,14 +270,17 @@ class AppLocalizations {
   // Mail
   String get mailTitle => Intl.message('Mail', name: 'mailTitle');
 
-  // Chat / chat list / invite list
-  String get chatTitle => Intl.message('Chat', name: 'chatTitle');
-
-  String get composePlaceholder => Intl.message('Type something...', name: 'composePlaceholder');
+  // Chat list / invite list
 
   String get inviteEmptyList => Intl.message('No invites', name: 'inviteEmptyList');
 
   String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
+
+  // Chat
+
+  String get chatTitle => Intl.message('Chat', name: 'chatTitle');
+
+  String get composePlaceholder => Intl.message('Type something...', name: 'composePlaceholder');
 
   String get recordingAudioMessageFailure => Intl.message('Audio recording failed, missing permissions', name: 'recordingAudioMessageFailure');
 

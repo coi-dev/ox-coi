@@ -44,7 +44,9 @@ import 'dart:io';
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/message/message_attachment_bloc.dart';
 import 'package:ox_talk/src/message/message_attachment_event.dart';
 import 'package:ox_talk/src/message/message_item_bloc.dart';
@@ -54,6 +56,7 @@ import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/conversion.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
+import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/avatar.dart';
 
 class ChatMessageItem extends StatefulWidget {
@@ -85,14 +88,17 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       bloc: _messagesBloc,
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
-            child: state.messageIsOutgoing
-                ? buildSentMessage(state)
-                : buildReceivedMessage(
-                    widget._isGroupChat,
-                    state,
-                  ),
+          return GestureDetector(
+            onLongPress: !state.hasFile ? () => _onTab(state.messageText) : null,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
+              child: state.messageIsOutgoing
+                  ? buildSentMessage(state)
+                  : buildReceivedMessage(
+                      widget._isGroupChat,
+                      state,
+                    ),
+            ),
           );
         } else {
           return Center(
@@ -101,6 +107,13 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         }
       },
     );
+  }
+
+  _onTab(String message) {
+    var clipboardData = ClipboardData(text: message);
+    Clipboard.setData(clipboardData);
+    String clipboardToast = AppLocalizations.of(context).copiedToClipboard;
+    showToast(clipboardToast);
   }
 
   Widget buildSentMessage(MessageItemStateSuccess state) {
