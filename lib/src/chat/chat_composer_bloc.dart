@@ -68,7 +68,8 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     if (event is StartAudioRecording) {
       try {
         bool hasContactPermission = await hasPermission(PermissionGroup.microphone);
-        if (hasContactPermission) {
+        bool hasFilesPermission = await hasPermission(PermissionGroup.storage);
+        if (hasContactPermission && hasFilesPermission) {
           await startAudioRecorder();
           yield ChatComposerRecordingAudio(timer: "00:00:00");
         } else {
