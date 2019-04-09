@@ -7,11 +7,11 @@ OX Talk is a mail based chat app. This app provides the user interface for an IM
 
 ## Information
 - [Documentation](https://github.com/open-xchange/ox-talk/wiki/Developer-Documentation)
-- The IMAP / SMTP interactions are managed by the [delta_chat_core plugin](https://github.com/open-xchange/flutter-deltachat-core)
+- The IMAP / SMTP interactions are managed by the [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core)
 
 ## Requirements
 - The latest Flutter stable version is used (if problems occur try the [Flutter Dev Channel](https://github.com/flutter/flutter/wiki/Flutter-build-release-channels))
-- The [delta_chat_core plugin](https://github.com/open-xchange/flutter-deltachat-core) needs to be checked out right beside the OX Talk app (the repositories should be located in the same folder) and please follow the requirements given by that project
+- The [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core) needs to be checked out right beside the OX Talk app (the repositories should be located in the same folder) and please follow the requirements given by that project
 
 ## Execution
 - Build and run the project via your IDE / Flutter CLI
@@ -19,6 +19,7 @@ OX Talk is a mail based chat app. This app provides the user interface for an IM
 ## Development
 To be able to edit / extend this project the following steps are important:
 
+- Create an issue
 - Perform all actions mentioned under **Execution**
 - Implement your changes
 - Add tests and code for the test suite
