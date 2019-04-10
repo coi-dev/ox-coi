@@ -107,12 +107,21 @@ class _ContactListState extends State<ContactListView> {
   ContactListBloc _contactListBloc = ContactListBloc();
   ContactImportBloc _contactImportBloc = ContactImportBloc();
   Navigation navigation = Navigation();
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _contactListBloc.dispatch(RequestContacts());
     setupContactImport();
+    _searchController.addListener(() {
+      var query = _searchController.text;
+      if (query.isEmpty) {
+        _contactListBloc.dispatch(RequestContacts());
+      } else {
+        _contactListBloc.dispatch(FilterContacts(query: query));
+      }
+    });
   }
 
   setupContactImport() async {
@@ -143,20 +152,42 @@ class _ContactListState extends State<ContactListView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _contactListBloc,
-      builder: (context, state) {
-        if (state is ContactListStateSuccess) {
-          return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
-        } else if (state is! ContactListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Icon(Icons.error);
-        }
-      },
+    return Column(
+      children: <Widget>[
+        TextField(
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context).contactsSearchHint,
+            prefixIcon: Icon(Icons.search),
+            suffixIcon: GestureDetector(
+              child: Icon(Icons.close),
+              onTap: _exitSearch,
+            ),
+          ),
+          controller: _searchController,
+        ),
+        Expanded(
+          child: BlocBuilder(
+            bloc: _contactListBloc,
+            builder: (context, state) {
+              if (state is ContactListStateSuccess) {
+                return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
+              } else if (state is! ContactListStateFailure) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Icon(Icons.error);
+              }
+            },
+          ),
+        ),
+      ],
     );
+  }
+
+  void _exitSearch() {
+    _searchController.text = "";
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   Widget getImportAction() {

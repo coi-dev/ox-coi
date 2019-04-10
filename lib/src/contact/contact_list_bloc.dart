@@ -83,7 +83,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
-    } else if(event is RequestChatContacts){
+    } else if (event is RequestChatContacts) {
       yield ContactListStateLoading();
       try {
         contactRepository = RepositoryManager.get(RepositoryType.contact, event.chatId);
@@ -92,6 +92,10 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
+    } else if (event is FilterContacts) {
+      filterContacts(event.query);
+    } else if (event is ContactsFiltered) {
+      yield ContactListStateSuccess(contactIds: event.ids, contactLastUpdateValues: event.lastUpdates);
     }
   }
 
@@ -114,14 +118,13 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
   Future _updateValidContactIds() async {
     Context _context = Context();
     List<int> contactIds;
-    if(contactListType == ContactRepository.validContacts){
+    if (contactListType == ContactRepository.validContacts) {
       contactIds = List.from(await _context.getContacts(2, null));
-    }else if(contactListType == ContactRepository.blockedContacts){
+    } else if (contactListType == ContactRepository.blockedContacts) {
       contactIds = List.from(await _context.getBlockedContacts());
-    }else if(contactListType != ContactRepository.inviteContacts){
+    } else if (contactListType != ContactRepository.inviteContacts) {
       contactIds = List.from(await _context.getChatContacts(contactListType));
-    }
-    else{
+    } else {
       return;
     }
     contactRepository.putIfAbsent(ids: contactIds);
@@ -145,4 +148,15 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     contactRepository.putIfAbsent(ids: contactIds);
     dispatch(ContactsChanged());
   }
+
+  void filterContacts(String query) async {
+    Context context = Context();
+    List<int> contactIds = List.from(await context.getContacts(2, query));
+    List<int> lastUpdates = List();
+    contactIds.forEach((contactId) {
+      lastUpdates.add(contactRepository.get(contactId).lastUpdate);
+    });
+  dispatch(ContactsFiltered(ids: contactIds, lastUpdates: lastUpdates));
+  }
+
 }

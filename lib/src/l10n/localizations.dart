@@ -271,7 +271,6 @@ class AppLocalizations {
   String get mailTitle => Intl.message('Mail', name: 'mailTitle');
 
   // Chat list / invite list
-
   String get inviteEmptyList => Intl.message('No invites', name: 'inviteEmptyList');
 
   String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
@@ -348,6 +347,8 @@ class AppLocalizations {
   String contactImportSuccess(count) => Intl.message('$count system contacts imported', name: 'contactImportSuccess', args: [count]);
 
   String get contactImportFailure => Intl.message('Import failed, missing permissions', name: 'contactImportFailure');
+
+  String get contactsSearchHint => Intl.message('Search contacts', name: 'contactsSearchHint');
 
   //BlockedContacts
   String get blockedContactsTitle => Intl.message('Blocked contacts', name: 'blockedContactsTitle');

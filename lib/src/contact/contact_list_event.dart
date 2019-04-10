@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'package:meta/meta.dart';
+
 abstract class ContactListEvent {}
 
 class RequestContacts extends ContactListEvent {}
@@ -54,4 +56,17 @@ class RequestChatContacts extends ContactListEvent {
   int chatId;
 
   RequestChatContacts(this.chatId);
+}
+
+class FilterContacts extends ContactListEvent {
+  final String query;
+
+  FilterContacts({@required this.query});
+}
+
+class ContactsFiltered extends ContactListEvent {
+  final List<int> ids;
+  final List<int> lastUpdates;
+
+  ContactsFiltered({@required this.ids, @required this.lastUpdates});
 }
