@@ -19,4 +19,4 @@ build:
   - tools/build.triggerBuild.sh
   artifacts:
     paths:
-    - ./*.apk
+    - build/app/outputs/apk/release/*.apk
