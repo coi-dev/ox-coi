@@ -51,6 +51,7 @@ class AvatarListItem extends StatelessWidget {
   final String subTitle;
   final String imagePath;
   final Color color;
+  final int freshMessageCount;
   final Function onTap;
   final Widget titleIcon;
   final Widget subTitleIcon;
@@ -63,6 +64,7 @@ class AvatarListItem extends StatelessWidget {
       this.avatarIcon,
       this.imagePath,
       this.color,
+      this.freshMessageCount,
       this.titleIcon,
       this.subTitleIcon});
 
@@ -118,6 +120,27 @@ class AvatarListItem extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                freshMessageCount != null && freshMessageCount > 0 ?
+                Container(
+                  margin: EdgeInsets.only(top: 8.0),
+                  padding: EdgeInsets.only(left: 8.0,right: 8.0, top: 4.0, bottom: 4.0),
+                  decoration: BoxDecoration(
+                    color: chatMain,
+                    borderRadius: BorderRadius.circular(100)
+                  ),
+                  child: Text(
+                    freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0
+                    ),
+                  ),
+                ) : Container()
+              ],
             )
           ],
         ),

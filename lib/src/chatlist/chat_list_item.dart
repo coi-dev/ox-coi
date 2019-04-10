@@ -77,10 +77,12 @@ class _ChatListItemState extends State<ChatListItem> {
         String name;
         String subTitle;
         Color color;
+        int freshMessageCount;
         if (state is ChatStateSuccess) {
           name = state.name;
           subTitle = state.subTitle;
           color = state.color;
+          freshMessageCount = state.freshMessageCount;
         } else {
           name = "";
           subTitle = "";
@@ -89,6 +91,7 @@ class _ChatListItemState extends State<ChatListItem> {
           title: name,
           subTitle: subTitle,
           color: color,
+          freshMessageCount: freshMessageCount,
           subTitleIcon: _chatBloc.isGroup
               ? Icon(
                   Icons.group,
