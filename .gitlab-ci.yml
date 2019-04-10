@@ -1,0 +1,22 @@
+before_script:
+- export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+  - .gradle/wrapper
+  - .gradle/caches
+
+stages:
+- build
+
+build:
+  stage: build
+  tags:
+  - docker
+  - mobile
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  script:
+  - tools/build.triggerBuild.sh
+  artifacts:
+    paths:
+    - ./*.apk
