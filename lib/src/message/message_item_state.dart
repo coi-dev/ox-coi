@@ -73,7 +73,7 @@ class MessageItemStateLoading extends MessageItemState {
 
 class MessageItemStateSuccess extends MessageItemState {
   final String messageText;
-  final String messageTimestamp;
+  final int messageTimestamp;
   final bool messageIsOutgoing;
   final bool hasFile;
   final ContactWrapper contactWrapper;

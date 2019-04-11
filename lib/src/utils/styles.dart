@@ -78,6 +78,8 @@ const progressText = TextStyle(
 // Chat
 const chatItemTitle = TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0);
 
+const messageListDateSeparator = TextStyle(color: messageListDateSeparatorForeground);
+
 // Messages
 final messageTimeText = TextStyle(
   color: messageTimeForeground,

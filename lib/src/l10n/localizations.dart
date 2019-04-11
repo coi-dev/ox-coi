@@ -276,7 +276,6 @@ class AppLocalizations {
   String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
 
   // Chat
-
   String get chatTitle => Intl.message('Chat', name: 'chatTitle');
 
   String get composePlaceholder => Intl.message('Type something...', name: 'composePlaceholder');
@@ -284,6 +283,10 @@ class AppLocalizations {
   String get recordingAudioMessageFailure => Intl.message('Audio recording failed, missing permissions', name: 'recordingAudioMessageFailure');
 
   String get recordingVideoMessageFailure => Intl.message('Video recording failed, missing permissions', name: 'recordingVideoMessageFailure');
+
+  String get chatToday => Intl.message('Today', name: 'chatToday');
+
+  String get chatYesterday => Intl.message('Yesterday', name: 'chatYesterday');
 
   //Chat profile view
   String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');

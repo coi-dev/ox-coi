@@ -50,4 +50,8 @@ class RequestMessages extends MessagesEvent {
 
 class UpdateMessages extends MessagesEvent {}
 
-class MessagesLoaded extends MessagesEvent {}
+class MessagesLoaded extends MessagesEvent {
+  List<int> dateMarkerIds;
+
+  MessagesLoaded({this.dateMarkerIds});
+}

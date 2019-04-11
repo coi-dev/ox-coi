@@ -54,6 +54,7 @@ import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/conversion.dart';
+import 'package:ox_talk/src/utils/date.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/toast.dart';
@@ -63,8 +64,9 @@ class ChatMessageItem extends StatefulWidget {
   final int _chatId;
   final int _messageId;
   final bool _isGroupChat;
+  final bool _hasDateMarker;
 
-  ChatMessageItem(this._chatId, this._messageId, this._isGroupChat, key) : super(key: Key(key));
+  ChatMessageItem(this._chatId, this._messageId, this._isGroupChat, this._hasDateMarker, key) : super(key: Key(key));
 
   @override
   _ChatMessageItemState createState() => _ChatMessageItemState();
@@ -88,17 +90,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       bloc: _messagesBloc,
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
-          return GestureDetector(
-            onLongPress: !state.hasFile ? () => _onTab(state.messageText) : null,
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
-              child: state.messageIsOutgoing
-                  ? buildSentMessage(state)
-                  : buildReceivedMessage(
-                      widget._isGroupChat,
-                      state,
-                    ),
-            ),
+          return Column(
+            crossAxisAlignment: state.messageIsOutgoing ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: buildMessageAndMarker(state),
           );
         } else {
           return Center(
@@ -107,6 +101,31 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         }
       },
     );
+  }
+
+  List<Widget> buildMessageAndMarker(MessageItemStateSuccess state) {
+    List<Widget> widgets = List();
+    if (widget._hasDateMarker) {
+      String date = getDateFormTimestamp(state.messageTimestamp, true, true, context);
+      widgets.add(Center(
+          child: Text(
+        date,
+        style: messageListDateSeparator,
+      )));
+    }
+    widgets.add(GestureDetector(
+      onLongPress: !state.hasFile ? () => _onTab(state.messageText) : null,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
+        child: state.messageIsOutgoing
+            ? buildSentMessage(state)
+            : buildReceivedMessage(
+                widget._isGroupChat,
+                state,
+              ),
+      ),
+    ));
+    return widgets;
   }
 
   _onTab(String message) {
@@ -118,7 +137,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
 
   Widget buildSentMessage(MessageItemStateSuccess state) {
     String text = state.messageText;
-    String time = state.messageTimestamp;
+    String time = getTimeFormTimestamp(state.messageTimestamp);
     bool hasFile = state.hasFile;
     return FractionallySizedBox(
         alignment: Alignment.topRight,
@@ -148,26 +167,34 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
           ),
         ],
         color: color,
-        borderRadius: BorderRadius.only(topRight: Radius.circular(messagesBoxRadius), bottomLeft: Radius.circular(messagesBoxRadius), topLeft: Radius.circular(messagesBoxRadius)));
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(messagesBoxRadius),
+            bottomLeft: Radius.circular(messagesBoxRadius),
+            topLeft: Radius.circular(messagesBoxRadius)));
   }
 
   BoxDecoration buildReceiverBoxDecoration(Color color) {
     return BoxDecoration(
-      shape: BoxShape.rectangle,
-      boxShadow: [
-        new BoxShadow(
-          color: messageBoxGrey,
-          blurRadius: messagesBlurRadius,
-        ),
-      ],
-      color: color,
-      borderRadius: BorderRadius.only(topRight: Radius.circular(messagesBoxRadius), bottomRight: Radius.circular(messagesBoxRadius), bottomLeft: Radius.circular(messagesBoxRadius)));
+        shape: BoxShape.rectangle,
+        boxShadow: [
+          new BoxShadow(
+            color: messageBoxGrey,
+            blurRadius: messagesBlurRadius,
+          ),
+        ],
+        color: color,
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(messagesBoxRadius),
+            bottomRight: Radius.circular(messagesBoxRadius),
+            bottomLeft: Radius.circular(messagesBoxRadius)));
   }
 
   Widget buildAttachmentMessage(AttachmentWrapper attachment, String text, String time) {
     return GestureDetector(
       onTap: _openAttachment,
-      child: attachment.type == ChatMsg.typeImage ? buildImageAttachmentMessage(attachment, text, time) : buildGenericAttachmentMessage(attachment, time),
+      child: attachment.type == ChatMsg.typeImage
+          ? buildImageAttachmentMessage(attachment, text, time)
+          : buildGenericAttachmentMessage(attachment, time),
     );
   }
 
@@ -185,7 +212,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text(attachment.filename,
+              Text(
+                attachment.filename,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -207,9 +235,11 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       children: <Widget>[
         Image.file(file),
         text.isNotEmpty ? Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)) : Container(),
-        text.isNotEmpty ? Flexible(
-          child: Text(text),
-        ) : Container(),
+        text.isNotEmpty
+            ? Flexible(
+                child: Text(text),
+              )
+            : Container(),
         Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
         buildTime(time),
       ],
@@ -222,7 +252,10 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Flexible(
-          child: Text(text),
+          child: Text(
+            text,
+            style: defaultText,
+          ),
         ),
         Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
         buildTime(time),
@@ -245,7 +278,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       color = contactWrapper.contactColor;
     }
     String text = state.messageText;
-    String time = state.messageTimestamp;
+    String time = getTimeFormTimestamp(state.messageTimestamp);
     bool hasFile = state.hasFile;
     return FractionallySizedBox(
       alignment: Alignment.topLeft,
@@ -300,5 +333,4 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   void _openAttachment() {
     _attachmentBloc.dispatch(RequestAttachment(widget._chatId, widget._messageId));
   }
-
 }

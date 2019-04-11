@@ -80,6 +80,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
       yield MessagesStateSuccess(
         messageIds: messageRepository.getAllIds().reversed.toList(growable: false),
         messageLastUpdateValues: messageRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+        dateMarkerIds: event.dateMarkerIds,
       );
     }
   }
@@ -100,10 +101,18 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
   void _updateMessages() => dispatch(UpdateMessages());
 
   void _setupMessages() async {
+    List<int> dateMakerIds = List();
     Context context = Context();
-    List<int> messageIds = List.from(await context.getChatMessages(_chatId));
+    List<int> messageIds = List.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
+    for (int index = 0; index < messageIds.length; index++) {
+      int previousIndex = index - 1;
+      if (previousIndex >= 0 && messageIds[previousIndex] == ChatMsg.idDayMarker) {
+        dateMakerIds.add(messageIds[index]);
+      }
+    }
+    messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
     messageRepository.putIfAbsent(ids: messageIds);
-    dispatch(MessagesLoaded());
+    dispatch(MessagesLoaded(dateMarkerIds: dateMakerIds));
   }
 
   void submitMessage(String text) async {
@@ -112,7 +121,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     _updateMessages();
   }
 
-  void submitAttachmentMessage(String path, int fileType, [String text]) async{
+  void submitAttachmentMessage(String path, int fileType, [String text]) async {
     Context _context = Context();
     await _context.createChatAttachmentMessage(_chatId, path, fileType, text);
     dispatch(UpdateMessages());

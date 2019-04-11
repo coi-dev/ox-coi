@@ -41,15 +41,40 @@
  */
 
 import 'package:date_format/date_format.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
 
-String getTimeForTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), [HH, ':', nn]);
+const formatterTime = [HH, ':', nn];
+const formatterDate = [dd, '.', mm];
+const formatterDateLong = [dd, '. ', MM];
+const formatterTimer = [nn, ':', ss, ':', SSS];
+
+String getTimeFormTimestamp(int timestamp) {
+  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTime);
 }
 
-String getNowTimestamp() {
-  return DateTime.now().millisecondsSinceEpoch.toString();
+String getDateFormTimestamp(int timestamp, bool longMonth, [bool useWordsWhereApplicable, BuildContext context]) {
+  var date = formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), longMonth ? formatterDateLong : formatterDate);
+  if (useWordsWhereApplicable != null && useWordsWhereApplicable && context != null) {
+    if (_hasSameDate(DateTime.now().millisecondsSinceEpoch, timestamp)) {
+      return "${AppLocalizations.of(context).chatToday} - $date";
+    } else if (_hasSameDate(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch, timestamp)) {
+      return "${AppLocalizations.of(context).chatYesterday} - $date";
+    }
+  }
+  return date;
 }
 
-String getTimerForTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), [nn, ':', ss, ':', SSS]);
+bool _hasSameDate(int timestampOne, int timestampTwo) {
+  var dateOne = DateTime.fromMillisecondsSinceEpoch(timestampOne);
+  var dateTwo = DateTime.fromMillisecondsSinceEpoch(timestampTwo);
+  return formatDate(dateOne, formatterDate) == formatDate(dateTwo, formatterDate);
+}
+
+int getNowTimestamp() {
+  return DateTime.now().millisecondsSinceEpoch;
+}
+
+String getTimerFormTimestamp(int timestamp) {
+  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTimer);
 }

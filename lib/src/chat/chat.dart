@@ -294,8 +294,9 @@ class _ChatScreenState extends State<ChatScreen> {
             itemCount: state.messageIds.length,
             itemBuilder: (BuildContext context, int index) {
               int messageId = state.messageIds[index];
+              bool hasDateMarker = state.dateMarkerIds.contains(messageId);
               var key = "$messageId-${state.messageLastUpdateValues[index]}";
-              return ChatMessageItem(widget._chatId, messageId, _chatBloc.isGroup, key);
+              return ChatMessageItem(widget._chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
             },
           );
         } else {

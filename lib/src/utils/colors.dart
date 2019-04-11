@@ -84,6 +84,7 @@ final Color listAvatarDefaultBackgroundColor = Colors.transparent;
 // Chat
 const Color chatMain = Colors.blue;
 final Color chatComposeBorder = Colors.black12;
+const Color messageListDateSeparatorForeground = Colors.black54;
 
 // Messages
 const Color messageBoxGrey = Colors.grey;

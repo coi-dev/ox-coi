@@ -72,8 +72,9 @@ class MessagesStateLoading extends MessagesState {
 class MessagesStateSuccess extends MessagesState {
   final List<int> messageIds;
   final List<int> messageLastUpdateValues;
+  final List<int> dateMarkerIds;
 
-  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues})
+  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds})
       : super(
           isLoading: false,
           isSuccess: true,
