@@ -8,6 +8,7 @@ cache:
 
 stages:
 - build
+- deploy
 
 build:
   stage: build
@@ -20,3 +21,14 @@ build:
   artifacts:
     paths:
     - build/app/outputs/apk/release/*.apk
+
+deploy:
+  stage: deploy
+  tags:
+  - docker
+  - mobile
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  dependencies:
+  - build
+  script:
+  - tools/build.deploy.sh
