@@ -7,7 +7,7 @@ PROJECT_FOLDER=`pwd`
 PLUGIN_FOLDER="flutter-deltachat-core";
 
 cd ..
-if [[ -d "PLUGIN_FOLDER" ]]; then
+if [[ -d "$PLUGIN_FOLDER" ]]; then
     cd PLUGIN_FOLDER
     git pull
 else
