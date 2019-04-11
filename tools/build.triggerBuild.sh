@@ -8,7 +8,7 @@ PLUGIN_FOLDER="flutter-deltachat-core";
 
 cd ..
 if [[ -d "$PLUGIN_FOLDER" ]]; then
-    cd PLUGIN_FOLDER
+    cd ${PLUGIN_FOLDER}
     git pull
 else
     git clone --recurse-submodules https://github.com/open-xchange/flutter-deltachat-core.git
