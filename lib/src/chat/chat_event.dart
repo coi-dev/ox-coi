@@ -57,8 +57,10 @@ class ChatLoaded extends ChatEvent {
   final int freshMessageCount;
   final bool isSelfTalk;
   final bool isGroupChat;
+  final String preview;
+  final int timestamp;
 
-  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat);
+  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp);
 }
 
 class ChatMarkNoticed extends ChatEvent {}

@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/date.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/avatar.dart';
@@ -56,6 +57,7 @@ class AvatarListItem extends StatelessWidget {
   final Widget titleIcon;
   final Widget subTitleIcon;
   final IconData avatarIcon;
+  final int timestamp;
 
   AvatarListItem(
       {@required this.title,
@@ -66,7 +68,8 @@ class AvatarListItem extends StatelessWidget {
       this.color,
       this.freshMessageCount,
       this.titleIcon,
-      this.subTitleIcon});
+      this.subTitleIcon,
+      this.timestamp});
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +127,14 @@ class AvatarListItem extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                timestamp != null ? Text(
+                  getChatListTime(context, timestamp),
+                  style: TextStyle(
+                    color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,
+                    fontWeight: freshMessageCount != null && freshMessageCount > 0 ? FontWeight.bold : FontWeight.normal,
+                    fontSize: 14.0
+                  ),
+                ) : Container(),
                 freshMessageCount != null && freshMessageCount > 0 ?
                 Container(
                   margin: EdgeInsets.only(top: 8.0),

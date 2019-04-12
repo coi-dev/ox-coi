@@ -138,6 +138,8 @@ class AppLocalizations {
 
   String get copiedToClipboard => Intl.message('Copied to clipboard', name: 'copiedToClipboard');
 
+  String get yesterday => Intl.message('Yesterday', name: 'yesterday');
+
   // Core
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
 

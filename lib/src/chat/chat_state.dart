@@ -78,8 +78,10 @@ class ChatStateSuccess extends ChatState {
   final int freshMessageCount;
   final bool isSelfTalk;
   final bool isGroupChat;
+  final String preview;
+  final int timestamp;
 
-  ChatStateSuccess({@required this.name, @required this.subTitle, @required this.color, @required this.freshMessageCount, @required this.isSelfTalk, @required this.isGroupChat})
+  ChatStateSuccess({@required this.name, @required this.subTitle, @required this.color, @required this.freshMessageCount, @required this.isSelfTalk, @required this.isGroupChat, @required this.preview, @required this.timestamp})
       : super(
           isLoading: false,
           isSuccess: true,

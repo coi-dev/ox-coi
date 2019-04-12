@@ -55,16 +55,24 @@ class ChatRepository extends Repository<Chat> {
     super.onData(event);
   }
 
-  Future<void> setupChatListAfterUpdate(int chatId) async {
+  Future<void> setupChatListAfterUpdate(int changedChatId) async {
     ChatList chatList = ChatList();
     int chatCount = await chatList.getChatCnt();
     List<int> chatIds = List();
+    ChatSummary chatSummary;
     for (int i = 0; i < chatCount; i++) {
       int chatId = await chatList.getChat(i);
+      if(changedChatId == chatId){
+        var chatSummary = await chatList.getChatSummary(i);
+        chatSummary = ChatSummary.fromMethodChannel(chatSummary);
+      }
       chatIds.add(chatId);
     }
-    if (chatId != 0 && chatIds.contains(chatId)) {
-      Chat updatedChat = get(chatId);
+    if (changedChatId != 0 && chatIds.contains(changedChatId)) {
+      Chat updatedChat = get(changedChatId);
+      if(chatSummary != null){
+        updatedChat.chatSummary = chatSummary;
+      }
       updatedChat.setLastUpdate();
     }
     update(ids: chatIds);

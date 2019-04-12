@@ -78,3 +78,24 @@ int getNowTimestamp() {
 String getTimerFormTimestamp(int timestamp) {
   return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTimer);
 }
+
+String getChatListTime(BuildContext context, int timestamp){
+  DateTime chatTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+  DateTime comparingChatDateTime = DateTime(chatTime.year, chatTime.month, chatTime.day);
+  DateTime now = DateTime.now();
+  DateTime nowDate = DateTime(now.year, now.month, now.day);
+
+  int result = comparingChatDateTime.compareTo(nowDate);
+  if(result == 0){
+    return getTimeFormTimestamp(timestamp);
+  }else if(result == -1){
+    Duration difference = comparingChatDateTime.difference(nowDate);
+    if(difference.inDays == -1){
+      return AppLocalizations.of(context).yesterday;
+    }
+    else{
+      return formatDate(chatTime, [dd, '.', mm, '.', yy]);
+    }
+  }
+  return getTimeFormTimestamp(timestamp);
+}

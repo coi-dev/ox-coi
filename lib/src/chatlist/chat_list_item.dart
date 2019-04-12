@@ -78,20 +78,25 @@ class _ChatListItemState extends State<ChatListItem> {
         String subTitle;
         Color color;
         int freshMessageCount;
+        int timestamp;
+        String preview;
         if (state is ChatStateSuccess) {
           name = state.name;
           subTitle = state.subTitle;
           color = state.color;
           freshMessageCount = state.freshMessageCount;
+          timestamp = state.timestamp;
+          preview = state.preview;
         } else {
           name = "";
           subTitle = "";
         }
         return AvatarListItem(
           title: name,
-          subTitle: subTitle,
+          subTitle: _chatBloc.isGroup ? subTitle : preview,
           color: color,
           freshMessageCount: freshMessageCount,
+          timestamp: timestamp,
           subTitleIcon: _chatBloc.isGroup
               ? Icon(
                   Icons.group,

@@ -78,6 +78,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         freshMessageCount: event.freshMessageCount,
         isSelfTalk: event.isSelfTalk,
         isGroupChat: event.isGroupChat,
+        preview: event.preview,
+        timestamp: event.timestamp,
       );
     } else if(event is ChatMarkNoticed){
       _markNoticedChat();
@@ -87,6 +89,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   void _setupChat() async {
     Context context = Context();
     Chat chat = chatRepository.get(_chatId);
+    ChatList chatList = ChatList();
+    int chatCount = await chatList.getChatCnt();
+    for (int i = 0; i < chatCount; i++) {
+      int chatId = await chatList.getChat(i);
+      if(chatId == _chatId) {
+        var summaryData = await chatList.getChatSummary(i);
+        chat.chatSummary = ChatSummary.fromMethodChannel(summaryData);
+      }
+    }
     String name = await chat.getName();
     String subTitle = await chat.getSubtitle();
     int colorValue = await chat.getColor();
@@ -94,7 +105,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     bool isSelfTalk = await chat.isSelfTalk();
     _isGroup = await chat.isGroup();
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup));
+    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chat.chatSummary.preview, chat.chatSummary.timestamp));
   }
 
   void _markNoticedChat() async{
