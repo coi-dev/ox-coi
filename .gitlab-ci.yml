@@ -16,7 +16,7 @@ build:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:latest
   script:
   - tools/build.triggerBuild.sh
   artifacts:
@@ -29,7 +29,7 @@ deploy:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:latest
   dependencies:
   - build
   script:
