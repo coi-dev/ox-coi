@@ -52,6 +52,21 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "configuration"
+
+    productFlavors {
+        stable {
+            dimension "configuration"
+            resValue "string", "app_name", "OX Talk"
+        }
+        development {
+            dimension "configuration"
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "OX Talk Dev"
+        }
+    }
+
 }
 
 flutter {
