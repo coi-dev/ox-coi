@@ -40,41 +40,26 @@
  * for more details.
  */
 
-import 'dart:async';
-
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/src/data/contact_repository_updater.dart';
 import 'package:ox_talk/src/data/repository.dart';
 
-class ContactRepository extends Repository<Contact> {
-  ContactRepository(RepositoryItemCreator<Contact> creator, this._listType) : super(creator);
+class ContactRepository extends Repository<Contact> with ContactRepositoryUpdater {
+  ContactRepository(RepositoryItemCreator<Contact> creator, this._listTypeOrChatId) : super(creator);
 
-  final int _listType;
   static const int validContacts = 0;
   static const int inviteContacts = 1;
   static const int blockedContacts = 2;
 
+  final int _listTypeOrChatId;
+
   @override
   onData(Event event) async {
     if (event.eventId == Event.contactsChanged) {
-      await setupContactsAfterUpdate();
+      List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
+      update(ids: contactIds);
     }
     super.onData(event);
-  }
-
-  Future<void> setupContactsAfterUpdate() async {
-    Context context = Context();
-    List<int> contactIds;
-    if( _listType == validContacts){
-      contactIds = List.from(await context.getContacts(2, null));
-    }else if(_listType == blockedContacts){
-      contactIds = List.from(await context.getBlockedContacts());
-    }else if(_listType != inviteContacts){
-      contactIds = List.from(await context.getChatContacts(_listType));
-    }else{
-      return;
-    }
-
-    update(ids: contactIds);
   }
 
   @override

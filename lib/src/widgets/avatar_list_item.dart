@@ -127,7 +127,7 @@ class AvatarListItem extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                timestamp != null ? Text(
+                timestamp != null && timestamp != 0 ? Text(
                   getChatListTime(context, timestamp),
                   style: TextStyle(
                     color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,

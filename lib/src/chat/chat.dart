@@ -113,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } else if (state is ChatComposerRecordingAudioStopped) {
       if (state.filePath != null && state.shouldSend) {
         _filePath = state.filePath;
-        _onMessageSend(Context.msgVoice);
+        _onMessageSend(ChatMsg.typeVoice);
       }
       setState(() {
         _composingAudioTimer = null;
@@ -367,23 +367,23 @@ class _ChatScreenState extends State<ChatScreen> {
       if (knownType == null) {
         switch (_selectedFileType) {
           case FileType.IMAGE:
-            type = Context.msgImage;
+            type = ChatMsg.typeImage;
             break;
           case FileType.VIDEO:
-            type = Context.msgVideo;
+            type = ChatMsg.typeVideo;
             break;
           case FileType.AUDIO:
-            type = Context.msgAudio;
+            type = ChatMsg.typeAudio;
             break;
           case FileType.CUSTOM:
             if (_selectedExtension == "gif") {
-              type = Context.msgGif;
+              type = ChatMsg.typeGif;
             } else {
-              type = Context.msgFile;
+              type = ChatMsg.typeFile;
             }
             break;
           case FileType.ANY:
-            type = Context.msgFile;
+            type = ChatMsg.typeFile;
             break;
         }
       } else {

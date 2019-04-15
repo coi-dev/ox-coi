@@ -50,6 +50,7 @@ import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
@@ -112,12 +113,12 @@ class _ContactListState extends State<ContactListView> {
   @override
   void initState() {
     super.initState();
-    _contactListBloc.dispatch(RequestContacts());
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     setupContactImport();
     _searchController.addListener(() {
       var query = _searchController.text;
       if (query.isEmpty) {
-        _contactListBloc.dispatch(RequestContacts());
+        _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
       } else {
         _contactListBloc.dispatch(FilterContacts(query: query));
       }

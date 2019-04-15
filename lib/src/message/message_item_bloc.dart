@@ -46,15 +46,14 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/message/message_item_event.dart';
-import 'package:ox_talk/src/message/message_item_state.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
+import 'package:ox_talk/src/message/message_item_event.dart';
+import 'package:ox_talk/src/message/message_item_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/date.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
-  final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+  Repository<Contact> _contactRepository;
   Repository<ChatMsg> _messagesRepository;
   int _messageId;
   int _contactId;
@@ -69,9 +68,14 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       yield MessageItemStateLoading();
       try {
         var chatId = event.chatId;
+        if (isInvite(chatId)) {
+          _contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
+        } else {
+          _contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+        }
         _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
         _messageId = event.messageId;
-        _addContact = event.isGroupChat || chatId == ChatList.specialInvite;
+        _addContact = event.isGroupChat || isInvite(chatId);
         if (_addContact) {
           _setupContact();
         }
@@ -130,6 +134,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       }
     }
   }
+
+  bool isInvite(int chatId) => chatId == Chat.typeInvite;
 
   void _setupContact() async {
     ChatMsg message = _getMessage();

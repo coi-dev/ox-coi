@@ -40,29 +40,26 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 
-abstract class ContactListEvent {}
+mixin ContactRepositoryUpdater {
 
-class RequestContacts extends ContactListEvent {
-  final int listTypeOrChatId;
+  Future<List<int>> getContactIdsAfterUpdate(int listTypeOrChatId) async {
+    Context context = Context();
+    List<int> contactIds;
+    if (listTypeOrChatId == ContactRepository.validContacts) {
+      contactIds = List.from(await context.getContacts(2, null));
+    } else if (listTypeOrChatId == ContactRepository.blockedContacts) {
+      contactIds = List.from(await context.getBlockedContacts());
+    } else if (listTypeOrChatId == ContactRepository.inviteContacts) {
+      contactIds = List.from(await context.getChatContacts(Chat.typeInvite));
+    } else if (listTypeOrChatId != null) {
+      contactIds = List.from(await context.getChatContacts(listTypeOrChatId));
+    } else {
+      return List();
+    }
+    return contactIds;
+  }
 
-  RequestContacts({@required this.listTypeOrChatId});
-}
-
-class ContactsChanged extends ContactListEvent {}
-
-class BlockedContactsChanged extends ContactListEvent {}
-
-class FilterContacts extends ContactListEvent {
-  final String query;
-
-  FilterContacts({@required this.query});
-}
-
-class ContactsFiltered extends ContactListEvent {
-  final List<int> ids;
-  final List<int> lastUpdates;
-
-  ContactsFiltered({@required this.ids, @required this.lastUpdates});
 }

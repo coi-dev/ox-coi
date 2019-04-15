@@ -129,10 +129,10 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     int type;
     if (pickImage) {
       file = await ImagePicker.pickImage(source: ImageSource.camera);
-      type = Dcc.Context.msgImage;
+      type = Dcc.ChatMsg.typeImage;
     } else {
       file = await ImagePicker.pickVideo(source: ImageSource.camera);
-      type = Dcc.Context.msgVideo;
+      type = Dcc.ChatMsg.typeVideo;
     }
     if (file != null) {
       dispatch(StopImageOrVideoRecording(filePath: file.path, type: type));

@@ -39,13 +39,14 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
  import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
@@ -55,7 +56,7 @@ class ContactBlockedList extends StatefulWidget {
    @override
    _ContactBlockedListState createState() => _ContactBlockedListState();
  }
- 
+
  class _ContactBlockedListState extends State<ContactBlockedList> {
    ContactListBloc _contactListBloc = ContactListBloc();
    Navigation navigation = Navigation();
@@ -63,7 +64,7 @@ class ContactBlockedList extends StatefulWidget {
    @override
   void initState() {
     super.initState();
-    _contactListBloc.dispatch(RequestBlockedContacts());
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.blockedContacts));
   }
 
    @override
@@ -112,4 +113,3 @@ class ContactBlockedList extends StatefulWidget {
        });
    }
  }
- 

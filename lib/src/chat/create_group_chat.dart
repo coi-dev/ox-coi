@@ -49,6 +49,7 @@ import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/contact/selectable_contact_item.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
@@ -70,7 +71,7 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
   @override
   void initState() {
     super.initState();
-    _contactListBloc.dispatch(RequestContacts());
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     chatRepository = ChatRepository(Chat.getCreator());
   }
 

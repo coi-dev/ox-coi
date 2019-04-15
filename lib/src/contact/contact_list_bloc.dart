@@ -46,15 +46,15 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
+import 'package:ox_talk/src/data/contact_repository_updater.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/data/repository_stream_handler.dart';
 
-class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
+class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater{
   Repository<Contact> contactRepository;
   RepositoryEventStreamHandler repositoryStreamHandler;
-  int contactListType;
+  int _listTypeOrChatId;
 
   @override
   ContactListState get initialState => ContactListStateInitial();
@@ -64,34 +64,15 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     if (event is RequestContacts) {
       yield ContactListStateLoading();
       try {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-        contactListType = ContactRepository.validContacts;
-        setupContactListener();
-        setupContacts();
+        _listTypeOrChatId = event.listTypeOrChatId;
+        contactRepository = RepositoryManager.get(RepositoryType.contact, _listTypeOrChatId);
+        _setupContactListener();
+        _setupContacts();
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
     } else if (event is ContactsChanged) {
       yield ContactListStateSuccess(contactIds: contactRepository.getAllIds(), contactLastUpdateValues: contactRepository.getAllLastUpdateValues());
-    } else if (event is RequestBlockedContacts) {
-      yield ContactListStateLoading();
-      try {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.blockedContacts);
-        contactListType = ContactRepository.blockedContacts;
-        setupContactListener();
-        setupBlockedContacts();
-      } catch (error) {
-        yield ContactListStateFailure(error: error.toString());
-      }
-    } else if (event is RequestChatContacts) {
-      yield ContactListStateLoading();
-      try {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, event.chatId);
-        contactListType = event.chatId;
-        setupChatContacts(event.chatId);
-      } catch (error) {
-        yield ContactListStateFailure(error: error.toString());
-      }
     } else if (event is FilterContacts) {
       filterContacts(event.query);
     } else if (event is ContactsFiltered) {
@@ -105,46 +86,17 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     super.dispose();
   }
 
-  void setupContactListener() async {
+  void _setupContactListener() async {
     repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.contactsChanged, _dispatchContactsChanged);
     contactRepository.addListener(repositoryStreamHandler);
   }
 
   void _dispatchContactsChanged() async {
-    await _updateValidContactIds();
     dispatch(ContactsChanged());
   }
 
-  Future _updateValidContactIds() async {
-    Context _context = Context();
-    List<int> contactIds;
-    if (contactListType == ContactRepository.validContacts) {
-      contactIds = List.from(await _context.getContacts(2, null));
-    } else if (contactListType == ContactRepository.blockedContacts) {
-      contactIds = List.from(await _context.getBlockedContacts());
-    } else if (contactListType != ContactRepository.inviteContacts) {
-      contactIds = List.from(await _context.getChatContacts(contactListType));
-    } else {
-      return;
-    }
-    contactRepository.putIfAbsent(ids: contactIds);
-  }
-
-  void setupContacts() async {
-    await _updateValidContactIds();
-    dispatch(ContactsChanged());
-  }
-
-  void setupBlockedContacts() async {
-    Context context = Context();
-    List<int> contactIds = List.from(await context.getBlockedContacts());
-    contactRepository.putIfAbsent(ids: contactIds);
-    dispatch(ContactsChanged());
-  }
-
-  void setupChatContacts(int chatId) async {
-    Context context = Context();
-    List<int> contactIds = List.from(await context.getChatContacts(chatId));
+  Future _setupContacts() async {
+    List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
     contactRepository.putIfAbsent(ids: contactIds);
     dispatch(ContactsChanged());
   }
@@ -156,7 +108,6 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> {
     contactIds.forEach((contactId) {
       lastUpdates.add(contactRepository.get(contactId).lastUpdate);
     });
-  dispatch(ContactsFiltered(ids: contactIds, lastUpdates: lastUpdates));
+    dispatch(ContactsFiltered(ids: contactIds, lastUpdates: lastUpdates));
   }
-
 }

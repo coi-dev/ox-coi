@@ -67,7 +67,7 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
   @override
   void initState() {
     super.initState();
-    _contactListBloc.dispatch(RequestChatContacts(widget._chatId));
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget._chatId));
   }
 
   @override
