@@ -10,13 +10,14 @@ cache:
 stages:
 - build
 - deploy
+- status-report
 
 build:
   stage: build
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:latest
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
   script:
   - tools/build.triggerBuild.sh
   artifacts:
@@ -29,11 +30,31 @@ deploy:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:latest
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
   dependencies:
   - build
   script:
-  - tools/build.deploy.sh
+  - tools/deploy.uploadToHockey.sh
   artifacts:
     paths:
     - ./.current-build-id
+
+status-report-success:
+  stage: status-report
+  tags:
+  - docker
+  - mobile
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  script:
+  - post-ticket-comment -s success
+  when: on_success
+
+status-report-failure:
+  stage: status-report
+  tags:
+  - docker
+  - mobile
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  script:
+  - post-ticket-comment -s failure
+  when: on_failure
