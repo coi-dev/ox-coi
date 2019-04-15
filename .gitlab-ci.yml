@@ -17,7 +17,7 @@ build:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:0.1
   script:
   - tools/build.triggerBuild.sh
   artifacts:
@@ -30,7 +30,7 @@ deploy:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:0.1
   dependencies:
   - build
   script:
@@ -44,7 +44,7 @@ status-report-success:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:0.1
   script:
   - post-ticket-comment -s success
   when: on_success
@@ -54,7 +54,7 @@ status-report-failure:
   tags:
   - docker
   - mobile
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter:0.1
   script:
   - post-ticket-comment -s failure
   when: on_failure
