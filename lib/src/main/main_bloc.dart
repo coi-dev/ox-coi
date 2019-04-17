@@ -85,7 +85,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   _setupDefaultValues(BuildContext context) async {
     Config config = Config();
     config.setValue(Context.configSelfStatus, AppLocalizations.of(context).editUserSettingsStatusDefaultValue);
-    config.setValue(Context.configShowEmails, Context.showEmailsAcceptedContacts);
+    config.setValue(Context.configShowEmails, Context.showEmailsOff);
     String version = await getAppVersion();
     await setPreference(preferenceAppVersion, version);
   }
