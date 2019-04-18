@@ -104,12 +104,12 @@ class ContactBlockedList extends StatefulWidget {
 
    Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
      return ListView.builder(
-       padding: EdgeInsets.all(listItemPadding),
+       padding: EdgeInsets.only(top: listItemPadding),
        itemCount: contactIds.length,
        itemBuilder: (BuildContext context, int index) {
          var contactId = contactIds[index];
          var key = "$contactId-${contactLastUpdateValues[index]}";
-         return ContactItem(contactId, false, true, key);
+         return ContactItem(contactId, key, ContactItemType.blocked);
        });
    }
  }

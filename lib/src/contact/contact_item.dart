@@ -41,26 +41,32 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/chat/change_chat_bloc.dart';
 import 'package:ox_talk/src/chat/change_chat_event.dart';
 import 'package:ox_talk/src/chat/change_chat_state.dart';
+import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
+import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:rxdart/rxdart.dart';
 
+enum ContactItemType {
+  display,
+  edit,
+  createChat,
+  blocked,
+}
+
 class ContactItem extends StatefulWidget {
   final int _contactId;
-  final bool _createChat;
-  final bool _isBlocked;
+  final ContactItemType contactItemType;
 
-  ContactItem(this._contactId, this._createChat, this._isBlocked, key) : super(key: Key(key));
+  ContactItem(this._contactId, key, [this.contactItemType = ContactItemType.display]) : super(key: Key(key));
 
   @override
   _ContactItemState createState() => _ContactItemState();
@@ -84,27 +90,25 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   @override
   Widget build(BuildContext context) {
-    return getBlocBuilder(_contactBloc, onContactTapped);
+    return getAvatarItemBlocBuilder(_contactBloc, onContactTapped);
   }
 
   onContactTapped(String name, String email) async {
-    if (widget._createChat) {
+    if (widget.contactItemType == ContactItemType.createChat) {
       return buildCreateChatDialog(name, email);
-    } else if(widget._isBlocked){
+    } else if (widget.contactItemType == ContactItemType.blocked) {
       return buildUnblockContactDialog(name, email);
-    } else {
+    } else if (widget.contactItemType == ContactItemType.edit) {
       navigation.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-            ContactChange(
-              contactAction: ContactAction.edit,
-              id: widget._contactId,
-              email: email,
-              name: name,
-            )),
-        "ContactChange"
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) => ContactChange(
+                    contactAction: ContactAction.edit,
+                    id: widget._contactId,
+                    email: email,
+                    name: name,
+                  )),
+          "ContactChange");
     }
   }
 
@@ -114,23 +118,17 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
         builder: (BuildContext context) {
           String contact = name.isNotEmpty ? name : email;
           return AlertDialog(
-            title: Text(AppLocalizations
-                .of(context)
-                .createChatTitle),
+            title: Text(AppLocalizations.of(context).createChatTitle),
             content: new Text(AppLocalizations.of(context).createChatWith(contact)),
             actions: <Widget>[
               new FlatButton(
-                child: new Text(AppLocalizations
-                    .of(context)
-                    .cancel),
+                child: new Text(AppLocalizations.of(context).cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               new FlatButton(
-                child: new Text(AppLocalizations
-                    .of(context)
-                    .yes),
+                child: new Text(AppLocalizations.of(context).yes),
                 onPressed: () {
                   createChat();
                   Navigator.of(context).pop();
@@ -156,35 +154,29 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   buildUnblockContactDialog(String name, String email) {
     return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        String contact = name.isNotEmpty ? name : email;
-        return AlertDialog(
-          title: Text(AppLocalizations
-            .of(context)
-            .unblockDialogTitle),
-          content: new Text(AppLocalizations.of(context).unblockDialogText(contact)),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text(AppLocalizations
-                .of(context)
-                .cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text(AppLocalizations
-                .of(context)
-                .unblock),
-              onPressed: () {
-                unblockContact();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      });
+        context: context,
+        builder: (BuildContext context) {
+          String contact = name.isNotEmpty ? name : email;
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context).unblockDialogTitle),
+            content: new Text(AppLocalizations.of(context).unblockDialogText(contact)),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text(AppLocalizations.of(context).cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text(AppLocalizations.of(context).unblock),
+                onPressed: () {
+                  unblockContact();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   void unblockContact() {

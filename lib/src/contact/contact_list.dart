@@ -50,6 +50,7 @@ import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
@@ -57,6 +58,7 @@ import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/widgets/search_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends BaseRootChild {
@@ -104,7 +106,7 @@ class ContactListView extends BaseRootChild {
   }
 }
 
-class _ContactListState extends State<ContactListView> {
+class _ContactListState extends State<ContactListView> with ContactSearchController {
   ContactListBloc _contactListBloc = ContactListBloc();
   ContactImportBloc _contactImportBloc = ContactImportBloc();
   Navigation navigation = Navigation();
@@ -115,14 +117,7 @@ class _ContactListState extends State<ContactListView> {
     super.initState();
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     setupContactImport();
-    _searchController.addListener(() {
-      var query = _searchController.text;
-      if (query.isEmpty) {
-        _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
-      } else {
-        _contactListBloc.dispatch(FilterContacts(query: query));
-      }
-    });
+    addSearchListener(_contactListBloc, _searchController);
   }
 
   setupContactImport() async {
@@ -155,15 +150,7 @@ class _ContactListState extends State<ContactListView> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        TextField(
-          decoration: InputDecoration(
-            labelText: AppLocalizations.of(context).contactsSearchHint,
-            prefixIcon: Icon(Icons.search),
-            suffixIcon: GestureDetector(
-              child: Icon(Icons.close),
-              onTap: _exitSearch,
-            ),
-          ),
+        SearchView(
           controller: _searchController,
         ),
         Expanded(
@@ -184,11 +171,6 @@ class _ContactListState extends State<ContactListView> {
         ),
       ],
     );
-  }
-
-  void _exitSearch() {
-    _searchController.text = "";
-    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   Widget getImportAction() {
@@ -229,12 +211,12 @@ class _ContactListState extends State<ContactListView> {
 
   Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
     return ListView.builder(
-        padding: EdgeInsets.all(listItemPadding),
+        padding: EdgeInsets.only(top: listItemPadding),
         itemCount: contactIds.length,
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];
           var key = "$contactId-${contactLastUpdateValues[index]}";
-          return ContactItem(contactId, false, false, key);
+          return ContactItem(contactId, key, ContactItemType.edit);
         });
   }
 }

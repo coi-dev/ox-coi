@@ -76,7 +76,11 @@ class AvatarListItem extends StatelessWidget {
     return InkWell(
       onTap: () => onTap(title, subTitle),
       child: Container(
-        padding: const EdgeInsets.only(top: listItemPaddingSmall),
+        padding: const EdgeInsets.only(
+          left: listItemPadding,
+          right: listItemPadding,
+          top: listItemPaddingSmall,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -176,7 +180,7 @@ class AvatarListItem extends StatelessWidget {
             subTitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: testLessImportant),
+            style: TextStyle(color: textLessImportant),
           )
         : Container();
   }

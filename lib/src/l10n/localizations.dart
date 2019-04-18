@@ -139,6 +139,8 @@ class AppLocalizations {
   String get copiedToClipboard => Intl.message('Copied to clipboard', name: 'copiedToClipboard');
 
   String get yesterday => Intl.message('Yesterday', name: 'yesterday');
+  
+  String get participants => Intl.message('Participants', name: 'participants');
 
   // Core
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
@@ -290,7 +292,7 @@ class AppLocalizations {
 
   String get chatYesterday => Intl.message('Yesterday', name: 'chatYesterday');
 
-  //Chat profile view
+  // Chat profile view
   String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');
 
   String get chatProfileBlockContactButtonText => Intl.message('Block contact', name: 'chatProfileBlockContactButtonText');
@@ -304,18 +306,22 @@ class AppLocalizations {
 
   String get createChatNewContactButtonText => Intl.message('New contact', name: 'createChatNewContactButtonText');
 
-  String get createChatCreateGroupButtonText => Intl.message('Create group', name: 'createChatCreateGroupButtonText');
-
   String createChatWith(name) => Intl.message('Start a chat with $name?', name: 'createChatWith', args: [name]);
 
-  // Group
+  // Create group
+  String get createGroupButtonText => Intl.message('Create group', name: 'createGroupButtonText');
+
+  String get createGroupNameAndAvatarHeader => Intl.message('Group name', name: 'createChatCreateGroupNameAndAvatarHeader');
+
+  String get createGroupNoParticipantsHint => Intl.message('Simply add one by tapping on a contact.', name: 'createGroupNoParticipantsHint');
+
+  String get createGroupNoParticipantsSelected => Intl.message('No participants selected. Please select at least one person.', name: 'createGroupNoParticipantsSelected');
+
   String get createGroupTitle => Intl.message('Create group chat', name: 'createGroupTitle');
 
   String get createGroupTextFieldLabel => Intl.message('Group name', name: 'createGroupTextFieldLabel');
 
   String get createGroupTextFieldHint => Intl.message('Set a group name', name: 'createGroupTextFieldHint');
-
-  String get createGroupSelectContactsInfo => Intl.message('Select all contacts for this group', name: 'createGroupSelectContactsInfo');
 
   // Contact
   String get contactTitle => Intl.message('Contacts', name: 'contactTitle');

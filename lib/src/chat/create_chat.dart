@@ -42,30 +42,36 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/create_group_chat.dart';
+import 'package:ox_talk/src/chat/create_group_chat_participants.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/styles.dart';
+import 'package:ox_talk/src/widgets/search_field.dart';
 
 class CreateChat extends StatefulWidget {
   @override
   _CreateChatState createState() => _CreateChatState();
 }
 
-class _CreateChatState extends State<CreateChat> {
+class _CreateChatState extends State<CreateChat> with ContactSearchController {
   ContactListBloc _contactListBloc = ContactListBloc();
   Navigation navigation = Navigation();
+  TextEditingController _searchController = TextEditingController();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    addSearchListener(_contactListBloc, _searchController);
   }
 
   @override
@@ -78,14 +84,9 @@ class _CreateChatState extends State<CreateChat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context, "CreateChat"),
-          ),
           title: Text(AppLocalizations.of(context).createChatTitle),
         ),
-        body: buildForm()
-    );
+        body: buildForm());
   }
 
   Widget buildForm() {
@@ -107,53 +108,93 @@ class _CreateChatState extends State<CreateChat> {
 
   Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        SizedBox(
-          width: double.infinity,
-          child: FlatButton(
-            onPressed: () => newContactTapped(),
-            child: Text(AppLocalizations.of(context).createChatNewContactButtonText)
-          ),
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: FlatButton(
-            onPressed: () => createGroupTapped(),
-            child: Text(AppLocalizations.of(context).createChatCreateGroupButtonText)
-          ),
+        SearchView(
+          controller: _searchController,
         ),
         Flexible(
           child: ListView.builder(
-            padding: EdgeInsets.all(listItemPadding),
-            itemCount: contactIds.length,
-            itemBuilder: (BuildContext context, int index) {
-              var contactId = contactIds[index];
-              var key = "$contactId-${contactLastUpdateValues[index]}";
-              return ContactItem(contactId, true, false, key);
-            }
-          ),
+              itemCount: contactIds.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return buildNewContactAddGroup();
+                } else {
+                  int adjustedIndex = index - 1;
+                  var contactId = contactIds[adjustedIndex];
+                  var key = "$contactId-${contactLastUpdateValues[adjustedIndex]}";
+                  return ContactItem(contactId, key, ContactItemType.createChat);
+                }
+              }),
         )
       ],
     );
   }
 
-  newContactTapped(){
+  newContactTapped() {
     navigation.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ContactChange(contactAction: ContactAction.add, createChat: true,),
-      ),
-      "ContactChange"
-    );
+        context,
+        MaterialPageRoute(
+          builder: (context) => ContactChange(
+                contactAction: ContactAction.add,
+                createChat: true,
+              ),
+        ),
+        "ContactChange");
   }
 
   createGroupTapped() {
     navigation.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateGroupChat(),
-      ),
-      "CreateGroupChat"
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateGroupChatParticipants(),
+        ),
+        "CreateGroupChatParticipants");
+  }
+
+  Column buildNewContactAddGroup() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Visibility(
+          visible: _searchController.text.isEmpty,
+          child: ListTile(
+            leading: Icon(
+              Icons.person_add,
+              color: accent,
+            ),
+            title: Text(
+              AppLocalizations.of(context).createChatNewContactButtonText,
+              style: createChatTitle,
+            ),
+            onTap: newContactTapped,
+          ),
+        ),
+        Visibility(
+          visible: _searchController.text.isEmpty,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(),
+              ),
+            ),
+            child: ListTile(
+              leading: Icon(
+                Icons.group_add,
+                color: accent,
+              ),
+              title: Text(
+                AppLocalizations.of(context).createGroupButtonText,
+                style: createChatTitle,
+              ),
+              onTap: createGroupTapped,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: listItemPadding),
+        )
+      ],
     );
   }
 }

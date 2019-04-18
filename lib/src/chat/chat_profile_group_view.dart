@@ -120,7 +120,7 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(listItemPadding),
+                  padding: EdgeInsets.only(top: listItemPadding),
                   itemCount: state.contactIds.length,
                   itemBuilder: (BuildContext context, int index) {
                     var contactId = state.contactIds[index];

@@ -71,7 +71,7 @@ class ChatProfileGroupContactItem extends StatefulWidget {
 
   @override
    Widget build(BuildContext context) {
-    return getBlocBuilder(_contactBloc, onContactTapped);
+    return getAvatarItemBlocBuilder(_contactBloc, onContactTapped);
    }
 
    onContactTapped(String name, String email) async {

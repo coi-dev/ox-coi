@@ -45,11 +45,34 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_state.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 
 mixin ContactItemBuilder {
+  BlocBuilder getChipBlocBuilder(ContactItemBloc bloc, Function onContactTapped) {
+    return BlocBuilder(
+      bloc: bloc,
+      builder: (context, state) {
+        if (state is ContactItemStateSuccess) {
+          return Padding(
+            padding: EdgeInsets.only(left: listItemPadding),
+            child: Chip(
+              backgroundColor: Colors.blue[50],
+              label: Text(state.name),
+              onDeleted: onContactTapped,
+              deleteIconColor: primary,
+            ),
+          );
+        }
+        else {
+          return Container();
+        }
+      },
+    );
+  }
 
-  BlocBuilder getBlocBuilder(ContactItemBloc bloc, Function onContactTapped, [bool isSelected = false]) {
+  BlocBuilder getAvatarItemBlocBuilder(ContactItemBloc bloc, Function onContactTapped, [bool isSelected = false]) {
     return BlocBuilder(
         bloc: bloc,
         builder: (context, state) {
@@ -72,5 +95,4 @@ mixin ContactItemBuilder {
           }
         });
   }
-
 }

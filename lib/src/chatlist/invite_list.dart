@@ -93,7 +93,7 @@ class _InviteListState extends State<InviteList> {
 
   Widget buildListViewItems(List<int> messageIds, List<int> messageLastUpdateValues) {
     return ListView.builder(
-      padding: EdgeInsets.all(listItemPadding),
+      padding: EdgeInsets.only(top: listItemPadding),
       itemCount: messageIds.length,
       itemBuilder: (BuildContext context, int index) {
         var messageId = messageIds[index];

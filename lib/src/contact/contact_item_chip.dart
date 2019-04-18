@@ -41,66 +41,32 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chatlist/chat_list_bloc.dart';
-import 'package:ox_talk/src/chatlist/chat_list_event.dart';
-import 'package:ox_talk/src/chatlist/chat_list_item.dart';
-import 'package:ox_talk/src/chatlist/chat_list_state.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/contact/contact_item_bloc.dart';
+import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
+import 'package:ox_talk/src/contact/contact_item_event.dart';
+import 'package:ox_talk/src/utils/widget.dart';
 
-class ChatList extends StatefulWidget {
+class ContactItemChip extends StatefulWidget {
+  final int _contactId;
+  final Function _itemTapped;
+
+  ContactItemChip(this._contactId, this._itemTapped) : super(key: createKey(_contactId));
+
   @override
-  _ChatListState createState() => _ChatListState();
+  _ContactItemChipState createState() => _ContactItemChipState();
 }
 
-class _ChatListState extends State<ChatList> {
-  ChatListBloc _chatListBloc = ChatListBloc();
+class _ContactItemChipState extends State<ContactItemChip> with ContactItemBuilder {
+  ContactItemBloc _contactBloc = ContactItemBloc();
 
   @override
   void initState() {
     super.initState();
-    _chatListBloc.dispatch(RequestChatList());
-  }
-
-  @override
-  void dispose() {
-    _chatListBloc.dispose();
-    super.dispose();
+    _contactBloc.dispatch(RequestContact(widget._contactId));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _chatListBloc,
-      builder: (context, state) {
-        if (state is ChatListStateSuccess) {
-          if(state.chatIds.length > 0) {
-            return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
-          }
-          else{
-            return Center(child: Text(AppLocalizations.of(context).chatListEmpty),);
-          }
-        } else if (state is! ChatListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Icon(Icons.error);
-        }
-      },
-    );
-  }
-
-  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues) {
-    return ListView.builder(
-      padding: EdgeInsets.only(top: listItemPadding),
-      itemCount: chatIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var chatId = chatIds[index];
-        var key = "$chatId-${chatLastUpdateValues[index]}";
-        return ChatListItem(chatId, key);
-      },
-    );
+    return getChipBlocBuilder(_contactBloc, widget._itemTapped);
   }
 }

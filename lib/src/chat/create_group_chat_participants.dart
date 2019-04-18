@@ -43,63 +43,69 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/chat.dart';
+import 'package:ox_talk/src/chat/create_group_chat_settings.dart';
+import 'package:ox_talk/src/contact/contact_item_chip.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_talk/src/contact/selectable_contact_item.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/widgets/search_field.dart';
 
-class CreateGroupChat extends StatefulWidget {
+class CreateGroupChatParticipants extends StatefulWidget {
   @override
-  _CreateGroupChatState createState() => _CreateGroupChatState();
+  _CreateGroupChatParticipantsState createState() => _CreateGroupChatParticipantsState();
 }
 
-class _CreateGroupChatState extends State<CreateGroupChat> {
+class _CreateGroupChatParticipantsState extends State<CreateGroupChatParticipants> with ContactSearchController {
   ContactListBloc _contactListBloc = ContactListBloc();
-  TextEditingController _controller = new TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey();
-  List<int> selectedItems = new List();
+  List<int> _selectedContacts = List();
   Repository<Chat> chatRepository;
   Navigation navigation = Navigation();
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     chatRepository = ChatRepository(Chat.getCreator());
+    addSearchListener(_contactListBloc, _searchController);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context, "CreateGroupChat"),
-          ),
-          title: Text(AppLocalizations.of(context).createGroupTitle),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () => onSubmit(),
-            )
-          ],
+      appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.close),
+          onPressed: () => navigation.pop(context, "CreateGroupChatParticipants"),
         ),
-        body: buildForm());
+        title: Text(AppLocalizations.of(context).createGroupTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () => _onSubmit(),
+          )
+        ],
+      ),
+      body: buildBody(),
+    );
   }
 
-  Widget buildForm() {
+  Widget buildBody() {
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          return buildCompleteForm(state.contactIds, state.contactLastUpdateValues);
+          return buildForm(state.contactIds, state.contactLastUpdateValues);
         } else if (state is! ContactListStateFailure) {
           return Center(
             child: CircularProgressIndicator(),
@@ -111,62 +117,87 @@ class _CreateGroupChatState extends State<CreateGroupChat> {
     );
   }
 
-  Widget buildCompleteForm(List<int> contactIds, List<int> contactLastUpdateValues) {
+  Widget buildForm(List<int> contactIds, List<int> contactLastUpdateValues) {
     return Column(
       children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
-            child: Form(
-              key: _formKey,
-              child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).createGroupTextFieldLabel,
-                    hintText: AppLocalizations.of(context).createGroupTextFieldHint),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return AppLocalizations.of(context).validatableTextFormFieldHintEmptyString;
-                  }
-                },
-                controller: _controller,
-              ),
-            )),
-        Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
-        Text(AppLocalizations.of(context).createGroupSelectContactsInfo),
+        SearchView(
+          controller: _searchController,
+        ),
+        _buildSelectedParticipantList(),
         Flexible(
             child: ListView.builder(
-                padding: EdgeInsets.all(listItemPadding),
+                padding: EdgeInsets.only(top: listItemPadding),
                 itemCount: contactIds.length,
                 itemBuilder: (BuildContext context, int index) {
                   var contactId = contactIds[index];
                   var key = "$contactId-${contactLastUpdateValues[index]}";
-                  return SelectableContactItem(contactId, itemTapped, key);
+                  return SelectableContactItem(contactId, _itemTapped, isSelected(contactId), key);
                 }))
       ],
     );
   }
 
-  itemTapped(int id) {
-    if (selectedItems.contains(id)) {
-      selectedItems.remove(id);
-    } else {
-      selectedItems.add(id);
-    }
+  Widget _buildSelectedParticipantList() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(
+            left: listItemPadding,
+            right: listItemPadding,
+            top: listItemPadding,
+            bottom: listItemPaddingSmall,
+          ),
+          child: Text("${_selectedContacts.length} ${AppLocalizations.of(context).participants}"),
+        ),
+        Container(
+          padding: EdgeInsets.only(bottom: 4.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(),
+            ),
+          ),
+          width: double.infinity,
+          height: 40.0,
+          child: _selectedContacts.isNotEmpty
+              ? ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _selectedContacts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var selectedContactId = _selectedContacts[index];
+                    return ContactItemChip(selectedContactId, () => _itemTapped(selectedContactId));
+                  })
+              : Container(
+                  padding: EdgeInsets.only(
+                    left: listItemPadding,
+                    right: listItemPadding,
+                    top: listItemPadding,
+                  ),
+                  child: Text(AppLocalizations.of(context).createGroupNoParticipantsHint),
+                ),
+        ),
+      ],
+    );
   }
 
-  onSubmit() async {
-    if (_formKey.currentState.validate()) {
-      Context coreContext = Context();
-      int chatId = await coreContext.createGroupChat(false, _controller.text);
-      for (int i = 0; i < selectedItems.length; i++) {
-        coreContext.addContactToChat(chatId, selectedItems[i]);
+  bool isSelected(int id) => _selectedContacts.contains(id);
+
+  _itemTapped(int id) {
+    setState(() {
+      if (isSelected(id)) {
+        _selectedContacts.remove(id);
+      } else {
+        _selectedContacts.add(id);
       }
-      chatRepository.putIfAbsent(id: chatId);
-      navigation.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => ChatScreen(chatId), settings: RouteSettings(name: "ChatScreen")),
-        ModalRoute.withName(Navigation.ROUTES_ROOT),
-        "ChatScreen"
-      );
+    });
+  }
+
+  _onSubmit() async {
+    if (_selectedContacts.length > 0) {
+      navigation.push(context, MaterialPageRoute(builder: (context) => CreateGroupChatSettings(_selectedContacts)), "CreateGroupChatSettings");
+    } else {
+      showToast(AppLocalizations.of(context).createGroupNoParticipantsSelected);
     }
   }
 }

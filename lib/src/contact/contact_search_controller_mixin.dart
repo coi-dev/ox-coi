@@ -40,67 +40,20 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chatlist/chat_list_bloc.dart';
-import 'package:ox_talk/src/chatlist/chat_list_event.dart';
-import 'package:ox_talk/src/chatlist/chat_list_item.dart';
-import 'package:ox_talk/src/chatlist/chat_list_state.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_talk/src/contact/contact_list_bloc.dart';
+import 'package:ox_talk/src/contact/contact_list_event.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 
-class ChatList extends StatefulWidget {
-  @override
-  _ChatListState createState() => _ChatListState();
-}
-
-class _ChatListState extends State<ChatList> {
-  ChatListBloc _chatListBloc = ChatListBloc();
-
-  @override
-  void initState() {
-    super.initState();
-    _chatListBloc.dispatch(RequestChatList());
-  }
-
-  @override
-  void dispose() {
-    _chatListBloc.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _chatListBloc,
-      builder: (context, state) {
-        if (state is ChatListStateSuccess) {
-          if(state.chatIds.length > 0) {
-            return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
-          }
-          else{
-            return Center(child: Text(AppLocalizations.of(context).chatListEmpty),);
-          }
-        } else if (state is! ChatListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Icon(Icons.error);
-        }
-      },
-    );
-  }
-
-  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues) {
-    return ListView.builder(
-      padding: EdgeInsets.only(top: listItemPadding),
-      itemCount: chatIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var chatId = chatIds[index];
-        var key = "$chatId-${chatLastUpdateValues[index]}";
-        return ChatListItem(chatId, key);
-      },
-    );
+mixin ContactSearchController {
+  void addSearchListener(ContactListBloc contactListBloc, TextEditingController controller) {
+    controller.addListener(() {
+      var query = controller.text;
+      if (query.isEmpty) {
+        contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+      } else {
+        contactListBloc.dispatch(FilterContacts(query: query));
+      }
+    });
   }
 }

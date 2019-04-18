@@ -138,7 +138,7 @@ class _ContactChangeState extends State<ContactChange> {
   @override
   Widget build(BuildContext context) {
     if (widget.contactAction == ContactAction.add) {
-      title = AppLocalizations.of(context).contactChangeAddTitle;
+      title = widget.createChat ? AppLocalizations.of(context).createChatTitle : AppLocalizations.of(context).contactChangeAddTitle;
       changeToast = AppLocalizations.of(context).contactChangeAddToast;
     } else {
       deleteButton = AppLocalizations.of(context).contactChangeDeleteTitle;

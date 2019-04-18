@@ -48,8 +48,9 @@ import 'package:ox_talk/src/contact/contact_item_event.dart';
 class SelectableContactItem extends StatefulWidget {
   final int _contactId;
   final Function onTap;
+  final bool isSelected;
 
-  SelectableContactItem(this._contactId, this.onTap, key) : super(key: Key(key));
+  SelectableContactItem(this._contactId, this.onTap, this.isSelected, key) : super(key: Key(key));
 
   @override
   _SelectableContactItemState createState() => _SelectableContactItemState();
@@ -57,7 +58,6 @@ class SelectableContactItem extends StatefulWidget {
 
 class _SelectableContactItemState extends State<SelectableContactItem> with ContactItemBuilder {
   ContactItemBloc _contactBloc = ContactItemBloc();
-  var isSelected = false;
 
   @override
   void initState() {
@@ -67,17 +67,10 @@ class _SelectableContactItemState extends State<SelectableContactItem> with Cont
 
   @override
   Widget build(BuildContext context) {
-    return getBlocBuilder(_contactBloc, onContactTapped, isSelected);
+    return getAvatarItemBlocBuilder(_contactBloc, _onContactTapped, widget.isSelected);
   }
 
-  onContactTapped(String name, String email) {
-    setState(() {
-      if (isSelected) {
-        isSelected = false;
-      } else {
-        isSelected = true;
-      }
-    });
+  _onContactTapped(String name, String email) {
     widget.onTap(widget._contactId);
   }
 }

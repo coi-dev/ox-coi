@@ -68,7 +68,7 @@ class OxTalkApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       theme: new ThemeData(
-        primaryColor: chatMain,
+        primaryColor: primary,
         accentColor: accent,
       ),
       localizationsDelegates: [

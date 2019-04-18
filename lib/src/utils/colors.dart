@@ -64,12 +64,15 @@ int _blue(int color) {
 }
 
 // Global
+const Color primary = Colors.blue;
+const Color accent = Colors.blue;
+
 const Color textDisabled = Colors.black26;
-const Color testLessImportant = Colors.black45;
+const Color textLessImportant = Colors.black45;
 const Color appBarIcon = Colors.white;
 const Color textColorInverted = Colors.white;
 const Color transparent = Colors.transparent;
-const Color accent = Colors.pink;
+const Color divider = Colors.black;
 
 // Progress
 final Color progressBackground = Colors.black45;
