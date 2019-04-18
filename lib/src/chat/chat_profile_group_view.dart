@@ -130,6 +130,8 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
               )
             ],
           );
+        } else {
+          return Container();
         }
       }
     );

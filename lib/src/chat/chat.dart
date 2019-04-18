@@ -293,6 +293,7 @@ class _ChatScreenState extends State<ChatScreen> {
       bloc: _messagesBloc,
       builder: (context, state) {
         if (state is MessagesStateSuccess) {
+          _chatBloc.dispatch(ChatMarkNoticed());
           return new ListView.builder(
             padding: new EdgeInsets.all(listItemPadding),
             reverse: true,
