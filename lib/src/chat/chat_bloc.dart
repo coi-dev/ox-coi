@@ -108,7 +108,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chat.chatSummary.preview, chat.chatSummary.timestamp));
   }
 
-  void _markNoticedChat() async{
+  void _markNoticedChat() async {
+    if (!chatRepository.contains(_chatId)) {
+      return;
+    }
     Context context = Context();
     await context.markNoticedChat(_chatId);
     Chat chat = chatRepository.get(_chatId);
