@@ -100,7 +100,12 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _chatBloc.dispatch(RequestChat(widget._chatId));
     _chatBloc.dispatch(ChatMarkNoticed());
-    _messagesBloc.dispatch(RequestMessages(widget._chatId));
+    final chatObservable = new Observable<ChatState>(_chatBloc.state);
+    chatObservable.listen((state) {
+      if (state is ChatStateSuccess) {
+        _messagesBloc.dispatch(RequestMessages(widget._chatId));
+      }
+    });
     final contactImportObservable = new Observable<ChatComposerState>(_chatComposerBloc.state);
     contactImportObservable.listen((state) => handleChatComposer(state));
   }
