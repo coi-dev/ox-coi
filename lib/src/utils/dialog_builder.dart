@@ -52,7 +52,8 @@ showConfirmationDialog({
   @required Function positiveAction,
   String negativeButton,
   Function negativeAction,
-}) {
+  bool selfClose = true
+  }) {
   Navigation navigation = Navigation();
   return showDialog<void>(
     context: context,
@@ -67,14 +68,18 @@ showConfirmationDialog({
               if (negativeAction != null) {
                 negativeAction();
               }
-              navigation.pop(context, "DialogBuilder.showConfirmationDialog");
+              if(selfClose){
+                navigation.pop(context, "DialogBuilder.showConfirmationDialog");
+              }
             },
           ),
           new FlatButton(
             child: new Text(positiveButton),
             onPressed: () {
               positiveAction();
-              navigation.pop(context, "DialogBuilder.showConfirmationDialog");
+              if(selfClose){
+                navigation.pop(context, "DialogBuilder.showConfirmationDialog");
+              }
             },
           ),
         ],

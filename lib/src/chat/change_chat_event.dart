@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'package:flutter/material.dart';
+
 abstract class ChangeChatEvent {}
 
 class CreateChat extends ChangeChatEvent {
@@ -62,4 +64,22 @@ class ChatCreated extends ChangeChatEvent {
   final int chatId;
 
   ChatCreated({this.chatId});
+}
+
+class DeleteChat extends ChangeChatEvent{
+  final int chatId;
+
+  DeleteChat({@required this.chatId});
+}
+
+class LeaveGroupChat extends ChangeChatEvent{
+  final int chatId;
+
+  LeaveGroupChat({@required this.chatId});
+}
+
+class DeleteChats extends ChangeChatEvent{
+  final List<int> chatIds;
+
+  DeleteChats({@required this.chatIds});
 }

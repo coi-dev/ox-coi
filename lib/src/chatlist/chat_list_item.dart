@@ -52,8 +52,11 @@ import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 
 class ChatListItem extends StatefulWidget {
   final int _chatId;
+  final Function _onTap;
+  final Function _switchMultiSelect;
+  final bool _isMultiSelect;
 
-  ChatListItem(this._chatId, key) : super(key: Key(key));
+  ChatListItem(this._chatId, this._onTap, this._switchMultiSelect, this._isMultiSelect, key) : super(key: Key(key));
 
   @override
   _ChatListItemState createState() => _ChatListItemState();
@@ -62,11 +65,13 @@ class ChatListItem extends StatefulWidget {
 class _ChatListItemState extends State<ChatListItem> {
   ChatBloc _chatBloc = ChatBloc();
   Navigation navigation = Navigation();
+  bool _isSelected;
 
   @override
   void initState() {
     super.initState();
     _chatBloc.dispatch(RequestChat(widget._chatId));
+    _isSelected = false;
   }
 
   @override
@@ -91,30 +96,49 @@ class _ChatListItemState extends State<ChatListItem> {
           name = "";
           subTitle = "";
         }
-        return AvatarListItem(
-          title: name,
-          subTitle: _chatBloc.isGroup ? subTitle : preview,
-          color: color,
-          freshMessageCount: freshMessageCount,
-          timestamp: timestamp,
-          subTitleIcon: _chatBloc.isGroup
+        return InkWell(
+          //onLongPress: () => chatItemLongPress(),
+          child: AvatarListItem(
+            avatarIcon: _isSelected && widget._isMultiSelect ? Icons.check : null,
+            title: name,
+            subTitle: _chatBloc.isGroup ? subTitle : preview,
+            color: color,
+            freshMessageCount: freshMessageCount,
+            timestamp: timestamp,
+            subTitleIcon: _chatBloc.isGroup
               ? Icon(
-                  Icons.group,
-                  size: iconSize,
-                )
-              : Container(),
-          onTap: chatItemTapped,
+              Icons.group,
+              size: iconSize,
+            ) : Container(),
+            onTap: chatItemTapped,
+          ),
         );
       },
     );
-    /*;*/
   }
 
   chatItemTapped(String name, String subtitle) {
-    navigation.push(
-      context,
-      MaterialPageRoute(builder: (context) => ChatScreen(widget._chatId),),
-      "ChatScreen"
-    );
+    if(widget._isMultiSelect) {
+      setState(() {
+        _isSelected = _isSelected ? false : true;
+      });
+      widget._onTap(widget._chatId);
+    }else{
+      navigation.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChatScreen(widget._chatId),),
+        "ChatScreen"
+      );
+    }
+  }
+
+  chatItemLongPress(){
+    if(!widget._isMultiSelect) {
+      setState(() {
+        _isSelected = _isSelected ? false : true;
+      });
+      widget._onTap(widget._chatId);
+      widget._switchMultiSelect(widget._chatId);
+    }
   }
 }

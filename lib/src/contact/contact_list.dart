@@ -64,10 +64,12 @@ import 'package:rxdart/rxdart.dart';
 class ContactListView extends BaseRootChild {
   final Navigation navigation = Navigation();
 
+  ContactListView(State<StatefulWidget> state) : super(state);
+
   @override
   _ContactListState createState() {
     final state = _ContactListState();
-    addActions([state.getImportAction(), state.getBlockedUsersAction()]);
+    setActions([state.getImportAction(), state.getBlockedUsersAction()]);
     return state;
   }
 

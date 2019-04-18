@@ -44,6 +44,9 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 abstract class BaseRootChild extends StatefulWidget {
+  final State state;
+
+  BaseRootChild(this.state);
 
   final List<Widget> _actions = new List();
 
@@ -65,7 +68,7 @@ abstract class BaseRootChild extends StatefulWidget {
     return _actions;
   }
 
-  addActions(List<Widget> widgets) {
+  setActions(List<Widget> widgets) {
     _actions.clear();
     _actions.addAll(widgets);
   }

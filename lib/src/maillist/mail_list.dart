@@ -49,6 +49,9 @@ import 'package:ox_talk/src/utils/dimensions.dart';
 
 class MailListView extends BaseRootChild {
 
+  MailListView(State<StatefulWidget> state) : super(state);
+
+
   _MailListState createState() => _MailListState();
 
   @override

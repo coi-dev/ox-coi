@@ -40,13 +40,18 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/src/chat/change_chat_bloc.dart';
+import 'package:ox_talk/src/chat/change_chat_event.dart';
 import 'package:ox_talk/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 
@@ -101,6 +106,16 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
             padding: EdgeInsets.all(chatProfileDividerPadding),
             child: Divider(height: dividerHeight,),
           ),
+          Card(
+            child: ListTile(
+              title: Text(AppLocalizations.of(context).chatProfileLeaveGroupButtonText,),
+              onTap: () => _showLeaveGroupDialog(),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(chatProfileDividerPadding),
+            child: Divider(height: dividerHeight,),
+          ),
           _buildGroupMemberList()
         ],
       ),
@@ -135,5 +150,24 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
         }
       }
     );
+  }
+
+  _showLeaveGroupDialog() {
+    return showConfirmationDialog(
+      context: context,
+      title: AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
+      content: AppLocalizations.of(context).chatProfileLeaveGroupInfoText,
+      positiveButton: AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
+      positiveAction: () => _leaveGroup(),
+      selfClose: false
+    );
+  }
+
+  _leaveGroup() async{
+    Navigation navigation = Navigation();
+    ChangeChatBloc changeChatBloc = ChangeChatBloc();
+    changeChatBloc.dispatch(LeaveGroupChat(chatId: widget._chatId));
+    changeChatBloc.dispatch(DeleteChat(chatId: widget._chatId));
+    navigation.popUntil(context, ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatProfileSingleContact - deleteChat()");
   }
 }

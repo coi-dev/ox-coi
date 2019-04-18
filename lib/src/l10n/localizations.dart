@@ -279,6 +279,10 @@ class AppLocalizations {
 
   String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
 
+  String get chatListDeleteChatsDialogTitleText => Intl.message('Delete chats', name: 'chatListDeleteChatsDialogTitleText');
+
+  String get chatListDeleteChatsInfoText => Intl.message('Do you want to delete these chats?', name: 'chatListDeleteChatsInfoText');
+
   // Chat
   String get chatTitle => Intl.message('Chat', name: 'chatTitle');
 
@@ -297,7 +301,15 @@ class AppLocalizations {
 
   String get chatProfileBlockContactButtonText => Intl.message('Block contact', name: 'chatProfileBlockContactButtonText');
 
+  String get chatProfileDeleteChatButtonText => Intl.message('Delete chat', name: 'chatProfileDeleteChatButtonText');
+
+  String get chatProfileDeleteChatInfoText => Intl.message('Do you want to delete this chat?', name: 'chatProfileDeleteChatInfoText');
+
   String get chatProfileClipboardToastMessage => Intl.message('Email copied to clipboard', name: 'chatProfileClipboardToastMessage');
+
+  String get chatProfileLeaveGroupInfoText => Intl.message('Do you really want to leave the group?', name: 'chatProfileLeaveGroupInfoText');
+
+  String get chatProfileLeaveGroupButtonText => Intl.message('Leave group', name: 'chatProfileLeaveGroupButtonText');
 
   String chatProfileGroupMemberCounter(memberCount) => Intl.message('$memberCount member(s)', name: 'chatProfileGroupMemberCounter', args: [memberCount]);
 

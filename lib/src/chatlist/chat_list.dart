@@ -50,6 +50,12 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 class ChatList extends StatefulWidget {
+  final void Function(int) _switchMultiSelect;
+  final void Function(int) _multiSelectItemTapped;
+  final bool _isMultiSelect;
+
+  ChatList(this._switchMultiSelect, this._multiSelectItemTapped, this._isMultiSelect);
+
   @override
   _ChatListState createState() => _ChatListState();
 }
@@ -99,8 +105,16 @@ class _ChatListState extends State<ChatList> {
       itemBuilder: (BuildContext context, int index) {
         var chatId = chatIds[index];
         var key = "$chatId-${chatLastUpdateValues[index]}";
-        return ChatListItem(chatId, key);
+        return ChatListItem(chatId, multiSelectItemTapped, switchMultiSelect, widget._isMultiSelect, key);
       },
     );
+  }
+
+  multiSelectItemTapped(int id) {
+    widget._multiSelectItemTapped(id);
+  }
+
+  switchMultiSelect(int id) {
+    widget._switchMultiSelect(id);
   }
 }

@@ -58,10 +58,12 @@ import 'package:ox_talk/src/utils/widget.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 
 class ProfileView extends BaseRootChild {
+  ProfileView(State<StatefulWidget> state) : super(state);
+
   @override
   _ProfileState createState() {
     final state = _ProfileState();
-    addActions([state.getAccountSettingsAction()]);
+    setActions([state.getAccountSettingsAction()]);
     return state;
   }
 

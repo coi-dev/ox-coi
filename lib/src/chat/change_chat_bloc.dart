@@ -70,6 +70,15 @@ class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
     } else if (event is ChatCreated) {
       yield CreateChatStateSuccess(chatId: event.chatId);
     }
+    else if (event is DeleteChat) {
+      _deleteChat(event.chatId);
+    }
+    else if (event is DeleteChats) {
+      _deleteChats(event.chatIds);
+    }
+    else if (event is LeaveGroupChat) {
+      _leaveGroupChat(event.chatId);
+    }
   }
 
   void _createChat({int contactId, int messageId, bool verified, String name}) async {
@@ -94,4 +103,26 @@ class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
     dispatch(ChatCreated(chatId: chatId));
   }
 
+  void _deleteChat(int chatId) async{
+    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
+    Context context = Context();
+    chatRepository.remove(chatId);
+    await context.deleteChat(chatId);
+  }
+
+  void _deleteChats(List<int> chatIds) async{
+    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
+    Context context = Context();
+
+    for(int chatId in chatIds) {
+      chatRepository.remove(chatId);
+      _leaveGroupChat(chatId);
+      await context.deleteChat(chatId);
+    }
+  }
+
+  void _leaveGroupChat(int chatId) async{
+    Context context = Context();
+    await context.removeContactFromChat(chatId, Contact.idSelf);
+  }
 }

@@ -43,6 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
+import 'package:ox_talk/src/chat/change_chat_bloc.dart';
+import 'package:ox_talk/src/chat/change_chat_event.dart';
 import 'package:ox_talk/src/chatlist/chat_list.dart';
 import 'package:ox_talk/src/chatlist/invite_list.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
@@ -51,11 +53,20 @@ import 'package:ox_talk/src/message/messages_event.dart';
 import 'package:ox_talk/src/message/messages_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 class ChatListView extends BaseRootChild {
-  _ChatListViewState createState() => _ChatListViewState();
   final Navigation navigation = Navigation();
+
+  ChatListView(State<StatefulWidget> state) : super(state);
+
+  @override
+  _ChatListViewState createState() {
+    final state = _ChatListViewState();
+    setActions([]);
+    return state;
+  }
 
   @override
   Color getColor() {
@@ -99,20 +110,38 @@ class ChatListView extends BaseRootChild {
 
 class _ChatListViewState extends State<ChatListView> with SingleTickerProviderStateMixin {
   TabController controller;
-
+  bool _isMultiSelect = false;
   MessagesBloc _messagesBloc = MessagesBloc();
+  ChangeChatBloc _changeChatBloc = ChangeChatBloc();
+  List<int> _selectedChats;
 
   @override
   void initState() {
     super.initState();
     _messagesBloc.dispatch(RequestMessages(1));
     controller = TabController(length: 2, vsync: this);
+    _isMultiSelect = false;
+    _selectedChats = List();
   }
 
   @override
   void dispose() {
     _messagesBloc.dispose();
     super.dispose();
+  }
+
+  Widget getDeleteAction() {
+    return _isMultiSelect ? IconButton(
+      icon: Icon(Icons.delete),
+      onPressed: () => _showDeleteDialog(),
+    ) : Container();
+  }
+
+  Widget getCancelAction() {
+    return _isMultiSelect ? IconButton(
+      icon: Icon(Icons.cancel),
+      onPressed: () => _cancelMultiSelect(),
+    ) : Container();
   }
 
   @override
@@ -150,12 +179,66 @@ class _ChatListViewState extends State<ChatListView> with SingleTickerProviderSt
           child: TabBarView(
             controller: controller,
             children: <Widget>[
-              ChatList(),
+              ChatList(_switchMultiSelect, _itemTapped, _isMultiSelect),
               InviteList(),
             ],
           ),
         )
       ],
     );
+  }
+
+  _switchMultiSelect(int chatId){
+    setState(() {
+      if(_isMultiSelect){
+        _isMultiSelect = false;
+        widget.state.setState((){
+          widget.setActions([]);
+        });
+      }
+      else{
+        _isMultiSelect = true;
+        _selectedChats.clear();
+        _selectedChats.add(chatId);
+        widget.state.setState(() {
+          widget.setActions([getDeleteAction(), getCancelAction()]);
+        });
+      }
+    });
+  }
+
+  _itemTapped(int chatId){
+    if (_selectedChats.contains(chatId)) {
+      _selectedChats.remove(chatId);
+    } else {
+      _selectedChats.add(chatId);
+    }
+  }
+
+  _showDeleteDialog() {
+    if(_selectedChats != null && _selectedChats.length > 0) {
+      showConfirmationDialog(
+          context: context,
+          title: AppLocalizations
+              .of(context)
+              .chatListDeleteChatsDialogTitleText,
+          content: AppLocalizations
+              .of(context)
+              .chatListDeleteChatsInfoText,
+          positiveButton: AppLocalizations
+              .of(context)
+              .delete,
+          positiveAction: () => _deleteSelectedChats()
+      );
+    }
+  }
+
+  _deleteSelectedChats(){
+    _changeChatBloc.dispatch(DeleteChats(chatIds: _selectedChats));
+    _switchMultiSelect(null);
+  }
+
+  _cancelMultiSelect() {
+    _switchMultiSelect(null);
   }
 }
