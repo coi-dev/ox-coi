@@ -67,12 +67,12 @@ class UserAccountDataChanged extends UserChangeEvent {
   final String imapLogin;
   final String imapPassword;
   final String imapServer;
-  final int imapPort;
+  final String imapPort;
   final int imapSecurity;
   final String smtpLogin;
   final String smtpPassword;
   final String smtpServer;
-  final int smtpPort;
+  final String smtpPort;
   final int smtpSecurity;
 
   UserAccountDataChanged({

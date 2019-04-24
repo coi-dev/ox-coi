@@ -181,10 +181,10 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
     _email = config.email;
     imapLoginNameField.controller.text = config.imapLogin;
     imapServerField.controller.text = config.imapServer;
-    imapPortField.controller.text = config.imapPortAsString;
+    imapPortField.controller.text = config.imapPort;
     smtpLoginNameField.controller.text = config.smtpLogin;
     smtpServerField.controller.text = config.imapServer;
-    smtpPortField.controller.text = config.smtpPortAsString;
+    smtpPortField.controller.text = config.smtpPort;
     _selectedImapSecurity = convertProtocolIntToString(context, config.imapSecurity);
     _selectedSmtpSecurity = convertProtocolIntToString(context, config.smtpSecurity);
   }
@@ -270,12 +270,12 @@ class _EditAccountSettingsState extends State<EditAccountSettings> {
         imapLogin: imapLogin,
         imapPassword: imapPassword,
         imapServer: imapServer,
-        imapPort: imapPort.isNotEmpty ? int.parse(imapPort) : null,
+        imapPort: imapPort,
         imapSecurity: imapSecurity,
         smtpLogin: smtpLogin,
         smtpPassword: smtpPassword,
         smtpServer: smtpServer,
-        smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
+        smtpPort: smtpPort,
         smtpSecurity: smtpSecurity,
       ));
     }

@@ -54,11 +54,11 @@ class Config {
   String email;
   String imapLogin;
   String imapServer;
-  int imapPort;
+  String imapPort;
   int imapSecurity;
   String smtpLogin;
   String smtpServer;
-  int smtpPort;
+  String smtpPort;
   int smtpSecurity;
   int showEmails;
 
@@ -83,10 +83,10 @@ class Config {
     email = await _context.getConfigValue(Context.configAddress);
     imapLogin = await _context.getConfigValue(Context.configMailUser);
     imapServer = await _context.getConfigValue(Context.configMailServer);
-    imapPort = await _context.getConfigValue(Context.configMailPort, ObjectType.int);
+    imapPort = await _context.getConfigValue(Context.configMailPort);
     smtpLogin = await _context.getConfigValue(Context.configSendUser);
     smtpServer = await _context.getConfigValue(Context.configSendServer);
-    smtpPort = await _context.getConfigValue(Context.configSendPort, ObjectType.int);
+    smtpPort = await _context.getConfigValue(Context.configSendPort);
     int serverFlags = await _context.getConfigValue(Context.configServerFlags, ObjectType.int);
     imapSecurity = getSavedImapSecurityOption(serverFlags);
     smtpSecurity = getSavedSmtpSecurityOption(serverFlags);
@@ -158,10 +158,6 @@ class Config {
   }
 
   bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails;
-
-  String get smtpPortAsString => smtpPort != null ? (smtpPort > 0 ? smtpPort.toString() : "") : null;
-
-  String get imapPortAsString => imapPort != null ? (imapPort > 0 ? imapPort.toString() : "") : null;
 
   convertEmptyStringToNull(value) {
     if (value == null || (value is String && value.isEmpty)) {

@@ -49,12 +49,12 @@ class LoginButtonPressed extends LoginEvent {
   final String password;
   final String imapLogin;
   final String imapServer;
-  final int imapPort;
+  final String imapPort;
   final int imapSecurity;
   final String smtpLogin;
   final String smtpPassword;
   final String smtpServer;
-  final int smtpPort;
+  final String smtpPort;
   final int smtpSecurity;
 
   LoginButtonPressed(

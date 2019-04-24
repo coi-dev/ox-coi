@@ -40,7 +40,6 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/change_chat_bloc.dart';

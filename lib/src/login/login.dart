@@ -166,12 +166,12 @@ class _LoginState extends State<Login> {
         password: password,
         imapLogin: imapLogin,
         imapServer: imapServer,
-        imapPort: imapPort.isNotEmpty ? int.parse(imapPort) : null,
+        imapPort: imapPort,
         imapSecurity: imapSecurity,
         smtpLogin: smtpLogin,
         smtpPassword: smtpPassword,
         smtpServer: smtpServer,
-        smtpPort: smtpPort.isNotEmpty ? int.parse(smtpPort) : null,
+        smtpPort: smtpPort,
         smtpSecurity: smtpSecurity,
       ));
     }
