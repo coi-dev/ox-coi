@@ -47,6 +47,7 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
+import 'package:ox_talk/src/data/chat_extension.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/utils/colors.dart';
@@ -95,7 +96,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       int chatId = await chatList.getChat(i);
       if(chatId == _chatId) {
         var summaryData = await chatList.getChatSummary(i);
-        chat.chatSummary = ChatSummary.fromMethodChannel(summaryData);
+        var chatSummary = ChatSummary.fromMethodChannel(summaryData);
+        chat.set(ChatExtension.chatSummary, chatSummary);
       }
     }
     String name = await chat.getName();
@@ -105,7 +107,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     bool isSelfTalk = await chat.isSelfTalk();
     _isGroup = await chat.isGroup();
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chat.chatSummary.preview, chat.chatSummary.timestamp));
+    var chatSummary = chat.get(ChatExtension.chatSummary);
+    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary.preview, chatSummary.timestamp));
   }
 
   void _markNoticedChat() async {

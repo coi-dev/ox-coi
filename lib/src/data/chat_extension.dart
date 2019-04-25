@@ -40,47 +40,6 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/chat_extension.dart';
-
-class ChatRepository extends Repository<Chat> {
-  ChatRepository(RepositoryItemCreator<Chat> creator) : super(creator);
-
-  @override
-  onData(Event event) async {
-    if (event.hasType(Event.incomingMsg) || event.hasType(Event.msgsChanged)) {
-      int chatId = event.data1;
-      await setupChatListAfterUpdate(chatId);
-    }
-    super.onData(event);
-  }
-
-  Future<void> setupChatListAfterUpdate(int changedChatId) async {
-    ChatList chatList = ChatList();
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    ChatSummary chatSummary;
-    for (int i = 0; i < chatCount; i++) {
-      int chatId = await chatList.getChat(i);
-      if(changedChatId == chatId){
-        var chatSummary = await chatList.getChatSummary(i);
-        chatSummary = ChatSummary.fromMethodChannel(chatSummary);
-      }
-      chatIds.add(chatId);
-    }
-    if (changedChatId != 0 && chatIds.contains(changedChatId)) {
-      Chat updatedChat = get(changedChatId);
-      if(chatSummary != null){
-        updatedChat.set(ChatExtension.chatSummary, chatSummary);
-      }
-      updatedChat.setLastUpdate();
-    }
-    update(ids: chatIds);
-  }
-
-  @override
-  onError(error) {
-    super.onError(error);
-  }
+class ChatExtension {
+  static const String chatSummary = "chat_extension_summary";
 }
