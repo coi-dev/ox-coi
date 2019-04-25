@@ -48,6 +48,7 @@ const formatterTime = [HH, ':', nn];
 const formatterDate = [dd, '.', mm];
 const formatterDateLong = [dd, '. ', MM];
 const formatterTimer = [nn, ':', ss, ':', SSS];
+const formatterDateTimeFile = [yy, '-', mm, '-', dd, '_', HH, '-', nn, '-', ss];
 
 String getTimeFormTimestamp(int timestamp) {
   return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTime);
@@ -79,23 +80,29 @@ String getTimerFormTimestamp(int timestamp) {
   return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTimer);
 }
 
-String getChatListTime(BuildContext context, int timestamp){
+String getChatListTime(BuildContext context, int timestamp) {
   DateTime chatTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
   DateTime comparingChatDateTime = DateTime(chatTime.year, chatTime.month, chatTime.day);
   DateTime now = DateTime.now();
   DateTime nowDate = DateTime(now.year, now.month, now.day);
 
   int result = comparingChatDateTime.compareTo(nowDate);
-  if(result == 0){
+  if (result == 0) {
     return getTimeFormTimestamp(timestamp);
-  }else if(result == -1){
+  } else if (result == -1) {
     Duration difference = comparingChatDateTime.difference(nowDate);
-    if(difference.inDays == -1){
+    if (difference.inDays == -1) {
       return AppLocalizations.of(context).yesterday;
-    }
-    else{
+    } else {
       return formatDate(chatTime, [dd, '.', mm, '.', yy]);
     }
   }
   return getTimeFormTimestamp(timestamp);
+}
+
+String getDateTimeFileFormTimestamp([int timestamp]) {
+  if (timestamp == null) {
+    timestamp = getNowTimestamp();
+  }
+  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterDateTimeFile);
 }

@@ -40,41 +40,11 @@
  * for more details.
  */
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
-const preferenceSystemContactsImportShown = "preferenceSystemContactsImportShown";
-const preferenceAppVersion = "preferenceAppVersion";
-const preferenceLogFiles = "preferenceLogFiles";
-
-Future<dynamic> getPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  var preference = sharedPreferences.get(key);
-  if (preference is List) {
-    return List<String>.from(preference);
-  }
-  return preference;
-}
-
-Future<bool> containsPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  return sharedPreferences.getKeys().contains(key);
-}
-
-Future<SharedPreferences> getSharedPreferences() async {
-  return await SharedPreferences.getInstance();
-}
-
-Future<void> setPreference(String key, value) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  if (value is bool) {
-    sharedPreferences.setBool(key, value);
-  } else if (value is int) {
-    sharedPreferences.setInt(key, value);
-  } else if (value is double) {
-    sharedPreferences.setDouble(key, value);
-  } else if (value is String) {
-    sharedPreferences.setString(key, value);
-  } else if (value is List) {
-    sharedPreferences.setStringList(key, value);
-  }
+Future<void> writeToFile(File file, String content) async {
+  var sink = file.openWrite(mode: FileMode.append);
+  sink.write(content);
+  await sink.flush();
+  await sink.close();
 }
