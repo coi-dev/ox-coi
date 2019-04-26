@@ -58,6 +58,7 @@ class ChatRepository extends Repository<Chat> {
 
   Future<void> setupChatListAfterUpdate(int changedChatId) async {
     ChatList chatList = ChatList();
+    await chatList.setup();
     int chatCount = await chatList.getChatCnt();
     List<int> chatIds = List();
     ChatSummary chatSummary;
@@ -69,6 +70,7 @@ class ChatRepository extends Repository<Chat> {
       }
       chatIds.add(chatId);
     }
+    await chatList.tearDown();
     if (changedChatId != 0 && chatIds.contains(changedChatId)) {
       Chat updatedChat = get(changedChatId);
       if(chatSummary != null){

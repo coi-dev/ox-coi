@@ -41,14 +41,12 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/chat_list_repository.dart';
 import 'package:ox_talk/src/data/chat_message_repository.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 
 enum RepositoryType {
-  chatList,
   chat,
   chatMessage,
   contact,
@@ -66,9 +64,6 @@ class RepositoryManager {
     } else {
       Repository repository;
       switch (type) {
-        case RepositoryType.chatList:
-          repository = ChatListRepository((id) => ChatList());
-          break;
         case RepositoryType.chat:
           repository = ChatRepository(Chat.getCreator());
           break;

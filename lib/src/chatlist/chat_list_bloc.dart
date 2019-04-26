@@ -83,12 +83,14 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   void setupChatList() async {
     ChatList chatList = ChatList();
+    await chatList.setup();
     int chatCount = await chatList.getChatCnt();
     List<int> chatIds = List();
     for (int i = 0; i < chatCount; i++) {
       int chatId = await chatList.getChat(i);
       chatIds.add(chatId);
     }
+    await chatList.tearDown();
     chatRepository.putIfAbsent(ids: chatIds);
     dispatch(ChatListModified());
   }
