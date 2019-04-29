@@ -81,11 +81,12 @@ class _ChatListState extends State<ChatList> {
       bloc: _chatListBloc,
       builder: (context, state) {
         if (state is ChatListStateSuccess) {
-          if(state.chatIds.length > 0) {
+          if (state.chatIds.length > 0) {
             return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
-          }
-          else{
-            return Center(child: Text(AppLocalizations.of(context).chatListEmpty),);
+          } else {
+            return Center(
+              child: Text(AppLocalizations.of(context).chatListEmpty),
+            );
           }
         } else if (state is! ChatListStateFailure) {
           return Center(

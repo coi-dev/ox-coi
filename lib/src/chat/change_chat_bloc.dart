@@ -47,7 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/chat/change_chat_event.dart';
 import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/data/chat_message_repository.dart';
-import 'package:ox_talk/src/data/chat_repository.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 
@@ -63,65 +63,65 @@ class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
       yield CreateChatStateLoading();
       try {
         messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
-        _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name);
+        _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name, contacts: event.contacts);
       } catch (error) {
         yield CreateChatStateFailure(error: error.toString());
       }
     } else if (event is ChatCreated) {
       yield CreateChatStateSuccess(chatId: event.chatId);
-    }
-    else if (event is DeleteChat) {
+    } else if (event is DeleteChat) {
       _deleteChat(event.chatId);
-    }
-    else if (event is DeleteChats) {
+    } else if (event is DeleteChats) {
       _deleteChats(event.chatIds);
-    }
-    else if (event is LeaveGroupChat) {
+    } else if (event is LeaveGroupChat) {
       _leaveGroupChat(event.chatId);
     }
   }
 
-  void _createChat({int contactId, int messageId, bool verified, String name}) async {
+  void _createChat({int contactId, int messageId, bool verified, String name, List<int> contacts}) async {
     Context context = Context();
     var chatId;
     if (contactId != null) {
       Repository<ChatMsg> inviteMessageRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
       inviteMessageRepository.clear();
       chatId = await context.createChatByContactId(contactId);
-//      var chatMessages = await context.getChatMessages(chatId);
-//      for(int msgId in chatMessages){
-//        inviteMessageRepository.remove(msgId);
-//      }
     } else if (messageId != null) {
+      var messageContactId = await messagesRepository.get(messageId).getFromId();
+      Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
+      Repository<Contact> validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+      inviteContactRepository.transferTo(validContactRepository, messageContactId);
       messagesRepository.clear();
       chatId = await context.createChatByMessageId(messageId);
-    } else if (verified != null && name != null) {
+    } else if (verified != null && name != null && contacts != null) {
       chatId = await context.createGroupChat(verified, name);
+      for (int i = 0; i < contacts.length; i++) {
+        context.addContactToChat(chatId, contacts[i]);
+      }
     }
-    Repository<Chat> chatRepository = ChatRepository(Chat.getCreator());
+    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     chatRepository.putIfAbsent(id: chatId);
     dispatch(ChatCreated(chatId: chatId));
   }
 
-  void _deleteChat(int chatId) async{
+  void _deleteChat(int chatId) async {
     Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     Context context = Context();
     chatRepository.remove(chatId);
     await context.deleteChat(chatId);
   }
 
-  void _deleteChats(List<int> chatIds) async{
+  void _deleteChats(List<int> chatIds) async {
     Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     Context context = Context();
 
-    for(int chatId in chatIds) {
+    for (int chatId in chatIds) {
       chatRepository.remove(chatId);
       _leaveGroupChat(chatId);
       await context.deleteChat(chatId);
     }
   }
 
-  void _leaveGroupChat(int chatId) async{
+  void _leaveGroupChat(int chatId) async {
     Context context = Context();
     await context.removeContactFromChat(chatId, Contact.idSelf);
   }

@@ -57,12 +57,7 @@ abstract class Repository<T extends Base> {
   Repository(this._creator, [this.id]);
 
   T get(int id) {
-    var item = _items[id];
-    if (item == null) {
-      _putIfAbsent(id);
-      item = _items[id];
-    }
-    return item;
+    return _items[id];
   }
 
   List<T> getAll() {
@@ -75,6 +70,10 @@ abstract class Repository<T extends Base> {
 
   List<int> getAllLastUpdateValues() {
     return _items.values.map<int>((Base item) => item.lastUpdate).toList();
+  }
+
+  void _set(int id, T value) {
+    _items[id] = value;
   }
 
   update({int id, List<int> ids}) {
@@ -168,6 +167,14 @@ abstract class Repository<T extends Base> {
 
   void tearDownCoreListener(int eventId, int listenerId) {
     _core.removeListener(eventId, listenerId);
+  }
+  
+  void transferTo(Repository<T> repository, int id) {
+    var value = _items[id];
+    if (value != null) {
+      repository._set(id, value);
+      _items.remove(id);
+    }
   }
 
   onData(Event event) {}

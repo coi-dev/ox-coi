@@ -44,6 +44,9 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/src/base/base_root_child.dart';
 import 'package:ox_talk/src/chatlist/chat_list_view.dart';
 import 'package:ox_talk/src/contact/contact_list.dart';
+import 'package:ox_talk/src/contact/contact_list_bloc.dart';
+import 'package:ox_talk/src/contact/contact_list_event.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/profile/profile.dart';
 import 'package:ox_talk/src/widgets/root_view_switcher.dart';
 
@@ -58,6 +61,17 @@ class _RootState extends State<Root> {
 
   _RootState() {
     childList.addAll([new ChatListView(this), new ContactListView(this), new ProfileView(this)]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _prepareInitialAppState();
+  }
+
+  void _prepareInitialAppState() {
+    ContactListBloc contactListBloc = ContactListBloc();
+    contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
   }
 
   @override

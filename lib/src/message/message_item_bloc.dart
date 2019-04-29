@@ -140,6 +140,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   void _setupContact() async {
     ChatMsg message = _getMessage();
     _contactId = await message.getFromId();
+    if (isInvite(await message.getChatId())) {
+      _contactRepository.putIfAbsent(id: _contactId);
+    }
     _getContact().loadValues(keys: [
       Contact.methodContactGetName,
       Contact.methodContactGetAddress,

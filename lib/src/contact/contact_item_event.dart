@@ -41,12 +41,15 @@
  */
 import 'dart:ui';
 
+import 'package:meta/meta.dart';
+
 abstract class ContactItemEvent {}
 
 class RequestContact extends ContactItemEvent {
   final int contactId;
+  final int listType;
 
-  RequestContact(this.contactId);
+  RequestContact({@required this.contactId, @required this.listType});
 }
 
 class ContactLoaded extends ContactItemEvent {

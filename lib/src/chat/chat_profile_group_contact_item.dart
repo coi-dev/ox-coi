@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 
 class ChatProfileGroupContactItem extends StatefulWidget {
   final int _contactId;
@@ -60,7 +61,7 @@ class ChatProfileGroupContactItem extends StatefulWidget {
    @override
    void initState() {
      super.initState();
-     _contactBloc.dispatch(RequestContact(widget._contactId));
+     _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
    }
 
    @override

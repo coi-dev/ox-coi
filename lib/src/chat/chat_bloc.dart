@@ -114,11 +114,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _markNoticedChat() async {
+    Context context = Context();
+    await context.markNoticedChat(_chatId);
     if (!chatRepository.contains(_chatId)) {
       return;
     }
-    Context context = Context();
-    await context.markNoticedChat(_chatId);
     Chat chat = chatRepository.get(_chatId);
     chat.setLastUpdate();
   }

@@ -139,7 +139,7 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
         });
   }
 
-  void createChat() async {
+  void createChat() {
     ChangeChatBloc createChatBloc = ChangeChatBloc();
     final changeChatStatesObservable = new Observable<ChangeChatState>(createChatBloc.state);
     changeChatStatesObservable.listen((state) => _handleChangeChatStateChange(state));

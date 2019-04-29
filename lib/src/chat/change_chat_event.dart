@@ -50,6 +50,7 @@ class CreateChat extends ChangeChatEvent {
   final int chatId;
   final bool verified;
   final String name;
+  final List<int> contacts;
 
   CreateChat({
     this.contactId,
@@ -57,6 +58,7 @@ class CreateChat extends ChangeChatEvent {
     this.chatId,
     this.verified,
     this.name,
+    this.contacts,
   });
 }
 

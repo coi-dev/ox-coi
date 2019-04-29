@@ -51,6 +51,7 @@ import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -79,7 +80,13 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   @override
   void initState() {
     super.initState();
-    _contactBloc.dispatch(RequestContact(widget._contactId));
+    var listType;
+    if (widget.contactItemType == ContactItemType.blocked) {
+      listType = ContactRepository.blockedContacts;
+    } else {
+      listType = ContactRepository.validContacts;
+    }
+    _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: listType));
   }
 
   @override

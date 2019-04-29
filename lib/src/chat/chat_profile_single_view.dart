@@ -50,6 +50,7 @@ import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/contact/contact_item_state.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
@@ -80,7 +81,7 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
   @override
   void initState() {
     super.initState();
-    _contactItemBloc.dispatch(RequestContact(widget._contactId));
+    _contactItemBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
   }
 
   @override

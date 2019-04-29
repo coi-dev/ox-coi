@@ -121,7 +121,8 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
   }
 
   void _blockContact(int id, int chatId) async {
-    contactRepository.remove(id);
+    var blockedContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.blockedContacts);
+    contactRepository.transferTo(blockedContactRepository, id);
     Context context = Context();
     await context.blockContact(id);
     Repository<ChatMsg> messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
@@ -134,7 +135,8 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
   }
 
   void _unblockContact(int id) async {
-    contactRepository.remove(id);
+    var validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+    contactRepository.transferTo(validContactRepository, id);
     Context context = Context();
     await context.unblockContact(id);
     dispatch(ContactUnblocked());

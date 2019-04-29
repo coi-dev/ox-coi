@@ -43,6 +43,9 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/src/chat/change_chat_bloc.dart';
+import 'package:ox_talk/src/chat/change_chat_event.dart';
+import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
@@ -55,6 +58,7 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CreateGroupChatSettings extends StatefulWidget {
   final List<int> _selectedContacts;
@@ -169,16 +173,22 @@ class _CreateGroupChatSettingsState extends State<CreateGroupChatSettings> {
     );
   }
 
-  _onSubmit() async {
+  _onSubmit() {
     if (_formKey.currentState.validate()) {
-      Context coreContext = Context();
-      int chatId = await coreContext.createGroupChat(false, _controller.text);
-      for (int i = 0; i < widget._selectedContacts.length; i++) {
-        coreContext.addContactToChat(chatId, widget._selectedContacts[i]);
-      }
-      chatRepository.putIfAbsent(id: chatId);
-      navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId), settings: RouteSettings(name: "ChatScreen")),
-          ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatScreen");
+      ChangeChatBloc changeChatBloc = ChangeChatBloc();
+      final changeChatStatesObservable = new Observable<ChangeChatState>(changeChatBloc.state);
+      changeChatStatesObservable.listen((state) => _handleChangeChatStateChange(state));
+      changeChatBloc.dispatch(CreateChat(verified: false, name: _controller.text, contacts: widget._selectedContacts));
+    }
+  }
+
+  _handleChangeChatStateChange(ChangeChatState state) {
+    if (state is CreateChatStateSuccess) {
+      navigation.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => ChatScreen(state.chatId), settings: RouteSettings(name: "ChatScreen")),
+          ModalRoute.withName(Navigation.ROUTES_ROOT),
+          "ChatScreen");
     }
   }
 }

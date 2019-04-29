@@ -53,7 +53,7 @@ import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
-  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+  Repository<Contact> _contactRepository;
   int _contactId;
 
   ContactItemBloc();
@@ -64,7 +64,8 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   @override
   Stream<ContactItemState> mapEventToState(ContactItemState currentState, ContactItemEvent event) async* {
     if (event is RequestContact) {
-      this._contactId = event.contactId;
+      _contactId = event.contactId;
+      _contactRepository = RepositoryManager.get(RepositoryType.contact, event.listType);
       yield ContactItemStateLoading();
       try {
         _setupContact();
@@ -77,7 +78,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   }
 
   void _setupContact() async {
-    Contact contact = contactRepository.get(_contactId);
+    Contact contact = _contactRepository.get(_contactId);
     String name = await contact.getName();
     String mail = await contact.getAddress();
     int colorValue = await contact.getColor();
