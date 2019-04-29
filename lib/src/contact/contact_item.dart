@@ -102,7 +102,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   onContactTapped(String name, String email) async {
     if (widget.contactItemType == ContactItemType.createChat) {
-      return buildCreateChatDialog(name, email);
+      return createChat();
     } else if (widget.contactItemType == ContactItemType.blocked) {
       return buildUnblockContactDialog(name, email);
     } else if (widget.contactItemType == ContactItemType.edit) {
@@ -119,34 +119,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
     }
   }
 
-  Future<void> buildCreateChatDialog(String name, String email) {
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          String contact = name.isNotEmpty ? name : email;
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context).createChatTitle),
-            content: new Text(AppLocalizations.of(context).createChatWith(contact)),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).cancel),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).yes),
-                onPressed: () {
-                  createChat();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  void createChat() async {
+  void createChat() {
     ChangeChatBloc createChatBloc = ChangeChatBloc();
     final createChatStatesObservable = new Observable<ChangeChatState>(createChatBloc.state);
     createChatStatesObservable.listen((state) => _handleCreateChatStateChange(state));
