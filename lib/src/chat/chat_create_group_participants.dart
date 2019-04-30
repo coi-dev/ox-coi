@@ -53,6 +53,7 @@ import 'package:ox_talk/src/contact/contact_item_selectable.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
+import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -75,7 +76,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   void initState() {
     super.initState();
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
-    chatRepository = ChatRepository(Chat.getCreator());
+    chatRepository = RepositoryManager.get(RepositoryType.chat);
     addSearchListener(_contactListBloc, _searchController);
   }
 

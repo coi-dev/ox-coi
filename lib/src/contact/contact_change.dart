@@ -48,6 +48,7 @@ import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_change_state.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
+import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/error.dart';
@@ -110,7 +111,7 @@ class _ContactChangeState extends State<ContactChange> {
     }
     final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
     contactAddedObservable.listen((state) => handleContactChanged(state));
-    chatRepository = ChatRepository(Chat.getCreator());
+    chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
 
   handleContactChanged(ContactChangeState state) async {
