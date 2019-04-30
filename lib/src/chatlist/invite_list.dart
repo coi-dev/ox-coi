@@ -42,11 +42,11 @@
  
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chatlist/chat_list_invite_item.dart';
+import 'package:ox_talk/src/chatlist/invite_item.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/message/messages_bloc.dart';
-import 'package:ox_talk/src/message/messages_event.dart';
-import 'package:ox_talk/src/message/messages_state.dart';
+import 'package:ox_talk/src/message/message_list_bloc.dart';
+import 'package:ox_talk/src/message/message_list_event.dart';
+import 'package:ox_talk/src/message/message_list_state.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 class InviteList extends StatefulWidget {
@@ -55,7 +55,7 @@ class InviteList extends StatefulWidget {
 }
 
 class _InviteListState extends State<InviteList> {
-  MessagesBloc _messagesBloc = MessagesBloc();
+  MessageListBloc _messagesBloc = MessageListBloc();
 
   @override
   void initState(){
@@ -98,7 +98,7 @@ class _InviteListState extends State<InviteList> {
       itemBuilder: (BuildContext context, int index) {
         var messageId = messageIds[index];
         var key = "$messageId-${messageLastUpdateValues[index]}";
-        return ChatListInviteItem(1, messageId, key);
+        return InviteItem(1, messageId, key);
       },
     );
   }

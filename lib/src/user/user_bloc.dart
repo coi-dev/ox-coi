@@ -40,48 +40,34 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-abstract class ChangeChatEvent {}
+import 'package:bloc/bloc.dart';
+import 'package:ox_talk/src/data/config.dart';
+import 'package:ox_talk/src/user/user_event.dart';
+import 'package:ox_talk/src/user/user_state.dart';
 
-class CreateChat extends ChangeChatEvent {
-  final int contactId;
-  final int messageId;
-  final int chatId;
-  final bool verified;
-  final String name;
-  final List<int> contacts;
+class UserBloc extends Bloc<UserEvent, UserState> {
+  @override
+  UserState get initialState => UserStateInitial();
 
-  CreateChat({
-    this.contactId,
-    this.messageId,
-    this.chatId,
-    this.verified,
-    this.name,
-    this.contacts,
-  });
-}
+  @override
+  Stream<UserState> mapEventToState(UserState currentState, UserEvent event) async* {
+    if (event is RequestUser) {
+      yield UserStateLoading();
+      try {
+        _setupUser();
+      } catch (error) {
+        yield UserStateFailure(error: error.toString());
+      }
+    } else if (event is UserLoaded) {
+      yield UserStateSuccess(config: event.config);
+    }
+  }
 
-class ChatCreated extends ChangeChatEvent {
-  final int chatId;
-
-  ChatCreated({this.chatId});
-}
-
-class DeleteChat extends ChangeChatEvent{
-  final int chatId;
-
-  DeleteChat({@required this.chatId});
-}
-
-class LeaveGroupChat extends ChangeChatEvent{
-  final int chatId;
-
-  LeaveGroupChat({@required this.chatId});
-}
-
-class DeleteChats extends ChangeChatEvent{
-  final List<int> chatIds;
-
-  DeleteChats({@required this.chatIds});
+  void _setupUser() async {
+    Config config = Config();
+    await config.load();
+    dispatch(UserLoaded(config: config));
+  }
 }

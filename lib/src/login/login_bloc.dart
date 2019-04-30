@@ -48,7 +48,7 @@ import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/utils/error.dart';
-import 'package:ox_talk/src/utils/protocol_security_converter.dart';
+import 'package:ox_talk/src/utils/core.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

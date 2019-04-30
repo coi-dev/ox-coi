@@ -43,8 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_event.dart';
+import 'package:ox_talk/src/chat/chat_change_bloc.dart';
+import 'package:ox_talk/src/chat/chat_change_event.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_item_bloc.dart';
@@ -192,8 +192,8 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
   }
 
   _deleteChat() {
-    ChangeChatBloc changeChatBloc = ChangeChatBloc();
-    changeChatBloc.dispatch(DeleteChat(chatId: widget._chatId));
+    ChatChangeBloc chatChangeBloc = ChatChangeBloc();
+    chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
     navigation.popUntil(context, ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatProfileSingleContact - deleteChat()");
   }
 }

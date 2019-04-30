@@ -51,7 +51,7 @@ import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 
 class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
-  Repository<ChatMsg> _messagesRepository;
+  Repository<ChatMsg> _messageListRepository;
 
   @override
   MessageAttachmentState get initialState => MessageAttachmentStateInitial();
@@ -59,7 +59,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
   @override
   Stream<MessageAttachmentState> mapEventToState(MessageAttachmentState currentState, MessageAttachmentEvent event) async* {
     if (event is RequestAttachment) {
-      _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+      _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
       yield MessageAttachmentStateLoading();
       try {
         _openFile(event.messageId);
@@ -78,6 +78,6 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
   }
 
   ChatMsg _getMessage(int messageId) {
-    return _messagesRepository.get(messageId);
+    return _messageListRepository.get(messageId);
   }
 }

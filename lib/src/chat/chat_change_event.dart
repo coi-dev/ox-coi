@@ -41,37 +41,47 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/contact/contact_item_bloc.dart';
-import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
-import 'package:ox_talk/src/contact/contact_item_event.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
 
-class SelectableContactItem extends StatefulWidget {
-  final int _contactId;
-  final Function onTap;
-  final bool isSelected;
+abstract class ChatChangeEvent {}
 
-  SelectableContactItem(this._contactId, this.onTap, this.isSelected, key) : super(key: Key(key));
+class CreateChat extends ChatChangeEvent {
+  final int contactId;
+  final int messageId;
+  final int chatId;
+  final bool verified;
+  final String name;
+  final List<int> contacts;
 
-  @override
-  _SelectableContactItemState createState() => _SelectableContactItemState();
+  CreateChat({
+    this.contactId,
+    this.messageId,
+    this.chatId,
+    this.verified,
+    this.name,
+    this.contacts,
+  });
 }
 
-class _SelectableContactItemState extends State<SelectableContactItem> with ContactItemBuilder {
-  ContactItemBloc _contactBloc = ContactItemBloc();
+class ChatCreated extends ChatChangeEvent {
+  final int chatId;
 
-  @override
-  void initState() {
-    super.initState();
-    _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
-  }
+  ChatCreated({this.chatId});
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return getAvatarItemBlocBuilder(_contactBloc, _onContactTapped, widget.isSelected);
-  }
+class DeleteChat extends ChatChangeEvent{
+  final int chatId;
 
-  _onContactTapped(String name, String email) {
-    widget.onTap(widget._contactId);
-  }
+  DeleteChat({@required this.chatId});
+}
+
+class LeaveGroupChat extends ChatChangeEvent{
+  final int chatId;
+
+  LeaveGroupChat({@required this.chatId});
+}
+
+class DeleteChats extends ChatChangeEvent{
+  final List<int> chatIds;
+
+  DeleteChats({@required this.chatIds});
 }

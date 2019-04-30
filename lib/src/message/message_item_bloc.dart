@@ -54,7 +54,7 @@ import 'package:ox_talk/src/utils/colors.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   Repository<Contact> _contactRepository;
-  Repository<ChatMsg> _messagesRepository;
+  Repository<ChatMsg> _messageListRepository;
   int _messageId;
   int _contactId;
   bool _addContact;
@@ -73,7 +73,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         } else {
           _contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
         }
-        _messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
+        _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
         _messageId = event.messageId;
         _addContact = event.isGroupChat || isInvite(chatId);
         if (_addContact) {
@@ -169,6 +169,6 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   ChatMsg _getMessage() {
-    return _messagesRepository.get(_messageId);
+    return _messageListRepository.get(_messageId);
   }
 }

@@ -51,25 +51,25 @@ import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/platform/system.dart';
-import 'package:ox_talk/src/profile/user_change_bloc.dart';
-import 'package:ox_talk/src/profile/user_change_event.dart';
-import 'package:ox_talk/src/profile/user_change_state.dart';
+import 'package:ox_talk/src/user/user_change_bloc.dart';
+import 'package:ox_talk/src/user/user_change_event.dart';
+import 'package:ox_talk/src/user/user_change_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/protocol_security_converter.dart';
+import 'package:ox_talk/src/utils/core.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
-class EditAccountSettings extends StatefulWidget {
+class UserAccountSettings extends StatefulWidget {
   @override
-  _EditAccountSettingsState createState() => _EditAccountSettingsState();
+  _UserAccountSettingsState createState() => _UserAccountSettingsState();
 }
 
-class _EditAccountSettingsState extends State<EditAccountSettings> {
+class _UserAccountSettingsState extends State<UserAccountSettings> {
   UserChangeBloc _userChangeBloc = UserChangeBloc();
   LoginBloc _loginBloc = LoginBloc();
   Navigation navigation = Navigation();

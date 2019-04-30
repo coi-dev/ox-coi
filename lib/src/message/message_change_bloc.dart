@@ -50,7 +50,7 @@ import 'package:ox_talk/src/message/message_change_event.dart';
 import 'package:ox_talk/src/message/message_change_state.dart';
 
 class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
-  Repository<ChatMsg> messagesRepository;
+  Repository<ChatMsg> _messageListRepository;
 
   @override
   MessageChangeState get initialState => MessageChangeStateInitial();
@@ -60,7 +60,7 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
     if (event is DeleteMessage) {
       yield MessageChangeStateLoading();
       try {
-        messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+        _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
         _deleteMessage(event.messageId, false);
       } catch (error) {
         yield MessageChangeStateFailure(error: error.toString());
@@ -71,7 +71,7 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
   }
 
   void _deleteMessage(int messageId, bool deleteInCore) async {
-    messagesRepository.remove(messageId);
+    _messageListRepository.remove(messageId);
     if (deleteInCore) {
       //TODO Delete messages from core
     }

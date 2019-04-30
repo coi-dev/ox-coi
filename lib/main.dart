@@ -44,7 +44,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:ox_talk/src/log/bloc_delegate.dart';
+import 'package:ox_talk/src/log/log_bloc.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login.dart';
 import 'package:ox_talk/src/main/main_bloc.dart';
@@ -54,10 +54,10 @@ import 'package:ox_talk/src/main/root.dart';
 import 'package:ox_talk/src/main/splash.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/widgets/root_view_switcher.dart';
+import 'package:ox_talk/src/widgets/view_switcher.dart';
 
 void main() {
-  BlocSupervisor().delegate = DebugBlocDelegate();
+  BlocSupervisor().delegate = LogBloc();
   runApp(new OxTalkApp());
 }
 
@@ -112,7 +112,7 @@ class _OxTalkState extends State<OxTalk> {
         } else {
           child = Splash();
         }
-        return RootViewSwitcher(child);
+        return ViewSwitcher(child);
       },
     );
   }

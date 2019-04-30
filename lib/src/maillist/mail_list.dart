@@ -41,13 +41,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
+import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/maillist/mail_list_item.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
-class MailListView extends BaseRootChild {
+class MailListView extends RootChild {
 
   MailListView(State<StatefulWidget> state) : super(state);
 

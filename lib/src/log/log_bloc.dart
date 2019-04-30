@@ -40,14 +40,16 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
 
-class RootViewSwitcher extends AnimatedSwitcher {
-  static const defaultDuration = Duration(milliseconds: 200);
+class LogBloc implements BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
 
-  RootViewSwitcher(Widget child)
-      : super(
-            duration: defaultDuration,
-            transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(child: child, opacity: animation),
-            child: child);
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    print("Error: $error (Stacktrace: $stacktrace)");
+  }
 }

@@ -40,34 +40,14 @@
  * for more details.
  */
 
-import 'dart:async';
+import 'package:flutter/material.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/profile/user_event.dart';
-import 'package:ox_talk/src/profile/user_state.dart';
+class ViewSwitcher extends AnimatedSwitcher {
+  static const defaultDuration = Duration(milliseconds: 200);
 
-class UserBloc extends Bloc<UserEvent, UserState> {
-  @override
-  UserState get initialState => UserStateInitial();
-
-  @override
-  Stream<UserState> mapEventToState(UserState currentState, UserEvent event) async* {
-    if (event is RequestUser) {
-      yield UserStateLoading();
-      try {
-        _setupUser();
-      } catch (error) {
-        yield UserStateFailure(error: error.toString());
-      }
-    } else if (event is UserLoaded) {
-      yield UserStateSuccess(config: event.config);
-    }
-  }
-
-  void _setupUser() async {
-    Config config = Config();
-    await config.load();
-    dispatch(UserLoaded(config: config));
-  }
+  ViewSwitcher(Widget child)
+      : super(
+            duration: defaultDuration,
+            transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(child: child, opacity: animation),
+            child: child);
 }

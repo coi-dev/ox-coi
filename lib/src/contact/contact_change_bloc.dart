@@ -125,8 +125,8 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
     contactRepository.transferTo(blockedContactRepository, id);
     Context context = Context();
     await context.blockContact(id);
-    Repository<ChatMsg> messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
-    messagesRepository.clear();
+    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
+    messageListRepository.clear();
     if(chatId != null){
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.remove(chatId);

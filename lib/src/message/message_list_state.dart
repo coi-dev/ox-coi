@@ -40,18 +40,53 @@
  * for more details.
  */
 
-abstract class MessagesEvent {}
+import 'package:meta/meta.dart';
+import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-class RequestMessages extends MessagesEvent {
-  int chatId;
-
-  RequestMessages(this.chatId);
+abstract class MessageListState extends BaseState {
+  MessageListState({
+    @required isLoading,
+    @required isSuccess,
+    @required error,
+  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
 }
 
-class UpdateMessages extends MessagesEvent {}
+class MessagesStateInitial extends MessageListState {
+  MessagesStateInitial()
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: '',
+        );
+}
 
-class MessagesLoaded extends MessagesEvent {
-  List<int> dateMarkerIds;
+class MessagesStateLoading extends MessageListState {
+  MessagesStateLoading()
+      : super(
+          isLoading: true,
+          isSuccess: false,
+          error: '',
+        );
+}
 
-  MessagesLoaded({this.dateMarkerIds});
+class MessagesStateSuccess extends MessageListState {
+  final List<int> messageIds;
+  final List<int> messageLastUpdateValues;
+  final List<int> dateMarkerIds;
+
+  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds})
+      : super(
+          isLoading: false,
+          isSuccess: true,
+          error: '',
+        );
+}
+
+class MessagesStateFailure extends MessageListState {
+  MessagesStateFailure({@required error})
+      : super(
+          isLoading: false,
+          isSuccess: false,
+          error: error,
+        );
 }

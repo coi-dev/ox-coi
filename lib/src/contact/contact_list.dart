@@ -42,7 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
+import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/contact/contact_import_bloc.dart';
 import 'package:ox_talk/src/contact/contact_import_event.dart';
 import 'package:ox_talk/src/contact/contact_import_state.dart';
@@ -61,7 +61,7 @@ import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/search_field.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ContactListView extends BaseRootChild {
+class ContactListView extends RootChild {
   final Navigation navigation = Navigation();
 
   ContactListView(State<StatefulWidget> state) : super(state);

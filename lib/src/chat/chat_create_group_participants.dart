@@ -43,54 +43,54 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_event.dart';
-import 'package:ox_talk/src/chat/change_chat_state.dart';
-import 'package:ox_talk/src/chat/chat.dart';
-import 'package:ox_talk/src/contact/contact_item.dart';
+import 'package:ox_talk/src/chat/chat_create_group_settings.dart';
+import 'package:ox_talk/src/contact/contact_item_chip.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
+import 'package:ox_talk/src/contact/contact_item_selectable.dart';
 import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/widgets/search_field.dart';
 
-class CreateGroupChatSettings extends StatefulWidget {
-  final List<int> _selectedContacts;
-
-  CreateGroupChatSettings(this._selectedContacts);
-
+class ChatCreateGroupParticipants extends StatefulWidget {
   @override
-  _CreateGroupChatSettingsState createState() => _CreateGroupChatSettingsState();
+  _ChatCreateGroupParticipantsState createState() => _ChatCreateGroupParticipantsState();
 }
 
-class _CreateGroupChatSettingsState extends State<CreateGroupChatSettings> {
+class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipants> with ContactSearchController {
   ContactListBloc _contactListBloc = ContactListBloc();
-  TextEditingController _controller = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey();
+  List<int> _selectedContacts = List();
   Repository<Chat> chatRepository;
   Navigation navigation = Navigation();
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     chatRepository = ChatRepository(Chat.getCreator());
+    addSearchListener(_contactListBloc, _searchController);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.close),
+          onPressed: () => navigation.pop(context, "CreateGroupChatParticipants"),
+        ),
         title: Text(AppLocalizations.of(context).createGroupTitle),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.check),
+            icon: Icon(Icons.arrow_forward),
             onPressed: () => _onSubmit(),
           )
         ],
@@ -104,7 +104,7 @@ class _CreateGroupChatSettingsState extends State<CreateGroupChatSettings> {
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          return buildParticipantList(state.contactIds, state.contactLastUpdateValues);
+          return buildForm(state.contactIds, state.contactLastUpdateValues);
         } else if (state is! ContactListStateFailure) {
           return Center(
             child: CircularProgressIndicator(),
@@ -116,79 +116,87 @@ class _CreateGroupChatSettingsState extends State<CreateGroupChatSettings> {
     );
   }
 
-  Widget buildParticipantList(List<int> contactIds, List<int> contactLastUpdateValues) {
-    contactIds.removeWhere((contactId) {
-      return !widget._selectedContacts.contains(contactId);
-    });
+  Widget buildForm(List<int> contactIds, List<int> contactLastUpdateValues) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            left: formHorizontalPadding,
-            right: formHorizontalPadding,
-            top: formVerticalPadding,
-          ),
-          child: Text(
-            AppLocalizations.of(context).createGroupNameAndAvatarHeader,
-            style: Theme.of(context).textTheme.body2.apply(color: primary),
-          ),
+        SearchView(
+          controller: _searchController,
         ),
-        Padding(
-            padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
-            child: Form(
-              key: _formKey,
-              child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).createGroupTextFieldLabel,
-                    hintText: AppLocalizations.of(context).createGroupTextFieldHint),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return AppLocalizations.of(context).validatableTextFormFieldHintEmptyString;
-                  }
-                },
-                controller: _controller,
-              ),
-            )),
-        Padding(
-          padding: EdgeInsets.only(
-            left: formHorizontalPadding,
-            right: formHorizontalPadding,
-            top: formVerticalPadding,
-          ),
-          child: Text(
-            AppLocalizations.of(context).participants,
-            style: Theme.of(context).textTheme.body2.apply(color: primary),
-          ),
-        ),
+        _buildSelectedParticipantList(),
         Flexible(
             child: ListView.builder(
-                padding: EdgeInsets.all(listItemPadding),
+                padding: EdgeInsets.only(top: listItemPadding),
                 itemCount: contactIds.length,
                 itemBuilder: (BuildContext context, int index) {
                   var contactId = contactIds[index];
-                  return ContactItem(contactId, contactId.toString());
+                  var key = "$contactId-${contactLastUpdateValues[index]}";
+                  return ContactItemSelectable(contactId, _itemTapped, isSelected(contactId), key);
                 }))
       ],
     );
   }
 
-  _onSubmit() {
-    if (_formKey.currentState.validate()) {
-      ChangeChatBloc changeChatBloc = ChangeChatBloc();
-      final changeChatStatesObservable = new Observable<ChangeChatState>(changeChatBloc.state);
-      changeChatStatesObservable.listen((state) => _handleChangeChatStateChange(state));
-      changeChatBloc.dispatch(CreateChat(verified: false, name: _controller.text, contacts: widget._selectedContacts));
-    }
+  Widget _buildSelectedParticipantList() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(
+            left: listItemPadding,
+            right: listItemPadding,
+            top: listItemPadding,
+            bottom: listItemPaddingSmall,
+          ),
+          child: Text("${_selectedContacts.length} ${AppLocalizations.of(context).participants}"),
+        ),
+        Container(
+          padding: EdgeInsets.only(bottom: 4.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(),
+            ),
+          ),
+          width: double.infinity,
+          height: 40.0,
+          child: _selectedContacts.isNotEmpty
+              ? ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _selectedContacts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var selectedContactId = _selectedContacts[index];
+                    return ContactItemChip(selectedContactId, () => _itemTapped(selectedContactId));
+                  })
+              : Container(
+                  padding: EdgeInsets.only(
+                    left: listItemPadding,
+                    right: listItemPadding,
+                    top: listItemPadding,
+                  ),
+                  child: Text(AppLocalizations.of(context).createGroupNoParticipantsHint),
+                ),
+        ),
+      ],
+    );
   }
 
-  _handleChangeChatStateChange(ChangeChatState state) {
-    if (state is CreateChatStateSuccess) {
-      navigation.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => ChatScreen(state.chatId), settings: RouteSettings(name: "ChatScreen")),
-          ModalRoute.withName(Navigation.ROUTES_ROOT),
-          "ChatScreen");
+  bool isSelected(int id) => _selectedContacts.contains(id);
+
+  _itemTapped(int id) {
+    setState(() {
+      if (isSelected(id)) {
+        _selectedContacts.remove(id);
+      } else {
+        _selectedContacts.add(id);
+      }
+    });
+  }
+
+  _onSubmit() async {
+    if (_selectedContacts.length > 0) {
+      navigation.push(context, MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(_selectedContacts)), "CreateGroupChatSettings");
+    } else {
+      showToast(AppLocalizations.of(context).createGroupNoParticipantsSelected);
     }
   }
 }

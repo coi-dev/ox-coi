@@ -42,7 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/create_group_chat_participants.dart';
+import 'package:ox_talk/src/chat/chat_create_group_participants.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
@@ -57,12 +57,12 @@ import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/search_field.dart';
 
-class CreateChat extends StatefulWidget {
+class ChatCreate extends StatefulWidget {
   @override
-  _CreateChatState createState() => _CreateChatState();
+  _ChatCreateState createState() => _ChatCreateState();
 }
 
-class _CreateChatState extends State<CreateChat> with ContactSearchController {
+class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
   ContactListBloc _contactListBloc = ContactListBloc();
   Navigation navigation = Navigation();
   TextEditingController _searchController = TextEditingController();
@@ -147,7 +147,7 @@ class _CreateChatState extends State<CreateChat> with ContactSearchController {
     navigation.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateGroupChatParticipants(),
+          builder: (context) => ChatCreateGroupParticipants(),
         ),
         "CreateGroupChatParticipants");
   }

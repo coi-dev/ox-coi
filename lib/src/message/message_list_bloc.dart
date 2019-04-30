@@ -47,24 +47,24 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/data/repository_stream_handler.dart';
-import 'package:ox_talk/src/message/messages_event.dart';
-import 'package:ox_talk/src/message/messages_state.dart';
+import 'package:ox_talk/src/message/message_list_event.dart';
+import 'package:ox_talk/src/message/message_list_state.dart';
 
-class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
+class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
   RepositoryMultiEventStreamHandler repositoryStreamHandler;
-  Repository<ChatMsg> messageRepository;
+  Repository<ChatMsg> _messageListRepository;
   int _chatId;
 
   @override
-  MessagesState get initialState => MessagesStateInitial();
+  MessageListState get initialState => MessagesStateInitial();
 
   @override
-  Stream<MessagesState> mapEventToState(MessagesState currentState, MessagesEvent event) async* {
+  Stream<MessageListState> mapEventToState(MessageListState currentState, MessageListEvent event) async* {
     if (event is RequestMessages) {
       yield MessagesStateLoading();
       try {
         _chatId = event.chatId;
-        messageRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
+        _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
         _setupMessagesListener();
         _setupMessages();
       } catch (error) {
@@ -78,8 +78,8 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
       }
     } else if (event is MessagesLoaded) {
       yield MessagesStateSuccess(
-        messageIds: messageRepository.getAllIds().reversed.toList(growable: false),
-        messageLastUpdateValues: messageRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+        messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
+        messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
         dateMarkerIds: event.dateMarkerIds,
       );
     }
@@ -87,14 +87,14 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
 
   @override
   void dispose() {
-    messageRepository.removeListener(repositoryStreamHandler);
+    _messageListRepository.removeListener(repositoryStreamHandler);
     super.dispose();
   }
 
   void _setupMessagesListener() async {
     if (repositoryStreamHandler == null) {
       repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _updateMessages);
-      messageRepository.addListener(repositoryStreamHandler);
+      _messageListRepository.addListener(repositoryStreamHandler);
     }
   }
 
@@ -111,7 +111,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
       }
     }
     messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
-    messageRepository.putIfAbsent(ids: messageIds);
+    _messageListRepository.putIfAbsent(ids: messageIds);
     dispatch(MessagesLoaded(dateMarkerIds: dateMakerIds));
   }
 

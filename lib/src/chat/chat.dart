@@ -48,7 +48,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
-import 'package:ox_talk/src/chat/chat_composer.dart';
+import 'package:ox_talk/src/chat/chat_composer_mixin.dart';
 import 'package:ox_talk/src/chat/chat_composer_bloc.dart';
 import 'package:ox_talk/src/chat/chat_composer_event.dart';
 import 'package:ox_talk/src/chat/chat_composer_state.dart';
@@ -57,9 +57,9 @@ import 'package:ox_talk/src/chat/chat_profile_view.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/message/message_item.dart';
-import 'package:ox_talk/src/message/messages_bloc.dart';
-import 'package:ox_talk/src/message/messages_event.dart';
-import 'package:ox_talk/src/message/messages_state.dart';
+import 'package:ox_talk/src/message/message_list_bloc.dart';
+import 'package:ox_talk/src/message/message_list_event.dart';
+import 'package:ox_talk/src/message/message_list_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -78,10 +78,10 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => new _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with ChatComposer {
   Navigation navigation = Navigation();
   ChatBloc _chatBloc = ChatBloc();
-  MessagesBloc _messagesBloc = MessagesBloc();
+  MessageListBloc _messagesBloc = MessageListBloc();
   ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
 
   final TextEditingController _textController = new TextEditingController();

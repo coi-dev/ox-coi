@@ -40,51 +40,37 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 
-abstract class ChangeChatState extends BaseState {
-  ChangeChatState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
-}
+abstract class RootChild extends StatefulWidget {
+  final State state;
 
-class CreateChatStateInitial extends ChangeChatState {
-  CreateChatStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
-}
+  final List<Widget> _actions = new List();
 
-class CreateChatStateLoading extends ChangeChatState {
-  CreateChatStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
-}
+  RootChild(this.state);
 
-class CreateChatStateSuccess extends ChangeChatState {
-  final int chatId;
+  getElevation() {
+    return appBarElevationDefault;
+  }
 
-  CreateChatStateSuccess({@required this.chatId})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
-}
+  List<Widget> getActions(BuildContext context) {
+    return _actions;
+  }
 
-class CreateChatStateFailure extends ChangeChatState {
-  CreateChatStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  setActions(List<Widget> widgets) {
+    _actions.clear();
+    _actions.addAll(widgets);
+  }
+
+  String getTitle(BuildContext context);
+
+  String getNavigationText(BuildContext context);
+
+  IconData getNavigationIcon();
+
+  Color getColor();
+
+  FloatingActionButton getFloatingActionButton(BuildContext context);
+
 }

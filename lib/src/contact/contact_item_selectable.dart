@@ -40,16 +40,38 @@
  * for more details.
  */
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_talk/src/contact/contact_item_bloc.dart';
+import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
+import 'package:ox_talk/src/contact/contact_item_event.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 
-class DebugBlocDelegate implements BlocDelegate {
+class ContactItemSelectable extends StatefulWidget {
+  final int _contactId;
+  final Function onTap;
+  final bool isSelected;
+
+  ContactItemSelectable(this._contactId, this.onTap, this.isSelected, key) : super(key: Key(key));
+
   @override
-  void onTransition(Transition transition) {
-    print(transition.toString());
+  _ContactItemSelectableState createState() => _ContactItemSelectableState();
+}
+
+class _ContactItemSelectableState extends State<ContactItemSelectable> with ContactItemBuilder {
+  ContactItemBloc _contactBloc = ContactItemBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
-    print("Error: $error (Stacktrace: $stacktrace)");
+  Widget build(BuildContext context) {
+    return getAvatarItemBlocBuilder(_contactBloc, _onContactTapped, widget.isSelected);
+  }
+
+  _onContactTapped(String name, String email) {
+    widget.onTap(widget._contactId);
   }
 }

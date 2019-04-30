@@ -44,25 +44,25 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/chat/change_chat_event.dart';
-import 'package:ox_talk/src/chat/change_chat_state.dart';
+import 'package:ox_talk/src/chat/chat_change_event.dart';
+import 'package:ox_talk/src/chat/chat_change_state.dart';
 import 'package:ox_talk/src/data/chat_message_repository.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 
-class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
-  Repository<ChatMsg> messagesRepository;
+class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
+  Repository<ChatMsg> _messageListRepository;
 
   @override
-  ChangeChatState get initialState => CreateChatStateInitial();
+  ChatChangeState get initialState => CreateChatStateInitial();
 
   @override
-  Stream<ChangeChatState> mapEventToState(ChangeChatState currentState, ChangeChatEvent event) async* {
+  Stream<ChatChangeState> mapEventToState(ChatChangeState currentState, ChatChangeEvent event) async* {
     if (event is CreateChat) {
       yield CreateChatStateLoading();
       try {
-        messagesRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+        _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
         _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name, contacts: event.contacts);
       } catch (error) {
         yield CreateChatStateFailure(error: error.toString());
@@ -86,11 +86,11 @@ class ChangeChatBloc extends Bloc<ChangeChatEvent, ChangeChatState> {
       inviteMessageRepository.clear();
       chatId = await context.createChatByContactId(contactId);
     } else if (messageId != null) {
-      var messageContactId = await messagesRepository.get(messageId).getFromId();
+      var messageContactId = await _messageListRepository.get(messageId).getFromId();
       Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
       Repository<Contact> validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
       inviteContactRepository.transferTo(validContactRepository, messageContactId);
-      messagesRepository.clear();
+      _messageListRepository.clear();
       chatId = await context.createChatByMessageId(messageId);
     } else if (verified != null && name != null && contacts != null) {
       chatId = await context.createGroupChat(verified, name);

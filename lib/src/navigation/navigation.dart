@@ -42,10 +42,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/main.dart';
-import 'package:ox_talk/src/chat/create_chat.dart';
+import 'package:ox_talk/src/chat/chat_create.dart';
 import 'package:ox_talk/src/contact/contact_blocked_list.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
-import 'package:ox_talk/src/profile/edit_account_settings.dart';
+import 'package:ox_talk/src/user/user_account_settings.dart';
 
 class Navigation {
   static const String ROUTES_ROOT = '/';
@@ -65,8 +65,8 @@ class Navigation {
     ROUTES_CONTACT_ADD: (context) => ContactChange(
           contactAction: ContactAction.add,
         ),
-    ROUTES_PROFILE_EDIT: (context) => EditAccountSettings(),
-    ROUTES_CHAT_CREATE: (context) => CreateChat(),
+    ROUTES_PROFILE_EDIT: (context) => UserAccountSettings(),
+    ROUTES_CHAT_CREATE: (context) => ChatCreate(),
     ROUTES_CONTACTS_BLOCKED: (context) => ContactBlockedList(),
   };
 

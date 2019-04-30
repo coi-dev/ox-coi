@@ -49,19 +49,19 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/profile/user_change_bloc.dart';
-import 'package:ox_talk/src/profile/user_change_event.dart';
-import 'package:ox_talk/src/profile/user_change_state.dart';
+import 'package:ox_talk/src/user/user_change_bloc.dart';
+import 'package:ox_talk/src/user/user_change_event.dart';
+import 'package:ox_talk/src/user/user_change_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:rxdart/rxdart.dart';
 
-class EditUserSettings extends StatefulWidget {
+class UserSettings extends StatefulWidget {
   @override
-  _EditUserSettingsState createState() => _EditUserSettingsState();
+  _UserSettingsState createState() => _UserSettingsState();
 }
 
-class _EditUserSettingsState extends State<EditUserSettings> {
+class _UserSettingsState extends State<UserSettings> {
   UserChangeBloc _userChangeBloc = UserChangeBloc();
   Navigation navigation = Navigation();
 

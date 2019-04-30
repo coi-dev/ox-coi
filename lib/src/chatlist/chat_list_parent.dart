@@ -42,24 +42,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
-import 'package:ox_talk/src/chat/change_chat_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_event.dart';
+import 'package:ox_talk/src/main/root_child.dart';
+import 'package:ox_talk/src/chat/chat_change_bloc.dart';
+import 'package:ox_talk/src/chat/chat_change_event.dart';
 import 'package:ox_talk/src/chatlist/chat_list.dart';
 import 'package:ox_talk/src/chatlist/invite_list.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/message/messages_bloc.dart';
-import 'package:ox_talk/src/message/messages_event.dart';
-import 'package:ox_talk/src/message/messages_state.dart';
+import 'package:ox_talk/src/message/message_list_bloc.dart';
+import 'package:ox_talk/src/message/message_list_event.dart';
+import 'package:ox_talk/src/message/message_list_state.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
-class ChatListView extends BaseRootChild {
+class ChatListParent extends RootChild {
   final Navigation navigation = Navigation();
 
-  ChatListView(State<StatefulWidget> state) : super(state);
+  ChatListParent(State<StatefulWidget> state) : super(state);
 
   @override
   _ChatListViewState createState() {
@@ -108,11 +108,11 @@ class ChatListView extends BaseRootChild {
   }
 }
 
-class _ChatListViewState extends State<ChatListView> with SingleTickerProviderStateMixin {
+class _ChatListViewState extends State<ChatListParent> with SingleTickerProviderStateMixin {
   TabController controller;
   bool _isMultiSelect = false;
-  MessagesBloc _messagesBloc = MessagesBloc();
-  ChangeChatBloc _changeChatBloc = ChangeChatBloc();
+  MessageListBloc _messagesBloc = MessageListBloc();
+  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
   List<int> _selectedChats;
 
   @override
@@ -234,7 +234,7 @@ class _ChatListViewState extends State<ChatListView> with SingleTickerProviderSt
   }
 
   _deleteSelectedChats(){
-    _changeChatBloc.dispatch(DeleteChats(chatIds: _selectedChats));
+    _chatChangeBloc.dispatch(DeleteChats(chatIds: _selectedChats));
     _switchMultiSelect(null);
   }
 

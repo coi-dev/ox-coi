@@ -41,14 +41,14 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
-import 'package:ox_talk/src/chatlist/chat_list_view.dart';
+import 'package:ox_talk/src/main/root_child.dart';
+import 'package:ox_talk/src/chatlist/chat_list_parent.dart';
 import 'package:ox_talk/src/contact/contact_list.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/profile/profile.dart';
-import 'package:ox_talk/src/widgets/root_view_switcher.dart';
+import 'package:ox_talk/src/user/user_profile.dart';
+import 'package:ox_talk/src/widgets/view_switcher.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -57,10 +57,10 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   int _selectedIndex = 0;
-  var childList = List<BaseRootChild>();
+  var childList = List<RootChild>();
 
   _RootState() {
-    childList.addAll([new ChatListView(this), new ContactListView(this), new ProfileView(this)]);
+    childList.addAll([new ChatListParent(this), new ContactListView(this), new UserProfileView(this)]);
   }
 
   @override
@@ -76,7 +76,7 @@ class _RootState extends State<Root> {
 
   @override
   Widget build(BuildContext context) {
-    BaseRootChild child = childList[_selectedIndex];
+    RootChild child = childList[_selectedIndex];
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +85,7 @@ class _RootState extends State<Root> {
         actions: child.getActions(context),
         elevation: child.getElevation(),
       ),
-      body: RootViewSwitcher(child),
+      body: ViewSwitcher(child),
       bottomNavigationBar: _buildBottomBar(),
       floatingActionButton: child.getFloatingActionButton(context),
     );

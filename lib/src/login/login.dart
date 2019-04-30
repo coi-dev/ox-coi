@@ -48,7 +48,7 @@ import 'package:ox_talk/src/login/login_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/protocol_security_converter.dart';
+import 'package:ox_talk/src/utils/core.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';

@@ -44,21 +44,21 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/base/base_root_child.dart';
+import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/profile/edit_user_settings.dart';
-import 'package:ox_talk/src/profile/user_bloc.dart';
-import 'package:ox_talk/src/profile/user_event.dart';
-import 'package:ox_talk/src/profile/user_state.dart';
+import 'package:ox_talk/src/user/user_settings.dart';
+import 'package:ox_talk/src/user/user_bloc.dart';
+import 'package:ox_talk/src/user/user_event.dart';
+import 'package:ox_talk/src/user/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
-import 'package:ox_talk/src/utils/widget.dart';
+import 'package:ox_talk/src/utils/widgets.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 
-class ProfileView extends BaseRootChild {
-  ProfileView(State<StatefulWidget> state) : super(state);
+class UserProfileView extends RootChild {
+  UserProfileView(State<StatefulWidget> state) : super(state);
 
   @override
   _ProfileState createState() {
@@ -93,7 +93,7 @@ class ProfileView extends BaseRootChild {
   }
 }
 
-class _ProfileState extends State<ProfileView> {
+class _ProfileState extends State<UserProfileView> {
   UserBloc _userBloc = UserBloc();
   Navigation navigation = Navigation();
 
@@ -198,7 +198,7 @@ class _ProfileState extends State<ProfileView> {
   editUserSettings() {
     navigation.push(
       context,
-      MaterialPageRoute(builder: (context) => EditUserSettings()),
+      MaterialPageRoute(builder: (context) => UserSettings()),
       "EditUserSettings"
     );
   }

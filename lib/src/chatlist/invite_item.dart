@@ -42,10 +42,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_event.dart';
-import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/chat/chat.dart';
+import 'package:ox_talk/src/chat/chat_change_bloc.dart';
+import 'package:ox_talk/src/chat/chat_change_event.dart';
+import 'package:ox_talk/src/chat/chat_change_state.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
@@ -57,17 +57,17 @@ import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ChatListInviteItem extends StatefulWidget {
+class InviteItem extends StatefulWidget {
   final int _chatId;
   final int _messageId;
 
-  ChatListInviteItem(this._chatId, this._messageId, key) : super(key: Key(key));
+  InviteItem(this._chatId, this._messageId, key) : super(key: Key(key));
 
   @override
-  _ChatListInviteItemState createState() => _ChatListInviteItemState();
+  _InviteItemState createState() => _InviteItemState();
 }
 
-class _ChatListInviteItemState extends State<ChatListInviteItem> {
+class _InviteItemState extends State<InviteItem> {
   MessageItemBloc _messageItemBloc = MessageItemBloc();
   Navigation navigation = Navigation();
   int _contactId;
@@ -140,13 +140,13 @@ class _ChatListInviteItemState extends State<ChatListInviteItem> {
   }
 
   void createChat() {
-    ChangeChatBloc createChatBloc = ChangeChatBloc();
-    final changeChatStatesObservable = new Observable<ChangeChatState>(createChatBloc.state);
-    changeChatStatesObservable.listen((state) => _handleChangeChatStateChange(state));
+    ChatChangeBloc createChatBloc = ChatChangeBloc();
+    final changeChatStatesObservable = new Observable<ChatChangeState>(createChatBloc.state);
+    changeChatStatesObservable.listen((state) => _handleChatChangeStateChange(state));
     createChatBloc.dispatch(CreateChat(messageId: widget._messageId, chatId: widget._chatId));
   }
 
-  _handleChangeChatStateChange(ChangeChatState state) {
+  _handleChatChangeStateChange(ChatChangeState state) {
     if (state is CreateChatStateSuccess) {
       navigation.push(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatListInviteItem");
     }

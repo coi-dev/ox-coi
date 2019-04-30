@@ -41,10 +41,10 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/chat/change_chat_bloc.dart';
-import 'package:ox_talk/src/chat/change_chat_event.dart';
-import 'package:ox_talk/src/chat/change_chat_state.dart';
 import 'package:ox_talk/src/chat/chat.dart';
+import 'package:ox_talk/src/chat/chat_change_bloc.dart';
+import 'package:ox_talk/src/chat/chat_change_event.dart';
+import 'package:ox_talk/src/chat/chat_change_state.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
@@ -120,13 +120,13 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   }
 
   void createChat() {
-    ChangeChatBloc createChatBloc = ChangeChatBloc();
-    final createChatStatesObservable = new Observable<ChangeChatState>(createChatBloc.state);
+    ChatChangeBloc createChatBloc = ChatChangeBloc();
+    final createChatStatesObservable = new Observable<ChatChangeState>(createChatBloc.state);
     createChatStatesObservable.listen((state) => _handleCreateChatStateChange(state));
     createChatBloc.dispatch(CreateChat(contactId: widget._contactId));
   }
 
-  _handleCreateChatStateChange(ChangeChatState state) {
+  _handleCreateChatStateChange(ChatChangeState state) {
     if (state is CreateChatStateSuccess) {
       navigation.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatScreen");
     }
