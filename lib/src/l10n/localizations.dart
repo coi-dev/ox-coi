@@ -139,7 +139,7 @@ class AppLocalizations {
   String get copiedToClipboard => Intl.message('Copied to clipboard', name: 'copiedToClipboard');
 
   String get yesterday => Intl.message('Yesterday', name: 'yesterday');
-  
+
   String get participants => Intl.message('Participants', name: 'participants');
 
   // Core
@@ -311,7 +311,8 @@ class AppLocalizations {
 
   String get chatProfileLeaveGroupButtonText => Intl.message('Leave group', name: 'chatProfileLeaveGroupButtonText');
 
-  String chatProfileGroupMemberCounter(memberCount) => Intl.message('$memberCount member(s)', name: 'chatProfileGroupMemberCounter', args: [memberCount]);
+  String chatProfileGroupMemberCounter(memberCount) =>
+      Intl.message('$memberCount member(s)', name: 'chatProfileGroupMemberCounter', args: [memberCount]);
 
   // Create chat
   String get createChatTitle => Intl.message('Create chat', name: 'createChatTitle');
@@ -327,7 +328,8 @@ class AppLocalizations {
 
   String get createGroupNoParticipantsHint => Intl.message('Simply add one by tapping on a contact.', name: 'createGroupNoParticipantsHint');
 
-  String get createGroupNoParticipantsSelected => Intl.message('No participants selected. Please select at least one person.', name: 'createGroupNoParticipantsSelected');
+  String get createGroupNoParticipantsSelected =>
+      Intl.message('No participants selected. Please select at least one person.', name: 'createGroupNoParticipantsSelected');
 
   String get createGroupTitle => Intl.message('Create group chat', name: 'createGroupTitle');
 
@@ -413,7 +415,6 @@ class AppLocalizations {
   String get editAccountSettingsSuccess => Intl.message('Account settings succesfully changed', name: 'editAccountSettingsSuccess');
 
   String get editAccountSettingsErrorDialogTitle => Intl.message('Configuration change aborted', name: 'editAccountSettingsErrorDialogTitle');
-
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
