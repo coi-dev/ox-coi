@@ -39,6 +39,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+
 import 'dart:ui';
 
 import 'package:meta/meta.dart';

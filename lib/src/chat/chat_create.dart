@@ -1,42 +1,42 @@
 /*
- * open-xchange legal information
+ * OPEN-XCHANGE legal information
  *
- * all intellectual property rights in the software are protected by
+ * All intellectual property rights in the Software are protected by
  * international copyright laws.
  *
  *
- * in some countries ox, ox open-xchange and open xchange
- * as well as the corresponding logos ox open-xchange and ox are registered
- * trademarks of the ox software gmbh group of companies.
- * the use of the logos is not covered by the mozilla public license 2.0 (mpl 2.0).
- * instead, you are allowed to use these logos according to the terms and
- * conditions of the creative commons license, version 2.5, attribution,
- * non-commercial, sharealike, and the interpretation of the term
- * non-commercial applicable to the aforementioned license is published
+ * In some countries OX, OX Open-Xchange and open xchange
+ * as well as the corresponding Logos OX Open-Xchange and OX are registered
+ * trademarks of the OX Software GmbH group of companies.
+ * The use of the Logos is not covered by the Mozilla Public License 2.0 (MPL 2.0).
+ * Instead, you are allowed to use these Logos according to the terms and
+ * conditions of the Creative Commons License, Version 2.5, Attribution,
+ * Non-commercial, ShareAlike, and the interpretation of the term
+ * Non-commercial applicable to the aforementioned license is published
  * on the web site https://www.open-xchange.com/terms-and-conditions/.
  *
- * please make sure that third-party modules and libraries are used
+ * Please make sure that third-party modules and libraries are used
  * according to their respective licenses.
  *
- * any modifications to this package must retain all copyright notices
+ * Any modifications to this package must retain all copyright notices
  * of the original copyright holder(s) for the original code used.
  *
- * after any such modifications, the original and derivative code shall remain
+ * After any such modifications, the original and derivative code shall remain
  * under the copyright of the copyright holder(s) and/or original author(s) as stated here:
- * https://www.open-xchange.com/legal/. the contributing author shall be
- * given attribution for the derivative code and a license granting use.
+ * https://www.open-xchange.com/legal/. The contributing author shall be
+ * given Attribution for the derivative code and a license granting use.
  *
- * copyright (c) 2016-2020 ox software gmbh
- * mail: info@open-xchange.com
+ * Copyright (C) 2016-2020 OX Software GmbH
+ * Mail: info@open-xchange.com
  *
  *
- * this source code form is subject to the terms of the mozilla public
- * license, v. 2.0. if a copy of the mpl was not distributed with this
- * file, you can obtain one at http://mozilla.org/mpl/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * this program is distributed in the hope that it will be useful, but
- * without any warranty; without even the implied warranty of merchantability
- * or fitness for a particular purpose. see the mozilla public license 2.0
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
 
