@@ -41,10 +41,9 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 import 'package:ox_talk/src/data/config.dart';
 
-abstract class UserState extends BaseState {}
+abstract class UserState {}
 
 class UserStateInitial extends UserState {}
 

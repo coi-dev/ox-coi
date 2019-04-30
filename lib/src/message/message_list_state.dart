@@ -41,32 +41,17 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class MessageListState extends BaseState {
-  MessageListState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class MessageListState {
+  MessageListState();
 }
 
 class MessagesStateInitial extends MessageListState {
-  MessagesStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  MessagesStateInitial();
 }
 
 class MessagesStateLoading extends MessageListState {
-  MessagesStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  MessagesStateLoading();
 }
 
 class MessagesStateSuccess extends MessageListState {
@@ -74,19 +59,11 @@ class MessagesStateSuccess extends MessageListState {
   final List<int> messageLastUpdateValues;
   final List<int> dateMarkerIds;
 
-  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
 }
 
 class MessagesStateFailure extends MessageListState {
-  MessagesStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  MessagesStateFailure({@required this.error});
 }

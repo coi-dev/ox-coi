@@ -44,51 +44,23 @@ import 'package:meta/meta.dart';
 import 'package:ox_talk/src/base/bloc_progress_state.dart';
 
 abstract class LoginState extends ProgressState {
-  LoginState({
-    @required isLoading,
-    @required isSuccess,
-    @required progress,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, progress: progress, error: error);
+  LoginState({progress}) : super(progress: progress);
 }
 
 class LoginStateInitial extends LoginState {
-  LoginStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          progress: 0,
-          error: '',
-        );
+  LoginStateInitial();
 }
 
 class LoginStateLoading extends LoginState {
-  LoginStateLoading({
-    @required progress,
-  }) : super(
-          isLoading: true,
-          isSuccess: false,
-          progress: progress,
-          error: '',
-        );
+  LoginStateLoading({@required progress}) : super(progress: progress);
 }
 
 class LoginStateSuccess extends LoginState {
-  LoginStateSuccess()
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          progress: 1000,
-          error: '',
-        );
+  LoginStateSuccess();
 }
 
 class LoginStateFailure extends LoginState {
-  LoginStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          progress: 0,
-          error: error,
-        );
+  final String error;
+
+  LoginStateFailure({@required this.error});
 }

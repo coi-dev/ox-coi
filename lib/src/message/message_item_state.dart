@@ -43,32 +43,17 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class MessageItemState extends BaseState {
-  MessageItemState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class MessageItemState {
+  MessageItemState();
 }
 
 class MessageItemStateInitial extends MessageItemState {
-  MessageItemStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  MessageItemStateInitial();
 }
 
 class MessageItemStateLoading extends MessageItemState {
-  MessageItemStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  MessageItemStateLoading();
 }
 
 class MessageItemStateSuccess extends MessageItemState {
@@ -86,20 +71,13 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.hasFile,
     @required this.attachmentWrapper,
     @required this.contactWrapper,
-  }) : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  });
 }
 
 class MessageItemStateFailure extends MessageItemState {
-  MessageItemStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  MessageItemStateFailure({@required this.error});
 }
 
 class ContactWrapper {

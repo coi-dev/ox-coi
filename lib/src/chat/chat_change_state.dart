@@ -41,50 +41,27 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ChatChangeState extends BaseState {
-  ChatChangeState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class ChatChangeState {
+  ChatChangeState();
 }
 
 class CreateChatStateInitial extends ChatChangeState {
-  CreateChatStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  CreateChatStateInitial();
 }
 
 class CreateChatStateLoading extends ChatChangeState {
-  CreateChatStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  CreateChatStateLoading();
 }
 
 class CreateChatStateSuccess extends ChatChangeState {
   final int chatId;
 
-  CreateChatStateSuccess({@required this.chatId})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  CreateChatStateSuccess({@required this.chatId});
 }
 
 class CreateChatStateFailure extends ChatChangeState {
-  CreateChatStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  CreateChatStateFailure({@required this.error});
 }

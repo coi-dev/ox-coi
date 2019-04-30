@@ -41,61 +41,28 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ContactListState extends BaseState {
-  final List<int> contactIds;
-  final List<int> contactLastUpdateValues;
-
-  ContactListState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-    @required this.contactIds,
-    @required this.contactLastUpdateValues,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class ContactListState {
+  ContactListState();
 }
 
 class ContactListStateInitial extends ContactListState {
-  ContactListStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-          contactIds: null,
-          contactLastUpdateValues: null,
-        );
+  ContactListStateInitial();
 }
 
 class ContactListStateLoading extends ContactListState {
-  ContactListStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-          contactIds: List(),
-          contactLastUpdateValues: List(),
-        );
+  ContactListStateLoading();
 }
 
 class ContactListStateSuccess extends ContactListState {
-  ContactListStateSuccess({@required List<int> contactIds, @required List<int> contactLastUpdateValues})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-          contactIds: contactIds,
-          contactLastUpdateValues: contactLastUpdateValues,
-        );
+  final List<int> contactIds;
+  final List<int> contactLastUpdateValues;
+
+  ContactListStateSuccess({@required this.contactIds, @required this.contactLastUpdateValues});
 }
 
 class ContactListStateFailure extends ContactListState {
-  ContactListStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-          contactIds: null,
-          contactLastUpdateValues: null,
-        );
+  final String error;
+
+  ContactListStateFailure({@required this.error});
 }

@@ -43,32 +43,17 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ChatState extends BaseState {
-  ChatState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class ChatState {
+  ChatState();
 }
 
 class ChatStateInitial extends ChatState {
-  ChatStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  ChatStateInitial();
 }
 
 class ChatStateLoading extends ChatState {
-  ChatStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  ChatStateLoading();
 }
 
 class ChatStateSuccess extends ChatState {
@@ -81,19 +66,17 @@ class ChatStateSuccess extends ChatState {
   final String preview;
   final int timestamp;
 
-  ChatStateSuccess({@required this.name, @required this.subTitle, @required this.color, @required this.freshMessageCount, @required this.isSelfTalk, @required this.isGroupChat, @required this.preview, @required this.timestamp})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  ChatStateSuccess(
+      {@required this.name,
+      @required this.subTitle,
+      @required this.color,
+      @required this.freshMessageCount,
+      @required this.isSelfTalk,
+      @required this.isGroupChat,
+      @required this.preview,
+      @required this.timestamp});
 }
 
 class ChatStateFailure extends ChatState {
-  ChatStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  ChatStateFailure({@required error});
 }

@@ -41,73 +41,30 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ContactChangeState extends BaseState {
+abstract class ContactChangeState {
+  ContactChangeState();
+}
+
+class ContactChangeStateInitial extends ContactChangeState {
+  ContactChangeStateInitial();
+}
+
+class ContactChangeStateLoading extends ContactChangeState {
+  ContactChangeStateLoading();
+}
+
+class ContactChangeStateSuccess extends ContactChangeState {
   final bool add;
   final bool delete;
   final bool blocked;
   final int id;
 
-  ContactChangeState(
-      {@required isLoading,
-      @required isSuccess,
-      @required error,
-      @required this.add,
-      @required this.delete,
-      @required this.blocked,
-      @required this.id})
-      : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
-}
-
-class ContactChangeStateInitial extends ContactChangeState {
-  ContactChangeStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-          add: null,
-          delete: null,
-          blocked: null,
-          id: null,
-        );
-}
-
-class ContactChangeStateLoading extends ContactChangeState {
-  ContactChangeStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-          add: null,
-          delete: null,
-          blocked: null,
-          id: null,
-        );
-}
-
-class ContactChangeStateSuccess extends ContactChangeState {
-  ContactChangeStateSuccess({@required bool add, @required bool delete, @required bool blocked, @required int id})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-          add: add,
-          delete: delete,
-          blocked: blocked,
-          id: id,
-        );
+  ContactChangeStateSuccess({@required this.add, @required this.delete, @required this.blocked, @required this.id});
 }
 
 class ContactChangeStateFailure extends ContactChangeState {
-  ContactChangeStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-          add: null,
-          delete: null,
-          blocked: null,
-          id: null,
-        );
+  final String error;
+
+  ContactChangeStateFailure({@required this.error});
 }

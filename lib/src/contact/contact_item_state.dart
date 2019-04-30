@@ -42,32 +42,17 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ContactItemState extends BaseState {
-  ContactItemState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class ContactItemState {
+  ContactItemState();
 }
 
 class ContactItemStateInitial extends ContactItemState {
-  ContactItemStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  ContactItemStateInitial();
 }
 
 class ContactItemStateLoading extends ContactItemState {
-  ContactItemStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  ContactItemStateLoading();
 }
 
 class ContactItemStateSuccess extends ContactItemState {
@@ -75,19 +60,11 @@ class ContactItemStateSuccess extends ContactItemState {
   final String email;
   final Color color;
 
-  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color})
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color});
 }
 
 class ContactItemStateFailure extends ContactItemState {
-  ContactItemStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  ContactItemStateFailure({@required this.error});
 }

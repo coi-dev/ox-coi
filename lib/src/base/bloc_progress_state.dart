@@ -41,16 +41,9 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ProgressState extends BaseState {
+abstract class ProgressState {
   final int progress;
 
-  ProgressState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-    @required this.progress,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+  ProgressState({@required this.progress});
 }
-

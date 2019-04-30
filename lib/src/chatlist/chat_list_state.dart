@@ -41,32 +41,17 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class ChatListState extends BaseState {
-  ChatListState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class ChatListState {
+  ChatListState();
 }
 
 class ChatListStateInitial extends ChatListState {
-  ChatListStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  ChatListStateInitial();
 }
 
 class ChatListStateLoading extends ChatListState {
-  ChatListStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  ChatListStateLoading();
 }
 
 class ChatListStateSuccess extends ChatListState {
@@ -76,18 +61,11 @@ class ChatListStateSuccess extends ChatListState {
   ChatListStateSuccess({
     @required this.chatIds,
     @required this.chatLastUpdateValues,
-  }) : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  });
 }
 
 class ChatListStateFailure extends ChatListState {
-  ChatListStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  ChatListStateFailure({@required this.error});
 }

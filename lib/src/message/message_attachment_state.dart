@@ -41,48 +41,25 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class MessageAttachmentState extends BaseState {
-  MessageAttachmentState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class MessageAttachmentState {
+  MessageAttachmentState();
 }
 
 class MessageAttachmentStateInitial extends MessageAttachmentState {
-  MessageAttachmentStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  MessageAttachmentStateInitial();
 }
 
 class MessageAttachmentStateLoading extends MessageAttachmentState {
-  MessageAttachmentStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  MessageAttachmentStateLoading();
 }
 
 class MessageAttachmentStateSuccess extends MessageAttachmentState {
-  MessageAttachmentStateSuccess()
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  MessageAttachmentStateSuccess();
 }
 
 class MessageAttachmentStateFailure extends MessageAttachmentState {
-  MessageAttachmentStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  MessageAttachmentStateFailure({@required this.error});
 }

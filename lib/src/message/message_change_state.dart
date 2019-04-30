@@ -41,48 +41,25 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_base_state.dart';
 
-abstract class MessageChangeState extends BaseState {
-  MessageChangeState({
-    @required isLoading,
-    @required isSuccess,
-    @required error,
-  }) : super(isLoading: isLoading, isSuccess: isSuccess, error: error);
+abstract class MessageChangeState {
+  MessageChangeState();
 }
 
 class MessageChangeStateInitial extends MessageChangeState {
-  MessageChangeStateInitial()
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: '',
-        );
+  MessageChangeStateInitial();
 }
 
 class MessageChangeStateLoading extends MessageChangeState {
-  MessageChangeStateLoading()
-      : super(
-          isLoading: true,
-          isSuccess: false,
-          error: '',
-        );
+  MessageChangeStateLoading();
 }
 
 class MessageChangeStateSuccess extends MessageChangeState {
-  MessageChangeStateSuccess()
-      : super(
-          isLoading: false,
-          isSuccess: true,
-          error: '',
-        );
+  MessageChangeStateSuccess();
 }
 
 class MessageChangeStateFailure extends MessageChangeState {
-  MessageChangeStateFailure({@required error})
-      : super(
-          isLoading: false,
-          isSuccess: false,
-          error: error,
-        );
+  final String error;
+
+  MessageChangeStateFailure({@required this.error});
 }
