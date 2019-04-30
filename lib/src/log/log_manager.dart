@@ -106,7 +106,7 @@ class LogManager {
   }
 
   Future<void> _writeToLogFile(LogRecord logRecord) async {
-    var content =_logTemplateFile(logRecord);
+    var content = _logTemplateFile(logRecord);
     writeToFile(_logFile, content);
   }
 
