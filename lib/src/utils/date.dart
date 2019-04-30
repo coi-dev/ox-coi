@@ -58,9 +58,9 @@ String getDateFormTimestamp(int timestamp, bool longMonth, [bool useWordsWhereAp
   var date = formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), longMonth ? formatterDateLong : formatterDate);
   if (useWordsWhereApplicable != null && useWordsWhereApplicable && context != null) {
     if (_hasSameDate(DateTime.now().millisecondsSinceEpoch, timestamp)) {
-      return "${AppLocalizations.of(context).chatToday} - $date";
+      return "${AppLocalizations.of(context).today} - $date";
     } else if (_hasSameDate(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch, timestamp)) {
-      return "${AppLocalizations.of(context).chatYesterday} - $date";
+      return "${AppLocalizations.of(context).yesterday} - $date";
     }
   }
   return date;
@@ -94,7 +94,7 @@ String getChatListTime(BuildContext context, int timestamp) {
     if (difference.inDays == -1) {
       return AppLocalizations.of(context).yesterday;
     } else {
-      return formatDate(chatTime, [dd, '.', mm, '.', yy]);
+      return formatDate(chatTime, formatterDate);
     }
   }
   return getTimeFormTimestamp(timestamp);

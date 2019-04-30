@@ -42,17 +42,11 @@
 
 import 'package:flutter/material.dart';
 
-abstract class ChatListState {
-  ChatListState();
-}
+abstract class ChatListState {}
 
-class ChatListStateInitial extends ChatListState {
-  ChatListStateInitial();
-}
+class ChatListStateInitial extends ChatListState {}
 
-class ChatListStateLoading extends ChatListState {
-  ChatListStateLoading();
-}
+class ChatListStateLoading extends ChatListState {}
 
 class ChatListStateSuccess extends ChatListState {
   final List<int> chatIds;

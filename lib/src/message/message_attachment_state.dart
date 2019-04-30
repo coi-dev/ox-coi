@@ -42,21 +42,13 @@
 
 import 'package:meta/meta.dart';
 
-abstract class MessageAttachmentState {
-  MessageAttachmentState();
-}
+abstract class MessageAttachmentState {}
 
-class MessageAttachmentStateInitial extends MessageAttachmentState {
-  MessageAttachmentStateInitial();
-}
+class MessageAttachmentStateInitial extends MessageAttachmentState {}
 
-class MessageAttachmentStateLoading extends MessageAttachmentState {
-  MessageAttachmentStateLoading();
-}
+class MessageAttachmentStateLoading extends MessageAttachmentState {}
 
-class MessageAttachmentStateSuccess extends MessageAttachmentState {
-  MessageAttachmentStateSuccess();
-}
+class MessageAttachmentStateSuccess extends MessageAttachmentState {}
 
 class MessageAttachmentStateFailure extends MessageAttachmentState {
   final String error;

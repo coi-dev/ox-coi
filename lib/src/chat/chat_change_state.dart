@@ -42,17 +42,11 @@
 
 import 'package:meta/meta.dart';
 
-abstract class ChatChangeState {
-  ChatChangeState();
-}
+abstract class ChatChangeState {}
 
-class CreateChatStateInitial extends ChatChangeState {
-  CreateChatStateInitial();
-}
+class CreateChatStateInitial extends ChatChangeState {}
 
-class CreateChatStateLoading extends ChatChangeState {
-  CreateChatStateLoading();
-}
+class CreateChatStateLoading extends ChatChangeState {}
 
 class CreateChatStateSuccess extends ChatChangeState {
   final int chatId;

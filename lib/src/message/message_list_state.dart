@@ -42,17 +42,11 @@
 
 import 'package:meta/meta.dart';
 
-abstract class MessageListState {
-  MessageListState();
-}
+abstract class MessageListState {}
 
-class MessagesStateInitial extends MessageListState {
-  MessagesStateInitial();
-}
+class MessagesStateInitial extends MessageListState {}
 
-class MessagesStateLoading extends MessageListState {
-  MessagesStateLoading();
-}
+class MessagesStateLoading extends MessageListState {}
 
 class MessagesStateSuccess extends MessageListState {
   final List<int> messageIds;

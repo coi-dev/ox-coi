@@ -138,6 +138,8 @@ class AppLocalizations {
 
   String get copiedToClipboard => Intl.message('Copied to clipboard', name: 'copiedToClipboard');
 
+  String get today => Intl.message('Today', name: 'today');
+
   String get yesterday => Intl.message('Yesterday', name: 'yesterday');
 
   String get participants => Intl.message('Participants', name: 'participants');
@@ -291,10 +293,6 @@ class AppLocalizations {
   String get recordingAudioMessageFailure => Intl.message('Audio recording failed, missing permissions', name: 'recordingAudioMessageFailure');
 
   String get recordingVideoMessageFailure => Intl.message('Video recording failed, missing permissions', name: 'recordingVideoMessageFailure');
-
-  String get chatToday => Intl.message('Today', name: 'chatToday');
-
-  String get chatYesterday => Intl.message('Yesterday', name: 'chatYesterday');
 
   // Chat profile view
   String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');

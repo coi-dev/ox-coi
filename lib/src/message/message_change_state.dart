@@ -42,21 +42,13 @@
 
 import 'package:meta/meta.dart';
 
-abstract class MessageChangeState {
-  MessageChangeState();
-}
+abstract class MessageChangeState {}
 
-class MessageChangeStateInitial extends MessageChangeState {
-  MessageChangeStateInitial();
-}
+class MessageChangeStateInitial extends MessageChangeState {}
 
-class MessageChangeStateLoading extends MessageChangeState {
-  MessageChangeStateLoading();
-}
+class MessageChangeStateLoading extends MessageChangeState {}
 
-class MessageChangeStateSuccess extends MessageChangeState {
-  MessageChangeStateSuccess();
-}
+class MessageChangeStateSuccess extends MessageChangeState {}
 
 class MessageChangeStateFailure extends MessageChangeState {
   final String error;

@@ -42,17 +42,11 @@
 
 import 'package:meta/meta.dart';
 
-abstract class ContactChangeState {
-  ContactChangeState();
-}
+abstract class ContactChangeState {}
 
-class ContactChangeStateInitial extends ContactChangeState {
-  ContactChangeStateInitial();
-}
+class ContactChangeStateInitial extends ContactChangeState {}
 
-class ContactChangeStateLoading extends ContactChangeState {
-  ContactChangeStateLoading();
-}
+class ContactChangeStateLoading extends ContactChangeState {}
 
 class ContactChangeStateSuccess extends ContactChangeState {
   final bool add;

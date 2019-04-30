@@ -44,17 +44,11 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-abstract class ChatState {
-  ChatState();
-}
+abstract class ChatState {}
 
-class ChatStateInitial extends ChatState {
-  ChatStateInitial();
-}
+class ChatStateInitial extends ChatState {}
 
-class ChatStateLoading extends ChatState {
-  ChatStateLoading();
-}
+class ChatStateLoading extends ChatState {}
 
 class ChatStateSuccess extends ChatState {
   final String name;

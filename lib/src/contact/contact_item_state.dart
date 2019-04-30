@@ -44,17 +44,11 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-abstract class ContactItemState {
-  ContactItemState();
-}
+abstract class ContactItemState {}
 
-class ContactItemStateInitial extends ContactItemState {
-  ContactItemStateInitial();
-}
+class ContactItemStateInitial extends ContactItemState {}
 
-class ContactItemStateLoading extends ContactItemState {
-  ContactItemStateLoading();
-}
+class ContactItemStateLoading extends ContactItemState {}
 
 class ContactItemStateSuccess extends ContactItemState {
   final String name;

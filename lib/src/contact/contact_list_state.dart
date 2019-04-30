@@ -42,17 +42,11 @@
 
 import 'package:meta/meta.dart';
 
-abstract class ContactListState {
-  ContactListState();
-}
+abstract class ContactListState {}
 
-class ContactListStateInitial extends ContactListState {
-  ContactListStateInitial();
-}
+class ContactListStateInitial extends ContactListState {}
 
-class ContactListStateLoading extends ContactListState {
-  ContactListStateLoading();
-}
+class ContactListStateLoading extends ContactListState {}
 
 class ContactListStateSuccess extends ContactListState {
   final List<int> contactIds;

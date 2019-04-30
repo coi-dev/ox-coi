@@ -44,17 +44,11 @@ import 'dart:ui';
 
 import 'package:meta/meta.dart';
 
-abstract class MessageItemState {
-  MessageItemState();
-}
+abstract class MessageItemState {}
 
-class MessageItemStateInitial extends MessageItemState {
-  MessageItemStateInitial();
-}
+class MessageItemStateInitial extends MessageItemState {}
 
-class MessageItemStateLoading extends MessageItemState {
-  MessageItemStateLoading();
-}
+class MessageItemStateLoading extends MessageItemState {}
 
 class MessageItemStateSuccess extends MessageItemState {
   final String messageText;
