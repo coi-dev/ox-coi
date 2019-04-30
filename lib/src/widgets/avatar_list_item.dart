@@ -131,30 +131,26 @@ class AvatarListItem extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                timestamp != null && timestamp != 0 ? Text(
-                  getChatListTime(context, timestamp),
-                  style: TextStyle(
-                    color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,
-                    fontWeight: freshMessageCount != null && freshMessageCount > 0 ? FontWeight.bold : FontWeight.normal,
-                    fontSize: 14.0
-                  ),
-                ) : Container(),
-                freshMessageCount != null && freshMessageCount > 0 ?
-                Container(
-                  margin: EdgeInsets.only(top: 8.0),
-                  padding: EdgeInsets.only(left: 8.0,right: 8.0, top: 4.0, bottom: 4.0),
-                  decoration: BoxDecoration(
-                    color: chatMain,
-                    borderRadius: BorderRadius.circular(100)
-                  ),
-                  child: Text(
-                    freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0
-                    ),
-                  ),
-                ) : Container()
+                timestamp != null && timestamp != 0
+                    ? Text(
+                        getChatListTime(context, timestamp),
+                        style: TextStyle(
+                            color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,
+                            fontWeight: freshMessageCount != null && freshMessageCount > 0 ? FontWeight.bold : FontWeight.normal,
+                            fontSize: 14.0),
+                      )
+                    : Container(),
+                freshMessageCount != null && freshMessageCount > 0
+                    ? Container(
+                        margin: EdgeInsets.only(top: 8.0),
+                        padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                        decoration: BoxDecoration(color: chatMain, borderRadius: BorderRadius.circular(100)),
+                        child: Text(
+                          freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                          style: TextStyle(color: Colors.white, fontSize: 12.0),
+                        ),
+                      )
+                    : Container()
               ],
             )
           ],
