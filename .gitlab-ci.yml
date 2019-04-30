@@ -21,7 +21,7 @@ build:
   - tools/build.triggerBuild.sh
   artifacts:
     paths:
-    - build/app/outputs/apk/release/*.apk
+    - build/app/outputs/apk/development/release/*.apk
     - ./.current-build-id
 
 deploy:
