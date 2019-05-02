@@ -82,8 +82,8 @@ class _ChatListItemState extends State<ChatListItem> {
         String name;
         String subTitle;
         Color color;
-        int freshMessageCount;
-        int timestamp;
+        int freshMessageCount = 0;
+        int timestamp = 0;
         String preview;
         if (state is ChatStateSuccess) {
           name = state.name;

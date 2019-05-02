@@ -46,7 +46,6 @@ import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
 import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_change_state.dart';
-import 'package:ox_talk/src/data/chat_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';

@@ -66,10 +66,10 @@ class AvatarListItem extends StatelessWidget {
       this.avatarIcon,
       this.imagePath,
       this.color,
-      this.freshMessageCount,
+      this.freshMessageCount = 0,
       this.titleIcon,
       this.subTitleIcon,
-      this.timestamp});
+      this.timestamp = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -85,20 +85,18 @@ class AvatarListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             avatarIcon == null
-                ? Avatar(
-                    imagePath: imagePath,
-                    initials: getInitials(),
-                    color: color,
-                  )
-                : CircleAvatar(
-                    radius: listAvatarRadius,
-                    foregroundColor: listAvatarForegroundColor,
-                    child: Icon(avatarIcon),
-                  ),
+              ? Avatar(
+                  imagePath: imagePath,
+                  initials: getInitials(),
+                  color: color,
+                )
+              : CircleAvatar(
+                  radius: listAvatarRadius,
+                  foregroundColor: listAvatarForegroundColor,
+                  child: Icon(avatarIcon),
+                ),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: listItemPadding),
-                child: Column(
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Row(
@@ -107,13 +105,27 @@ class AvatarListItem extends StatelessWidget {
                           padding: const EdgeInsets.only(right: iconTextPadding),
                           child: titleIcon != null ? titleIcon : Container(),
                         ),
-                        Expanded(child: getTitle()),
+                        Expanded(
+                          child: getTitle()
+                        ),
+                        Visibility(
+                          visible: timestamp != null && timestamp != 0,
+                          child: Text(
+                            getChatListTime(context, timestamp),
+                            style: TextStyle(
+                              color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,
+                              fontWeight: freshMessageCount != null && freshMessageCount > 0 ? FontWeight.bold : FontWeight.normal,
+                              fontSize: 14.0
+                            ),
+                          )
+                        ),
                       ],
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                      vertical: listItemPaddingSmall,
-                    )),
+                      padding: EdgeInsets.symmetric(
+                        vertical: listItemPaddingSmall,
+                      )
+                    ),
                     Row(
                       children: <Widget>[
                         Padding(
@@ -121,38 +133,23 @@ class AvatarListItem extends StatelessWidget {
                           child: subTitleIcon != null ? subTitleIcon : Container(),
                         ),
                         Expanded(child: getSubTitle()),
+                        Visibility(
+                          visible: freshMessageCount != null && freshMessageCount > 0,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                            decoration: BoxDecoration(color: chatMain, borderRadius: BorderRadius.circular(100)),
+                            child: Text(
+                              freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                              style: TextStyle(color: Colors.white, fontSize: 12.0),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Divider(),
                   ],
                 ),
-              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                timestamp != null && timestamp != 0
-                    ? Text(
-                        getChatListTime(context, timestamp),
-                        style: TextStyle(
-                            color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,
-                            fontWeight: freshMessageCount != null && freshMessageCount > 0 ? FontWeight.bold : FontWeight.normal,
-                            fontSize: 14.0),
-                      )
-                    : Container(),
-                freshMessageCount != null && freshMessageCount > 0
-                    ? Container(
-                        margin: EdgeInsets.only(top: 8.0),
-                        padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                        decoration: BoxDecoration(color: chatMain, borderRadius: BorderRadius.circular(100)),
-                        child: Text(
-                          freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                          style: TextStyle(color: Colors.white, fontSize: 12.0),
-                        ),
-                      )
-                    : Container()
-              ],
-            )
           ],
         ),
       ),
@@ -160,25 +157,27 @@ class AvatarListItem extends StatelessWidget {
   }
 
   StatelessWidget getTitle() {
-    return title != null
-        ? Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: chatItemTitle,
-          )
-        : Container();
+    return Visibility(
+      visible: title != null,
+      child: Text(
+        title != null ? title : "",
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: chatItemTitle,
+      )
+    );
   }
 
   StatelessWidget getSubTitle() {
-    return subTitle != null
-        ? Text(
-            subTitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: textLessImportant),
-          )
-        : Container();
+    return Visibility(
+      visible: subTitle != null,
+      child: Text(
+        subTitle != null ? subTitle :"",
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: textLessImportant),
+      )
+    );
   }
 
   String getInitials() {
