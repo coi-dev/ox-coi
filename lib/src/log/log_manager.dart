@@ -117,20 +117,16 @@ class LogManager {
   void deleteAllLogFiles() async {
     List<String> logFiles = await getLogFiles();
     logFiles.forEach((logFile) {
-      deleteLogFile(logFile, false);
+      deleteLogFile(logFile);
     });
     logFiles.clear();
     await setPreference(preferenceLogFiles, logFiles);
   }
 
-  void deleteLogFile(String logFile, [bool removeFromList = true]) async {
+  void deleteLogFile(String logFile) async {
     try {
       File(logFile).delete();
     } catch (error) {}
-    if (removeFromList) {
-      List<String> logFiles = await getLogFiles();
-      logFiles.remove(logFile);
-    }
   }
 
   Future<dynamic> getLogFiles() {
