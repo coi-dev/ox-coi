@@ -88,8 +88,9 @@ class _ChatProfileViewState extends State<ChatProfileView> {
         bloc: _chatBloc,
         builder: (context, state){
           if(state is ChatStateSuccess){
+            bool _isVerified = state.isVerified;
             if(state.isGroupChat){
-              return ChatProfileGroupView(widget._chatId, state.name, state.color);
+              return ChatProfileGroupView(widget._chatId, state.name, state.color, _isVerified);
             }else{
               bool _isSelfTalk = state.isSelfTalk;
               return BlocBuilder(
@@ -97,7 +98,7 @@ class _ChatProfileViewState extends State<ChatProfileView> {
                 builder: (context, state){
                   if(state is ContactListStateSuccess){
                     var key = "${state.contactIds[0]}-${state.contactLastUpdateValues[0]}";
-                    return ChatProfileSingleView(widget._chatId, _isSelfTalk, state.contactIds[0], key);
+                    return ChatProfileSingleView(widget._chatId, _isSelfTalk, _isVerified, state.contactIds[0], key);
                   }else{
                     return Container();
                   }

@@ -58,8 +58,9 @@ class ChatProfileGroupView extends StatefulWidget {
   final int _chatId;
   final String _chatName;
   final Color _chatColor;
+  final bool _isVerified;
 
-  ChatProfileGroupView(this._chatId, this._chatName, this._chatColor);
+  ChatProfileGroupView(this._chatId, this._chatName, this._chatColor, this._isVerified);
 
   @override
   _ChatProfileGroupViewState createState() => _ChatProfileGroupViewState();
@@ -97,9 +98,23 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
               ),
             ),
           ),
-          Text(
-            widget._chatName,
-            style: defaultText,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Visibility(
+                visible: widget._isVerified,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: iconTextPadding),
+                  child: Icon(
+                    Icons.verified_user
+                  ),
+                )
+              ),
+              Text(
+                widget._chatName,
+                style: defaultText,
+              ),
+            ],
           ),
           Padding(
             padding: EdgeInsets.all(chatProfileDividerPadding),

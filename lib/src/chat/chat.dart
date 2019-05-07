@@ -230,10 +230,12 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
         String name;
         String subTitle;
         Color color;
+        bool isVerified = false;
         if (state is ChatStateSuccess) {
           name = state.name;
           subTitle = state.subTitle;
           color = state.color;
+          isVerified = state.isVerified;
         } else {
           name = "";
           subTitle = "";
@@ -260,14 +262,26 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
                     ),
                     Row(
                       children: <Widget>[
-                        _chatBloc.isGroup
-                            ? Padding(
+                        Visibility(
+                          visible: _chatBloc.isGroup,
+                          child: Padding(
                             padding: const EdgeInsets.only(right: iconTextPadding),
                             child: Icon(
                               Icons.group,
                               size: iconSize,
-                            ))
-                            : Container(),
+                            )
+                          ),
+                        ),
+                        Visibility(
+                          visible: isVerified,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: iconTextPadding),
+                            child: Icon(
+                              Icons.verified_user,
+                              size: iconSize,
+                            )
+                          ),
+                        ),
                         Expanded(
                           child: Text(
                             subTitle,

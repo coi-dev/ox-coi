@@ -83,6 +83,7 @@ mixin ContactItemBuilder {
               color: state.color,
               avatarIcon: isSelected ? Icons.check : null,
               onTap: onContactTapped,
+              isVerified: state.isVerified != null ? state.isVerified : false,
             );
           } else if (state is ContactItemStateFailure) {
             return new Text(state.error);

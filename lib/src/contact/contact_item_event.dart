@@ -56,6 +56,7 @@ class ContactLoaded extends ContactItemEvent {
   final String name;
   final String email;
   final Color color;
+  final bool isVerified;
 
-  ContactLoaded(this.name, this.email, this.color);
+  ContactLoaded(this.name, this.email, this.color, this.isVerified);
 }

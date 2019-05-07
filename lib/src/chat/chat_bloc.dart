@@ -45,6 +45,7 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/material.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_state.dart';
 import 'package:ox_talk/src/data/chat_extension.dart';
@@ -81,6 +82,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         isGroupChat: event.isGroupChat,
         preview: event.preview,
         timestamp: event.timestamp,
+        isVerified: event.isVerified,
       );
     } else if(event is ChatMarkNoticed){
       _markNoticedChat();
@@ -108,9 +110,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     int freshMessageCount = await context.getFreshMessageCount(_chatId);
     bool isSelfTalk = await chat.isSelfTalk();
     _isGroup = await chat.isGroup();
+    bool isVerified = await chat.isVerified();
     Color color = rgbColorFromInt(colorValue);
     var chatSummary = chat.get(ChatExtension.chatSummary);
-    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary.preview, chatSummary.timestamp));
+    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary.preview, chatSummary.timestamp, isVerified));
   }
 
   void _markNoticedChat() async {

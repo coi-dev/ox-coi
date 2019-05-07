@@ -67,8 +67,9 @@ class ChatProfileSingleView extends StatefulWidget {
   final int _chatId;
   final int _contactId;
   final bool _isSelfTalk;
+  final bool _isVerified;
 
-  ChatProfileSingleView(this._chatId, this._isSelfTalk, this._contactId, key) : super(key: Key(key));
+  ChatProfileSingleView(this._chatId, this._isSelfTalk, this._isVerified, this._contactId, key) : super(key: Key(key));
 
   @override
   _ChatProfileSingleViewState createState() => _ChatProfileSingleViewState();
@@ -120,30 +121,50 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
             ),
           ),
         ),
-        chatName.isNotEmpty ? Text(
-          chatName,
-          style: defaultText,
-        ) : Container(),
-        InkWell(
-          onTap: () => {
-          Clipboard.setData(new ClipboardData(text: email)),
-          showToast(AppLocalizations.of(context).chatProfileClipboardToastMessage)
-          },
+        Visibility(
+          visible: chatName.isNotEmpty,
           child: Text(
-            email,
+            chatName,
             style: defaultText,
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Visibility(
+              visible: widget._isVerified,
+              child: Padding(
+                padding: const EdgeInsets.only(right: iconTextPadding),
+                child: Icon(
+                  Icons.verified_user
+                ),
+              )
+            ),
+            InkWell(
+              onTap: () => {
+                Clipboard.setData(ClipboardData(text: email)),
+                showToast(AppLocalizations.of(context).chatProfileClipboardToastMessage)
+              },
+              child: Text(
+                email,
+                style: defaultText,
+              ),
+            ),
+          ],
         ),
         Padding(
           padding: EdgeInsets.all(chatProfileDividerPadding),
           child: Divider(height: dividerHeight,),
         ),
-        !widget._isSelfTalk ? Card(
-          child: ListTile(
-            title: Text(AppLocalizations.of(context).chatProfileBlockContactButtonText,),
-            onTap: () => _showBlockContactDialog(ChatProfileViewAction.block),
-          ),
-        ): Container(),
+        Visibility(
+          visible: !widget._isSelfTalk,
+          child: Card(
+            child: ListTile(
+              title: Text(AppLocalizations.of(context).chatProfileBlockContactButtonText,),
+              onTap: () => _showBlockContactDialog(ChatProfileViewAction.block),
+            ),
+          )
+        ),
         Card(
           child: ListTile(
             title: Text(AppLocalizations.of(context).chatProfileDeleteChatButtonText,),

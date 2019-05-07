@@ -54,8 +54,9 @@ class ContactItemStateSuccess extends ContactItemState {
   final String name;
   final String email;
   final Color color;
+  final bool isVerified;
 
-  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color});
+  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified});
 }
 
 class ContactItemStateFailure extends ContactItemState {

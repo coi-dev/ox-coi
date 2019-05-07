@@ -59,6 +59,7 @@ class ChatStateSuccess extends ChatState {
   final bool isGroupChat;
   final String preview;
   final int timestamp;
+  final bool isVerified;
 
   ChatStateSuccess(
       {@required this.name,
@@ -68,7 +69,8 @@ class ChatStateSuccess extends ChatState {
       @required this.isSelfTalk,
       @required this.isGroupChat,
       @required this.preview,
-      @required this.timestamp});
+      @required this.timestamp,
+      @required this.isVerified});
 }
 
 class ChatStateFailure extends ChatState {

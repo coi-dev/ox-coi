@@ -58,6 +58,7 @@ class AvatarListItem extends StatelessWidget {
   final Widget subTitleIcon;
   final IconData avatarIcon;
   final int timestamp;
+  final bool isVerified;
 
   AvatarListItem(
       {@required this.title,
@@ -69,7 +70,9 @@ class AvatarListItem extends StatelessWidget {
       this.freshMessageCount = 0,
       this.titleIcon,
       this.subTitleIcon,
-      this.timestamp = 0});
+      this.timestamp = 0,
+      this.isVerified = false,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +134,16 @@ class AvatarListItem extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: iconTextPadding),
                           child: subTitleIcon != null ? subTitleIcon : Container(),
+                        ),
+                        Visibility(
+                          visible: isVerified,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: iconTextPadding),
+                            child: Icon(
+                              Icons.verified_user,
+                              size: iconSize,
+                            ),
+                          ),
                         ),
                         Expanded(child: getSubTitle()),
                         Visibility(

@@ -72,7 +72,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
         yield ContactItemStateFailure(error: error.toString());
       }
     } else if (event is ContactLoaded) {
-      yield ContactItemStateSuccess(name: event.name, email: event.email, color: event.color);
+      yield ContactItemStateSuccess(name: event.name, email: event.email, color: event.color, isVerified: event.isVerified);
     }
   }
 
@@ -81,7 +81,8 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     String name = await contact.getName();
     String mail = await contact.getAddress();
     int colorValue = await contact.getColor();
+    bool isVerified = await contact.isVerified();
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ContactLoaded(name, mail, color));
+    dispatch(ContactLoaded(name, mail, color, isVerified));
   }
 }
