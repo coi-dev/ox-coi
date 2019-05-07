@@ -89,9 +89,11 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       var messageContactId = await _messageListRepository.get(messageId).getFromId();
       Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
       Repository<Contact> validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-      inviteContactRepository.transferTo(validContactRepository, messageContactId);
+      inviteContactRepository.remove(messageContactId);
       _messageListRepository.clear();
       chatId = await context.createChatByMessageId(messageId);
+      List<int> contactIds = await context.getChatContacts(chatId);
+      validContactRepository.putIfAbsent(ids: contactIds);
     } else if (verified != null && name != null && contacts != null) {
       chatId = await context.createGroupChat(verified, name);
       for (int i = 0; i < contacts.length; i++) {
