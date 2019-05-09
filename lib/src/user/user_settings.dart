@@ -101,7 +101,7 @@ class _UserSettingsState extends State<UserSettings> {
             onPressed: () => navigation.pop(context, "EditUserSettings"),
           ),
           backgroundColor: contactMain,
-          title: Text(AppLocalizations.of(context).editUserSettingsTitle),
+          title: Text(AppLocalizations.of(context).userSettingsTitle),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: _saveChanges)],
         ),
         body: buildForm());
@@ -163,11 +163,11 @@ class _UserSettingsState extends State<UserSettings> {
                   TextFormField(
                       maxLines: 1,
                       controller: _usernameController,
-                      decoration: InputDecoration(labelText: AppLocalizations.of(context).editUserSettingsUsernameLabel)),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsUsernameLabel)),
                   TextFormField(
                     maxLines: 1,
                     controller: _statusController,
-                    decoration: InputDecoration(labelText: AppLocalizations.of(context).editUserSettingsStatusLabel),
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsStatusLabel),
                   ),
                 ],
               ),
@@ -197,7 +197,7 @@ class _UserSettingsState extends State<UserSettings> {
               ),
               ListTile(
                 leading: Icon(Icons.delete),
-                title: Text(AppLocalizations.of(context).editUserSettingsRemoveImage),
+                title: Text(AppLocalizations.of(context).userSettingsRemoveImage),
                 onTap: () => _removeAvatar(),
               )
             ],

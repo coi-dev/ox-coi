@@ -46,7 +46,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/base/bloc_progress_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/styles.dart';
 
 class FullscreenProgress<T extends Bloc> extends StatelessWidget {
   final String _text;
@@ -67,15 +66,16 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
           progress = state.progress;
         }
         return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           constraints: BoxConstraints.expand(),
           color: progressBackground,
-          child: buildProgress(progress),
+          child: buildProgress(context, progress),
         );
       },
     );
   }
 
-  Widget buildProgress(int progress) {
+  Widget buildProgress(BuildContext context, int progress) {
     var column = Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -85,14 +85,23 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: verticalPadding),
-          child: Text(_text, style: progressText),
+          child: Center(
+              child: Text(
+            _text,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.subhead.apply(color: textColorInverted),
+          )),
         ),
       ],
     );
     if (_showProgressValues) {
       column.children.add(Padding(
         padding: EdgeInsets.only(top: verticalPaddingSmall),
-        child: Text("${progress / 10}%", style: progressText),
+        child: Text(
+          "${progress / 10}%",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.subhead.apply(color: textColorInverted),
+        ),
       ));
     }
     return column;

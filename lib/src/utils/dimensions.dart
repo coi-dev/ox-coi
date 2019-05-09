@@ -49,6 +49,7 @@ const dividerHeight = 1.0;
 // Progress
 const verticalPaddingSmall = 8.0;
 const verticalPadding = 16.0;
+const horizontalPadding = 16.0;
 
 // List
 const listItemHeaderPadding = 8.0;

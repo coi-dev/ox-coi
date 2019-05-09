@@ -89,7 +89,7 @@ class ContactListView extends RootChild {
   }
 
   _showAddContactView(BuildContext context) {
-    navigation.pushNamed(context, Navigation.ROUTES_CONTACT_ADD);
+    navigation.pushNamed(context, Navigation.contactAdd);
   }
 
   @override
@@ -190,7 +190,7 @@ class _ContactListState extends State<ContactListView> with ContactSearchControl
   }
 
   _showBlockedUserList(BuildContext context) {
-    navigation.pushNamed(context, Navigation.ROUTES_CONTACTS_BLOCKED);
+    navigation.pushNamed(context, Navigation.contactsBlocked);
   }
 
   void _showImportDialog(bool initialImport, BuildContext context) {

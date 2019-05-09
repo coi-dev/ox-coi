@@ -127,7 +127,7 @@ class _ContactChangeState extends State<ContactChange> {
           Context coreContext = Context();
           var chatId = await coreContext.createChatByContactId(state.id);
           chatRepository.putIfAbsent(id: chatId);
-          navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatScreen");
+          navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.root), "ChatScreen");
         }
       }
     } else if (state is ContactChangeStateFailure && state.error == contactDelete) {

@@ -58,6 +58,7 @@ class ValidatableTextFormField extends StatefulWidget {
   final TextInputType inputType;
   final TextEditingController controller = TextEditingController();
   final bool needValidation;
+  final bool enabled;
 
   ValidatableTextFormField(
     this.labelText, {
@@ -67,6 +68,7 @@ class ValidatableTextFormField extends StatefulWidget {
     this.inputType = TextInputType.text,
     this.autoFocus = false,
     this.needValidation = true,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
@@ -87,6 +89,7 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
         maxLines: 1,
         controller: widget.controller,
         keyboardType: widget.inputType,
+        enabled: widget.enabled,
         validator: (value) {
           if (widget.needValidation) {
             if (widget.textFormType == TextFormType.email && !isEmail(value)) {

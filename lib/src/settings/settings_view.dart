@@ -40,62 +40,60 @@
  * for more details.
  */
 
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/data/config.dart';
+import 'package:flutter/material.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/main/main_event.dart';
-import 'package:ox_talk/src/main/main_state.dart';
-import 'package:ox_talk/src/platform/app_information.dart';
-import 'package:ox_talk/src/platform/preferences.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
 
-class MainBloc extends Bloc<MainEvent, MainState> {
-  DeltaChatCore _core = DeltaChatCore();
-  Context _context = Context();
+enum SettingsType {
+  account,
+  security,
+}
+
+class SettingsView extends StatelessWidget {
+  final Navigation navigation = Navigation();
 
   @override
-  MainState get initialState => MainStateInitial();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: contactMain,
+          title: Text(AppLocalizations.of(context).settings),
+        ),
+        body: buildPreferenceList(context));
+  }
 
-  @override
-  Stream<MainState> mapEventToState(MainState currentState, MainEvent event) async* {
-    if (event is PrepareApp) {
-      yield MainStateLoading();
-      try {
-        await _initCore();
-        String appVersion = await getPreference(preferenceAppVersion);
-        if (appVersion == null || appVersion.isEmpty) {
-          await _setupDefaultValues(event.context);
-        }
-        _checkLogin();
-      } catch (error) {
-        yield MainStateFailure(error: error.toString());
-      }
-    } else if (event is AppLoaded) {
-      yield MainStateSuccess(configured: event.configured);
+  ListView buildPreferenceList(BuildContext context) {
+    return ListView(
+      children: ListTile.divideTiles(context: context, tiles: [
+        ListTile(
+          leading: Icon(
+            Icons.account_circle,
+            color: primary,
+          ),
+          title: Text(AppLocalizations.of(context).accountSettingsTitle),
+          onTap: () => _onPressed(context, SettingsType.account),
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.security,
+            color: primary,
+          ),
+          title: Text(AppLocalizations.of(context).security),
+          onTap: () => _onPressed(context, SettingsType.security),
+        ),
+      ]).toList(),
+    );
+  }
+
+  void _onPressed(BuildContext context, SettingsType type) {
+    switch (type) {
+      case SettingsType.account:
+        navigation.pushNamed(context, Navigation.settingsAccount);
+        break;
+      case SettingsType.security:
+        navigation.pushNamed(context, Navigation.settingsSecurity);
+        break;
     }
-  }
-
-  _initCore() async {
-    await _core.init();
-  }
-
-  _setupDefaultValues(BuildContext context) async {
-    Config config = Config();
-    config.setValue(Context.configSelfStatus, AppLocalizations.of(context).userSettingsStatusDefaultValue);
-    config.setValue(Context.configShowEmails, Context.showEmailsOff);
-    String version = await getAppVersion();
-    await setPreference(preferenceAppVersion, version);
-  }
-
-  _checkLogin() async {
-    bool configured = await _context.isConfigured();
-    dispatch(AppLoaded(configured: configured));
-  }
-
-  onLoginSuccess() {
-    dispatch(AppLoaded(configured: true));
   }
 }

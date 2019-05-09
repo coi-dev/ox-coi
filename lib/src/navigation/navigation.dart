@@ -45,14 +45,18 @@ import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/chat/chat_create.dart';
 import 'package:ox_talk/src/contact/contact_blocked_list.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
+import 'package:ox_talk/src/settings/settings_security.dart';
+import 'package:ox_talk/src/settings/settings_view.dart';
 import 'package:ox_talk/src/user/user_account_settings.dart';
 
 class Navigation {
-  static const String ROUTES_ROOT = '/';
-  static const String ROUTES_CONTACT_ADD = '/contactAdd';
-  static const String ROUTES_PROFILE_EDIT = '/profileEdit';
-  static const String ROUTES_CHAT_CREATE = '/chatCreate';
-  static const String ROUTES_CONTACTS_BLOCKED = '/contactsBlocked';
+  static const String root = '/';
+  static const String contactAdd = '/contactAdd';
+  static const String settings = '/settings';
+  static const String settingsAccount = '/settings/account';
+  static const String settingsSecurity = '/settings/security';
+  static const String chatCreate = '/chatCreate';
+  static const String contactsBlocked = '/contactsBlocked';
 
   static Navigation _instance;
 
@@ -61,13 +65,15 @@ class Navigation {
   Navigation._internal();
 
   final Map<String, WidgetBuilder> routeMapping = {
-    ROUTES_ROOT: (context) => OxTalk(),
-    ROUTES_CONTACT_ADD: (context) => ContactChange(
+    root: (context) => OxTalk(),
+    contactAdd: (context) => ContactChange(
           contactAction: ContactAction.add,
         ),
-    ROUTES_PROFILE_EDIT: (context) => UserAccountSettings(),
-    ROUTES_CHAT_CREATE: (context) => ChatCreate(),
-    ROUTES_CONTACTS_BLOCKED: (context) => ContactBlockedList(),
+    settings: (context) => SettingsView(),
+    settingsAccount: (context) => UserAccountSettings(),
+    settingsSecurity: (context) => SettingsSecurity(),
+    chatCreate: (context) => ChatCreate(),
+    contactsBlocked: (context) => ContactBlockedList(),
   };
 
   void push(BuildContext context, MaterialPageRoute route, String routeToPage) {
@@ -95,7 +101,7 @@ class Navigation {
     Navigator.pop(context);
   }
 
-  void popUntil(BuildContext context, RoutePredicate predicate, String popFromPage){
+  void popUntil(BuildContext context, RoutePredicate predicate, String popFromPage) {
     debugPrint("Navigation.popUntil from $popFromPage");
     Navigator.popUntil(context, predicate);
   }

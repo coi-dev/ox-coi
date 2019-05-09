@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
-    loginObservable.listen((event) => handleLoginStateChange(event));
+    loginObservable.listen((state) => handleLoginStateChange(state));
   }
 
   void handleLoginStateChange(LoginState state) {

@@ -66,15 +66,6 @@ const hugeDisabledText = TextStyle(
   color: textDisabled,
 );
 
-// Progress
-const progressText = TextStyle(
-  color: textColorInverted,
-  fontSize: 16.0,
-  fontFamily: "Roboto",
-  fontWeight: FontWeight.normal,
-  decoration: TextDecoration.none,
-);
-
 // Chat
 const chatItemTitle = TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0);
 

@@ -55,10 +55,9 @@ import 'package:ox_talk/src/user/user_change_bloc.dart';
 import 'package:ox_talk/src/user/user_change_event.dart';
 import 'package:ox_talk/src/user/user_change_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/core.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/core.dart';
-import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
@@ -78,6 +77,10 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   bool _showedErrorDialog = false;
 
   final _formKey = GlobalKey<FormState>();
+  ValidatableTextFormField imapMailField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).loginLabelEmail,
+    enabled: false,
+  );
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
   ValidatableTextFormField imapPasswordField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).password,
@@ -103,7 +106,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   );
   String _selectedImapSecurity;
   String _selectedSmtpSecurity;
-  String _email = "";
+  bool _firstBuild = true;
 
   @override
   void initState() {
@@ -117,10 +120,8 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   }
 
   _handleUserChangeStateChange(UserChangeState state) {
-    if (state is UserChangeStateSuccess) {
-      _fillEditAccountDataView(state.config);
-    } else if (state is UserChangeStateApplied) {
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).editAccountDataProgressMessage, true);
+    if (state is UserChangeStateApplied) {
+      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).accountSettingsDataProgressMessage, true);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);
@@ -137,14 +138,14 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
       }
     }
     if (state is LoginStateSuccess) {
-      showToast(AppLocalizations.of(context).editAccountSettingsSuccess);
+      showToast(AppLocalizations.of(context).accountSettingsSuccess);
       navigation.pop(context, "EditAccountSettings");
     } else if (state is LoginStateFailure) {
       if (!_showedErrorDialog) {
         _showedErrorDialog = true;
         showInformationDialog(
           context: context,
-          title: AppLocalizations.of(context).editAccountSettingsErrorDialogTitle,
+          title: AppLocalizations.of(context).accountSettingsErrorDialogTitle,
           content: state.error,
         );
       }
@@ -160,7 +161,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
             onPressed: () => navigation.pop(context, "EditAccountSettings"),
           ),
           backgroundColor: contactMain,
-          title: Text(AppLocalizations.of(context).editAccountSettingsTitle),
+          title: Text(AppLocalizations.of(context).accountSettingsTitle),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: saveAccountData)],
         ),
         body: buildForm());
@@ -170,15 +171,23 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
     return BlocBuilder(
         bloc: _userChangeBloc,
         builder: (context, state) {
-          if (state is UserChangeStateFailure) {
+          if (state is UserChangeStateSuccess) {
+            if (_firstBuild) {
+              _firstBuild = false;
+              _fillEditAccountDataView(state.config);
+            }
+            return _buildEditAccountDataView();
+          } else if (state is UserChangeStateFailure) {
             showToast(state.error);
+            return _buildEditAccountDataView();
+          } else {
+            return Container();
           }
-          return _buildEditAccountDataView();
         });
   }
 
   _fillEditAccountDataView(Config config) {
-    _email = config.email;
+    imapMailField.controller.text = config.email;
     imapLoginNameField.controller.text = config.imapLogin;
     imapServerField.controller.text = config.imapServer;
     imapPortField.controller.text = config.imapPort;
@@ -200,21 +209,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.mail),
-                    Padding(
-                      padding: EdgeInsets.only(right: iconFormPadding),
-                    ),
-                    Text(
-                      _email,
-                      style: defaultText,
-                    ),
-                  ],
-                ),
-              ),
+              imapMailField,
               imapPasswordField,
               Padding(padding: EdgeInsets.only(top: formVerticalPadding)),
               Text(AppLocalizations.of(context).inbox),

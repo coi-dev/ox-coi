@@ -144,6 +144,10 @@ class AppLocalizations {
 
   String get participants => Intl.message('Participants', name: 'participants');
 
+  String get settings => Intl.message('Settings', name: 'settings');
+
+  String get security => Intl.message('Security', name: 'security');
+
   // Core
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
 
@@ -250,6 +254,8 @@ class AppLocalizations {
   String get loginHintPassword => Intl.message('Enter your password', name: 'loginHintPassword');
 
   String get loginLabelImapName => Intl.message('IMAP login-name', name: 'loginLabelImapName');
+
+  String get loginLabelEmail => Intl.message('E-mail address', name: 'loginLabelEmail');
 
   String get loginLabelImapPassword => Intl.message('IMAP password', name: 'loginLabelImapPassword');
 
@@ -392,27 +398,50 @@ class AppLocalizations {
   String get profileEditButton => Intl.message('Edit profile', name: 'profileEditButton');
 
   // User settings
-  String get editUserSettingsTitle => Intl.message('Edit user settings', name: 'editUserSettingsTitle');
+  String get userSettingsTitle => Intl.message('Edit user settings', name: 'userSettingsTitle');
 
-  String get editUserSettingsUsernameLabel => Intl.message('Username', name: 'editUserSettingsUsernameLabel');
+  String get userSettingsUsernameLabel => Intl.message('Username', name: 'userSettingsUsernameLabel');
 
-  String get editUserSettingsStatusLabel => Intl.message('Status', name: 'editUserSettingsStatusLabel');
+  String get userSettingsStatusLabel => Intl.message('Status', name: 'userSettingsStatusLabel');
 
-  String get editUserSettingsSaveButton => Intl.message('Save', name: 'editUserSettingsSaveButton');
+  String get userSettingsSaveButton => Intl.message('Save', name: 'userSettingsSaveButton');
 
-  String get editUserSettingsStatusDefaultValue =>
-      Intl.message('Sent with OX Talk - https://github.com/open-xchange/ox-talk', name: 'editUserSettingsStatusDefaultValue');
+  String get userSettingsStatusDefaultValue =>
+      Intl.message('Sent with OX Talk - https://github.com/open-xchange/ox-talk', name: 'userSettingsStatusDefaultValue');
 
-  String get editUserSettingsRemoveImage => Intl.message('Remove current image', name: 'editUserSettingsRemoveImage');
+  String get userSettingsRemoveImage => Intl.message('Remove current image', name: 'userSettingsRemoveImage');
 
   // Account settings
-  String get editAccountSettingsTitle => Intl.message('Edit account settings', name: 'editAccountSettingsTitle');
+  String get accountSettingsTitle => Intl.message('Account settings', name: 'accountSettingsTitle');
 
-  String get editAccountDataProgressMessage => Intl.message('Applying new settings, this may take a moment', name: 'editAccountDataProgressMessage');
+  String get accountSettingsDataProgressMessage => Intl.message('Applying new settings, this may take a moment', name: 'accountSettingsDataProgressMessage');
 
-  String get editAccountSettingsSuccess => Intl.message('Account settings succesfully changed', name: 'editAccountSettingsSuccess');
+  String get accountSettingsSuccess => Intl.message('Account settings succesfully changed', name: 'accountSettingsSuccess');
 
-  String get editAccountSettingsErrorDialogTitle => Intl.message('Configuration change aborted', name: 'editAccountSettingsErrorDialogTitle');
+  String get accountSettingsErrorDialogTitle => Intl.message('Configuration change aborted', name: 'accountSettingsErrorDialogTitle');
+
+  // Security settings
+  String get securitySettingsExportKeys => Intl.message('Export keys', name: 'securitySettingsExportKeys');
+
+  String get securitySettingsExportKeysText => Intl.message('Use this keys to enable another device to use your current security setup', name: 'securitySettingsExportKeysText');
+
+  String securitySettingsExportKeysDialog(path) => Intl.message('Do you want to save your keys in "$path"?', name: 'securitySettingsExportKeysDialog', args: [path]);
+
+  String get securitySettingsExportKeysPerforming => Intl.message('Performing key export', name: 'securitySettingsExportKeysPerforming');
+
+  String get securitySettingsImportKeys => Intl.message('Import keys', name: 'securitySettingsImportKeys');
+
+  String get securitySettingsImportKeysText => Intl.message('Load keys from your local storage to change your current security setup', name: 'securitySettingsImportKeysText');
+
+  String securitySettingsImportKeysDialog(path) => Intl.message('Do you want to load your keys from "$path"? If there are no keys in that folder, the operation will fail.', name: 'securitySettingsImportKeysDialog', args: [path]);
+
+  String get securitySettingsImportKeysPerforming => Intl.message('Performing key import', name: 'securitySettingsImportKeysPerforming');
+
+  String get securitySettingsKeyActionSuccess => Intl.message('Key action successfully done', name: 'securitySettingsKeyActionSuccess');
+
+  String get securitySettingsKeyActionFailed => Intl.message('Key action failed', name: 'securitySettingsKeyActionFailed');
+
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

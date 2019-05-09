@@ -182,6 +182,6 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.dispatch(LeaveGroupChat(chatId: widget._chatId));
     chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatProfileSingleContact - deleteChat()");
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root), "ChatProfileSingleContact - deleteChat()");
   }
 }

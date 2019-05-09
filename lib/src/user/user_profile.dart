@@ -63,7 +63,7 @@ class UserProfileView extends RootChild {
   @override
   _ProfileState createState() {
     final state = _ProfileState();
-    setActions([state.getAccountSettingsAction()]);
+    setActions([state.getSettings()]);
     return state;
   }
 
@@ -184,15 +184,15 @@ class _ProfileState extends State<UserProfileView> {
           );
   }
 
-  Widget getAccountSettingsAction() {
+  Widget getSettings() {
     return IconButton(
       icon: Icon(Icons.settings),
-      onPressed: () => _editAccountSettings(context),
+      onPressed: () => _settings(context),
     );
   }
 
-  _editAccountSettings(BuildContext context) {
-    navigation.pushNamed(context, Navigation.ROUTES_PROFILE_EDIT);
+  _settings(BuildContext context) {
+    navigation.pushNamed(context, Navigation.settings);
   }
 
   editUserSettings() {

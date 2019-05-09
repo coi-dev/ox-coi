@@ -40,62 +40,18 @@
  * for more details.
  */
 
-import 'dart:async';
+import 'package:meta/meta.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/main/main_event.dart';
-import 'package:ox_talk/src/main/main_state.dart';
-import 'package:ox_talk/src/platform/app_information.dart';
-import 'package:ox_talk/src/platform/preferences.dart';
+abstract class SettingsSecurityEvent {}
 
-class MainBloc extends Bloc<MainEvent, MainState> {
-  DeltaChatCore _core = DeltaChatCore();
-  Context _context = Context();
+class ExportKeys extends SettingsSecurityEvent {}
 
-  @override
-  MainState get initialState => MainStateInitial();
+class ImportKeys extends SettingsSecurityEvent {}
 
-  @override
-  Stream<MainState> mapEventToState(MainState currentState, MainEvent event) async* {
-    if (event is PrepareApp) {
-      yield MainStateLoading();
-      try {
-        await _initCore();
-        String appVersion = await getPreference(preferenceAppVersion);
-        if (appVersion == null || appVersion.isEmpty) {
-          await _setupDefaultValues(event.context);
-        }
-        _checkLogin();
-      } catch (error) {
-        yield MainStateFailure(error: error.toString());
-      }
-    } else if (event is AppLoaded) {
-      yield MainStateSuccess(configured: event.configured);
-    }
-  }
+class ActionSuccess extends SettingsSecurityEvent {}
 
-  _initCore() async {
-    await _core.init();
-  }
+class ActionFailed extends SettingsSecurityEvent {
+  final String error;
 
-  _setupDefaultValues(BuildContext context) async {
-    Config config = Config();
-    config.setValue(Context.configSelfStatus, AppLocalizations.of(context).userSettingsStatusDefaultValue);
-    config.setValue(Context.configShowEmails, Context.showEmailsOff);
-    String version = await getAppVersion();
-    await setPreference(preferenceAppVersion, version);
-  }
-
-  _checkLogin() async {
-    bool configured = await _context.isConfigured();
-    dispatch(AppLoaded(configured: configured));
-  }
-
-  onLoginSuccess() {
-    dispatch(AppLoaded(configured: true));
-  }
+  ActionFailed({@required this.error});
 }

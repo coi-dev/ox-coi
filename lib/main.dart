@@ -79,7 +79,7 @@ class OxTalkApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      initialRoute: Navigation.ROUTES_ROOT,
+      initialRoute: Navigation.root,
       routes: navigation.routeMapping,
     );
   }

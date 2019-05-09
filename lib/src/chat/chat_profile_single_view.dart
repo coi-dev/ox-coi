@@ -209,12 +209,12 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
   _blockContact() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
     contactChangeBloc.dispatch(BlockContact(widget._contactId, widget._chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatProfileSingleContact - blockContact()");
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root), "ChatProfileSingleContact - blockContact()");
   }
 
   _deleteChat() {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.ROUTES_ROOT), "ChatProfileSingleContact - deleteChat()");
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root), "ChatProfileSingleContact - deleteChat()");
   }
 }

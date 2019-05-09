@@ -40,62 +40,23 @@
  * for more details.
  */
 
-import 'dart:async';
+import 'package:meta/meta.dart';
+import 'package:ox_talk/src/settings/settings_security_bloc.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/main/main_event.dart';
-import 'package:ox_talk/src/main/main_state.dart';
-import 'package:ox_talk/src/platform/app_information.dart';
-import 'package:ox_talk/src/platform/preferences.dart';
+abstract class SettingsSecurityState {}
 
-class MainBloc extends Bloc<MainEvent, MainState> {
-  DeltaChatCore _core = DeltaChatCore();
-  Context _context = Context();
+class SettingsSecurityStateInitial extends SettingsSecurityState {}
 
-  @override
-  MainState get initialState => MainStateInitial();
+class SettingsSecurityStateLoading extends SettingsSecurityState {
+  final SettingsSecurityType type;
 
-  @override
-  Stream<MainState> mapEventToState(MainState currentState, MainEvent event) async* {
-    if (event is PrepareApp) {
-      yield MainStateLoading();
-      try {
-        await _initCore();
-        String appVersion = await getPreference(preferenceAppVersion);
-        if (appVersion == null || appVersion.isEmpty) {
-          await _setupDefaultValues(event.context);
-        }
-        _checkLogin();
-      } catch (error) {
-        yield MainStateFailure(error: error.toString());
-      }
-    } else if (event is AppLoaded) {
-      yield MainStateSuccess(configured: event.configured);
-    }
-  }
+  SettingsSecurityStateLoading({@required this.type});
+}
 
-  _initCore() async {
-    await _core.init();
-  }
+class SettingsSecurityStateSuccess extends SettingsSecurityState {}
 
-  _setupDefaultValues(BuildContext context) async {
-    Config config = Config();
-    config.setValue(Context.configSelfStatus, AppLocalizations.of(context).userSettingsStatusDefaultValue);
-    config.setValue(Context.configShowEmails, Context.showEmailsOff);
-    String version = await getAppVersion();
-    await setPreference(preferenceAppVersion, version);
-  }
+class SettingsSecurityStateFailure extends SettingsSecurityState {
+  final String error;
 
-  _checkLogin() async {
-    bool configured = await _context.isConfigured();
-    dispatch(AppLoaded(configured: configured));
-  }
-
-  onLoginSuccess() {
-    dispatch(AppLoaded(configured: true));
-  }
+  SettingsSecurityStateFailure({@required this.error});
 }

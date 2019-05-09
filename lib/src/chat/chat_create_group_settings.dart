@@ -187,7 +187,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
       navigation.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => ChatScreen(state.chatId), settings: RouteSettings(name: "ChatScreen")),
-          ModalRoute.withName(Navigation.ROUTES_ROOT),
+          ModalRoute.withName(Navigation.root),
           "ChatScreen");
     }
   }
