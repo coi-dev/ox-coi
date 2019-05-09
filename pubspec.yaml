@@ -29,6 +29,8 @@ dependencies:
   rxdart: ^0.20.0 # ^0.21.0 exists but 0.20.0 is used for compatibility reasons with bloc: ^0.9.3
   shared_preferences: ^0.5.1+1
   video_player: ^0.10.0+4
+  flutter_local_notifications: ^0.7.0
+  firebase_messaging: ^5.0.0
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 

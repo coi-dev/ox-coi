@@ -53,8 +53,10 @@ import 'package:ox_talk/src/main/main_state.dart';
 import 'package:ox_talk/src/main/root.dart';
 import 'package:ox_talk/src/main/splash.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/notifications/notification_manager.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/widgets/view_switcher.dart';
+
 
 void main() {
   BlocSupervisor().delegate = LogBloc();
@@ -90,10 +92,12 @@ class OxTalk extends StatefulWidget {
 
 class _OxTalkState extends State<OxTalk> {
   MainBloc _mainBloc = MainBloc();
+  NotificationManager _notificationManager = NotificationManager();
 
   @override
   void initState() {
     super.initState();
+    _notificationManager.setupNotificationManager();
     _mainBloc.dispatch(PrepareApp(context: context));
   }
 
