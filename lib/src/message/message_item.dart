@@ -140,6 +140,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   }
 
   List<Widget> buildMessageAndMarker(MessageItemStateSuccess state) {
+    _message = state.messageText;
     List<Widget> widgets = List();
     if (widget._hasDateMarker) {
       String date = getDateFromTimestamp(state.messageTimestamp, true, true, AppLocalizations.of(context));
