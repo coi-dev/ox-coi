@@ -1,17 +1,17 @@
-# OX Talk
+# OX Coi
 
-OX Talk is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
+OX Coi is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
 
 - **Android state:** Currently in development
 - **iOS state:** Pending
 
 ## Information
-- [Documentation](https://github.com/open-xchange/ox-talk/wiki/Developer-Documentation)
+- [Documentation](https://github.com/open-xchange/ox-coi/wiki/Developer-Documentation)
 - The IMAP / SMTP interactions are managed by the [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core)
 
 ## Requirements
 - The latest Flutter stable version is used (if problems occur try the [Flutter Dev Channel](https://github.com/flutter/flutter/wiki/Flutter-build-release-channels))
-- The [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core) needs to be checked out right beside the OX Talk app (the repositories should be located in the same folder) and please follow the requirements given by that project
+- The [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core) needs to be checked out right beside the OX Coi app (the repositories should be located in the same folder) and please follow the requirements given by that project
 
 ## Execution
 - Build and run the project via your IDE / Flutter CLI

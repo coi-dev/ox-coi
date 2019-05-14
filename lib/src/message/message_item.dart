@@ -46,21 +46,21 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/message/message_attachment_bloc.dart';
-import 'package:ox_talk/src/message/message_attachment_event.dart';
-import 'package:ox_talk/src/message/message_item_bloc.dart';
-import 'package:ox_talk/src/message/message_item_event.dart';
-import 'package:ox_talk/src/message/message_item_state.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/share/share.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/conversion.dart';
-import 'package:ox_talk/src/utils/date.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/styles.dart';
-import 'package:ox_talk/src/utils/toast.dart';
-import 'package:ox_talk/src/widgets/avatar.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/message/message_attachment_bloc.dart';
+import 'package:ox_coi/src/message/message_attachment_event.dart';
+import 'package:ox_coi/src/message/message_item_bloc.dart';
+import 'package:ox_coi/src/message/message_item_event.dart';
+import 'package:ox_coi/src/message/message_item_state.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/share/share.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/conversion.dart';
+import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/avatar.dart';
 
 const List<MessageAction> messageActions = const <MessageAction>[
   const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),

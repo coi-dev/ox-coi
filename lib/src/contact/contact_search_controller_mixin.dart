@@ -41,9 +41,9 @@
  */
 
 import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/contact/contact_list_bloc.dart';
-import 'package:ox_talk/src/contact/contact_list_event.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
+import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_event.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
 
 mixin ContactSearchController {
   void addSearchListener(ContactListBloc contactListBloc, TextEditingController controller) {

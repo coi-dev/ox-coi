@@ -43,8 +43,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 class Avatar extends StatelessWidget {
   final String imagePath;

@@ -42,16 +42,16 @@
 
  import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/contact/contact_item.dart';
-import 'package:ox_talk/src/contact/contact_list_bloc.dart';
-import 'package:ox_talk/src/contact/contact_list_event.dart';
-import 'package:ox_talk/src/contact/contact_list_state.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/contact/contact_item.dart';
+import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_event.dart';
+import 'package:ox_coi/src/contact/contact_list_state.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 class ContactBlockedList extends StatefulWidget {
    @override

@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 abstract class RootChild extends StatefulWidget {
   final State state;

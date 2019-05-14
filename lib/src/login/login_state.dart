@@ -41,7 +41,7 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/base/bloc_progress_state.dart';
+import 'package:ox_coi/src/base/bloc_progress_state.dart';
 
 abstract class LoginState extends ProgressState {
   LoginState({progress}) : super(progress: progress);

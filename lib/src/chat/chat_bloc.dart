@@ -46,12 +46,12 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/chat/chat_event.dart';
-import 'package:ox_talk/src/chat/chat_state.dart';
-import 'package:ox_talk/src/data/chat_extension.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_coi/src/chat/chat_event.dart';
+import 'package:ox_coi/src/chat/chat_state.dart';
+import 'package:ox_coi/src/data/chat_extension.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);

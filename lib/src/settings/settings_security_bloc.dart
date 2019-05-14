@@ -44,9 +44,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/platform/files.dart';
-import 'package:ox_talk/src/settings/settings_security_event.dart';
-import 'package:ox_talk/src/settings/settings_security_state.dart';
+import 'package:ox_coi/src/platform/files.dart';
+import 'package:ox_coi/src/settings/settings_security_event.dart';
+import 'package:ox_coi/src/settings/settings_security_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum SettingsSecurityType {

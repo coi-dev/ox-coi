@@ -44,11 +44,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/chatlist/chat_list_event.dart';
-import 'package:ox_talk/src/chatlist/chat_list_state.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/chatlist/chat_list_event.dart';
+import 'package:ox_coi/src/chatlist/chat_list_state.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/data/repository_stream_handler.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);

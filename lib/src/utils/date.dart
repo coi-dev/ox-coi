@@ -42,7 +42,7 @@
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 
 const formatterTime = [HH, ':', nn];
 const formatterDate = [dd, '.', mm];

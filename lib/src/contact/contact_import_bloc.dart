@@ -45,13 +45,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:contacts_service/contacts_service.dart' as SystemContacts;
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/contact/contact_import_event.dart';
-import 'package:ox_talk/src/contact/contact_import_state.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/platform/preferences.dart';
-import 'package:ox_talk/src/utils/security.dart';
+import 'package:ox_coi/src/contact/contact_import_event.dart';
+import 'package:ox_coi/src/contact/contact_import_state.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {

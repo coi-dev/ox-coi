@@ -41,7 +41,7 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/utils/core.dart';
+import 'package:ox_coi/src/utils/core.dart';
 
 class Config {
   static Config _instance;

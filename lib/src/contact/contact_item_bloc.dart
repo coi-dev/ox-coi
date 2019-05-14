@@ -45,11 +45,11 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/contact/contact_item_event.dart';
-import 'package:ox_talk/src/contact/contact_item_state.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_coi/src/contact/contact_item_event.dart';
+import 'package:ox_coi/src/contact/contact_item_state.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   Repository<Contact> _contactRepository;

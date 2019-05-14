@@ -41,8 +41,8 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/chat_extension.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/chat_extension.dart';
 
 class ChatRepository extends Repository<Chat> {
   ChatRepository(RepositoryItemCreator<Chat> creator) : super(creator);

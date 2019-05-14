@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 
 enum TextFormType {
   normal,

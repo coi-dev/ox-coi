@@ -1,4 +1,4 @@
-# OX Talk Dev Version
+# OX Coi Dev Version
 
 ## TOC
 
@@ -9,7 +9,7 @@
 
 ## About this app
 
-This is the development version of OX Talk. It is build and deployed to HockeyApp on
+This is the development version of OX Coi. It is build and deployed to HockeyApp on
 each commit to the `develop` branch on gitlab.open-xchange.com.
 
 **It is a development version which might break or

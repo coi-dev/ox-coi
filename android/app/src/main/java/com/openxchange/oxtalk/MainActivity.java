@@ -40,7 +40,7 @@
  * for more details.
  */
 
-package com.openxchange.oxtalk;
+package com.openxchange.oxcoi;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

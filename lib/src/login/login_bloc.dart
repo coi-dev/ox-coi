@@ -44,11 +44,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/login/login_events.dart';
-import 'package:ox_talk/src/login/login_state.dart';
-import 'package:ox_talk/src/utils/error.dart';
-import 'package:ox_talk/src/utils/core.dart';
+import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/login/login_events.dart';
+import 'package:ox_coi/src/login/login_state.dart';
+import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/core.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {

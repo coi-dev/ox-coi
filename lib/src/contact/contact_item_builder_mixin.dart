@@ -43,11 +43,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/contact/contact_item_bloc.dart';
-import 'package:ox_talk/src/contact/contact_item_state.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/widgets/avatar_list_item.dart';
+import 'package:ox_coi/src/contact/contact_item_bloc.dart';
+import 'package:ox_coi/src/contact/contact_item_state.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 mixin ContactItemBuilder {
   BlocBuilder getChipBlocBuilder(ContactItemBloc bloc, Function onContactTapped) {

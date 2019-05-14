@@ -42,16 +42,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/chat_bloc.dart';
-import 'package:ox_talk/src/chat/chat_event.dart';
-import 'package:ox_talk/src/chat/chat_profile_group_view.dart';
-import 'package:ox_talk/src/chat/chat_profile_single_view.dart';
-import 'package:ox_talk/src/chat/chat_state.dart';
-import 'package:ox_talk/src/contact/contact_list_bloc.dart';
-import 'package:ox_talk/src/contact/contact_list_event.dart';
-import 'package:ox_talk/src/contact/contact_list_state.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_coi/src/chat/chat_bloc.dart';
+import 'package:ox_coi/src/chat/chat_event.dart';
+import 'package:ox_coi/src/chat/chat_profile_group_view.dart';
+import 'package:ox_coi/src/chat/chat_profile_single_view.dart';
+import 'package:ox_coi/src/chat/chat_state.dart';
+import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_event.dart';
+import 'package:ox_coi/src/contact/contact_list_state.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 
 class ChatProfile extends StatefulWidget {
   final int _chatId;

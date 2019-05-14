@@ -44,10 +44,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/message/message_change_event.dart';
-import 'package:ox_talk/src/message/message_change_state.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/message/message_change_event.dart';
+import 'package:ox_coi/src/message/message_change_state.dart';
 
 class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
   Repository<ChatMsg> _messageListRepository;

@@ -41,7 +41,7 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/settings/settings_security_bloc.dart';
+import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 
 abstract class SettingsSecurityState {}
 

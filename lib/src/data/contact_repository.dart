@@ -41,8 +41,8 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/contact_repository_updater.dart';
-import 'package:ox_talk/src/data/repository.dart';
+import 'package:ox_coi/src/data/contact_repository_updater.dart';
+import 'package:ox_coi/src/data/repository.dart';
 
 class ContactRepository extends Repository<Contact> with ContactRepositoryUpdater {
   ContactRepository(RepositoryItemCreator<Contact> creator, this._listTypeOrChatId) : super(creator);

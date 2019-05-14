@@ -42,14 +42,14 @@
  
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chatlist/invite_item.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/message/message_list_bloc.dart';
-import 'package:ox_talk/src/message/message_list_event.dart';
-import 'package:ox_talk/src/message/message_list_state.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/chatlist/invite_item.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/message/message_list_bloc.dart';
+import 'package:ox_coi/src/message/message_list_event.dart';
+import 'package:ox_coi/src/message/message_list_state.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 class InviteList extends StatefulWidget {
   @override

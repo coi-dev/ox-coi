@@ -42,13 +42,13 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/data/chat_message_repository.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/data/chat_message_repository.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LocalPushManager {

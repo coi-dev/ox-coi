@@ -44,12 +44,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/contact/contact_list_event.dart';
-import 'package:ox_talk/src/contact/contact_list_state.dart';
-import 'package:ox_talk/src/data/contact_repository_updater.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/contact/contact_list_event.dart';
+import 'package:ox_coi/src/contact/contact_list_state.dart';
+import 'package:ox_coi/src/data/contact_repository_updater.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/data/repository_stream_handler.dart';
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater{
   Repository<Contact> contactRepository;

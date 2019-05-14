@@ -42,20 +42,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/chat_change_bloc.dart';
-import 'package:ox_talk/src/chat/chat_change_event.dart';
-import 'package:ox_talk/src/chatlist/chat_list.dart';
-import 'package:ox_talk/src/chatlist/invite_list.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/main/root_child.dart';
-import 'package:ox_talk/src/message/message_list_bloc.dart';
-import 'package:ox_talk/src/message/message_list_event.dart';
-import 'package:ox_talk/src/message/message_list_state.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/dialog_builder.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/chat/chat_change_bloc.dart';
+import 'package:ox_coi/src/chat/chat_change_event.dart';
+import 'package:ox_coi/src/chatlist/chat_list.dart';
+import 'package:ox_coi/src/chatlist/invite_list.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/main/root_child.dart';
+import 'package:ox_coi/src/message/message_list_bloc.dart';
+import 'package:ox_coi/src/message/message_list_event.dart';
+import 'package:ox_coi/src/message/message_list_state.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 class ChatListParent extends RootChild {
   final Navigation navigation = Navigation();

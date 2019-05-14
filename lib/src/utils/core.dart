@@ -42,7 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 
 enum ProtocolType{imap,smtp}
 

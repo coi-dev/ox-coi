@@ -43,8 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:ox_talk/src/chat/chat.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_coi/src/chat/chat.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 
 //TODO: Prepare iOS project (https://pub.dev/packages/flutter_local_notifications, https://firebase.google.com/docs/cloud-messaging/ & https://firebase.google.com/docs/cloud-messaging/concept-options)
 class NotificationManager{
@@ -103,7 +103,7 @@ class NotificationManager{
   Future<void> showNotification(int chatId, String title, String body, {String payload}) async {
     //TODO: Add better AndroidNotificationDetails
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.android.oxtalk.notification.single', 'Message notification', 'Notification for incoming messages',
+      'com.android.oxcoi.notification.single', 'Message notification', 'Notification for incoming messages',
       importance: Importance.Max, priority: Priority.High, );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
@@ -114,8 +114,8 @@ class NotificationManager{
   //show group notification (Android only)
   Future<void> showGroupNotification(int chatId, String title, String body, {String payload}) async{
     //TODO: Add better names
-    String groupKey = 'com.android.oxtalk.WORK_EMAIL';
-    String groupChannelId = 'com.android.oxtalk.notification.group';
+    String groupKey = 'com.android.oxcoi.WORK_EMAIL';
+    String groupChannelId = 'com.android.oxcoi.notification.group';
     String groupChannelName = 'Group notification';
     String groupChannelDescription = 'Notification for grouped messages';
 

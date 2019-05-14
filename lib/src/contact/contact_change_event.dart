@@ -40,7 +40,7 @@
  * for more details.
  */
 
-import 'package:ox_talk/src/contact/contact_change.dart';
+import 'package:ox_coi/src/contact/contact_change.dart';
 
 abstract class ContactChangeEvent {}
 

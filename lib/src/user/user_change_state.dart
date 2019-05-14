@@ -41,7 +41,7 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_talk/src/data/config.dart';
+import 'package:ox_coi/src/data/config.dart';
 
 abstract class UserChangeState {}
 

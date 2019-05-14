@@ -41,10 +41,10 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/chat_message_repository.dart';
-import 'package:ox_talk/src/data/chat_repository.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/data/repository.dart';
+import 'package:ox_coi/src/data/chat_message_repository.dart';
+import 'package:ox_coi/src/data/chat_repository.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/data/repository.dart';
 
 enum RepositoryType {
   chat,

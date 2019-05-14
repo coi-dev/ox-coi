@@ -45,17 +45,17 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/contact/contact_list_bloc.dart';
-import 'package:ox_talk/src/contact/contact_list_event.dart';
-import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/main/main_event.dart';
-import 'package:ox_talk/src/main/main_state.dart';
-import 'package:ox_talk/src/notifications/local_push_manager.dart';
-import 'package:ox_talk/src/notifications/notification_manager.dart';
-import 'package:ox_talk/src/platform/app_information.dart';
-import 'package:ox_talk/src/platform/preferences.dart';
+import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_event.dart';
+import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/main/main_event.dart';
+import 'package:ox_coi/src/main/main_state.dart';
+import 'package:ox_coi/src/notifications/local_push_manager.dart';
+import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/platform/app_information.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();

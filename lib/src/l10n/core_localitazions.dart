@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/widgets.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 
 Map<int, String> getCoreStringMap(BuildContext context) {
   return {

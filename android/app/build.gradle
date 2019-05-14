@@ -37,7 +37,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.openxchange.oxtalk"
+        applicationId "com.openxchange.oxcoi"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
@@ -58,12 +58,12 @@ android {
     productFlavors {
         stable {
             dimension "configuration"
-            resValue "string", "app_name", "OX Talk"
+            resValue "string", "app_name", "OX Coi"
         }
         development {
             dimension "configuration"
             applicationIdSuffix ".dev"
-            resValue "string", "app_name", "OX Talk Dev"
+            resValue "string", "app_name", "OX Coi Dev"
         }
     }
 

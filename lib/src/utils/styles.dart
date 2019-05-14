@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 
 // Global
 const twoLineHeaderTitle = TextStyle(fontSize: 18);

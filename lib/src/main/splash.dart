@@ -41,8 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 
 class Splash extends StatelessWidget {
 

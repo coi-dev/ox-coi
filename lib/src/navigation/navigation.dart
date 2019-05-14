@@ -44,14 +44,14 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_talk/main.dart';
-import 'package:ox_talk/src/chat/chat_create.dart';
-import 'package:ox_talk/src/contact/contact_blocked_list.dart';
-import 'package:ox_talk/src/contact/contact_change.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/settings/settings_security.dart';
-import 'package:ox_talk/src/settings/settings_view.dart';
-import 'package:ox_talk/src/user/user_account_settings.dart';
+import 'package:ox_coi/main.dart';
+import 'package:ox_coi/src/chat/chat_create.dart';
+import 'package:ox_coi/src/contact/contact_blocked_list.dart';
+import 'package:ox_coi/src/contact/contact_change.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/settings/settings_security.dart';
+import 'package:ox_coi/src/settings/settings_view.dart';
+import 'package:ox_coi/src/user/user_account_settings.dart';
 
 class Navigation {
   final Logger _logger = Logger("navigation");
@@ -65,7 +65,7 @@ class Navigation {
   static const String contactsBlocked = '/contacts/blocked';
 
   final Map<String, WidgetBuilder> routeMapping = {
-    root: (context) => OxTalk(),
+    root: (context) => OxCoi(),
     contactsAdd: (context) => ContactChange(
           contactAction: ContactAction.add,
         ),

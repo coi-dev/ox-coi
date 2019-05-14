@@ -41,7 +41,7 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
 
 mixin ContactRepositoryUpdater {
 

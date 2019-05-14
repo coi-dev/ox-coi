@@ -44,7 +44,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ox_talk/src/l10n/messages_all.dart';
+import 'package:ox_coi/src/l10n/messages_all.dart';
 
 class AppLocalizations {
   static get supportedLocales => [
@@ -195,7 +195,7 @@ class AppLocalizations {
   String get coreMessageCannotDecrypt => Intl.message(
       'This message cannot be decrypted.\n\n'
       '• It might already help to simply reply to this message and ask the sender to send the message again.\n\n'
-      '• In case you re-installed OX Talk or another email program on this or another device you may want to send an Autocrypt Setup Message from there.',
+      '• In case you re-installed OX Coi or another email program on this or another device you may want to send an Autocrypt Setup Message from there.',
       name: 'coreMessageCannotDecrypt');
 
   String get coreReadReceiptSubject => Intl.message('Read receipt', name: 'coreReadReceiptSubject');
@@ -248,7 +248,7 @@ class AppLocalizations {
   String get validatableTextFormFieldHintEmptyString => Intl.message('This field can not be empty', name: 'validatableTextFormFieldHintEmptyString');
 
   // Login
-  String get loginTitle => Intl.message('Login to OX Talk', name: 'loginTitle');
+  String get loginTitle => Intl.message('Login to OX Coi', name: 'loginTitle');
 
   String get loginInformation => Intl.message(
       'For known email providers additional settings are setup automatically. Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.',
@@ -410,7 +410,7 @@ class AppLocalizations {
   String get userSettingsSaveButton => Intl.message('Save', name: 'userSettingsSaveButton');
 
   String get userSettingsStatusDefaultValue =>
-      Intl.message('Sent with OX Talk - https://github.com/open-xchange/ox-talk', name: 'userSettingsStatusDefaultValue');
+      Intl.message('Sent with OX Coi - https://github.com/open-xchange/ox-coi', name: 'userSettingsStatusDefaultValue');
 
   String get userSettingsRemoveImage => Intl.message('Remove current image', name: 'userSettingsRemoveImage');
 

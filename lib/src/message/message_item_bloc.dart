@@ -45,12 +45,12 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_talk/src/data/contact_repository.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/message/message_item_event.dart';
-import 'package:ox_talk/src/message/message_item_state.dart';
-import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/message/message_item_event.dart';
+import 'package:ox_coi/src/message/message_item_state.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   Repository<Contact> _contactRepository;

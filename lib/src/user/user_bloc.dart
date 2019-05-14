@@ -43,9 +43,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:ox_talk/src/data/config.dart';
-import 'package:ox_talk/src/user/user_event.dart';
-import 'package:ox_talk/src/user/user_state.dart';
+import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/user/user_event.dart';
+import 'package:ox_coi/src/user/user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   @override

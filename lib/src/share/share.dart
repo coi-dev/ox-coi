@@ -42,16 +42,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/chat/chat.dart';
-import 'package:ox_talk/src/chatlist/chat_list_item.dart';
-import 'package:ox_talk/src/contact/contact_item.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/message/message_item.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/share/share_bloc.dart';
-import 'package:ox_talk/src/share/share_event.dart';
-import 'package:ox_talk/src/share/share_state.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/chat/chat.dart';
+import 'package:ox_coi/src/chatlist/chat_list_item.dart';
+import 'package:ox_coi/src/contact/contact_item.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/message/message_item.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/share/share_bloc.dart';
+import 'package:ox_coi/src/share/share_event.dart';
+import 'package:ox_coi/src/share/share_state.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 class ShareScreen extends StatefulWidget {
   final List<int> _msgIds;

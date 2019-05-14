@@ -41,11 +41,11 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/main/root_child.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/maillist/mail_list_item.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_coi/src/main/root_child.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/maillist/mail_list_item.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
 class MailListView extends RootChild {
 

@@ -42,22 +42,22 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/chat/chat.dart';
-import 'package:ox_talk/src/contact/contact_change_bloc.dart';
-import 'package:ox_talk/src/contact/contact_change_event.dart';
-import 'package:ox_talk/src/contact/contact_change_state.dart';
-import 'package:ox_talk/src/data/repository.dart';
-import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/dialog_builder.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/error.dart';
-import 'package:ox_talk/src/utils/styles.dart';
-import 'package:ox_talk/src/utils/toast.dart';
-import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
+import 'package:ox_coi/src/chat/chat.dart';
+import 'package:ox_coi/src/contact/contact_change_bloc.dart';
+import 'package:ox_coi/src/contact/contact_change_event.dart';
+import 'package:ox_coi/src/contact/contact_change_state.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum ContactAction {

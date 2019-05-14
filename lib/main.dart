@@ -45,28 +45,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_talk/src/log/log_bloc.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/log/log_manager.dart';
-import 'package:ox_talk/src/login/login.dart';
-import 'package:ox_talk/src/main/main_bloc.dart';
-import 'package:ox_talk/src/main/main_event.dart';
-import 'package:ox_talk/src/main/main_state.dart';
-import 'package:ox_talk/src/main/root.dart';
-import 'package:ox_talk/src/main/splash.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
-import 'package:ox_talk/src/notifications/notification_manager.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/widgets/view_switcher.dart';
+import 'package:ox_coi/src/log/log_bloc.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/log/log_manager.dart';
+import 'package:ox_coi/src/login/login.dart';
+import 'package:ox_coi/src/main/main_bloc.dart';
+import 'package:ox_coi/src/main/main_event.dart';
+import 'package:ox_coi/src/main/main_state.dart';
+import 'package:ox_coi/src/main/root.dart';
+import 'package:ox_coi/src/main/splash.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 
 void main() {
   LogManager _logManager = LogManager();
   _logManager.setup(logToFile: false, logLevel: Level.INFO);
-  runApp(new OxTalkApp());
+  runApp(new OxCoiApp());
 }
 
-class OxTalkApp extends StatelessWidget {
+class OxCoiApp extends StatelessWidget {
   final Navigation navigation = Navigation();
 
   @override
@@ -88,12 +88,12 @@ class OxTalkApp extends StatelessWidget {
   }
 }
 
-class OxTalk extends StatefulWidget {
+class OxCoi extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _OxTalkState();
+  State<StatefulWidget> createState() => _OxCoiState();
 }
 
-class _OxTalkState extends State<OxTalk> {
+class _OxCoiState extends State<OxCoi> {
   MainBloc _mainBloc = MainBloc();
 
   @override

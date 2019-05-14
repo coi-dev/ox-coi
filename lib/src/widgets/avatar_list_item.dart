@@ -41,11 +41,11 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_talk/src/utils/colors.dart';
-import 'package:ox_talk/src/utils/date.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/styles.dart';
-import 'package:ox_talk/src/widgets/avatar.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/widgets/avatar.dart';
 
 class AvatarListItem extends StatelessWidget {
   final String title;
