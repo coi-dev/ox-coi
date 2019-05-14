@@ -57,7 +57,7 @@ class NotificationManager{
 
   void setupNotificationManager(){
     //localNotification setup
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidRecieveLocalNotification);
     var initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
