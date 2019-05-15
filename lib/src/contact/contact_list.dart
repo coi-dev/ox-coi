@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/contact/contact_import_bloc.dart';
 import 'package:ox_talk/src/contact/contact_import_event.dart';
 import 'package:ox_talk/src/contact/contact_import_state.dart';
@@ -53,6 +52,8 @@ import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/main/root_child.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
@@ -89,7 +90,7 @@ class ContactListView extends RootChild {
   }
 
   _showAddContactView(BuildContext context) {
-    navigation.pushNamed(context, Navigation.contactAdd);
+    navigation.pushNamed(context, Navigation.contactsAdd);
   }
 
   @override
@@ -117,6 +118,7 @@ class _ContactListState extends State<ContactListView> with ContactSearchControl
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.contactList);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     setupContactImport();
     addSearchListener(_contactListBloc, _searchController);
@@ -208,6 +210,7 @@ class _ContactListState extends State<ContactListView> with ContactSearchControl
       positiveAction: () {
         _contactImportBloc.dispatch(PerformImport());
       },
+      navigatable: Navigatable(Type.contactImportDialog),
     );
   }
 

@@ -42,8 +42,10 @@
 
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:ox_talk/src/log/log_bloc.dart';
 import 'package:ox_talk/src/platform/files.dart';
 import 'package:ox_talk/src/platform/preferences.dart';
 import 'package:ox_talk/src/utils/date.dart';
@@ -66,6 +68,7 @@ class LogManager {
   LogManager._internal();
 
   void setup({@required bool logToFile, @required Level logLevel}) async {
+    BlocSupervisor().delegate = LogBloc();
     if (logToFile) {
       _logFile = await _setupLogFile();
       await manageLogFiles();
@@ -102,7 +105,7 @@ class LogManager {
   }
 
   String _logTemplatePrint(LogRecord logRecord) {
-    return '${logRecord.level.name} ${logRecord.loggerName}: ${logRecord.message}';
+    return '[${logRecord.loggerName}] ${logRecord.message}';
   }
 
   Future<void> _writeToLogFile(LogRecord logRecord) async {
@@ -111,7 +114,7 @@ class LogManager {
   }
 
   String _logTemplateFile(LogRecord logRecord) {
-    return '${logRecord.time} ${logRecord.level.name} ${logRecord.loggerName}: ${logRecord.message}\n';
+    return '${logRecord.time} ${logRecord.level.name} [${logRecord.loggerName}] ${logRecord.message}\n';
   }
 
   void deleteAllLogFiles() async {

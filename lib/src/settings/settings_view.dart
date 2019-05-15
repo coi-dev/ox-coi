@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 
@@ -52,6 +53,10 @@ enum SettingsType {
 
 class SettingsView extends StatelessWidget {
   final Navigation navigation = Navigation();
+
+  SettingsView() {
+    navigation.current = Navigatable(Type.settings);
+  }
 
   @override
   Widget build(BuildContext context) {

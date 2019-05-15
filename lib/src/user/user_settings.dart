@@ -48,6 +48,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/user/user_change_bloc.dart';
 import 'package:ox_talk/src/user/user_change_event.dart';
@@ -73,6 +74,7 @@ class _UserSettingsState extends State<UserSettings> {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.settingsUser);
     _userChangeBloc.dispatch(RequestUser());
     final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc.state);
     userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
@@ -88,7 +90,7 @@ class _UserSettingsState extends State<UserSettings> {
         _avatar = File(config.avatarPath);
       }
     } else if (state is UserChangeStateApplied) {
-      navigation.pop(context, "EditUserSettings");
+      navigation.pop(context);
     }
   }
 
@@ -98,7 +100,7 @@ class _UserSettingsState extends State<UserSettings> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context, "EditUserSettings"),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).userSettingsTitle),
@@ -206,7 +208,7 @@ class _UserSettingsState extends State<UserSettings> {
   }
 
   _getNewAvatarPath(ImageSource source) async {
-    navigation.pop(context, "EditUserSettings - ModalBottomSheet");
+    navigation.pop(context);
     File newAvatar = await ImagePicker.pickImage(source: source);
     if (newAvatar != null) {
       File croppedAvatar = await ImageCropper.cropImage(
@@ -225,7 +227,7 @@ class _UserSettingsState extends State<UserSettings> {
   }
 
   _removeAvatar() {
-    navigation.pop(context, "EditUserSettings - ModalBottomSheet");
+    navigation.pop(context);
     setState(() {
       _avatar = null;
     });

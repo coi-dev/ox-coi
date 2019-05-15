@@ -42,73 +42,88 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 
-showConfirmationDialog({
-  @required BuildContext context,
-  @required String title,
-  @required String content,
-  @required String positiveButton,
-  @required Function positiveAction,
-  String negativeButton,
-  Function negativeAction,
-  bool selfClose = true
-  }) {
+showNavigatableDialog({@required BuildContext context, @required Widget dialog, @required Navigatable navigatable, Navigatable previousNavigatable}) {
   Navigation navigation = Navigation();
+  previousNavigatable = previousNavigatable ?? navigation.current;
+  navigation.current = navigatable;
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        content: new Text(content),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : AppLocalizations.of(context).cancel),
-            onPressed: () {
-              if (negativeAction != null) {
-                negativeAction();
-              }
-              if(selfClose){
-                navigation.pop(context, "DialogBuilder.showConfirmationDialog");
-              }
-            },
-          ),
-          new FlatButton(
-            child: new Text(positiveButton),
-            onPressed: () {
-              positiveAction();
-              if(selfClose){
-                navigation.pop(context, "DialogBuilder.showConfirmationDialog");
-              }
-            },
-          ),
-        ],
-      );
+      return dialog;
     },
+  ).then((value) {
+    navigation.current = previousNavigatable;
+  });
+}
+
+showConfirmationDialog(
+    {@required BuildContext context,
+    @required String title,
+    @required String content,
+    @required String positiveButton,
+    @required Function positiveAction,
+    @required Navigatable navigatable,
+    Navigatable previousNavigatable,
+    String negativeButton,
+    Function negativeAction,
+    bool selfClose = true}) {
+  Navigation navigation = Navigation();
+  return showNavigatableDialog(
+    context: context,
+    navigatable: navigatable,
+    previousNavigatable: previousNavigatable,
+    dialog: AlertDialog(
+      title: Text(title),
+      content: new Text(content),
+      actions: <Widget>[
+        new FlatButton(
+          child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : AppLocalizations.of(context).cancel),
+          onPressed: () {
+            if (negativeAction != null) {
+              negativeAction();
+            }
+            navigation.pop(context);
+          },
+        ),
+        new FlatButton(
+          child: new Text(positiveButton),
+          onPressed: () {
+            positiveAction();
+            if (selfClose) {
+              navigation.pop(context);
+            }
+          },
+        ),
+      ],
+    ),
   );
 }
 
-showInformationDialog({
-  @required BuildContext context,
-  @required String title,
-  @required String content,
-}) {
+showInformationDialog(
+    {@required BuildContext context,
+    @required String title,
+    @required String content,
+    @required Navigatable navigatable,
+    Navigatable previousNavigatable}) {
   Navigation navigation = Navigation();
-  return showDialog<void>(
+  return showNavigatableDialog(
     context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        content: new Text(content),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text(AppLocalizations.of(context).ok),
-            onPressed: () {
-              navigation.pop(context, "DialogBuilder.showInformationDialog");
-            },
-          ),
-        ],
-      );
-    },
+    navigatable: navigatable,
+    previousNavigatable: previousNavigatable,
+    dialog: AlertDialog(
+      title: Text(title),
+      content: new Text(content),
+      actions: <Widget>[
+        new FlatButton(
+          child: new Text(AppLocalizations.of(context).ok),
+          onPressed: () {
+            navigation.pop(context);
+          },
+        ),
+      ],
+    ),
   );
 }

@@ -40,13 +40,13 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/chat/chat_change_bloc.dart';
 import 'package:ox_talk/src/chat/chat_change_event.dart';
 import 'package:ox_talk/src/chat/chat_change_state.dart';
-import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_item.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
@@ -55,6 +55,7 @@ import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -73,12 +74,13 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
   ContactListBloc _contactListBloc = ContactListBloc();
   TextEditingController _controller = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey();
-  Repository<Chat> chatRepository;
+  Repository<Core.Chat> chatRepository;
   Navigation navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.chatCreateGroupSettings);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
@@ -185,10 +187,10 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
   _handleChatChangeStateChange(ChatChangeState state) {
     if (state is CreateChatStateSuccess) {
       navigation.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => ChatScreen(state.chatId), settings: RouteSettings(name: "ChatScreen")),
-          ModalRoute.withName(Navigation.root),
-          "ChatScreen");
+        context,
+        MaterialPageRoute(builder: (context) => Chat(state.chatId), settings: RouteSettings(name: "ChatScreen")),
+        ModalRoute.withName(Navigation.root),
+      );
     }
   }
 }

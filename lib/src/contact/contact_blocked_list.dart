@@ -48,6 +48,7 @@ import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -64,6 +65,7 @@ class ContactBlockedList extends StatefulWidget {
    @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.contactListBlocked);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.blockedContacts));
   }
 
@@ -73,7 +75,7 @@ class ContactBlockedList extends StatefulWidget {
        appBar: AppBar(
          leading: new IconButton(
            icon: new Icon(Icons.close),
-           onPressed: () => navigation.pop(context, "ContactBlockedList"),
+           onPressed: () => navigation.pop(context),
          ),
          backgroundColor: contactMain,
          title: Text(AppLocalizations.of(context).blockedContactsTitle),

@@ -44,8 +44,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:logging/logging.dart';
 import 'package:ox_talk/src/log/log_bloc.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/log/log_manager.dart';
 import 'package:ox_talk/src/login/login.dart';
 import 'package:ox_talk/src/main/main_bloc.dart';
 import 'package:ox_talk/src/main/main_event.dart';
@@ -59,7 +61,8 @@ import 'package:ox_talk/src/widgets/view_switcher.dart';
 
 
 void main() {
-  BlocSupervisor().delegate = LogBloc();
+  LogManager _logManager = LogManager();
+  _logManager.setup(logToFile: false, logLevel: Level.INFO);
   runApp(new OxTalkApp());
 }
 
@@ -68,7 +71,7 @@ class OxTalkApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       theme: new ThemeData(
         primaryColor: primary,
         accentColor: accent,
@@ -92,12 +95,10 @@ class OxTalk extends StatefulWidget {
 
 class _OxTalkState extends State<OxTalk> {
   MainBloc _mainBloc = MainBloc();
-  NotificationManager _notificationManager = NotificationManager();
 
   @override
   void initState() {
     super.initState();
-    _notificationManager.setupNotificationManager();
     _mainBloc.dispatch(PrepareApp(context: context));
   }
 

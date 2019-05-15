@@ -42,12 +42,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/platform/files.dart';
 import 'package:ox_talk/src/settings/settings_security_bloc.dart';
 import 'package:ox_talk/src/settings/settings_security_event.dart';
 import 'package:ox_talk/src/settings/settings_security_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
@@ -68,6 +70,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.settingsSecurity);
     final settingsSecurityObservable = new Observable<SettingsSecurityState>(_settingsSecurityBloc.state);
     settingsSecurityObservable.listen((state) => _settingsSecurityStateChange(state));
   }
@@ -158,35 +161,23 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     String title;
     String text;
     String path = await getExportImportPath();
+    Type navigationType;
     if (type == SettingsSecurityType.exportKeys) {
       title = AppLocalizations.of(context).securitySettingsExportKeys;
       text = AppLocalizations.of(context).securitySettingsExportKeysDialog(path);
+      navigationType = Type.settingsExportKeysDialog;
     } else if (type == SettingsSecurityType.importKeys) {
       title = AppLocalizations.of(context).securitySettingsImportKeys;
       text = AppLocalizations.of(context).securitySettingsImportKeysDialog(path);
+      navigationType = Type.settingsImportKeysDialog;
     }
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: new Text(text),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).cancel),
-                onPressed: () {
-                  navigation.pop(context, "SettingsSecurity");
-                },
-              ),
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).yes),
-                onPressed: () {
-                  navigation.pop(context, "SettingsSecurity");
-                  _exportImport(type);
-                },
-              ),
-            ],
-          );
-        });
+    showConfirmationDialog(
+      context: context,
+      title: title,
+      content: text,
+      positiveButton: AppLocalizations.of(context).delete,
+      positiveAction: () => _exportImport(type),
+      navigatable: Navigatable(navigationType),
+    );
   }
 }

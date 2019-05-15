@@ -40,33 +40,33 @@
 * for more details.
 */
 
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:ox_talk/main.dart';
 import 'package:ox_talk/src/chat/chat_create.dart';
 import 'package:ox_talk/src/contact/contact_blocked_list.dart';
 import 'package:ox_talk/src/contact/contact_change.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/settings/settings_security.dart';
 import 'package:ox_talk/src/settings/settings_view.dart';
 import 'package:ox_talk/src/user/user_account_settings.dart';
 
 class Navigation {
+  final Logger _logger = Logger("navigation");
+
   static const String root = '/';
-  static const String contactAdd = '/contactAdd';
+  static const String contactsAdd = '/contacts/add';
   static const String settings = '/settings';
   static const String settingsAccount = '/settings/account';
   static const String settingsSecurity = '/settings/security';
-  static const String chatCreate = '/chatCreate';
-  static const String contactsBlocked = '/contactsBlocked';
-
-  static Navigation _instance;
-
-  factory Navigation() => _instance ??= new Navigation._internal();
-
-  Navigation._internal();
+  static const String chatCreate = '/chat/create';
+  static const String contactsBlocked = '/contacts/blocked';
 
   final Map<String, WidgetBuilder> routeMapping = {
     root: (context) => OxTalk(),
-    contactAdd: (context) => ContactChange(
+    contactsAdd: (context) => ContactChange(
           contactAction: ContactAction.add,
         ),
     settings: (context) => SettingsView(),
@@ -76,33 +76,60 @@ class Navigation {
     contactsBlocked: (context) => ContactBlockedList(),
   };
 
-  void push(BuildContext context, MaterialPageRoute route, String routeToPage) {
-    debugPrint("Navigation.push to $routeToPage");
-    Navigator.push(context, route);
+  static Navigation _instance;
+
+  Queue<Navigatable> _navigationStack = Queue();
+
+  Navigatable get current => _navigationStack.last;
+
+  set current(Navigatable navigatable) {
+    _logger.info("Set current: ${navigatable.tag}");
+    _navigationStack.add(navigatable);
+  }
+
+  factory Navigation() => _instance ??= new Navigation._internal();
+
+  Navigation._internal();
+
+  void push(BuildContext context, MaterialPageRoute route) {
+    _logger.info("Push");
+    Navigatable savedNavigatable = _navigationStack.last;
+    Navigator.push(context, route).then((value) {
+      current = savedNavigatable;
+    });
   }
 
   void pushNamed(BuildContext context, String routeName, {Object arguments}) {
-    debugPrint("Navigation.pushNamed to $routeName");
-    Navigator.pushNamed(context, routeName, arguments: arguments);
+    _logger.info("Push named");
+    Navigatable savedNavigatable = _navigationStack.last;
+    Navigator.pushNamed(context, routeName, arguments: arguments).then((value) {
+      current = savedNavigatable;
+    });
   }
 
-  void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate, String routeToPage) {
-    debugPrint("Navigation.pushAndRemoveUntil to $routeToPage until $predicate");
-    Navigator.pushAndRemoveUntil(context, newRoute, predicate);
+  void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate) {
+    _logger.info("Push and pop multiple");
+    Navigatable savedNavigatable = _navigationStack.last;
+    Navigator.pushAndRemoveUntil(context, newRoute, predicate).then((value) {
+      current = savedNavigatable;
+    });
   }
 
-  void pushReplacement(BuildContext context, Route newRoute, String routeToPage) {
-    debugPrint("Navigation.pushReplacement to $routeToPage");
-    Navigator.pushReplacement(context, newRoute);
+  void pushReplacement(BuildContext context, Route newRoute) {
+    _logger.info("Push and replace");
+    Navigatable savedNavigatable = _navigationStack.last;
+    Navigator.pushReplacement(context, newRoute).then((value) {
+      current = savedNavigatable;
+    });
   }
 
-  void pop(BuildContext context, String popFromPage) {
-    debugPrint("Navigation.pop from $popFromPage");
+  void pop(BuildContext context) {
+    _logger.info("Pop latest");
     Navigator.pop(context);
   }
 
-  void popUntil(BuildContext context, RoutePredicate predicate, String popFromPage) {
-    debugPrint("Navigation.popUntil from $popFromPage");
+  void popUntil(BuildContext context, RoutePredicate predicate) {
+    _logger.info("Pop multiple");
     Navigator.popUntil(context, predicate);
   }
 }

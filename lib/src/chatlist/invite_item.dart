@@ -52,8 +52,10 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/message/message_item_bloc.dart';
 import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
-import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/widgets/avatar_list_item.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -107,36 +109,36 @@ class _InviteItemState extends State<InviteItem> {
   }
 
   inviteItemTapped(String name, String message) {
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context).createChatWith(name)),
-            content: new Text(message),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).cancel),
-                onPressed: () {
-                  navigation.pop(context, "InviteItemTappedDialog");
-                },
-              ),
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).block),
-                onPressed: () {
-                  blockUser();
-                  navigation.pop(context, "InviteItemTappedDialog");
-                },
-              ),
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).yes),
-                onPressed: () {
-                  createChat();
-                  navigation.pop(context, "InviteItemTappedDialog");
-                },
-              ),
-            ],
-          );
-        });
+    return showNavigatableDialog(
+      context: context,
+      navigatable: Navigatable(Type.contactInviteDialog),
+      dialog: AlertDialog(
+        title: Text(AppLocalizations.of(context).createChatWith(name)),
+        content: new Text(message),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).cancel),
+            onPressed: () {
+              navigation.pop(context);
+            },
+          ),
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).block),
+            onPressed: () {
+              blockUser();
+              navigation.pop(context);
+            },
+          ),
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).yes),
+            onPressed: () {
+              createChat();
+              navigation.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void createChat() {
@@ -148,7 +150,7 @@ class _InviteItemState extends State<InviteItem> {
 
   _handleChatChangeStateChange(ChatChangeState state) {
     if (state is CreateChatStateSuccess) {
-      navigation.push(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatListInviteItem");
+      navigation.push(context, MaterialPageRoute(builder: (context) => Chat(state.chatId)));
     }
   }
 
@@ -158,7 +160,7 @@ class _InviteItemState extends State<InviteItem> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _messageItemBloc.dispose();
     super.dispose();
   }

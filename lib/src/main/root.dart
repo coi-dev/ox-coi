@@ -64,17 +64,6 @@ class _RootState extends State<Root> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _prepareInitialAppState();
-  }
-
-  void _prepareInitialAppState() {
-    ContactListBloc contactListBloc = ContactListBloc();
-    contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
-  }
-
-  @override
   Widget build(BuildContext context) {
     RootChild child = childList[_selectedIndex];
 

@@ -50,18 +50,19 @@ import 'package:ox_talk/src/chat/chat_state.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 
-class ChatProfileView extends StatefulWidget {
+class ChatProfile extends StatefulWidget {
   final int _chatId;
 
-  ChatProfileView(this._chatId);
+  ChatProfile(this._chatId);
 
   @override
-  _ChatProfileViewState createState() => _ChatProfileViewState();
+  _ChatProfileState createState() => _ChatProfileState();
 }
 
-class _ChatProfileViewState extends State<ChatProfileView> {
+class _ChatProfileState extends State<ChatProfile> {
   ChatBloc _chatBloc = ChatBloc();
   ContactListBloc _contactListBloc = ContactListBloc();
   final Navigation navigation = Navigation();
@@ -69,6 +70,7 @@ class _ChatProfileViewState extends State<ChatProfileView> {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.chatProfile);
     _chatBloc.dispatch(RequestChat(widget._chatId));
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget._chatId));
   }

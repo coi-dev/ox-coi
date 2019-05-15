@@ -52,6 +52,7 @@ import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/contact/contact_item_state.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -180,6 +181,7 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
     String content;
     String positiveButtonText;
     Function positiveAction;
+    Type type;
 
     switch(action){
       case ChatProfileViewAction.block:
@@ -187,12 +189,14 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
         content = AppLocalizations.of(context).chatProfileBlockContactInfoText;
         positiveButtonText = AppLocalizations.of(context).chatProfileBlockContactButtonText;
         positiveAction = () => _blockContact();
+        type = Type.contactBlockDialog;
         break;
       case ChatProfileViewAction.delete:
         title = AppLocalizations.of(context).delete;
         content = AppLocalizations.of(context).chatProfileDeleteChatInfoText;
         positiveButtonText = AppLocalizations.of(context).chatProfileDeleteChatButtonText;
         positiveAction = () => _deleteChat();
+        type = Type.chatDeleteDialog;
         break;
     }
 
@@ -202,19 +206,20 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
       content: content,
       positiveButton: positiveButtonText,
       positiveAction: positiveAction,
-      selfClose: false
+      selfClose: false,
+      navigatable: Navigatable(type),
     );
   }
 
   _blockContact() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
     contactChangeBloc.dispatch(BlockContact(widget._contactId, widget._chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root), "ChatProfileSingleContact - blockContact()");
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 
   _deleteChat() {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root), "ChatProfileSingleContact - deleteChat()");
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 }

@@ -40,7 +40,7 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
 import 'package:ox_talk/src/chat/chat.dart';
 import 'package:ox_talk/src/contact/contact_change_bloc.dart';
@@ -48,14 +48,16 @@ import 'package:ox_talk/src/contact/contact_change_event.dart';
 import 'package:ox_talk/src/contact/contact_change_state.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
-import 'package:ox_talk/src/utils/dimensions.dart';
+import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
+import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/error.dart';
 import 'package:ox_talk/src/utils/styles.dart';
-import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
-import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/toast.dart';
+import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum ContactAction {
@@ -94,11 +96,12 @@ class _ContactChangeState extends State<ContactChange> {
 
   ContactChangeBloc _contactChangeBloc = ContactChangeBloc();
 
-  Repository<Chat> chatRepository;
+  Repository<Core.Chat> chatRepository;
 
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.contactChange);
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
         (context) => AppLocalizations.of(context).emailAddress,
@@ -121,13 +124,17 @@ class _ContactChangeState extends State<ContactChange> {
         } else {
           showToast(changeToast);
         }
-        navigation.pop(context, "ContactChanged");
+        navigation.pop(context);
       } else {
         if (state.id != null) {
-          Context coreContext = Context();
+          Core.Context coreContext = Core.Context();
           var chatId = await coreContext.createChatByContactId(state.id);
           chatRepository.putIfAbsent(id: chatId);
-          navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ChatScreen(chatId)), ModalRoute.withName(Navigation.root), "ChatScreen");
+          navigation.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Chat(chatId)),
+            ModalRoute.withName(Navigation.root),
+          );
         }
       }
     } else if (state is ContactChangeStateFailure && state.error == contactDelete) {
@@ -151,7 +158,7 @@ class _ContactChangeState extends State<ContactChange> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context, "ContactChange"),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: contactMain,
           title: Text(title),
@@ -243,29 +250,29 @@ class _ContactChangeState extends State<ContactChange> {
   }
 
   onDelete(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context).contactChangeDeleteTitle),
-            content: new Text(AppLocalizations.of(context).contactChangeDeleteDialogContent(getEmail(), getName())),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).no),
-                onPressed: () {
-                  navigation.pop(context, "ContactChange");
-                },
-              ),
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).delete),
-                onPressed: () {
-                  _contactChangeBloc.dispatch(DeleteContact(widget.id));
-                  navigation.pop(context, "ContactChange");
-                },
-              ),
-            ],
-          );
-        });
+    showNavigatableDialog(
+      context: context,
+      navigatable: Navigatable(Type.contactDeleteDialog),
+      dialog: AlertDialog(
+        title: Text(AppLocalizations.of(context).contactChangeDeleteTitle),
+        content: new Text(AppLocalizations.of(context).contactChangeDeleteDialogContent(getEmail(), getName())),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).no),
+            onPressed: () {
+              navigation.pop(context);
+            },
+          ),
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).delete),
+            onPressed: () {
+              _contactChangeBloc.dispatch(DeleteContact(widget.id));
+              navigation.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   String getName() => _nameField.controller.text;

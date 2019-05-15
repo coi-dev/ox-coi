@@ -45,10 +45,12 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login_bloc.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
+import 'package:ox_talk/src/utils/core.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
-import 'package:ox_talk/src/utils/core.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/widgets/progress_handler.dart';
 import 'package:ox_talk/src/widgets/validatable_text_form_field.dart';
@@ -104,6 +106,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    var navigation = Navigation();
+    navigation.current = Navigatable(Type.login);
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }
@@ -122,10 +126,9 @@ class _LoginState extends State<Login> {
         _showedErrorDialog = true;
         showInformationDialog(
           context: context,
-          title: AppLocalizations
-              .of(context)
-              .loginErrorDialogTitle,
+          title: AppLocalizations.of(context).loginErrorDialogTitle,
           content: state.error,
+          navigatable: Navigatable(Type.loginErrorDialog),
         );
       }
     }

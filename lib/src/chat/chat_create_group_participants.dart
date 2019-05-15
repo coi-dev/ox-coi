@@ -45,15 +45,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_create_group_settings.dart';
 import 'package:ox_talk/src/contact/contact_item_chip.dart';
+import 'package:ox_talk/src/contact/contact_item_selectable.dart';
 import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
-import 'package:ox_talk/src/contact/contact_item_selectable.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/data/repository.dart';
 import 'package:ox_talk/src/data/repository_manager.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/toast.dart';
@@ -74,6 +75,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.chatCreateGroupParticipants);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
     addSearchListener(_contactListBloc, _searchController);
@@ -85,7 +87,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
       appBar: AppBar(
         leading: new IconButton(
           icon: new Icon(Icons.close),
-          onPressed: () => navigation.pop(context, "CreateGroupChatParticipants"),
+          onPressed: () => navigation.pop(context),
         ),
         title: Text(AppLocalizations.of(context).createGroupTitle),
         actions: <Widget>[
@@ -194,7 +196,10 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
 
   _onSubmit() async {
     if (_selectedContacts.length > 0) {
-      navigation.push(context, MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(_selectedContacts)), "CreateGroupChatSettings");
+      navigation.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(_selectedContacts)),
+      );
     } else {
       showToast(AppLocalizations.of(context).createGroupNoParticipantsSelected);
     }

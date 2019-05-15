@@ -53,7 +53,9 @@ import 'package:ox_talk/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_talk/src/contact/contact_item_event.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum ContactItemType {
@@ -107,15 +109,15 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
       return buildUnblockContactDialog(name, email);
     } else if (widget.contactItemType == ContactItemType.edit) {
       navigation.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ContactChange(
-                    contactAction: ContactAction.edit,
-                    id: widget._contactId,
-                    email: email,
-                    name: name,
-                  )),
-          "ContactChange");
+        context,
+        MaterialPageRoute(
+            builder: (context) => ContactChange(
+                  contactAction: ContactAction.edit,
+                  id: widget._contactId,
+                  email: email,
+                  name: name,
+                )),
+      );
     }
   }
 
@@ -128,35 +130,39 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   _handleCreateChatStateChange(ChatChangeState state) {
     if (state is CreateChatStateSuccess) {
-      navigation.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(state.chatId)), "ChatScreen");
+      navigation.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Chat(state.chatId)),
+      );
     }
   }
 
   buildUnblockContactDialog(String name, String email) {
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          String contact = name.isNotEmpty ? name : email;
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context).unblockDialogTitle),
-            content: new Text(AppLocalizations.of(context).unblockDialogText(contact)),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).cancel),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              new FlatButton(
-                child: new Text(AppLocalizations.of(context).unblock),
-                onPressed: () {
-                  unblockContact();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
+    String contact = name.isNotEmpty ? name : email;
+    Navigation navigation = Navigation();
+    return showNavigatableDialog(
+      context: context,
+      navigatable: Navigatable(Type.contactUnblockDialog),
+      dialog: AlertDialog(
+        title: Text(AppLocalizations.of(context).unblockDialogTitle),
+        content: new Text(AppLocalizations.of(context).unblockDialogText(contact)),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).cancel),
+            onPressed: () {
+              navigation.pop(context);
+            },
+          ),
+          new FlatButton(
+            child: new Text(AppLocalizations.of(context).unblock),
+            onPressed: () {
+              unblockContact();
+              navigation.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void unblockContact() {

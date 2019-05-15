@@ -43,6 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:ox_talk/src/chat/chat.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 
 //TODO: Prepare iOS project (https://pub.dev/packages/flutter_local_notifications, https://firebase.google.com/docs/cloud-messaging/ & https://firebase.google.com/docs/cloud-messaging/concept-options)
 class NotificationManager{
@@ -51,14 +53,16 @@ class NotificationManager{
 
   static NotificationManager _instance;
 
-  factory NotificationManager() => _instance ??= new NotificationManager._internal();
+  final BuildContext _buildContext;
 
-  NotificationManager._internal();
+  factory NotificationManager(BuildContext buildContext) => _instance ??= new NotificationManager._internal(buildContext);
 
-  void setupNotificationManager(){
+  NotificationManager._internal(this._buildContext);
+
+  void setup(){
     //localNotification setup
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
-    var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidRecieveLocalNotification);
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
 
@@ -83,14 +87,17 @@ class NotificationManager{
     });
   }
 
-  Future onDidRecieveLocalNotification(int id, String title, String body, String payload) {
+  Future onDidReceiveLocalNotification(int id, String title, String body, String payload) {
     //TODO: Use payload to navigate to the right location/chat
     debugPrint("NotificationManager.onDidRecieveLocalNotification() payload = $payload");
   }
 
   Future onSelectNotification(String payload) {
-    //TODO: Use payload to navigate to the right location/chat
-    debugPrint("NotificationManager.onSelectNotification() payload = $payload");
+    Navigation navigation = Navigation();
+    navigation.push(
+      _buildContext,
+      MaterialPageRoute(builder: (context) => Chat(int.parse(payload))),
+    );
   }
 
   Future<void> showNotification(int chatId, String title, String body, {String payload}) async {

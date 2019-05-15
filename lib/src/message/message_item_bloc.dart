@@ -143,7 +143,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     if (isInvite(await message.getChatId())) {
       _contactRepository.putIfAbsent(id: _contactId);
     }
-    _getContact().loadValues(keys: [
+    await _getContact().loadValues(keys: [
       Contact.methodContactGetName,
       Contact.methodContactGetAddress,
       Contact.methodContactGetColor,
@@ -151,7 +151,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   void _setupMessage() async {
-    _getMessage().loadValues(keys: [
+    await _getMessage().loadValues(keys: [
       ChatMsg.methodMessageGetText,
       ChatMsg.methodMessageGetTimestamp,
       ChatMsg.methodMessageIsOutgoing,

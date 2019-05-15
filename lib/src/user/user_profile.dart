@@ -44,18 +44,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/data/config.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
-import 'package:ox_talk/src/user/user_settings.dart';
+import 'package:ox_talk/src/main/root_child.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/user/user_bloc.dart';
 import 'package:ox_talk/src/user/user_event.dart';
+import 'package:ox_talk/src/user/user_settings.dart';
 import 'package:ox_talk/src/user/user_state.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/widgets.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
 
 class UserProfileView extends RootChild {
   UserProfileView(State<StatefulWidget> state) : super(state);
@@ -100,6 +101,7 @@ class _ProfileState extends State<UserProfileView> {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.profile);
     _userBloc.dispatch(RequestUser());
   }
 
@@ -199,7 +201,6 @@ class _ProfileState extends State<UserProfileView> {
     navigation.push(
       context,
       MaterialPageRoute(builder: (context) => UserSettings()),
-      "EditUserSettings"
     );
   }
 }

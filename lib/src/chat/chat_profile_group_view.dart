@@ -49,6 +49,7 @@ import 'package:ox_talk/src/contact/contact_list_bloc.dart';
 import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -173,15 +174,16 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
       content: AppLocalizations.of(context).chatProfileLeaveGroupInfoText,
       positiveButton: AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
       positiveAction: () => _leaveGroup(),
-      selfClose: false
+      selfClose: false,
+      navigatable: Navigatable(Type.chatLeaveGroupDialog),
     );
   }
 
   _leaveGroup() async{
-    Navigation navigation = Navigation();
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.dispatch(LeaveGroupChat(chatId: widget._chatId));
     chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root), "ChatProfileSingleContact - deleteChat()");
+    Navigation navigation = Navigation();
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 }

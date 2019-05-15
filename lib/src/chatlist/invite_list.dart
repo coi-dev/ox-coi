@@ -47,6 +47,8 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/message/message_list_bloc.dart';
 import 'package:ox_talk/src/message/message_list_event.dart';
 import 'package:ox_talk/src/message/message_list_state.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 class InviteList extends StatefulWidget {
@@ -60,6 +62,8 @@ class _InviteListState extends State<InviteList> {
   @override
   void initState(){
     super.initState();
+    var navigation = Navigation();
+    navigation.current = Navigatable(Type.inviteList);
     _messagesBloc.dispatch(RequestMessages(1));
   }
 

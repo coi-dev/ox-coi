@@ -48,9 +48,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_talk/src/chat/chat_bloc.dart';
-import 'package:ox_talk/src/chat/chat_composer_mixin.dart';
 import 'package:ox_talk/src/chat/chat_composer_bloc.dart';
 import 'package:ox_talk/src/chat/chat_composer_event.dart';
+import 'package:ox_talk/src/chat/chat_composer_mixin.dart';
 import 'package:ox_talk/src/chat/chat_composer_state.dart';
 import 'package:ox_talk/src/chat/chat_event.dart';
 import 'package:ox_talk/src/chat/chat_profile_view.dart';
@@ -60,6 +60,7 @@ import 'package:ox_talk/src/message/message_item.dart';
 import 'package:ox_talk/src/message/message_list_bloc.dart';
 import 'package:ox_talk/src/message/message_list_event.dart';
 import 'package:ox_talk/src/message/message_list_state.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -69,16 +70,16 @@ import 'package:ox_talk/src/widgets/avatar.dart';
 import 'package:path/path.dart' as Path;
 import 'package:rxdart/rxdart.dart';
 
-class ChatScreen extends StatefulWidget {
+class Chat extends StatefulWidget {
   final int _chatId;
 
-  ChatScreen(this._chatId);
+  Chat(this._chatId);
 
   @override
-  _ChatScreenState createState() => new _ChatScreenState();
+  _ChatState createState() => new _ChatState();
 }
 
-class _ChatScreenState extends State<ChatScreen> with ChatComposer {
+class _ChatState extends State<Chat> with ChatComposer {
   Navigation navigation = Navigation();
   ChatBloc _chatBloc = ChatBloc();
   MessageListBloc _messagesBloc = MessageListBloc();
@@ -98,6 +99,7 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.chat, params: [widget._chatId]);
     _chatBloc.dispatch(RequestChat(widget._chatId));
     _chatBloc.dispatch(ChatMarkNoticed());
     final chatObservable = new Observable<ChatState>(_chatBloc.state);
@@ -128,8 +130,7 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
         _filePath = state.filePath;
         _onMessageSend(state.type);
       }
-    }
-    else if (state is ChatComposerRecordingAborted) {
+    } else if (state is ChatComposerRecordingAborted) {
       _composingAudioTimer = null;
       String chatComposeAborted;
       if (state.error == ChatComposerStateError.missingMicrophonePermission) {
@@ -265,22 +266,20 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
                         Visibility(
                           visible: _chatBloc.isGroup,
                           child: Padding(
-                            padding: const EdgeInsets.only(right: iconTextPadding),
-                            child: Icon(
-                              Icons.group,
-                              size: iconSize,
-                            )
-                          ),
+                              padding: const EdgeInsets.only(right: iconTextPadding),
+                              child: Icon(
+                                Icons.group,
+                                size: iconSize,
+                              )),
                         ),
                         Visibility(
                           visible: isVerified,
                           child: Padding(
-                            padding: const EdgeInsets.only(right: iconTextPadding),
-                            child: Icon(
-                              Icons.verified_user,
-                              size: iconSize,
-                            )
-                          ),
+                              padding: const EdgeInsets.only(right: iconTextPadding),
+                              child: Icon(
+                                Icons.verified_user,
+                                size: iconSize,
+                              )),
                         ),
                         Expanded(
                           child: Text(
@@ -511,7 +510,7 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
   }
 
   _getFilePath(FileType fileType, [String extension]) async {
-    navigation.pop(context, "Chat - ModalBottomSheet");
+    navigation.pop(context);
     String filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
     _fileName = Path.basename(filePath);
 
@@ -534,8 +533,9 @@ class _ChatScreenState extends State<ChatScreen> with ChatComposer {
   }
 
   _chatTitleTapped() {
-    navigation.push(context, MaterialPageRoute(
-      builder: (context) => ChatProfileView(widget._chatId)),
-      "ChatProfileView");
+    navigation.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChatProfile(widget._chatId)),
+    );
   }
 }

@@ -40,23 +40,61 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:ox_talk/src/navigation/navigatable.dart';
-import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 
-class Splash extends StatelessWidget {
+enum Type {
+  chat,
+  chatCreate,
+  chatCreateGroupParticipants,
+  chatCreateGroupSettings,
+  chatDeleteDialog,
+  chatList,
+  chatLeaveGroupDialog,
+  chatProfile,
+  contactAdd,
+  contactChange,
+  contactListBlocked,
+  contactList,
+  contactBlockDialog,
+  contactDeleteDialog,
+  contactImportDialog,
+  contactInviteDialog,
+  contactUnblockDialog,
+  inviteList,
+  login,
+  loginErrorDialog,
+  profile,
+  settings,
+  settingsAccount,
+  settingsSecurity,
+  settingsUser,
+  settingsExportKeysDialog,
+  settingsImportKeysDialog,
+  splash,
+}
 
-  Splash() {
-    var navigation = Navigation();
-    navigation.current = Navigatable(Type.splash);
+class Navigatable {
+  final Type type;
+
+  List params;
+
+  String get tag => describeEnum(type);
+
+  Navigatable(this.type, {this.params});
+
+  equal(Navigatable other) {
+    if (other == null) {
+      return false;
+    }
+    bool equal = equalType(other);
+    if (equal) {
+      equal = ListEquality().equals(params, other.params);
+    }
+    return equal;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
+  bool equalType(Navigatable other) => type == other.type;
+
+  static String getTag(Type type, [String subTag]) => describeEnum(type) + subTag;
 }

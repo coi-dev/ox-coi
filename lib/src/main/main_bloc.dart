@@ -45,16 +45,23 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ox_talk/src/contact/contact_list_bloc.dart';
+import 'package:ox_talk/src/contact/contact_list_event.dart';
 import 'package:ox_talk/src/data/config.dart';
+import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/main/main_event.dart';
 import 'package:ox_talk/src/main/main_state.dart';
+import 'package:ox_talk/src/notifications/local_push_manager.dart';
+import 'package:ox_talk/src/notifications/notification_manager.dart';
 import 'package:ox_talk/src/platform/app_information.dart';
 import 'package:ox_talk/src/platform/preferences.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
+  NotificationManager _notificationManager;
+  LocalPushManager _localPushManager;
 
   @override
   MainState get initialState => MainStateInitial();
@@ -69,13 +76,22 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         if (appVersion == null || appVersion.isEmpty) {
           await _setupDefaultValues(event.context);
         }
+        _setupManagers(event);
         _checkLogin();
       } catch (error) {
         yield MainStateFailure(error: error.toString());
       }
     } else if (event is AppLoaded) {
+      _setupInitialAppState();
       yield MainStateSuccess(configured: event.configured);
     }
+  }
+
+  void _setupManagers(PrepareApp event) {
+    _localPushManager = LocalPushManager(event.context);
+    _localPushManager.setup();
+    _notificationManager = NotificationManager(event.context);
+    _notificationManager.setup();
   }
 
   _initCore() async {
@@ -90,9 +106,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     await setPreference(preferenceAppVersion, version);
   }
 
-  _checkLogin() async {
+  void _checkLogin() async {
     bool configured = await _context.isConfigured();
     dispatch(AppLoaded(configured: configured));
+  }
+
+  void _setupInitialAppState() {
+    ContactListBloc contactListBloc = ContactListBloc();
+    contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
   }
 
   onLoginSuccess() {

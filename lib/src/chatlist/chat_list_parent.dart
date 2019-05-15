@@ -42,15 +42,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/chat/chat_change_bloc.dart';
 import 'package:ox_talk/src/chat/chat_change_event.dart';
 import 'package:ox_talk/src/chatlist/chat_list.dart';
 import 'package:ox_talk/src/chatlist/invite_list.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/main/root_child.dart';
 import 'package:ox_talk/src/message/message_list_bloc.dart';
 import 'package:ox_talk/src/message/message_list_event.dart';
 import 'package:ox_talk/src/message/message_list_state.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dialog_builder.dart';
@@ -131,17 +132,21 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
   }
 
   Widget getDeleteAction() {
-    return _isMultiSelect ? IconButton(
-      icon: Icon(Icons.delete),
-      onPressed: () => _showDeleteDialog(),
-    ) : Container();
+    return _isMultiSelect
+        ? IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _showDeleteDialog(),
+          )
+        : Container();
   }
 
   Widget getCancelAction() {
-    return _isMultiSelect ? IconButton(
-      icon: Icon(Icons.cancel),
-      onPressed: () => _cancelMultiSelect(),
-    ) : Container();
+    return _isMultiSelect
+        ? IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: () => _cancelMultiSelect(),
+          )
+        : Container();
   }
 
   @override
@@ -188,15 +193,14 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
     );
   }
 
-  _switchMultiSelect(int chatId){
+  _switchMultiSelect(int chatId) {
     setState(() {
-      if(_isMultiSelect){
+      if (_isMultiSelect) {
         _isMultiSelect = false;
-        widget.state.setState((){
+        widget.state.setState(() {
           widget.setActions([]);
         });
-      }
-      else{
+      } else {
         _isMultiSelect = true;
         _selectedChats.clear();
         _selectedChats.add(chatId);
@@ -207,7 +211,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
     });
   }
 
-  _itemTapped(int chatId){
+  _itemTapped(int chatId) {
     if (_selectedChats.contains(chatId)) {
       _selectedChats.remove(chatId);
     } else {
@@ -216,24 +220,19 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
   }
 
   _showDeleteDialog() {
-    if(_selectedChats != null && _selectedChats.length > 0) {
+    if (_selectedChats != null && _selectedChats.length > 0) {
       showConfirmationDialog(
-          context: context,
-          title: AppLocalizations
-              .of(context)
-              .chatListDeleteChatsDialogTitleText,
-          content: AppLocalizations
-              .of(context)
-              .chatListDeleteChatsInfoText,
-          positiveButton: AppLocalizations
-              .of(context)
-              .delete,
-          positiveAction: () => _deleteSelectedChats()
+        context: context,
+        title: AppLocalizations.of(context).chatListDeleteChatsDialogTitleText,
+        content: AppLocalizations.of(context).chatListDeleteChatsInfoText,
+        positiveButton: AppLocalizations.of(context).delete,
+        positiveAction: () => _deleteSelectedChats(),
+        navigatable: Navigatable(Type.chatDeleteDialog),
       );
     }
   }
 
-  _deleteSelectedChats(){
+  _deleteSelectedChats() {
     _chatChangeBloc.dispatch(DeleteChats(chatIds: _selectedChats));
     _switchMultiSelect(null);
   }

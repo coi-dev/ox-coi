@@ -78,9 +78,6 @@ class AppLocalizations {
 
   String get bigDot => '\u2B24';
 
-  // No translation + DCC default values which should get adjusted
-  String get coreChatStatusDefaultValue => "Sent with my Delta Chat Messenger: https://delta.chat";
-
   // Global
   String get yes => Intl.message('Yes', name: 'yes');
 
@@ -149,6 +146,8 @@ class AppLocalizations {
   String get security => Intl.message('Security', name: 'security');
 
   // Core
+  String get coreChatStatusDefaultValue => "Sent with my Delta Chat Messenger: https://delta.chat";
+
   String get coreChatNoMessages => Intl.message('No messages', name: 'coreChatNoMessages');
 
   String get coreSelf => Intl.message('Me', name: 'coreSelf');
@@ -441,6 +440,8 @@ class AppLocalizations {
 
   String get securitySettingsKeyActionFailed => Intl.message('Key action failed', name: 'securitySettingsKeyActionFailed');
 
+  // Notifications
+  String get moreMessages => Intl.message('more messages', name: 'moreMessages');
 
 }
 

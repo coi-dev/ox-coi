@@ -49,6 +49,7 @@ import 'package:ox_talk/src/l10n/localizations.dart';
 import 'package:ox_talk/src/login/login_bloc.dart';
 import 'package:ox_talk/src/login/login_events.dart';
 import 'package:ox_talk/src/login/login_state.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/platform/system.dart';
 import 'package:ox_talk/src/user/user_change_bloc.dart';
@@ -111,6 +112,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.settingsAccount);
     _userChangeBloc.dispatch(RequestUser());
     final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc.state);
     userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
@@ -139,7 +141,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
     }
     if (state is LoginStateSuccess) {
       showToast(AppLocalizations.of(context).accountSettingsSuccess);
-      navigation.pop(context, "EditAccountSettings");
+      navigation.pop(context);
     } else if (state is LoginStateFailure) {
       if (!_showedErrorDialog) {
         _showedErrorDialog = true;
@@ -147,6 +149,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
           context: context,
           title: AppLocalizations.of(context).accountSettingsErrorDialogTitle,
           content: state.error,
+          navigatable: Navigatable(Type.loginErrorDialog),
         );
       }
     }
@@ -158,7 +161,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context, "EditAccountSettings"),
+            onPressed: () => navigation.pop(context),
           ),
           backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).accountSettingsTitle),

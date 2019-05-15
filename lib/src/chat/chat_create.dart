@@ -51,6 +51,7 @@ import 'package:ox_talk/src/contact/contact_list_state.dart';
 import 'package:ox_talk/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_talk/src/data/contact_repository.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
 import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
@@ -70,6 +71,7 @@ class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
   @override
   void initState() {
     super.initState();
+    navigation.current = Navigatable(Type.chatCreate);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     addSearchListener(_contactListBloc, _searchController);
   }
@@ -133,23 +135,23 @@ class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
 
   newContactTapped() {
     navigation.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ContactChange(
-                contactAction: ContactAction.add,
-                createChat: true,
-              ),
-        ),
-        "ContactChange");
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactChange(
+              contactAction: ContactAction.add,
+              createChat: true,
+            ),
+      ),
+    );
   }
 
   createGroupTapped() {
     navigation.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatCreateGroupParticipants(),
-        ),
-        "CreateGroupChatParticipants");
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatCreateGroupParticipants(),
+      ),
+    );
   }
 
   Column buildNewContactAddGroup() {

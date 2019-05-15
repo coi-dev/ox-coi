@@ -47,6 +47,8 @@ import 'package:ox_talk/src/chatlist/chat_list_event.dart';
 import 'package:ox_talk/src/chatlist/chat_list_item.dart';
 import 'package:ox_talk/src/chatlist/chat_list_state.dart';
 import 'package:ox_talk/src/l10n/localizations.dart';
+import 'package:ox_talk/src/navigation/navigatable.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
 import 'package:ox_talk/src/utils/dimensions.dart';
 
 class ChatList extends StatefulWidget {
@@ -62,13 +64,15 @@ class ChatList extends StatefulWidget {
 
 class _ChatListState extends State<ChatList> {
   ChatListBloc _chatListBloc = ChatListBloc();
+  Navigation _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
+    _navigation.current = Navigatable(Type.chatList);
     _chatListBloc.dispatch(RequestChatList());
   }
-
+  
   @override
   void dispose() {
     _chatListBloc.dispose();
