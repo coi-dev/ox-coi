@@ -95,12 +95,12 @@ class ContactListView extends RootChild {
 
   @override
   String getTitle(BuildContext context) {
-    return AppLocalizations.of(context).contactTitle;
+    return AppLocalizations.of(context).contacts;
   }
 
   @override
   String getNavigationText(BuildContext context) {
-    return AppLocalizations.of(context).contactTitle;
+    return AppLocalizations.of(context).contacts;
   }
 
   @override

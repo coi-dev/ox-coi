@@ -52,6 +52,8 @@ import 'package:ox_talk/src/message/message_attachment_event.dart';
 import 'package:ox_talk/src/message/message_item_bloc.dart';
 import 'package:ox_talk/src/message/message_item_event.dart';
 import 'package:ox_talk/src/message/message_item_state.dart';
+import 'package:ox_talk/src/navigation/navigation.dart';
+import 'package:ox_talk/src/share/share.dart';
 import 'package:ox_talk/src/utils/colors.dart';
 import 'package:ox_talk/src/utils/conversion.dart';
 import 'package:ox_talk/src/utils/date.dart';
@@ -59,6 +61,21 @@ import 'package:ox_talk/src/utils/dimensions.dart';
 import 'package:ox_talk/src/utils/styles.dart';
 import 'package:ox_talk/src/utils/toast.dart';
 import 'package:ox_talk/src/widgets/avatar.dart';
+
+const List<MessageAction> messageActions = const <MessageAction>[
+  const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
+  const MessageAction(title: 'Copy', icon: Icons.content_copy, messageActionTag: MessageActionTag.copy),
+];
+
+const List<MessageAction> messageAttachmentActions = const <MessageAction>[
+  const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
+];
+
+enum MessageActionTag {
+  forward,
+  copy,
+  delete
+}
 
 class ChatMessageItem extends StatefulWidget {
   final int _chatId;
@@ -75,6 +92,31 @@ class ChatMessageItem extends StatefulWidget {
 class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAliveClientMixin<ChatMessageItem> {
   MessageItemBloc _messagesBloc = MessageItemBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
+  Navigation _navigation = Navigation();
+  String _message = "";
+  Offset tapDownPosition;
+  bool _hasFile;
+
+  void _selectMessageAction(MessageAction messageAction) {
+    List<int> msgIds = List();
+    msgIds.add(widget._messageId);
+    switch(messageAction.messageActionTag){
+      case MessageActionTag.forward:
+        _navigation.pop(context);
+        _navigation.push(context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds, messageAction.messageActionTag)));
+        break;
+      case MessageActionTag.copy:
+        var clipboardData = ClipboardData(text: _message);
+        Clipboard.setData(clipboardData);
+        String clipboardToast = AppLocalizations.of(context).copiedToClipboard;
+        showToast(clipboardToast);
+        _navigation.pop(context);
+        break;
+      case MessageActionTag.delete:
+        _navigation.pop(context);
+        break;
+    }
+  }
 
   @override
   void initState() {
@@ -90,6 +132,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       bloc: _messagesBloc,
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
+          _hasFile = state.hasFile;
+          _message = state.messageText;
           return Column(
             crossAxisAlignment: state.messageIsOutgoing ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: buildMessageAndMarker(state),
@@ -107,32 +151,63 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     List<Widget> widgets = List();
     if (widget._hasDateMarker) {
       String date = getDateFormTimestamp(state.messageTimestamp, true, true, context);
-      widgets.add(Center(
+      widgets.add(
+        Center(
           child: Text(
         date,
         style: messageListDateSeparator,
       )));
     }
-    widgets.add(GestureDetector(
-      onLongPress: !state.hasFile ? () => _onTab(state.messageText) : null,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
-        child: state.messageIsOutgoing
+    widgets.add(
+      GestureDetector(
+        onTap: !state.hasFile ? _onTap : null,
+        onTapDown: _onTapDown,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
+          child: state.messageIsOutgoing
             ? buildSentMessage(state)
             : buildReceivedMessage(
-                widget._isGroupChat,
-                state,
-              ),
-      ),
+            widget._isGroupChat,
+            state,
+          ),
+        ),
     ));
     return widgets;
   }
 
-  _onTab(String message) {
-    var clipboardData = ClipboardData(text: message);
-    Clipboard.setData(clipboardData);
-    String clipboardToast = AppLocalizations.of(context).copiedToClipboard;
-    showToast(clipboardToast);
+  void _onTapDown(TapDownDetails details){
+    tapDownPosition = details.globalPosition;
+  }
+
+  _onTap(){
+    _showMenu();
+  }
+
+  _onLongPress(){
+    _showMenu();
+  }
+
+  void _showMenu(){
+    List<MessageAction> actions = _hasFile ? messageAttachmentActions : messageActions;
+    showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
+        items: actions.map((MessageAction choice) {
+          return PopupMenuItem<MessageAction>(
+              value: choice,
+              child: InkWell(
+                onTap: () => _selectMessageAction(choice),
+                child: Row(
+                  children: <Widget>[
+                    Icon(choice.icon),
+                    Padding(padding: EdgeInsets.only(right: iconTextPadding)),
+                    Text(choice.title),
+                  ],
+                ),
+              )
+          );
+        }).toList()
+    );
   }
 
   Widget buildSentMessage(MessageItemStateSuccess state) {
@@ -191,6 +266,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
 
   Widget buildAttachmentMessage(AttachmentWrapper attachment, String text, String time) {
     return GestureDetector(
+      onLongPress: () => _onLongPress(),
       onTap: _openAttachment,
       child: attachment.type == ChatMsg.typeImage
           ? buildImageAttachmentMessage(attachment, text, time)
@@ -333,4 +409,11 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   void _openAttachment() {
     _attachmentBloc.dispatch(RequestAttachment(widget._chatId, widget._messageId));
   }
+}
+
+class MessageAction {
+  final String title;
+  final IconData icon;
+  final MessageActionTag messageActionTag;
+  const MessageAction({this.title, this.icon, this.messageActionTag});
 }

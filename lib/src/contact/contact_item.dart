@@ -63,13 +63,15 @@ enum ContactItemType {
   edit,
   createChat,
   blocked,
+  forward
 }
 
 class ContactItem extends StatefulWidget {
   final int _contactId;
   final ContactItemType contactItemType;
+  final Function _onTap;
 
-  ContactItem(this._contactId, key, [this.contactItemType = ContactItemType.display]) : super(key: Key(key));
+  ContactItem(this._contactId, key, [this.contactItemType = ContactItemType.display, this._onTap]) : super(key: Key(key));
 
   @override
   _ContactItemState createState() => _ContactItemState();
@@ -103,7 +105,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
   }
 
   onContactTapped(String name, String email) async {
-    if (widget.contactItemType == ContactItemType.createChat) {
+    if (widget.contactItemType == ContactItemType.createChat || widget.contactItemType == ContactItemType.forward) {
       return createChat();
     } else if (widget.contactItemType == ContactItemType.blocked) {
       return buildUnblockContactDialog(name, email);
@@ -130,10 +132,15 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   _handleCreateChatStateChange(ChatChangeState state) {
     if (state is CreateChatStateSuccess) {
-      navigation.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Chat(state.chatId)),
-      );
+      int chatId = state.chatId;
+      if(widget.contactItemType == ContactItemType.forward){
+        widget._onTap(chatId);
+      }else {
+        navigation.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Chat(state.chatId)),
+        );
+      }
     }
   }
 

@@ -110,7 +110,7 @@ class _ChatListState extends State<ChatList> {
       itemBuilder: (BuildContext context, int index) {
         var chatId = chatIds[index];
         var key = "$chatId-${chatLastUpdateValues[index]}";
-        return ChatListItem(chatId, multiSelectItemTapped, switchMultiSelect, widget._isMultiSelect, key);
+        return ChatListItem(chatId, multiSelectItemTapped, switchMultiSelect, widget._isMultiSelect, false, key);
       },
     );
   }

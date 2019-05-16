@@ -56,8 +56,9 @@ class ChatListItem extends StatefulWidget {
   final Function _onTap;
   final Function _switchMultiSelect;
   final bool _isMultiSelect;
+  final bool _isShareItem;
 
-  ChatListItem(this._chatId, this._onTap, this._switchMultiSelect, this._isMultiSelect, key) : super(key: Key(key));
+  ChatListItem(this._chatId, this._onTap, this._switchMultiSelect, this._isMultiSelect, this._isShareItem, key) : super(key: Key(key));
 
   @override
   _ChatListItemState createState() => _ChatListItemState();
@@ -123,6 +124,8 @@ class _ChatListItemState extends State<ChatListItem> {
       setState(() {
         _isSelected = _isSelected ? false : true;
       });
+      widget._onTap(widget._chatId);
+    }else if(widget._isShareItem) {
       widget._onTap(widget._chatId);
     }else{
       navigation.push(
