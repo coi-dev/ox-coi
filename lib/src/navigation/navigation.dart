@@ -49,6 +49,7 @@ import 'package:ox_coi/src/chat/chat_create.dart';
 import 'package:ox_coi/src/contact/contact_blocked_list.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/settings/settings_about.dart';
 import 'package:ox_coi/src/settings/settings_security.dart';
 import 'package:ox_coi/src/settings/settings_view.dart';
 import 'package:ox_coi/src/user/user_account_settings.dart';
@@ -61,6 +62,7 @@ class Navigation {
   static const String settings = '/settings';
   static const String settingsAccount = '/settings/account';
   static const String settingsSecurity = '/settings/security';
+  static const String settingsAbout = '/settings/about';
   static const String chatCreate = '/chat/create';
   static const String contactsBlocked = '/contacts/blocked';
 
@@ -72,6 +74,7 @@ class Navigation {
     settings: (context) => SettingsView(),
     settingsAccount: (context) => UserAccountSettings(),
     settingsSecurity: (context) => SettingsSecurity(),
+    settingsAbout: (context) => SettingsAbout(),
     chatCreate: (context) => ChatCreate(),
     contactsBlocked: (context) => ContactBlockedList(),
   };

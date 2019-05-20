@@ -49,6 +49,7 @@ import 'package:ox_coi/src/utils/colors.dart';
 enum SettingsType {
   account,
   security,
+  about
 }
 
 class SettingsView extends StatelessWidget {
@@ -87,6 +88,14 @@ class SettingsView extends StatelessWidget {
           title: Text(AppLocalizations.of(context).security),
           onTap: () => _onPressed(context, SettingsType.security),
         ),
+        ListTile(
+          leading: Icon(
+            Icons.info ,
+            color: primary,
+          ),
+          title: Text(AppLocalizations.of(context).about),
+          onTap: () => _onPressed(context, SettingsType.about),
+        ),
       ]).toList(),
     );
   }
@@ -98,6 +107,9 @@ class SettingsView extends StatelessWidget {
         break;
       case SettingsType.security:
         navigation.pushNamed(context, Navigation.settingsSecurity);
+        break;
+      case SettingsType.about:
+        navigation.pushNamed(context, Navigation.settingsAbout);
         break;
     }
   }

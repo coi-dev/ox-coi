@@ -40,32 +40,21 @@
  * for more details.
  */
 
-import 'package:package_info/package_info.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
-}
-
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
-}
-
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
-
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
+class UrlTextSpan extends TextSpan {
+  UrlTextSpan({
+    @required String url,
+    String text,
+  }) : super(
+          style: TextStyle(color: primary, fontWeight: FontWeight.bold),
+          text: text ?? url,
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              launch(url, forceSafariVC: false);
+            },
+        );
 }

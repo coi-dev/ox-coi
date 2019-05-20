@@ -40,32 +40,33 @@
  * for more details.
  */
 
-import 'package:package_info/package_info.dart';
+import 'dart:async';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
-}
+import 'package:bloc/bloc.dart';
+import 'package:ox_coi/src/platform/app_information.dart';
+import 'package:ox_coi/src/settings/settings_about_event.dart';
+import 'package:ox_coi/src/settings/settings_about_state.dart';
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
-}
+class SettingsAboutBloc extends Bloc<SettingsAboutEvent, SettingsAboutState> {
+  @override
+  SettingsAboutState get initialState => SettingsAboutStateInitial();
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
+  @override
+  Stream<SettingsAboutState> mapEventToState(SettingsAboutState currentState, SettingsAboutEvent event) async* {
+    if (event is RequestAbout) {
+      try {
+        loadAbout();
+      } catch (error) {
+        yield SettingsAboutStateFailure();
+      }
+    } else if (event is AboutLoaded) {
+      yield SettingsAboutStateSuccess(name: event.name, version: event.version);
+    }
+  }
 
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
+  void loadAbout() async {
+    String name = await getFullName();
+    String version = await getAppVersion();
+    dispatch(AboutLoaded(name: name, version: version));
+  }
 }

@@ -40,32 +40,17 @@
  * for more details.
  */
 
-import 'package:package_info/package_info.dart';
+import 'package:meta/meta.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
+abstract class SettingsAboutState {}
+
+class SettingsAboutStateInitial extends SettingsAboutState {}
+
+class SettingsAboutStateSuccess extends SettingsAboutState {
+  final String name;
+  final String version;
+
+  SettingsAboutStateSuccess({@required this.name, @required this.version});
 }
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
-}
-
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
-
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
-}
+class SettingsAboutStateFailure extends SettingsAboutState {}
