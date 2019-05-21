@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -89,6 +90,8 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
         text = AppLocalizations.of(context).securitySettingsImportKeysPerforming;
       } else if (state.type == SettingsSecurityType.exportKeys) {
         text = AppLocalizations.of(context).securitySettingsExportKeysPerforming;
+      } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
+        text = AppLocalizations.of(context).securitySettingsInitiateKeyTransferPerforming;
       }
       _progress = FullscreenProgress(_settingsSecurityBloc, text, false);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
@@ -101,7 +104,34 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
         _progressOverlayEntry = null;
       }
       if (state is SettingsSecurityStateSuccess) {
-        showToast(AppLocalizations.of(context).securitySettingsKeyActionSuccess);
+        if (state.setupCode.isNotEmpty) {
+          showNavigatableDialog(
+            context: context,
+            navigatable: Navigatable(Type.settingsKeyTransferDoneDialog),
+            dialog: AlertDialog(
+              title: Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferDone),
+              content: new Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferDoneDialog(state.setupCode)),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopy),
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: state.setupCode));
+                    showToast(AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopyDone);
+                    navigation.pop(context);
+                  },
+                ),
+                new FlatButton(
+                  child: new Text(AppLocalizations.of(context).ok),
+                  onPressed: () {
+                    navigation.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          showToast(AppLocalizations.of(context).securitySettingsKeyActionSuccess);
+        }
       }
       if (state is SettingsSecurityStateFailure) {
         if (state.error == null) {
@@ -145,19 +175,27 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
           subtitle: Text(AppLocalizations.of(context).securitySettingsImportKeysText),
           onTap: () => _onPressed(context, SettingsSecurityType.importKeys),
         ),
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+          title: Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransfer),
+          subtitle: Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferText),
+          onTap: () => _onPressed(context, SettingsSecurityType.initiateKeyTransfer),
+        ),
       ]).toList(),
     );
   }
 
   void _onPressed(BuildContext context, SettingsSecurityType type) {
-    _showExportImportDialog(type);
-  }
-
-  void _exportImport(SettingsSecurityType type) {
-    if (type == SettingsSecurityType.exportKeys) {
-      _settingsSecurityBloc.dispatch(ExportKeys());
-    } else if (type == SettingsSecurityType.importKeys) {
-      _settingsSecurityBloc.dispatch(ImportKeys());
+    switch (type) {
+      case SettingsSecurityType.exportKeys:
+        _showExportImportDialog(type);
+        break;
+      case SettingsSecurityType.importKeys:
+        _showExportImportDialog(type);
+        break;
+      case SettingsSecurityType.initiateKeyTransfer:
+        _showKeyTransferDialog();
+        break;
     }
   }
 
@@ -183,5 +221,28 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       positiveAction: () => _exportImport(type),
       navigatable: Navigatable(navigationType),
     );
+  }
+
+  void _exportImport(SettingsSecurityType type) {
+    if (type == SettingsSecurityType.exportKeys) {
+      _settingsSecurityBloc.dispatch(ExportKeys());
+    } else if (type == SettingsSecurityType.importKeys) {
+      _settingsSecurityBloc.dispatch(ImportKeys());
+    }
+  }
+
+  void _showKeyTransferDialog() {
+    showConfirmationDialog(
+      context: context,
+      title: AppLocalizations.of(context).securitySettingsInitiateKeyTransfer,
+      content: AppLocalizations.of(context).securitySettingsInitiateKeyTransferDialog,
+      positiveButton: AppLocalizations.of(context).ok,
+      positiveAction: _keyTransfer,
+      navigatable: Navigatable(Type.settingsKeyTransferDialog),
+    );
+  }
+
+  void _keyTransfer() {
+    _settingsSecurityBloc.dispatch(InitiateKeyTransfer());
   }
 }

@@ -40,25 +40,48 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_state.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/message/message_builder_mixin.dart';
+import 'package:ox_coi/src/message/message_item_state.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
-abstract class SettingsSecurityEvent {}
+class MessageSent extends StatelessWidget with MessageBuilder {
+  final String text;
+  final int timestamp;
+  final bool hasFile;
+  final int msgState;
+  final AttachmentWrapper attachmentWrapper;
 
-class ExportKeys extends SettingsSecurityEvent {}
+  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.attachmentWrapper}) : super(key: key);
 
-class ImportKeys extends SettingsSecurityEvent {}
+  @override
+  Widget build(BuildContext context) {
+    String time = getTimeFormTimestamp(timestamp);
+    return FractionallySizedBox(
+        alignment: Alignment.topRight,
+        widthFactor: 0.8,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              decoration: buildBoxDecoration(messageBoxGrey, messageSentBackground, buildBorderRadius()),
+              child: Padding(
+                padding: EdgeInsets.all(messagesInnerPadding),
+                child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, msgState) : buildTextMessage(text, time, msgState),
+              ),
+            ),
+          ],
+        ));
+  }
 
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
-
-class ActionSuccess extends SettingsSecurityEvent {
-  String setupCode;
-
-  ActionSuccess({this.setupCode});
-}
-
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
-
-  ActionFailed({@required this.error});
+  BorderRadius buildBorderRadius() {
+    return BorderRadius.only(
+      topRight: Radius.circular(messagesBoxRadius),
+      bottomLeft: Radius.circular(messagesBoxRadius),
+      topLeft: Radius.circular(messagesBoxRadius),
+    );
+  }
 }

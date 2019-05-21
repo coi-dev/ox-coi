@@ -49,39 +49,3 @@ Key createKey(var value) {
     return Key(value.toString());
   }
 }
-
-OutlineButton buildOutlineButton({
-  BuildContext context,
-  Function onPressed,
-  Widget child,
-  Color color,
-}) {
-  return OutlineButton(
-    highlightedBorderColor: color,
-    borderSide: BorderSide(color: color),
-    textColor: color,
-    onPressed: onPressed,
-    child: child,
-  );
-}
-
-Widget buildTextOrPlaceHolder({
-  @required String text,
-  TextStyle style,
-  TextAlign align,
-  @required String placeholderText,
-  TextStyle placeholderStyle,
-  TextAlign placeHolderAlign,
-}) {
-  return text != null && text.isNotEmpty
-      ? Text(
-          text,
-          style: style,
-          textAlign: align,
-        )
-      : Text(
-          placeholderText,
-          style: placeholderStyle,
-          textAlign: placeHolderAlign,
-        );
-}

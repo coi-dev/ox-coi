@@ -40,25 +40,22 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_state.dart';
+isNullOrEmpty(String text) => text == null || text.isEmpty;
 
-abstract class SettingsSecurityEvent {}
-
-class ExportKeys extends SettingsSecurityEvent {}
-
-class ImportKeys extends SettingsSecurityEvent {}
-
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
-
-class ActionSuccess extends SettingsSecurityEvent {
-  String setupCode;
-
-  ActionSuccess({this.setupCode});
+bool isEmail(String email) {
+  String source =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  RegExp regExp = new RegExp(source);
+  return regExp.hasMatch(email);
 }
 
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
-
-  ActionFailed({@required this.error});
+bool isPort(String portString) {
+  if (portString.isEmpty) {
+    return true;
+  }
+  int port = int.tryParse(portString);
+  if (port == null || port < 1 || port >= 65535) {
+    return false;
+  }
+  return true;
 }

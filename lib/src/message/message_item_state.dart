@@ -56,6 +56,8 @@ class MessageItemStateSuccess extends MessageItemState {
   final bool messageIsOutgoing;
   final bool hasFile;
   final int state;
+  final bool isSetupMessage;
+  final bool isInfo;
   final ContactWrapper contactWrapper;
   final AttachmentWrapper attachmentWrapper;
 
@@ -65,6 +67,8 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.messageTimestamp,
     @required this.hasFile,
     @required this.state,
+    @required this.isSetupMessage,
+    @required this.isInfo,
     @required this.attachmentWrapper,
     @required this.contactWrapper,
   });

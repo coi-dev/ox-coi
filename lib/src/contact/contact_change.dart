@@ -107,6 +107,8 @@ class _ContactChangeState extends State<ContactChange> {
         (context) => AppLocalizations.of(context).emailAddress,
         textFormType: TextFormType.email,
         inputType: TextInputType.emailAddress,
+        needValidation: true,
+        validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
       );
     } else {
       _nameField.controller.text = widget.name != null ? widget.name : "";
@@ -250,28 +252,16 @@ class _ContactChangeState extends State<ContactChange> {
   }
 
   onDelete(BuildContext context) {
-    showNavigatableDialog(
+    showConfirmationDialog(
       context: context,
+      title: AppLocalizations.of(context).contactChangeDeleteTitle,
+      content: (AppLocalizations.of(context).contactChangeDeleteDialogContent(getEmail(), getName())),
+      positiveButton: AppLocalizations.of(context).delete,
+      positiveAction: () {
+        _contactChangeBloc.dispatch(DeleteContact(widget.id));
+        navigation.pop(context);
+      },
       navigatable: Navigatable(Type.contactDeleteDialog),
-      dialog: AlertDialog(
-        title: Text(AppLocalizations.of(context).contactChangeDeleteTitle),
-        content: new Text(AppLocalizations.of(context).contactChangeDeleteDialogContent(getEmail(), getName())),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text(AppLocalizations.of(context).no),
-            onPressed: () {
-              navigation.pop(context);
-            },
-          ),
-          new FlatButton(
-            child: new Text(AppLocalizations.of(context).delete),
-            onPressed: () {
-              _contactChangeBloc.dispatch(DeleteContact(widget.id));
-              navigation.pop(context);
-            },
-          ),
-        ],
-      ),
     );
   }
 

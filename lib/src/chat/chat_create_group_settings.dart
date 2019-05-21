@@ -59,6 +59,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
@@ -72,7 +73,12 @@ class ChatCreateGroupSettings extends StatefulWidget {
 
 class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
   ContactListBloc _contactListBloc = ContactListBloc();
-  TextEditingController _controller = TextEditingController();
+  ValidatableTextFormField _groupNameField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).createGroupTextFieldLabel,
+    hintText: (context) => AppLocalizations.of(context).createGroupTextFieldHint,
+    needValidation: true,
+    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintEmptyString,
+  );
   GlobalKey<FormState> _formKey = GlobalKey();
   Repository<Core.Chat> chatRepository;
   Navigation navigation = Navigation();
@@ -137,21 +143,12 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
           ),
         ),
         Padding(
-            padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
-            child: Form(
-              key: _formKey,
-              child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context).createGroupTextFieldLabel,
-                    hintText: AppLocalizations.of(context).createGroupTextFieldHint),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return AppLocalizations.of(context).validatableTextFormFieldHintEmptyString;
-                  }
-                },
-                controller: _controller,
-              ),
-            )),
+          padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
+          child: Form(
+            key: _formKey,
+            child: _groupNameField,
+          ),
+        ),
         Padding(
           padding: EdgeInsets.only(
             left: formHorizontalPadding,
@@ -180,7 +177,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
       ChatChangeBloc chatChangeBloc = ChatChangeBloc();
       final changeChatStatesObservable = new Observable<ChatChangeState>(chatChangeBloc.state);
       changeChatStatesObservable.listen((state) => _handleChatChangeStateChange(state));
-      chatChangeBloc.dispatch(CreateChat(verified: false, name: _controller.text, contacts: widget._selectedContacts));
+      chatChangeBloc.dispatch(CreateChat(verified: false, name: _groupNameField.controller.text, contacts: widget._selectedContacts));
     }
   }
 

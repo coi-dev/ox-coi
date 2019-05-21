@@ -46,7 +46,7 @@ import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/message/message_item.dart';
+import 'package:ox_coi/src/message/message_action.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event.dart';

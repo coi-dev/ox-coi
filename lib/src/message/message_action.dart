@@ -40,25 +40,14 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_state.dart';
+import 'package:flutter/widgets.dart';
 
-abstract class SettingsSecurityEvent {}
+enum MessageActionTag { forward, copy, delete }
 
-class ExportKeys extends SettingsSecurityEvent {}
+class MessageAction {
+  final String title;
+  final IconData icon;
+  final MessageActionTag messageActionTag;
 
-class ImportKeys extends SettingsSecurityEvent {}
-
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
-
-class ActionSuccess extends SettingsSecurityEvent {
-  String setupCode;
-
-  ActionSuccess({this.setupCode});
-}
-
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
-
-  ActionFailed({@required this.error});
+  const MessageAction({this.title, this.icon, this.messageActionTag});
 }

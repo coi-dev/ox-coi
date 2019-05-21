@@ -71,6 +71,9 @@ enum Type {
   settingsUser,
   settingsExportKeysDialog,
   settingsImportKeysDialog,
+  settingsKeyTransferDialog,
+  settingsKeyTransferDoneDialog,
+  settingsAutocryptImport,
   splash,
 }
 

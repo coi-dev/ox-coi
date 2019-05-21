@@ -51,17 +51,15 @@ import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum SettingsSecurityType {
-  exportKeys,
-  importKeys,
-}
+enum SettingsSecurityType { exportKeys, importKeys, initiateKeyTransfer }
 
 class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityState> {
-  @override
-  SettingsSecurityState get initialState => SettingsSecurityStateInitial();
   PublishSubject<Event> _keyActionSubject = new PublishSubject();
   DeltaChatCore _core = DeltaChatCore();
   int _listenerId;
+
+  @override
+  SettingsSecurityState get initialState => SettingsSecurityStateInitial();
 
   @override
   Stream<SettingsSecurityState> mapEventToState(SettingsSecurityState currentState, SettingsSecurityEvent event) async* {
@@ -83,8 +81,11 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
       } catch (error) {
         yield SettingsSecurityStateFailure(error: error);
       }
+    } else if (event is InitiateKeyTransfer) {
+      yield SettingsSecurityStateLoading(type: SettingsSecurityType.initiateKeyTransfer);
+      _initiateKeyTransfer();
     } else if (event is ActionSuccess) {
-      yield SettingsSecurityStateSuccess();
+      yield SettingsSecurityStateSuccess(setupCode: event.setupCode);
     } else if (event is ActionFailed) {
       yield SettingsSecurityStateFailure(error: event.error);
     }
@@ -115,6 +116,12 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
     } else if (type == SettingsSecurityType.importKeys) {
       context.importKeys(path);
     }
+  }
+
+  void _initiateKeyTransfer() async {
+    var context = Context();
+    String setupCode = await context.initiateKeyTransfer();
+    dispatch(ActionSuccess(setupCode: setupCode));
   }
 
   Future<void> _registerListeners() async {

@@ -40,52 +40,68 @@
  * for more details.
  */
 
-import 'dart:io';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/text.dart';
 
-class Avatar extends StatelessWidget {
-  final String imagePath;
-  final String textPrimary;
-  final String textSecondary;
-  final Color color;
+import 'message_builder_mixin.dart';
 
-  Avatar({this.imagePath, @required this.textPrimary, @required this.textSecondary, this.color});
+class MessageSpecial extends StatelessWidget with MessageBuilder {
+  final bool isSetupMessage;
+  final String messageText;
+  final int timestamp;
+
+  const MessageSpecial({Key key, this.isSetupMessage, this.messageText, this.timestamp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String initials;
-    FileImage avatarImage;
-    if (imagePath != null && imagePath.isNotEmpty) {
-      avatarImage = FileImage(File(imagePath));
-    } else {
-      initials = getInitials(textPrimary, textSecondary);
-    }
-    if (avatarImage == null && isNullOrEmpty(initials)) {
-      return Container(
-        height: listAvatarDiameter,
-        width: listAvatarDiameter,
-      );
-    }
-    return CircleAvatar(
-      radius: listAvatarRadius,
-      foregroundColor: listAvatarForegroundColor,
-      backgroundColor: color != null ? color : listAvatarDefaultBackgroundColor,
-      child: avatarImage != null ? avatarImage : new Text(initials),
+    return isSetupMessage ? buildSetupMessage(context) : buildInfoMessage();
+  }
+
+  Widget buildSetupMessage(BuildContext context) {
+    String time = getTimeFormTimestamp(timestamp);
+    String text = AppLocalizations.of(context).securitySettingsAutocryptMessage;
+    return FractionallySizedBox(
+        alignment: Alignment.topRight,
+        widthFactor: 0.8,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              decoration: buildBoxDecoration(messageBoxGrey, messageSetupBackground, buildBorderRadius()),
+              child: Padding(
+                padding: EdgeInsets.all(messagesInnerPadding),
+                child: buildTextMessage(text, time),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget buildInfoMessage() {
+    return Center(
+      child: Container(
+        decoration: buildBoxDecoration(messageBoxGrey, messageInfoBackground, buildInfoBorderRadius()),
+        child: Padding(
+          padding: EdgeInsets.all(messagesInnerPadding),
+          child: Text(messageText),
+        ),
+      ),
     );
   }
 
-  static String getInitials(String textPrimary, String textSecondary) {
-    if (textPrimary != null && textPrimary.isNotEmpty) {
-      return textPrimary.substring(0, 1);
-    }
-    if (textSecondary != null && textSecondary.isNotEmpty) {
-      return textSecondary.substring(0, 1);
-    }
-    return "";
+  BorderRadius buildBorderRadius() {
+    return BorderRadius.only(
+      topRight: Radius.circular(messagesBoxRadius),
+      bottomLeft: Radius.circular(messagesBoxRadius),
+      topLeft: Radius.circular(messagesBoxRadius),
+    );
+  }
+
+  BorderRadius buildInfoBorderRadius() {
+    return BorderRadius.all(Radius.circular(messagesBoxRadius));
   }
 }
-

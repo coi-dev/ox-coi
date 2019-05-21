@@ -89,6 +89,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       bool isOutgoing = await message.isOutgoing();
       String text = await message.getText();
       bool hasFile = await message.hasFile();
+      bool isSetupMessage = await message.isSetupMessage();
+      bool isInfo = await message.isInfo();
       int timestamp = await message.getTimestamp();
       int state = await message.getState();
       AttachmentWrapper attachmentWrapper;
@@ -119,6 +121,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           messageIsOutgoing: isOutgoing,
           messageText: text,
           hasFile: hasFile,
+          isSetupMessage: isSetupMessage,
+          isInfo: isInfo,
           messageTimestamp: timestamp,
           state: state,
           attachmentWrapper: attachmentWrapper,
@@ -129,6 +133,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           messageIsOutgoing: isOutgoing,
           messageText: text,
           hasFile: hasFile,
+          isSetupMessage: isSetupMessage,
+          isInfo: isInfo,
           messageTimestamp: timestamp,
           state: state,
           attachmentWrapper: attachmentWrapper,

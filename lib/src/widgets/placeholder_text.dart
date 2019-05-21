@@ -40,25 +40,38 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_state.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
-abstract class SettingsSecurityEvent {}
+class PlaceholderText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+  final TextAlign align;
+  final String placeholderText;
+  final TextStyle placeholderStyle;
+  final TextAlign placeHolderAlign;
 
-class ExportKeys extends SettingsSecurityEvent {}
+  PlaceholderText({
+    @required this.text,
+    this.style,
+    this.align,
+    @required this.placeholderText,
+    this.placeholderStyle,
+    this.placeHolderAlign,
+  });
 
-class ImportKeys extends SettingsSecurityEvent {}
-
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
-
-class ActionSuccess extends SettingsSecurityEvent {
-  String setupCode;
-
-  ActionSuccess({this.setupCode});
-}
-
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
-
-  ActionFailed({@required this.error});
+  @override
+  Widget build(BuildContext context) {
+    return isNullOrEmpty(text)
+        ? Text(
+            text,
+            style: style,
+            textAlign: align,
+          )
+        : Text(
+            placeholderText,
+            style: placeholderStyle,
+            textAlign: placeHolderAlign,
+          );
+  }
 }

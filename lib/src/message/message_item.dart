@@ -40,9 +40,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,29 +50,17 @@ import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event.dart';
 import 'package:ox_coi/src/message/message_item_state.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/conversion.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/avatar.dart';
 
-const List<MessageAction> messageActions = const <MessageAction>[
-  const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
-  const MessageAction(title: 'Copy', icon: Icons.content_copy, messageActionTag: MessageActionTag.copy),
-];
-
-const List<MessageAction> messageAttachmentActions = const <MessageAction>[
-  const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
-];
-
-enum MessageActionTag {
-  forward,
-  copy,
-  delete
-}
+import 'message_action.dart';
+import 'message_received_view.dart';
+import 'message_sent_view.dart';
+import 'message_special_view.dart';
 
 class ChatMessageItem extends StatefulWidget {
   final int _chatId;
@@ -90,6 +75,15 @@ class ChatMessageItem extends StatefulWidget {
 }
 
 class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAliveClientMixin<ChatMessageItem> {
+  final List<MessageAction> _messageActions = const <MessageAction>[
+    const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
+    const MessageAction(title: 'Copy', icon: Icons.content_copy, messageActionTag: MessageActionTag.copy),
+  ];
+
+  final List<MessageAction> _messageAttachmentActions = const <MessageAction>[
+    const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
+  ];
+
   MessageItemBloc _messagesBloc = MessageItemBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
   Navigation _navigation = Navigation();
@@ -100,7 +94,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   void _selectMessageAction(MessageAction messageAction) {
     List<int> msgIds = List();
     msgIds.add(widget._messageId);
-    switch(messageAction.messageActionTag){
+    switch (messageAction.messageActionTag) {
       case MessageActionTag.forward:
         _navigation.pop(context);
         _navigation.push(context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds, messageAction.messageActionTag)));
@@ -152,46 +146,94 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     List<Widget> widgets = List();
     if (widget._hasDateMarker) {
       String date = getDateFormTimestamp(state.messageTimestamp, true, true, context);
-      widgets.add(
-        Center(
-          child: Text(
-          date,
-          style: messageListDateSeparator,
-          )
-        )
-      );
+      widgets.add(Center(child: Text(date, style: messageListDateSeparator)));
     }
-    widgets.add(
-      GestureDetector(
-        onTap: !state.hasFile ? _onTap : null,
-        onTapDown: _onTapDown,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
-          child: state.messageIsOutgoing
-            ? buildSentMessage(state)
-            : buildReceivedMessage(
-            widget._isGroupChat,
-            state,
-          ),
-        ),
+    String name;
+    String email;
+    Color color;
+    if (state.contactWrapper != null) {
+      name = state.contactWrapper.contactName;
+      email = state.contactWrapper.contactAddress;
+      color = state.contactWrapper.contactColor;
+    }
+    Widget message = buildMessage(state, name, email, color);
+    widgets.add(GestureDetector(
+      onTap: () => _onTap(state.hasFile, state.isSetupMessage),
+      onTapDown: _onTapDown,
+      onLongPress: () => _onLongPress(state.hasFile, state.isSetupMessage),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
+        child: message,
+      ),
     ));
     return widgets;
   }
 
-  void _onTapDown(TapDownDetails details){
+  Widget buildMessage(MessageItemStateSuccess state, String name, String email, Color color) {
+    Widget message;
+    if (state.isInfo) {
+      message = MessageSpecial(
+        isSetupMessage: state.isSetupMessage,
+        messageText: state.messageText,
+        timestamp: state.messageTimestamp,
+      );
+    } else if (state.isSetupMessage) {
+      message = MessageSpecial(
+        isSetupMessage: state.isSetupMessage,
+        timestamp: state.messageTimestamp,
+      );
+    } else if (state.messageIsOutgoing) {
+      message = MessageSent(
+        text: state.messageText,
+        timestamp: state.messageTimestamp,
+        hasFile: state.hasFile,
+        msgState: state.state,
+        attachmentWrapper: state.attachmentWrapper,
+      );
+    } else {
+      message = MessageReceived(
+        text: state.messageText,
+        timestamp: state.messageTimestamp,
+        hasFile: state.hasFile,
+        attachmentWrapper: state.attachmentWrapper,
+        name: name,
+        email: email,
+        color: color,
+        isGroupChat: widget._isGroupChat,
+      );
+    }
+    return message;
+  }
+
+  _onTap(bool hasFile, bool isSetupMessage) {
+    if (isSetupMessage) {
+      _showAutocryptSetup();
+    } else if (hasFile) {
+      _openTapAttachment();
+    } else {
+      _showMenu();
+    }
+  }
+
+  void _onTapDown(TapDownDetails details) {
     tapDownPosition = details.globalPosition;
   }
 
-  _onTap(){
-    _showMenu();
+  void _openTapAttachment() {
+    _attachmentBloc.dispatch(RequestAttachment(widget._chatId, widget._messageId));
   }
 
-  _onLongPress(){
-    _showMenu();
+  _onLongPress(bool hasFile, bool isSetupMessage) {
+    if (isSetupMessage) {
+      return null;
+    } else if (hasFile) {
+      _showMenu();
+    }
+    return null;
   }
 
-  void _showMenu(){
-    List<MessageAction> actions = _hasFile ? messageAttachmentActions : messageActions;
+  void _showMenu() {
+    List<MessageAction> actions = _hasFile ? _messageAttachmentActions : _messageActions;
     showMenu(
         context: context,
         position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
@@ -207,244 +249,19 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                     Text(choice.title),
                   ],
                 ),
-              )
-          );
-        }).toList()
-    );
+              ));
+        }).toList());
   }
 
-  Widget buildSentMessage(MessageItemStateSuccess state) {
-    String text = state.messageText;
-    String time = getTimeFormTimestamp(state.messageTimestamp);
-    int msgState = state.state;
-    bool hasFile = state.hasFile;
-    return FractionallySizedBox(
-        alignment: Alignment.topRight,
-        widthFactor: 0.8,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              decoration: buildSenderBoxDecoration(messageSentBackground),
-              child: Padding(
-                padding: EdgeInsets.all(messagesInnerPadding),
-                child: hasFile ? buildAttachmentMessage(state.attachmentWrapper, text, time, msgState) : buildTextMessage(text, time, msgState),
-              ),
+  void _showAutocryptSetup() {
+    _navigation.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SettingsAutocryptImport(
+              chatId: widget._chatId,
+              messageId: widget._messageId,
             ),
-          ],
-        ));
-  }
-
-  BoxDecoration buildSenderBoxDecoration(Color color) {
-    return BoxDecoration(
-        shape: BoxShape.rectangle,
-        boxShadow: [
-          new BoxShadow(
-            color: messageBoxGrey,
-            blurRadius: messagesBlurRadius,
-          ),
-        ],
-        color: color,
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(messagesBoxRadius),
-            bottomLeft: Radius.circular(messagesBoxRadius),
-            topLeft: Radius.circular(messagesBoxRadius)));
-  }
-
-  BoxDecoration buildReceiverBoxDecoration(Color color) {
-    return BoxDecoration(
-        shape: BoxShape.rectangle,
-        boxShadow: [
-          new BoxShadow(
-            color: messageBoxGrey,
-            blurRadius: messagesBlurRadius,
-          ),
-        ],
-        color: color,
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(messagesBoxRadius),
-            bottomRight: Radius.circular(messagesBoxRadius),
-            bottomLeft: Radius.circular(messagesBoxRadius)));
-  }
-
-  Widget buildAttachmentMessage(AttachmentWrapper attachment, String text, String time, int state) {
-    return GestureDetector(
-      onLongPress: () => _onLongPress(),
-      onTap: _openAttachment,
-      child: attachment.type == ChatMsg.typeImage
-          ? buildImageAttachmentMessage(attachment, text, time, state)
-          : buildGenericAttachmentMessage(attachment, time, state),
-    );
-  }
-
-  Row buildGenericAttachmentMessage(AttachmentWrapper attachment, String time, int state) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.attach_file,
-          size: messagesFileIconSize,
-        ),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                attachment.filename,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(byteToPrintableSize(attachment.size)),
-            ],
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-        buildTime(time),
-        buildStateMarker(state),
-      ],
-    );
-  }
-
-  Widget buildImageAttachmentMessage(AttachmentWrapper attachment, String text, String time, int state) {
-    File file = File(attachment.path);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Image.file(file),
-        text.isNotEmpty ? Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)) : Container(),
-        text.isNotEmpty
-            ? Flexible(
-                child: Text(text),
-              )
-            : Container(),
-        Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            buildTime(time),
-            buildStateMarker(state),
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget buildTextMessage(String text, String time, int state) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Flexible(
-          child: Text(
-            text,
-            style: defaultText,
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-        buildTime(time),
-        buildStateMarker(state),
-      ],
-    );
-  }
-
-  Widget buildStateMarker(int state) {
-    switch(state){
-      case ChatMsg.messageStateDelivered:
-        return Padding(
-          padding: EdgeInsets.only(left: iconTextPadding),
-          child: Icon(Icons.done, size: 14.0,),
-        );
-        break;
-      case ChatMsg.messageStateReceived:
-        return Padding(
-          padding: EdgeInsets.only(left: iconTextPadding),
-          child: Icon(Icons.done_all, size: 14.0,),
-        );
-        break;
-      default:
-        return Container();
-    }
-  }
-
-  StatelessWidget buildTime(String time) {
-    return Text(time, style: messageTimeText);
-  }
-
-  Widget buildReceivedMessage(bool isGroupChat, MessageItemStateSuccess state) {
-    ContactWrapper contactWrapper = state.contactWrapper;
-    String name;
-    String email;
-    Color color;
-    if (contactWrapper != null) {
-      name = contactWrapper.contactName;
-      email = contactWrapper.contactAddress;
-      color = contactWrapper.contactColor;
-    }
-    String text = state.messageText;
-    String time = getTimeFormTimestamp(state.messageTimestamp);
-    bool hasFile = state.hasFile;
-    return FractionallySizedBox(
-      alignment: Alignment.topLeft,
-      widthFactor: 0.8,
-      child: Row(
-        children: <Widget>[
-          isGroupChat
-              ? Padding(
-                  padding: const EdgeInsets.only(right: messagesInnerPadding),
-                  child: Avatar(
-                    initials: getInitials(name, email),
-                    color: color,
-                  ),
-                )
-              : Container(),
-          Flexible(
-            child: Container(
-              padding: EdgeInsets.all(messagesInnerPadding),
-              decoration: buildReceiverBoxDecoration(messageReceivedBackground),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  isGroupChat
-                      ? Text(
-                          name,
-                          style: TextStyle(color: color),
-                        )
-                      : Container(
-                          constraints: BoxConstraints(maxWidth: zero),
-                        ),
-                  hasFile ? buildAttachmentMessage(state.attachmentWrapper, text, time, null) : buildTextMessage(text, time, null),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
-
-  String getInitials(String name, String email) {
-    if (name != null && name.isNotEmpty) {
-      return name.substring(0, 1);
-    }
-    if (email != null && email.isNotEmpty) {
-      return email.substring(0, 1);
-    }
-    return "";
-  }
-
-  void _openAttachment() {
-    _attachmentBloc.dispatch(RequestAttachment(widget._chatId, widget._messageId));
-  }
-}
-
-class MessageAction {
-  final String title;
-  final IconData icon;
-  final MessageActionTag messageActionTag;
-  const MessageAction({this.title, this.icon, this.messageActionTag});
 }

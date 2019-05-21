@@ -90,7 +90,8 @@ class AvatarListItem extends StatelessWidget {
             avatarIcon == null
               ? Avatar(
                   imagePath: imagePath,
-                  initials: getInitials(),
+                  textPrimary: title,
+                  textSecondary: subTitle,
                   color: color,
                 )
               : CircleAvatar(
@@ -193,13 +194,4 @@ class AvatarListItem extends StatelessWidget {
     );
   }
 
-  String getInitials() {
-    if (title != null && title.isNotEmpty) {
-      return title.substring(0, 1);
-    }
-    if (subTitle != null && subTitle.isNotEmpty) {
-      return subTitle.substring(0, 1);
-    }
-    return "";
-  }
 }

@@ -246,7 +246,8 @@ class _ChatState extends State<Chat> with ChatComposer {
           child: Row(
             children: <Widget>[
               Avatar(
-                initials: getInitials(name, subTitle),
+                textPrimary: name,
+                textSecondary: subTitle,
                 color: color,
               ),
               Padding(padding: EdgeInsets.only(left: appBarAvatarTextPadding)),
@@ -461,16 +462,6 @@ class _ChatState extends State<Chat> with ChatComposer {
   _onCameraStateChange(bool pickImage) async {
     hideOverlay();
     _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: pickImage));
-  }
-
-  String getInitials(String name, String subTitle) {
-    if (name != null && name.isNotEmpty) {
-      return name.substring(0, 1);
-    }
-    if (subTitle != null && subTitle.isNotEmpty) {
-      return subTitle.substring(0, 1);
-    }
-    return "";
   }
 
   void _showAttachmentChooser() {

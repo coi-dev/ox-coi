@@ -94,6 +94,8 @@ const Color messageBoxGrey = Colors.grey;
 final Color messageSentBackground = Colors.blue[50];
 const Color messageReceivedBackground = Colors.white;
 final Color messageTimeForeground = Colors.grey[700];
+const Color messageInfoBackground = Colors.white70;
+final Color messageSetupBackground = Colors.blue[200];
 
 // Mail
 const Color mailMain = Colors.indigo;

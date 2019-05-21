@@ -57,6 +57,7 @@ import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/widgets/placeholder_text.dart';
 
 class UserProfileView extends RootChild {
   UserProfileView(State<StatefulWidget> state) : super(state);
@@ -131,7 +132,7 @@ class _ProfileState extends State<UserProfileView> {
               padding: EdgeInsets.symmetric(vertical: profileSectionsVerticalPadding),
               child: buildAvatar(config),
             ),
-            buildTextOrPlaceHolder(
+            PlaceholderText(
               text: config.username,
               style: hugeText,
               align: TextAlign.center,
@@ -148,7 +149,7 @@ class _ProfileState extends State<UserProfileView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: profileSectionsVerticalPadding),
-              child: buildTextOrPlaceHolder(
+              child: PlaceholderText(
                 text: config.status,
                 align: TextAlign.center,
                 style: defaultText,
@@ -157,11 +158,12 @@ class _ProfileState extends State<UserProfileView> {
                 placeHolderAlign: TextAlign.center,
               ),
             ),
-            buildOutlineButton(
-              context: context,
-              color: accent,
-              child: Text(AppLocalizations.of(context).profileEditButton),
+            OutlineButton(
+              highlightedBorderColor: accent,
+              borderSide: BorderSide(color: accent),
+              textColor: accent,
               onPressed: editUserSettings,
+              child: Text(AppLocalizations.of(context).profileEditButton),
             ),
           ],
         ),

@@ -74,26 +74,39 @@ class _LoginState extends State<Login> {
     hintText: (context) => AppLocalizations.of(context).loginHintEmail,
     textFormType: TextFormType.email,
     inputType: TextInputType.emailAddress,
+    needValidation: true,
+    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).password,
     hintText: (context) => AppLocalizations.of(context).loginHintPassword,
     textFormType: TextFormType.password,
+    needValidation: true,
+    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
   );
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
   ValidatableTextFormField imapServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapServer);
-  ValidatableTextFormField imapPortField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapPort);
+  ValidatableTextFormField imapPortField = ValidatableTextFormField(
+    (context) => AppLocalizations.of(context).loginLabelImapPort,
+    textFormType: TextFormType.port,
+    inputType: TextInputType.number,
+    needValidation: true,
+    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort,
+  );
   ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
   ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
     textFormType: TextFormType.password,
-    needValidation: false,
+    needValidation: true,
+    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
   );
   ValidatableTextFormField smtpServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpServer);
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).loginLabelSmtpPort,
     textFormType: TextFormType.port,
-    inputType: TextInputType.numberWithOptions(),
+    inputType: TextInputType.number,
+    needValidation: true,
+    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort,
   );
 
   String _selectedImapSecurity;

@@ -41,24 +41,19 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_state.dart';
 
-abstract class SettingsSecurityEvent {}
+abstract class SettingsAutocryptState {}
 
-class ExportKeys extends SettingsSecurityEvent {}
+class SettingsAutocryptStateInitial extends SettingsAutocryptState {}
 
-class ImportKeys extends SettingsSecurityEvent {}
+class SettingsAutocryptStateLoading extends SettingsAutocryptState {}
 
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
+class SettingsAutocryptStatePrepared extends SettingsAutocryptState {
+  final String setupCodeStart;
 
-class ActionSuccess extends SettingsSecurityEvent {
-  String setupCode;
-
-  ActionSuccess({this.setupCode});
+  SettingsAutocryptStatePrepared({@required this.setupCodeStart});
 }
 
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
+class SettingsAutocryptStateSuccess extends SettingsAutocryptState {}
 
-  ActionFailed({@required this.error});
-}
+class SettingsAutocryptStateFailure extends SettingsAutocryptState {}

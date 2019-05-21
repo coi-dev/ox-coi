@@ -57,7 +57,11 @@ class SettingsSecurityStateLoading extends SettingsSecurityState {
   SettingsSecurityStateLoading({@required this.type});
 }
 
-class SettingsSecurityStateSuccess extends SettingsSecurityState {}
+class SettingsSecurityStateSuccess extends SettingsSecurityState {
+  String setupCode;
+
+  SettingsSecurityStateSuccess({this.setupCode});
+}
 
 class SettingsSecurityStateFailure extends SettingsSecurityState {
   final SettingsSecurityStateError error;

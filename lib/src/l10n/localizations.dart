@@ -352,7 +352,7 @@ class AppLocalizations {
 
   String get createGroupTextFieldHint => Intl.message('Set a group name', name: 'createGroupTextFieldHint');
 
-  // Contact
+  // Contacts
   String get contactChangeAddTitle => Intl.message('Add Contact', name: 'contactChangeAddTitle');
 
   String get contactChangeAddToast => Intl.message('Contact successfully added', name: 'contactChangeAddToast');
@@ -388,7 +388,7 @@ class AppLocalizations {
 
   String get contactsSearchHint => Intl.message('Search contacts', name: 'contactsSearchHint');
 
-  //BlockedContacts
+  // Blocked contacts
   String get blockedContactsTitle => Intl.message('Blocked contacts', name: 'blockedContactsTitle');
 
   String get unblockDialogTitle => Intl.message('Unblock contact', name: 'unblockDialogTitle');
@@ -432,7 +432,7 @@ class AppLocalizations {
   // Security settings
   String get securitySettingsExportKeys => Intl.message('Export keys', name: 'securitySettingsExportKeys');
 
-  String get securitySettingsExportKeysText => Intl.message('Use this keys to enable another device to use your current security setup', name: 'securitySettingsExportKeysText');
+  String get securitySettingsExportKeysText => Intl.message('This keys enable another device to use your current encryption setup. Keys are saved on your local storage', name: 'securitySettingsExportKeysText');
 
   String securitySettingsExportKeysDialog(path) => Intl.message('Do you want to save your keys in "$path"?', name: 'securitySettingsExportKeysDialog', args: [path]);
 
@@ -440,9 +440,9 @@ class AppLocalizations {
 
   String get securitySettingsImportKeys => Intl.message('Import keys', name: 'securitySettingsImportKeys');
 
-  String get securitySettingsImportKeysText => Intl.message('Load keys from your local storage to change your current security setup', name: 'securitySettingsImportKeysText');
+  String get securitySettingsImportKeysText => Intl.message('Import keys from your local storage to change your current encryption setup', name: 'securitySettingsImportKeysText');
 
-  String securitySettingsImportKeysDialog(path) => Intl.message('Do you want to load your keys from "$path"? If there are no keys in that folder, the operation will fail.', name: 'securitySettingsImportKeysDialog', args: [path]);
+  String securitySettingsImportKeysDialog(path) => Intl.message('Do you want to import your keys from "$path"? If there are no keys present in that folder, the operation will fail.', name: 'securitySettingsImportKeysDialog', args: [path]);
 
   String get securitySettingsImportKeysPerforming => Intl.message('Performing key import', name: 'securitySettingsImportKeysPerforming');
 
@@ -452,13 +452,50 @@ class AppLocalizations {
 
   String get securitySettingsKeyActionFailedNoPermission => Intl.message('Key action failed, missing permissions', name: 'securitySettingsKeyActionFailedNoPermission');
   
+  String get securitySettingsInitiateKeyTransfer => Intl.message('Initiate key transfer', name: 'securitySettingsInitiateKeyTransfer');
+
+  String get securitySettingsInitiateKeyTransferPerforming => Intl.message('Performing key transfer', name: 'securitySettingsInitiateKeyTransferPerforming');
+
+  String get securitySettingsInitiateKeyTransferText => Intl.message('Creates an Autocrypt Setup Message on the server, you can load on other devices to use your current encryption setup.', name: 'securitySettingsInitiateKeyTransferText');
+
+  String get securitySettingsInitiateKeyTransferDialog => Intl.message('An Autocrypt Setup Message securely shares your end-to-end setup with other Autocrypt-compliant apps. '
+      'The setup will be encrypted by a setup code which is displayed here and must be typed on the other device', name: 'securitySettingsInitiateKeyTransferDialog');
+
+  String get securitySettingsInitiateKeyTransferDone => Intl.message('Setup message created', name: 'securitySettingsInitiateKeyTransferDone');
+
+  String securitySettingsInitiateKeyTransferDoneDialog(setupCode) => Intl.message('Your key has been sent to yourself. Switch to the other device and '
+      'open the setup message. You should be prompted for a setup code. '
+      'Type the following digits into the prompt:\n$setupCode\n'
+      'Once you\'re done, your other device will be ready to use Autocrypt.', name: 'securitySettingsInitiateKeyTransferDoneDialog', args: [setupCode]);
+
+  String get securitySettingsInitiateKeyTransferCopy => Intl.message('Copy code', name: 'securitySettingsInitiateKeyTransferCopy');
+
+  String get securitySettingsInitiateKeyTransferCopyDone => Intl.message('Code copied to clipboard', name: 'securitySettingsInitiateKeyTransferCopyDone');
+
+  String get securitySettingsAutocryptMessage => Intl.message('This message is an Autocrypt Setup Message. Tap it to start the import process. You will be guided through the process.', name: 'securitySettingsAutocryptMessage');
+
+  String get securitySettingsAutocryptImport => Intl.message('Import Autocrypt message', name: 'securitySettingsAutocryptImport');
+
+  String get securitySettingsAutocryptImportText => Intl.message('To complete the import of the Autocrypt Setup Message please provide the security code '
+      'shown in a dialog during creation of the message. After entering the code below the Autocrypt settings will be applied to your current encryption setup.', name: 'securitySettingsAutocryptImportText');
+
+  String get securitySettingsAutocryptImportLabel => Intl.message('Autocrypt setup code', name: 'securitySettingsAutocryptImportLabel');
+
+  String get securitySettingsAutocryptImportHint => Intl.message('The code can be entered with or without minus signs', name: 'securitySettingsAutocryptImportHint');
+
+  String securitySettingsAutocryptImportCodeHint(setupCodeStart) => Intl.message('The associated setup code starts with: $setupCodeStart', name: 'securitySettingsAutocryptImportCodeHint', args: [setupCodeStart]);
+
+  String get securitySettingsAutocryptImportSuccess => Intl.message('Autocrypt setup successfully changed', name: 'securitySettingsAutocryptImportSuccess');
+
+  String get securitySettingsAutocryptImportFailed => Intl.message('Autocrypt setup adjustment failed. Please check the entered setup code.', name: 'securitySettingsAutocryptImportFailed');
+
+  // Notifications
+  String get moreMessages => Intl.message('more messages', name: 'moreMessages');
+
   // About
   String get aboutSettingsName => Intl.message('App name', name: 'aboutSettingsName');
 
   String get aboutSettingsVersion => Intl.message('App version', name: 'aboutSettingsVersion');
-  
-  // Notifications
-  String get moreMessages => Intl.message('more messages', name: 'moreMessages');
 
 }
 

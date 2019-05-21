@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 enum TextFormType {
   normal,
@@ -54,11 +54,12 @@ class ValidatableTextFormField extends StatefulWidget {
   final TextFormType textFormType;
   final Function labelText;
   final Function hintText;
-  final bool autoFocus;
   final TextInputType inputType;
-  final TextEditingController controller = TextEditingController();
   final bool needValidation;
+  final Function validationHint;
   final bool enabled;
+  final int maxLines;
+  final TextEditingController controller = TextEditingController();
 
   ValidatableTextFormField(
     this.labelText, {
@@ -66,9 +67,10 @@ class ValidatableTextFormField extends StatefulWidget {
     Key key,
     this.textFormType = TextFormType.normal,
     this.inputType = TextInputType.text,
-    this.autoFocus = false,
-    this.needValidation = true,
+    this.needValidation = false,
+    this.validationHint,
     this.enabled = true,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -76,82 +78,55 @@ class ValidatableTextFormField extends StatefulWidget {
 }
 
 class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
-  bool _passwordIsVisible = false;
+  bool _showReadablePassword = false;
 
   @override
   Widget build(BuildContext context) {
-    return widget.textFormType != TextFormType.password ? buildPasswordTextField() : buildTextField();
-  }
-
-  TextFormField buildPasswordTextField() {
     return TextFormField(
-        autofocus: widget.autoFocus,
-        maxLines: 1,
+        obscureText: widget.textFormType == TextFormType.password && !_showReadablePassword,
+        maxLines: widget.maxLines,
         controller: widget.controller,
         keyboardType: widget.inputType,
         enabled: widget.enabled,
-        validator: (value) {
-          if (widget.needValidation) {
-            if (widget.textFormType == TextFormType.email && !isEmail(value)) {
-              return AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail;
-            } else if (widget.textFormType == TextFormType.port) {
-              if (!isValidPort(value)) {
-                return AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort;
-              }
-            }
-          }
-        },
-        decoration: InputDecoration(
-          labelText: widget.labelText(context),
-          hintText: widget.hintText != null ? widget.hintText(context) : "",
-        ));
+        validator: (value) => _validate(value),
+        decoration: _getInputDecoration());
   }
 
-  TextFormField buildTextField() {
-    return TextFormField(
-        obscureText: !_passwordIsVisible ? true : false,
-        autofocus: false,
-        maxLines: 1,
-        controller: widget.controller,
-        validator: (value) {
-          if (widget.needValidation) {
-            if (value.isEmpty) {
-              return AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword;
-            }
-          }
-        },
-        decoration: InputDecoration(
-          labelText: widget.labelText(context),
-          hintText: widget.hintText != null ? widget.hintText(context) : "",
-          suffixIcon: IconButton(icon: Icon(!_passwordIsVisible ? Icons.visibility_off : Icons.visibility), onPressed: _togglePasswordVisibility),
-        ));
+  InputDecoration _getInputDecoration() {
+    if (widget.textFormType == TextFormType.password) {
+      return InputDecoration(
+        labelText: widget.labelText(context),
+        hintText: widget.hintText != null ? widget.hintText(context) : "",
+        suffixIcon: IconButton(icon: Icon(_showReadablePassword ? Icons.visibility : Icons.visibility_off), onPressed: _togglePasswordVisibility),
+      );
+    } else {
+      return InputDecoration(
+        labelText: widget.labelText(context),
+        hintText: widget.hintText != null ? widget.hintText(context) : "",
+      );
+    }
+  }
+
+  String _validate(String value) {
+    var valid = true;
+    if (widget.needValidation) {
+      if (widget.textFormType == TextFormType.normal) {
+        valid = value.isNotEmpty;
+      } else if (widget.textFormType == TextFormType.email) {
+        valid = isEmail(value);
+      } else if (widget.textFormType == TextFormType.port) {
+        valid = isPort(value);
+      }
+    }
+    if (!valid) {
+      return widget.validationHint(context);
+    }
+    return null;
   }
 
   void _togglePasswordVisibility() {
     setState(() {
-      if (_passwordIsVisible) {
-        _passwordIsVisible = false;
-      } else {
-        _passwordIsVisible = true;
-      }
+      _showReadablePassword = !_showReadablePassword;
     });
-  }
-
-  bool isEmail(String email) {
-    String source =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(source);
-    return regExp.hasMatch(email);
-  }
-
-  bool isValidPort(String portString) {
-    if (portString.isEmpty) {
-      return true;
-    }
-    int port = int.tryParse(portString);
-    if (port == null || port < 1 || port >= 65535) {
-      return false;
-    }
-    return true;
   }
 }
