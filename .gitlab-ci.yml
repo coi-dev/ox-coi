@@ -1,6 +1,5 @@
 before_script:
 - export GRADLE_USER_HOME=`pwd`/.gradle
-- source setup-build-id
 
 cache:
   paths:
@@ -22,7 +21,6 @@ build:
   artifacts:
     paths:
     - build/app/outputs/apk/development/release/*.apk
-    - ./.current-build-id
 
 deploy:
   stage: deploy
@@ -33,9 +31,6 @@ deploy:
   - build
   script:
   - tools/deploy.uploadToHockey.sh
-  artifacts:
-    paths:
-    - ./.current-build-id
 
 status-report-success:
   stage: status-report
