@@ -40,12 +40,10 @@
  * for more details.
  */
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/log/log_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/log/log_manager.dart';
 import 'package:ox_coi/src/login/login.dart';
@@ -55,7 +53,6 @@ import 'package:ox_coi/src/main/main_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 

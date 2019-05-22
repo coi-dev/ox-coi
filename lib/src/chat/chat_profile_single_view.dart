@@ -142,9 +142,9 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
               )
             ),
             InkWell(
-              onTap: () => {
-                Clipboard.setData(ClipboardData(text: email)),
-                showToast(AppLocalizations.of(context).chatProfileClipboardToastMessage)
+              onTap: () {
+                Clipboard.setData(ClipboardData(text: email));
+                showToast(AppLocalizations.of(context).chatProfileClipboardToastMessage);
               },
               child: Text(
                 email,

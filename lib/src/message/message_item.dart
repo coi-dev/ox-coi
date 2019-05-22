@@ -128,6 +128,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   bool get wantKeepAlive => true;
 
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder(
       bloc: _messagesBloc,
       builder: (context, state) {

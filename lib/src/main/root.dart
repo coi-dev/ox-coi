@@ -41,12 +41,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/chatlist/chat_list_parent.dart';
 import 'package:ox_coi/src/contact/contact_list.dart';
-import 'package:ox_coi/src/contact/contact_list_bloc.dart';
-import 'package:ox_coi/src/contact/contact_list_event.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/user/user_profile.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 

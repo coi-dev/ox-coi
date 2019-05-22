@@ -40,9 +40,9 @@
  * for more details.
  */
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 

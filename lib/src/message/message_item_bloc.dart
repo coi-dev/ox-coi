@@ -104,7 +104,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       ContactWrapper contactWrapper;
       if (_addContact) {
         Contact contact = _getContact();
-        int contactId = contact.getId();
+        int contactId = contact.id;
         String contactName = await contact.getName();
         String contactAddress = await contact.getAddress();
         Color contactColor = rgbColorFromInt(await contact.getColor());
