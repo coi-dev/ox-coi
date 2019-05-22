@@ -43,6 +43,10 @@
 import 'package:meta/meta.dart';
 import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 
+enum SettingsSecurityStateError {
+  missingStoragePermission,
+}
+
 abstract class SettingsSecurityState {}
 
 class SettingsSecurityStateInitial extends SettingsSecurityState {}
@@ -56,7 +60,7 @@ class SettingsSecurityStateLoading extends SettingsSecurityState {
 class SettingsSecurityStateSuccess extends SettingsSecurityState {}
 
 class SettingsSecurityStateFailure extends SettingsSecurityState {
-  final String error;
+  final SettingsSecurityStateError error;
 
   SettingsSecurityStateFailure({@required this.error});
 }

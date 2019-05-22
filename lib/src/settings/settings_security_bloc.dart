@@ -47,6 +47,8 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/settings/settings_security_event.dart';
 import 'package:ox_coi/src/settings/settings_security_state.dart';
+import 'package:ox_coi/src/utils/security.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum SettingsSecurityType {
@@ -66,14 +68,18 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
     if (event is ExportKeys) {
       yield SettingsSecurityStateLoading(type: SettingsSecurityType.exportKeys);
       try {
-        _exportImportKeys(SettingsSecurityType.exportKeys);
+        if (await _checkPermissions()) {
+          _exportImportKeys(SettingsSecurityType.exportKeys);
+        }
       } catch (error) {
         yield SettingsSecurityStateFailure(error: error);
       }
     } else if (event is ImportKeys) {
       yield SettingsSecurityStateLoading(type: SettingsSecurityType.importKeys);
       try {
-        _exportImportKeys(SettingsSecurityType.importKeys);
+        if (await _checkPermissions()) {
+          _exportImportKeys(SettingsSecurityType.importKeys);
+        }
       } catch (error) {
         yield SettingsSecurityStateFailure(error: error);
       }
@@ -88,6 +94,14 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   void dispose() {
     _unregisterListeners();
     super.dispose();
+  }
+
+  Future<bool> _checkPermissions() async {
+    bool hasFilesPermission = await hasPermission(PermissionGroup.storage);
+    if (!hasFilesPermission) {
+      dispatch(ActionFailed(error: SettingsSecurityStateError.missingStoragePermission));
+    }
+    return hasFilesPermission;
   }
 
   void _exportImportKeys(SettingsSecurityType type) async {

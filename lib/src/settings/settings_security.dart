@@ -104,10 +104,14 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
         showToast(AppLocalizations.of(context).securitySettingsKeyActionSuccess);
       }
       if (state is SettingsSecurityStateFailure) {
-        if (state.error == null || state.error.isEmpty) {
+        if (state.error == null) {
           showToast(AppLocalizations.of(context).securitySettingsKeyActionFailed);
         } else {
-          showToast(state.error);
+          switch (state.error) {
+            case SettingsSecurityStateError.missingStoragePermission:
+              showToast(AppLocalizations.of(context).securitySettingsKeyActionFailedNoPermission);
+              break;
+          }
         }
       }
     }
@@ -175,7 +179,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       context: context,
       title: title,
       content: text,
-      positiveButton: AppLocalizations.of(context).delete,
+      positiveButton: AppLocalizations.of(context).ok,
       positiveAction: () => _exportImport(type),
       navigatable: Navigatable(navigationType),
     );

@@ -450,11 +450,13 @@ class AppLocalizations {
 
   String get securitySettingsKeyActionFailed => Intl.message('Key action failed', name: 'securitySettingsKeyActionFailed');
 
+  String get securitySettingsKeyActionFailedNoPermission => Intl.message('Key action failed, missing permissions', name: 'securitySettingsKeyActionFailedNoPermission');
+  
   // About
   String get aboutSettingsName => Intl.message('App name', name: 'aboutSettingsName');
 
   String get aboutSettingsVersion => Intl.message('App version', name: 'aboutSettingsVersion');
-
+  
   // Notifications
   String get moreMessages => Intl.message('more messages', name: 'moreMessages');
 

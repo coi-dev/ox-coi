@@ -41,6 +41,7 @@
  */
 
 import 'package:meta/meta.dart';
+import 'package:ox_coi/src/settings/settings_security_state.dart';
 
 abstract class SettingsSecurityEvent {}
 
@@ -51,7 +52,7 @@ class ImportKeys extends SettingsSecurityEvent {}
 class ActionSuccess extends SettingsSecurityEvent {}
 
 class ActionFailed extends SettingsSecurityEvent {
-  final String error;
+  final SettingsSecurityStateError error;
 
   ActionFailed({@required this.error});
 }
