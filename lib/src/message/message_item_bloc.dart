@@ -90,6 +90,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       String text = await message.getText();
       bool hasFile = await message.hasFile();
       int timestamp = await message.getTimestamp();
+      int state = await message.getState();
       AttachmentWrapper attachmentWrapper;
       if (hasFile) {
         attachmentWrapper = AttachmentWrapper(
@@ -119,6 +120,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           messageText: text,
           hasFile: hasFile,
           messageTimestamp: timestamp,
+          state: state,
           attachmentWrapper: attachmentWrapper,
           contactWrapper: contactWrapper,
         );
@@ -128,6 +130,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           messageText: text,
           hasFile: hasFile,
           messageTimestamp: timestamp,
+          state: state,
           attachmentWrapper: attachmentWrapper,
           contactWrapper: contactWrapper,
         );
@@ -161,6 +164,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       ChatMsg.methodMessageGetType,
       ChatMsg.methodMessageGetFileBytes,
       ChatMsg.methodMessageGetFilename,
+      ChatMsg.methodMessageGetState,
     ]);
   }
 

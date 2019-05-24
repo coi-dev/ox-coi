@@ -93,7 +93,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
 
   void _setupMessagesListener() async {
     if (repositoryStreamHandler == null) {
-      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _updateMessages);
+      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead], _updateMessages);
       _messageListRepository.addListener(repositoryStreamHandler);
     }
   }

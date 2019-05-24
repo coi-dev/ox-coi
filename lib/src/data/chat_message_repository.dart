@@ -50,8 +50,19 @@ class ChatMessageRepository extends Repository<ChatMsg> {
   ChatMessageRepository(RepositoryItemCreator<ChatMsg> creator) : super(creator);
 
   @override
-  onData(Event event) {
+  onData(Event event) async{
+    if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead)) {
+      int msgId = event.data2;
+      await setupMessageAfterUpdate(msgId);
+    }
     super.onData(event);
+  }
+
+  Future<void> setupMessageAfterUpdate(int changedMessageId) async{
+    ChatMsg chatMsg = get(changedMessageId);
+    if(chatMsg != null) {
+      await chatMsg.reloadValue(ChatMsg.methodMessageGetState);
+    }
   }
 
   @override

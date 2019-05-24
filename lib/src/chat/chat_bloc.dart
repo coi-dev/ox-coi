@@ -86,6 +86,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
     } else if(event is ChatMarkNoticed){
       _markNoticedChat();
+    }else if(event is ChatMarkMessagesSeen){
+      _markMessagesSeen(event.messageIds);
     }
   }
 
@@ -124,5 +126,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
     Chat chat = chatRepository.get(_chatId);
     chat.setLastUpdate();
+  }
+
+  void _markMessagesSeen(List<int> messageIds) async{
+    Context context = Context();
+    await context.markSeenMessages(messageIds);
   }
 }

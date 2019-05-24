@@ -307,6 +307,7 @@ class _ChatState extends State<Chat> with ChatComposer {
       builder: (context, state) {
         if (state is MessagesStateSuccess) {
           _chatBloc.dispatch(ChatMarkNoticed());
+          _chatBloc.dispatch(ChatMarkMessagesSeen(state.messageIds));
           return new ListView.builder(
             padding: new EdgeInsets.all(listItemPadding),
             reverse: true,

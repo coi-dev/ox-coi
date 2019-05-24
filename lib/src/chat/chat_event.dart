@@ -65,3 +65,9 @@ class ChatLoaded extends ChatEvent {
 }
 
 class ChatMarkNoticed extends ChatEvent {}
+
+class ChatMarkMessagesSeen extends ChatEvent {
+  final List<int> messageIds;
+
+  ChatMarkMessagesSeen(this.messageIds);
+}
