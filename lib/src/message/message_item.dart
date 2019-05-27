@@ -96,7 +96,6 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     msgIds.add(widget._messageId);
     switch (messageAction.messageActionTag) {
       case MessageActionTag.forward:
-        _navigation.pop(context);
         _navigation.push(context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds, messageAction.messageActionTag)));
         break;
       case MessageActionTag.copy:
@@ -104,10 +103,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         Clipboard.setData(clipboardData);
         String clipboardToast = AppLocalizations.of(context).copiedToClipboard;
         showToast(clipboardToast);
-        _navigation.pop(context);
         break;
       case MessageActionTag.delete:
-        _navigation.pop(context);
         break;
     }
   }
@@ -235,22 +232,23 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   void _showMenu() {
     List<MessageAction> actions = _hasFile ? _messageAttachmentActions : _messageActions;
     showMenu(
-        context: context,
-        position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
-        items: actions.map((MessageAction choice) {
-          return PopupMenuItem<MessageAction>(
-              value: choice,
-              child: InkWell(
-                onTap: () => _selectMessageAction(choice),
-                child: Row(
-                  children: <Widget>[
-                    Icon(choice.icon),
-                    Padding(padding: EdgeInsets.only(right: iconTextPadding)),
-                    Text(choice.title),
-                  ],
-                ),
-              ));
-        }).toList());
+      context: context,
+      position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
+      items: actions.map((MessageAction choice) {
+        return PopupMenuItem<MessageAction>(
+          value: choice,
+          child: Row(
+            children: <Widget>[
+              Icon(choice.icon),
+              Padding(padding: EdgeInsets.only(right: iconTextPadding)),
+              Text(choice.title),
+            ],
+          ),
+        );
+      }).toList()
+    ).then((action) {
+        _selectMessageAction(action);
+    });
   }
 
   void _showAutocryptSetup() {
