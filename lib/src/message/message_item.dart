@@ -236,15 +236,16 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
       items: actions.map((MessageAction choice) {
         return PopupMenuItem<MessageAction>(
-          value: choice,
-          child: Row(
-            children: <Widget>[
-              Icon(choice.icon),
-              Padding(padding: EdgeInsets.only(right: iconTextPadding)),
-              Text(choice.title),
-            ],
-          ),
-        );
+            value: choice,
+
+            child:  Row(
+                children: <Widget>[
+                  Icon(choice.icon),
+                  Padding(padding: EdgeInsets.only(right: iconTextPadding)),
+                  Text(choice.title),
+                ],
+              ),
+            );
       }).toList()
     ).then((action) {
         _selectMessageAction(action);
