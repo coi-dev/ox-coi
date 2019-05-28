@@ -65,6 +65,7 @@ enum Type {
   login,
   loginErrorDialog,
   profile,
+  search,
   settings,
   settingsAccount,
   settingsSecurity,

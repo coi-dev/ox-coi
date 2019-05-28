@@ -46,9 +46,11 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event.dart';
 import 'package:ox_coi/src/chatlist/chat_list_state.dart';
+import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
@@ -63,7 +65,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       yield ChatListStateLoading();
       try {
         setupChatListListener();
-        setupChatList();
+        setupChatList(event.query);
       } catch (error) {
         yield ChatListStateFailure(error: error.toString());
       }
@@ -71,6 +73,11 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       yield ChatListStateSuccess(
         chatIds: chatRepository.getAllIds(),
         chatLastUpdateValues: chatRepository.getAllLastUpdateValues(),
+      );
+    } else if (event is ChatListSearched) {
+      yield ChatListStateSuccess(
+        chatIds: event.chatIds,
+        chatLastUpdateValues: event.lastUpdateValues,
       );
     }
   }
@@ -81,18 +88,29 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     super.dispose();
   }
 
-  void setupChatList() async {
+  void setupChatList([String query]) async {
     ChatList chatList = ChatList();
-    await chatList.setup();
+    await chatList.setup(query);
     int chatCount = await chatList.getChatCnt();
     List<int> chatIds = List();
+    Map<int, dynamic> chatSummaries = Map();
     for (int i = 0; i < chatCount; i++) {
       int chatId = await chatList.getChat(i);
       chatIds.add(chatId);
+      var summaryData = await chatList.getChatSummary(i);
+      var chatSummary = ChatSummary.fromMethodChannel(summaryData);
+      chatSummaries.putIfAbsent(chatId, () => chatSummary);
     }
     await chatList.tearDown();
     chatRepository.putIfAbsent(ids: chatIds);
-    dispatch(ChatListModified());
+    chatSummaries.forEach((id, chatSummary) {
+      chatRepository.get(id).set(ChatExtension.chatSummary, chatSummary);
+    });
+    if (isNullOrEmpty(query)) {
+      dispatch(ChatListModified());
+    } else {
+      dispatch(ChatListSearched(chatIds: chatIds, lastUpdateValues: null));
+    }
   }
 
   void setupChatListListener() {

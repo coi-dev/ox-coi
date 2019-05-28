@@ -48,7 +48,6 @@ import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event.dart';
 import 'package:ox_coi/src/contact/contact_list_state.dart';
-import 'package:ox_coi/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -56,24 +55,22 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
-import 'package:ox_coi/src/widgets/search_field.dart';
+import 'package:ox_coi/src/widgets/search.dart';
 
 class ChatCreate extends StatefulWidget {
   @override
   _ChatCreateState createState() => _ChatCreateState();
 }
 
-class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
+class _ChatCreateState extends State<ChatCreate> {
   ContactListBloc _contactListBloc = ContactListBloc();
   Navigation navigation = Navigation();
-  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatCreate);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
-    addSearchListener(_contactListBloc, _searchController);
   }
 
   @override
@@ -87,16 +84,39 @@ class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context).createChatTitle),
+          actions: <Widget>[getSearchAction()],
         ),
-        body: buildForm());
+        body: buildList(true));
   }
 
-  Widget buildForm() {
+  Widget getSearchAction() {
+    Search search = Search(
+      onBuildResults: onBuildResultOrSuggestion,
+      onBuildSuggestion: onBuildResultOrSuggestion,
+      onClose: onSearchClose,
+    );
+    return IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () => search.show(context),
+    );
+  }
+
+  Widget onBuildResultOrSuggestion(String query) {
+    _contactListBloc.dispatch(FilterContacts(query: query));
+    return buildList(false);
+  }
+
+  void onSearchClose() {
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+  }
+
+  Widget buildList(bool showNewContactAndAddGroup) {
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
+          int offset = showNewContactAndAddGroup ? 1 : 0;
+          return buildListItems(showNewContactAndAddGroup, state, offset);
         } else if (state is! ContactListStateFailure) {
           return Center(
             child: CircularProgressIndicator(),
@@ -108,26 +128,57 @@ class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
     );
   }
 
-  Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
+  ListView buildListItems(bool showNewContactAndAddGroup, ContactListStateSuccess state, int offset) {
+    return ListView.builder(
+        padding: showNewContactAndAddGroup ? null : EdgeInsets.only(top: listItemPadding),
+        itemCount: state.contactIds.length + offset,
+        itemBuilder: (BuildContext context, int index) {
+          if (showNewContactAndAddGroup && index == 0) {
+            return buildNewContactAndAddGroup();
+          } else {
+            int adjustedIndex = index - offset;
+            var contactId = state.contactIds[adjustedIndex];
+            var key = "$contactId-${state.contactLastUpdateValues[adjustedIndex]}";
+            return ContactItem(contactId, key, ContactItemType.createChat);
+          }
+        });
+  }
+
+  Column buildNewContactAndAddGroup() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SearchView(
-          controller: _searchController,
+        ListTile(
+          leading: Icon(
+            Icons.person_add,
+            color: accent,
+          ),
+          title: Text(
+            AppLocalizations.of(context).createChatNewContactButtonText,
+            style: createChatTitle,
+          ),
+          onTap: newContactTapped,
         ),
-        Flexible(
-          child: ListView.builder(
-              itemCount: contactIds.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return buildNewContactAddGroup();
-                } else {
-                  int adjustedIndex = index - 1;
-                  var contactId = contactIds[adjustedIndex];
-                  var key = "$contactId-${contactLastUpdateValues[adjustedIndex]}";
-                  return ContactItem(contactId, key, ContactItemType.createChat);
-                }
-              }),
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(),
+            ),
+          ),
+          child: ListTile(
+            leading: Icon(
+              Icons.group_add,
+              color: accent,
+            ),
+            title: Text(
+              AppLocalizations.of(context).createGroupButtonText,
+              style: createChatTitle,
+            ),
+            onTap: createGroupTapped,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: listItemPadding),
         )
       ],
     );
@@ -151,52 +202,6 @@ class _ChatCreateState extends State<ChatCreate> with ContactSearchController {
       MaterialPageRoute(
         builder: (context) => ChatCreateGroupParticipants(),
       ),
-    );
-  }
-
-  Column buildNewContactAddGroup() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Visibility(
-          visible: _searchController.text.isEmpty,
-          child: ListTile(
-            leading: Icon(
-              Icons.person_add,
-              color: accent,
-            ),
-            title: Text(
-              AppLocalizations.of(context).createChatNewContactButtonText,
-              style: createChatTitle,
-            ),
-            onTap: newContactTapped,
-          ),
-        ),
-        Visibility(
-          visible: _searchController.text.isEmpty,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(),
-              ),
-            ),
-            child: ListTile(
-              leading: Icon(
-                Icons.group_add,
-                color: accent,
-              ),
-              title: Text(
-                AppLocalizations.of(context).createGroupButtonText,
-                style: createChatTitle,
-              ),
-              onTap: createGroupTapped,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: listItemPadding),
-        )
-      ],
     );
   }
 }

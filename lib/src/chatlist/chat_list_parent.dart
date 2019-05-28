@@ -45,6 +45,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event.dart';
 import 'package:ox_coi/src/chatlist/chat_list.dart';
+import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
+import 'package:ox_coi/src/chatlist/chat_list_event.dart';
+import 'package:ox_coi/src/chatlist/chat_list_state.dart';
 import 'package:ox_coi/src/chatlist/invite_list.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/main/root_child.dart';
@@ -56,6 +59,9 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 
 class ChatListParent extends RootChild {
   final Navigation navigation = Navigation();
@@ -65,7 +71,7 @@ class ChatListParent extends RootChild {
   @override
   _ChatListViewState createState() {
     final state = _ChatListViewState();
-    setActions([]);
+    setActions([state.getSearchAction()]);
     return state;
   }
 
@@ -114,6 +120,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
   bool _isMultiSelect = false;
   MessageListBloc _messagesBloc = MessageListBloc();
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
+  ChatListBloc _chatListBloc = ChatListBloc();
   List<int> _selectedChats;
 
   @override
@@ -240,4 +247,58 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
   _cancelMultiSelect() {
     _switchMultiSelect(null);
   }
+
+  Widget getSearchAction() {
+    Search search = Search(
+      onBuildResults: onBuildResultOrSuggestion,
+      onBuildSuggestion: onBuildResultOrSuggestion,
+    );
+    return IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () => search.show(context),
+    );
+  }
+
+  Widget onBuildResultOrSuggestion(String query) {
+    _chatListBloc.dispatch(RequestChatList(query: query));
+    return buildSearchResults();
+  }
+
+  Widget buildSearchResults() {
+    return BlocBuilder(
+      bloc: _chatListBloc,
+      builder: (context, state) {
+        if (state is ChatListStateSuccess) {
+          if (state.chatIds.length > 0) {
+            return buildListItems(state);
+          } else {
+            return Center(
+              child: Text(AppLocalizations
+                  .of(context)
+                  .chatListEmpty),
+            );
+          }
+        } else if (state is! ChatListStateFailure) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Icon(Icons.error);
+        }
+      },
+    );
+  }
+
+  ListView buildListItems(ChatListStateSuccess state) {
+    return ListView.builder(
+      padding: EdgeInsets.only(top: listItemPadding),
+      itemCount: state.chatIds.length,
+      itemBuilder: (BuildContext context, int index) {
+        var chatId = state.chatIds[index];
+        var key = createKeyString(chatId, 1);
+        return ChatListItem(chatId, null, null, false, false, key);
+      },
+    );
+  }
+
 }

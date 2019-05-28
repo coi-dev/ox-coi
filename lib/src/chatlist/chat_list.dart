@@ -50,6 +50,7 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/widgets.dart';
 
 class ChatList extends StatefulWidget {
   final void Function(int) _switchMultiSelect;
@@ -72,7 +73,7 @@ class _ChatListState extends State<ChatList> {
     _navigation.current = Navigatable(Type.chatList);
     _chatListBloc.dispatch(RequestChatList());
   }
-  
+
   @override
   void dispose() {
     _chatListBloc.dispose();
@@ -86,10 +87,12 @@ class _ChatListState extends State<ChatList> {
       builder: (context, state) {
         if (state is ChatListStateSuccess) {
           if (state.chatIds.length > 0) {
-            return buildListViewItems(state.chatIds, state.chatLastUpdateValues);
+            return buildListItems(state);
           } else {
             return Center(
-              child: Text(AppLocalizations.of(context).chatListEmpty),
+              child: Text(AppLocalizations
+                  .of(context)
+                  .chatListEmpty),
             );
           }
         } else if (state is! ChatListStateFailure) {
@@ -103,13 +106,13 @@ class _ChatListState extends State<ChatList> {
     );
   }
 
-  Widget buildListViewItems(List<int> chatIds, List<int> chatLastUpdateValues) {
+  ListView buildListItems(ChatListStateSuccess state) {
     return ListView.builder(
       padding: EdgeInsets.only(top: listItemPadding),
-      itemCount: chatIds.length,
+      itemCount: state.chatIds.length,
       itemBuilder: (BuildContext context, int index) {
-        var chatId = chatIds[index];
-        var key = "$chatId-${chatLastUpdateValues[index]}";
+        var chatId = state.chatIds[index];
+        var key = createKeyString(chatId, state.chatLastUpdateValues[index]);
         return ChatListItem(chatId, multiSelectItemTapped, switchMultiSelect, widget._isMultiSelect, false, key);
       },
     );

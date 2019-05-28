@@ -47,6 +47,7 @@ import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 mixin ContactItemBuilder {
@@ -59,13 +60,12 @@ mixin ContactItemBuilder {
             padding: EdgeInsets.only(left: listItemPadding),
             child: Chip(
               backgroundColor: Colors.blue[50],
-              label: Text(state.name),
+              label: Text(isNullOrEmpty(state.name) ? state.email : state.name),
               onDeleted: onContactTapped,
               deleteIconColor: primary,
             ),
           );
-        }
-        else {
+        } else {
           return Container();
         }
       },

@@ -40,8 +40,21 @@
  * for more details.
  */
 
+import 'package:meta/meta.dart';
+
 abstract class ChatListEvent {}
 
-class RequestChatList extends ChatListEvent {}
+class RequestChatList extends ChatListEvent {
+  String query;
+
+  RequestChatList({this.query});
+}
 
 class ChatListModified extends ChatListEvent {}
+
+class ChatListSearched extends ChatListEvent {
+  final List<int> chatIds;
+  final List<int> lastUpdateValues;
+
+  ChatListSearched({@required this.chatIds, @required this.lastUpdateValues});
+}

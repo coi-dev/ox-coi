@@ -49,7 +49,6 @@ import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event.dart';
 import 'package:ox_coi/src/contact/contact_list_state.dart';
-import 'package:ox_coi/src/contact/contact_search_controller_mixin.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/main/root_child.dart';
@@ -59,7 +58,7 @@ import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/search_field.dart';
+import 'package:ox_coi/src/widgets/search.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends RootChild {
@@ -70,7 +69,7 @@ class ContactListView extends RootChild {
   @override
   _ContactListState createState() {
     final state = _ContactListState();
-    setActions([state.getImportAction(), state.getBlockedUsersAction()]);
+    setActions([state.getImportAction(), state.getBlockedUsersAction(), state.getSearchAction()]);
     return state;
   }
 
@@ -109,11 +108,10 @@ class ContactListView extends RootChild {
   }
 }
 
-class _ContactListState extends State<ContactListView> with ContactSearchController {
+class _ContactListState extends State<ContactListView> {
   ContactListBloc _contactListBloc = ContactListBloc();
   ContactImportBloc _contactImportBloc = ContactImportBloc();
   Navigation navigation = Navigation();
-  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -121,7 +119,6 @@ class _ContactListState extends State<ContactListView> with ContactSearchControl
     navigation.current = Navigatable(Type.contactList);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
     setupContactImport();
-    addSearchListener(_contactListBloc, _searchController);
   }
 
   setupContactImport() async {
@@ -152,28 +149,23 @@ class _ContactListState extends State<ContactListView> with ContactSearchControl
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SearchView(
-          controller: _searchController,
-        ),
-        Expanded(
-          child: BlocBuilder(
-            bloc: _contactListBloc,
-            builder: (context, state) {
-              if (state is ContactListStateSuccess) {
-                return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
-              } else if (state is! ContactListStateFailure) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return Icon(Icons.error);
-              }
-            },
-          ),
-        ),
-      ],
+    return buildList();
+  }
+
+  Widget buildList() {
+    return BlocBuilder(
+      bloc: _contactListBloc,
+      builder: (context, state) {
+        if (state is ContactListStateSuccess) {
+          return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
+        } else if (state is! ContactListStateFailure) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Icon(Icons.error);
+        }
+      },
     );
   }
 
@@ -189,6 +181,27 @@ class _ContactListState extends State<ContactListView> with ContactSearchControl
       icon: Icon(Icons.block),
       onPressed: () => _showBlockedUserList(context),
     );
+  }
+
+  Widget getSearchAction() {
+    Search search = Search(
+      onBuildResults: onBuildResultOrSuggestion,
+      onBuildSuggestion: onBuildResultOrSuggestion,
+      onClose: onSearchClose,
+    );
+    return IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () => search.show(context),
+    );
+  }
+
+  Widget onBuildResultOrSuggestion(String query) {
+    _contactListBloc.dispatch(FilterContacts(query: query));
+    return buildList();
+  }
+
+  void onSearchClose() {
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
   }
 
   _showBlockedUserList(BuildContext context) {

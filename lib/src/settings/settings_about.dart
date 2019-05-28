@@ -48,7 +48,7 @@ import 'package:ox_coi/src/settings/settings_about_event.dart';
 import 'package:ox_coi/src/settings/settings_about_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/widgets/UrlTextSpan.dart';
+import 'package:ox_coi/src/widgets/url_text_span.dart';
 
 class SettingsAbout extends StatefulWidget {
   @override

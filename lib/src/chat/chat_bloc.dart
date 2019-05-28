@@ -94,18 +94,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   void _setupChat() async {
     Context context = Context();
     Chat chat = chatRepository.get(_chatId);
-    ChatList chatList = ChatList();
-    await chatList.setup();
-    int chatCount = await chatList.getChatCnt();
-    for (int i = 0; i < chatCount; i++) {
-      int chatId = await chatList.getChat(i);
-      if(chatId == _chatId) {
-        var summaryData = await chatList.getChatSummary(i);
-        var chatSummary = ChatSummary.fromMethodChannel(summaryData);
-        chat.set(ChatExtension.chatSummary, chatSummary);
-      }
-    }
-    await chatList.tearDown();
     String name = await chat.getName();
     String subTitle = await chat.getSubtitle();
     int colorValue = await chat.getColor();

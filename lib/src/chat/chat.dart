@@ -309,22 +309,26 @@ class _ChatState extends State<Chat> with ChatComposer {
         if (state is MessagesStateSuccess) {
           _chatBloc.dispatch(ChatMarkNoticed());
           _chatBloc.dispatch(ChatMarkMessagesSeen(state.messageIds));
-          return new ListView.builder(
-            padding: new EdgeInsets.all(listItemPadding),
-            reverse: true,
-            itemCount: state.messageIds.length,
-            itemBuilder: (BuildContext context, int index) {
-              int messageId = state.messageIds[index];
-              bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-              var key = "$messageId-${state.messageLastUpdateValues[index]}";
-              return ChatMessageItem(widget._chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
-            },
-          );
+          return buildListItems(state);
         } else {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
+      },
+    );
+  }
+
+  ListView buildListItems(MessagesStateSuccess state) {
+    return ListView.builder(
+      padding: new EdgeInsets.all(listItemPadding),
+      reverse: true,
+      itemCount: state.messageIds.length,
+      itemBuilder: (BuildContext context, int index) {
+        int messageId = state.messageIds[index];
+        bool hasDateMarker = state.dateMarkerIds.contains(messageId);
+        var key = "$messageId-${state.messageLastUpdateValues[index]}";
+        return ChatMessageItem(widget._chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
       },
     );
   }

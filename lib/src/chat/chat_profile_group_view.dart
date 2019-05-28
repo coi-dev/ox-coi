@@ -147,17 +147,8 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
             children: <Widget>[
               Text(AppLocalizations.of(context).chatProfileGroupMemberCounter(state.contactIds.length)),
               Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(top: listItemPadding),
-                  itemCount: state.contactIds.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var contactId = state.contactIds[index];
-                    var key = "$contactId-${state.contactLastUpdateValues[index]}";
-                    return ChatProfileGroupContactItem(contactId, key);
-                  })
-              )
+                child: buildListItems(state),
+              ),
             ],
           );
         } else {
@@ -165,6 +156,19 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
         }
       }
     );
+  }
+
+  ListView buildListItems(ContactListStateSuccess state) {
+    return ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.only(top: listItemPadding),
+                itemCount: state.contactIds.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var contactId = state.contactIds[index];
+                  var key = "$contactId-${state.contactLastUpdateValues[index]}";
+                  return ChatProfileGroupContactItem(contactId, key);
+                });
   }
 
   _showLeaveGroupDialog() {

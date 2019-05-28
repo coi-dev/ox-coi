@@ -47,6 +47,7 @@ import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/message/message_action.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event.dart';
@@ -82,7 +83,9 @@ class _ShareScreenState extends State<ShareScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget._messageActionTag == MessageActionTag.forward ? Text(AppLocalizations.of(context).forward) : Text(AppLocalizations.of(context).share),
+        title: widget._messageActionTag == MessageActionTag.forward
+            ? Text(AppLocalizations.of(context).forward)
+            : Text(AppLocalizations.of(context).share),
       ),
       body: _buildShareList(),
     );
@@ -96,7 +99,7 @@ class _ShareScreenState extends State<ShareScreen> {
           if (state.chatAndContactIds.length > 0) {
             return buildListView(state);
           }
-        }else if(state is ShareStateLoading){
+        } else if (state is ShareStateLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -112,18 +115,18 @@ class _ShareScreenState extends State<ShareScreen> {
       padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.chatAndContactIds.length,
       itemBuilder: (BuildContext context, int index) {
-        if(state.chatIdCount > 0 && index < state.chatIdCount){
+        if (state.chatIdCount > 0 && index < state.chatIdCount) {
           var chatId = state.chatAndContactIds[index];
-          if(index == 0){
+          if (index == 0) {
             return createChatItemWithHeader(chatId);
-          }else {
+          } else {
             return ChatListItem(chatId, chatItemTapped, null, false, true, chatId.toString());
           }
-        }else if(state.contactIdCount > 0 && index >= state.chatIdCount){
+        } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
           var contactId = state.chatAndContactIds[index];
-          if(index == state.chatIdCount){
+          if (index == state.chatIdCount) {
             return createContactItemWithHeader(contactId);
-          }else {
+          } else {
             return ContactItem(contactId, contactId.toString(), ContactItemType.forward, chatItemTapped);
           }
         }
@@ -134,14 +137,20 @@ class _ShareScreenState extends State<ShareScreen> {
   chatItemTapped(int chatId) {
     Navigation navigation = Navigation();
     _shareBloc.dispatch(ForwardMessages(chatId, widget._msgIds));
-    navigation.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Chat(chatId)), ModalRoute.withName(Navigation.root));
+    navigation.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Chat(chatId)),
+      ModalRoute.withName(Navigation.root),
+      Navigatable(Type.chat, params: [chatId]),
+    );
   }
 
   Widget createChatItemWithHeader(int chatId) {
     return Container(
       child: Column(
         children: <Widget>[
-            Text(AppLocalizations.of(context).chats,
+          Text(
+            AppLocalizations.of(context).chats,
             style: Theme.of(context).textTheme.headline,
           ),
           ChatListItem(chatId, chatItemTapped, null, false, true, chatId.toString()),

@@ -52,6 +52,12 @@ class RequestContacts extends ContactListEvent {
 
 class ContactsChanged extends ContactListEvent {}
 
+class ContactsSelectionChanged extends ContactListEvent {
+  final int id;
+
+  ContactsSelectionChanged({@required this.id});
+}
+
 class BlockedContactsChanged extends ContactListEvent {}
 
 class FilterContacts extends ContactListEvent {

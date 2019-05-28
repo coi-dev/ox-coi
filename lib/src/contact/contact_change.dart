@@ -136,6 +136,7 @@ class _ContactChangeState extends State<ContactChange> {
             context,
             MaterialPageRoute(builder: (context) => Chat(chatId)),
             ModalRoute.withName(Navigation.root),
+            Navigatable(Type.contactList),
           );
         }
       }

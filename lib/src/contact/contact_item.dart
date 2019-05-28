@@ -136,9 +136,11 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
       if(widget.contactItemType == ContactItemType.forward){
         widget._onTap(chatId);
       }else {
-        navigation.pushReplacement(
+        navigation.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Chat(state.chatId)),
+          ModalRoute.withName(Navigation.root),
+          Navigatable(Type.chatList),
         );
       }
     }

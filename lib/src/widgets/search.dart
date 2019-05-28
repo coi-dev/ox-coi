@@ -40,20 +40,69 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/contact/contact_list_bloc.dart';
-import 'package:ox_coi/src/contact/contact_list_event.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 
-mixin ContactSearchController {
-  void addSearchListener(ContactListBloc contactListBloc, TextEditingController controller) {
-    controller.addListener(() {
-      var query = controller.text;
-      if (query.isEmpty) {
-        contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
-      } else {
-        contactListBloc.dispatch(FilterContacts(query: query));
+class Search extends SearchDelegate {
+  final Function onBuildResults;
+  final Function onBuildSuggestion;
+  final Function onClose;
+  final Function onStart;
+  final Navigation _navigation = Navigation();
+
+  Search({@required this.onBuildResults, @required this.onBuildSuggestion, this.onClose, this.onStart});
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = "";
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, query);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return onBuildResults(query);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return onBuildSuggestion(query);
+  }
+
+  show(BuildContext context) {
+    if (onStart != null) {
+      onStart();
+    }
+    Navigatable previousNavigatable = _navigation.current;
+    _navigation.current = Navigatable(Type.search);
+    showSearch(
+      context: context,
+      delegate: this,
+    ).then((value) {
+      _navigation.current = previousNavigatable;
+      if (onClose != null) {
+        onClose();
       }
     });
+  }
+
+  bool isSearchActive() {
+    return query.isNotEmpty;
   }
 }

@@ -110,17 +110,17 @@ class Navigation {
     });
   }
 
-  void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate) {
+  void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate, Navigatable newParent) {
     _logger.info("Push and pop multiple");
-    Navigatable savedNavigatable = _navigationStack.last;
     Navigator.pushAndRemoveUntil(context, newRoute, predicate).then((value) {
-      current = savedNavigatable;
+      current = newParent;
     });
   }
 
   void pushReplacement(BuildContext context, Route newRoute) {
     _logger.info("Push and replace");
-    Navigatable savedNavigatable = _navigationStack.last;
+    var previousIndex = _navigationStack.length - 2;
+    Navigatable savedNavigatable = _navigationStack.elementAt(previousIndex);
     Navigator.pushReplacement(context, newRoute).then((value) {
       current = savedNavigatable;
     });

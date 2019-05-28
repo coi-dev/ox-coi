@@ -42,6 +42,10 @@
 
 import 'package:flutter/material.dart';
 
+String createKeyString(int id, int lastUpdateValue) {
+  return "$id-$lastUpdateValue";
+}
+
 Key createKey(var value) {
   if (value is String) {
     return Key(value);

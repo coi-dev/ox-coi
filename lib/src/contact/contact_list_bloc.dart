@@ -50,11 +50,18 @@ import 'package:ox_coi/src/data/contact_repository_updater.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
-class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater{
+class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater {
   Repository<Contact> contactRepository;
   RepositoryEventStreamHandler repositoryStreamHandler;
   int _listTypeOrChatId;
+  List<int> _contactsSelected = List();
+  String _currentSearch;
+
+  int get contactsSelectedCount => _contactsSelected.length;
+
+  List<int> get contactsSelected => _contactsSelected;
 
   @override
   ContactListState get initialState => ContactListStateInitial();
@@ -64,6 +71,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     if (event is RequestContacts) {
       yield ContactListStateLoading();
       try {
+        _currentSearch = null;
         _listTypeOrChatId = event.listTypeOrChatId;
         contactRepository = RepositoryManager.get(RepositoryType.contact, _listTypeOrChatId);
         _setupContactListener();
@@ -72,11 +80,22 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
         yield ContactListStateFailure(error: error.toString());
       }
     } else if (event is ContactsChanged) {
-      yield ContactListStateSuccess(contactIds: contactRepository.getAllIds(), contactLastUpdateValues: contactRepository.getAllLastUpdateValues());
+      yield ContactListStateSuccess(
+        contactIds: contactRepository.getAllIds(),
+        contactLastUpdateValues: contactRepository.getAllLastUpdateValues(),
+        contactsSelected: _contactsSelected,
+      );
     } else if (event is FilterContacts) {
-      filterContacts(event.query);
+      _currentSearch = event.query;
+      _filterContacts();
     } else if (event is ContactsFiltered) {
-      yield ContactListStateSuccess(contactIds: event.ids, contactLastUpdateValues: event.lastUpdates);
+      yield ContactListStateSuccess(
+        contactIds: event.ids,
+        contactLastUpdateValues: event.lastUpdates,
+        contactsSelected: _contactsSelected,
+      );
+    } else if (event is ContactsSelectionChanged) {
+      _selectionChanged(event.id);
     }
   }
 
@@ -91,23 +110,36 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     contactRepository.addListener(repositoryStreamHandler);
   }
 
-  void _dispatchContactsChanged() async {
+  void _dispatchContactsChanged()  {
     dispatch(ContactsChanged());
   }
 
   Future _setupContacts() async {
     List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
     contactRepository.putIfAbsent(ids: contactIds);
-    dispatch(ContactsChanged());
+    _dispatchContactsChanged();
   }
 
-  void filterContacts(String query) async {
+  void _filterContacts() async {
     Context context = Context();
-    List<int> contactIds = List.from(await context.getContacts(2, query));
+    List<int> contactIds = List.from(await context.getContacts(2, _currentSearch));
     List<int> lastUpdates = List();
     contactIds.forEach((contactId) {
       lastUpdates.add(contactRepository.get(contactId).lastUpdate);
     });
     dispatch(ContactsFiltered(ids: contactIds, lastUpdates: lastUpdates));
+  }
+
+  void _selectionChanged(int id) {
+    if (_contactsSelected.contains(id)) {
+      _contactsSelected.remove(id);
+    } else {
+      _contactsSelected.add(id);
+    }
+    if (isNullOrEmpty(_currentSearch)) {
+      _dispatchContactsChanged();
+    } else {
+      _filterContacts();
+    }
   }
 }

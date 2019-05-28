@@ -161,15 +161,21 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
           ),
         ),
         Flexible(
-            child: ListView.builder(
-                padding: EdgeInsets.all(listItemPadding),
-                itemCount: contactIds.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var contactId = contactIds[index];
-                  return ContactItem(contactId, contactId.toString());
-                }))
+          child: buildListItems(contactIds),
+        ),
       ],
     );
+  }
+
+  ListView buildListItems(List<int> contactIds) {
+    return ListView.builder(
+          padding: EdgeInsets.all(listItemPadding),
+          itemCount: contactIds.length,
+          itemBuilder: (BuildContext context, int index) {
+            var contactId = contactIds[index];
+            return ContactItem(contactId, contactId.toString());
+          },
+        );
   }
 
   _onSubmit() {
@@ -187,6 +193,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
         context,
         MaterialPageRoute(builder: (context) => Chat(state.chatId), settings: RouteSettings(name: "ChatScreen")),
         ModalRoute.withName(Navigation.root),
+        Navigatable(Type.chatList),
       );
     }
   }

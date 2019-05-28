@@ -51,8 +51,9 @@ class ContactListStateLoading extends ContactListState {}
 class ContactListStateSuccess extends ContactListState {
   final List<int> contactIds;
   final List<int> contactLastUpdateValues;
+  final List<int> contactsSelected;
 
-  ContactListStateSuccess({@required this.contactIds, @required this.contactLastUpdateValues});
+  ContactListStateSuccess({@required this.contactIds, @required this.contactLastUpdateValues, @required this.contactsSelected});
 }
 
 class ContactListStateFailure extends ContactListState {

@@ -41,8 +41,8 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
+import 'package:ox_coi/src/data/repository.dart';
 
 class ChatRepository extends Repository<Chat> {
   ChatRepository(RepositoryItemCreator<Chat> creator) : super(creator);
@@ -64,16 +64,16 @@ class ChatRepository extends Repository<Chat> {
     ChatSummary chatSummary;
     for (int i = 0; i < chatCount; i++) {
       int chatId = await chatList.getChat(i);
-      if(changedChatId == chatId){
-        var chatSummary = await chatList.getChatSummary(i);
-        chatSummary = ChatSummary.fromMethodChannel(chatSummary);
+      if (changedChatId == chatId) {
+        var summaryData = await chatList.getChatSummary(i);
+        chatSummary = ChatSummary.fromMethodChannel(summaryData);
       }
       chatIds.add(chatId);
     }
     await chatList.tearDown();
     if (changedChatId != 0 && chatIds.contains(changedChatId)) {
       Chat updatedChat = get(changedChatId);
-      if(chatSummary != null){
+      if (chatSummary != null) {
         updatedChat.set(ChatExtension.chatSummary, chatSummary);
       }
       updatedChat.setLastUpdate();
