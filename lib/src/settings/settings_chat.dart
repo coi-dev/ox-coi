@@ -41,23 +41,25 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/navigation/navigatable.dart';
-import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/settings/settings_chat_bloc.dart';
+import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
-enum SettingsType {
-  account,
-  security,
-  about,
-  chat,
+class SettingsChat extends StatefulWidget {
+  @override
+  _SettingsChatState createState() => _SettingsChatState();
 }
 
-class SettingsView extends StatelessWidget {
-  final Navigation navigation = Navigation();
+class _SettingsChatState extends State<SettingsChat> {
+  SettingsChatBloc _settingsChatBloc = SettingsChatBloc();
 
-  SettingsView() {
-    navigation.current = Navigatable(Type.settings);
+  @override
+  void initState() {
+    super.initState();
+    _settingsChatBloc.dispatch(RequestValues());
   }
 
   @override
@@ -65,64 +67,36 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: contactMain,
-          title: Text(AppLocalizations.of(context).settings),
+          title: Text(AppLocalizations.of(context).security),
         ),
-        body: buildPreferenceList(context));
+        body: _buildPreferenceList(context));
   }
 
-  ListView buildPreferenceList(BuildContext context) {
-    return ListView(
-      children: ListTile.divideTiles(context: context, tiles: [
-        ListTile(
-          leading: Icon(
-            Icons.account_circle,
-            color: primary,
-          ),
-          title: Text(AppLocalizations.of(context).accountSettingsTitle),
-          onTap: () => _onPressed(context, SettingsType.account),
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.security,
-            color: primary,
-          ),
-          title: Text(AppLocalizations.of(context).security),
-          onTap: () => _onPressed(context, SettingsType.security),
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.chat,
-            color: primary,
-          ),
-          title: Text(AppLocalizations.of(context).chat),
-          onTap: () => _onPressed(context, SettingsType.chat),
-        ),
-        ListTile(
-          leading: Icon(
-            Icons.info,
-            color: primary,
-          ),
-          title: Text(AppLocalizations.of(context).about),
-          onTap: () => _onPressed(context, SettingsType.about),
-        ),
-      ]).toList(),
+  Widget _buildPreferenceList(BuildContext context) {
+    return BlocBuilder(
+      bloc: _settingsChatBloc,
+      builder: (context, state) {
+        if (state is SettingsChatStateSuccess) {
+          return ListView(
+            children: ListTile.divideTiles(context: context, tiles: [
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                title: Text(AppLocalizations.of(context).chatSettingsChangeReadReceipts),
+                subtitle: Text(AppLocalizations.of(context).chatSettingsChangeReadReceiptsText),
+                trailing: Switch(value: state.readReceiptsEnabled, onChanged: (value) => _changeReadReceipts()),
+              ),
+            ]).toList(),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
-  void _onPressed(BuildContext context, SettingsType type) {
-    switch (type) {
-      case SettingsType.account:
-        navigation.pushNamed(context, Navigation.settingsAccount);
-        break;
-      case SettingsType.security:
-        navigation.pushNamed(context, Navigation.settingsSecurity);
-        break;
-      case SettingsType.about:
-        navigation.pushNamed(context, Navigation.settingsAbout);
-        break;
-      case SettingsType.chat:
-        navigation.pushNamed(context, Navigation.settingsChat);
-        break;
-    }
+  void _changeReadReceipts() {
+    _settingsChatBloc.dispatch(ChangeReadReceipts());
   }
 }

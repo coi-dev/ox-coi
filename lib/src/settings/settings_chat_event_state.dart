@@ -40,26 +40,36 @@
  * for more details.
  */
 
-import 'dart:ui';
+import 'package:meta/meta.dart';
 
-abstract class ChatEvent {}
+abstract class SettingsChatEvent {}
 
-class RequestChat extends ChatEvent {
-  int chatId;
+class RequestValues extends SettingsChatEvent {}
 
-  RequestChat(this.chatId);
+class ChangeReadReceipts extends SettingsChatEvent {}
+
+class ChatSettingsActionSuccess extends SettingsChatEvent {
+  bool readReceiptsEnabled;
+
+  ChatSettingsActionSuccess({this.readReceiptsEnabled});
 }
 
-class ChatLoaded extends ChatEvent {
-  final String name;
-  final String subTitle;
-  final Color color;
-  final int freshMessageCount;
-  final bool isSelfTalk;
-  final bool isGroupChat;
-  final String preview;
-  final int timestamp;
-  final bool isVerified;
+class ChatSettingsActionFailed extends SettingsChatEvent {
+  final ChatSettingsActionFailed error;
 
-  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp, this.isVerified);
+  ChatSettingsActionFailed({@required this.error});
 }
+
+abstract class SettingsChatState {}
+
+class SettingsChatStateInitial extends SettingsChatState {}
+
+class SettingsChatStateLoading extends SettingsChatState {}
+
+class SettingsChatStateSuccess extends SettingsChatState {
+  bool readReceiptsEnabled;
+
+  SettingsChatStateSuccess({this.readReceiptsEnabled});
+}
+
+class SettingsChatStateFailure extends SettingsChatState {}

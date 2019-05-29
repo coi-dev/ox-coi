@@ -120,7 +120,21 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  _chatListModified() {
+  _chatListModified() async {
+    await _updateSummaries();
     dispatch(ChatListModified());
+  }
+
+  Future<void> _updateSummaries() async {
+    ChatList chatList = ChatList();
+    await chatList.setup();
+    int chatCount = await chatList.getChatCnt();
+    for (int i = 0; i < chatCount; i++) {
+      int chatId = await chatList.getChat(i);
+      var summaryData = await chatList.getChatSummary(i);
+      var chatSummary = ChatSummary.fromMethodChannel(summaryData);
+      chatRepository.get(chatId).set(ChatExtension.chatSummary, chatSummary);
+    }
+    await chatList.tearDown();
   }
 }

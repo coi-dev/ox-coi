@@ -53,6 +53,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 
 class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   Repository<ChatMsg> _messageListRepository;
+  Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
 
   @override
   ChatChangeState get initialState => CreateChatStateInitial();
@@ -75,6 +76,10 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       _deleteChats(event.chatIds);
     } else if (event is LeaveGroupChat) {
       _leaveGroupChat(event.chatId);
+    } else if (event is ChatMarkNoticed) {
+      _markNoticedChat(event.chatId);
+    } else if (event is ChatMarkMessagesSeen) {
+      _markMessagesSeen(event.messageIds);
     }
   }
 
@@ -100,24 +105,22 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
         context.addContactToChat(chatId, contacts[i]);
       }
     }
-    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-    chatRepository.putIfAbsent(id: chatId);
+
+    _chatRepository.putIfAbsent(id: chatId);
     dispatch(ChatCreated(chatId: chatId));
   }
 
   void _deleteChat(int chatId) async {
-    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     Context context = Context();
-    chatRepository.remove(chatId);
+    _chatRepository.remove(chatId);
     await context.deleteChat(chatId);
   }
 
   void _deleteChats(List<int> chatIds) async {
-    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     Context context = Context();
 
     for (int chatId in chatIds) {
-      chatRepository.remove(chatId);
+      _chatRepository.remove(chatId);
       _leaveGroupChat(chatId);
       await context.deleteChat(chatId);
     }
@@ -126,5 +129,20 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   void _leaveGroupChat(int chatId) async {
     Context context = Context();
     await context.removeContactFromChat(chatId, Contact.idSelf);
+  }
+
+  void _markNoticedChat(int chatId) async {
+    Context context = Context();
+    await context.markNoticedChat(chatId);
+    if (!_chatRepository.contains(chatId)) {
+      return;
+    }
+    Chat chat = _chatRepository.get(chatId);
+    chat.setLastUpdate();
+  }
+
+  void _markMessagesSeen(List<int> messageIds) async {
+    Context context = Context();
+    await context.markSeenMessages(messageIds);
   }
 }

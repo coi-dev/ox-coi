@@ -84,10 +84,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         timestamp: event.timestamp,
         isVerified: event.isVerified,
       );
-    } else if(event is ChatMarkNoticed){
-      _markNoticedChat();
-    }else if(event is ChatMarkMessagesSeen){
-      _markMessagesSeen(event.messageIds);
     }
   }
 
@@ -106,18 +102,4 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary.preview, chatSummary.timestamp, isVerified));
   }
 
-  void _markNoticedChat() async {
-    Context context = Context();
-    await context.markNoticedChat(_chatId);
-    if (!chatRepository.contains(_chatId)) {
-      return;
-    }
-    Chat chat = chatRepository.get(_chatId);
-    chat.setLastUpdate();
-  }
-
-  void _markMessagesSeen(List<int> messageIds) async{
-    Context context = Context();
-    await context.markSeenMessages(messageIds);
-  }
 }

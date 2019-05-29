@@ -112,6 +112,12 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
     }
     messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
     _messageListRepository.putIfAbsent(ids: messageIds);
+    await Future.forEach(messageIds, (id) async {
+      ChatMsg message = _messageListRepository.get(id);
+      if (await message.isOutgoing()) {
+        await message.reloadValue(ChatMsg.methodMessageGetState);
+      }
+    });
     dispatch(MessagesLoaded(dateMarkerIds: dateMakerIds));
   }
 

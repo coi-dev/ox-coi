@@ -40,26 +40,50 @@
  * for more details.
  */
 
-import 'dart:ui';
+import 'dart:async';
 
-abstract class ChatEvent {}
+import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 
-class RequestChat extends ChatEvent {
-  int chatId;
-
-  RequestChat(this.chatId);
+enum SettingsChatType {
+  readReceipts,
 }
 
-class ChatLoaded extends ChatEvent {
-  final String name;
-  final String subTitle;
-  final Color color;
-  final int freshMessageCount;
-  final bool isSelfTalk;
-  final bool isGroupChat;
-  final String preview;
-  final int timestamp;
-  final bool isVerified;
+class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
+  @override
+  SettingsChatState get initialState => SettingsChatStateInitial();
 
-  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp, this.isVerified);
+  @override
+  Stream<SettingsChatState> mapEventToState(SettingsChatState currentState, SettingsChatEvent event) async* {
+    if (event is RequestValues) {
+      try {
+        _requestValues();
+      } catch (error) {
+        yield SettingsChatStateFailure();
+      }
+    }
+    else if (event is ChangeReadReceipts) {
+      try {
+        _changeReadReceipts();
+      } catch (error) {
+        yield SettingsChatStateFailure();
+      }
+    } else if (event is ChatSettingsActionSuccess) {
+      yield SettingsChatStateSuccess(readReceiptsEnabled: event.readReceiptsEnabled);
+    }
+  }
+
+  void _requestValues() {
+    Config config = Config();
+    dispatch(ChatSettingsActionSuccess(readReceiptsEnabled: config.mdnsEnabled == 1));
+  }
+
+  void _changeReadReceipts() async {
+    Config config = Config();
+    int enable = config.mdnsEnabled == 1 ? 0 : 1;
+    await config.setValue(Context.configMdnsEnabled, enable);
+    dispatch(ChatSettingsActionSuccess(readReceiptsEnabled: enable == 1));
+  }
 }

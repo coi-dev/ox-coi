@@ -61,6 +61,7 @@ class Config {
   String smtpPort;
   int smtpSecurity;
   int showEmails;
+  int mdnsEnabled;
 
   int get lastUpdate => _lastUpdate;
 
@@ -91,6 +92,7 @@ class Config {
     imapSecurity = getSavedImapSecurityOption(serverFlags);
     smtpSecurity = getSavedSmtpSecurityOption(serverFlags);
     showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
+    mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int);
     setLastUpdate();
   }
 
@@ -152,12 +154,19 @@ class Config {
         if ((value & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
         if ((value & Context.serverFlagsSmtpPlain) != 0) sel = 3;
         smtpSecurity = sel;
+        break;
+      case Context.configShowEmails:
+        showEmails = value;
+        break;
+      case Context.configMdnsEnabled:
+        mdnsEnabled = value;
+        break;
     }
     await _context.setConfigValue(key, value, type);
     setLastUpdate();
   }
 
-  bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails;
+  bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails || key == Context.configMdnsEnabled;
 
   convertEmptyStringToNull(value) {
     if (value == null || (value is String && value.isEmpty)) {

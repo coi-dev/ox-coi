@@ -48,6 +48,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
+import 'package:ox_coi/src/chat/chat_change_bloc.dart';
+import 'package:ox_coi/src/chat/chat_change_event.dart';
 import 'package:ox_coi/src/chat/chat_composer_bloc.dart';
 import 'package:ox_coi/src/chat/chat_composer_event.dart';
 import 'package:ox_coi/src/chat/chat_composer_mixin.dart';
@@ -84,6 +86,7 @@ class _ChatState extends State<Chat> with ChatComposer {
   ChatBloc _chatBloc = ChatBloc();
   MessageListBloc _messagesBloc = MessageListBloc();
   ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
+  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
 
   final TextEditingController _textController = new TextEditingController();
   bool _isComposingText = false;
@@ -101,15 +104,20 @@ class _ChatState extends State<Chat> with ChatComposer {
     super.initState();
     navigation.current = Navigatable(Type.chat, params: [widget._chatId]);
     _chatBloc.dispatch(RequestChat(widget._chatId));
-    _chatBloc.dispatch(ChatMarkNoticed());
     final chatObservable = new Observable<ChatState>(_chatBloc.state);
     chatObservable.listen((state) {
       if (state is ChatStateSuccess) {
         _messagesBloc.dispatch(RequestMessages(widget._chatId));
       }
     });
-    final contactImportObservable = new Observable<ChatComposerState>(_chatComposerBloc.state);
-    contactImportObservable.listen((state) => handleChatComposer(state));
+    final chatComposerObservable = new Observable<ChatComposerState>(_chatComposerBloc.state);
+    chatComposerObservable.listen((state) => handleChatComposer(state));
+    final messagesObservable = new Observable<MessageListState>(_messagesBloc.state);
+    messagesObservable.listen((state) {
+      if (state is MessagesStateSuccess) {
+        _chatChangeBloc.dispatch(ChatMarkMessagesSeen(state.messageIds));
+      }
+    });
   }
 
   void handleChatComposer(ChatComposerState state) {
@@ -307,8 +315,6 @@ class _ChatState extends State<Chat> with ChatComposer {
       bloc: _messagesBloc,
       builder: (context, state) {
         if (state is MessagesStateSuccess) {
-          _chatBloc.dispatch(ChatMarkNoticed());
-          _chatBloc.dispatch(ChatMarkMessagesSeen(state.messageIds));
           return buildListItems(state);
         } else {
           return Center(

@@ -85,3 +85,15 @@ class DeleteChats extends ChatChangeEvent{
 
   DeleteChats({@required this.chatIds});
 }
+
+class ChatMarkNoticed extends ChatChangeEvent {
+  final int chatId;
+
+  ChatMarkNoticed({this.chatId});
+}
+
+class ChatMarkMessagesSeen extends ChatChangeEvent {
+  final List<int> messageIds;
+
+  ChatMarkMessagesSeen(this.messageIds);
+}

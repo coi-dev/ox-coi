@@ -51,7 +51,11 @@ import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum SettingsSecurityType { exportKeys, importKeys, initiateKeyTransfer }
+enum SettingsSecurityType {
+  exportKeys,
+  importKeys,
+  initiateKeyTransfer,
+}
 
 class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityState> {
   PublishSubject<Event> _keyActionSubject = new PublishSubject();

@@ -41,7 +41,6 @@
  */
 
 import 'package:date_format/date_format.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 
 const formatterTime = [HH, ':', nn];
@@ -51,58 +50,57 @@ const formatterTimer = [nn, ':', ss, ':', SSS];
 const formatterDateTimeFile = [yy, '-', mm, '-', dd, '_', HH, '-', nn, '-', ss];
 
 String getTimeFormTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTime);
+  return formatDate(_getDateTimeFromTimestamp(timestamp), formatterTime);
 }
 
-String getDateFormTimestamp(int timestamp, bool longMonth, [bool useWordsWhereApplicable, BuildContext context]) {
-  var date = formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), longMonth ? formatterDateLong : formatterDate);
-  if (useWordsWhereApplicable != null && useWordsWhereApplicable && context != null) {
-    if (_hasSameDate(DateTime.now().millisecondsSinceEpoch, timestamp)) {
-      return "${AppLocalizations.of(context).today} - $date";
-    } else if (_hasSameDate(DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch, timestamp)) {
-      return "${AppLocalizations.of(context).yesterday} - $date";
+DateTime _getDateTimeFromTimestamp(int timestamp) => DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+
+String getDateFromTimestamp(int timestamp, bool longMonth, [bool prependWordsWhereApplicable, AppLocalizations appLocalizations]) {
+  var date = formatDate(_getDateTimeFromTimestamp(timestamp), longMonth ? formatterDateLong : formatterDate);
+  if (prependWordsWhereApplicable != null && prependWordsWhereApplicable && appLocalizations != null) {
+    if (_compareDate(getNowTimestamp(), timestamp) == 0) {
+      return "${appLocalizations.today} - $date";
+    } else if (_compareDate(getYesterdayTimestamp(), timestamp) == 0) {
+      return "${appLocalizations.yesterday} - $date";
     }
   }
   return date;
 }
 
-bool _hasSameDate(int timestampOne, int timestampTwo) {
-  var dateOne = DateTime.fromMillisecondsSinceEpoch(timestampOne);
-  var dateTwo = DateTime.fromMillisecondsSinceEpoch(timestampTwo);
-  return formatDate(dateOne, formatterDate) == formatDate(dateTwo, formatterDate);
+int _compareDate(int timestampOne, int timestampTwo) {
+  var dateOne = _getDateTimeFromTimestamp(timestampOne);
+  var dateOneCompare = DateTime(dateOne.year, dateOne.month, dateOne.day);
+  var dateTwo = _getDateTimeFromTimestamp(timestampTwo);
+  var dateTwoCompare = DateTime(dateTwo.year, dateTwo.month, dateTwo.day);
+  return dateOneCompare.compareTo(dateTwoCompare);
 }
 
 int getNowTimestamp() {
   return DateTime.now().millisecondsSinceEpoch;
 }
 
-String getTimerFormTimestamp(int timestamp) {
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterTimer);
+int getYesterdayTimestamp() {
+  return DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch;
 }
 
-String getChatListTime(BuildContext context, int timestamp) {
-  DateTime chatTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-  DateTime comparingChatDateTime = DateTime(chatTime.year, chatTime.month, chatTime.day);
-  DateTime now = DateTime.now();
-  DateTime nowDate = DateTime(now.year, now.month, now.day);
+String getTimerFromTimestamp(int timestamp) {
+  return formatDate(_getDateTimeFromTimestamp(timestamp), formatterTimer);
+}
 
-  int result = comparingChatDateTime.compareTo(nowDate);
-  if (result == 0) {
+String getChatListTime(AppLocalizations appLocalizations, int timestamp) {
+  if (_compareDate(timestamp, getNowTimestamp()) == 0) {
     return getTimeFormTimestamp(timestamp);
-  } else if (result == -1) {
-    Duration difference = comparingChatDateTime.difference(nowDate);
-    if (difference.inDays == -1) {
-      return AppLocalizations.of(context).yesterday;
-    } else {
-      return formatDate(chatTime, formatterDate);
-    }
+  } else if (_compareDate(getYesterdayTimestamp(), timestamp) == 0) {
+    return appLocalizations.yesterday;
+  } else {
+    return formatDate(_getDateTimeFromTimestamp(timestamp), formatterDate);
   }
-  return getTimeFormTimestamp(timestamp);
 }
 
 String getDateTimeFileFormTimestamp([int timestamp]) {
   if (timestamp == null) {
     timestamp = getNowTimestamp();
   }
-  return formatDate(DateTime.fromMillisecondsSinceEpoch(timestamp), formatterDateTimeFile);
+  return formatDate(_getDateTimeFromTimestamp(timestamp), formatterDateTimeFile);
 }

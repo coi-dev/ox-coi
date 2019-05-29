@@ -157,6 +157,8 @@ class AppLocalizations {
 
   String get feedback => Intl.message('Feedback', name: 'feedback');
 
+  String get chat => Intl.message('Chat', name: 'chat');
+
   // Core
   String get coreChatStatusDefaultValue => "Sent with my Delta Chat Messenger: https://delta.chat";
 
@@ -488,6 +490,11 @@ class AppLocalizations {
   String get securitySettingsAutocryptImportSuccess => Intl.message('Autocrypt setup successfully changed', name: 'securitySettingsAutocryptImportSuccess');
 
   String get securitySettingsAutocryptImportFailed => Intl.message('Autocrypt setup adjustment failed. Please check the entered setup code.', name: 'securitySettingsAutocryptImportFailed');
+
+  // Chat settings
+  String get chatSettingsChangeReadReceipts => Intl.message('Read receipts', name: 'chatSettingsChangeReadReceipts');
+
+  String get chatSettingsChangeReadReceiptsText => Intl.message('Enable sending and requesting of read receipts.', name: 'chatSettingsChangeReadReceiptsText');
 
   // Notifications
   String get moreMessages => Intl.message('more messages', name: 'moreMessages');
