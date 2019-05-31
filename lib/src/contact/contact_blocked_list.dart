@@ -44,8 +44,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
-import 'package:ox_coi/src/contact/contact_list_event.dart';
-import 'package:ox_coi/src/contact/contact_list_state.dart';
+import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';

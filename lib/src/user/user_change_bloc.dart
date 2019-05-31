@@ -45,8 +45,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/config.dart';
-import 'package:ox_coi/src/user/user_change_event.dart';
-import 'package:ox_coi/src/user/user_change_state.dart';
+import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/core.dart';
 
 class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {

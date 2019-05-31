@@ -42,38 +42,27 @@
 
 import 'package:meta/meta.dart';
 
-abstract class ChatComposerEvent {}
+abstract class MessageChangeEvent {}
 
-class StartAudioRecording extends ChatComposerEvent {}
+class DeleteMessage extends MessageChangeEvent {
+  final int chatId;
+  final int messageId;
 
-class UpdateAudioRecording extends ChatComposerEvent {
-  final String timer;
-
-  UpdateAudioRecording({@required this.timer});
+  DeleteMessage(this.chatId, this.messageId);
 }
 
-class StopAudioRecording extends ChatComposerEvent {
-  final bool shouldSend;
+class MessageDeleted extends MessageChangeEvent {}
 
-  StopAudioRecording({@required this.shouldSend});
-}
+abstract class MessageChangeState {}
 
-class AudioRecordingStopped extends ChatComposerEvent {
-  final String audioPath;
-  final bool shouldSend;
+class MessageChangeStateInitial extends MessageChangeState {}
 
-  AudioRecordingStopped({@required this.audioPath, @required this.shouldSend});
-}
+class MessageChangeStateLoading extends MessageChangeState {}
 
-class StartImageOrVideoRecording extends ChatComposerEvent {
-  final bool pickImage;
+class MessageChangeStateSuccess extends MessageChangeState {}
 
-  StartImageOrVideoRecording({@required this.pickImage});
-}
+class MessageChangeStateFailure extends MessageChangeState {
+  final String error;
 
-class StopImageOrVideoRecording extends ChatComposerEvent {
-  final String filePath;
-  final int type;
-
-  StopImageOrVideoRecording({@required this.type, @required this.filePath});
+  MessageChangeStateFailure({@required this.error});
 }

@@ -41,22 +41,54 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/data/config.dart';
 
-abstract class UserState {}
+abstract class ContactListEvent {}
 
-class UserStateInitial extends UserState {}
+class RequestContacts extends ContactListEvent {
+  final int listTypeOrChatId;
 
-class UserStateLoading extends UserState {}
-
-class UserStateSuccess extends UserState {
-  final Config config;
-
-  UserStateSuccess({@required this.config});
+  RequestContacts({@required this.listTypeOrChatId});
 }
 
-class UserStateFailure extends UserState {
+class ContactsChanged extends ContactListEvent {}
+
+class ContactsSelectionChanged extends ContactListEvent {
+  final int id;
+
+  ContactsSelectionChanged({@required this.id});
+}
+
+class BlockedContactsChanged extends ContactListEvent {}
+
+class FilterContacts extends ContactListEvent {
+  final String query;
+
+  FilterContacts({@required this.query});
+}
+
+class ContactsFiltered extends ContactListEvent {
+  final List<int> ids;
+  final List<int> lastUpdates;
+
+  ContactsFiltered({@required this.ids, @required this.lastUpdates});
+}
+
+abstract class ContactListState {}
+
+class ContactListStateInitial extends ContactListState {}
+
+class ContactListStateLoading extends ContactListState {}
+
+class ContactListStateSuccess extends ContactListState {
+  final List<int> contactIds;
+  final List<int> contactLastUpdateValues;
+  final List<int> contactsSelected;
+
+  ContactListStateSuccess({@required this.contactIds, @required this.contactLastUpdateValues, @required this.contactsSelected});
+}
+
+class ContactListStateFailure extends ContactListState {
   final String error;
 
-  UserStateFailure({@required this.error});
+  ContactListStateFailure({@required this.error});
 }

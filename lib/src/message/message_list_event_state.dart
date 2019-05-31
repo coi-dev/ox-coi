@@ -40,74 +40,40 @@
  * for more details.
  */
 
-import 'dart:ui';
-
 import 'package:meta/meta.dart';
 
-abstract class MessageItemState {}
+abstract class MessageListEvent {}
 
-class MessageItemStateInitial extends MessageItemState {}
+class RequestMessages extends MessageListEvent {
+  int chatId;
 
-class MessageItemStateLoading extends MessageItemState {}
-
-class MessageItemStateSuccess extends MessageItemState {
-  final String messageText;
-  final int messageTimestamp;
-  final bool messageIsOutgoing;
-  final bool hasFile;
-  final int state;
-  final bool isSetupMessage;
-  final bool isInfo;
-  final int showPadlock;
-  final ContactWrapper contactWrapper;
-  final AttachmentWrapper attachmentWrapper;
-
-  MessageItemStateSuccess({
-    @required this.messageText,
-    @required this.messageIsOutgoing,
-    @required this.messageTimestamp,
-    @required this.hasFile,
-    @required this.state,
-    @required this.isSetupMessage,
-    @required this.isInfo,
-    @required this.showPadlock,
-    @required this.attachmentWrapper,
-    @required this.contactWrapper,
-  });
+  RequestMessages(this.chatId);
 }
 
-class MessageItemStateFailure extends MessageItemState {
+class UpdateMessages extends MessageListEvent {}
+
+class MessagesLoaded extends MessageListEvent {
+  List<int> dateMarkerIds;
+
+  MessagesLoaded({this.dateMarkerIds});
+}
+
+abstract class MessageListState {}
+
+class MessagesStateInitial extends MessageListState {}
+
+class MessagesStateLoading extends MessageListState {}
+
+class MessagesStateSuccess extends MessageListState {
+  final List<int> messageIds;
+  final List<int> messageLastUpdateValues;
+  final List<int> dateMarkerIds;
+
+  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
+}
+
+class MessagesStateFailure extends MessageListState {
   final String error;
 
-  MessageItemStateFailure({@required this.error});
-}
-
-class ContactWrapper {
-  final int contactId;
-  final String contactName;
-  final String contactAddress;
-  final Color contactColor;
-
-  ContactWrapper({
-    @required this.contactId,
-    @required this.contactName,
-    @required this.contactAddress,
-    @required this.contactColor,
-  });
-}
-
-class AttachmentWrapper {
-  final String filename;
-  final String path;
-  final String mimeType;
-  final int size;
-  final int type;
-
-  AttachmentWrapper({
-    @required this.filename,
-    @required this.path,
-    @required this.mimeType,
-    @required this.size,
-    @required this.type,
-  });
+  MessagesStateFailure({@required this.error});
 }

@@ -40,17 +40,47 @@
  * for more details.
  */
 
-abstract class ContactImportEvent {}
+import 'package:meta/meta.dart';
 
-class MarkContactsAsInitiallyLoaded extends ContactImportEvent {}
+abstract class ShareEvent {}
 
-class PerformImport extends ContactImportEvent {}
+class RequestChatsAndContacts extends ShareEvent {}
 
-class ImportAborted extends ContactImportEvent {}
+class ChatsAndContactsLoaded extends ShareEvent {
+  final List<int> chatAndContactList;
+  final int chatListLength;
+  final int contactListLength;
 
-class ImportPerformed extends ContactImportEvent {
-  final int changedCount;
+  ChatsAndContactsLoaded(this.chatAndContactList, this.chatListLength, this.contactListLength);
+}
 
-  ImportPerformed(this.changedCount);
+class ForwardMessages extends ShareEvent {
+  final int destinationChatId;
+  final List<int> messageIds;
 
+  ForwardMessages(this.destinationChatId, this.messageIds);
+}
+
+abstract class ShareState {}
+
+class ShareStateInitial extends ShareState {}
+
+class ShareStateLoading extends ShareState {}
+
+class ShareStateSuccess extends ShareState {
+  final List<int> chatAndContactIds;
+  final int chatIdCount;
+  final int contactIdCount;
+
+  ShareStateSuccess({
+    @required this.chatAndContactIds,
+    @required this.chatIdCount,
+    @required this.contactIdCount,
+  });
+}
+
+class ShareStateFailure extends ShareState {
+  final String error;
+
+  ShareStateFailure({@required this.error});
 }

@@ -40,27 +40,61 @@
  * for more details.
  */
 
-import 'dart:ui';
-
 import 'package:meta/meta.dart';
+import 'package:ox_coi/src/base/bloc_progress_state.dart';
 
-abstract class ContactItemState {}
+abstract class LoginEvent {}
 
-class ContactItemStateInitial extends ContactItemState {}
-
-class ContactItemStateLoading extends ContactItemState {}
-
-class ContactItemStateSuccess extends ContactItemState {
-  final String name;
+class LoginButtonPressed extends LoginEvent {
   final String email;
-  final Color color;
-  final bool isVerified;
+  final String password;
+  final String imapLogin;
+  final String imapServer;
+  final String imapPort;
+  final int imapSecurity;
+  final String smtpLogin;
+  final String smtpPassword;
+  final String smtpServer;
+  final String smtpPort;
+  final int smtpSecurity;
 
-  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified});
+  LoginButtonPressed(
+      {@required this.email,
+      @required this.password,
+      @required this.imapLogin,
+      @required this.imapServer,
+      @required this.imapPort,
+      @required this.imapSecurity,
+      @required this.smtpLogin,
+      @required this.smtpPassword,
+      @required this.smtpServer,
+      @required this.smtpPort,
+      @required this.smtpSecurity});
 }
 
-class ContactItemStateFailure extends ContactItemState {
+class EditButtonPressed extends LoginEvent {}
+
+class LoginProgress extends LoginEvent {
+  final int progress;
+  final error;
+
+  LoginProgress(this.progress, [this.error]);
+}
+
+abstract class LoginState extends ProgressState {
+  LoginState({progress}) : super(progress: progress);
+}
+
+class LoginStateInitial extends LoginState {}
+
+class LoginStateLoading extends LoginState {
+  LoginStateLoading({@required progress}) : super(progress: progress);
+}
+
+class LoginStateSuccess extends LoginState {}
+
+class LoginStateFailure extends LoginState {
   final String error;
 
-  ContactItemStateFailure({@required this.error});
+  LoginStateFailure({@required this.error});
 }

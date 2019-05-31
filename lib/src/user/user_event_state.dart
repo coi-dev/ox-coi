@@ -41,30 +41,32 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_bloc.dart';
+import 'package:ox_coi/src/data/config.dart';
 
-enum SettingsSecurityStateError {
-  missingStoragePermission,
+abstract class UserEvent {}
+
+class RequestUser extends UserEvent {}
+
+class UserLoaded extends UserEvent {
+  final Config config;
+
+  UserLoaded({@required this.config});
 }
 
-abstract class SettingsSecurityState {}
+abstract class UserState {}
 
-class SettingsSecurityStateInitial extends SettingsSecurityState {}
+class UserStateInitial extends UserState {}
 
-class SettingsSecurityStateLoading extends SettingsSecurityState {
-  final SettingsSecurityType type;
+class UserStateLoading extends UserState {}
 
-  SettingsSecurityStateLoading({@required this.type});
+class UserStateSuccess extends UserState {
+  final Config config;
+
+  UserStateSuccess({@required this.config});
 }
 
-class SettingsSecurityStateSuccess extends SettingsSecurityState {
-  String setupCode;
+class UserStateFailure extends UserState {
+  final String error;
 
-  SettingsSecurityStateSuccess({this.setupCode});
-}
-
-class SettingsSecurityStateFailure extends SettingsSecurityState {
-  final SettingsSecurityStateError error;
-
-  SettingsSecurityStateFailure({@required this.error});
+  UserStateFailure({@required this.error});
 }

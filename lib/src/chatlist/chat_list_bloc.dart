@@ -44,8 +44,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_coi/src/chatlist/chat_list_event.dart';
-import 'package:ox_coi/src/chatlist/chat_list_state.dart';
+import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';

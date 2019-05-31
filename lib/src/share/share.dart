@@ -50,8 +50,7 @@ import 'package:ox_coi/src/message/message_action.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
-import 'package:ox_coi/src/share/share_event.dart';
-import 'package:ox_coi/src/share/share_state.dart';
+import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 
 class ShareScreen extends StatefulWidget {

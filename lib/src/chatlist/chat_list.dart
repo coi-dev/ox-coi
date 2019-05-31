@@ -43,9 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
-import 'package:ox_coi/src/chatlist/chat_list_event.dart';
+import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
-import 'package:ox_coi/src/chatlist/chat_list_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';

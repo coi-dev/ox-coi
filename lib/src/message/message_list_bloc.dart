@@ -47,8 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
-import 'package:ox_coi/src/message/message_list_event.dart';
-import 'package:ox_coi/src/message/message_list_state.dart';
+import 'package:ox_coi/src/message/message_list_event_state.dart';
 
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
   RepositoryMultiEventStreamHandler repositoryStreamHandler;

@@ -46,8 +46,7 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/settings/settings_autocrypt_event.dart';
-import 'package:ox_coi/src/settings/settings_autocrypt_state.dart';
+import 'package:ox_coi/src/settings/settings_autocrypt_event_state.dart';
 
 class SettingsAutocryptBloc extends Bloc<SettingsAutocryptEvent, SettingsAutocryptState> {
   @override

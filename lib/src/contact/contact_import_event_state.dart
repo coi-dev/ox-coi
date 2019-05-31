@@ -42,16 +42,29 @@
 
 import 'package:meta/meta.dart';
 
-abstract class MessageChangeState {}
+abstract class ContactImportEvent {}
 
-class MessageChangeStateInitial extends MessageChangeState {}
+class MarkContactsAsInitiallyLoaded extends ContactImportEvent {}
 
-class MessageChangeStateLoading extends MessageChangeState {}
+class PerformImport extends ContactImportEvent {}
 
-class MessageChangeStateSuccess extends MessageChangeState {}
+class ImportAborted extends ContactImportEvent {}
 
-class MessageChangeStateFailure extends MessageChangeState {
-  final String error;
+class ImportPerformed extends ContactImportEvent {
+  final int changedCount;
 
-  MessageChangeStateFailure({@required this.error});
+  ImportPerformed(this.changedCount);
+
 }
+
+abstract class ContactImportState {}
+
+class ContactsImportInitial extends ContactImportState {}
+
+class ContactsImportSuccess extends ContactImportState {
+  final int changedCount;
+
+  ContactsImportSuccess({@required this.changedCount});
+}
+
+class ContactsImportFailure extends ContactImportState {}

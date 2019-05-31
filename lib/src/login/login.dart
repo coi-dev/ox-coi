@@ -43,8 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
-import 'package:ox_coi/src/login/login_events.dart';
-import 'package:ox_coi/src/login/login_state.dart';
+import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';

@@ -45,10 +45,11 @@ import 'dart:io';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/message/message_item_state.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
+
+import 'message_item_event_state.dart';
 
 mixin MessageBuilder {
   Widget buildTextMessage(String text, String time, bool showPadlock, [int state]) {

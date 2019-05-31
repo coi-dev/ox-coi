@@ -40,25 +40,86 @@
  * for more details.
  */
 
+import 'dart:ui';
+
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/data/config.dart';
 
-abstract class UserChangeState {}
+abstract class MessageItemEvent {}
 
-class UserChangeStateInitial extends UserChangeState {}
+class RequestMessage extends MessageItemEvent {
+  final int chatId;
+  final int messageId;
+  final bool isGroupChat;
 
-class UserChangeStateLoading extends UserChangeState {}
-
-class UserChangeStateSuccess extends UserChangeState {
-  final Config config;
-
-  UserChangeStateSuccess({@required this.config});
+  RequestMessage(this.chatId, this.messageId, this.isGroupChat);
 }
 
-class UserChangeStateFailure extends UserChangeState {
-  String error;
+class MessageLoaded extends MessageItemEvent {}
 
-  UserChangeStateFailure({@required this.error});
+abstract class MessageItemState {}
+
+class MessageItemStateInitial extends MessageItemState {}
+
+class MessageItemStateLoading extends MessageItemState {}
+
+class MessageItemStateSuccess extends MessageItemState {
+  final String messageText;
+  final int messageTimestamp;
+  final bool messageIsOutgoing;
+  final bool hasFile;
+  final int state;
+  final bool isSetupMessage;
+  final bool isInfo;
+  final int showPadlock;
+  final ContactWrapper contactWrapper;
+  final AttachmentWrapper attachmentWrapper;
+
+  MessageItemStateSuccess({
+    @required this.messageText,
+    @required this.messageIsOutgoing,
+    @required this.messageTimestamp,
+    @required this.hasFile,
+    @required this.state,
+    @required this.isSetupMessage,
+    @required this.isInfo,
+    @required this.showPadlock,
+    @required this.attachmentWrapper,
+    @required this.contactWrapper,
+  });
 }
 
-class UserChangeStateApplied extends UserChangeState {}
+class MessageItemStateFailure extends MessageItemState {
+  final String error;
+
+  MessageItemStateFailure({@required this.error});
+}
+
+class ContactWrapper {
+  final int contactId;
+  final String contactName;
+  final String contactAddress;
+  final Color contactColor;
+
+  ContactWrapper({
+    @required this.contactId,
+    @required this.contactName,
+    @required this.contactAddress,
+    @required this.contactColor,
+  });
+}
+
+class AttachmentWrapper {
+  final String filename;
+  final String path;
+  final String mimeType;
+  final int size;
+  final int type;
+
+  AttachmentWrapper({
+    @required this.filename,
+    @required this.path,
+    @required this.mimeType,
+    @required this.size,
+    @required this.type,
+  });
+}

@@ -44,8 +44,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/settings/settings_about_event.dart';
-import 'package:ox_coi/src/settings/settings_about_state.dart';
+import 'package:ox_coi/src/settings/settings_about_event_state.dart';
 
 class SettingsAboutBloc extends Bloc<SettingsAboutEvent, SettingsAboutState> {
   @override

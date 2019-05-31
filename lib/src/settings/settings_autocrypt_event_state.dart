@@ -41,50 +41,45 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/data/config.dart';
 
-abstract class UserChangeEvent {}
+abstract class SettingsAutocryptEvent {}
 
-class RequestUser extends UserChangeEvent {}
+class PrepareKeyTransfer extends SettingsAutocryptEvent {
+  final int chatId;
+  final int messageId;
 
-class UserLoaded extends UserChangeEvent {
-  final Config config;
-
-  UserLoaded({@required this.config});
+  PrepareKeyTransfer({@required this.chatId, @required this.messageId});
 }
 
-class ChangesApplied extends UserChangeEvent {}
+class ContinueKeyTransfer extends SettingsAutocryptEvent {
+  final int messageId;
+  final String setupCode;
 
-class UserPersonalDataChanged extends UserChangeEvent {
-  final String username;
-  final String status;
-  final String avatarPath;
-
-  UserPersonalDataChanged({@required this.username, @required this.status, @required this.avatarPath});
+  ContinueKeyTransfer({@required this.messageId, @required this.setupCode});
 }
 
-class UserAccountDataChanged extends UserChangeEvent {
-  final String imapLogin;
-  final String imapPassword;
-  final String imapServer;
-  final String imapPort;
-  final int imapSecurity;
-  final String smtpLogin;
-  final String smtpPassword;
-  final String smtpServer;
-  final String smtpPort;
-  final int smtpSecurity;
+class KeyTransferPrepared extends SettingsAutocryptEvent {
+  final String setupCodeStart;
 
-  UserAccountDataChanged({
-    @required this.imapLogin,
-    @required this.imapPassword,
-    @required this.imapServer,
-    @required this.imapPort,
-    @required this.imapSecurity,
-    @required this.smtpLogin,
-    @required this.smtpPassword,
-    @required this.smtpServer,
-    @required this.smtpPort,
-    @required this.smtpSecurity,
-  });
+  KeyTransferPrepared({@required this.setupCodeStart});
 }
+
+class KeyTransferDone extends SettingsAutocryptEvent {}
+
+class KeyTransferFailed extends SettingsAutocryptEvent {}
+
+abstract class SettingsAutocryptState {}
+
+class SettingsAutocryptStateInitial extends SettingsAutocryptState {}
+
+class SettingsAutocryptStateLoading extends SettingsAutocryptState {}
+
+class SettingsAutocryptStatePrepared extends SettingsAutocryptState {
+  final String setupCodeStart;
+
+  SettingsAutocryptStatePrepared({@required this.setupCodeStart});
+}
+
+class SettingsAutocryptStateSuccess extends SettingsAutocryptState {}
+
+class SettingsAutocryptStateFailure extends SettingsAutocryptState {}

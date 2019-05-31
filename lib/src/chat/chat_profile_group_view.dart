@@ -43,11 +43,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
-import 'package:ox_coi/src/chat/chat_change_event.dart';
+import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
-import 'package:ox_coi/src/contact/contact_list_event.dart';
-import 'package:ox_coi/src/contact/contact_list_state.dart';
+import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';

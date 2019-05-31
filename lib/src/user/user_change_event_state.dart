@@ -40,18 +40,71 @@
  * for more details.
  */
 
-abstract class MessageListEvent {}
+import 'package:meta/meta.dart';
+import 'package:ox_coi/src/data/config.dart';
 
-class RequestMessages extends MessageListEvent {
-  int chatId;
+abstract class UserChangeEvent {}
 
-  RequestMessages(this.chatId);
+class RequestUser extends UserChangeEvent {}
+
+class UserLoaded extends UserChangeEvent {
+  final Config config;
+
+  UserLoaded({@required this.config});
 }
 
-class UpdateMessages extends MessageListEvent {}
+class ChangesApplied extends UserChangeEvent {}
 
-class MessagesLoaded extends MessageListEvent {
-  List<int> dateMarkerIds;
+class UserPersonalDataChanged extends UserChangeEvent {
+  final String username;
+  final String status;
+  final String avatarPath;
 
-  MessagesLoaded({this.dateMarkerIds});
+  UserPersonalDataChanged({@required this.username, @required this.status, @required this.avatarPath});
 }
+
+class UserAccountDataChanged extends UserChangeEvent {
+  final String imapLogin;
+  final String imapPassword;
+  final String imapServer;
+  final String imapPort;
+  final int imapSecurity;
+  final String smtpLogin;
+  final String smtpPassword;
+  final String smtpServer;
+  final String smtpPort;
+  final int smtpSecurity;
+
+  UserAccountDataChanged({
+    @required this.imapLogin,
+    @required this.imapPassword,
+    @required this.imapServer,
+    @required this.imapPort,
+    @required this.imapSecurity,
+    @required this.smtpLogin,
+    @required this.smtpPassword,
+    @required this.smtpServer,
+    @required this.smtpPort,
+    @required this.smtpSecurity,
+  });
+}
+
+abstract class UserChangeState {}
+
+class UserChangeStateInitial extends UserChangeState {}
+
+class UserChangeStateLoading extends UserChangeState {}
+
+class UserChangeStateSuccess extends UserChangeState {
+  final Config config;
+
+  UserChangeStateSuccess({@required this.config});
+}
+
+class UserChangeStateFailure extends UserChangeState {
+  String error;
+
+  UserChangeStateFailure({@required this.error});
+}
+
+class UserChangeStateApplied extends UserChangeState {}

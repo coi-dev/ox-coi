@@ -42,33 +42,26 @@
 
 import 'package:meta/meta.dart';
 
-abstract class ContactListEvent {}
+abstract class SettingsAboutEvent {}
 
-class RequestContacts extends ContactListEvent {
-  final int listTypeOrChatId;
+class RequestAbout extends SettingsAboutEvent {}
 
-  RequestContacts({@required this.listTypeOrChatId});
+class AboutLoaded extends SettingsAboutEvent {
+  final String name;
+  final String version;
+
+  AboutLoaded({@required this.name, @required this.version});
 }
 
-class ContactsChanged extends ContactListEvent {}
+abstract class SettingsAboutState {}
 
-class ContactsSelectionChanged extends ContactListEvent {
-  final int id;
+class SettingsAboutStateInitial extends SettingsAboutState {}
 
-  ContactsSelectionChanged({@required this.id});
+class SettingsAboutStateSuccess extends SettingsAboutState {
+  final String name;
+  final String version;
+
+  SettingsAboutStateSuccess({@required this.name, @required this.version});
 }
 
-class BlockedContactsChanged extends ContactListEvent {}
-
-class FilterContacts extends ContactListEvent {
-  final String query;
-
-  FilterContacts({@required this.query});
-}
-
-class ContactsFiltered extends ContactListEvent {
-  final List<int> ids;
-  final List<int> lastUpdates;
-
-  ContactsFiltered({@required this.ids, @required this.lastUpdates});
-}
+class SettingsAboutStateFailure extends SettingsAboutState {}

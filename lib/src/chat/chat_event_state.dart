@@ -40,14 +40,61 @@
  * for more details.
  */
 
-abstract class MessageItemEvent {}
+import 'dart:ui';
 
-class RequestMessage extends MessageItemEvent {
-  final int chatId;
-  final int messageId;
-  final bool isGroupChat;
+import 'package:meta/meta.dart';
 
-  RequestMessage(this.chatId, this.messageId, this.isGroupChat);
+abstract class ChatEvent {}
+
+class RequestChat extends ChatEvent {
+  int chatId;
+
+  RequestChat(this.chatId);
 }
 
-class MessageLoaded extends MessageItemEvent {}
+class ChatLoaded extends ChatEvent {
+  final String name;
+  final String subTitle;
+  final Color color;
+  final int freshMessageCount;
+  final bool isSelfTalk;
+  final bool isGroupChat;
+  final String preview;
+  final int timestamp;
+  final bool isVerified;
+
+  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp, this.isVerified);
+}
+
+abstract class ChatState {}
+
+class ChatStateInitial extends ChatState {}
+
+class ChatStateLoading extends ChatState {}
+
+class ChatStateSuccess extends ChatState {
+  final String name;
+  final String subTitle;
+  final Color color;
+  final int freshMessageCount;
+  final bool isSelfTalk;
+  final bool isGroupChat;
+  final String preview;
+  final int timestamp;
+  final bool isVerified;
+
+  ChatStateSuccess(
+    {@required this.name,
+      @required this.subTitle,
+      @required this.color,
+      @required this.freshMessageCount,
+      @required this.isSelfTalk,
+      @required this.isGroupChat,
+      @required this.preview,
+      @required this.timestamp,
+      @required this.isVerified});
+}
+
+class ChatStateFailure extends ChatState {
+  ChatStateFailure({@required error});
+}

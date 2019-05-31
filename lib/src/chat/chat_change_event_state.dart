@@ -40,16 +40,78 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
-abstract class ContactImportState {}
+abstract class ChatChangeEvent {}
 
-class ContactsImportInitial extends ContactImportState {}
+class CreateChat extends ChatChangeEvent {
+  final int contactId;
+  final int messageId;
+  final int chatId;
+  final bool verified;
+  final String name;
+  final List<int> contacts;
 
-class ContactsImportSuccess extends ContactImportState {
-  final int changedCount;
-
-  ContactsImportSuccess({@required this.changedCount});
+  CreateChat({
+    this.contactId,
+    this.messageId,
+    this.chatId,
+    this.verified,
+    this.name,
+    this.contacts,
+  });
 }
 
-class ContactsImportFailure extends ContactImportState {}
+class ChatCreated extends ChatChangeEvent {
+  final int chatId;
+
+  ChatCreated({this.chatId});
+}
+
+class DeleteChat extends ChatChangeEvent{
+  final int chatId;
+
+  DeleteChat({@required this.chatId});
+}
+
+class LeaveGroupChat extends ChatChangeEvent{
+  final int chatId;
+
+  LeaveGroupChat({@required this.chatId});
+}
+
+class DeleteChats extends ChatChangeEvent{
+  final List<int> chatIds;
+
+  DeleteChats({@required this.chatIds});
+}
+
+class ChatMarkNoticed extends ChatChangeEvent {
+  final int chatId;
+
+  ChatMarkNoticed({this.chatId});
+}
+
+class ChatMarkMessagesSeen extends ChatChangeEvent {
+  final List<int> messageIds;
+
+  ChatMarkMessagesSeen(this.messageIds);
+}
+
+abstract class ChatChangeState {}
+
+class CreateChatStateInitial extends ChatChangeState {}
+
+class CreateChatStateLoading extends ChatChangeState {}
+
+class CreateChatStateSuccess extends ChatChangeState {
+  final int chatId;
+
+  CreateChatStateSuccess({@required this.chatId});
+}
+
+class CreateChatStateFailure extends ChatChangeState {
+  final String error;
+
+  CreateChatStateFailure({@required this.error});
+}

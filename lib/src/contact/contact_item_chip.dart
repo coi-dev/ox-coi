@@ -43,7 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
-import 'package:ox_coi/src/contact/contact_item_event.dart';
+import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 

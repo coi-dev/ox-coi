@@ -40,28 +40,71 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+import 'package:ox_coi/src/contact/contact_change.dart';
 
-abstract class ShareState {}
+abstract class ContactChangeEvent {}
 
-class ShareStateInitial extends ShareState {}
+class ChangeContact extends ContactChangeEvent {
+  final String name;
+  final String mail;
+  final ContactAction contactAction;
 
-class ShareStateLoading extends ShareState {}
-
-class ShareStateSuccess extends ShareState {
-  final List<int> chatAndContactIds;
-  final int chatIdCount;
-  final int contactIdCount;
-
-  ShareStateSuccess({
-    @required this.chatAndContactIds,
-    @required this.chatIdCount,
-    @required this.contactIdCount,
-  });
+  ChangeContact(this.name, this.mail, this.contactAction);
 }
 
-class ShareStateFailure extends ShareState {
+class DeleteContact extends ContactChangeEvent {
+  final int id;
+
+  DeleteContact(this.id);
+}
+
+class ContactAdded extends ContactChangeEvent {
+  final int id;
+
+  ContactAdded(this.id);
+}
+
+class ContactEdited extends ContactChangeEvent {}
+
+class ContactDeleted extends ContactChangeEvent {}
+
+class ContactDeleteFailed extends ContactChangeEvent {}
+
+class BlockContact extends ContactChangeEvent {
+  final int id;
+  final int chatId;
+
+  BlockContact(this.id, this.chatId);
+}
+
+class ContactBlocked extends ContactChangeEvent {}
+
+class UnblockContact extends ContactChangeEvent {
+  final int id;
+
+  UnblockContact(this.id);
+}
+
+class ContactUnblocked extends ContactChangeEvent {}
+
+abstract class ContactChangeState {}
+
+class ContactChangeStateInitial extends ContactChangeState {}
+
+class ContactChangeStateLoading extends ContactChangeState {}
+
+class ContactChangeStateSuccess extends ContactChangeState {
+  final bool add;
+  final bool delete;
+  final bool blocked;
+  final int id;
+
+  ContactChangeStateSuccess({@required this.add, @required this.delete, @required this.blocked, @required this.id});
+}
+
+class ContactChangeStateFailure extends ContactChangeState {
   final String error;
 
-  ShareStateFailure({@required this.error});
+  ContactChangeStateFailure({@required this.error});
 }

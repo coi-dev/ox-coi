@@ -48,8 +48,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/message/message_item_event.dart';
-import 'package:ox_coi/src/message/message_item_state.dart';
+import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {

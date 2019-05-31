@@ -39,24 +39,45 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+import 'dart:ui';
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/base/bloc_progress_state.dart';
 
-abstract class LoginState extends ProgressState {
-  LoginState({progress}) : super(progress: progress);
+abstract class ContactItemEvent {}
+
+class RequestContact extends ContactItemEvent {
+  final int contactId;
+  final int listType;
+
+  RequestContact({@required this.contactId, @required this.listType});
 }
 
-class LoginStateInitial extends LoginState {}
+class ContactLoaded extends ContactItemEvent {
+  final String name;
+  final String email;
+  final Color color;
+  final bool isVerified;
 
-class LoginStateLoading extends LoginState {
-  LoginStateLoading({@required progress}) : super(progress: progress);
+  ContactLoaded(this.name, this.email, this.color, this.isVerified);
 }
 
-class LoginStateSuccess extends LoginState {}
+abstract class ContactItemState {}
 
-class LoginStateFailure extends LoginState {
+class ContactItemStateInitial extends ContactItemState {}
+
+class ContactItemStateLoading extends ContactItemState {}
+
+class ContactItemStateSuccess extends ContactItemState {
+  final String name;
+  final String email;
+  final Color color;
+  final bool isVerified;
+
+  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified});
+}
+
+class ContactItemStateFailure extends ContactItemState {
   final String error;
 
-  LoginStateFailure({@required this.error});
+  ContactItemStateFailure({@required this.error});
 }

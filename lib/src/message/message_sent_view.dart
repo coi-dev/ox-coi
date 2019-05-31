@@ -42,10 +42,10 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder_mixin.dart';
-import 'package:ox_coi/src/message/message_item_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'message_item_event_state.dart';
 
 class MessageSent extends StatelessWidget with MessageBuilder {
   final String text;

@@ -40,20 +40,38 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:flutter/widgets.dart';
 
-abstract class SettingsAutocryptState {}
+abstract class MainEvent {}
 
-class SettingsAutocryptStateInitial extends SettingsAutocryptState {}
+class PrepareApp extends MainEvent {
+  BuildContext context;
 
-class SettingsAutocryptStateLoading extends SettingsAutocryptState {}
-
-class SettingsAutocryptStatePrepared extends SettingsAutocryptState {
-  final String setupCodeStart;
-
-  SettingsAutocryptStatePrepared({@required this.setupCodeStart});
+  PrepareApp({@required this.context});
 }
 
-class SettingsAutocryptStateSuccess extends SettingsAutocryptState {}
+class LoadApp extends MainEvent {}
 
-class SettingsAutocryptStateFailure extends SettingsAutocryptState {}
+class AppLoaded extends MainEvent {
+  bool configured;
+
+  AppLoaded({@required this.configured});
+}
+
+abstract class MainState {}
+
+class MainStateInitial extends MainState {}
+
+class MainStateLoading extends MainState {}
+
+class MainStateSuccess extends MainState {
+  bool configured;
+
+  MainStateSuccess({@required this.configured});
+}
+
+class MainStateFailure extends MainState {
+  String error;
+
+  MainStateFailure({@required error});
+}

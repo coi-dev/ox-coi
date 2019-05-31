@@ -40,26 +40,29 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
-abstract class ChatListState {}
+abstract class MessageAttachmentEvent {}
 
-class ChatListStateInitial extends ChatListState {}
+class RequestAttachment extends MessageAttachmentEvent {
+  final int chatId;
+  final int messageId;
 
-class ChatListStateLoading extends ChatListState {}
-
-class ChatListStateSuccess extends ChatListState {
-  final List<int> chatIds;
-  final List<int> chatLastUpdateValues;
-
-  ChatListStateSuccess({
-    @required this.chatIds,
-    @required this.chatLastUpdateValues,
-  });
+  RequestAttachment(this.chatId, this.messageId);
 }
 
-class ChatListStateFailure extends ChatListState {
+class AttachmentLoaded extends MessageAttachmentEvent {}
+
+abstract class MessageAttachmentState {}
+
+class MessageAttachmentStateInitial extends MessageAttachmentState {}
+
+class MessageAttachmentStateLoading extends MessageAttachmentState {}
+
+class MessageAttachmentStateSuccess extends MessageAttachmentState {}
+
+class MessageAttachmentStateFailure extends MessageAttachmentState {
   final String error;
 
-  ChatListStateFailure({@required this.error});
+  MessageAttachmentStateFailure({@required this.error});
 }

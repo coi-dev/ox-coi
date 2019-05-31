@@ -40,26 +40,51 @@
  * for more details.
  */
 
-import 'dart:ui';
+import 'package:meta/meta.dart';
+import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 
-abstract class ChatEvent {}
+abstract class SettingsSecurityEvent {}
 
-class RequestChat extends ChatEvent {
-  int chatId;
+class ExportKeys extends SettingsSecurityEvent {}
 
-  RequestChat(this.chatId);
+class ImportKeys extends SettingsSecurityEvent {}
+
+class InitiateKeyTransfer extends SettingsSecurityEvent {}
+
+class ActionSuccess extends SettingsSecurityEvent {
+  String setupCode;
+
+  ActionSuccess({this.setupCode});
 }
 
-class ChatLoaded extends ChatEvent {
-  final String name;
-  final String subTitle;
-  final Color color;
-  final int freshMessageCount;
-  final bool isSelfTalk;
-  final bool isGroupChat;
-  final String preview;
-  final int timestamp;
-  final bool isVerified;
+class ActionFailed extends SettingsSecurityEvent {
+  final SettingsSecurityStateError error;
 
-  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp, this.isVerified);
+  ActionFailed({@required this.error});
+}
+
+enum SettingsSecurityStateError {
+  missingStoragePermission,
+}
+
+abstract class SettingsSecurityState {}
+
+class SettingsSecurityStateInitial extends SettingsSecurityState {}
+
+class SettingsSecurityStateLoading extends SettingsSecurityState {
+  final SettingsSecurityType type;
+
+  SettingsSecurityStateLoading({@required this.type});
+}
+
+class SettingsSecurityStateSuccess extends SettingsSecurityState {
+  String setupCode;
+
+  SettingsSecurityStateSuccess({this.setupCode});
+}
+
+class SettingsSecurityStateFailure extends SettingsSecurityState {
+  final SettingsSecurityStateError error;
+
+  SettingsSecurityStateFailure({@required this.error});
 }

@@ -41,24 +41,74 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_state.dart';
 
-abstract class SettingsSecurityEvent {}
+abstract class ChatComposerEvent {}
 
-class ExportKeys extends SettingsSecurityEvent {}
+class StartAudioRecording extends ChatComposerEvent {}
 
-class ImportKeys extends SettingsSecurityEvent {}
+class UpdateAudioRecording extends ChatComposerEvent {
+  final String timer;
 
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
-
-class ActionSuccess extends SettingsSecurityEvent {
-  String setupCode;
-
-  ActionSuccess({this.setupCode});
+  UpdateAudioRecording({@required this.timer});
 }
 
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
+class StopAudioRecording extends ChatComposerEvent {
+  final bool shouldSend;
 
-  ActionFailed({@required this.error});
+  StopAudioRecording({@required this.shouldSend});
+}
+
+class AudioRecordingStopped extends ChatComposerEvent {
+  final String audioPath;
+  final bool shouldSend;
+
+  AudioRecordingStopped({@required this.audioPath, @required this.shouldSend});
+}
+
+class StartImageOrVideoRecording extends ChatComposerEvent {
+  final bool pickImage;
+
+  StartImageOrVideoRecording({@required this.pickImage});
+}
+
+class StopImageOrVideoRecording extends ChatComposerEvent {
+  final String filePath;
+  final int type;
+
+  StopImageOrVideoRecording({@required this.type, @required this.filePath});
+}
+
+enum ChatComposerStateError {
+  missingMicrophonePermission,
+  missingCameraPermission,
+}
+
+abstract class ChatComposerState {}
+
+class ChatComposerInitial extends ChatComposerState {}
+
+class ChatComposerRecordingAudio extends ChatComposerState {
+  String timer;
+
+  ChatComposerRecordingAudio({@required this.timer});
+}
+
+class ChatComposerRecordingAudioStopped extends ChatComposerState {
+  String filePath;
+  bool shouldSend;
+
+  ChatComposerRecordingAudioStopped({@required this.filePath, @required this.shouldSend});
+}
+
+class ChatComposerRecordingAborted extends ChatComposerState {
+  ChatComposerStateError error;
+
+  ChatComposerRecordingAborted({@required this.error});
+}
+
+class ChatComposerRecordingImageOrVideoStopped extends ChatComposerState {
+  String filePath;
+  int type;
+
+  ChatComposerRecordingImageOrVideoStopped({@required this.filePath, @required this.type});
 }

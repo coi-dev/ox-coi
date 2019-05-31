@@ -40,13 +40,43 @@
  * for more details.
  */
 
-abstract class MessageAttachmentEvent {}
+import 'package:meta/meta.dart';
 
-class RequestAttachment extends MessageAttachmentEvent {
-  final int chatId;
-  final int messageId;
+abstract class ChatListEvent {}
 
-  RequestAttachment(this.chatId, this.messageId);
+class RequestChatList extends ChatListEvent {
+  String query;
+
+  RequestChatList({this.query});
 }
 
-class AttachmentLoaded extends MessageAttachmentEvent {}
+class ChatListModified extends ChatListEvent {}
+
+class ChatListSearched extends ChatListEvent {
+  final List<int> chatIds;
+  final List<int> lastUpdateValues;
+
+  ChatListSearched({@required this.chatIds, @required this.lastUpdateValues});
+}
+
+abstract class ChatListState {}
+
+class ChatListStateInitial extends ChatListState {}
+
+class ChatListStateLoading extends ChatListState {}
+
+class ChatListStateSuccess extends ChatListState {
+  final List<int> chatIds;
+  final List<int> chatLastUpdateValues;
+
+  ChatListStateSuccess({
+    @required this.chatIds,
+    @required this.chatLastUpdateValues,
+  });
+}
+
+class ChatListStateFailure extends ChatListState {
+  final String error;
+
+  ChatListStateFailure({@required this.error});
+}
