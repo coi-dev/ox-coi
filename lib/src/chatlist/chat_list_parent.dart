@@ -273,7 +273,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
             return Center(
               child: Text(AppLocalizations
                   .of(context)
-                  .chatListEmpty),
+                  .searchEmpty),
             );
           }
         } else if (state is! ChatListStateFailure) {

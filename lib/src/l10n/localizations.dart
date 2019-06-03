@@ -507,6 +507,10 @@ class AppLocalizations {
 
   String get aboutSettingsVersion => Intl.message('App version', name: 'aboutSettingsVersion');
 
+  // Search
+  String get searchEmpty => Intl.message('No results found.', name: 'searchEmpty');
+
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
