@@ -52,8 +52,9 @@ class MessageSpecial extends StatelessWidget with MessageBuilder {
   final bool isSetupMessage;
   final String messageText;
   final int timestamp;
+  final bool showPadlock;
 
-  const MessageSpecial({Key key, this.isSetupMessage, this.messageText, this.timestamp}) : super(key: key);
+  const MessageSpecial({Key key, this.isSetupMessage, this.messageText, this.timestamp, this.showPadlock}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class MessageSpecial extends StatelessWidget with MessageBuilder {
               decoration: buildBoxDecoration(messageBoxGrey, messageSetupBackground, buildBorderRadius()),
               child: Padding(
                 padding: EdgeInsets.all(messagesInnerPadding),
-                child: buildTextMessage(text, time),
+                child: buildTextMessage(text, time, showPadlock),
               ),
             ),
           ],

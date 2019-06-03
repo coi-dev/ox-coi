@@ -51,7 +51,7 @@ import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 
 mixin MessageBuilder {
-  Widget buildTextMessage(String text, String time, [int state]) {
+  Widget buildTextMessage(String text, String time, bool showPadlock, [int state]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -64,6 +64,7 @@ mixin MessageBuilder {
         ),
         Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
         buildTime(time),
+        _buildPadlock(showPadlock),
         _buildStateMarker(state),
       ],
     );
@@ -86,6 +87,16 @@ mixin MessageBuilder {
       default:
         return Container();
     }
+  }
+
+  Widget _buildPadlock(bool showPadlock) {
+    return Visibility(
+      visible: showPadlock,
+      child: Padding(
+        padding: EdgeInsets.only(left: iconTextPadding, bottom: iconPadlockBottomPadding),
+        child: Icon(Icons.lock, size: iconPadlockSize,),
+      ),
+    );
   }
 
   StatelessWidget buildTime(String time) {

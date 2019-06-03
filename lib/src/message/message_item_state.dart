@@ -58,6 +58,7 @@ class MessageItemStateSuccess extends MessageItemState {
   final int state;
   final bool isSetupMessage;
   final bool isInfo;
+  final int showPadlock;
   final ContactWrapper contactWrapper;
   final AttachmentWrapper attachmentWrapper;
 
@@ -69,6 +70,7 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.state,
     @required this.isSetupMessage,
     @required this.isInfo,
+    @required this.showPadlock,
     @required this.attachmentWrapper,
     @required this.contactWrapper,
   });

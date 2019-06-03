@@ -52,9 +52,10 @@ class MessageSent extends StatelessWidget with MessageBuilder {
   final int timestamp;
   final bool hasFile;
   final int msgState;
+  final bool showPadlock;
   final AttachmentWrapper attachmentWrapper;
 
-  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.attachmentWrapper}) : super(key: key);
+  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.attachmentWrapper}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,7 @@ class MessageSent extends StatelessWidget with MessageBuilder {
               decoration: buildBoxDecoration(messageBoxGrey, messageSentBackground, buildBorderRadius()),
               child: Padding(
                 padding: EdgeInsets.all(messagesInnerPadding),
-                child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, msgState) : buildTextMessage(text, time, msgState),
+                child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, msgState) : buildTextMessage(text, time, showPadlock, msgState),
               ),
             ),
           ],

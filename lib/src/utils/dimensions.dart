@@ -64,6 +64,8 @@ const appBarAvatarTextPadding = 16.0;
 const appBarElevationDefault = 4.0;
 
 // Icons
+const iconPadlockBottomPadding = 2.0;
+const iconPadlockSize = 10.0;
 const iconTextPadding = 4.0;
 const iconFormPadding = 8.0;
 const iconSize = 18.0;

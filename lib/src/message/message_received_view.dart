@@ -56,10 +56,11 @@ class MessageReceived extends StatelessWidget with MessageBuilder {
   final int timestamp;
   final bool hasFile;
   final bool isGroupChat;
+  final bool showPadlock;
   final AttachmentWrapper attachmentWrapper;
 
   const MessageReceived(
-      {Key key, this.name, this.email, this.color, this.text, this.timestamp, this.hasFile, this.isGroupChat, this.attachmentWrapper})
+      {Key key, this.name, this.email, this.color, this.text, this.timestamp, this.hasFile, this.isGroupChat, this.showPadlock, this.attachmentWrapper})
       : super(key: key);
 
   @override
@@ -89,7 +90,7 @@ class MessageReceived extends StatelessWidget with MessageBuilder {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   isGroupChat ? Text(name, style: TextStyle(color: color)) : Container(constraints: BoxConstraints(maxWidth: zero)),
-                  hasFile ? buildAttachmentMessage(attachmentWrapper, text, time) : buildTextMessage(text, time),
+                  hasFile ? buildAttachmentMessage(attachmentWrapper, text, time) : buildTextMessage(text, time, showPadlock),
                 ],
               ),
             ),
