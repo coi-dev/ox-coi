@@ -88,10 +88,14 @@ class _ChatListState extends State<ChatList> {
           if (state.chatIds.length > 0) {
             return buildListItems(state);
           } else {
-            return Center(
-              child: Text(AppLocalizations
-                  .of(context)
-                  .chatListEmpty),
+            return Padding(
+              padding: const EdgeInsets.all(listItemPaddingBig),
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context).chatListEmpty,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             );
           }
         } else if (state is! ChatListStateFailure) {

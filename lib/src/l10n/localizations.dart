@@ -298,7 +298,7 @@ class AppLocalizations {
   // Chat list / invite list
   String get inviteEmptyList => Intl.message('No invites', name: 'inviteEmptyList');
 
-  String get chatListEmpty => Intl.message('No chats', name: 'chatListEmpty');
+  String get chatListEmpty => Intl.message('Welcome to OX Coi!\nPlease start a new chat by tapping the pen icon.', name: 'chatListEmpty');
 
   String get chatListDeleteChatsDialogTitleText => Intl.message('Delete chats', name: 'chatListDeleteChatsDialogTitleText');
 
@@ -312,6 +312,9 @@ class AppLocalizations {
   String get recordingAudioMessageFailure => Intl.message('Audio recording failed, missing permissions', name: 'recordingAudioMessageFailure');
 
   String get recordingVideoMessageFailure => Intl.message('Video recording failed, missing permissions', name: 'recordingVideoMessageFailure');
+
+  String get chatEmpty => Intl.message('This is a new chat. Send a message to connect!', name: 'chatEmpty');
+
 
   // Chat profile view
   String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');

@@ -312,7 +312,19 @@ class _ChatState extends State<Chat> with ChatComposer {
       bloc: _messagesBloc,
       builder: (context, state) {
         if (state is MessagesStateSuccess) {
-          return buildListItems(state);
+          if (state.messageIds.length > 0) {
+            return buildListItems(state);
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(listItemPaddingBig),
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context).chatEmpty,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
         } else {
           return Center(
             child: CircularProgressIndicator(),

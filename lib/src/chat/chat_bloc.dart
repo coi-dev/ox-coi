@@ -98,7 +98,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     bool isVerified = await chat.isVerified();
     Color color = rgbColorFromInt(colorValue);
     var chatSummary = chat.get(ChatExtension.chatSummary);
-    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary.preview, chatSummary.timestamp, isVerified));
+    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary?.preview, chatSummary?.timestamp, isVerified));
   }
 
 }
