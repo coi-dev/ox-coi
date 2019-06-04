@@ -51,9 +51,7 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
@@ -62,7 +60,6 @@ import 'package:rxdart/rxdart.dart';
 enum ContactAction {
   add,
   edit,
-  delete,
 }
 
 class ContactChange extends StatefulWidget {
@@ -88,10 +85,7 @@ class _ContactChangeState extends State<ContactChange> {
   ValidatableTextFormField _emailField;
 
   String title;
-  String deleteButton;
   String changeToast;
-  String deleteToast;
-  String deleteFailedToast;
 
   ContactChangeBloc _contactChangeBloc = ContactChangeBloc();
 
@@ -120,11 +114,7 @@ class _ContactChangeState extends State<ContactChange> {
   handleContactChanged(ContactChangeState state) async {
     if (state is ContactChangeStateSuccess) {
       if (!widget.createChat) {
-        if (state.delete) {
-          showToast(deleteToast);
-        } else {
-          showToast(changeToast);
-        }
+        showToast(changeToast);
         navigation.pop(context);
       } else {
         if (state.id != null) {
@@ -139,8 +129,6 @@ class _ContactChangeState extends State<ContactChange> {
           );
         }
       }
-    } else if (state is ContactChangeStateFailure && state.error == contactDelete) {
-      showToast(deleteFailedToast);
     }
   }
 
@@ -150,11 +138,8 @@ class _ContactChangeState extends State<ContactChange> {
       title = widget.createChat ? AppLocalizations.of(context).createChatTitle : AppLocalizations.of(context).contactChangeAddTitle;
       changeToast = AppLocalizations.of(context).contactChangeAddToast;
     } else {
-      deleteButton = AppLocalizations.of(context).contactChangeDeleteTitle;
       title = AppLocalizations.of(context).contactChangeEditTitle;
       changeToast = AppLocalizations.of(context).contactChangeEditToast;
-      deleteToast = AppLocalizations.of(context).contactChangeDeleteToast;
-      deleteFailedToast = AppLocalizations.of(context).contactChangeDeleteFailedToast;
     }
     return Scaffold(
         appBar: AppBar(
@@ -167,20 +152,20 @@ class _ContactChangeState extends State<ContactChange> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.check),
-              onPressed: () => onSubmit(),
+              onPressed: () => _onSubmit(),
             )
           ],
         ),
-        body: buildForm());
+        body: _buildForm());
   }
 
-  onSubmit() {
+  _onSubmit() {
     if (_formKey.currentState.validate()) {
-      _contactChangeBloc.dispatch(ChangeContact(getName(), getEmail(), widget.contactAction));
+      _contactChangeBloc.dispatch(ChangeContact(_getName(), _getEmail(), widget.contactAction));
     }
   }
 
-  Widget buildForm() {
+  Widget _buildForm() {
     return Builder(builder: (BuildContext context) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
@@ -233,17 +218,6 @@ class _ContactChangeState extends State<ContactChange> {
                   ],
                 ),
               ),
-              widget.contactAction != ContactAction.add
-                  ? Center(
-                      child: OutlineButton(
-                        highlightedBorderColor: Theme.of(context).errorColor,
-                        borderSide: BorderSide(color: Theme.of(context).errorColor),
-                        textColor: Theme.of(context).errorColor,
-                        onPressed: () => onDelete(context),
-                        child: Text(deleteButton),
-                      ),
-                    )
-                  : Container(),
             ],
           ),
         ),
@@ -251,21 +225,7 @@ class _ContactChangeState extends State<ContactChange> {
     });
   }
 
-  onDelete(BuildContext context) {
-    showConfirmationDialog(
-      context: context,
-      title: AppLocalizations.of(context).contactChangeDeleteTitle,
-      content: (AppLocalizations.of(context).contactChangeDeleteDialogContent(getEmail(), getName())),
-      positiveButton: AppLocalizations.of(context).delete,
-      positiveAction: () {
-        _contactChangeBloc.dispatch(DeleteContact(widget.id));
-        navigation.pop(context);
-      },
-      navigatable: Navigatable(Type.contactDeleteDialog),
-    );
-  }
+  String _getName() => _nameField.controller.text;
 
-  String getName() => _nameField.controller.text;
-
-  String getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
+  String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
 }

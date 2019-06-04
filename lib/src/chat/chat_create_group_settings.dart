@@ -43,9 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/chat/chat.dart';
-import 'package:ox_coi/src/chat/chat_change_bloc.dart';
-import 'package:ox_coi/src/chat/chat_change_event_state.dart';
+import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
@@ -58,7 +56,6 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
   final List<int> _selectedContacts;
@@ -69,7 +66,7 @@ class ChatCreateGroupSettings extends StatefulWidget {
   _ChatCreateGroupSettingsState createState() => _ChatCreateGroupSettingsState();
 }
 
-class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
+class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with CreateChatMixin {
   ContactListBloc _contactListBloc = ContactListBloc();
   ValidatableTextFormField _groupNameField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).createGroupTextFieldLabel,
@@ -167,32 +164,18 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> {
 
   ListView buildListItems(List<int> contactIds) {
     return ListView.builder(
-          padding: EdgeInsets.all(listItemPadding),
-          itemCount: contactIds.length,
-          itemBuilder: (BuildContext context, int index) {
-            var contactId = contactIds[index];
-            return ContactItem(contactId, contactId.toString());
-          },
-        );
+      padding: EdgeInsets.all(listItemPadding),
+      itemCount: contactIds.length,
+      itemBuilder: (BuildContext context, int index) {
+        var contactId = contactIds[index];
+        return ContactItem(contactId, contactId.toString());
+      },
+    );
   }
 
   _onSubmit() {
     if (_formKey.currentState.validate()) {
-      ChatChangeBloc chatChangeBloc = ChatChangeBloc();
-      final changeChatStatesObservable = new Observable<ChatChangeState>(chatChangeBloc.state);
-      changeChatStatesObservable.listen((state) => _handleChatChangeStateChange(state));
-      chatChangeBloc.dispatch(CreateChat(verified: false, name: _groupNameField.controller.text, contacts: widget._selectedContacts));
-    }
-  }
-
-  _handleChatChangeStateChange(ChatChangeState state) {
-    if (state is CreateChatStateSuccess) {
-      navigation.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Chat(state.chatId), settings: RouteSettings(name: "ChatScreen")),
-        ModalRoute.withName(Navigation.root),
-        Navigatable(Type.chatList),
-      );
+      createChatFromGroup(context, false, _groupNameField.controller.text, widget._selectedContacts);
     }
   }
 }

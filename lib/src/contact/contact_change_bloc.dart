@@ -102,8 +102,10 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
       Contact contact = contactRepository.get(id);
       contact.set(Contact.methodContactGetName, name);
       int chatId = await context.getChatByContactId(id);
-      Chat chat = chatRepository.get(chatId);
-      chat.set(Chat.methodChatGetName, name);
+      if (chatId != 0) {
+        Chat chat = chatRepository.get(chatId);
+        chat.set(Chat.methodChatGetName, name);
+      }
       dispatch(ContactEdited());
     }
   }

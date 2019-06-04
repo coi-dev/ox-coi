@@ -60,6 +60,7 @@ enum Type {
   contactDeleteDialog,
   contactImportDialog,
   contactInviteDialog,
+  contactProfile,
   contactUnblockDialog,
   inviteList,
   login,

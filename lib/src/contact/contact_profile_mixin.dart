@@ -40,38 +40,50 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/utils/text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/toast.dart';
 
-class PlaceholderText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-  final TextAlign align;
-  final String placeholderText;
-  final TextStyle placeholderStyle;
-  final TextAlign placeHolderAlign;
-
-  PlaceholderText({
-    @required this.text,
-    this.style,
-    this.align,
-    @required this.placeholderText,
-    this.placeholderStyle,
-    this.placeHolderAlign,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return !isNullOrEmpty(text)
-        ? Text(
-            text,
-            style: style,
-            textAlign: align,
+mixin ContactProfileMixin {
+  Widget buildHeaderText(BuildContext context, String text, [IconData iconData]) {
+    return iconData != null
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(iconData),
+              Padding(
+                padding: const EdgeInsets.only(left: iconTextPadding),
+                child: buildHeaderText(context, text),
+              ),
+            ],
           )
-        : Text(
-            placeholderText,
-            style: placeholderStyle,
-            textAlign: placeHolderAlign,
-          );
+        : Text(text, style: Theme.of(context).textTheme.subhead);
+  }
+
+  Widget buildCopyableText(BuildContext context, String text, String toastMessage) {
+    return InkWell(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: text));
+        showToast(toastMessage);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: iconTextPadding),
+            child: buildHeaderText(context, text),
+          ),
+          Icon(Icons.content_copy),
+        ],
+      ),
+    );
+  }
+
+  Widget buildActionList(BuildContext context, List<ListTile> tiles) {
+    return ListView(
+      shrinkWrap: true,
+      children: ListTile.divideTiles(context: context, tiles: tiles).toList(),
+    );
   }
 }

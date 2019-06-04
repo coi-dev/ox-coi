@@ -44,12 +44,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
-import 'package:ox_coi/src/chat/chat_profile_group_view.dart';
-import 'package:ox_coi/src/chat/chat_profile_single_view.dart';
+import 'package:ox_coi/src/chat/chat_profile_group.dart';
+import 'package:ox_coi/src/chat/chat_profile_single.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/widgets.dart';
 
 class ChatProfile extends StatefulWidget {
   final int _chatId;
@@ -83,33 +85,38 @@ class _ChatProfileState extends State<ChatProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: BlocBuilder(
-        bloc: _chatBloc,
-        builder: (context, state){
-          if(state is ChatStateSuccess){
-            bool _isVerified = state.isVerified;
-            if(state.isGroupChat){
-              return ChatProfileGroupView(widget._chatId, state.name, state.color, _isVerified);
-            }else{
-              bool _isSelfTalk = state.isSelfTalk;
-              return BlocBuilder(
-                bloc: _contactListBloc,
-                builder: (context, state){
-                  if(state is ContactListStateSuccess){
-                    var key = "${state.contactIds[0]}-${state.contactLastUpdateValues[0]}";
-                    return ChatProfileSingleView(widget._chatId, _isSelfTalk, _isVerified, state.contactIds[0], key);
-                  }else{
-                    return Container();
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context).profileTitle),
+        ),
+        body: SingleChildScrollView(
+          child: BlocBuilder(
+              bloc: _chatBloc,
+              builder: (context, state) {
+                if (state is ChatStateSuccess) {
+                  bool _isVerified = state.isVerified;
+                  if (state.isGroupChat) {
+                    return ChatProfileGroup(widget._chatId, state.name, state.color, _isVerified);
+                  } else {
+                    return _buildChatProfileOneToOne(state);
                   }
+                } else {
+                  return Container();
                 }
-              );
-            }
+              }),
+        ));
+  }
+
+  BlocBuilder<ContactListEvent, ContactListState> _buildChatProfileOneToOne(ChatStateSuccess state) {
+    bool _isSelfTalk = state.isSelfTalk;
+    return BlocBuilder(
+        bloc: _contactListBloc,
+        builder: (context, state) {
+          if (state is ContactListStateSuccess) {
+            var key = createKeyString(state.contactIds.first, state.contactLastUpdateValues.first);
+            return ChatProfileOneToOne(widget._chatId, _isSelfTalk, state.contactIds.first, key);
           } else {
             return Container();
           }
-        }
-      )
-    );
+        });
   }
 }

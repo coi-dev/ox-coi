@@ -4,7 +4,7 @@ description: OX Coi is a mail based chat app.
 version: 0.7.0+407 # x.y.z+build-number
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:

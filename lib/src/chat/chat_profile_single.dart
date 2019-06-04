@@ -41,7 +41,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
@@ -49,33 +48,30 @@ import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
+import 'package:ox_coi/src/contact/contact_profile_mixin.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
-import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/profile_header.dart';
 
-enum ChatProfileViewAction{
-  delete,
-  block
-}
+enum ChatProfileViewAction { delete, block }
 
-class ChatProfileSingleView extends StatefulWidget {
+class ChatProfileOneToOne extends StatefulWidget {
   final int _chatId;
   final int _contactId;
   final bool _isSelfTalk;
-  final bool _isVerified;
 
-  ChatProfileSingleView(this._chatId, this._isSelfTalk, this._isVerified, this._contactId, key) : super(key: Key(key));
+  ChatProfileOneToOne(this._chatId, this._isSelfTalk, this._contactId, key) : super(key: Key(key));
 
   @override
-  _ChatProfileSingleViewState createState() => _ChatProfileSingleViewState();
+  _ChatProfileOneToOneState createState() => _ChatProfileOneToOneState();
 }
 
-class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
+class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> with ContactProfileMixin {
   ContactItemBloc _contactItemBloc = ContactItemBloc();
   Navigation navigation = Navigation();
 
@@ -94,95 +90,64 @@ class _ChatProfileSingleViewState extends State<ChatProfileSingleView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _contactItemBloc,
-      builder: (context, state){
-        if(state is ContactItemStateSuccess){
-          return _buildSingleProfileInfo(state.name, state.email, state.color);
-        }
-        else{
-          return Container();
-        }
-      }
-    );
+        bloc: _contactItemBloc,
+        builder: (context, state) {
+          if (state is ContactItemStateSuccess) {
+            return _buildSingleProfileInfo(state.name, state.email, state.color, state.isVerified);
+          } else {
+            return Container();
+          }
+        });
   }
 
-  Widget _buildSingleProfileInfo(String chatName, String email, Color color) {
+  Widget _buildSingleProfileInfo(String chatName, String email, Color color, bool isVerified) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          child: CircleAvatar(
-            maxRadius: profileAvatarMaxRadius,
-            backgroundColor: color,
-            child: Text(
-              chatName.isNotEmpty ? chatName.substring(0,1) : email.substring(0,1),
-              style: chatProfileAvatarInitialText,
-            ),
-          ),
-        ),
-        Visibility(
-          visible: chatName.isNotEmpty,
-          child: Text(
-            chatName,
-            style: defaultText,
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Visibility(
-              visible: widget._isVerified,
-              child: Padding(
-                padding: const EdgeInsets.only(right: iconTextPadding),
-                child: Icon(
-                  Icons.verified_user
-                ),
-              )
-            ),
-            InkWell(
-              onTap: () {
-                Clipboard.setData(ClipboardData(text: email));
-                showToast(AppLocalizations.of(context).chatProfileClipboardToastMessage);
-              },
-              child: Text(
-                email,
-                style: defaultText,
-              ),
-            ),
+        ProfileHeader(
+          dynamicChildren: [
+            buildHeaderText(context, chatName, isVerified ? Icons.verified_user : null),
+            buildCopyableText(context, email, AppLocalizations.of(context).chatProfileClipboardToastMessage),
           ],
+          color: color,
+          initialsString: Avatar.getInitials(chatName, email),
         ),
-        Padding(
-          padding: EdgeInsets.all(chatProfileDividerPadding),
-          child: Divider(height: dividerHeight,),
-        ),
-        Visibility(
-          visible: !widget._isSelfTalk,
-          child: Card(
-            child: ListTile(
-              title: Text(AppLocalizations.of(context).chatProfileBlockContactButtonText,),
+        buildActionList(context, [
+          if (!widget._isSelfTalk)
+            ListTile(
+              leading: Icon(
+                Icons.block,
+                color: primary,
+              ),
+              title: Text(
+                AppLocalizations.of(context).chatProfileBlockContactButtonText,
+              ),
               onTap: () => _showBlockContactDialog(ChatProfileViewAction.block),
             ),
-          )
-        ),
-        Card(
-          child: ListTile(
-            title: Text(AppLocalizations.of(context).chatProfileDeleteChatButtonText,),
+          ListTile(
+            leading: Icon(
+              Icons.delete,
+              color: primary,
+            ),
+            title: Text(
+              AppLocalizations.of(context).chatProfileDeleteChatButtonText,
+            ),
             onTap: () => _showBlockContactDialog(ChatProfileViewAction.delete),
           ),
-        )
+        ]),
       ],
     );
   }
 
-  _showBlockContactDialog(ChatProfileViewAction action){
+  _showBlockContactDialog(ChatProfileViewAction action) {
     String title;
     String content;
     String positiveButtonText;
     Function positiveAction;
     Type type;
 
-    switch(action){
+    switch (action) {
       case ChatProfileViewAction.block:
         title = AppLocalizations.of(context).block;
         content = AppLocalizations.of(context).chatProfileBlockContactInfoText;

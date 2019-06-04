@@ -81,7 +81,7 @@ class ChatListParent extends RootChild {
   @override
   FloatingActionButton getFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
-      child: new Icon(Icons.create),
+      child: new Icon(Icons.chat),
       onPressed: () {
         _showCreateChatView(context);
       },

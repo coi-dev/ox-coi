@@ -298,7 +298,7 @@ class AppLocalizations {
   // Chat list / invite list
   String get inviteEmptyList => Intl.message('No invites', name: 'inviteEmptyList');
 
-  String get chatListEmpty => Intl.message('Welcome to OX Coi!\nPlease start a new chat by tapping the pen icon.', name: 'chatListEmpty');
+  String get chatListEmpty => Intl.message('Welcome to OX Coi!\nPlease start a new chat by tapping the chat bubble icon.', name: 'chatListEmpty');
 
   String get chatListDeleteChatsDialogTitleText => Intl.message('Delete chats', name: 'chatListDeleteChatsDialogTitleText');
 
@@ -358,15 +358,15 @@ class AppLocalizations {
   String get createGroupTextFieldHint => Intl.message('Set a group name', name: 'createGroupTextFieldHint');
 
   // Contacts
-  String get contactChangeAddTitle => Intl.message('Add Contact', name: 'contactChangeAddTitle');
+  String get contactChangeAddTitle => Intl.message('Add contact', name: 'contactChangeAddTitle');
 
   String get contactChangeAddToast => Intl.message('Contact successfully added', name: 'contactChangeAddToast');
 
-  String get contactChangeEditTitle => Intl.message('Edit Name', name: 'contactChangeEditTitle');
+  String get contactChangeEditTitle => Intl.message('Edit contact', name: 'contactChangeEditTitle');
 
   String get contactChangeEditToast => Intl.message('Contact successfully edited', name: 'contactChangeEditToast');
 
-  String get contactChangeDeleteTitle => Intl.message('Delete Contact', name: 'contactChangeDeleteTitle');
+  String get contactChangeDeleteTitle => Intl.message('Delete contact', name: 'contactChangeDeleteTitle');
 
   String get contactChangeDeleteToast => Intl.message('Contact successfully deleted', name: 'contactChangeDeleteToast');
 
@@ -392,6 +392,8 @@ class AppLocalizations {
   String get contactImportFailure => Intl.message('Import failed, missing permissions', name: 'contactImportFailure');
 
   String get contactsSearchHint => Intl.message('Search contacts', name: 'contactsSearchHint');
+
+  String get contactsOpenChat => Intl.message('Open chat', name: 'contactsOpenChat');
 
   // Blocked contacts
   String get blockedContactsTitle => Intl.message('Blocked contacts', name: 'blockedContactsTitle');
@@ -509,7 +511,6 @@ class AppLocalizations {
 
   // Search
   String get searchEmpty => Intl.message('No results found.', name: 'searchEmpty');
-
 
 }
 

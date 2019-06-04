@@ -42,9 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat.dart';
-import 'package:ox_coi/src/chat/chat_change_bloc.dart';
-import 'package:ox_coi/src/chat/chat_change_event_state.dart';
-import 'package:ox_coi/src/contact/contact_change.dart';
+import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
@@ -55,15 +53,10 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:rxdart/rxdart.dart';
 
-enum ContactItemType {
-  display,
-  edit,
-  createChat,
-  blocked,
-  forward
-}
+import 'contact_details.dart';
+
+enum ContactItemType { display, edit, createChat, blocked, forward }
 
 class ContactItem extends StatefulWidget {
   final int _contactId;
@@ -76,7 +69,7 @@ class ContactItem extends StatefulWidget {
   _ContactItemState createState() => _ContactItemState();
 }
 
-class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
+class _ContactItemState extends State<ContactItem> with ContactItemBuilder, CreateChatMixin {
   ContactItemBloc _contactBloc = ContactItemBloc();
   Navigation navigation = Navigation();
 
@@ -105,43 +98,27 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder {
 
   onContactTapped(String name, String email) async {
     if (widget.contactItemType == ContactItemType.createChat || widget.contactItemType == ContactItemType.forward) {
-      return createChat();
+      return createChatFromContact(context, widget._contactId, _handleCreateChatStateChange);
     } else if (widget.contactItemType == ContactItemType.blocked) {
       return buildUnblockContactDialog(name, email);
     } else if (widget.contactItemType == ContactItemType.edit) {
       navigation.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => ContactChange(
-                  contactAction: ContactAction.edit,
-                  id: widget._contactId,
-                  email: email,
-                  name: name,
-                )),
+        MaterialPageRoute(builder: (context) => ContactDetailsView(widget._contactId)),
       );
     }
   }
 
-  void createChat() {
-    ChatChangeBloc createChatBloc = ChatChangeBloc();
-    final createChatStatesObservable = new Observable<ChatChangeState>(createChatBloc.state);
-    createChatStatesObservable.listen((state) => _handleCreateChatStateChange(state));
-    createChatBloc.dispatch(CreateChat(contactId: widget._contactId));
-  }
-
-  _handleCreateChatStateChange(ChatChangeState state) {
-    if (state is CreateChatStateSuccess) {
-      int chatId = state.chatId;
-      if(widget.contactItemType == ContactItemType.forward){
-        widget._onTap(chatId);
-      }else {
-        navigation.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Chat(state.chatId)),
-          ModalRoute.withName(Navigation.root),
-          Navigatable(Type.chatList),
-        );
-      }
+  _handleCreateChatStateChange(int chatId) {
+    if (widget.contactItemType == ContactItemType.forward) {
+      widget._onTap(chatId);
+    } else {
+      navigation.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Chat(chatId)),
+        ModalRoute.withName(Navigation.root),
+        Navigatable(Type.chatList),
+      );
     }
   }
 

@@ -50,23 +50,26 @@ import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/contact/contact_profile_mixin.dart';
+import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/profile_header.dart';
 
-class ChatProfileGroupView extends StatefulWidget {
+class ChatProfileGroup extends StatefulWidget {
   final int _chatId;
   final String _chatName;
   final Color _chatColor;
   final bool _isVerified;
 
-  ChatProfileGroupView(this._chatId, this._chatName, this._chatColor, this._isVerified);
+  ChatProfileGroup(this._chatId, this._chatName, this._chatColor, this._isVerified);
 
   @override
-  _ChatProfileGroupViewState createState() => _ChatProfileGroupViewState();
+  _ChatProfileGroupState createState() => _ChatProfileGroupState();
 }
 
-class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
+class _ChatProfileGroupState extends State<ChatProfileGroup> with ContactProfileMixin {
   ContactListBloc _contactListBloc = ContactListBloc();
 
   @override
@@ -83,91 +86,55 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
-            child: CircleAvatar(
-              maxRadius: profileAvatarMaxRadius,
-              backgroundColor: widget._chatColor,
-              child: Text(
-                widget._chatName.substring(0,1),
-                style: chatProfileAvatarInitialText,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Visibility(
-                visible: widget._isVerified,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: iconTextPadding),
-                  child: Icon(
-                    Icons.verified_user
-                  ),
-                )
-              ),
-              Text(
-                widget._chatName,
-                style: defaultText,
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.all(chatProfileDividerPadding),
-            child: Divider(height: dividerHeight,),
-          ),
-          Card(
-            child: ListTile(
-              title: Text(AppLocalizations.of(context).chatProfileLeaveGroupButtonText,),
-              onTap: () => _showLeaveGroupDialog(),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(chatProfileDividerPadding),
-            child: Divider(height: dividerHeight,),
-          ),
-          _buildGroupMemberList()
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGroupMemberList() {
     return BlocBuilder(
       bloc: _contactListBloc,
-      builder: (context, state){
-        if(state is ContactListStateSuccess){
+      builder: (context, state) {
+        if (state is ContactListStateSuccess) {
+          List<Widget> dynamicChildren = List();
+          dynamicChildren.add(buildHeaderText(context, widget._chatName, widget._isVerified ? Icons.verified_user : null));
+          dynamicChildren.add(buildHeaderText(context, AppLocalizations.of(context).chatProfileGroupMemberCounter(state.contactIds.length)));
           return Column(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(AppLocalizations.of(context).chatProfileGroupMemberCounter(state.contactIds.length)),
-              Flexible(
-                child: buildListItems(state),
+              ProfileHeader(
+                dynamicChildren: dynamicChildren,
+                color: widget._chatColor,
+                initialsString: Avatar.getInitials(widget._chatName),
               ),
+              buildActionList(context, [
+                ListTile(
+                  leading: Icon(
+                    Icons.delete,
+                    color: primary,
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
+                  ),
+                  onTap: () => _showLeaveGroupDialog(),
+                ),
+              ]),
+              Divider(height: dividerHeight),
+              _buildGroupMemberList(state)
             ],
           );
         } else {
           return Container();
         }
-      }
+      },
     );
   }
 
-  ListView buildListItems(ContactListStateSuccess state) {
+  ListView _buildGroupMemberList(ContactListStateSuccess state) {
     return ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.only(top: listItemPadding),
-                itemCount: state.contactIds.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var contactId = state.contactIds[index];
-                  var key = "$contactId-${state.contactLastUpdateValues[index]}";
-                  return ChatProfileGroupContactItem(contactId, key);
-                });
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.only(top: listItemPadding),
+        itemCount: state.contactIds.length,
+        itemBuilder: (BuildContext context, int index) {
+          var contactId = state.contactIds[index];
+          var key = "$contactId-${state.contactLastUpdateValues[index]}";
+          return ChatProfileGroupContactItem(contactId, key);
+        });
   }
 
   _showLeaveGroupDialog() {
@@ -182,7 +149,7 @@ class _ChatProfileGroupViewState extends State<ChatProfileGroupView> {
     );
   }
 
-  _leaveGroup() async{
+  _leaveGroup() async {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.dispatch(LeaveGroupChat(chatId: widget._chatId));
     chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));

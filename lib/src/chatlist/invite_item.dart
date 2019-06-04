@@ -42,9 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/chat/chat.dart';
-import 'package:ox_coi/src/chat/chat_change_bloc.dart';
-import 'package:ox_coi/src/chat/chat_change_event_state.dart';
+import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
@@ -55,7 +53,6 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
-import 'package:rxdart/rxdart.dart';
 
 class InviteItem extends StatefulWidget {
   final int _chatId;
@@ -67,7 +64,7 @@ class InviteItem extends StatefulWidget {
   _InviteItemState createState() => _InviteItemState();
 }
 
-class _InviteItemState extends State<InviteItem> {
+class _InviteItemState extends State<InviteItem> with CreateChatMixin {
   MessageItemBloc _messageItemBloc = MessageItemBloc();
   Navigation navigation = Navigation();
   int _contactId;
@@ -130,26 +127,13 @@ class _InviteItemState extends State<InviteItem> {
           new FlatButton(
             child: new Text(AppLocalizations.of(context).yes),
             onPressed: () {
-              createChat();
+              createChatFromMessage(context, widget._messageId, widget._chatId);
               navigation.pop(context);
             },
           ),
         ],
       ),
     );
-  }
-
-  void createChat() {
-    ChatChangeBloc createChatBloc = ChatChangeBloc();
-    final changeChatStatesObservable = new Observable<ChatChangeState>(createChatBloc.state);
-    changeChatStatesObservable.listen((state) => _handleChatChangeStateChange(state));
-    createChatBloc.dispatch(CreateChat(messageId: widget._messageId, chatId: widget._chatId));
-  }
-
-  _handleChatChangeStateChange(ChatChangeState state) {
-    if (state is CreateChatStateSuccess) {
-      navigation.push(context, MaterialPageRoute(builder: (context) => Chat(state.chatId)));
-    }
   }
 
   void blockUser() {

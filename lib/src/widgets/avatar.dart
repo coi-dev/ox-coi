@@ -78,7 +78,7 @@ class Avatar extends StatelessWidget {
     );
   }
 
-  static String getInitials(String textPrimary, String textSecondary) {
+  static String getInitials(String textPrimary, [String textSecondary]) {
     if (textPrimary != null && textPrimary.isNotEmpty) {
       return textPrimary.substring(0, 1);
     }

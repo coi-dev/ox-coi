@@ -67,7 +67,7 @@ class _SettingsChatState extends State<SettingsChat> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: contactMain,
-          title: Text(AppLocalizations.of(context).security),
+          title: Text(AppLocalizations.of(context).chat),
         ),
         body: _buildPreferenceList(context));
   }

@@ -54,7 +54,7 @@ import 'package:ox_coi/src/chat/chat_composer_bloc.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
 import 'package:ox_coi/src/chat/chat_composer_mixin.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
-import 'package:ox_coi/src/chat/chat_profile_view.dart';
+import 'package:ox_coi/src/chat/chat_profile.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
@@ -175,7 +175,7 @@ class _ChatState extends State<Chat> with ChatComposer {
         body: new Column(children: <Widget>[
           new Flexible(child: buildListView()),
           _filePath.isNotEmpty ? buildPreview() : Container(),
-          new Divider(height: dividerHeight),
+          Divider(height: dividerHeight),
           new Container(
             decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),

@@ -40,38 +40,65 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/utils/widgets.dart';
 
-class PlaceholderText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-  final TextAlign align;
-  final String placeholderText;
-  final TextStyle placeholderStyle;
-  final TextAlign placeHolderAlign;
+class ProfileHeader extends StatelessWidget {
+  final String initialsString;
 
-  PlaceholderText({
-    @required this.text,
-    this.style,
-    this.align,
-    @required this.placeholderText,
-    this.placeholderStyle,
-    this.placeHolderAlign,
+  final List<Widget> dynamicChildren;
+  final Color color;
+  final String imagePath;
+  final int lastUpdate;
+
+  ProfileHeader({
+    @required this.initialsString,
+    this.dynamicChildren,
+    this.color,
+    this.imagePath,
+    this.lastUpdate,
   });
 
   @override
   Widget build(BuildContext context) {
-    return !isNullOrEmpty(text)
-        ? Text(
-            text,
-            style: style,
-            textAlign: align,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
+          child: _buildAvatar(initialsString, color, imagePath, lastUpdate),
+        ),
+        for (var child in dynamicChildren) Padding(padding: EdgeInsets.only(top: 8.0), child: child),
+        Padding(
+          padding: const EdgeInsets.only(top: chatProfileVerticalPadding),
+          child: Divider(
+            height: dividerHeight,
+          ),
+        )
+      ],
+    );
+  }
+
+  CircleAvatar _buildAvatar(String initials, Color color, [String imagePath, int lastUpdate]) {
+    return isNullOrEmpty(imagePath)
+        ? CircleAvatar(
+            maxRadius: profileAvatarMaxRadius,
+            child: Text(
+              initials,
+              style: chatProfileAvatarInitialText,
+            ),
+            backgroundColor: color,
           )
-        : Text(
-            placeholderText,
-            style: placeholderStyle,
-            textAlign: placeHolderAlign,
+        : CircleAvatar(
+            key: lastUpdate ?? createKey(lastUpdate),
+            maxRadius: profileAvatarMaxRadius,
+            backgroundImage: FileImage(File(imagePath)),
+            backgroundColor: color,
           );
   }
 }

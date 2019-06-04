@@ -44,7 +44,7 @@ import 'dart:core';
 
 // Global
 const zero = 0.0;
-const dividerHeight = 1.0;
+const dividerHeight = 0.0;
 
 // Progress
 const verticalPaddingSmall = 8.0;
@@ -77,6 +77,7 @@ const composeTextBorderRadius = 24.0;
 
 // Chat profile
 const chatProfileDividerPadding = 8.0;
+const chatProfileVerticalPadding = 16.0;
 
 //Attachment preview
 const attachmentDividerPadding = 4.0;
