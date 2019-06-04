@@ -64,7 +64,7 @@ mixin MessageBuilder {
           ),
         ),
         Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-        buildTime(time),
+        _buildTime(time),
         _buildPadlock(showPadlock),
         _buildStateMarker(state),
       ],
@@ -72,17 +72,23 @@ mixin MessageBuilder {
   }
 
   Widget _buildStateMarker(int state) {
-    switch(state){
+    switch (state) {
       case ChatMsg.messageStateDelivered:
         return Padding(
           padding: EdgeInsets.only(left: iconTextPadding),
-          child: Icon(Icons.done, size: 14.0,),
+          child: Icon(
+            Icons.done,
+            size: 14.0,
+          ),
         );
         break;
       case ChatMsg.messageStateReceived:
         return Padding(
           padding: EdgeInsets.only(left: iconTextPadding),
-          child: Icon(Icons.done_all, size: 14.0,),
+          child: Icon(
+            Icons.done_all,
+            size: 14.0,
+          ),
         );
         break;
       default:
@@ -95,24 +101,27 @@ mixin MessageBuilder {
       visible: showPadlock,
       child: Padding(
         padding: EdgeInsets.only(left: iconTextPadding, bottom: iconPadlockBottomPadding),
-        child: Icon(Icons.lock, size: iconPadlockSize,),
+        child: Icon(
+          Icons.lock,
+          size: iconPadlockSize,
+        ),
       ),
     );
   }
 
-  StatelessWidget buildTime(String time) {
+  StatelessWidget _buildTime(String time) {
     return Text(time, style: messageTimeText);
   }
 
-  Widget buildAttachmentMessage(AttachmentWrapper attachment, String text, String time, [int state]) {
+  Widget buildAttachmentMessage(AttachmentWrapper attachment, String text, String time, bool showPadlock, [int state]) {
     return Container(
       child: attachment.type == ChatMsg.typeImage
-          ? buildImageAttachmentMessage(attachment, text, time, state)
-          : buildGenericAttachmentMessage(attachment, time, state),
+          ? buildImageAttachmentMessage(attachment, text, time, showPadlock, state)
+          : buildGenericAttachmentMessage(attachment, time, showPadlock, state),
     );
   }
 
-  Widget buildImageAttachmentMessage(AttachmentWrapper attachment, String text, String time, [int state]) {
+  Widget buildImageAttachmentMessage(AttachmentWrapper attachment, String text, String time, bool showPadlock, [int state]) {
     File file = File(attachment.path);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -129,7 +138,8 @@ mixin MessageBuilder {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            buildTime(time),
+            _buildTime(time),
+            _buildPadlock(showPadlock),
             _buildStateMarker(state),
           ],
         ),
@@ -137,7 +147,7 @@ mixin MessageBuilder {
     );
   }
 
-  Row buildGenericAttachmentMessage(AttachmentWrapper attachment, String time, [int state]) {
+  Row buildGenericAttachmentMessage(AttachmentWrapper attachment, String time, bool showPadlock, [int state]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -161,7 +171,8 @@ mixin MessageBuilder {
           ),
         ),
         Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-        buildTime(time),
+        _buildTime(time),
+        _buildPadlock(showPadlock),
         _buildStateMarker(state),
       ],
     );
@@ -180,5 +191,4 @@ mixin MessageBuilder {
       borderRadius: borderRadius,
     );
   }
-
 }

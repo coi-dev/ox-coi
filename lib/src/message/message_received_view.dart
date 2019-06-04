@@ -90,7 +90,7 @@ class MessageReceived extends StatelessWidget with MessageBuilder {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   isGroupChat ? Text(name, style: TextStyle(color: color)) : Container(constraints: BoxConstraints(maxWidth: zero)),
-                  hasFile ? buildAttachmentMessage(attachmentWrapper, text, time) : buildTextMessage(text, time, showPadlock),
+                  hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, showPadlock) : buildTextMessage(text, time, showPadlock),
                 ],
               ),
             ),

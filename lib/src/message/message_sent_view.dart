@@ -71,7 +71,7 @@ class MessageSent extends StatelessWidget with MessageBuilder {
               decoration: buildBoxDecoration(messageBoxGrey, messageSentBackground, buildBorderRadius()),
               child: Padding(
                 padding: EdgeInsets.all(messagesInnerPadding),
-                child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, msgState) : buildTextMessage(text, time, showPadlock, msgState),
+                child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, showPadlock, msgState) : buildTextMessage(text, time, showPadlock, msgState),
               ),
             ),
           ],
