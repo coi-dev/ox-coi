@@ -168,7 +168,6 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context),
           ),
-          backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).accountSettingsTitle),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: saveAccountData)],
         ),

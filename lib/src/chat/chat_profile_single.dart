@@ -118,7 +118,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> with ContactP
             ListTile(
               leading: Icon(
                 Icons.block,
-                color: primary,
+                color: accent,
               ),
               title: Text(
                 AppLocalizations.of(context).chatProfileBlockContactButtonText,
@@ -128,7 +128,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> with ContactP
           ListTile(
             leading: Icon(
               Icons.delete,
-              color: primary,
+              color: accent,
             ),
             title: Text(
               AppLocalizations.of(context).chatProfileDeleteChatButtonText,

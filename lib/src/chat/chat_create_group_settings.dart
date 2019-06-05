@@ -55,6 +55,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
@@ -109,9 +110,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         if (state is ContactListStateSuccess) {
           return buildParticipantList(state.contactIds, state.contactLastUpdateValues);
         } else if (state is! ContactListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

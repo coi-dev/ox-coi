@@ -55,6 +55,7 @@ import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatCreate extends StatefulWidget {
   @override
@@ -117,9 +118,7 @@ class _ChatCreateState extends State<ChatCreate> {
           int offset = showNewContactAndAddGroup ? 1 : 0;
           return buildListItems(showNewContactAndAddGroup, state, offset);
         } else if (state is! ContactListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

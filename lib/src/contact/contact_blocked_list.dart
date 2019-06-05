@@ -51,6 +51,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ContactBlockedList extends StatefulWidget {
    @override
@@ -76,7 +77,6 @@ class ContactBlockedList extends StatefulWidget {
            icon: new Icon(Icons.close),
            onPressed: () => navigation.pop(context),
          ),
-         backgroundColor: contactMain,
          title: Text(AppLocalizations.of(context).blockedContactsTitle),
        ),
        body: buildForm());
@@ -93,9 +93,7 @@ class ContactBlockedList extends StatefulWidget {
              return Center(child: Text(AppLocalizations.of(context).blockedListEmpty),);
            }
          } else if (state is! ContactListStateFailure) {
-           return Center(
-             child: CircularProgressIndicator(),
-           );
+           return StateInfo(showLoading: true);
          } else {
            return Icon(Icons.error);
          }

@@ -50,6 +50,7 @@ import 'package:ox_coi/src/settings/settings_autocrypt_event_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -106,7 +107,6 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
           icon: new Icon(Icons.close),
           onPressed: () => navigation.pop(context),
         ),
-        backgroundColor: contactMain,
         title: Text(AppLocalizations.of(context).securitySettingsAutocryptImport),
         actions: <Widget>[
           IconButton(
@@ -121,7 +121,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
           if (state is SettingsAutocryptStatePrepared || state is SettingsAutocryptStateFailure) {
             return buildForm();
           } else {
-            return Center(child: CircularProgressIndicator());
+            return StateInfo(showLoading: true);
           }
         },
       ),

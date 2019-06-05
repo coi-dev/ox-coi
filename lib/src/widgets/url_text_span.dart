@@ -50,7 +50,7 @@ class UrlTextSpan extends TextSpan {
     @required String url,
     String text,
   }) : super(
-          style: TextStyle(color: primary, fontWeight: FontWeight.bold),
+          style: TextStyle(color: accent, fontWeight: FontWeight.bold),
           text: text ?? url,
           recognizer: TapGestureRecognizer()
             ..onTap = () {

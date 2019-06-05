@@ -56,7 +56,7 @@ class MailListView extends RootChild {
 
   @override
   Color getColor() {
-    return mailMain;
+    return primary;
   }
 
   @override

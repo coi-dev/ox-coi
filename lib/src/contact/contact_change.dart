@@ -147,7 +147,6 @@ class _ContactChangeState extends State<ContactChange> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context),
           ),
-          backgroundColor: contactMain,
           title: Text(title),
           actions: <Widget>[
             IconButton(

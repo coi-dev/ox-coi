@@ -101,7 +101,7 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
                     ListTile(
                       leading: Icon(
                         Icons.chat,
-                        color: primary,
+                        color: accent,
                       ),
                       title: Text(
                         AppLocalizations.of(context).contactsOpenChat,
@@ -111,7 +111,7 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
                     ListTile(
                       leading: Icon(
                         Icons.edit,
-                        color: primary,
+                        color: accent,
                       ),
                       title: Text(
                         AppLocalizations.of(context).contactChangeEditTitle,
@@ -133,7 +133,7 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
                     ListTile(
                       leading: Icon(
                         Icons.delete,
-                        color: primary,
+                        color: accent,
                       ),
                       title: Text(
                         AppLocalizations.of(context).contactChangeDeleteTitle,

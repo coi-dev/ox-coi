@@ -52,6 +52,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ShareScreen extends StatefulWidget {
   final List<int> _msgIds;
@@ -99,9 +100,7 @@ class _ShareScreenState extends State<ShareScreen> {
             return buildListView(state);
           }
         } else if (state is ShareStateLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

@@ -49,6 +49,7 @@ import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class InviteList extends StatefulWidget {
   @override
@@ -84,9 +85,7 @@ class _InviteListState extends State<InviteList> {
             return Center(child: Text(AppLocalizations.of(context).inviteEmptyList),);
           }
         } else if (state is! MessagesLoaded) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

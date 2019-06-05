@@ -60,6 +60,7 @@ import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatListParent extends RootChild {
   final Navigation navigation = Navigation();
@@ -75,7 +76,7 @@ class ChatListParent extends RootChild {
 
   @override
   Color getColor() {
-    return chatMain;
+    return primary;
   }
 
   @override
@@ -160,7 +161,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
       children: <Widget>[
         PhysicalModel(
           elevation: appBarElevationDefault,
-          color: chatMain,
+          color: primary,
           child: TabBar(
             tabs: <Widget>[
               Tab(
@@ -277,9 +278,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
             );
           }
         } else if (state is! ChatListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

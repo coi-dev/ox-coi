@@ -50,6 +50,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatList extends StatefulWidget {
   final void Function(int) _switchMultiSelect;
@@ -99,9 +100,7 @@ class _ChatListState extends State<ChatList> {
             );
           }
         } else if (state is! ChatListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

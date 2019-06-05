@@ -47,6 +47,7 @@ import 'package:ox_coi/src/settings/settings_about_bloc.dart';
 import 'package:ox_coi/src/settings/settings_about_event_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 
 class SettingsAbout extends StatefulWidget {
@@ -73,7 +74,6 @@ class _SettingsAboutState extends State<SettingsAbout> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).about),
         ),
         body: _buildPreferenceList(context));
@@ -84,7 +84,7 @@ class _SettingsAboutState extends State<SettingsAbout> {
       bloc: _settingsAboutBloc,
       builder: (context, state) {
         if (state is SettingsAboutStateInitial) {
-          return CircularProgressIndicator();
+          return StateInfo(showLoading: true);
         } else if (state is SettingsAboutStateSuccess) {
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [

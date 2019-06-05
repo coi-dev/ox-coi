@@ -55,6 +55,7 @@ import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'message_action.dart';
 import 'message_received_view.dart';
@@ -130,9 +131,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
             children: buildMessageAndMarker(state),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         }
       },
     );

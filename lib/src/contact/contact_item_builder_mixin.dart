@@ -63,7 +63,7 @@ mixin ContactItemBuilder {
               backgroundColor: Colors.blue[50],
               label: Text(isNullOrEmpty(state.name) ? state.email : state.name),
               onDeleted: onContactTapped,
-              deleteIconColor: primary,
+              deleteIconColor: accent,
             ),
           );
         } else {

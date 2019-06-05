@@ -213,7 +213,7 @@ class _LoginState extends State<Login> {
               AppLocalizations.of(context).loginInformation,
               softWrap: true,
               textAlign: TextAlign.center,
-              style: TextStyle(color: textColorInverted),
+              style: TextStyle(color: textInverted),
             ),
           ),
           Container(
@@ -224,10 +224,10 @@ class _LoginState extends State<Login> {
                   children: <Widget>[emailField, passwordField],
                 ),
               )),
-          OutlineButton(
+          RaisedButton(
+            color: accent,
+            textColor: text,
             onPressed: _advancedPressed,
-            borderSide: BorderSide(color: transparent),
-            highlightedBorderColor: transparent,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

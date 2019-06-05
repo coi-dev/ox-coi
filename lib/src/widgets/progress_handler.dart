@@ -81,7 +81,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(textColorInverted),
+          valueColor: AlwaysStoppedAnimation<Color>(textInverted),
         ),
         Padding(
           padding: EdgeInsets.only(top: verticalPadding),
@@ -89,7 +89,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
               child: Text(
             _text,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subhead.apply(color: textColorInverted),
+            style: Theme.of(context).textTheme.subhead.apply(color: textInverted),
           )),
         ),
       ],
@@ -100,7 +100,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         child: Text(
           "${progress / 10}%",
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.subhead.apply(color: textColorInverted),
+          style: Theme.of(context).textTheme.subhead.apply(color: textInverted),
         ),
       ));
     }

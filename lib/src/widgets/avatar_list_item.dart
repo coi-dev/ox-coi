@@ -97,7 +97,7 @@ class AvatarListItem extends StatelessWidget {
                 )
               : CircleAvatar(
                   radius: listAvatarRadius,
-                  foregroundColor: listAvatarForegroundColor,
+                  foregroundColor: avatarForegroundColor,
                   child: Icon(avatarIcon),
                 ),
             Expanded(
@@ -152,7 +152,7 @@ class AvatarListItem extends StatelessWidget {
                           visible: freshMessageCount != null && freshMessageCount > 0,
                           child: Container(
                             padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                            decoration: BoxDecoration(color: chatMain, borderRadius: BorderRadius.circular(100)),
+                            decoration: BoxDecoration(color: primary, borderRadius: BorderRadius.circular(100)),
                             child: Text(
                               freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
                               style: TextStyle(color: Colors.white, fontSize: 12.0),

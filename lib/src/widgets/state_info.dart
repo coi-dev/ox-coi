@@ -40,52 +40,77 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
-class Avatar extends StatelessWidget {
-  final String imagePath;
-  final String textPrimary;
-  final String textSecondary;
-  final Color color;
+class StateInfo extends StatelessWidget {
+  final bool showLoading;
 
-  Avatar({this.imagePath, @required this.textPrimary, @required this.textSecondary, this.color});
+  final String imagePath;
+
+  final String title;
+
+  final String subTitle;
+
+  final String actionTitle;
+
+  final Function action;
+
+  const StateInfo({Key key, this.showLoading, this.imagePath, this.title, this.subTitle, this.actionTitle, this.action}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String initials;
-    FileImage avatarImage;
-    if (imagePath != null && imagePath.isNotEmpty) {
-      avatarImage = FileImage(File(imagePath));
-    } else {
-      initials = getInitials(textPrimary, textSecondary);
-    }
-    if (avatarImage == null && isNullOrEmpty(initials)) {
-      return Container(
-        height: listAvatarDiameter,
-        width: listAvatarDiameter,
-      );
-    }
-    return CircleAvatar(
-      radius: listAvatarRadius,
-      foregroundColor: avatarForegroundColor,
-      backgroundColor: color != null ? color : transparent,
-      child: avatarImage != null ? avatarImage : new Text(initials),
+    return Center(
+      child: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: listStateInfoVerticalPadding),
+              ),
+              if (showLoading != null && showLoading) CircularProgressIndicator(),
+              if (!isNullOrEmpty(imagePath)) Image.asset(imagePath),
+              if (!isNullOrEmpty(title))
+                Padding(
+                  padding: buildEdgeInsets(),
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.title,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              if (!isNullOrEmpty(subTitle))
+                Padding(
+                  padding: buildEdgeInsets(),
+                  child: Text(
+                    subTitle,
+                    style: Theme.of(context).textTheme.subtitle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              if (!isNullOrEmpty(actionTitle) && action != null)
+                Padding(
+                  padding: buildEdgeInsets(),
+                  child: RaisedButton(
+                    color: accent,
+                    textColor: text,
+                    onPressed: action,
+                    child: Text(actionTitle),
+                  ),
+                ),
+              Padding(
+                padding: EdgeInsets.only(bottom: listStateInfoVerticalPadding),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  static String getInitials(String textPrimary, [String textSecondary]) {
-    if (textPrimary != null && textPrimary.isNotEmpty) {
-      return textPrimary.substring(0, 1);
-    }
-    if (textSecondary != null && textSecondary.isNotEmpty) {
-      return textSecondary.substring(0, 1);
-    }
-    return "";
-  }
+  EdgeInsets buildEdgeInsets() => EdgeInsets.only(top: listStateInfoVerticalPadding, left: listStateInfoHorizontalPadding, right: listStateInfoHorizontalPadding);
 }
-

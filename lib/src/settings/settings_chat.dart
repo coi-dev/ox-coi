@@ -47,6 +47,7 @@ import 'package:ox_coi/src/settings/settings_chat_bloc.dart';
 import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsChat extends StatefulWidget {
   @override
@@ -66,7 +67,6 @@ class _SettingsChatState extends State<SettingsChat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).chat),
         ),
         body: _buildPreferenceList(context));
@@ -88,9 +88,7 @@ class _SettingsChatState extends State<SettingsChat> {
             ]).toList(),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         }
       },
     );

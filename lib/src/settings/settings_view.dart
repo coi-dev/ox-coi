@@ -64,7 +64,6 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).settings),
         ),
         body: buildPreferenceList(context));
@@ -76,7 +75,7 @@ class SettingsView extends StatelessWidget {
         ListTile(
           leading: Icon(
             Icons.account_circle,
-            color: primary,
+            color: accent,
           ),
           title: Text(AppLocalizations.of(context).accountSettingsTitle),
           onTap: () => _onPressed(context, SettingsType.account),
@@ -84,7 +83,7 @@ class SettingsView extends StatelessWidget {
         ListTile(
           leading: Icon(
             Icons.security,
-            color: primary,
+            color: accent,
           ),
           title: Text(AppLocalizations.of(context).security),
           onTap: () => _onPressed(context, SettingsType.security),
@@ -92,7 +91,7 @@ class SettingsView extends StatelessWidget {
         ListTile(
           leading: Icon(
             Icons.chat,
-            color: primary,
+            color: accent,
           ),
           title: Text(AppLocalizations.of(context).chat),
           onTap: () => _onPressed(context, SettingsType.chat),
@@ -100,7 +99,7 @@ class SettingsView extends StatelessWidget {
         ListTile(
           leading: Icon(
             Icons.info,
-            color: primary,
+            color: accent,
           ),
           title: Text(AppLocalizations.of(context).about),
           onTap: () => _onPressed(context, SettingsType.about),

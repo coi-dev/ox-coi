@@ -70,7 +70,7 @@ class UserProfileView extends RootChild {
 
   @override
   Color getColor() {
-    return profileMain;
+    return primary;
   }
 
   @override
@@ -157,10 +157,9 @@ class _ProfileState extends State<UserProfileView> {
                 placeHolderAlign: TextAlign.center,
               ),
             ),
-            OutlineButton(
-              highlightedBorderColor: accent,
-              borderSide: BorderSide(color: accent),
-              textColor: accent,
+            RaisedButton(
+              color: accent,
+              textColor: text,
               onPressed: editUserSettings,
               child: Text(AppLocalizations.of(context).profileEditButton),
             ),

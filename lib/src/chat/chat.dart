@@ -66,6 +66,7 @@ import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
 import 'package:rxdart/rxdart.dart';
 
@@ -326,9 +327,7 @@ class _ChatState extends State<Chat> with ChatComposer {
             );
           }
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         }
       },
     );

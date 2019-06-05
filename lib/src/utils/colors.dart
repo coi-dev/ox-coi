@@ -64,15 +64,18 @@ int _blue(int color) {
 }
 
 // Global
-const Color primary = Colors.blue;
+final Color primary = Colors.blue[600];
 const Color accent = Colors.blue;
+const Color transparent = Colors.transparent;
 
+// Text
+const Color text = Colors.white;
 const Color textDisabled = Colors.black26;
 const Color textLessImportant = Colors.black45;
+const Color textInverted = Colors.white;
+
+// Icons / images
 const Color appBarIcon = Colors.white;
-const Color textColorInverted = Colors.white;
-const Color transparent = Colors.transparent;
-const Color divider = Colors.black;
 
 // Progress
 final Color progressBackground = Colors.black45;
@@ -80,14 +83,8 @@ final Color progressBackground = Colors.black45;
 // Login
 const Color loginHintBackground = Colors.blueGrey;
 
-// List
-const Color listAvatarForegroundColor = Colors.white;
-final Color listAvatarDefaultBackgroundColor = Colors.transparent;
-
 // Chat
-const Color chatMain = Colors.blue;
 final Color chatComposeBorder = Colors.black12;
-const Color messageListDateSeparatorForeground = Colors.black54;
 
 // Messages
 const Color messageBoxGrey = Colors.grey;
@@ -96,15 +93,12 @@ const Color messageReceivedBackground = Colors.white;
 final Color messageTimeForeground = Colors.grey[700];
 const Color messageInfoBackground = Colors.white70;
 final Color messageSetupBackground = Colors.blue[200];
+const Color messageListDateSeparatorForeground = Colors.black54;
 
-// Mail
-const Color mailMain = Colors.indigo;
-
-// Contact
-const Color contactMain = Colors.blueGrey;
+// Avatar
 const Color avatarDefaultBackground = Colors.blue;
+const Color avatarForegroundColor = Colors.white;
 
 // Profile
-const Color profileMain = contactMain;
 final Color editUserAvatarPlaceholderIconColor = Colors.white54;
 const Color editUserAvatarEditIconColor = Colors.white;

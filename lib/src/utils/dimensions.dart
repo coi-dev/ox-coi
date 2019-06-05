@@ -49,15 +49,15 @@ const dividerHeight = 0.0;
 // Progress
 const verticalPaddingSmall = 8.0;
 const verticalPadding = 16.0;
-const horizontalPadding = 16.0;
 
 // List
-const listItemHeaderPadding = 8.0;
 const listItemPaddingBig = 16.0;
 const listItemPadding = 8.0;
 const listItemPaddingSmall = 4.0;
 const listAvatarRadius = 24.0;
 const listAvatarDiameter = listAvatarRadius * 2;
+const listStateInfoHorizontalPadding = 24.0;
+const listStateInfoVerticalPadding = 16.0;
 
 // AppBar
 const appBarAvatarTextPadding = 16.0;

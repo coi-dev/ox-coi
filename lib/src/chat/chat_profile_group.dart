@@ -105,7 +105,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> with ContactProfile
                 ListTile(
                   leading: Icon(
                     Icons.delete,
-                    color: primary,
+                    color: accent,
                   ),
                   title: Text(
                     AppLocalizations.of(context).chatProfileLeaveGroupButtonText,

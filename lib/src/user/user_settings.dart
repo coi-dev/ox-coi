@@ -101,7 +101,6 @@ class _UserSettingsState extends State<UserSettings> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context),
           ),
-          backgroundColor: contactMain,
           title: Text(AppLocalizations.of(context).userSettingsTitle),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: _saveChanges)],
         ),
@@ -166,7 +165,7 @@ class _UserSettingsState extends State<UserSettings> {
                       controller: _usernameController,
                       decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsUsernameLabel)),
                   TextFormField(
-                    maxLines: 1,
+                    maxLines: 2,
                     controller: _statusController,
                     decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsStatusLabel),
                   ),

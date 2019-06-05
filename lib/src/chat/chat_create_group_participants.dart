@@ -58,6 +58,7 @@ import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
   @override
@@ -133,9 +134,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
             ],
           );
         } else if (state is! ContactListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }

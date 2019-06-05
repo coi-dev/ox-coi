@@ -152,7 +152,6 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       onWillPop: () async => _enableBack,
       child: Scaffold(
           appBar: AppBar(
-            backgroundColor: contactMain,
             title: Text(AppLocalizations.of(context).security),
           ),
           body: _buildPreferenceList(context)),

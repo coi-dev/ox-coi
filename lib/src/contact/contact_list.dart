@@ -57,6 +57,7 @@ import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ContactListView extends RootChild {
@@ -73,7 +74,7 @@ class ContactListView extends RootChild {
 
   @override
   Color getColor() {
-    return contactMain;
+    return primary;
   }
 
   @override
@@ -157,9 +158,7 @@ class _ContactListState extends State<ContactListView> {
         if (state is ContactListStateSuccess) {
           return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
         } else if (state is! ContactListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return StateInfo(showLoading: true);
         } else {
           return Icon(Icons.error);
         }
