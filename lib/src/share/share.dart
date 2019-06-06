@@ -137,7 +137,7 @@ class _ShareScreenState extends State<ShareScreen> {
     _shareBloc.dispatch(ForwardMessages(chatId, widget._msgIds));
     navigation.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => Chat(chatId)),
+      MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
       ModalRoute.withName(Navigation.root),
       Navigatable(Type.chat, params: [chatId]),
     );

@@ -42,16 +42,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
-import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 class InviteItem extends StatefulWidget {
@@ -81,30 +79,43 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
       bloc: _messageItemBloc,
       builder: (context, state) {
         String name;
-        String subTitle;
+        String preview;
         Color color;
+        int timestamp = 0;
         if (state is MessageItemStateSuccess) {
           var contactWrapper = state.contactWrapper;
           _contactId = contactWrapper.contactId;
           name = contactWrapper.contactAddress;
-          subTitle = state.messageText;
+          preview = state.preview;
+          timestamp = state.messageTimestamp;
           color = avatarDefaultBackground;
         } else {
           name = "";
-          subTitle = "";
+          preview = "";
         }
         return AvatarListItem(
           title: name,
-          subTitle: subTitle,
+          subTitle: preview,
           color: color,
+          timestamp: timestamp,
           onTap: inviteItemTapped,
+          isInvite: true,
         );
       },
     );
   }
 
   inviteItemTapped(String name, String message) {
-    return showNavigatableDialog(
+    navigation.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Chat(
+              chatId: widget._chatId,
+              messageId: widget._messageId,
+            ),
+      ),
+    );
+    /*return showNavigatableDialog(
       context: context,
       navigatable: Navigatable(Type.contactInviteDialog),
       dialog: AlertDialog(
@@ -133,12 +144,12 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
           ),
         ],
       ),
-    );
+    );*/
   }
 
   void blockUser() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(_contactId, null));
+    contactChangeBloc.dispatch(BlockContact(contactId: _contactId, chatId: widget._chatId));
   }
 
   @override

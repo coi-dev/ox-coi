@@ -41,6 +41,7 @@
  */
 
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
@@ -49,11 +50,24 @@ import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/message/message_list_bloc.dart';
+import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:rxdart/rxdart.dart';
+
+enum ChatListItemType {
+  chat,
+  message,
+}
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
-  final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-  RepositoryMultiEventStreamHandler repositoryStreamHandler;
+  final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
+  final Repository<ChatMsg> _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+  final _messageListBloc = MessageListBloc();
+  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
+  String _currentSearch;
+  bool _showInvites;
 
   @override
   ChatListState get initialState => ChatListStateInitial();
@@ -61,67 +75,187 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   @override
   Stream<ChatListState> mapEventToState(ChatListState currentState, ChatListEvent event) async* {
     if (event is RequestChatList) {
+      _currentSearch = null;
       yield ChatListStateLoading();
       try {
         setupChatListListener();
-        setupChatList(event.query);
+        _showInvites = event.showInvites;
+        if (_showInvites) {
+          setupInvites(true);
+        } else {
+          setupChatList(true);
+        }
       } catch (error) {
         yield ChatListStateFailure(error: error.toString());
       }
+    } else if (event is SearchChatList) {
+      try {
+        _currentSearch = event.query;
+        setupChatList(true);
+      } catch (error) {
+        yield ChatListStateFailure(error: error.toString());
+      }
+    } else if (event is InvitesPrepared) {
+      setupChatList(true, event.messageIds);
     } else if (event is ChatListModified) {
       yield ChatListStateSuccess(
-        chatIds: chatRepository.getAllIds(),
-        chatLastUpdateValues: chatRepository.getAllLastUpdateValues(),
-      );
-    } else if (event is ChatListSearched) {
-      yield ChatListStateSuccess(
-        chatIds: event.chatIds,
-        chatLastUpdateValues: event.lastUpdateValues,
+        chatListItemWrapper: event.chatListItemWrapper,
       );
     }
   }
 
   @override
   void dispose() {
-    chatRepository.removeListener(repositoryStreamHandler);
+    _chatRepository.removeListener(_repositoryStreamHandler);
+    _messageListBloc.dispose();
     super.dispose();
   }
 
-  void setupChatList([String query]) async {
-    ChatList chatList = ChatList();
-    await chatList.setup(query);
-    int chatCount = await chatList.getChatCnt();
-    List<int> chatIds = List();
-    Map<int, dynamic> chatSummaries = Map();
-    for (int i = 0; i < chatCount; i++) {
-      int chatId = await chatList.getChat(i);
-      chatIds.add(chatId);
-      var summaryData = await chatList.getChatSummary(i);
-      var chatSummary = ChatSummary.fromMethodChannel(summaryData);
-      chatSummaries.putIfAbsent(chatId, () => chatSummary);
-    }
-    await chatList.tearDown();
-    chatRepository.putIfAbsent(ids: chatIds);
-    chatSummaries.forEach((id, chatSummary) {
-      chatRepository.get(id).set(ChatExtension.chatSummary, chatSummary);
-    });
-    if (isNullOrEmpty(query)) {
-      dispatch(ChatListModified());
-    } else {
-      dispatch(ChatListSearched(chatIds: chatIds, lastUpdateValues: null));
-    }
-  }
-
   void setupChatListListener() {
-    if (repositoryStreamHandler == null) {
-      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _chatListModified);
-      chatRepository.addListener(repositoryStreamHandler);
+    if (_repositoryStreamHandler == null) {
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _chatListModified);
+      _chatRepository.addListener(_repositoryStreamHandler);
+
+      final messageListObservable = Observable<MessageListState>(_messageListBloc.state);
+      messageListObservable.listen((state) async {
+        if (state is MessagesStateSuccess) {
+          var uniqueInviteMap = LinkedHashMap<int, int>();
+          await Future.forEach(state.messageIds, (messageId) async {
+            ChatMsg message = _messageListRepository.get(messageId);
+            var contactId = await message.getFromId();
+            if (!uniqueInviteMap.containsKey(contactId)) {
+              uniqueInviteMap.putIfAbsent(contactId, () => messageId);
+            }
+          });
+          dispatch(InvitesPrepared(messageIds: uniqueInviteMap.values.toList(growable: false)));
+        }
+      });
     }
   }
 
-  _chatListModified() async {
+  Future<void> _chatListModified() async {
     await _updateSummaries();
-    dispatch(ChatListModified());
+    if (_showInvites) {
+      setupInvites(false);
+    } else {
+      dispatch(ChatListModified(
+        chatListItemWrapper: createChatListItemWrapper(_chatRepository.getAllIds(), _chatRepository.getAllLastUpdateValues()),
+      ));
+    }
+  }
+
+  Future setupInvites(bool chatListRefreshNeeded) async {
+    _messageListBloc.dispatch(RequestMessages(chatId: Chat.typeInvite));
+  }
+
+  ChatListItemWrapper createChatListItemWrapper(List<int> ids, List<int> lastUpdateValues, [List<int> types]) {
+    var typesFallback = List<ChatListItemType>.filled(ids.length, ChatListItemType.chat, growable: false);
+    return ChatListItemWrapper(
+      ids: ids,
+      types: types ?? typesFallback,
+      lastUpdateValues: lastUpdateValues,
+    );
+  }
+
+  Future<ChatListItemWrapper> mergeInvitesAndChats(List<int> chatIds, List<int> inviteMessageIds) async {
+    var ids = List<int>();
+    var types = List<ChatListItemType>();
+    var lastUpdateValues = List<int>();
+    int stop = chatIds.length + inviteMessageIds.length;
+    int index = 0;
+    int nextChat = 0;
+    int nextInvite = 0;
+    while (index < stop) {
+      if (nextChat >= chatIds.length) {
+        nextInvite = addInviteMessageToResult(ids, getMessage(inviteMessageIds, nextInvite), types, lastUpdateValues, nextInvite);
+      } else if (nextInvite >= inviteMessageIds.length) {
+        nextChat = addChatToResult(ids, getChat(chatIds, nextChat), types, lastUpdateValues, nextChat);
+      } else {
+        Chat chat = getChat(chatIds, nextChat);
+        ChatSummary chatSummary = chat.get(ChatExtension.chatSummary);
+        var chatTimestamp = chatSummary.timestamp;
+        ChatMsg message = getMessage(inviteMessageIds, nextInvite);
+        var inviteTimestamp = await message.getTimestamp();
+        if (chatTimestamp > inviteTimestamp) {
+          nextChat = addChatToResult(ids, chat, types, lastUpdateValues, nextChat);
+        } else {
+          nextInvite = addInviteMessageToResult(ids, message, types, lastUpdateValues, nextInvite);
+        }
+      }
+      index++;
+    }
+    return ChatListItemWrapper(
+      ids: ids,
+      types: types,
+      lastUpdateValues: lastUpdateValues,
+    );
+  }
+
+  Chat getChat(List<int> chatIds, int nextChat) => _chatRepository.get(chatIds[nextChat]);
+
+  ChatMsg getMessage(List<int> inviteMessageIds, int nextInvite) => _messageListRepository.get(inviteMessageIds[nextInvite]);
+
+  int addChatToResult(List ids, Chat chat, List types, List lastUpdateValues, int nextChat) {
+    ids.add(chat.id);
+    types.add(ChatListItemType.chat);
+    lastUpdateValues.add(chat.lastUpdate);
+    nextChat++;
+    return nextChat;
+  }
+
+  int addInviteMessageToResult(List ids, ChatMsg message, List types, List lastUpdateValues, int nextInvite) {
+    ids.add(message.id);
+    types.add(ChatListItemType.message);
+    lastUpdateValues.add(message.lastUpdate);
+    nextInvite++;
+    return nextInvite;
+  }
+
+  Future<void> setupChatList(bool chatListRefreshNeeded, [List<int> inviteMessageIds]) async {
+    var ids = List<int>();
+    List<int> chatIds = List();
+    var lastUpdateValues = List<int>();
+    if (chatListRefreshNeeded) {
+      ChatList chatList = ChatList();
+      await chatList.setup(_currentSearch);
+      int chatCount = await chatList.getChatCnt();
+      Map<int, dynamic> chatSummaries = Map();
+      for (int i = 0; i < chatCount; i++) {
+        int chatId = await chatList.getChat(i);
+        chatIds.add(chatId);
+        var summaryData = await chatList.getChatSummary(i);
+        var chatSummary = ChatSummary.fromMethodChannel(summaryData);
+        chatSummaries.putIfAbsent(chatId, () => chatSummary);
+      }
+      await chatList.tearDown();
+      _chatRepository.putIfAbsent(ids: chatIds);
+      chatSummaries.forEach((id, chatSummary) {
+        _chatRepository.get(id).set(ChatExtension.chatSummary, chatSummary);
+      });
+    }
+    if (isNullOrEmpty(_currentSearch)) {
+      ids = _chatRepository.getAllIds();
+      lastUpdateValues = _chatRepository.getAllLastUpdateValues();
+    } else {
+      var chatLastUpdateValues = List<int>();
+      int timestamp = getNowTimestamp();
+      chatIds.forEach((_) {
+        chatLastUpdateValues.add(timestamp);
+      });
+      ids = chatIds;
+      lastUpdateValues = chatLastUpdateValues;
+    }
+    ChatListItemWrapper chatListItemWrapper;
+    if (inviteMessageIds == null || inviteMessageIds.isEmpty) {
+      chatListItemWrapper = ChatListItemWrapper(
+        ids: ids,
+        types: List<ChatListItemType>.filled(ids.length, ChatListItemType.chat, growable: true),
+        lastUpdateValues: lastUpdateValues,
+      );
+    } else {
+      chatListItemWrapper = await mergeInvitesAndChats(ids, inviteMessageIds);
+    }
+    dispatch(ChatListModified(chatListItemWrapper: chatListItemWrapper));
   }
 
   Future<void> _updateSummaries() async {
@@ -132,7 +266,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       int chatId = await chatList.getChat(i);
       var summaryData = await chatList.getChatSummary(i);
       var chatSummary = ChatSummary.fromMethodChannel(summaryData);
-      chatRepository.get(chatId).set(ChatExtension.chatSummary, chatSummary);
+      _chatRepository.get(chatId).set(ChatExtension.chatSummary, chatSummary);
     }
     await chatList.tearDown();
   }

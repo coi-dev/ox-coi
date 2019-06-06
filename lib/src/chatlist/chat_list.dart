@@ -40,43 +40,86 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
+import 'package:ox_coi/src/chatlist/invite_item.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-class ChatList extends StatefulWidget {
-  final void Function(int) _switchMultiSelect;
-  final void Function(int) _multiSelectItemTapped;
-  final bool _isMultiSelect;
+class ChatList extends RootChild {
+  final Navigation navigation = Navigation();
 
-  ChatList(this._switchMultiSelect, this._multiSelectItemTapped, this._isMultiSelect);
+  ChatList(State<StatefulWidget> state) : super(state);
 
   @override
-  _ChatListState createState() => _ChatListState();
+  _ChatListState createState() {
+    final state = _ChatListState();
+    setActions([state.getSearchAction()]);
+    return state;
+  }
+
+  @override
+  Color getColor() {
+    return primary;
+  }
+
+  @override
+  FloatingActionButton getFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: new Icon(Icons.chat),
+      onPressed: () {
+        _showCreateChatView(context);
+      },
+    );
+  }
+
+  _showCreateChatView(BuildContext context) {
+    navigation.pushNamed(context, Navigation.chatCreate);
+  }
+
+  @override
+  String getTitle(BuildContext context) {
+    return AppLocalizations.of(context).chatTitle;
+  }
+
+  @override
+  String getNavigationText(BuildContext context) {
+    return AppLocalizations.of(context).chatTitle;
+  }
+
+  @override
+  IconData getNavigationIcon() {
+    return Icons.chat;
+  }
 }
 
 class _ChatListState extends State<ChatList> {
   ChatListBloc _chatListBloc = ChatListBloc();
+  ChatListBloc _chatListSearchBloc = ChatListBloc();
   Navigation _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chatList);
-    _chatListBloc.dispatch(RequestChatList());
+    _chatListBloc.dispatch(RequestChatList(showInvites: true));
   }
 
   @override
   void dispose() {
     _chatListBloc.dispose();
+    _chatListSearchBloc.dispose();
     super.dispose();
   }
 
@@ -86,7 +129,7 @@ class _ChatListState extends State<ChatList> {
       bloc: _chatListBloc,
       builder: (context, state) {
         if (state is ChatListStateSuccess) {
-          if (state.chatIds.length > 0) {
+          if (state.chatListItemWrapper.ids.length > 0) {
             return buildListItems(state);
           } else {
             return Padding(
@@ -109,22 +152,62 @@ class _ChatListState extends State<ChatList> {
   }
 
   ListView buildListItems(ChatListStateSuccess state) {
+    var chatListItemWrapper = state.chatListItemWrapper;
     return ListView.builder(
       padding: EdgeInsets.only(top: listItemPadding),
-      itemCount: state.chatIds.length,
+      itemCount: chatListItemWrapper.ids.length,
       itemBuilder: (BuildContext context, int index) {
-        var chatId = state.chatIds[index];
-        var key = createKeyString(chatId, state.chatLastUpdateValues[index]);
-        return ChatListItem(chatId, multiSelectItemTapped, switchMultiSelect, widget._isMultiSelect, false, key);
+        var id = chatListItemWrapper.ids[index];
+        var key = createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
+        if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
+          return ChatListItem(id, multiSelectItemTapped, switchMultiSelect, false, false, key);
+        } else {
+          return InviteItem(Chat.typeInvite, id, key);
+        }
       },
     );
   }
 
-  multiSelectItemTapped(int id) {
-    widget._multiSelectItemTapped(id);
+  multiSelectItemTapped(int id) {}
+
+  switchMultiSelect(int id) {}
+
+  Widget getSearchAction() {
+    Search search = Search(
+      onBuildResults: onBuildResultOrSuggestion,
+      onBuildSuggestion: onBuildResultOrSuggestion,
+    );
+    return IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () => search.show(context),
+    );
   }
 
-  switchMultiSelect(int id) {
-    widget._switchMultiSelect(id);
+  Widget onBuildResultOrSuggestion(String query) {
+    _chatListSearchBloc.dispatch(SearchChatList(query: query, showInvites: false));
+    return buildSearchResults();
+  }
+
+  Widget buildSearchResults() {
+    return BlocBuilder(
+      bloc: _chatListSearchBloc,
+      builder: (context, state) {
+        if (state is ChatListStateSuccess) {
+          if (state.chatListItemWrapper.ids.length > 0) {
+            return buildListItems(state);
+          } else {
+            return Center(
+              child: Text(AppLocalizations.of(context).searchEmpty),
+            );
+          }
+        } else if (state is! ChatListStateFailure) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Icon(Icons.error);
+        }
+      },
+    );
   }
 }

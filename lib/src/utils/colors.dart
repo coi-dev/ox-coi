@@ -76,6 +76,9 @@ const Color textInverted = Colors.white;
 
 // Icons / images
 const Color appBarIcon = Colors.white;
+const Color textColorInverted = Colors.white;
+const Color divider = Colors.black;
+final Color error = Colors.red[800];
 
 // Progress
 final Color progressBackground = Colors.black45;

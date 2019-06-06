@@ -115,7 +115,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Crea
     } else {
       navigation.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => Chat(chatId)),
+        MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
         ModalRoute.withName(Navigation.root),
         Navigatable(Type.chatList),
       );

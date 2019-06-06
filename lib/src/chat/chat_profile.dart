@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
@@ -48,15 +49,17 @@ import 'package:ox_coi/src/chat/chat_profile_group.dart';
 import 'package:ox_coi/src/chat/chat_profile_single.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 
 class ChatProfile extends StatefulWidget {
-  final int _chatId;
+  final int chatId;
+  final int messageId;
 
-  ChatProfile(this._chatId);
+  ChatProfile({@required this.chatId, this.messageId});
 
   @override
   _ChatProfileState createState() => _ChatProfileState();
@@ -71,8 +74,14 @@ class _ChatProfileState extends State<ChatProfile> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatProfile);
-    _chatBloc.dispatch(RequestChat(widget._chatId));
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget._chatId));
+    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
+    int listTypeOrChatId;
+    if (widget.chatId == Chat.typeInvite) {
+      listTypeOrChatId = ContactRepository.inviteContacts;
+    } else {
+      listTypeOrChatId = widget.chatId;
+    }
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: listTypeOrChatId));
   }
 
   @override
@@ -95,7 +104,7 @@ class _ChatProfileState extends State<ChatProfile> {
                 if (state is ChatStateSuccess) {
                   bool _isVerified = state.isVerified;
                   if (state.isGroupChat) {
-                    return ChatProfileGroup(widget._chatId, state.name, state.color, _isVerified);
+                    return ChatProfileGroup(widget.chatId, state.name, state.color, _isVerified);
                   } else {
                     return _buildChatProfileOneToOne(state);
                   }
@@ -113,7 +122,7 @@ class _ChatProfileState extends State<ChatProfile> {
         builder: (context, state) {
           if (state is ContactListStateSuccess) {
             var key = createKeyString(state.contactIds.first, state.contactLastUpdateValues.first);
-            return ChatProfileOneToOne(widget._chatId, _isSelfTalk, state.contactIds.first, key);
+            return ChatProfileOneToOne(widget.chatId, _isSelfTalk, state.contactIds.first, key);
           } else {
             return Container();
           }

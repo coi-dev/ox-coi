@@ -315,6 +315,8 @@ class AppLocalizations {
 
   String get chatEmpty => Intl.message('This is a new chat. Send a message to connect!', name: 'chatEmpty');
 
+  String get chatInviteQuestion => Intl.message('Do you want to chat with this new contact?', name: 'chatInviteQuestion');
+
 
   // Chat profile view
   String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');

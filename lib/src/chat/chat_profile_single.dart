@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
@@ -78,8 +79,16 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> with ContactP
   @override
   void initState() {
     super.initState();
-    _contactItemBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
+    var listType;
+    if (isInvite()) {
+      listType = ContactRepository.inviteContacts;
+    } else {
+      listType = ContactRepository.validContacts;
+    }
+    _contactItemBloc.dispatch(RequestContact(contactId: widget._contactId, listType: listType));
   }
+
+  bool isInvite() => widget._chatId == Chat.typeInvite;
 
   @override
   void dispose() {
@@ -125,16 +134,17 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> with ContactP
               ),
               onTap: () => _showBlockContactDialog(ChatProfileViewAction.block),
             ),
-          ListTile(
-            leading: Icon(
-              Icons.delete,
-              color: accent,
+          if (!isInvite())
+            ListTile(
+              leading: Icon(
+                Icons.delete,
+                color: accent,
+              ),
+              title: Text(
+                AppLocalizations.of(context).chatProfileDeleteChatButtonText,
+              ),
+              onTap: () => _showBlockContactDialog(ChatProfileViewAction.delete),
             ),
-            title: Text(
-              AppLocalizations.of(context).chatProfileDeleteChatButtonText,
-            ),
-            onTap: () => _showBlockContactDialog(ChatProfileViewAction.delete),
-          ),
         ]),
       ],
     );
@@ -177,7 +187,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> with ContactP
 
   _blockContact() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(widget._contactId, widget._chatId));
+    contactChangeBloc.dispatch(BlockContact(contactId: widget._contactId, chatId: widget._chatId));
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 

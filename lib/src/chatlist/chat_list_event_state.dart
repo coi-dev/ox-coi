@@ -42,21 +42,40 @@
 
 import 'package:meta/meta.dart';
 
+import 'chat_list_bloc.dart';
+
 abstract class ChatListEvent {}
 
 class RequestChatList extends ChatListEvent {
-  String query;
+  final bool showInvites;
 
-  RequestChatList({this.query});
+  RequestChatList({@required this.showInvites});
 }
 
-class ChatListModified extends ChatListEvent {}
+class SearchChatList extends ChatListEvent {
+  final String query;
+  final bool showInvites;
 
-class ChatListSearched extends ChatListEvent {
+  SearchChatList({@required this.query, @required this.showInvites});
+}
+
+class InvitesPrepared extends ChatListEvent {
+  final String query;
+  final List<int> messageIds;
+
+  InvitesPrepared({this.query, @required this.messageIds});
+}
+
+class ChatsPrepared extends ChatListEvent {
   final List<int> chatIds;
-  final List<int> lastUpdateValues;
 
-  ChatListSearched({@required this.chatIds, @required this.lastUpdateValues});
+  ChatsPrepared({@required this.chatIds});
+}
+
+class ChatListModified extends ChatListEvent {
+  final ChatListItemWrapper chatListItemWrapper;
+
+  ChatListModified({@required this.chatListItemWrapper});
 }
 
 abstract class ChatListState {}
@@ -66,12 +85,10 @@ class ChatListStateInitial extends ChatListState {}
 class ChatListStateLoading extends ChatListState {}
 
 class ChatListStateSuccess extends ChatListState {
-  final List<int> chatIds;
-  final List<int> chatLastUpdateValues;
+  final ChatListItemWrapper chatListItemWrapper;
 
   ChatListStateSuccess({
-    @required this.chatIds,
-    @required this.chatLastUpdateValues,
+    @required this.chatListItemWrapper,
   });
 }
 
@@ -79,4 +96,12 @@ class ChatListStateFailure extends ChatListState {
   final String error;
 
   ChatListStateFailure({@required this.error});
+}
+
+class ChatListItemWrapper {
+  final List<int> ids;
+  final List<ChatListItemType> types;
+  final List<int> lastUpdateValues;
+
+  ChatListItemWrapper({@required this.ids, @required this.types, @required this.lastUpdateValues});
 }

@@ -55,6 +55,9 @@ import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
 import 'package:ox_coi/src/chat/chat_composer_mixin.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
 import 'package:ox_coi/src/chat/chat_profile.dart';
+import 'package:ox_coi/src/contact/contact_change_bloc.dart';
+import 'package:ox_coi/src/contact/contact_change_event_state.dart';
+import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
@@ -70,19 +73,25 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
 import 'package:rxdart/rxdart.dart';
 
-class Chat extends StatefulWidget {
-  final int _chatId;
+import 'chat_create_mixin.dart';
 
-  Chat(this._chatId);
+class Chat extends StatefulWidget {
+  final int chatId;
+  final int messageId;
+  final String newMessage;
+  final String newPath;
+  final int newFileType;
+
+  Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType});
 
   @override
   _ChatState createState() => new _ChatState();
 }
 
-class _ChatState extends State<Chat> with ChatComposer {
+class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteMixin {
   Navigation navigation = Navigation();
   ChatBloc _chatBloc = ChatBloc();
-  MessageListBloc _messagesBloc = MessageListBloc();
+  MessageListBloc _messageListBloc = MessageListBloc();
   ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
 
@@ -90,6 +99,7 @@ class _ChatState extends State<Chat> with ChatComposer {
   bool _isComposingText = false;
   String _composingAudioTimer;
   String _filePath = "";
+  int _knownType;
   FileType _selectedFileType;
   String _selectedExtension = "";
   String _fileName = "";
@@ -100,17 +110,24 @@ class _ChatState extends State<Chat> with ChatComposer {
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.chat, params: [widget._chatId]);
-    _chatBloc.dispatch(RequestChat(widget._chatId));
+    navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
+    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
     final chatObservable = new Observable<ChatState>(_chatBloc.state);
     chatObservable.listen((state) {
       if (state is ChatStateSuccess) {
-        _messagesBloc.dispatch(RequestMessages(widget._chatId));
+        _messageListBloc.dispatch(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
+        if (widget.newMessage != null || widget.newPath != null) {
+          if (widget.newPath.isEmpty) {
+            _messageListBloc.dispatch(SendMessage(text: widget.newMessage));
+          } else {
+            _messageListBloc.dispatch(SendMessage(path: widget.newPath, fileType: widget.newFileType, text: widget.newMessage));
+          }
+        }
       }
     });
     final chatComposerObservable = new Observable<ChatComposerState>(_chatComposerBloc.state);
     chatComposerObservable.listen((state) => handleChatComposer(state));
-    final messagesObservable = new Observable<MessageListState>(_messagesBloc.state);
+    final messagesObservable = new Observable<MessageListState>(_messageListBloc.state);
     messagesObservable.listen((state) {
       if (state is MessagesStateSuccess) {
         _chatChangeBloc.dispatch(ChatMarkMessagesSeen(state.messageIds));
@@ -126,7 +143,8 @@ class _ChatState extends State<Chat> with ChatComposer {
     } else if (state is ChatComposerRecordingAudioStopped) {
       if (state.filePath != null && state.shouldSend) {
         _filePath = state.filePath;
-        _onMessageSend(ChatMsg.typeVoice);
+        _knownType = ChatMsg.typeVoice;
+        _onPrepareMessageSend();
       }
       setState(() {
         _composingAudioTimer = null;
@@ -134,7 +152,8 @@ class _ChatState extends State<Chat> with ChatComposer {
     } else if (state is ChatComposerRecordingImageOrVideoStopped) {
       if (state.type != 0 && state.filePath != null) {
         _filePath = state.filePath;
-        _onMessageSend(state.type);
+        _knownType = state.type;
+        _onPrepareMessageSend();
       }
     } else if (state is ChatComposerRecordingAborted) {
       _composingAudioTimer = null;
@@ -151,7 +170,9 @@ class _ChatState extends State<Chat> with ChatComposer {
   @override
   void dispose() {
     _chatBloc.dispose();
-    _messagesBloc.dispose();
+    _messageListBloc.dispose();
+    _chatComposerBloc.dispose();
+    _chatChangeBloc.dispose();
     super.dispose();
   }
 
@@ -175,13 +196,71 @@ class _ChatState extends State<Chat> with ChatComposer {
         ),
         body: new Column(children: <Widget>[
           new Flexible(child: buildListView()),
-          _filePath.isNotEmpty ? buildPreview() : Container(),
+          if (isInviteChat(widget.chatId)) buildInviteChoice(),
+          if (_filePath.isNotEmpty) buildPreview(),
           Divider(height: dividerHeight),
           new Container(
             decoration: new BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
           ),
         ]));
+  }
+
+  Widget buildInviteChoice() {
+    return Column(
+      children: <Widget>[
+        Divider(),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(AppLocalizations.of(context).chatInviteQuestion, style: Theme.of(context).textTheme.subhead),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ButtonTheme(
+                minWidth: 120.0,
+                child: OutlineButton(
+                  highlightedBorderColor: error,
+                  onPressed: _blockContact,
+                  child: Text(
+                    AppLocalizations.of(context).block.toUpperCase(),
+                    style: TextStyle(color: error),
+                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+                ),
+              ),
+              ButtonTheme(
+                minWidth: 120.0,
+                child: OutlineButton(
+                  highlightedBorderColor: primary,
+                  onPressed: _createChat,
+                  child: Text(
+                    AppLocalizations.of(context).ok.toUpperCase(),
+                    style: TextStyle(color: primary),
+                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  _blockContact() {
+    _messageListBloc.dispose();
+    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
+    contactChangeBloc.dispatch(BlockContact(messageId: widget.messageId, chatId: widget.chatId));
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+  }
+
+  _createChat() {
+    _messageListBloc.dispose();
+    createChatFromMessage(context, widget.messageId, widget.chatId);
   }
 
   Widget buildPreview() {
@@ -310,7 +389,7 @@ class _ChatState extends State<Chat> with ChatComposer {
 
   Widget buildListView() {
     return BlocBuilder(
-      bloc: _messagesBloc,
+      bloc: _messageListBloc,
       builder: (context, state) {
         if (state is MessagesStateSuccess) {
           if (state.messageIds.length > 0) {
@@ -342,7 +421,7 @@ class _ChatState extends State<Chat> with ChatComposer {
         int messageId = state.messageIds[index];
         bool hasDateMarker = state.dateMarkerIds.contains(messageId);
         var key = "$messageId-${state.messageLastUpdateValues[index]}";
-        return ChatMessageItem(widget._chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
+        return ChatMessageItem(widget.chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
       },
     );
   }
@@ -365,7 +444,7 @@ class _ChatState extends State<Chat> with ChatComposer {
       onRecordAudioPressed: _onRecordAudioPressed,
       onRecordVideoPressed: _onRecordVideoPressed,
       type: _getComposerType(),
-      onSendText: _onMessageSend,
+      onSendText: _onPrepareMessageSend,
       imageVideoKey: _imageVideoKey,
     ));
     return IconTheme(
@@ -396,45 +475,75 @@ class _ChatState extends State<Chat> with ChatComposer {
     });
   }
 
-  void _onMessageSend([int knownType]) {
+  void _onPrepareMessageSend() {
+    if (isInviteChat(widget.chatId)) {
+      _messageListBloc.dispose();
+      createChatFromMessage(context, widget.messageId, widget.chatId, _handleCreateChatSuccess);
+    } else {
+      _onMessageSend();
+    }
+  }
+
+  _handleCreateChatSuccess(int chatId) {
+    navigation.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Chat(
+              chatId: chatId,
+              newMessage: _textController.text,
+              newPath: _filePath,
+              newFileType: getType(),
+            ),
+      ),
+      ModalRoute.withName(Navigation.root),
+      Navigatable(Type.chatList),
+    );
+  }
+
+  void _onMessageSend() {
     String text = _textController.text;
     _textController.clear();
     if (_filePath.isEmpty) {
-      _messagesBloc.submitMessage(text);
+      _messageListBloc.dispatch(SendMessage(text: text));
     } else {
-      int type = 0;
-      if (knownType == null) {
-        switch (_selectedFileType) {
-          case FileType.IMAGE:
-            type = ChatMsg.typeImage;
-            break;
-          case FileType.VIDEO:
-            type = ChatMsg.typeVideo;
-            break;
-          case FileType.AUDIO:
-            type = ChatMsg.typeAudio;
-            break;
-          case FileType.CUSTOM:
-            if (_selectedExtension == "gif") {
-              type = ChatMsg.typeGif;
-            } else {
-              type = ChatMsg.typeFile;
-            }
-            break;
-          case FileType.ANY:
-            type = ChatMsg.typeFile;
-            break;
-        }
-      } else {
-        type = knownType;
-      }
-      _messagesBloc.submitAttachmentMessage(_filePath, type, text);
+      int type = getType();
+      _messageListBloc.dispatch(SendMessage(path: _filePath, fileType: type, text: text));
     }
 
     _closePreview();
     setState(() {
       _isComposingText = false;
     });
+  }
+
+  int getType() {
+    int type = 0;
+    if (_knownType == null) {
+      switch (_selectedFileType) {
+        case FileType.IMAGE:
+          type = ChatMsg.typeImage;
+          break;
+        case FileType.VIDEO:
+          type = ChatMsg.typeVideo;
+          break;
+        case FileType.AUDIO:
+          type = ChatMsg.typeAudio;
+          break;
+        case FileType.CUSTOM:
+          if (_selectedExtension == "gif") {
+            type = ChatMsg.typeGif;
+          } else {
+            type = ChatMsg.typeFile;
+          }
+          break;
+        case FileType.ANY:
+          type = ChatMsg.typeFile;
+          break;
+      }
+    } else {
+      type = _knownType;
+    }
+    return type;
   }
 
   _onRecordAudioPressed() async {
@@ -545,7 +654,7 @@ class _ChatState extends State<Chat> with ChatComposer {
   _chatTitleTapped() {
     navigation.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatProfile(widget._chatId)),
+      MaterialPageRoute(builder: (context) => ChatProfile(chatId: widget.chatId, messageId: widget.messageId)),
     );
   }
 }

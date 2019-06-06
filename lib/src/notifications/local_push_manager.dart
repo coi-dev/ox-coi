@@ -83,8 +83,8 @@ class LocalPushManager {
     List<int> createdNotifications = List();
     List<int> freshMessages = await getAndFilterFreshMessages();
     Future.forEach(freshMessages, (int messageId) async {
-      ChatMsg chatMessage = _temporaryMessageRepository.get(messageId);
-      int chatId = await chatMessage.getChatId();
+      ChatMsg message = _temporaryMessageRepository.get(messageId);
+      int chatId = await message.getChatId();
       if (!createdNotifications.contains(chatId)) {
         createdNotifications.add(chatId);
         String title = await _chatRepository.get(chatId).getName();
@@ -92,8 +92,8 @@ class LocalPushManager {
         if (count > 1) {
           title = "$title (+ $count ${AppLocalizations.of(_buildContext).moreMessages})";
         }
-        String teaser = await chatMessage.getSummaryText(200);
-        showNotificationIfRequired(chatId, title, teaser);
+        String preview = await message.getSummaryText(200);
+        showNotificationIfRequired(chatId, title, preview);
       }
     });
   }

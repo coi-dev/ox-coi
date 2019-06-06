@@ -112,7 +112,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.dispatch(FilterContacts(query: query));
+    _contactListBloc.dispatch(SearchContacts(query: query));
     return buildList();
   }
 

@@ -45,8 +45,6 @@ import 'package:ox_coi/src/data/repository.dart';
 
 class ChatMessageRepository extends Repository<ChatMsg> {
 
-  static const inviteChatId = 1;
-
   ChatMessageRepository(RepositoryItemCreator<ChatMsg> creator) : super(creator);
 
   @override

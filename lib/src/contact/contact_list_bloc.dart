@@ -78,16 +78,20 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
+    } else if (event is SearchContacts) {
+      try {
+        _currentSearch = event.query;
+        _searchContacts();
+      } catch (error) {
+        yield ContactListStateFailure(error: error.toString());
+      }
     } else if (event is ContactsChanged) {
       yield ContactListStateSuccess(
         contactIds: contactRepository.getAllIds(),
         contactLastUpdateValues: contactRepository.getAllLastUpdateValues(),
         contactsSelected: _contactsSelected,
       );
-    } else if (event is FilterContacts) {
-      _currentSearch = event.query;
-      _filterContacts();
-    } else if (event is ContactsFiltered) {
+    } else if (event is ContactsSearched) {
       yield ContactListStateSuccess(
         contactIds: event.ids,
         contactLastUpdateValues: event.lastUpdates,
@@ -109,24 +113,24 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     contactRepository.addListener(repositoryStreamHandler);
   }
 
-  void _dispatchContactsChanged()  {
+  void _dispatchContactsChanged() {
     dispatch(ContactsChanged());
   }
 
   Future _setupContacts() async {
     List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
-    contactRepository.putIfAbsent(ids: contactIds);
+    contactRepository.update(ids: contactIds);
     _dispatchContactsChanged();
   }
 
-  void _filterContacts() async {
+  void _searchContacts() async {
     Context context = Context();
     List<int> contactIds = List.from(await context.getContacts(2, _currentSearch));
     List<int> lastUpdates = List();
     contactIds.forEach((contactId) {
       lastUpdates.add(contactRepository.get(contactId).lastUpdate);
     });
-    dispatch(ContactsFiltered(ids: contactIds, lastUpdates: lastUpdates));
+    dispatch(ContactsSearched(ids: contactIds, lastUpdates: lastUpdates));
   }
 
   void _selectionChanged(int id) {
@@ -138,7 +142,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     if (isNullOrEmpty(_currentSearch)) {
       _dispatchContactsChanged();
     } else {
-      _filterContacts();
+      _searchContacts();
     }
   }
 }

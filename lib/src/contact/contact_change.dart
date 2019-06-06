@@ -123,7 +123,7 @@ class _ContactChangeState extends State<ContactChange> {
           chatRepository.putIfAbsent(id: chatId);
           navigation.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => Chat(chatId)),
+            MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
             ModalRoute.withName(Navigation.root),
             Navigatable(Type.contactList),
           );

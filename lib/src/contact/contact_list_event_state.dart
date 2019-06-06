@@ -60,17 +60,17 @@ class ContactsSelectionChanged extends ContactListEvent {
 
 class BlockedContactsChanged extends ContactListEvent {}
 
-class FilterContacts extends ContactListEvent {
+class SearchContacts extends ContactListEvent {
   final String query;
 
-  FilterContacts({@required this.query});
+  SearchContacts({@required this.query});
 }
 
-class ContactsFiltered extends ContactListEvent {
+class ContactsSearched extends ContactListEvent {
   final List<int> ids;
   final List<int> lastUpdates;
 
-  ContactsFiltered({@required this.ids, @required this.lastUpdates});
+  ContactsSearched({@required this.ids, @required this.lastUpdates});
 }
 
 abstract class ContactListState {}

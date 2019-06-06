@@ -96,14 +96,14 @@ class ShareBloc extends Bloc<ShareEvent, ShareState>{
     chatListObservable.listen((state) {
       if (state is ChatListStateSuccess) {
         _completeList.clear();
-        _chatIds = state.chatIds;
-        if(state.chatIds != null){
-          _completeList.insertAll(0, state.chatIds);
+        _chatIds = state.chatListItemWrapper.ids;
+        if(_chatIds != null){
+          _completeList.insertAll(0, _chatIds);
         }
         _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
       }
     });
-    _chatListBloc.dispatch(RequestChatList());
+    _chatListBloc.dispatch(RequestChatList(showInvites: false));
   }
 
   void forwardMessages(int destinationChatId, List<int> messageIds) async{

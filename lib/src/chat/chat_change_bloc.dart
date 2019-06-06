@@ -45,7 +45,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
-import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
@@ -86,7 +85,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     Context context = Context();
     var chatId;
     if (contactId != null) {
-      Repository<ChatMsg> inviteMessageRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
+      Repository<ChatMsg> inviteMessageRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
       inviteMessageRepository.clear();
       chatId = await context.createChatByContactId(contactId);
     } else if (messageId != null) {

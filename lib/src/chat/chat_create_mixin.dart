@@ -81,7 +81,7 @@ mixin CreateChatMixin {
       } else {
         navigation.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Chat(state.chatId)),
+          MaterialPageRoute(builder: (context) => Chat(chatId: state.chatId)),
           ModalRoute.withName(Navigation.root),
           Navigatable(Type.chatList),
         );

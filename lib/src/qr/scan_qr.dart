@@ -76,7 +76,7 @@ class _ScanQrState extends State<ScanQr> {
           _progressOverlayEntry.remove();
           _navigation.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => Chat(state.chatId)),
+            MaterialPageRoute(builder: (context) => Chat(chatId: state.chatId)),
             ModalRoute.withName(Navigation.root),
             Navigatable(Type.chat)
           );

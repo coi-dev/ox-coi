@@ -46,13 +46,13 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
-import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/utils/error.dart';
 
-class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
+class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> with InviteMixin {
   final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
   Repository<Contact> contactRepository;
 
@@ -81,8 +81,13 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
     } else if (event is ContactDeleteFailed) {
       yield ContactChangeStateFailure(error: contactDelete);
     } else if (event is BlockContact) {
-      contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-      _blockContact(event.id, event.chatId);
+      int chatId = event.chatId;
+      if (isInviteChat(chatId)) {
+        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
+      } else {
+        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+      }
+      _blockContact(event.contactId, event.chatId, event.messageId);
     } else if (event is ContactBlocked) {
       yield ContactChangeStateSuccess(add: false, delete: false, blocked: true, id: null);
     } else if (event is UnblockContact) {
@@ -121,14 +126,17 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> {
     }
   }
 
-  void _blockContact(int id, int chatId) async {
+  void _blockContact(int contactId, int chatId, int messageId) async {
+    if (contactId == null && messageId != null) {
+      contactId = await getContactIdFromMessage(messageId);
+    }
     var blockedContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.blockedContacts);
-    contactRepository.transferTo(blockedContactRepository, id);
+    contactRepository.transferTo(blockedContactRepository, contactId);
     Context context = Context();
-    await context.blockContact(id);
-    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, ChatMessageRepository.inviteChatId);
+    await context.blockContact(contactId);
+    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     messageListRepository.clear();
-    if(chatId != null){
+    if (chatId != null && chatId != Chat.typeInvite) {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.remove(chatId);
     }

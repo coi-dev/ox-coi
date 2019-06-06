@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
@@ -47,7 +48,7 @@ import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
-import 'package:ox_coi/src/chatlist/invite_list.dart';
+import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
@@ -70,7 +71,7 @@ class ChatListParent extends RootChild {
   @override
   _ChatListViewState createState() {
     final state = _ChatListViewState();
-    setActions([state.getSearchAction()]);
+    //setActions([state.getSearchAction()]);
     return state;
   }
 
@@ -125,7 +126,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _messagesBloc.dispatch(RequestMessages(1));
+    _messagesBloc.dispatch(RequestMessages(chatId: Chat.typeInvite));
     controller = TabController(length: 2, vsync: this);
     _isMultiSelect = false;
     _selectedChats = List();
@@ -190,8 +191,8 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
           child: TabBarView(
             controller: controller,
             children: <Widget>[
-              ChatList(_switchMultiSelect, _itemTapped, _isMultiSelect),
-              InviteList(),
+              /*ChatList(_switchMultiSelect, _itemTapped, _isMultiSelect),
+              InviteList(),*/
             ],
           ),
         )
@@ -247,7 +248,7 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
     _switchMultiSelect(null);
   }
 
-  Widget getSearchAction() {
+/*Widget getSearchAction() {
     Search search = Search(
       onBuildResults: onBuildResultOrSuggestion,
       onBuildSuggestion: onBuildResultOrSuggestion,
@@ -296,6 +297,6 @@ class _ChatListViewState extends State<ChatListParent> with SingleTickerProvider
         return ChatListItem(chatId, null, null, false, false, key);
       },
     );
-  }
+  }*/
 
 }

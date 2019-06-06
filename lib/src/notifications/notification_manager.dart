@@ -96,7 +96,7 @@ class NotificationManager{
     Navigation navigation = Navigation();
     navigation.push(
       _buildContext,
-      MaterialPageRoute(builder: (context) => Chat(int.parse(payload))),
+      MaterialPageRoute(builder: (context) => Chat(chatId: int.parse(payload))),
     );
   }
 

@@ -40,6 +40,7 @@
  * for more details.
  */
  
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chatlist/invite_item.dart';
@@ -64,7 +65,7 @@ class _InviteListState extends State<InviteList> {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.inviteList);
-    _messagesBloc.dispatch(RequestMessages(1));
+    _messagesBloc.dispatch(RequestMessages(chatId: Chat.typeInvite));
   }
 
   @override

@@ -76,7 +76,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         _messageId = event.messageId;
         _addContact = event.isGroupChat || isInvite(chatId);
         if (_addContact) {
-          _setupContact();
+          await _setupContact();
         }
         _setupMessage();
         dispatch(MessageLoaded());
@@ -93,6 +93,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       int timestamp = await message.getTimestamp();
       int state = await message.getState();
       int showPadlock = await message.showPadlock();
+      String teaser = await message.getSummaryText(200);
       AttachmentWrapper attachmentWrapper;
       if (hasFile) {
         attachmentWrapper = AttachmentWrapper(
@@ -117,38 +118,26 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           contactAddress: contactAddress,
           contactColor: contactColor,
         );
-        yield MessageItemStateSuccess(
-          messageIsOutgoing: isOutgoing,
-          messageText: text,
-          hasFile: hasFile,
-          isSetupMessage: isSetupMessage,
-          isInfo: isInfo,
-          messageTimestamp: timestamp,
-          state: state,
-          showPadlock: showPadlock,
-          attachmentWrapper: attachmentWrapper,
-          contactWrapper: contactWrapper,
-        );
-      } else {
-        yield MessageItemStateSuccess(
-          messageIsOutgoing: isOutgoing,
-          messageText: text,
-          hasFile: hasFile,
-          isSetupMessage: isSetupMessage,
-          isInfo: isInfo,
-          messageTimestamp: timestamp,
-          state: state,
-          showPadlock: showPadlock,
-          attachmentWrapper: attachmentWrapper,
-          contactWrapper: contactWrapper,
-        );
       }
+      yield MessageItemStateSuccess(
+        messageIsOutgoing: isOutgoing,
+        messageText: text,
+        hasFile: hasFile,
+        isSetupMessage: isSetupMessage,
+        isInfo: isInfo,
+        messageTimestamp: timestamp,
+        state: state,
+        showPadlock: showPadlock,
+        attachmentWrapper: attachmentWrapper,
+        contactWrapper: contactWrapper,
+        preview: teaser,
+      );
     }
   }
 
   bool isInvite(int chatId) => chatId == Chat.typeInvite;
 
-  void _setupContact() async {
+  Future<void> _setupContact() async {
     ChatMsg message = _getMessage();
     _contactId = await message.getFromId();
     if (isInvite(await message.getChatId())) {

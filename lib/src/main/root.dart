@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/chatlist/chat_list_parent.dart';
+import 'package:ox_coi/src/chatlist/chat_list.dart';
 import 'package:ox_coi/src/contact/contact_list.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/user/user_profile.dart';
@@ -57,7 +57,7 @@ class _RootState extends State<Root> {
   var childList = List<RootChild>();
 
   _RootState() {
-    childList.addAll([new ChatListParent(this), new ContactListView(this), new UserProfileView(this)]);
+    childList.addAll([new ChatList(this), new ContactListView(this), new UserProfileView(this)]);
   }
 
   @override

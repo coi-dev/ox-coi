@@ -70,7 +70,7 @@ class _ChatListItemState extends State<ChatListItem> {
   @override
   void initState() {
     super.initState();
-    _chatBloc.dispatch(RequestChat(widget._chatId));
+    _chatBloc.dispatch(RequestChat(chatId: widget._chatId));
     _isSelected = false;
   }
 
@@ -106,10 +106,11 @@ class _ChatListItemState extends State<ChatListItem> {
             freshMessageCount: freshMessageCount,
             timestamp: timestamp,
             subTitleIcon: _chatBloc.isGroup
-              ? Icon(
-              Icons.group,
-              size: iconSize,
-            ) : Container(),
+                ? Icon(
+                    Icons.group,
+                    size: iconSize,
+                  )
+                : Container(),
             onTap: chatItemTapped,
           ),
         );
@@ -118,23 +119,25 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   chatItemTapped(String name, String subtitle) {
-    if(widget._isMultiSelect) {
+    if (widget._isMultiSelect) {
       setState(() {
         _isSelected = _isSelected ? false : true;
       });
       widget._onTap(widget._chatId);
-    }else if(widget._isShareItem) {
+    } else if (widget._isShareItem) {
       widget._onTap(widget._chatId);
-    }else{
+    } else {
       navigation.push(
         context,
-        MaterialPageRoute(builder: (context) => Chat(widget._chatId),),
+        MaterialPageRoute(
+          builder: (context) => Chat(chatId: widget._chatId),
+        ),
       );
     }
   }
 
-  chatItemLongPress(){
-    if(!widget._isMultiSelect) {
+  chatItemLongPress() {
+    if (!widget._isMultiSelect) {
       setState(() {
         _isSelected = _isSelected ? false : true;
       });

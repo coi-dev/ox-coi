@@ -47,12 +47,15 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 
-class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
+class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with InviteMixin {
   RepositoryMultiEventStreamHandler repositoryStreamHandler;
   Repository<ChatMsg> _messageListRepository;
   int _chatId;
+  int _messageId;
+  String who;
 
   @override
   MessageListState get initialState => MessagesStateInitial();
@@ -63,6 +66,9 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       yield MessagesStateLoading();
       try {
         _chatId = event.chatId;
+        if (isInvite(_chatId, event.messageId)) {
+          _messageId = event.messageId;
+        }
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
         _setupMessagesListener();
         _setupMessages();
@@ -77,22 +83,29 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
       }
     } else if (event is MessagesLoaded) {
       yield MessagesStateSuccess(
-        messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
-        messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+        messageIds: event.messageIds,
+        messageLastUpdateValues: event.messageLastUpdateValues,
         dateMarkerIds: event.dateMarkerIds,
       );
+    } else if (event is SendMessage) {
+      if (event.path != null) {
+        _submitAttachmentMessage(event.path, event.fileType, event.text);
+      } else {
+        _submitMessage(event.text);
+      }
     }
   }
 
   @override
   void dispose() {
-    _messageListRepository.removeListener(repositoryStreamHandler);
+    _messageListRepository?.removeListener(repositoryStreamHandler);
     super.dispose();
   }
 
   void _setupMessagesListener() async {
     if (repositoryStreamHandler == null) {
-      repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead], _updateMessages);
+      repositoryStreamHandler =
+          RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead], _updateMessages);
       _messageListRepository.addListener(repositoryStreamHandler);
     }
   }
@@ -117,18 +130,38 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> {
         await message.reloadValue(ChatMsg.methodMessageGetState);
       }
     });
-    dispatch(MessagesLoaded(dateMarkerIds: dateMakerIds));
+    if (isInvite(_chatId, _messageId)) {
+      var messageIds = List<int>();
+      var lastUpdateValues = List<int>();
+      int inviteContactId = await getContactIdFromMessage(_messageId);
+      await Future.forEach(_messageListRepository.getAll(), (ChatMsg message) async {
+        var contactId = await message.getFromId();
+        if (inviteContactId == contactId) {
+          messageIds.add(message.id);
+          lastUpdateValues.add(message.lastUpdate);
+        }
+      });
+      dispatch(MessagesLoaded(
+          messageIds: messageIds.reversed.toList(growable: false),
+          messageLastUpdateValues: lastUpdateValues.reversed.toList(growable: false),
+          dateMarkerIds: dateMakerIds));
+    } else {
+      dispatch(
+        MessagesLoaded(
+            messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
+            messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+            dateMarkerIds: dateMakerIds),
+      );
+    }
   }
 
-  void submitMessage(String text) async {
+  void _submitMessage(String text) async {
     Context context = Context();
     await context.createChatMessage(_chatId, text);
-    _updateMessages();
   }
 
-  void submitAttachmentMessage(String path, int fileType, [String text]) async {
+  void _submitAttachmentMessage(String path, int fileType, [String text]) async {
     Context _context = Context();
     await _context.createChatAttachmentMessage(_chatId, path, fileType, text);
-    dispatch(UpdateMessages());
   }
 }

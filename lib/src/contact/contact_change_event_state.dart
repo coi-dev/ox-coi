@@ -72,10 +72,11 @@ class ContactDeleted extends ContactChangeEvent {}
 class ContactDeleteFailed extends ContactChangeEvent {}
 
 class BlockContact extends ContactChangeEvent {
-  final int id;
+  final int contactId;
   final int chatId;
+  final int messageId;
 
-  BlockContact(this.id, this.chatId);
+  BlockContact({@required this.chatId, this.contactId, this.messageId});
 }
 
 class ContactBlocked extends ContactChangeEvent {}

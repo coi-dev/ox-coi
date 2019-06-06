@@ -69,7 +69,6 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
   final int _contactId;
 
   ContactDetailsView(this._contactId) {
-    print("[ContactDetailsView.ContactDetailsView] dboehrs - BLAA!");
     _navigation.current = Navigatable(Type.contactProfile);
     _contactItemBloc.dispatch(RequestContact(contactId: _contactId, listType: ContactRepository.validContacts));
   }

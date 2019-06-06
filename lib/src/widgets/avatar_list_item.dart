@@ -60,20 +60,22 @@ class AvatarListItem extends StatelessWidget {
   final IconData avatarIcon;
   final int timestamp;
   final bool isVerified;
+  final bool isInvite;
 
-  AvatarListItem(
-      {@required this.title,
-      @required this.subTitle,
-      @required this.onTap,
-      this.avatarIcon,
-      this.imagePath,
-      this.color,
-      this.freshMessageCount = 0,
-      this.titleIcon,
-      this.subTitleIcon,
-      this.timestamp = 0,
-      this.isVerified = false,
-      });
+  AvatarListItem({
+    @required this.title,
+    @required this.subTitle,
+    @required this.onTap,
+    this.avatarIcon,
+    this.imagePath,
+    this.color,
+    this.freshMessageCount = 0,
+    this.titleIcon,
+    this.subTitleIcon,
+    this.timestamp = 0,
+    this.isVerified = false,
+    this.isInvite = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -89,81 +91,89 @@ class AvatarListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             avatarIcon == null
-              ? Avatar(
-                  imagePath: imagePath,
-                  textPrimary: title,
-                  textSecondary: subTitle,
-                  color: color,
-                )
-              : CircleAvatar(
-                  radius: listAvatarRadius,
-                  foregroundColor: avatarForegroundColor,
-                  child: Icon(avatarIcon),
-                ),
+                ? Avatar(
+                    imagePath: imagePath,
+                    textPrimary: title,
+                    textSecondary: subTitle,
+                    color: color,
+                  )
+                : CircleAvatar(
+                    radius: listAvatarRadius,
+                    foregroundColor: avatarForegroundColor,
+                    child: Icon(avatarIcon),
+                  ),
             Expanded(
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: iconTextPadding),
-                          child: titleIcon != null ? titleIcon : Container(),
-                        ),
-                        Expanded(
-                          child: getTitle()
-                        ),
-                        Visibility(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: iconTextPadding),
+                        child: titleIcon != null ? titleIcon : Container(),
+                      ),
+                      Expanded(child: getTitle()),
+                      Visibility(
                           visible: timestamp != null && timestamp != 0,
                           child: Text(
                             getChatListTime(AppLocalizations.of(context), timestamp),
                             style: TextStyle(
-                              color: freshMessageCount != null && freshMessageCount > 0 ? Colors.black : Colors.grey,
-                              fontWeight: freshMessageCount != null && freshMessageCount > 0 ? FontWeight.bold : FontWeight.normal,
-                              fontSize: 14.0
-                            ),
-                          )
-                        ),
-                      ],
-                    ),
-                    Padding(
+                                color: shouldHighlight() ? Colors.black : Colors.grey,
+                                fontWeight: shouldHighlight() ? FontWeight.bold : FontWeight.normal,
+                                fontSize: 14.0),
+                          )),
+                    ],
+                  ),
+                  Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: listItemPaddingSmall,
-                      )
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
+                    vertical: listItemPaddingSmall,
+                  )),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: iconTextPadding),
+                        child: subTitleIcon != null ? subTitleIcon : Container(),
+                      ),
+                      Visibility(
+                        visible: isVerified,
+                        child: Padding(
                           padding: const EdgeInsets.only(right: iconTextPadding),
-                          child: subTitleIcon != null ? subTitleIcon : Container(),
-                        ),
-                        Visibility(
-                          visible: isVerified,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: iconTextPadding),
-                            child: Icon(
-                              Icons.verified_user,
-                              size: iconSize,
-                            ),
+                          child: Icon(
+                            Icons.verified_user,
+                            size: iconSize,
                           ),
                         ),
-                        Expanded(child: getSubTitle()),
-                        Visibility(
-                          visible: freshMessageCount != null && freshMessageCount > 0,
-                          child: Container(
-                            padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                            decoration: BoxDecoration(color: primary, borderRadius: BorderRadius.circular(100)),
-                            child: Text(
-                              freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                              style: TextStyle(color: Colors.white, fontSize: 12.0),
-                            ),
+                      ),
+                      Expanded(child: getSubTitle()),
+                      Visibility(
+                        visible: isInvite,
+                        child: Container(
+                          width: 23.0,
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                          decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(16)),
+                          child: Text(
+                            "!",
+                            style: TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                      ],
-                    ),
-                    Divider(),
-                  ],
-                ),
+                      ),
+                      Visibility(
+                        visible: hasNewMessages(),
+                        child: Container(
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+                          decoration: BoxDecoration(color: primary, borderRadius: BorderRadius.circular(16)),
+                          child: Text(
+                            freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                            style: TextStyle(color: Colors.white, fontSize: 12.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                ],
+              ),
             ),
           ],
         ),
@@ -171,28 +181,29 @@ class AvatarListItem extends StatelessWidget {
     );
   }
 
+  bool hasNewMessages() => freshMessageCount != null && freshMessageCount > 0;
+
+  bool shouldHighlight() => isInvite || (freshMessageCount != null && freshMessageCount > 0);
+
   StatelessWidget getTitle() {
     return Visibility(
-      visible: title != null,
-      child: Text(
-        title != null ? title : "",
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: chatItemTitle,
-      )
-    );
+        visible: title != null,
+        child: Text(
+          title != null ? title : "",
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: chatItemTitle,
+        ));
   }
 
   StatelessWidget getSubTitle() {
     return Visibility(
-      visible: subTitle != null,
-      child: Text(
-        subTitle != null ? subTitle :"",
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: textLessImportant),
-      )
-    );
+        visible: subTitle != null,
+        child: Text(
+          subTitle != null ? subTitle : "",
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: textLessImportant),
+        ));
   }
-
 }

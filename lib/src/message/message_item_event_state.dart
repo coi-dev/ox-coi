@@ -73,6 +73,7 @@ class MessageItemStateSuccess extends MessageItemState {
   final int showPadlock;
   final ContactWrapper contactWrapper;
   final AttachmentWrapper attachmentWrapper;
+  final String preview;
 
   MessageItemStateSuccess({
     @required this.messageText,
@@ -85,6 +86,7 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.showPadlock,
     @required this.attachmentWrapper,
     @required this.contactWrapper,
+    @required this.preview,
   });
 }
 

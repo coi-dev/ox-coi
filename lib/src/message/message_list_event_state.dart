@@ -45,17 +45,28 @@ import 'package:meta/meta.dart';
 abstract class MessageListEvent {}
 
 class RequestMessages extends MessageListEvent {
-  int chatId;
+  final int chatId;
+  final int messageId;
 
-  RequestMessages(this.chatId);
+  RequestMessages({@required this.chatId, this.messageId});
 }
 
 class UpdateMessages extends MessageListEvent {}
 
 class MessagesLoaded extends MessageListEvent {
-  List<int> dateMarkerIds;
+  final List<int> messageIds;
+  final List<int> messageLastUpdateValues;
+  final List<int> dateMarkerIds;
 
-  MessagesLoaded({this.dateMarkerIds});
+  MessagesLoaded({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
+}
+
+class SendMessage extends MessageListEvent {
+  final String text;
+  final String path;
+  final int fileType;
+
+  SendMessage({this.text, this.path, this.fileType});
 }
 
 abstract class MessageListState {}

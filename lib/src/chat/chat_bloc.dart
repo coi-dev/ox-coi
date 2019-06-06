@@ -48,13 +48,12 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-  int _chatId;
   bool _isGroup = false;
   bool get isGroup => _isGroup;
 
@@ -66,8 +65,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (event is RequestChat) {
       yield ChatStateLoading();
       try {
-        _chatId = event.chatId;
-        _setupChat();
+        int chatId = event.chatId;
+        if (chatId == Chat.typeInvite) {
+          _setupInviteChat(event.messageId);
+        } else {
+          _setupChat(chatId);
+        }
       } catch (error) {
         yield ChatStateFailure(error: error.toString());
       }
@@ -86,13 +89,27 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _setupChat() async {
+  void _setupInviteChat(int messageId) async {
+    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+    ChatMsg message = messageListRepository.get(messageId);
+    int contactId = await message.getFromId();
+    Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
+    Contact contact = inviteContactRepository.get(contactId);
+    String name = await contact.getName();
+    String email = await contact.getAddress();
+    int colorValue = await contact.getColor();
+    Color color = rgbColorFromInt(colorValue);
+    dispatch(ChatLoaded(name, email, color, 0, false, false, null, null, false));
+  }
+
+  void _setupChat(int chatId) async {
+    Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
     Context context = Context();
-    Chat chat = chatRepository.get(_chatId);
+    Chat chat = _chatRepository.get(chatId);
     String name = await chat.getName();
     String subTitle = await chat.getSubtitle();
     int colorValue = await chat.getColor();
-    int freshMessageCount = await context.getFreshMessageCount(_chatId);
+    int freshMessageCount = await context.getFreshMessageCount(chatId);
     bool isSelfTalk = await chat.isSelfTalk();
     _isGroup = await chat.isGroup();
     bool isVerified = await chat.isVerified();
@@ -100,5 +117,4 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     var chatSummary = chat.get(ChatExtension.chatSummary);
     dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary?.preview, chatSummary?.timestamp, isVerified));
   }
-
 }

@@ -40,62 +40,18 @@
  * for more details.
  */
 
-import 'dart:ui';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
 
-import 'package:meta/meta.dart';
+mixin InviteMixin {
+  bool isInviteChat(int chatId) => chatId == Chat.typeInvite;
 
-abstract class ChatEvent {}
+  bool isInvite(int chatId, int messageId) => isInviteChat(chatId) && messageId != null && messageId != 0;
 
-class RequestChat extends ChatEvent {
-  final int chatId;
-  final int messageId;
-
-  RequestChat({@required this.chatId, this.messageId});
-}
-
-class ChatLoaded extends ChatEvent {
-  final String name;
-  final String subTitle;
-  final Color color;
-  final int freshMessageCount;
-  final bool isSelfTalk;
-  final bool isGroupChat;
-  final String preview;
-  final int timestamp;
-  final bool isVerified;
-
-  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp, this.isVerified);
-}
-
-abstract class ChatState {}
-
-class ChatStateInitial extends ChatState {}
-
-class ChatStateLoading extends ChatState {}
-
-class ChatStateSuccess extends ChatState {
-  final String name;
-  final String subTitle;
-  final Color color;
-  final int freshMessageCount;
-  final bool isSelfTalk;
-  final bool isGroupChat;
-  final String preview;
-  final int timestamp;
-  final bool isVerified;
-
-  ChatStateSuccess(
-    {@required this.name,
-      @required this.subTitle,
-      @required this.color,
-      @required this.freshMessageCount,
-      @required this.isSelfTalk,
-      @required this.isGroupChat,
-      @required this.preview,
-      @required this.timestamp,
-      @required this.isVerified});
-}
-
-class ChatStateFailure extends ChatState {
-  ChatStateFailure({@required error});
+  Future<int> getContactIdFromMessage(int messageId) async {
+    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+    ChatMsg message = messageListRepository.get(messageId);
+    return await message.getFromId();
+  }
 }
