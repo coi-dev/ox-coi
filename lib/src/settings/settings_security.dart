@@ -92,7 +92,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
         text = AppLocalizations.of(context).securitySettingsInitiateKeyTransferPerforming;
       }
-      _progress = FullscreenProgress(_settingsSecurityBloc, text, false);
+      _progress = FullscreenProgress(_settingsSecurityBloc, text, false, false);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);

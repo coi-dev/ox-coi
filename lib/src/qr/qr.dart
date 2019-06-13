@@ -39,75 +39,75 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+ 
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/qr/scan_qr.dart';
+import 'package:ox_coi/src/qr/show_qr.dart';
+import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/utils/dimensions.dart';
 
-import 'dart:core';
+class QrCode extends StatefulWidget {
+  final int _chatId;
 
-// Global
-const zero = 0.0;
-const dividerHeight = 0.0;
+  QrCode(this._chatId);
 
-// Progress
-const verticalPaddingSmall = 8.0;
-const verticalPadding = 16.0;
+  @override
+  _QrCodeState createState() => _QrCodeState();
+}
 
-// List
-const listItemPaddingBig = 16.0;
-const listItemPadding = 8.0;
-const listItemPaddingSmall = 4.0;
-const listAvatarRadius = 24.0;
-const listAvatarDiameter = listAvatarRadius * 2;
-const listStateInfoHorizontalPadding = 24.0;
-const listStateInfoVerticalPadding = 16.0;
+class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
+  TabController controller;
 
-// AppBar
-const appBarAvatarTextPadding = 16.0;
-const appBarElevationDefault = 4.0;
+  @override
+  void initState() {
+    super.initState();
+    controller = TabController(length: 2, vsync: this);
+  }
 
-// Icons
-const iconPadlockBottomPadding = 2.0;
-const iconPadlockSize = 10.0;
-const iconTextPadding = 4.0;
-const iconFormPadding = 8.0;
-const iconSize = 18.0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: zero,
+        title: Text(AppLocalizations.of(context).qrTitle),
+      ),
+      body: buildBody(),
+    );
+  }
 
-// Chat
-const composerHorizontalPadding = 8.0;
-const composerTextFieldPadding = 8.0;
-const composeTextBorderRadius = 24.0;
-
-// Chat profile
-const chatProfileDividerPadding = 8.0;
-const chatProfileVerticalPadding = 16.0;
-const chatProfileButtonPadding = 8.0;
-
-//Attachment preview
-const attachmentDividerPadding = 4.0;
-const previewMaxSize = 100.0;
-const previewDefaultIconSize = 100.0;
-const previewCloseIconBorderRadius = 20.0;
-const previewCloseIconSize = 30.0;
-const previewFileNamePadding = 4.0;
-
-// Forms
-const formHorizontalPadding = 16.0;
-const formVerticalPadding = 16.0;
-
-// Messages
-const messagesHorizontalPadding = 8.0;
-const messagesVerticalPadding = 8.0;
-const messagesInnerPadding = 8.0;
-const messagesContentTimePadding = 8.0;
-const messagesBoxRadius = 20.0;
-const messagesBlurRadius = 2.0;
-const messagesFileIconSize = 30.0;
-
-// Profile
-const profileVerticalPadding = 8.0;
-const profileSectionsVerticalPadding = 36.0;
-const profileAvatarPlaceholderIconSize = 60.0;
-const profileAvatarMaxRadius = 64.0;
-
-const editUserAvatarVerticalPadding = 24.0;
-const editUserAvatarEditIconSize = 36.0;
-const editUserAvatarImageMaxSize = 512;
-const editUserAvatarRation = 1.0;
+  Widget buildBody() {
+    return Column(
+      children: <Widget>[
+        PhysicalModel(
+          elevation: appBarElevationDefault,
+          color: primary,
+          child: TabBar(
+            tabs: <Widget>[
+              Tab(
+                child: Text(
+                  AppLocalizations.of(context).showQrTabTitle,
+                ),
+              ),
+              Tab(
+                child: Text(
+                  AppLocalizations.of(context).scanQrTabTitle,
+                ),
+              ),
+            ],
+            controller: controller,
+          ),
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: controller,
+            children: <Widget>[
+              ShowQr(widget._chatId),
+              ScanQr(),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}

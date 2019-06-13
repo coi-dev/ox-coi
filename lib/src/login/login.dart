@@ -171,7 +171,7 @@ class _LoginState extends State<Login> {
     bool advancedLoginIsValid = _advancedLoginKey.currentState != null ? _advancedLoginKey.currentState.validate() : true;
 
     if (simpleLoginIsValid && advancedLoginIsValid) {
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).loginProgressMessage, true);
+      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).loginProgressMessage, true, false);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);

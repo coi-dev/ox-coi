@@ -413,6 +413,25 @@ class AppLocalizations {
 
   String get profileEditButton => Intl.message('Edit profile', name: 'profileEditButton');
 
+  String get showQrButton => Intl.message('QR', name: 'showQrButton');
+
+  //QR
+  String get qrTitle => Intl.message('QR', name: 'qrTitle');
+
+  String qrInviteInfoText(name) => Intl.message('Scan this code to create a verified chat with $name.', name: 'qrInviteInfoText', args: [name]);
+
+  String get showQrTabTitle => Intl.message('Show QR', name: 'showQrTabTitle');
+
+  String get scanQrTabTitle => Intl.message('Scan QR', name: 'scanQrTabTitle');
+
+  String get qrErrorCancelText => Intl.message('There was an error or the progress was canceled.', name: 'qrErrorCancelText');
+
+  String get qrProgressInfoText => Intl.message('Please wait a moment.', name: 'qrProgressInfoText');
+
+  String get qrVerifyingText => Intl.message('Verifying. Please wait a moment.', name: 'qrVerifyingText');
+
+  String get qrVerifyCompleteText => Intl.message('Verification finished.', name: 'qrVerifyCompleteText');
+
   // User settings
   String get userSettingsTitle => Intl.message('Edit user settings', name: 'userSettingsTitle');
 

@@ -44,6 +44,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/base/bloc_progress_state.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 
@@ -54,7 +55,11 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
 
   final T _bloc;
 
-  FullscreenProgress(this._bloc, this._text, [this._showProgressValues]);
+  final bool _showCancelButton;
+
+  final Function _cancelPressed;
+
+  FullscreenProgress(this._bloc, this._text, [this._showProgressValues, this._showCancelButton, this._cancelPressed]);
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +99,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         ),
       ],
     );
-    if (_showProgressValues) {
+    if (_showProgressValues && progress != null) {
       column.children.add(Padding(
         padding: EdgeInsets.only(top: verticalPaddingSmall),
         child: Text(
@@ -102,6 +107,19 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.subhead.apply(color: textInverted),
         ),
+      ));
+    }
+    if(_showCancelButton){
+      column.children.add(Padding(
+        padding: EdgeInsets.only(top: verticalPaddingSmall),
+        child: Container(
+          child: RaisedButton(
+            child: Text(
+              AppLocalizations.of(context).cancel
+            ),
+            onPressed: _cancelPressed
+          ),
+        )
       ));
     }
     return column;

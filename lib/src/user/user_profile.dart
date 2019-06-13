@@ -49,6 +49,7 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
@@ -157,12 +158,24 @@ class _ProfileState extends State<UserProfileView> {
                 placeHolderAlign: TextAlign.center,
               ),
             ),
-            RaisedButton(
-              color: accent,
-              textColor: text,
-              onPressed: editUserSettings,
-              child: Text(AppLocalizations.of(context).profileEditButton),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  color: accent,
+                  textColor: text,
+                  child: Text(AppLocalizations.of(context).profileEditButton),
+                  onPressed: editUserSettings,
+                ),
+                Padding(padding:EdgeInsets.all(chatProfileButtonPadding)),
+                RaisedButton(
+                  color: accent,
+                  textColor: text,
+                  child: Text(AppLocalizations.of(context).showQrButton),
+                  onPressed: showQr,
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -203,4 +216,13 @@ class _ProfileState extends State<UserProfileView> {
       MaterialPageRoute(builder: (context) => UserSettings()),
     );
   }
+
+  showQr() {
+    navigation.push(
+      context,
+      MaterialPageRoute(builder: (context) => QrCode(0)),
+    );
+  }
+
+
 }

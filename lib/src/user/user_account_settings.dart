@@ -128,7 +128,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
 
   _handleUserChangeStateChange(UserChangeState state) {
     if (state is UserChangeStateApplied) {
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).accountSettingsDataProgressMessage, true);
+      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).accountSettingsDataProgressMessage, true, false);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);

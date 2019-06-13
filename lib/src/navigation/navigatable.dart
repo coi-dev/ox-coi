@@ -77,6 +77,9 @@ enum Type {
   settingsKeyTransferDoneDialog,
   settingsAutocryptImport,
   splash,
+  share,
+  showQr,
+  scanQr,
 }
 
 class Navigatable {
