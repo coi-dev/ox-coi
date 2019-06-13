@@ -41,14 +41,17 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
+import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   DeltaChatCore _core = DeltaChatCore();
@@ -64,7 +67,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Stream<LoginState> mapEventToState(LoginState currentState, LoginEvent event) async* {
-    if (event is LoginButtonPressed) {
+    if(event is RequestProviders){
+      try{
+        _loadProviders();
+      }catch(error){
+        yield LoginStateFailure(error: error.toString());
+      }
+    } else if (event is ProviderLoginButtonPressed) {
+      yield LoginStateLoading(progress: 0);
+      try {
+        await _setupConfigWithProvider(event);
+        _registerListeners();
+        _context.configure();
+      } catch (error) {
+        yield LoginStateFailure(error: error.toString());
+      }
+    }else if (event is LoginButtonPressed) {
       yield LoginStateLoading(progress: 0);
       try {
         await _setupConfig(event);
@@ -94,6 +112,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         yield LoginStateLoading(progress: event.progress);
       }
+    } else if(event is ProvidersLoaded){
+      yield LoginStateProvidersLoaded(providers: event.providers);
     }
   }
 
@@ -154,5 +174,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _errorCallback(error) async {
     dispatch(LoginProgress(0, error));
+  }
+
+  void _loadProviders() async{
+    Map<String, dynamic> json = await rootBundle.loadString('lib/src/assets/json/providers.json')
+        .then((jsonStr) => jsonDecode(jsonStr));
+
+    Providers providers = Providers.fromJson(json);
+    dispatch(ProvidersLoaded(providers: providers.ProvidersList));
+  }
+
+  _setupConfigWithProvider(ProviderLoginButtonPressed event) async{
+    Config config = Config();
+    Preset preset = event.provider.preset;
+
+    await config.setValue(Context.configAddress, event.email);
+    await config.setValue(Context.configMailPassword, event.password);
+    await config.setValue(Context.configMailUser, event.imapLogin);
+    await config.setValue(Context.configMailServer, preset.incomingServer);
+    await config.setValue(Context.configMailPort, preset.incomingPort.toString());
+    await config.setValue(Context.configSendUser, event.smtpLogin);
+    await config.setValue(Context.configSendPassword, event.smtpPassword);
+    await config.setValue(Context.configSendServer, preset.outgoingServer);
+    await config.setValue(Context.configSendPort, preset.outgoingPort.toString());
+    int imapSecurity = getSecurityId(preset.incomingSecurity);
+    int smtpSecurity = getSecurityId(preset.outgoingSecurity);
+    int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
+
+    await config.setValue(Context.configServerFlags, serverFlags);
   }
 }

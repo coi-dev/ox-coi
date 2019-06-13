@@ -59,6 +59,7 @@ class ValidatableTextFormField extends StatefulWidget {
   final Function validationHint;
   final bool enabled;
   final int maxLines;
+  final bool showIcon;
   final TextEditingController controller = TextEditingController();
 
   ValidatableTextFormField(
@@ -71,6 +72,7 @@ class ValidatableTextFormField extends StatefulWidget {
     this.validationHint,
     this.enabled = true,
     this.maxLines = 1,
+    this.showIcon = false
   }) : super(key: key);
 
   @override
@@ -97,12 +99,14 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
       return InputDecoration(
         labelText: widget.labelText(context),
         hintText: widget.hintText != null ? widget.hintText(context) : "",
+        prefixIcon: widget.showIcon ? Icon(Icons.lock) : null,
         suffixIcon: IconButton(icon: Icon(_showReadablePassword ? Icons.visibility : Icons.visibility_off), onPressed: _togglePasswordVisibility),
       );
     } else {
       return InputDecoration(
         labelText: widget.labelText(context),
         hintText: widget.hintText != null ? widget.hintText(context) : "",
+        prefixIcon: widget.textFormType == TextFormType.email && widget.showIcon ? Icon(Icons.person) : null,
       );
     }
   }

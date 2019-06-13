@@ -76,9 +76,30 @@ class AppLocalizations {
 
   String get startTLS => 'StartTLS';
 
+  String get presetSslTls => 'ssltls';
+
+  String get presetStartTLS => 'starttls';
+
   String get bigDot => '\u2B24';
 
   String get feedbackUrl => 'https://github.com/open-xchange/ox-coi';
+
+  String get other => 'other';
+
+  // Image path
+  String get appLogoUrl => 'lib/src/assets/images/app_logo.png';
+
+  String get outlookLogoUrl => 'lib/src/assets/images/outlook_icon.png';
+
+  String get yahooLogoUrl => 'lib/src/assets/images/yahoo_icon.png';
+
+  String get gmxLogoUrl => 'lib/src/assets/images/gmx_icon.png';
+
+  String get mailboxLogoUrl => 'lib/src/assets/images/mailbox_icon.jpg';
+
+  String get mailcomLogoUrl => 'lib/src/assets/images/mailcom_icon.png';
+
+  String get otherProviderLogoUrl => 'lib/src/assets/images/mail_icon.png';
 
   // Global
   String get yes => Intl.message('Yes', name: 'yes');
@@ -258,13 +279,56 @@ class AppLocalizations {
   // Login
   String get loginTitle => Intl.message('Login to OX Coi', name: 'loginTitle');
 
+  String get loginWelcomeText => Intl.message('Welcome to OX Coi', name: 'loginWelcomeText');
+
+  String get loginFirstInformationText => Intl.message('OX Coi works with any email account. If you have one, please sign in, otherwise register a new account first.', name: 'loginFirstInformationText');
+
+  String get loginTermsConditionPrivacyText => Intl.message('By using OX Coi you agree to our ', name: 'loginTermsConditionPrivacyText');
+
+  String get loginTermsConditionText => Intl.message('terms & conditions', name: 'loginTermsConditionText');
+
+  String get loginTermsConditionPrivacyAndText => Intl.message(' and ', name: 'loginTermsConditionPrivacyAndText');
+
+  String get loginPrivacyDeclarationText => Intl.message('privacy declaration', name: 'loginPrivacyDeclarationText');
+
+  String get loginSignInButtonText => Intl.message('SIGN IN', name: 'loginSignInButtonText');
+
+  String get loginRegisterButtonText => Intl.message('REGISTER', name: 'loginRegisterButtonText');
+
+  String get loginSignInTitle => Intl.message('Sign in', name: 'loginSignInTitle');
+
+  String get loginSignInInfoText => Intl.message('Please select your email provider to sign in', name: 'loginSignInInfoText');
+
+  String get loginOtherMailAccount => Intl.message('Other mail account', name: 'loginOtherMailAccount');
+
+  String loginProviderSignInText(name) => Intl.message('Sign in with $name?', name: 'loginProviderSignInText', args: [name]);
+
+  String get loginError => Intl.message('Please check your username and password', name: 'loginError');
+
+  String get loginManualSettings => Intl.message('Manual Settings', name: 'loginManualSettings');
+
+  String get loginManualSettingsInfoText => Intl.message('Please specify your email server settings.', name: 'loginManualSettingsInfoText');
+
+  String get loginManualSettingsSecondInfoText => Intl.message('Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. '
+    'Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.', name: 'loginManualSettingsSecondInfoText');
+
+  String get loginManualSettingsErrorInfoText => Intl.message('We could not determine all settings automatically.', name: 'loginManualSettingsErrorInfoText');
+
   String get loginInformation => Intl.message(
       'For known email providers additional settings are setup automatically. Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.',
       name: 'loginInformation');
 
-  String get loginHintEmail => Intl.message('Enter your email address', name: 'loginLabelEmail');
+  String get loginBaseSettingsTitle => Intl.message('Base Settings', name: 'loginBaseSettingsTitle');
 
-  String get loginHintPassword => Intl.message('Enter your password', name: 'loginHintPassword');
+  String get loginServerAddressesTitle => Intl.message('Server addresses', name: 'loginServerAddressesTitle');
+
+  String get loginAdvancedImapTitle => Intl.message('Advanced IMAP Settings', name: 'loginAdvancedImapTitle');
+
+  String get loginAdvancedSmtpTitle => Intl.message('Advanced SMTP Settings', name: 'loginAdvancedSmtpTitle');
+
+  String get loginHintEmail => Intl.message('Email address', name: 'loginLabelEmail');
+
+  String get loginHintPassword => Intl.message('Password', name: 'loginHintPassword');
 
   String get loginLabelImapName => Intl.message('IMAP login-name', name: 'loginLabelImapName');
 
@@ -272,7 +336,7 @@ class AppLocalizations {
 
   String get loginLabelImapPassword => Intl.message('IMAP password', name: 'loginLabelImapPassword');
 
-  String get loginLabelImapServer => Intl.message('IMAP server', name: 'loginLabelImapServer');
+  String get loginLabelImapServer => Intl.message('IMAP server (e.g. imap.coi.me)', name: 'loginLabelImapServer');
 
   String get loginLabelImapPort => Intl.message('IMAP port', name: 'loginLabelImapPort');
 
@@ -282,7 +346,7 @@ class AppLocalizations {
 
   String get loginLabelSmtpPassword => Intl.message('SMTP password', name: 'loginLabelSmtpPassword');
 
-  String get loginLabelSmtpServer => Intl.message('SMTP server', name: 'loginLabelSmtpServer');
+  String get loginLabelSmtpServer => Intl.message('SMTP server (e.g. smtp.coi.me)', name: 'loginLabelSmtpServer');
 
   String get loginLabelSmtpPort => Intl.message('SMTP port', name: 'loginLabelSmtpPort');
 

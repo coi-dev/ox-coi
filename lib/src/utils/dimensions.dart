@@ -111,3 +111,21 @@ const editUserAvatarVerticalPadding = 24.0;
 const editUserAvatarEditIconSize = 36.0;
 const editUserAvatarImageMaxSize = 512;
 const editUserAvatarRation = 1.0;
+
+// Login
+const loginLogoSize = 250.0;
+const loginHorizontalPadding = 40.0;
+const loginVerticalPadding = 28.0;
+const loginTopPadding = 80.0;
+const loginButtonWidth = 200.0;
+const loginVerticalPadding8dp = 8.0;
+const loginVerticalPadding12dp = 12.0;
+const loginVerticalPadding20dp = 20.0;
+const loginProviderIconSize = 40.0;
+const loginManualSettingsSubTitlePadding = 8.0;
+const loginManualSettingsPadding = 20.0;
+const loginTermsAndConditionsHeightFactor = 5.0;
+const loginProviderIconSizeBig = 150.0;
+const loginErrorOverlayLeftPadding = 12.0;
+const loginErrorOverlayIconSize = 24.0;
+const loginErrorOverlayHeight = 40.0;

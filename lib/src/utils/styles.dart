@@ -83,3 +83,38 @@ const chatProfileAvatarInitialText = TextStyle(
   color: Colors.white,
   fontSize: 50.0
 );
+
+// Login
+const loginTitleText = TextStyle(
+  fontWeight: FontWeight.w500,
+  fontSize: 24
+);
+
+const loginInfoText = TextStyle(
+  fontSize: 24
+);
+
+const loginTermsAndConditionText = TextStyle(
+  fontSize: 12,
+  color: textDark
+);
+
+const loginFlatButtonText = TextStyle(
+  color: accent
+);
+
+const loginManualSettingsSignInButtonText = TextStyle(
+  color: accent,
+  fontSize: 16.0,
+);
+
+const loginManualSettingHeaderText = TextStyle(
+  fontWeight: FontWeight.w500,
+  fontSize: 16.0,
+  color: accent
+);
+
+const loginErrorOverlayText = TextStyle(
+  fontSize: 12.0,
+  color: textInverted
+);

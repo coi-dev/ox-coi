@@ -108,7 +108,7 @@ class _OxCoiState extends State<OxCoi> {
           if (state.configured) {
             child = Root();
           } else {
-            child = Login(_mainBloc.onLoginSuccess);
+            child = Login(_loginSuccess);
           }
         } else {
           child = Splash();
@@ -116,5 +116,11 @@ class _OxCoiState extends State<OxCoi> {
         return ViewSwitcher(child);
       },
     );
+  }
+
+  _loginSuccess() {
+    Navigation navigation = Navigation();
+    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _mainBloc.dispatch(AppLoaded(configured: true));
   }
 }

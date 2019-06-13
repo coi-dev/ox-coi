@@ -67,12 +67,14 @@ int _blue(int color) {
 final Color primary = Colors.blue[600];
 const Color accent = Colors.blue;
 const Color transparent = Colors.transparent;
+const Color error = Colors.red;
 
 // Text
 const Color text = Colors.white;
 const Color textDisabled = Colors.black26;
 const Color textLessImportant = Colors.black45;
 const Color textInverted = Colors.white;
+const Color textDark = Colors.black;
 
 // Icons / images
 const Color appBarIcon = Colors.white;

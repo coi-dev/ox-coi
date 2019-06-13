@@ -1,0 +1,103 @@
+{
+  "providers": [
+    {
+      "id": "google",
+      "name": "Google",
+      "oauth": {
+        "serviceId": "com.openexchange.oauth.google",
+        "displayName": "Google"
+      }
+    },
+    {
+      "id": "yahoo",
+      "name": "Yahoo",
+      "preset": {
+        "incoming_security": "ssltls",
+        "incoming_server": "imap.mail.yahoo.com",
+        "incoming_protocol": "imap",
+        "incoming_port": 993,
+        "outgoing_security": "ssltls",
+        "outgoing_server": "smtp.mail.yahoo.com",
+        "outgoing_port": 465
+      }
+    },
+    {
+      "id": "outlook",
+      "name": "Outlook",
+      "preset": {
+        "incoming_security": "ssltls",
+        "incoming_server": "outlook.office365.com",
+        "incoming_protocol": "imap",
+        "incoming_port": 993,
+        "outgoing_security": "starttls",
+        "outgoing_server": "smtp.office365.com",
+        "outgoing_port": 587
+      }
+    },
+    {
+      "id": "gmx",
+      "name": "GMX",
+      "preset": {
+        "incoming_security": "ssltls",
+        "incoming_server": "imap.gmx.net",
+        "incoming_protocol": "imap",
+        "incoming_port": 993,
+        "outgoing_security": "starttls",
+        "outgoing_server": "mail.gmx.net",
+        "outgoing_port": 587
+      }
+    },
+    {
+      "id": "mailbox",
+      "name": "Mailbox.org",
+      "preset": {
+        "incoming_security": "ssltls",
+        "incoming_server": "imap.mailbox.org",
+        "incoming_protocol": "imap",
+        "incoming_port": 993,
+        "outgoing_security": "ssltls",
+        "outgoing_server": "smtp.mailbox.org",
+        "outgoing_port": 465
+      }
+    },
+    {
+      "id": "mail_com",
+      "name": "Mail.com",
+      "preset": {
+        "incoming_security": "ssltls",
+        "incoming_server": "imap.mail.com",
+        "incoming_protocol": "imap",
+        "incoming_port": 993,
+        "outgoing_security": "starttls",
+        "outgoing_server": "smtp.mail.com",
+        "outgoing_port": 587
+      }
+    },
+    {
+      "id": "other",
+      "name": "other",
+      "preset": {
+        "incoming_security": "",
+        "incoming_server": "",
+        "incoming_protocol": "",
+        "incoming_port": 0,
+        "outgoing_security": "",
+        "outgoing_server": "",
+        "outgoing_port": 0
+      }
+    },
+    {
+      "id": "coi",
+      "name": "Coi debug",
+      "preset": {
+        "incoming_security": "",
+        "incoming_server": "mobile-coi.open-xchange.com",
+        "incoming_protocol": "",
+        "incoming_port": 0,
+        "outgoing_security": "",
+        "outgoing_server": "mobile-coi.open-xchange.com",
+        "outgoing_port": 0
+      }
+    }
+  ]
+}
