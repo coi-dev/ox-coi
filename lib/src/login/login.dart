@@ -224,9 +224,8 @@ class _LoginState extends State<Login> {
                   children: <Widget>[emailField, passwordField],
                 ),
               )),
-          RaisedButton(
-            color: accent,
-            textColor: text,
+          FlatButton(
+            textColor: accent,
             onPressed: _advancedPressed,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

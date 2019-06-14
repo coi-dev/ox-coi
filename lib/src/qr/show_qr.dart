@@ -83,8 +83,10 @@ class _ShowQrState extends State<ShowQr> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        buildQrCodeArea(),
-        Padding(padding: EdgeInsets.only(top: 20.0)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          child: buildQrCodeArea(),
+        ),
         buildInfoText(),
       ],
     );

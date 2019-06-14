@@ -92,26 +92,22 @@ class _ScanQrState extends State<ScanQr> {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: new SizedBox(
-          width: 300.0,
-          height: 600.0,
-          child: QrCamera(
-            onError: (context, error) => Text(
-              error.toString(),
-              style: TextStyle(color: Colors.red),
-            ),
-            qrCodeCallback: (code) {
-              setState(() {
-                if(!_qrCodeDetected) {
-                  String qrString = code;
-                  if (qrString.isNotEmpty) {
-                    _qrCodeDetected = true;
-                    checkAndJoinQr(qrString);
-                  }
-                }
-              });
-            },
+        child: QrCamera(
+          onError: (context, error) => Text(
+            error.toString(),
+            style: TextStyle(color: Colors.red),
           ),
+          qrCodeCallback: (code) {
+            setState(() {
+              if(!_qrCodeDetected) {
+                String qrString = code;
+                if (qrString.isNotEmpty) {
+                  _qrCodeDetected = true;
+                  checkAndJoinQr(qrString);
+                }
+              }
+            });
+          },
         ),
       ),
     );
