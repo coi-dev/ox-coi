@@ -50,14 +50,21 @@ class ChangeReadReceipts extends SettingsChatEvent {}
 
 class ChatSettingsActionSuccess extends SettingsChatEvent {
   bool readReceiptsEnabled;
+  int inviteSetting;
 
-  ChatSettingsActionSuccess({this.readReceiptsEnabled});
+  ChatSettingsActionSuccess({this.readReceiptsEnabled, this.inviteSetting});
 }
 
 class ChatSettingsActionFailed extends SettingsChatEvent {
   final ChatSettingsActionFailed error;
 
   ChatSettingsActionFailed({@required this.error});
+}
+
+class ChangeInviteSetting extends SettingsChatEvent {
+  int newInviteSetting;
+
+  ChangeInviteSetting({@required this.newInviteSetting});
 }
 
 abstract class SettingsChatState {}
@@ -68,8 +75,9 @@ class SettingsChatStateLoading extends SettingsChatState {}
 
 class SettingsChatStateSuccess extends SettingsChatState {
   bool readReceiptsEnabled;
+  int inviteSetting;
 
-  SettingsChatStateSuccess({this.readReceiptsEnabled});
+  SettingsChatStateSuccess({this.readReceiptsEnabled, this.inviteSetting});
 }
 
 class SettingsChatStateFailure extends SettingsChatState {}

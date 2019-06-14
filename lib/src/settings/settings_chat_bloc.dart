@@ -47,10 +47,6 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 
-enum SettingsChatType {
-  readReceipts,
-}
-
 class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
   @override
   SettingsChatState get initialState => SettingsChatStateInitial();
@@ -63,27 +59,38 @@ class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
       } catch (error) {
         yield SettingsChatStateFailure();
       }
-    }
-    else if (event is ChangeReadReceipts) {
+    } else if (event is ChangeReadReceipts) {
       try {
         _changeReadReceipts();
       } catch (error) {
         yield SettingsChatStateFailure();
       }
     } else if (event is ChatSettingsActionSuccess) {
-      yield SettingsChatStateSuccess(readReceiptsEnabled: event.readReceiptsEnabled);
+      yield SettingsChatStateSuccess(readReceiptsEnabled: event.readReceiptsEnabled, inviteSetting: event.inviteSetting);
+    } else if (event is ChangeInviteSetting) {
+      try {
+        _changeInviteSetting(event.newInviteSetting);
+      } catch (error) {
+        yield SettingsChatStateFailure();
+      }
     }
   }
 
   void _requestValues() {
     Config config = Config();
-    dispatch(ChatSettingsActionSuccess(readReceiptsEnabled: config.mdnsEnabled == 1));
+    dispatch(ChatSettingsActionSuccess(readReceiptsEnabled: config.mdnsEnabled == 1, inviteSetting: config.showEmails));
   }
 
   void _changeReadReceipts() async {
     Config config = Config();
     int enable = config.mdnsEnabled == 1 ? 0 : 1;
     await config.setValue(Context.configMdnsEnabled, enable);
-    dispatch(ChatSettingsActionSuccess(readReceiptsEnabled: enable == 1));
+    dispatch(ChatSettingsActionSuccess(readReceiptsEnabled: enable == 1, inviteSetting: config.showEmails));
+  }
+
+  void _changeInviteSetting(int newInviteSetting) async {
+    Config config = Config();
+    await config.setValue(Context.configShowEmails, newInviteSetting);
+    dispatch(ChatSettingsActionSuccess(inviteSetting: newInviteSetting, readReceiptsEnabled: config.mdnsEnabled == 1));
   }
 }
