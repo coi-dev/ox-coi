@@ -1,7 +1,7 @@
 name: ox_coi
 description: OX Coi is a mail based chat app.
 
-version: 0.7.0+407 # x.y.z+build-number
+version: 0.8.0+408 # x.y.z+build-number
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
