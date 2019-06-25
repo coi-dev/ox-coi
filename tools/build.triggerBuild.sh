@@ -16,4 +16,4 @@ BUILD_NAME="oxdev-r999.0"
         git clone --recurse-submodules https://github.com/open-xchange/flutter-deltachat-core.git
     fi
 )
-flutter build apk --build-name=${BUILD_NAME} --build-number=${CI_PIPELINE_ID} --flavor development
+flutter build apk --build-name=${BUILD_NAME} --build-number=${CI_PIPELINE_ID} --flavor development --debug
