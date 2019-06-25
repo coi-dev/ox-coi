@@ -50,6 +50,7 @@ import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 import 'package:ox_coi/src/settings/settings_security_event_state.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
 import 'package:rxdart/rxdart.dart';
@@ -102,7 +103,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
         _progressOverlayEntry = null;
       }
       if (state is SettingsSecurityStateSuccess) {
-        if (state.setupCode.isNotEmpty) {
+        if (!isNullOrEmpty(state.setupCode)) {
           showNavigatableDialog(
             context: context,
             navigatable: Navigatable(Type.settingsKeyTransferDoneDialog),
