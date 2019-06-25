@@ -20,7 +20,7 @@ build:
   - tools/build.triggerBuild.sh
   artifacts:
     paths:
-    - build/app/outputs/apk/development/release/*.apk
+    - build/app/outputs/apk/development/debug/*.apk
 
 deploy:
   stage: deploy
