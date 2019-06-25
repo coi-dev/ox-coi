@@ -67,7 +67,7 @@ int _blue(int color) {
 final Color primary = Colors.blue[600];
 const Color accent = Colors.blue;
 const Color transparent = Colors.transparent;
-const Color error = Colors.red;
+final Color error = Colors.red[800];
 
 // Text
 const Color text = Colors.white;
@@ -80,7 +80,6 @@ const Color textDark = Colors.black;
 const Color appBarIcon = Colors.white;
 const Color textColorInverted = Colors.white;
 const Color divider = Colors.black;
-final Color error = Colors.red[800];
 
 // Progress
 final Color progressBackground = Colors.black45;

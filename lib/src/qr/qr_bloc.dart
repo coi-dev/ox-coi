@@ -40,9 +40,8 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:bloc/bloc.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
