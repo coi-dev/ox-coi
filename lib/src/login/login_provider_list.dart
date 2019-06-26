@@ -45,6 +45,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/login/providers.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
@@ -69,6 +70,8 @@ class _ProviderListState extends State<ProviderList> {
   @override
   void initState() {
     super.initState();
+    var navigation = Navigation();
+    navigation.current = Navigatable(Type.loginProviderList);
     _loginBloc.dispatch(RequestProviders());
   }
 

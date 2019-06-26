@@ -98,7 +98,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   @override
   void initState() {
     super.initState();
-    _navigation.current = Navigatable(Type.loginManualSettings);
+    _navigation.current = Navigatable(Type.loginProviderSignIn);
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }

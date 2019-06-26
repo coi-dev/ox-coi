@@ -91,7 +91,10 @@ class _ManualSettingsState extends State<ManualSettings> {
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
   );
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
-  ValidatableTextFormField imapServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapServer);
+  ValidatableTextFormField imapServerField = ValidatableTextFormField(
+      (context) => AppLocalizations.of(context).loginLabelImapServer,
+    inputType: TextInputType.url,
+  );
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
       (context) => AppLocalizations.of(context).loginLabelImapPort,
     textFormType: TextFormType.port,
@@ -106,7 +109,10 @@ class _ManualSettingsState extends State<ManualSettings> {
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
   );
-  ValidatableTextFormField smtpServerField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpServer);
+  ValidatableTextFormField smtpServerField = ValidatableTextFormField(
+      (context) => AppLocalizations.of(context).loginLabelSmtpServer,
+    inputType: TextInputType.url,
+  );
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(
       (context) => AppLocalizations.of(context).loginLabelSmtpPort,
     textFormType: TextFormType.port,

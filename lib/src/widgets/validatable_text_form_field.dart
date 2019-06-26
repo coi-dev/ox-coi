@@ -90,6 +90,7 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
         controller: widget.controller,
         keyboardType: widget.inputType,
         enabled: widget.enabled,
+        autocorrect: false,
         validator: (value) => _validate(value),
         decoration: _getInputDecoration());
   }
