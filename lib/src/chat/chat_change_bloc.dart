@@ -92,7 +92,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       var messageContactId = await _messageListRepository.get(messageId).getFromId();
       Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
       Repository<Contact> validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-      inviteContactRepository.remove(messageContactId);
+      inviteContactRepository.remove(id: messageContactId);
       _messageListRepository.clear();
       chatId = await context.createChatByMessageId(messageId);
       List<int> contactIds = await context.getChatContacts(chatId);
@@ -110,7 +110,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
 
   void _deleteChat(int chatId) async {
     Context context = Context();
-    _chatRepository.remove(chatId);
+    _chatRepository.remove(id: chatId);
     await context.deleteChat(chatId);
   }
 
@@ -118,7 +118,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     Context context = Context();
 
     for (int chatId in chatIds) {
-      _chatRepository.remove(chatId);
+      _chatRepository.remove(id: chatId);
       _leaveGroupChat(chatId);
       await context.deleteChat(chatId);
     }

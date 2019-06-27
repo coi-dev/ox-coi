@@ -119,7 +119,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     Context context = Context();
     bool deleted = await context.deleteContact(id);
     if (deleted) {
-      contactRepository.remove(id);
+      contactRepository.remove(id: id);
       dispatch(ContactDeleted());
     } else {
       dispatch(ContactDeleteFailed());
@@ -138,7 +138,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     messageListRepository.clear();
     if (chatId != null && chatId != Chat.typeInvite) {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-      chatRepository.remove(chatId);
+      chatRepository.remove(id: chatId);
     }
     dispatch(ContactBlocked());
   }

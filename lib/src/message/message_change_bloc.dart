@@ -70,7 +70,7 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
   }
 
   void _deleteMessage(int messageId, bool deleteInCore) async {
-    _messageListRepository.remove(messageId);
+    _messageListRepository.remove(id: messageId);
     if (deleteInCore) {
       //TODO Delete messages from core
     }
