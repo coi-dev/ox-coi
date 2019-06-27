@@ -42,34 +42,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/settings/settings_about_bloc.dart';
-import 'package:ox_coi/src/settings/settings_about_event_state.dart';
+import 'package:ox_coi/src/settings/settings_debug_bloc.dart';
+import 'package:ox_coi/src/settings/settings_debug_event_state.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:ox_coi/src/widgets/url_text_span.dart';
 
-class SettingsAbout extends StatefulWidget {
+class SettingsDebug extends StatefulWidget {
   @override
-  _SettingsAboutState createState() => _SettingsAboutState();
+  _SettingsDebugState createState() => _SettingsDebugState();
 }
 
-class _SettingsAboutState extends State<SettingsAbout> {
-  SettingsAboutBloc _settingsAboutBloc = SettingsAboutBloc();
+class _SettingsDebugState extends State<SettingsDebug> {
+  SettingsDebugBloc _settingsDebugBloc = SettingsDebugBloc();
+  Logger _logger;
 
   @override
   void initState() {
     super.initState();
     Navigation navigation = Navigation();
-    navigation.current = Navigatable(Type.settingsAbout);
-    _settingsAboutBloc.dispatch(RequestAbout());
+    var type = Type.settingsDebug;
+    navigation.current = Navigatable(type);
+    _logger = Logger(Navigatable.getTag(type));
+    _settingsDebugBloc.dispatch(RequestDebug());
   }
 
   @override
   void dispose() {
-    _settingsAboutBloc.dispose();
+    _settingsDebugBloc.dispose();
     super.dispose();
   }
 
@@ -77,40 +81,30 @@ class _SettingsAboutState extends State<SettingsAbout> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).about),
+          title: Text(AppLocalizations.of(context).debugTitle),
         ),
         body: _buildPreferenceList(context));
   }
 
   Widget _buildPreferenceList(BuildContext context) {
     return BlocBuilder(
-      bloc: _settingsAboutBloc,
+      bloc: _settingsDebugBloc,
       builder: (context, state) {
-        if (state is SettingsAboutStateInitial) {
+        if (state is SettingsDebugStateInitial) {
           return StateInfo(showLoading: true);
-        } else if (state is SettingsAboutStateSuccess) {
+        } else if (state is SettingsDebugStateSuccess) {
+          var token = state.token;
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).aboutSettingsName),
-                subtitle: Text(state.name),
+                title: Text(AppLocalizations.of(context).debugFcmToken),
+                subtitle: Text(token),
+                onTap: () {
+                  _logger.info(token);
+                  copyToClipboardWithToast(text: token, toastText: getDefaultCopyToastText(context));
+                },
               ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).aboutSettingsVersion),
-                subtitle: Text(state.version),
-              ),
-              ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  title: Text(AppLocalizations.of(context).feedback),
-                  subtitle: RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        UrlTextSpan(url: AppLocalizations.of(context).feedbackUrl),
-                      ],
-                    ),
-                  )),
             ]).toList(),
           );
         } else {

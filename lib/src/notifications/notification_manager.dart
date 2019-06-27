@@ -40,14 +40,18 @@
  * for more details.
  */
 
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ox_coi/src/chat/chat.dart';
+import 'package:ox_coi/src/debug/debug_viewer.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/platform/app_information.dart';
 
 //TODO: Prepare iOS project (https://pub.dev/packages/flutter_local_notifications, https://firebase.google.com/docs/cloud-messaging/ & https://firebase.google.com/docs/cloud-messaging/concept-options)
-class NotificationManager{
+class NotificationManager {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
@@ -59,9 +63,9 @@ class NotificationManager{
 
   NotificationManager._internal(this._buildContext);
 
-  void setup(){
+  void setup() {
     //localNotification setup
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
@@ -71,6 +75,16 @@ class NotificationManager{
       onMessage: (Map<String, dynamic> message) {
         //TODO: Add functionality
         print('on message $message');
+        if (!isRelease()) {
+          Navigation navigation = Navigation();
+          navigation.push(
+            _buildContext,
+            MaterialPageRoute(builder: (context) {
+              var prettifiedMessage = JsonEncoder.withIndent('  ').convert(message);
+              return DebugViewer(input: prettifiedMessage);
+            }),
+          );
+        }
       },
       onResume: (Map<String, dynamic> message) {
         //TODO: Add functionality
@@ -82,7 +96,7 @@ class NotificationManager{
       },
     );
     _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.getToken().then((token){
+    _firebaseMessaging.getToken().then((token) {
       //Device token for server
     });
   }
@@ -103,8 +117,12 @@ class NotificationManager{
   Future<void> showNotification(int chatId, String title, String body, {String payload}) async {
     //TODO: Add better AndroidNotificationDetails
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.android.oxcoi.notification.single', 'Message notification', 'Notification for incoming messages',
-      importance: Importance.Max, priority: Priority.High, );
+      'com.android.oxcoi.notification.single',
+      'Message notification',
+      'Notification for incoming messages',
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
@@ -112,44 +130,36 @@ class NotificationManager{
   }
 
   //show group notification (Android only)
-  Future<void> showGroupNotification(int chatId, String title, String body, {String payload}) async{
+  Future<void> showGroupNotification(int chatId, String title, String body, {String payload}) async {
     //TODO: Add better names
     String groupKey = 'com.android.oxcoi.WORK_EMAIL';
     String groupChannelId = 'com.android.oxcoi.notification.group';
     String groupChannelName = 'Group notification';
     String groupChannelDescription = 'Notification for grouped messages';
 
-    AndroidNotificationDetails androidNotificationSpecifics =
-    new AndroidNotificationDetails(
+    AndroidNotificationDetails androidNotificationSpecifics = new AndroidNotificationDetails(
         groupChannelId, groupChannelName, groupChannelDescription,
-        importance: Importance.Max,
-        priority: Priority.High,
-        groupKey: groupKey);
+        importance: Importance.Max, priority: Priority.High, groupKey: groupKey);
     NotificationDetails notificationPlatformSpecifics = new NotificationDetails(androidNotificationSpecifics, null);
     await _flutterLocalNotificationsPlugin.show(chatId, title, body, notificationPlatformSpecifics, payload: payload);
 
-    AndroidNotificationDetails androidSummaryNotificationSpecifics =
-    new AndroidNotificationDetails(
-      groupChannelId, groupChannelName, groupChannelDescription,
-      importance: Importance.Max,
-      priority: Priority.High,
-      groupKey: groupKey,
-      setAsGroupSummary: true);
+    AndroidNotificationDetails androidSummaryNotificationSpecifics = new AndroidNotificationDetails(
+        groupChannelId, groupChannelName, groupChannelDescription,
+        importance: Importance.Max, priority: Priority.High, groupKey: groupKey, setAsGroupSummary: true);
     NotificationDetails notificationSummaryPlatformSpecifics = new NotificationDetails(androidSummaryNotificationSpecifics, null);
     await _flutterLocalNotificationsPlugin.show(chatId, "", "", notificationSummaryPlatformSpecifics, payload: payload);
   }
 
-  Future<bool> isAppLaunchedFromNotification() async{
+  Future<bool> isAppLaunchedFromNotification() async {
     var notificationAppLaunchDetails = await _flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     return notificationAppLaunchDetails.didNotificationLaunchApp;
   }
 
-  Future cancelNotification(int id) async{
+  Future cancelNotification(int id) async {
     await _flutterLocalNotificationsPlugin.cancel(id);
   }
 
-  Future cancelAllNotifications() async{
+  Future cancelAllNotifications() async {
     await _flutterLocalNotificationsPlugin.cancelAll();
   }
-
 }

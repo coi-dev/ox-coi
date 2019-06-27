@@ -40,37 +40,26 @@
  * for more details.
  */
 
-import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'package:meta/meta.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
+abstract class SettingsDebugEvent {}
+
+class RequestDebug extends SettingsDebugEvent {}
+
+class DebugLoaded extends SettingsDebugEvent {
+  final String token;
+
+  DebugLoaded({@required this.token});
 }
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
+abstract class SettingsDebugState {}
+
+class SettingsDebugStateInitial extends SettingsDebugState {}
+
+class SettingsDebugStateSuccess extends SettingsDebugState {
+  final String token;
+
+  SettingsDebugStateSuccess({@required this.token});
 }
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
-
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
-}
-
-bool isRelease() {
-  return kReleaseMode;
-}
+class SettingsDebugStateFailure extends SettingsDebugState {}

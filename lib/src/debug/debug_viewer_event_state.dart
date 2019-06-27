@@ -40,37 +40,34 @@
  * for more details.
  */
 
-import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'package:meta/meta.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
+abstract class DebugViewerEvent {}
+
+class RequestLog extends DebugViewerEvent {}
+
+class LogLoaded extends DebugViewerEvent {
+  final String log;
+
+  LogLoaded({@required this.log});
 }
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
+class LogEmpty extends DebugViewerEvent {}
+
+class InputLoaded extends DebugViewerEvent {
+  final String input;
+
+  InputLoaded({@required this.input});
 }
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
+abstract class DebugViewerState {}
+
+class DebugViewerStateInitial extends DebugViewerState {}
+
+class DebugViewerStateSuccess extends DebugViewerState {
+  final String data;
+
+  DebugViewerStateSuccess({@required this.data});
 }
 
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
-}
-
-bool isRelease() {
-  return kReleaseMode;
-}
+class DebugViewerStateFailure extends DebugViewerState {}

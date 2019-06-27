@@ -45,7 +45,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/log/log_bloc.dart';
+import 'package:ox_coi/src/log/log_bloc_delegate.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/date.dart';
@@ -67,8 +67,10 @@ class LogManager {
 
   LogManager._internal();
 
+  get currentLogFile => _logFile;
+
   void setup({@required bool logToFile, @required Level logLevel}) async {
-    BlocSupervisor().delegate = LogBloc();
+    BlocSupervisor().delegate = LogBlocDelegate();
     if (logToFile) {
       _logFile = await _setupLogFile();
       await manageLogFiles();
@@ -105,7 +107,7 @@ class LogManager {
   }
 
   String _logTemplatePrint(LogRecord logRecord) {
-    return '[${logRecord.loggerName}] ${logRecord.message}';
+    return '[COI - ${logRecord.loggerName}] ${logRecord.message}';
   }
 
   Future<void> _writeToLogFile(LogRecord logRecord) async {
@@ -133,6 +135,7 @@ class LogManager {
   }
 
   Future<dynamic> getLogFiles() {
-    return getPreference(preferenceLogFiles);
+    return getPreference(preferenceLogFiles) ?? List<String>();
   }
+
 }

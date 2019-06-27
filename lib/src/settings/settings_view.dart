@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 
 enum SettingsType {
@@ -51,13 +52,14 @@ enum SettingsType {
   security,
   about,
   chat,
+  debug,
 }
 
 class SettingsView extends StatelessWidget {
-  final Navigation navigation = Navigation();
+  final Navigation _navigation = Navigation();
 
   SettingsView() {
-    navigation.current = Navigatable(Type.settings);
+    _navigation.current = Navigatable(Type.settings);
   }
 
   @override
@@ -104,6 +106,15 @@ class SettingsView extends StatelessWidget {
           title: Text(AppLocalizations.of(context).about),
           onTap: () => _onPressed(context, SettingsType.about),
         ),
+        if (!isRelease())
+          ListTile(
+            leading: Icon(
+              Icons.bug_report,
+              color: accent,
+            ),
+            title: Text(AppLocalizations.of(context).debugTitle),
+            onTap: () => _onPressed(context, SettingsType.debug),
+          ),
       ]).toList(),
     );
   }
@@ -111,16 +122,19 @@ class SettingsView extends StatelessWidget {
   void _onPressed(BuildContext context, SettingsType type) {
     switch (type) {
       case SettingsType.account:
-        navigation.pushNamed(context, Navigation.settingsAccount);
+        _navigation.pushNamed(context, Navigation.settingsAccount);
         break;
       case SettingsType.security:
-        navigation.pushNamed(context, Navigation.settingsSecurity);
+        _navigation.pushNamed(context, Navigation.settingsSecurity);
         break;
       case SettingsType.about:
-        navigation.pushNamed(context, Navigation.settingsAbout);
+        _navigation.pushNamed(context, Navigation.settingsAbout);
         break;
       case SettingsType.chat:
-        navigation.pushNamed(context, Navigation.settingsChat);
+        _navigation.pushNamed(context, Navigation.settingsChat);
+        break;
+      case SettingsType.debug:
+        _navigation.pushNamed(context, Navigation.settingsDebug);
         break;
     }
   }

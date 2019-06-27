@@ -51,6 +51,7 @@ import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
@@ -101,10 +102,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         _navigation.push(context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds, messageAction.messageActionTag)));
         break;
       case MessageActionTag.copy:
-        var clipboardData = ClipboardData(text: _message);
-        Clipboard.setData(clipboardData);
-        String clipboardToast = AppLocalizations.of(context).copiedToClipboard;
-        showToast(clipboardToast);
+        copyToClipboardWithToast(text: _message, toastText: getDefaultCopyToastText(context));
         break;
       case MessageActionTag.delete:
         List<int> messageList = List();

@@ -41,13 +41,13 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 import 'package:ox_coi/src/settings/settings_security_event_state.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
@@ -114,8 +114,8 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
                 new FlatButton(
                   child: new Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopy),
                   onPressed: () {
-                    Clipboard.setData(ClipboardData(text: state.setupCode));
-                    showToast(AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopyDone);
+                    var toastText = AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopyDone;
+                    copyToClipboardWithToast(text: state.setupCode, toastText: toastText);
                     navigation.pop(context);
                   },
                 ),

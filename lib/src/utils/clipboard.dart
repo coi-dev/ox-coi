@@ -40,37 +40,21 @@
  * for more details.
  */
 
-import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/utils/toast.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
+void copyToClipboard(String text) {
+  var clipboardData = ClipboardData(text: text);
+  Clipboard.setData(clipboardData);
 }
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
+void copyToClipboardWithToast({@required String text, @required String toastText}) {
+  copyToClipboard(text);
+  showToast(toastText);
 }
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
-
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
-}
-
-bool isRelease() {
-  return kReleaseMode;
+String getDefaultCopyToastText(BuildContext context) {
+  return context != null ? AppLocalizations.of(context).copiedToClipboard : "";
 }

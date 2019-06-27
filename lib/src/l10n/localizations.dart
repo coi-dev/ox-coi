@@ -180,6 +180,11 @@ class AppLocalizations {
 
   String get chat => Intl.message('Chat', name: 'chat');
 
+  // Debug
+  String get debugTitle => Intl.message('Debug', name: 'debugTitle');
+
+  String get debugFcmToken => Intl.message('FCM token', name: 'debugFcmToken');
+
   // Core
   String get coreChatStatusDefaultValue => "Sent with my Delta Chat Messenger: https://delta.chat";
 

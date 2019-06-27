@@ -44,6 +44,8 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_chat_bloc.dart';
 import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
@@ -60,6 +62,8 @@ class _SettingsChatState extends State<SettingsChat> {
   @override
   void initState() {
     super.initState();
+    Navigation navigation = Navigation();
+    navigation.current = Navigatable(Type.settingsChat);
     _settingsChatBloc.dispatch(RequestValues());
   }
 

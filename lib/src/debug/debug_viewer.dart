@@ -42,34 +42,42 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/debug/debug_viewer_bloc.dart';
+import 'package:ox_coi/src/debug/debug_viewer_event_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/settings/settings_about_bloc.dart';
-import 'package:ox_coi/src/settings/settings_about_event_state.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:ox_coi/src/widgets/url_text_span.dart';
 
-class SettingsAbout extends StatefulWidget {
+class DebugViewer extends StatefulWidget {
+  final String input;
+
+  const DebugViewer({this.input, Key key}) : super(key: key);
+
   @override
-  _SettingsAboutState createState() => _SettingsAboutState();
+  _DebugViewerState createState() => _DebugViewerState();
 }
 
-class _SettingsAboutState extends State<SettingsAbout> {
-  SettingsAboutBloc _settingsAboutBloc = SettingsAboutBloc();
+class _DebugViewerState extends State<DebugViewer> {
+  DebugViewerBloc _debugViewerBloc = DebugViewerBloc();
 
   @override
   void initState() {
     super.initState();
     Navigation navigation = Navigation();
-    navigation.current = Navigatable(Type.settingsAbout);
-    _settingsAboutBloc.dispatch(RequestAbout());
+    navigation.current = Navigatable(Type.debugViewer);
+    if (isNullOrEmpty(widget.input)) {
+      _debugViewerBloc.dispatch(RequestLog());
+    } else {
+      _debugViewerBloc.dispatch(InputLoaded(input: widget.input));
+    }
   }
 
   @override
   void dispose() {
-    _settingsAboutBloc.dispose();
+    _debugViewerBloc.dispose();
     super.dispose();
   }
 
@@ -77,41 +85,30 @@ class _SettingsAboutState extends State<SettingsAbout> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).about),
+          title: Text(AppLocalizations.of(context).debugTitle),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.content_copy),
+              onPressed: () => _onCopy(),
+            )
+          ],
         ),
-        body: _buildPreferenceList(context));
+        body: _buildDebugOutput(context));
   }
 
-  Widget _buildPreferenceList(BuildContext context) {
+  Widget _buildDebugOutput(BuildContext context) {
     return BlocBuilder(
-      bloc: _settingsAboutBloc,
+      bloc: _debugViewerBloc,
       builder: (context, state) {
-        if (state is SettingsAboutStateInitial) {
+        if (state is DebugViewerStateInitial) {
           return StateInfo(showLoading: true);
-        } else if (state is SettingsAboutStateSuccess) {
-          return ListView(
-            children: ListTile.divideTiles(context: context, tiles: [
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).aboutSettingsName),
-                subtitle: Text(state.name),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).aboutSettingsVersion),
-                subtitle: Text(state.version),
-              ),
-              ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  title: Text(AppLocalizations.of(context).feedback),
-                  subtitle: RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        UrlTextSpan(url: AppLocalizations.of(context).feedbackUrl),
-                      ],
-                    ),
-                  )),
-            ]).toList(),
+        } else if (state is DebugViewerStateSuccess) {
+          return SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16.0),
+              child: Text(state.data),
+            ),
           );
         } else {
           return Center(
@@ -120,5 +117,9 @@ class _SettingsAboutState extends State<SettingsAbout> {
         }
       },
     );
+  }
+
+  _onCopy() {
+    copyToClipboardWithToast(text: _debugViewerBloc.data, toastText: getDefaultCopyToastText(context));
   }
 }

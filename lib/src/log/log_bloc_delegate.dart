@@ -40,37 +40,19 @@
  * for more details.
  */
 
-import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'package:bloc/bloc.dart';
+import 'package:logging/logging.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
-}
+class LogBlocDelegate implements BlocDelegate {
+  final Logger _logger = Logger("blocDelegate");
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
-}
+  @override
+  void onTransition(Transition transition) {
+    _logger.info(transition.toString());
+  }
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
-
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
-
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
-}
-
-bool isRelease() {
-  return kReleaseMode;
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    _logger.warning("Error: $error (Stacktrace: $stacktrace)");
+  }
 }

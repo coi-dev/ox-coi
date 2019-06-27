@@ -62,6 +62,7 @@ enum Type {
   contactInviteDialog,
   contactProfile,
   contactUnblockDialog,
+  debugViewer,
   inviteList,
   login,
   loginProviderList,
@@ -72,6 +73,9 @@ enum Type {
   search,
   settings,
   settingsAccount,
+  settingsAbout,
+  settingsChat,
+  settingsDebug,
   settingsSecurity,
   settingsUser,
   settingsExportKeysDialog,
@@ -107,5 +111,7 @@ class Navigatable {
 
   bool equalType(Navigatable other) => type == other.type;
 
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + subTag;
+  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
+
+  static String getSubTag(String subTag) => subTag ?? "";
 }

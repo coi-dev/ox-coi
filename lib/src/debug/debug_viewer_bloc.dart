@@ -40,37 +40,50 @@
  * for more details.
  */
 
-import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'dart:async';
+import 'dart:io';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  return "$version ($buildNumber)";
-}
+import 'package:bloc/bloc.dart';
+import 'package:ox_coi/src/log/log_manager.dart';
+import 'package:ox_coi/src/debug/debug_viewer_event_state.dart';
+import 'package:ox_coi/src/platform/files.dart';
 
-Future<PackageInfo> getPackageInfo() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  return packageInfo;
-}
+class DebugViewerBloc extends Bloc<DebugViewerEvent, DebugViewerState> {
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.appName;
-}
+  String _data;
 
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
-  return packageInfo.packageName;
-}
+  String get data => _data;
 
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
-  return "$appName ($packageName)";
-}
+  @override
+  DebugViewerState get initialState => DebugViewerStateInitial();
 
-bool isRelease() {
-  return kReleaseMode;
+  @override
+  Stream<DebugViewerState> mapEventToState(DebugViewerState currentState, DebugViewerEvent event) async* {
+    if (event is RequestLog) {
+      try {
+        loadLog();
+      } catch (error) {
+        yield DebugViewerStateFailure();
+      }
+    } else if (event is LogLoaded) {
+      _data = event.log;
+      yield DebugViewerStateSuccess(data: _data);
+    } else if (event is LogEmpty) {
+      yield DebugViewerStateSuccess(data: "Empty log found");
+    } else if (event is InputLoaded) {
+      _data = event.input;
+      yield DebugViewerStateSuccess(data: _data);
+    }
+  }
+
+  void loadLog() async {
+    LogManager logManager = LogManager();
+    File currentLogFile = logManager.currentLogFile;
+    if (currentLogFile != null) {
+      String log = await readFile(currentLogFile);
+      dispatch(LogLoaded(log: log));
+    } else {
+      dispatch(LogEmpty());
+    }
+  }
 }

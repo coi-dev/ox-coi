@@ -40,16 +40,32 @@
  * for more details.
  */
 
-import 'package:bloc/bloc.dart';
+import 'dart:async';
 
-class LogBloc implements BlocDelegate {
+import 'package:bloc/bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:ox_coi/src/settings/settings_debug_event_state.dart';
+
+class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
   @override
-  void onTransition(Transition transition) {
-    print(transition.toString());
+  SettingsDebugState get initialState => SettingsDebugStateInitial();
+
+  @override
+  Stream<SettingsDebugState> mapEventToState(SettingsDebugState currentState, SettingsDebugEvent event) async* {
+    if (event is RequestDebug) {
+      try {
+        loadDebug();
+      } catch (error) {
+        yield SettingsDebugStateFailure();
+      }
+    } else if (event is DebugLoaded) {
+      yield SettingsDebugStateSuccess(token: event.token);
+    }
   }
 
-  @override
-  void onError(Object error, StackTrace stacktrace) {
-    print("Error: $error (Stacktrace: $stacktrace)");
+  void loadDebug() async {
+    FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+    String token = await firebaseMessaging.getToken();
+    dispatch(DebugLoaded(token: token));
   }
 }

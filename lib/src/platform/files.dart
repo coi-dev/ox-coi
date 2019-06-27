@@ -51,6 +51,10 @@ Future<void> writeToFile(File file, String content) async {
   await sink.close();
 }
 
+Future<String> readFile(File file) async {
+  return await file.readAsString();
+}
+
 Future<String> getExportImportPath() async {
   Directory downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
   return downloadsDirectory.path;

@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 
@@ -64,8 +65,7 @@ mixin ContactProfileMixin {
   Widget buildCopyableText(BuildContext context, String text, String toastMessage) {
     return InkWell(
       onTap: () {
-        Clipboard.setData(ClipboardData(text: text));
-        showToast(toastMessage);
+        copyToClipboardWithToast(text: text, toastText: toastMessage);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
