@@ -3,7 +3,7 @@
 OX Coi is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
 
 - **Android state:** Currently in development
-- **iOS state:** Pending
+- **iOS state:** Currently in development
 
 ## Information
 - [Documentation](https://github.com/open-xchange/ox-coi/wiki/Developer-Documentation)
