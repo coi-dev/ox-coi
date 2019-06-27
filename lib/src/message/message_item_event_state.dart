@@ -56,6 +56,12 @@ class RequestMessage extends MessageItemEvent {
 
 class MessageLoaded extends MessageItemEvent {}
 
+class DeleteMessages extends MessageItemEvent {
+  final List<int> messageIds;
+
+  DeleteMessages(this.messageIds);
+}
+
 abstract class MessageItemState {}
 
 class MessageItemStateInitial extends MessageItemState {}

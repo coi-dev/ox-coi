@@ -132,6 +132,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         contactWrapper: contactWrapper,
         preview: teaser,
       );
+    } else if(event is DeleteMessages){
+      _deleteMessages(event.messageIds);
     }
   }
 
@@ -172,5 +174,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
   ChatMsg _getMessage() {
     return _messageListRepository.get(_messageId);
+  }
+
+  void _deleteMessages(List<int> messageIds) async{
+    Context context = Context();
+    _messageListRepository.remove(ids: messageIds);
+    await context.deleteMessages(messageIds);
   }
 }

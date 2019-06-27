@@ -78,10 +78,12 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   final List<MessageAction> _messageActions = const <MessageAction>[
     const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
     const MessageAction(title: 'Copy', icon: Icons.content_copy, messageActionTag: MessageActionTag.copy),
+    const MessageAction(title: 'Delete locally', icon: Icons.delete, messageActionTag: MessageActionTag.delete),
   ];
 
   final List<MessageAction> _messageAttachmentActions = const <MessageAction>[
     const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
+    const MessageAction(title: 'Delete locally', icon: Icons.delete, messageActionTag: MessageActionTag.delete),
   ];
 
   MessageItemBloc _messagesBloc = MessageItemBloc();
@@ -105,6 +107,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         showToast(clipboardToast);
         break;
       case MessageActionTag.delete:
+        List<int> messageList = List();
+        messageList.add(widget._messageId);
+        _messagesBloc.dispatch(DeleteMessages(messageList));
         break;
     }
   }

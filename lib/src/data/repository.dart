@@ -111,8 +111,14 @@ abstract class Repository<T extends Base> {
     _items.putIfAbsent(id, () => _creator(id));
   }
 
-  remove(int id) {
-    _items.remove(id);
+  remove({int id, List<int> ids}) {
+    if (id != null && id > 0) {
+      _items.remove(id);
+    } else if (ids != null && ids.isNotEmpty) {
+      ids.forEach((id) {
+        _items.remove(id);
+      });
+    }
   }
 
   clear() {
