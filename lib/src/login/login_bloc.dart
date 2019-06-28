@@ -50,8 +50,11 @@ import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/core.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/services.dart' show rootBundle;
+
+import 'login_provider_list.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   DeltaChatCore _core = DeltaChatCore();
@@ -69,7 +72,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginState currentState, LoginEvent event) async* {
     if(event is RequestProviders){
       try{
-        _loadProviders();
+        _loadProviders(event.type);
       }catch(error){
         yield LoginStateFailure(error: error.toString());
       }
@@ -176,12 +179,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     dispatch(LoginProgress(0, error));
   }
 
-  void _loadProviders() async{
+  void _loadProviders(ProviderListType type) async{
     Map<String, dynamic> json = await rootBundle.loadString('lib/src/assets/json/providers.json')
         .then((jsonStr) => jsonDecode(jsonStr));
 
     Providers providers = Providers.fromJson(json);
-    dispatch(ProvidersLoaded(providers: providers.ProvidersList));
+    if (type == ProviderListType.register) {
+      providers.providerList.removeWhere((provider) => isNullOrEmpty(provider.registerLink));
+    }
+    dispatch(ProvidersLoaded(providers: providers.providerList));
   }
 
   _setupConfigWithProvider(ProviderLoginButtonPressed event) async{

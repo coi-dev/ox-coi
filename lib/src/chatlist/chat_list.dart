@@ -57,6 +57,11 @@ import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
+enum ChatListItemType {
+  chat,
+  message,
+}
+
 class ChatList extends RootChild {
   final Navigation navigation = Navigation();
 

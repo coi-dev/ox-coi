@@ -42,7 +42,7 @@
 
 import 'package:meta/meta.dart';
 
-import 'chat_list_bloc.dart';
+import 'chat_list.dart';
 
 abstract class ChatListEvent {}
 

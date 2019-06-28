@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.login);
-    _loginBloc.dispatch(RequestProviders());
+    _loginBloc.dispatch(RequestProviders(type: ProviderListType.login));
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }
@@ -110,89 +110,83 @@ class _LoginState extends State<Login> {
 
   Widget createWelcomeScreen(){
     return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
-        child: Flex(
-          direction: Axis.vertical,
+      padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+      child: Column(
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).loginWelcomeText,
-                  style: loginTitleText,
-                ),
-                Image(
-                  image: AssetImage(AppLocalizations.of(context).appLogoUrl),
-                  height: loginLogoSize,
-                  width: loginLogoSize,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: loginVerticalPadding),
-                  child: Text(
-                    AppLocalizations.of(context).loginFirstInformationText,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                RaisedButton(
-                  color: accent,
-                  textColor: text,
-                  child: SizedBox(
-                    width: loginButtonWidth,
-                    child: Text(
-                      AppLocalizations.of(context).loginSignInButtonText,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  onPressed: _goToProviderList
-                ),
-                Padding(padding: EdgeInsets.all(loginVerticalPadding8dp)),
-                FlatButton(
-                  //TODO: Add register action
-                  onPressed: null,
-                  child: Text(
-                    AppLocalizations.of(context).loginRegisterButtonText,
-                    style: loginFlatButtonText,
-                  )
-                ),
-              ],
+            Text(
+              AppLocalizations.of(context).loginWelcomeText,
+              style: loginTitleText,
             ),
-            Align(
-              heightFactor: loginTermsAndConditionsHeightFactor,
-              alignment: Alignment.bottomCenter,
-              child: RichText(
+            Image(
+              image: AssetImage(AppLocalizations.of(context).appLogoUrl),
+              height: loginLogoSize,
+              width: loginLogoSize,
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: loginVerticalPadding),
+              child: Text(
+                AppLocalizations.of(context).loginFirstInformationText,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            RaisedButton(
+              color: accent,
+              textColor: text,
+              child: SizedBox(
+                width: loginButtonWidth,
+                child: Text(
+                  AppLocalizations.of(context).loginSignInButtonText,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              onPressed: () {
+                _goToProviderList(ProviderListType.login);
+              }
+            ),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding8dp),
+              child: FlatButton(
+                  child: Text(
+                    AppLocalizations
+                        .of(context)
+                        .loginRegisterButtonText,
+                    style: loginFlatButtonText,
+                  ),
+                  onPressed: () {
+                    _goToProviderList(ProviderListType.register);
+                  }
+              ),
+            ),
+            RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  style: loginTermsAndConditionText,
-                  text: AppLocalizations.of(context).loginTermsConditionPrivacyText,
-                  children: [
-                    UrlTextSpan(
-                      url: null,
-                      text: AppLocalizations.of(context).loginTermsConditionText
-                    ),
-                    TextSpan(
-                      text: AppLocalizations.of(context).loginTermsConditionPrivacyAndText
-                    ),
-                    UrlTextSpan(
-                      url: null,
-                      text: AppLocalizations.of(context).loginPrivacyDeclarationText
-                    )
-                  ]
+                    style: loginTermsAndConditionText,
+                    text: AppLocalizations.of(context).loginTermsConditionPrivacyText,
+                    children: [
+                      UrlTextSpan(
+                          url: null,
+                          text: AppLocalizations.of(context).loginTermsConditionText
+                      ),
+                      TextSpan(
+                          text: AppLocalizations.of(context).loginTermsConditionPrivacyAndText
+                      ),
+                      UrlTextSpan(
+                          url: null,
+                          text: AppLocalizations.of(context).loginPrivacyDeclarationText
+                      )
+                    ]
                 )
-              )
-            )
+            ),
           ],
         ),
-      ),
     );
   }
 
-  void _goToProviderList() {
+  void _goToProviderList(ProviderListType type) {
     var navigation = Navigation();
     navigation.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProviderList(widget._success)
+        builder: (context) => ProviderList(type: type, success: widget._success,)
       )
     );
   }

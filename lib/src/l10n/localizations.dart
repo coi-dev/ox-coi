@@ -361,6 +361,11 @@ class AppLocalizations {
 
   String get loginErrorDialogTitle => Intl.message('Login failed', name: 'loginErrorDialogTitle');
 
+  // Register
+  String get registerTitle => Intl.message('Register', name: 'registerTitle');
+
+  String get registerText => Intl.message('Choose a provider from the list below to create a new account', name: 'registerText');
+
   // Mail
   String get mailTitle => Intl.message('Mail', name: 'mailTitle');
 

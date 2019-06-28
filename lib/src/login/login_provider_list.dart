@@ -50,15 +50,22 @@ import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'login_bloc.dart';
 import 'login_events_state.dart';
 import 'login_provider_signin.dart';
 
-class ProviderList extends StatefulWidget {
-  final Function _success;
+enum ProviderListType {
+  login,
+  register,
+}
 
-  ProviderList(this._success);
+class ProviderList extends StatefulWidget {
+  final Function success;
+  final ProviderListType type;
+
+  ProviderList({@required this.type, this.success});
 
   @override
   _ProviderListState createState() => _ProviderListState();
@@ -66,39 +73,44 @@ class ProviderList extends StatefulWidget {
 
 class _ProviderListState extends State<ProviderList> {
   final LoginBloc _loginBloc = LoginBloc();
+  String title;
+  String text;
 
   @override
   void initState() {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginProviderList);
-    _loginBloc.dispatch(RequestProviders());
+    _loginBloc.dispatch(RequestProviders(type: widget.type));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: createProviderList()
-    );
+    if (widget.type == ProviderListType.login) {
+      title = AppLocalizations.of(context).loginSignInTitle;
+      text = AppLocalizations.of(context).loginSignInInfoText;
+    } else if (widget.type == ProviderListType.register) {
+      title = AppLocalizations.of(context).registerTitle;
+      text = AppLocalizations.of(context).registerText;
+    }
+    return Scaffold(body: createProviderList());
   }
 
   Widget createProviderList() {
     return Padding(
-      padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
-      child:Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            AppLocalizations.of(context).loginSignInTitle,
-            style: loginTitleText,
-          ),
-          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-          Text(
-            AppLocalizations.of(context).loginSignInInfoText
-          ),
-          Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
-          Expanded(
-            child: BlocBuilder(
+        padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              title,
+              style: loginTitleText,
+            ),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+            Text(text, textAlign: TextAlign.center,),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
+            Expanded(
+                child: BlocBuilder(
               bloc: _loginBloc,
               builder: (context, state) {
                 if (state is LoginStateProvidersLoaded) {
@@ -109,11 +121,9 @@ class _ProviderListState extends State<ProviderList> {
                   return Icon(Icons.error);
                 }
               },
-            )
-          ),
-        ],
-      )
-    );
+            )),
+          ],
+        ));
   }
 
   ListView buildListItems(LoginStateProvidersLoaded state) {
@@ -121,10 +131,9 @@ class _ProviderListState extends State<ProviderList> {
       padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.providers.length,
       itemBuilder: (BuildContext context, int index) {
-        if(state.providers[index].oauth == null) {
+        if (state.providers[index].oauth == null) {
           return createProviderItem(state.providers[index]);
-        }
-        else{
+        } else {
           return Container();
         }
       },
@@ -132,7 +141,7 @@ class _ProviderListState extends State<ProviderList> {
   }
 
   Widget createProviderItem(Provider provider) {
-    if(provider.id == "coi" && isRelease()){
+    if (provider.id == "coi" && isRelease()) {
       return Container();
     }
     return Column(
@@ -152,12 +161,16 @@ class _ProviderListState extends State<ProviderList> {
   }
 
   _onItemTap(Provider provider) {
-    var navigation = Navigation();
-    navigation.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProviderSignIn(provider, widget._success)
-      )
-    );
+    if (widget.type == ProviderListType.login) {
+      var navigation = Navigation();
+      navigation.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProviderSignIn(provider, widget.success),
+        ),
+      );
+    } else if (widget.type == ProviderListType.register) {
+      launch(provider.registerLink, forceSafariVC: false);
+    }
   }
 }

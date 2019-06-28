@@ -44,7 +44,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:delta_chat_core/delta_chat_core.dart' as Dcc;
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
@@ -56,14 +56,11 @@ import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum ChatListItemType {
-  chat,
-  message,
-}
+import 'chat_list.dart';
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
-  final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
-  final Repository<ChatMsg> _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+  final Repository<Dcc.Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
+  final Repository<Dcc.ChatMsg> _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Dcc.Chat.typeInvite);
   final _messageListBloc = MessageListBloc();
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   String _currentSearch;
@@ -113,7 +110,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   void setupChatListListener() {
     if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged], _chatListModified);
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _chatListModified);
       _chatRepository.addListener(_repositoryStreamHandler);
 
       final messageListObservable = Observable<MessageListState>(_messageListBloc.state);
@@ -121,7 +118,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         if (state is MessagesStateSuccess) {
           var uniqueInviteMap = LinkedHashMap<int, int>();
           await Future.forEach(state.messageIds, (messageId) async {
-            ChatMsg message = _messageListRepository.get(messageId);
+            Dcc.ChatMsg message = _messageListRepository.get(messageId);
             var contactId = await message.getFromId();
             if (!uniqueInviteMap.containsKey(contactId)) {
               uniqueInviteMap.putIfAbsent(contactId, () => messageId);
@@ -145,7 +142,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   Future setupInvites(bool chatListRefreshNeeded) async {
-    _messageListBloc.dispatch(RequestMessages(chatId: Chat.typeInvite));
+    _messageListBloc.dispatch(RequestMessages(chatId: Dcc.Chat.typeInvite));
   }
 
   ChatListItemWrapper createChatListItemWrapper(List<int> ids, List<int> lastUpdateValues, [List<int> types]) {
@@ -171,10 +168,10 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       } else if (nextInvite >= inviteMessageIds.length) {
         nextChat = addChatToResult(ids, getChat(chatIds, nextChat), types, lastUpdateValues, nextChat);
       } else {
-        Chat chat = getChat(chatIds, nextChat);
-        ChatSummary chatSummary = chat.get(ChatExtension.chatSummary);
+        Dcc.Chat chat = getChat(chatIds, nextChat);
+        Dcc.ChatSummary chatSummary = chat.get(ChatExtension.chatSummary);
         var chatTimestamp = chatSummary.timestamp;
-        ChatMsg message = getMessage(inviteMessageIds, nextInvite);
+        Dcc.ChatMsg message = getMessage(inviteMessageIds, nextInvite);
         var inviteTimestamp = await message.getTimestamp();
         if (chatTimestamp > inviteTimestamp) {
           nextChat = addChatToResult(ids, chat, types, lastUpdateValues, nextChat);
@@ -191,11 +188,11 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     );
   }
 
-  Chat getChat(List<int> chatIds, int nextChat) => _chatRepository.get(chatIds[nextChat]);
+  Dcc.Chat getChat(List<int> chatIds, int nextChat) => _chatRepository.get(chatIds[nextChat]);
 
-  ChatMsg getMessage(List<int> inviteMessageIds, int nextInvite) => _messageListRepository.get(inviteMessageIds[nextInvite]);
+  Dcc.ChatMsg getMessage(List<int> inviteMessageIds, int nextInvite) => _messageListRepository.get(inviteMessageIds[nextInvite]);
 
-  int addChatToResult(List ids, Chat chat, List types, List lastUpdateValues, int nextChat) {
+  int addChatToResult(List ids, Dcc.Chat chat, List types, List lastUpdateValues, int nextChat) {
     ids.add(chat.id);
     types.add(ChatListItemType.chat);
     lastUpdateValues.add(chat.lastUpdate);
@@ -203,7 +200,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     return nextChat;
   }
 
-  int addInviteMessageToResult(List ids, ChatMsg message, List types, List lastUpdateValues, int nextInvite) {
+  int addInviteMessageToResult(List ids, Dcc.ChatMsg message, List types, List lastUpdateValues, int nextInvite) {
     ids.add(message.id);
     types.add(ChatListItemType.message);
     lastUpdateValues.add(message.lastUpdate);
@@ -216,7 +213,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     List<int> chatIds = List();
     var lastUpdateValues = List<int>();
     if (chatListRefreshNeeded) {
-      ChatList chatList = ChatList();
+      var chatList = Dcc.ChatList();
       await chatList.setup(_currentSearch);
       int chatCount = await chatList.getChatCnt();
       Map<int, dynamic> chatSummaries = Map();
@@ -224,7 +221,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         int chatId = await chatList.getChat(i);
         chatIds.add(chatId);
         var summaryData = await chatList.getChatSummary(i);
-        var chatSummary = ChatSummary.fromMethodChannel(summaryData);
+        var chatSummary = Dcc.ChatSummary.fromMethodChannel(summaryData);
         chatSummaries.putIfAbsent(chatId, () => chatSummary);
       }
       await chatList.tearDown();
@@ -259,13 +256,13 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   Future<void> _updateSummaries() async {
-    ChatList chatList = ChatList();
+    var chatList = Dcc.ChatList();
     await chatList.setup();
     int chatCount = await chatList.getChatCnt();
     for (int i = 0; i < chatCount; i++) {
       int chatId = await chatList.getChat(i);
       var summaryData = await chatList.getChatSummary(i);
-      var chatSummary = ChatSummary.fromMethodChannel(summaryData);
+      var chatSummary = Dcc.ChatSummary.fromMethodChannel(summaryData);
       _chatRepository.get(chatId).set(ChatExtension.chatSummary, chatSummary);
     }
     await chatList.tearDown();

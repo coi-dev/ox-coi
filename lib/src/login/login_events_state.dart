@@ -44,9 +44,15 @@ import 'package:meta/meta.dart';
 import 'package:ox_coi/src/base/bloc_progress_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
 
+import 'login_provider_list.dart';
+
 abstract class LoginEvent {}
 
-class RequestProviders extends LoginEvent{}
+class RequestProviders extends LoginEvent {
+  final ProviderListType type;
+
+  RequestProviders({@required this.type});
+}
 
 class ProviderLoginButtonPressed extends LoginEvent {
   final String email;
@@ -57,13 +63,13 @@ class ProviderLoginButtonPressed extends LoginEvent {
   final String smtpPassword;
 
   ProviderLoginButtonPressed({
-      @required this.email,
-      @required this.password,
-      @required this.provider,
-      @required this.imapLogin,
-      @required this.smtpLogin,
-      @required this.smtpPassword,
-    });
+    @required this.email,
+    @required this.password,
+    @required this.provider,
+    @required this.imapLogin,
+    @required this.smtpLogin,
+    @required this.smtpPassword,
+  });
 }
 
 class LoginButtonPressed extends LoginEvent {
@@ -120,7 +126,7 @@ class LoginStateLoading extends LoginState {
 
 class LoginStateSuccess extends LoginState {}
 
-class LoginStateProvidersLoaded extends LoginState{
+class LoginStateProvidersLoaded extends LoginState {
   List<Provider> providers;
 
   LoginStateProvidersLoaded({@required this.providers});

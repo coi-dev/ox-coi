@@ -52,7 +52,7 @@ import 'package:ox_coi/src/utils/security.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:delta_chat_core/delta_chat_core.dart' as Dcc;
+import 'package:delta_chat_core/delta_chat_core.dart';
 
 class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
   StreamSubscription<RecordStatus> _recorderSubscription;
@@ -128,10 +128,10 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     int type;
     if (pickImage) {
       file = await ImagePicker.pickImage(source: ImageSource.camera);
-      type = Dcc.ChatMsg.typeImage;
+      type = ChatMsg.typeImage;
     } else {
       file = await ImagePicker.pickVideo(source: ImageSource.camera);
-      type = Dcc.ChatMsg.typeVideo;
+      type = ChatMsg.typeVideo;
     }
     if (file != null) {
       dispatch(StopImageOrVideoRecording(filePath: file.path, type: type));

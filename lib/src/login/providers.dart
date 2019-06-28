@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 
 class Providers {
-  List<Provider> ProvidersList;
+  List<Provider> providerList;
 
-  Providers({this.ProvidersList});
+  Providers({this.providerList});
 
   Providers.fromJson(Map<String, dynamic> json) {
     if (json['providers'] != null) {
-      ProvidersList = new List<Provider>();
+      providerList = new List<Provider>();
       json['providers'].forEach((v) {
-        ProvidersList.add(new Provider.fromJson(v));
+        providerList.add(new Provider.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.ProvidersList != null) {
-      data['providers'] = this.ProvidersList.map((v) => v.toJson()).toList();
+    if (this.providerList != null) {
+      data['providers'] = this.providerList.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -27,6 +27,7 @@ class Providers {
 class Provider {
   String id;
   String name;
+  String registerLink;
   Oauth oauth;
   Preset preset;
 
@@ -35,6 +36,7 @@ class Provider {
   Provider.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    registerLink = json['register_link'];
     oauth = json['oauth'] != null ? new Oauth.fromJson(json['oauth']) : null;
     preset = json['preset'] != null ? new Preset.fromJson(json['preset']) : null;
   }
@@ -43,6 +45,7 @@ class Provider {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
+    data['register_link'] = this.registerLink;
     if (this.oauth != null) {
       data['oauth'] = this.oauth.toJson();
     }

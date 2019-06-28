@@ -50,6 +50,7 @@
     {
       "id": "mailbox",
       "name": "Mailbox.org",
+      "register_link": "https://register.mailbox.org/",
       "preset": {
         "incoming_security": "ssltls",
         "incoming_server": "imap.mailbox.org",
