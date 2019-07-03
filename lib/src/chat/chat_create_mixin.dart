@@ -61,7 +61,6 @@ mixin CreateChatMixin {
     return createChatBloc;
   }
 
-
   void createChatFromGroup(BuildContext context, bool verified, String name, List<int> contacts, [Function onSuccess]) {
     ChatChangeBloc chatChangeBloc = _getChatChangeBloc(context, onSuccess);
     chatChangeBloc.dispatch(CreateChat(verified: verified, name: name, contacts: contacts));

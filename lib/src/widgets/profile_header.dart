@@ -43,6 +43,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/text.dart';
@@ -71,7 +72,21 @@ class ProfileHeader extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
-          child: _buildAvatar(initialsString, color, imagePath, lastUpdate),
+          child: isNullOrEmpty(imagePath)
+              ? CircleAvatar(
+                  maxRadius: profileAvatarMaxRadius,
+                  backgroundColor: color,
+                  child: Text(
+                    initialsString,
+                    style: chatProfileAvatarInitialText,
+                  ),
+                )
+              : CircleAvatar(
+                  key: lastUpdate ?? createKey(lastUpdate),
+                  maxRadius: profileAvatarMaxRadius,
+                  backgroundColor: color,
+                  backgroundImage: FileImage(File(imagePath)),
+                ),
         ),
         for (var child in dynamicChildren) Padding(padding: EdgeInsets.only(top: 8.0), child: child),
         Padding(
@@ -83,22 +98,56 @@ class ProfileHeader extends StatelessWidget {
       ],
     );
   }
+}
 
-  CircleAvatar _buildAvatar(String initials, Color color, [String imagePath, int lastUpdate]) {
-    return isNullOrEmpty(imagePath)
-        ? CircleAvatar(
-            maxRadius: profileAvatarMaxRadius,
-            child: Text(
-              initials,
-              style: chatProfileAvatarInitialText,
-            ),
-            backgroundColor: color,
+class ProfileHeaderText extends StatelessWidget {
+  final String text;
+
+  final IconData iconData;
+
+  const ProfileHeaderText({Key key, @required this.text, this.iconData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var content = Text(text, style: Theme.of(context).textTheme.subhead);
+    return iconData != null
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(iconData),
+              Padding(
+                padding: const EdgeInsets.only(left: iconTextPadding),
+                child: content,
+              ),
+            ],
           )
-        : CircleAvatar(
-            key: lastUpdate ?? createKey(lastUpdate),
-            maxRadius: profileAvatarMaxRadius,
-            backgroundImage: FileImage(File(imagePath)),
-            backgroundColor: color,
-          );
+        : content;
+  }
+}
+
+class ProfileCopyableHeaderText extends StatelessWidget {
+  final String text;
+  final String toastMessage;
+  final IconData iconData;
+
+  const ProfileCopyableHeaderText({Key key, @required this.text, @required this.toastMessage, this.iconData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        copyToClipboardWithToast(text: text, toastText: toastMessage);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: iconTextPadding),
+            child: ProfileHeaderText(text: text, iconData: iconData),
+          ),
+          Icon(Icons.content_copy),
+        ],
+      ),
+    );
   }
 }

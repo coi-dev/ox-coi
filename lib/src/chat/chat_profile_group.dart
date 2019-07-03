@@ -48,13 +48,10 @@ import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/contact/contact_profile_mixin.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
 class ChatProfileGroup extends StatefulWidget {
@@ -69,7 +66,7 @@ class ChatProfileGroup extends StatefulWidget {
   _ChatProfileGroupState createState() => _ChatProfileGroupState();
 }
 
-class _ChatProfileGroupState extends State<ChatProfileGroup> with ContactProfileMixin {
+class _ChatProfileGroupState extends State<ChatProfileGroup> {
   ContactListBloc _contactListBloc = ContactListBloc();
 
   @override
@@ -90,27 +87,26 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> with ContactProfile
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          List<Widget> dynamicChildren = List();
-          dynamicChildren.add(buildHeaderText(context, widget._chatName, widget._isVerified ? Icons.verified_user : null));
-          dynamicChildren.add(buildHeaderText(context, AppLocalizations.of(context).chatProfileGroupMemberCounter(state.contactIds.length)));
+          var appLocalizations = AppLocalizations.of(context);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               ProfileHeader(
-                dynamicChildren: dynamicChildren,
+                dynamicChildren: [
+                  ProfileHeaderText(text: widget._chatName),
+                  ProfileHeaderText(
+                    text: appLocalizations.chatProfileGroupMemberCounter(state.contactIds.length),
+                    iconData: widget._isVerified ? Icons.verified_user : null,
+                  )
+                ],
                 color: widget._chatColor,
                 initialsString: Avatar.getInitials(widget._chatName),
               ),
-              buildActionList(context, [
-                ListTile(
-                  leading: Icon(
-                    Icons.delete,
-                    color: accent,
-                  ),
-                  title: Text(
-                    AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
-                  ),
-                  onTap: () => _showLeaveGroupDialog(),
+              ProfileActionList(tiles: [
+                ProfileAction(
+                  iconData: Icons.delete,
+                  text: appLocalizations.chatProfileLeaveGroupButtonText,
+                  onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
                 ),
               ]),
               Divider(height: dividerHeight),
@@ -135,18 +131,6 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> with ContactProfile
           var key = "$contactId-${state.contactLastUpdateValues[index]}";
           return ChatProfileGroupContactItem(contactId, key);
         });
-  }
-
-  _showLeaveGroupDialog() {
-    return showConfirmationDialog(
-      context: context,
-      title: AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
-      content: AppLocalizations.of(context).chatProfileLeaveGroupInfoText,
-      positiveButton: AppLocalizations.of(context).chatProfileLeaveGroupButtonText,
-      positiveAction: () => _leaveGroup(),
-      selfClose: false,
-      navigatable: Navigatable(Type.chatLeaveGroupDialog),
-    );
   }
 
   _leaveGroup() async {

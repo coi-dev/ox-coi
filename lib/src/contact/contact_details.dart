@@ -50,19 +50,17 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
-import 'contact_profile_mixin.dart';
 
-class ContactDetailsView extends StatelessWidget with ContactProfileMixin, CreateChatMixin {
+class ContactDetailsView extends StatelessWidget with CreateChatMixin {
   final _contactItemBloc = ContactItemBloc();
   final _contactChangeBloc = ContactChangeBloc();
   final _navigation = Navigation();
@@ -75,9 +73,10 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
 
   @override
   Widget build(BuildContext context) {
+    var appLocalizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).profileTitle),
+        title: Text(appLocalizations.profileTitle),
       ),
       body: SingleChildScrollView(
         child: BlocBuilder(
@@ -90,56 +89,39 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
                 children: <Widget>[
                   ProfileHeader(
                     dynamicChildren: [
-                      buildHeaderText(context, state.name, state.isVerified ? Icons.verified_user : null),
-                      buildCopyableText(context, state.email, AppLocalizations.of(context).chatProfileClipboardToastMessage),
+                      ProfileHeaderText(text: state.name),
+                      ProfileCopyableHeaderText(
+                        text: state.email,
+                        toastMessage: appLocalizations.chatProfileClipboardToastMessage,
+                        iconData: state.isVerified ? Icons.verified_user : null,
+                      ),
                     ],
                     color: state.color,
                     initialsString: Avatar.getInitials(state.name, state.email),
                   ),
-                  buildActionList(context, [
-                    ListTile(
-                      leading: Icon(
-                        Icons.chat,
-                        color: accent,
-                      ),
-                      title: Text(
-                        AppLocalizations.of(context).contactsOpenChat,
-                      ),
+                  ProfileActionList(tiles: [
+                    ProfileAction(
+                      iconData: Icons.chat,
+                      text: appLocalizations.contactsOpenChat,
                       onTap: () => createChatFromContact(context, _contactId),
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.edit,
-                        color: accent,
-                      ),
-                      title: Text(
-                        AppLocalizations.of(context).contactChangeEditTitle,
-                      ),
-                      onTap: () {
-                        _navigation.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ContactChange(
-                                  contactAction: ContactAction.edit,
-                                  id: _contactId,
-                                  name: state.name,
-                                  email: state.email,
-                                ),
-                          ),
-                        );
-                      },
+                    ProfileAction(
+                      iconData: Icons.edit,
+                      text: appLocalizations.contactChangeEditTitle,
+                      onTap: () => _editContact(context, state.name, state.email),
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.delete,
-                        color: accent,
-                      ),
-                      title: Text(
-                        AppLocalizations.of(context).contactChangeDeleteTitle,
-                      ),
-                      onTap: () {
-                        _onDelete(context, state.name, state.email);
-                      },
+                    ProfileAction(
+                      iconData: Icons.delete,
+                      text: appLocalizations.contactChangeDeleteTitle,
+                      onTap: () => showActionDialog(
+                            context,
+                            ProfileActionType.deleteContact,
+                            () => _deleteContact(context),
+                            {
+                              ProfileActionParams.name: state.name,
+                              ProfileActionParams.email: state.email,
+                            },
+                          ),
                     ),
                   ]),
                 ],
@@ -153,19 +135,25 @@ class ContactDetailsView extends StatelessWidget with ContactProfileMixin, Creat
     );
   }
 
-  _onDelete(BuildContext context, String name, String email) {
-    showConfirmationDialog(
-      context: context,
-      title: AppLocalizations.of(context).contactChangeDeleteTitle,
-      content: (AppLocalizations.of(context).contactChangeDeleteDialogContent(email, name)),
-      positiveButton: AppLocalizations.of(context).delete,
-      positiveAction: () {
-        final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
-        contactAddedObservable.listen((state) => _handleContactChanged(context, state));
-        _contactChangeBloc.dispatch(DeleteContact(_contactId));
-      },
-      navigatable: Navigatable(Type.contactDeleteDialog),
+  void _editContact(BuildContext context, String name, String email) {
+    return _navigation.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactChange(
+              contactAction: ContactAction.edit,
+              id: _contactId,
+              name: name,
+              email: email,
+            ),
+      ),
     );
+  }
+
+  _deleteContact(BuildContext context) {
+    _navigation.pop(context);
+    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
+    contactAddedObservable.listen((state) => _handleContactChanged(context, state));
+    _contactChangeBloc.dispatch(DeleteContact(_contactId));
   }
 
   _handleContactChanged(BuildContext context, ContactChangeState state) {
