@@ -110,8 +110,10 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   }
 
   void _setupContactListener() async {
-    repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.contactsChanged, _onContactsChanged);
-    contactRepository.addListener(repositoryStreamHandler);
+    if (_repositoryStreamHandler == null) {
+      _repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.contactsChanged, _onContactsChanged);
+      _contactRepository.addListener(_repositoryStreamHandler);
+    }
   }
 
   void _onContactsChanged(event) {
@@ -120,7 +122,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
 
   Future _setupContacts() async {
     List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
-    contactRepository.update(ids: contactIds);
+    _contactRepository.update(ids: contactIds);
     dispatch(ContactsChanged());
   }
 
