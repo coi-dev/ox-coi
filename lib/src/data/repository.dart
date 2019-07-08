@@ -143,7 +143,7 @@ abstract class Repository<T extends Base> {
     }
     streamHandler.streamController.stream.listen((event) async {
       await onData(event);
-      streamHandler.onData();
+      streamHandler.onData(event);
     }).onError((error) {
       error(error);
       if (streamHandler.onError != null) {

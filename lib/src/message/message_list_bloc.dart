@@ -105,12 +105,12 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   void _setupMessagesListener() async {
     if (repositoryStreamHandler == null) {
       repositoryStreamHandler =
-          RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead], _updateMessages);
+          RepositoryMultiEventStreamHandler(Type.publish, [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead], _onMessagesChanged);
       _messageListRepository.addListener(repositoryStreamHandler);
     }
   }
 
-  void _updateMessages() => dispatch(UpdateMessages());
+  void _onMessagesChanged(event) => dispatch(UpdateMessages());
 
   void _setupMessages() async {
     List<int> dateMakerIds = List();

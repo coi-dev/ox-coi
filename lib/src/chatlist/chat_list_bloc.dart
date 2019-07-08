@@ -110,7 +110,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   void setupChatListListener() {
     if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _chatListModified);
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
 
       final messageListObservable = Observable<MessageListState>(_messageListBloc.state);
@@ -130,7 +130,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  Future<void> _chatListModified() async {
+  Future<void> _onChatListChanged(event) async {
     await _updateSummaries();
     if (_showInvites) {
       setupInvites(false);
