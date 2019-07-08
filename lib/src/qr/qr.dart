@@ -47,10 +47,13 @@ import 'package:ox_coi/src/qr/show_qr.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 
-class QrCode extends StatefulWidget {
-  final int _chatId;
 
-  QrCode(this._chatId);
+
+class QrCode extends StatefulWidget {
+  final int chatId;
+  final int initialIndex;
+
+  QrCode({@required this.chatId, this.initialIndex = 0});
 
   @override
   _QrCodeState createState() => _QrCodeState();
@@ -62,7 +65,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, vsync: this);
+    controller = TabController(length: 2, vsync: this, initialIndex: widget.initialIndex);
   }
 
   @override
@@ -102,7 +105,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
           child: TabBarView(
             controller: controller,
             children: <Widget>[
-              ShowQr(widget._chatId),
+              ShowQr(widget.chatId),
               ScanQr(),
             ],
           ),

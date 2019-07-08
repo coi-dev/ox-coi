@@ -50,6 +50,8 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/qr/qr.dart';
+import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
@@ -202,17 +204,30 @@ class _ContactChangeState extends State<ContactChange> {
                         Expanded(child: _nameField),
                       ],
                     ),
-                    widget.contactAction == ContactAction.add
-                        ? Row(
-                            children: <Widget>[
-                              Icon(Icons.mail),
-                              Padding(
-                                padding: EdgeInsets.only(right: iconFormPadding),
-                              ),
-                              Expanded(child: _emailField),
-                            ],
-                          )
-                        : Container(),
+                    Visibility(
+                      visible: widget.contactAction == ContactAction.add,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.mail),
+                          Padding(
+                            padding: EdgeInsets.only(right: iconFormPadding),
+                          ),
+                          Expanded(child: _emailField),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: formVerticalPadding),
+                    ),
+                    Visibility(
+                      visible: widget.contactAction == ContactAction.add,
+                      child: RaisedButton(
+                        color: accent,
+                        textColor: text,
+                        child: Text(AppLocalizations.of(context).contactChangeScanQrButton),
+                        onPressed: scanQr,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -226,4 +241,15 @@ class _ContactChangeState extends State<ContactChange> {
   String _getName() => _nameField.controller.text;
 
   String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
+
+  scanQr() {
+    navigation.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QrCode(
+                chatId: 0,
+                initialIndex: 1,
+              )),
+    );
+  }
 }

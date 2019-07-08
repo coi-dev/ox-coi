@@ -220,7 +220,7 @@ class _ProfileState extends State<UserProfileView> {
   showQr() {
     navigation.push(
       context,
-      MaterialPageRoute(builder: (context) => QrCode(0)),
+      MaterialPageRoute(builder: (context) => QrCode(chatId: 0)),
     );
   }
 

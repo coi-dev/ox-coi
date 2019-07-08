@@ -453,6 +453,8 @@ class AppLocalizations {
 
   String get contactChangeNameHint => Intl.message('Enter the contact name', name: 'contactChangeNameHint');
 
+  String get contactChangeScanQrButton => Intl.message('Scan QR', name: 'contactChangeScanQrButton');
+
   String get contactImportDialogTitle => Intl.message('Import system contacts', name: 'contactImportDialogTitle');
 
   String get contactImportDialogContent => Intl.message('Would you like to import your system contacts?', name: 'contactImportDialogContent');
