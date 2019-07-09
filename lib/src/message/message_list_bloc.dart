@@ -108,7 +108,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
         [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead],
-        _updateMessages,
+        _onMessagesChanged,
       );
       _messageListRepository.addListener(_repositoryStreamHandler);
     }
