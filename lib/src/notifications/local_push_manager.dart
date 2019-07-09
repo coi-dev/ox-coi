@@ -70,13 +70,16 @@ class LocalPushManager {
   LocalPushManager._internal(this._buildContext);
 
   setup() async {
-    _notificationManager = NotificationManager(_buildContext);
-    _messageSubject.listen(_successCallback);
-    _listenerId = await _core.listen(Event.incomingMsg, _messageSubject);
+    if (_listenerId == null) {
+      _notificationManager = NotificationManager(_buildContext);
+      _messageSubject.listen(_successCallback);
+      _listenerId = await _core.listen(Event.incomingMsg, _messageSubject);
+    }
   }
 
   tearDown() async {
     await _core.removeListener(Event.incomingMsg, _listenerId);
+    _listenerId = null;
   }
 
   _successCallback(Event event) async {

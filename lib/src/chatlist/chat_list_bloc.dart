@@ -104,6 +104,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   @override
   void dispose() {
     _chatRepository.removeListener(_repositoryStreamHandler);
+    _repositoryStreamHandler?.tearDown();
     _messageListBloc.dispose();
     super.dispose();
   }

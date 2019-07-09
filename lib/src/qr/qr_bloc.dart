@@ -130,6 +130,9 @@ class QrBloc extends Bloc<QrEvent, QrState>{
     _core.removeListener(Event.secureJoinInviterProgress, _qrInviterListenerId);
     _core.removeListener(Event.secureJoinJoinerProgress, _qrJoinerListenerId);
     _core.removeListener(Event.error, _errorSubjectListenerId);
+    _qrInviterListenerId = null;
+    _qrJoinerListenerId = null;
+    _errorSubjectListenerId = null;
   }
 
   void getQrText(int chatId) async{

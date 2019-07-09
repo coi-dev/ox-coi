@@ -160,6 +160,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _unregisterListeners() {
     _core.removeListener(Event.configureProgress, _loginListenerId);
     _core.removeListener(Event.error, _errorListenerId);
+    _loginListenerId = null;
+    _errorListenerId = null;
   }
 
   bool _loginSuccess(int progress) {

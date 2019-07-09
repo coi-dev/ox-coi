@@ -52,8 +52,8 @@ import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater {
-  Repository<Contact> contactRepository;
-  RepositoryEventStreamHandler repositoryStreamHandler;
+  Repository<Contact> _contactRepository;
+  RepositoryEventStreamHandler _repositoryStreamHandler;
   int _listTypeOrChatId;
   List<int> _contactsSelected = List();
   String _currentSearch;
@@ -72,7 +72,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       try {
         _currentSearch = null;
         _listTypeOrChatId = event.listTypeOrChatId;
-        contactRepository = RepositoryManager.get(RepositoryType.contact, _listTypeOrChatId);
+        _contactRepository = RepositoryManager.get(RepositoryType.contact, _listTypeOrChatId);
         _setupContactListener();
         _setupContacts();
       } catch (error) {
@@ -87,8 +87,8 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     } else if (event is ContactsChanged) {
       yield ContactListStateSuccess(
-        contactIds: contactRepository.getAllIds(),
-        contactLastUpdateValues: contactRepository.getAllLastUpdateValues(),
+        contactIds: _contactRepository.getAllIds(),
+        contactLastUpdateValues: _contactRepository.getAllLastUpdateValues(),
         contactsSelected: _contactsSelected,
       );
     } else if (event is ContactsSearched) {
@@ -104,7 +104,8 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
 
   @override
   void dispose() {
-    contactRepository.removeListener(repositoryStreamHandler);
+    _contactRepository.removeListener(_repositoryStreamHandler);
+    _repositoryStreamHandler?.tearDown();
     super.dispose();
   }
 
@@ -128,7 +129,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     List<int> contactIds = List.from(await context.getContacts(2, _currentSearch));
     List<int> lastUpdates = List();
     contactIds.forEach((contactId) {
-      lastUpdates.add(contactRepository.get(contactId).lastUpdate);
+      lastUpdates.add(_contactRepository.get(contactId).lastUpdate);
     });
     dispatch(ContactsSearched(ids: contactIds, lastUpdates: lastUpdates));
   }

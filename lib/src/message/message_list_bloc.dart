@@ -51,7 +51,7 @@ import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with InviteMixin {
-  RepositoryMultiEventStreamHandler repositoryStreamHandler;
+  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   Repository<ChatMsg> _messageListRepository;
   int _chatId;
   int _messageId;
@@ -98,7 +98,8 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   @override
   void dispose() {
-    _messageListRepository?.removeListener(repositoryStreamHandler);
+    _messageListRepository?.removeListener(_repositoryStreamHandler);
+    _repositoryStreamHandler?.tearDown();
     super.dispose();
   }
 
