@@ -180,6 +180,8 @@ class AppLocalizations {
 
   String get chat => Intl.message('Chat', name: 'chat');
 
+  String get antiMobbing => Intl.message('Anti-Mobbing', name: 'antiMobbing');
+
   // Debug
   String get debugTitle => Intl.message('Debug', name: 'debugTitle');
 
@@ -286,7 +288,9 @@ class AppLocalizations {
 
   String get loginWelcomeText => Intl.message('Welcome to OX Coi', name: 'loginWelcomeText');
 
-  String get loginFirstInformationText => Intl.message('OX Coi works with any email account. If you have one, please sign in, otherwise register a new account first.', name: 'loginFirstInformationText');
+  String get loginFirstInformationText =>
+      Intl.message('OX Coi works with any email account. If you have one, please sign in, otherwise register a new account first.',
+          name: 'loginFirstInformationText');
 
   String get loginTermsConditionPrivacyText => Intl.message('By using OX Coi you agree to our ', name: 'loginTermsConditionPrivacyText');
 
@@ -314,10 +318,13 @@ class AppLocalizations {
 
   String get loginManualSettingsInfoText => Intl.message('Please specify your email server settings.', name: 'loginManualSettingsInfoText');
 
-  String get loginManualSettingsSecondInfoText => Intl.message('Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. '
-    'Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.', name: 'loginManualSettingsSecondInfoText');
+  String get loginManualSettingsSecondInfoText => Intl.message(
+      'Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. '
+      'Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.',
+      name: 'loginManualSettingsSecondInfoText');
 
-  String get loginManualSettingsErrorInfoText => Intl.message('We could not determine all settings automatically.', name: 'loginManualSettingsErrorInfoText');
+  String get loginManualSettingsErrorInfoText =>
+      Intl.message('We could not determine all settings automatically.', name: 'loginManualSettingsErrorInfoText');
 
   String get loginInformation => Intl.message(
       'For known email providers additional settings are setup automatically. Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.',
@@ -397,7 +404,6 @@ class AppLocalizations {
   String get chatEmpty => Intl.message('This is a new chat. Send a message to connect!', name: 'chatEmpty');
 
   String get chatInviteQuestion => Intl.message('Do you want to chat with this new contact?', name: 'chatInviteQuestion');
-
 
   // Chat profile view
   String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');
@@ -534,7 +540,8 @@ class AppLocalizations {
   // Account settings
   String get accountSettingsTitle => Intl.message('Account settings', name: 'accountSettingsTitle');
 
-  String get accountSettingsDataProgressMessage => Intl.message('Applying new settings, this may take a moment', name: 'accountSettingsDataProgressMessage');
+  String get accountSettingsDataProgressMessage =>
+      Intl.message('Applying new settings, this may take a moment', name: 'accountSettingsDataProgressMessage');
 
   String get accountSettingsSuccess => Intl.message('Account settings succesfully changed', name: 'accountSettingsSuccess');
 
@@ -543,17 +550,23 @@ class AppLocalizations {
   // Security settings
   String get securitySettingsExportKeys => Intl.message('Export keys', name: 'securitySettingsExportKeys');
 
-  String get securitySettingsExportKeysText => Intl.message('This keys enable another device to use your current encryption setup. Keys are saved on your local storage', name: 'securitySettingsExportKeysText');
+  String get securitySettingsExportKeysText =>
+      Intl.message('This keys enable another device to use your current encryption setup. Keys are saved on your local storage',
+          name: 'securitySettingsExportKeysText');
 
-  String securitySettingsExportKeysDialog(path) => Intl.message('Do you want to save your keys in "$path"?', name: 'securitySettingsExportKeysDialog', args: [path]);
+  String securitySettingsExportKeysDialog(path) =>
+      Intl.message('Do you want to save your keys in "$path"?', name: 'securitySettingsExportKeysDialog', args: [path]);
 
   String get securitySettingsExportKeysPerforming => Intl.message('Performing key export', name: 'securitySettingsExportKeysPerforming');
 
   String get securitySettingsImportKeys => Intl.message('Import keys', name: 'securitySettingsImportKeys');
 
-  String get securitySettingsImportKeysText => Intl.message('Import keys from your local storage to change your current encryption setup', name: 'securitySettingsImportKeysText');
+  String get securitySettingsImportKeysText =>
+      Intl.message('Import keys from your local storage to change your current encryption setup', name: 'securitySettingsImportKeysText');
 
-  String securitySettingsImportKeysDialog(path) => Intl.message('Do you want to import your keys from "$path"? If there are no keys present in that folder, the operation will fail.', name: 'securitySettingsImportKeysDialog', args: [path]);
+  String securitySettingsImportKeysDialog(path) =>
+      Intl.message('Do you want to import your keys from "$path"? If there are no keys present in that folder, the operation will fail.',
+          name: 'securitySettingsImportKeysDialog', args: [path]);
 
   String get securitySettingsImportKeysPerforming => Intl.message('Performing key import', name: 'securitySettingsImportKeysPerforming');
 
@@ -561,59 +574,89 @@ class AppLocalizations {
 
   String get securitySettingsKeyActionFailed => Intl.message('Key action failed', name: 'securitySettingsKeyActionFailed');
 
-  String get securitySettingsKeyActionFailedNoPermission => Intl.message('Key action failed, missing permissions', name: 'securitySettingsKeyActionFailedNoPermission');
-  
+  String get securitySettingsKeyActionFailedNoPermission =>
+      Intl.message('Key action failed, missing permissions', name: 'securitySettingsKeyActionFailedNoPermission');
+
   String get securitySettingsInitiateKeyTransfer => Intl.message('Initiate key transfer', name: 'securitySettingsInitiateKeyTransfer');
 
-  String get securitySettingsInitiateKeyTransferPerforming => Intl.message('Performing key transfer', name: 'securitySettingsInitiateKeyTransferPerforming');
+  String get securitySettingsInitiateKeyTransferPerforming =>
+      Intl.message('Performing key transfer', name: 'securitySettingsInitiateKeyTransferPerforming');
 
-  String get securitySettingsInitiateKeyTransferText => Intl.message('Creates an Autocrypt Setup Message on the server, you can load on other devices to use your current encryption setup.', name: 'securitySettingsInitiateKeyTransferText');
+  String get securitySettingsInitiateKeyTransferText =>
+      Intl.message('Creates an Autocrypt Setup Message on the server, you can load on other devices to use your current encryption setup.',
+          name: 'securitySettingsInitiateKeyTransferText');
 
-  String get securitySettingsInitiateKeyTransferDialog => Intl.message('An Autocrypt Setup Message securely shares your end-to-end setup with other Autocrypt-compliant apps. '
-      'The setup will be encrypted by a setup code which is displayed here and must be typed on the other device', name: 'securitySettingsInitiateKeyTransferDialog');
+  String get securitySettingsInitiateKeyTransferDialog => Intl.message(
+      'An Autocrypt Setup Message securely shares your end-to-end setup with other Autocrypt-compliant apps. '
+      'The setup will be encrypted by a setup code which is displayed here and must be typed on the other device',
+      name: 'securitySettingsInitiateKeyTransferDialog');
 
   String get securitySettingsInitiateKeyTransferDone => Intl.message('Setup message created', name: 'securitySettingsInitiateKeyTransferDone');
 
-  String securitySettingsInitiateKeyTransferDoneDialog(setupCode) => Intl.message('Your key has been sent to yourself. Switch to the other device and '
+  String securitySettingsInitiateKeyTransferDoneDialog(setupCode) => Intl.message(
+      'Your key has been sent to yourself. Switch to the other device and '
       'open the setup message. You should be prompted for a setup code. '
       'Type the following digits into the prompt:\n$setupCode\n'
-      'Once you\'re done, your other device will be ready to use Autocrypt.', name: 'securitySettingsInitiateKeyTransferDoneDialog', args: [setupCode]);
+      'Once you\'re done, your other device will be ready to use Autocrypt.',
+      name: 'securitySettingsInitiateKeyTransferDoneDialog',
+      args: [setupCode]);
 
   String get securitySettingsInitiateKeyTransferCopy => Intl.message('Copy code', name: 'securitySettingsInitiateKeyTransferCopy');
 
-  String get securitySettingsInitiateKeyTransferCopyDone => Intl.message('Code copied to clipboard', name: 'securitySettingsInitiateKeyTransferCopyDone');
+  String get securitySettingsInitiateKeyTransferCopyDone =>
+      Intl.message('Code copied to clipboard', name: 'securitySettingsInitiateKeyTransferCopyDone');
 
-  String get securitySettingsAutocryptMessage => Intl.message('This message is an Autocrypt Setup Message. Tap it to start the import process. You will be guided through the process.', name: 'securitySettingsAutocryptMessage');
+  String get securitySettingsAutocryptMessage =>
+      Intl.message('This message is an Autocrypt Setup Message. Tap it to start the import process. You will be guided through the process.',
+          name: 'securitySettingsAutocryptMessage');
 
   String get securitySettingsAutocryptImport => Intl.message('Import Autocrypt message', name: 'securitySettingsAutocryptImport');
 
-  String get securitySettingsAutocryptImportText => Intl.message('To complete the import of the Autocrypt Setup Message please provide the security code '
-      'shown in a dialog during creation of the message. After entering the code below the Autocrypt settings will be applied to your current encryption setup.', name: 'securitySettingsAutocryptImportText');
+  String get securitySettingsAutocryptImportText => Intl.message(
+      'To complete the import of the Autocrypt Setup Message please provide the security code '
+      'shown in a dialog during creation of the message. After entering the code below the Autocrypt settings will be applied to your current encryption setup.',
+      name: 'securitySettingsAutocryptImportText');
 
   String get securitySettingsAutocryptImportLabel => Intl.message('Autocrypt setup code', name: 'securitySettingsAutocryptImportLabel');
 
-  String get securitySettingsAutocryptImportHint => Intl.message('The code can be entered with or without minus signs', name: 'securitySettingsAutocryptImportHint');
+  String get securitySettingsAutocryptImportHint =>
+      Intl.message('The code can be entered with or without minus signs', name: 'securitySettingsAutocryptImportHint');
 
-  String securitySettingsAutocryptImportCodeHint(setupCodeStart) => Intl.message('The associated setup code starts with: $setupCodeStart', name: 'securitySettingsAutocryptImportCodeHint', args: [setupCodeStart]);
+  String securitySettingsAutocryptImportCodeHint(setupCodeStart) =>
+      Intl.message('The associated setup code starts with: $setupCodeStart', name: 'securitySettingsAutocryptImportCodeHint', args: [setupCodeStart]);
 
-  String get securitySettingsAutocryptImportSuccess => Intl.message('Autocrypt setup successfully changed', name: 'securitySettingsAutocryptImportSuccess');
+  String get securitySettingsAutocryptImportSuccess =>
+      Intl.message('Autocrypt setup successfully changed', name: 'securitySettingsAutocryptImportSuccess');
 
-  String get securitySettingsAutocryptImportFailed => Intl.message('Autocrypt setup adjustment failed. Please check the entered setup code.', name: 'securitySettingsAutocryptImportFailed');
+  String get securitySettingsAutocryptImportFailed =>
+      Intl.message('Autocrypt setup adjustment failed. Please check the entered setup code.', name: 'securitySettingsAutocryptImportFailed');
 
   // Chat settings
   String get chatSettingsChangeReadReceipts => Intl.message('Read receipts', name: 'chatSettingsChangeReadReceipts');
 
-  String get chatSettingsChangeReadReceiptsText => Intl.message('Enable sending and requesting of read receipts.', name: 'chatSettingsChangeReadReceiptsText');
+  String get chatSettingsChangeReadReceiptsText =>
+      Intl.message('Enable sending and requesting of read receipts.', name: 'chatSettingsChangeReadReceiptsText');
 
   String get chatSettingsChangeMessageSync => Intl.message('Message syncing', name: 'chatSettingsChangeMessageSync');
 
-  String get chatSettingsChangeMessageSyncText => Intl.message('Please choose what kind of messages you would like to see.', name: 'chatSettingsChangeMessageSyncText');
+  String get chatSettingsChangeMessageSyncText =>
+      Intl.message('Please choose what kind of messages you would like to see.', name: 'chatSettingsChangeMessageSyncText');
 
   String get chatSettingsChangeMessageSyncOption1 => Intl.message('Show only chat messages ', name: 'chatSettingsChangeMessageSyncOption1');
 
   String get chatSettingsChangeMessageSyncOption2 => Intl.message('Show only messages of my contacts', name: 'chatSettingsChangeMessageSyncOption2');
 
-  String get chatSettingsChangeMessageSyncOption3 => Intl.message('Show all messages, including normal email messages', name: 'chatSettingsChangeMessageSyncOption3');
+  String get chatSettingsChangeMessageSyncOption3 =>
+      Intl.message('Show all messages, including normal email messages', name: 'chatSettingsChangeMessageSyncOption3');
+
+  // Anti-Mobbing settings
+  String get antiMobbingSettingsChangeSetting => Intl.message('Only show messages of known contacts', name: 'antiMobbingSettingsChangeSetting');
+
+  String get antiMobbingSettingsInfoText =>
+      Intl.message('Messages from unknown contacts do not appear in chats anymore. Instead, you can access such messages here:',
+          name: 'antiMobbingSettingsHelpText');
+
+  String get antiMobbingSettingsUnknownContactsButtonText => Intl.message('Messages from unknown contacts', name: 'antiMobbingSettingsUnknownContactsButtonText');
 
   // Notifications
   String get moreMessages => Intl.message('more messages', name: 'moreMessages');
@@ -625,7 +668,6 @@ class AppLocalizations {
 
   // Search
   String get searchEmpty => Intl.message('No results found.', name: 'searchEmpty');
-
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

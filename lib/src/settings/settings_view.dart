@@ -52,6 +52,7 @@ enum SettingsType {
   security,
   about,
   chat,
+  antiMobbing,
   debug,
 }
 
@@ -100,6 +101,14 @@ class SettingsView extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(
+            Icons.https,
+            color: accent,
+          ),
+          title: Text(AppLocalizations.of(context).antiMobbing),
+          onTap: () => _onPressed(context, SettingsType.antiMobbing),
+        ),
+        ListTile(
+          leading: Icon(
             Icons.info,
             color: accent,
           ),
@@ -132,6 +141,9 @@ class SettingsView extends StatelessWidget {
         break;
       case SettingsType.chat:
         _navigation.pushNamed(context, Navigation.settingsChat);
+        break;
+      case SettingsType.antiMobbing:
+        _navigation.pushNamed(context, Navigation.settingsAntiMobbing);
         break;
       case SettingsType.debug:
         _navigation.pushNamed(context, Navigation.settingsDebug);

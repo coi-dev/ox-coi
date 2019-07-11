@@ -45,52 +45,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chatlist/invite_item.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/message/message_list_bloc.dart';
-import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-class InviteList extends StatefulWidget {
+import 'anti_mobbing_list_bloc.dart';
+import 'anti_mobbing_list_event_state.dart';
+
+class AntiMobbingList extends StatefulWidget {
   @override
-  _InviteListState createState() => _InviteListState();
+  _AntiMobbingListState createState() => _AntiMobbingListState();
 }
 
-class _InviteListState extends State<InviteList> {
-  MessageListBloc _messagesBloc = MessageListBloc();
+class _AntiMobbingListState extends State<AntiMobbingList> {
+  AntiMobbingListBloc _antiMobbingListBloc = AntiMobbingListBloc();
 
   @override
   void initState(){
     super.initState();
     var navigation = Navigation();
-    navigation.current = Navigatable(Type.inviteList);
-    _messagesBloc.dispatch(RequestMessages(chatId: Chat.typeInvite));
+    navigation.current = Navigatable(Type.antiMobbingList);
+    _antiMobbingListBloc.dispatch(RequestMessages());
   }
 
   @override
   void dispose(){
-    _messagesBloc.dispose();
+    _antiMobbingListBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _messagesBloc,
-      builder: (context, state) {
-        if (state is MessagesStateSuccess) {
-          if(state.messageIds.length > 0) {
-            return buildListViewItems(state.messageIds, state.messageLastUpdateValues);
-          }else{
-            return Center(child: Text(AppLocalizations.of(context).inviteEmptyList),);
+    return Scaffold(
+      appBar: AppBar(),
+      body: BlocBuilder(
+        bloc: _antiMobbingListBloc,
+        builder: (context, state) {
+          if (state is AntiMobbingListStateSuccess) {
+            if(state.messageIds.length > 0) {
+              return buildListViewItems(state.messageIds, state.messageLastUpdateValues);
+            }else{
+              return Center(child: Text(AppLocalizations.of(context).inviteEmptyList),);
+            }
+          } else if (state is! MessagesLoaded) {
+            return StateInfo(showLoading: true);
+          } else {
+            return Icon(Icons.error);
           }
-        } else if (state is! MessagesLoaded) {
-          return StateInfo(showLoading: true);
-        } else {
-          return Icon(Icons.error);
-        }
-      },
+        },
+      ),
     );
   }
 
@@ -101,7 +105,7 @@ class _InviteListState extends State<InviteList> {
       itemBuilder: (BuildContext context, int index) {
         var messageId = messageIds[index];
         var key = "$messageId-${messageLastUpdateValues[index]}";
-        return InviteItem(1, messageId, key);
+        return InviteItem(Chat.typeInvite, messageId, key);
       },
     );
   }

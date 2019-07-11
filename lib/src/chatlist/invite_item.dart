@@ -65,7 +65,6 @@ class InviteItem extends StatefulWidget {
 class _InviteItemState extends State<InviteItem> with CreateChatMixin {
   MessageItemBloc _messageItemBloc = MessageItemBloc();
   Navigation navigation = Navigation();
-  int _contactId;
 
   @override
   void initState() {
@@ -84,7 +83,6 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
         int timestamp = 0;
         if (state is MessageItemStateSuccess) {
           var contactWrapper = state.contactWrapper;
-          _contactId = contactWrapper.contactId;
           name = contactWrapper.contactAddress;
           preview = state.preview;
           timestamp = state.messageTimestamp;
@@ -115,41 +113,6 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
             ),
       ),
     );
-    /*return showNavigatableDialog(
-      context: context,
-      navigatable: Navigatable(Type.contactInviteDialog),
-      dialog: AlertDialog(
-        title: Text(AppLocalizations.of(context).createChatWith(name)),
-        content: new Text(message),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text(AppLocalizations.of(context).cancel),
-            onPressed: () {
-              navigation.pop(context);
-            },
-          ),
-          new FlatButton(
-            child: new Text(AppLocalizations.of(context).block),
-            onPressed: () {
-              blockUser();
-              navigation.pop(context);
-            },
-          ),
-          new FlatButton(
-            child: new Text(AppLocalizations.of(context).yes),
-            onPressed: () {
-              createChatFromMessage(context, widget._messageId, widget._chatId);
-              navigation.pop(context);
-            },
-          ),
-        ],
-      ),
-    );*/
-  }
-
-  void blockUser() {
-    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(contactId: _contactId, chatId: widget._chatId));
   }
 
   @override

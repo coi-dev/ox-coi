@@ -44,6 +44,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 enum Type {
+  antiMobbingList,
   chat,
   chatCreate,
   chatCreateGroupParticipants,
@@ -64,7 +65,6 @@ enum Type {
   contactUnblockDialog,
   debugViewer,
   flagged,
-  inviteList,
   login,
   loginProviderList,
   loginManualSettings,
@@ -75,6 +75,7 @@ enum Type {
   settings,
   settingsAccount,
   settingsAbout,
+  settingsAntiMobbing,
   settingsChat,
   settingsDebug,
   settingsSecurity,

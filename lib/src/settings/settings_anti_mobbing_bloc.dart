@@ -40,42 +40,47 @@
  * for more details.
  */
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bloc/bloc.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/settings/settings_anti_mobbing_event_state.dart';
 
-const preferenceSystemContactsImportShown = "preferenceSystemContactsImportShown";
-const preferenceAppVersion = "preferenceAppVersion";
-const preferenceLogFiles = "preferenceLogFiles";
-const preferenceAntiMobbing = "preferenceAntiMobbing";
+class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAntiMobbingState> {
+  @override
+  SettingsAntiMobbingState get initialState => SettingsAntiMobbingStateInitial();
 
-Future<dynamic> getPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  var preference = sharedPreferences.get(key);
-  if (preference is List) {
-    return List<String>.from(preference);
+  @override
+  Stream<SettingsAntiMobbingState> mapEventToState(SettingsAntiMobbingState currentState, SettingsAntiMobbingEvent event) async* {
+    if (event is RequestSetting) {
+      try {
+        loadSetting();
+      } catch (error) {
+        yield SettingsAntiMobbingStateFailure();
+      }
+    }else if(event is SettingLoaded){
+      yield SettingsAntiMobbingStateSuccess(antiMobbingActivated: event.antiMobbingActivated);
+    }
+    else if(event is ActionSuccess){
+      yield SettingsAntiMobbingStateSuccess(antiMobbingActivated: event.antiMobbingActivated);
+    }
+    else if(event is ChangeSetting){
+      changeSetting();
+    }
   }
-  return preference;
-}
 
-Future<bool> containsPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  return sharedPreferences.getKeys().contains(key);
-}
+  void loadSetting() async {
+    bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
 
-Future<SharedPreferences> getSharedPreferences() async {
-  return await SharedPreferences.getInstance();
-}
+    if(antiMobbingPreference == null){
+      await setPreference(preferenceAntiMobbing, false);
+      antiMobbingPreference = false;
+    }
 
-Future<void> setPreference(String key, value) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  if (value is bool) {
-    sharedPreferences.setBool(key, value);
-  } else if (value is int) {
-    sharedPreferences.setInt(key, value);
-  } else if (value is double) {
-    sharedPreferences.setDouble(key, value);
-  } else if (value is String) {
-    sharedPreferences.setString(key, value);
-  } else if (value is List) {
-    sharedPreferences.setStringList(key, value);
+    dispatch(SettingLoaded(antiMobbingActivated: antiMobbingPreference));
+  }
+
+  void changeSetting() async{
+    bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
+    await setPreference(preferenceAntiMobbing, !antiMobbingPreference);
+    dispatch(ActionSuccess(antiMobbingActivated: !antiMobbingPreference));
   }
 }

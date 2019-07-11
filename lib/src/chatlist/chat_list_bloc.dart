@@ -52,6 +52,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:rxdart/rxdart.dart';
@@ -76,13 +77,15 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       yield ChatListStateLoading();
       try {
         setupChatListListener();
-        _showInvites = event.showInvites;
+        bool antiMobbingActivated = await getPreference(preferenceAntiMobbing);
+        _showInvites = antiMobbingActivated == null || !antiMobbingActivated;
         if (_showInvites) {
-          setupInvites(true);
+          setupInvites();
         } else {
           setupChatList(true);
         }
       } catch (error) {
+        print("[ChatListBloc.mapEventToState] dboehrs - ${error.toString()}");
         yield ChatListStateFailure(error: error.toString());
       }
     } else if (event is SearchChatList) {
@@ -90,6 +93,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         _currentSearch = event.query;
         setupChatList(true);
       } catch (error) {
+        print("[ChatListBloc.mapEventToState] dboehrs - ${error.toString()}");
         yield ChatListStateFailure(error: error.toString());
       }
     } else if (event is InvitesPrepared) {
@@ -134,7 +138,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   Future<void> _onChatListChanged(event) async {
     await _updateSummaries();
     if (_showInvites) {
-      setupInvites(false);
+      setupInvites();
     } else {
       dispatch(ChatListModified(
         chatListItemWrapper: createChatListItemWrapper(_chatRepository.getAllIds(), _chatRepository.getAllLastUpdateValues()),
@@ -142,7 +146,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  Future setupInvites(bool chatListRefreshNeeded) async {
+  Future setupInvites() async {
     _messageListBloc.dispatch(RequestMessages(chatId: Dcc.Chat.typeInvite));
   }
 

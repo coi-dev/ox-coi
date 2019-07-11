@@ -40,42 +40,34 @@
  * for more details.
  */
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:meta/meta.dart';
 
-const preferenceSystemContactsImportShown = "preferenceSystemContactsImportShown";
-const preferenceAppVersion = "preferenceAppVersion";
-const preferenceLogFiles = "preferenceLogFiles";
-const preferenceAntiMobbing = "preferenceAntiMobbing";
+abstract class SettingsAntiMobbingEvent {}
 
-Future<dynamic> getPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  var preference = sharedPreferences.get(key);
-  if (preference is List) {
-    return List<String>.from(preference);
-  }
-  return preference;
+class RequestSetting extends SettingsAntiMobbingEvent {}
+
+class SettingLoaded extends SettingsAntiMobbingEvent{
+  final bool antiMobbingActivated;
+
+  SettingLoaded({@required this.antiMobbingActivated});
 }
 
-Future<bool> containsPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  return sharedPreferences.getKeys().contains(key);
+class ChangeSetting extends SettingsAntiMobbingEvent {}
+
+class ActionSuccess extends SettingsAntiMobbingEvent {
+  final bool antiMobbingActivated;
+
+  ActionSuccess({@required this.antiMobbingActivated});
 }
 
-Future<SharedPreferences> getSharedPreferences() async {
-  return await SharedPreferences.getInstance();
+abstract class SettingsAntiMobbingState {}
+
+class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
+
+class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
+  final bool antiMobbingActivated;
+
+  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActivated});
 }
 
-Future<void> setPreference(String key, value) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  if (value is bool) {
-    sharedPreferences.setBool(key, value);
-  } else if (value is int) {
-    sharedPreferences.setInt(key, value);
-  } else if (value is double) {
-    sharedPreferences.setDouble(key, value);
-  } else if (value is String) {
-    sharedPreferences.setString(key, value);
-  } else if (value is List) {
-    sharedPreferences.setStringList(key, value);
-  }
-}
+class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}
