@@ -40,12 +40,14 @@
  * for more details.
  */
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder_mixin.dart';
 import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
+
 import 'message_item_event_state.dart';
 
 class MessageReceived extends StatelessWidget with MessageBuilder {
@@ -57,10 +59,21 @@ class MessageReceived extends StatelessWidget with MessageBuilder {
   final bool hasFile;
   final bool isGroupChat;
   final bool showPadlock;
+  final bool isFlagged;
   final AttachmentWrapper attachmentWrapper;
 
   const MessageReceived(
-      {Key key, this.name, this.email, this.color, this.text, this.timestamp, this.hasFile, this.isGroupChat, this.showPadlock, this.attachmentWrapper})
+      {Key key,
+      this.name,
+      this.email,
+      this.color,
+      this.text,
+      this.timestamp,
+      this.hasFile,
+      this.isGroupChat,
+      this.showPadlock,
+      this.isFlagged,
+      this.attachmentWrapper})
       : super(key: key);
 
   @override
@@ -70,6 +83,7 @@ class MessageReceived extends StatelessWidget with MessageBuilder {
       alignment: Alignment.topLeft,
       widthFactor: 0.8,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           isGroupChat
               ? Padding(
@@ -92,6 +106,16 @@ class MessageReceived extends StatelessWidget with MessageBuilder {
                   isGroupChat ? Text(name, style: TextStyle(color: color)) : Container(constraints: BoxConstraints(maxWidth: zero)),
                   hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, showPadlock) : buildTextMessage(text, time, showPadlock),
                 ],
+              ),
+            ),
+          ),
+          Visibility(
+            visible: isFlagged,
+            child: Padding(
+              padding: EdgeInsets.only(left: verticalPaddingSmall),
+              child: Icon(
+                Icons.star,
+                color: Colors.yellow,
               ),
             ),
           ),

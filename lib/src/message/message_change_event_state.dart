@@ -53,6 +53,16 @@ class DeleteMessage extends MessageChangeEvent {
 
 class MessageDeleted extends MessageChangeEvent {}
 
+class FlagMessages extends MessageChangeEvent {
+  final int chatId;
+  final List<int> messageIds;
+  final bool star;
+
+  FlagMessages(this.chatId, this.messageIds, this.star);
+}
+
+class MessageFlagged extends MessageChangeEvent {}
+
 abstract class MessageChangeState {}
 
 class MessageChangeStateInitial extends MessageChangeState {}

@@ -49,7 +49,7 @@ class ChatMessageRepository extends Repository<ChatMsg> {
 
   @override
   onData(Event event) async{
-    if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead)) {
+    if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead)|| event.hasType(Event.msgsChanged)) {
       int msgId = event.data2;
       await setupMessageAfterUpdate(msgId);
     }
@@ -60,6 +60,7 @@ class ChatMessageRepository extends Repository<ChatMsg> {
     ChatMsg chatMsg = get(changedMessageId);
     if(chatMsg != null) {
       await chatMsg.reloadValue(ChatMsg.methodMessageGetState);
+      await chatMsg.reloadValue(ChatMsg.methodMessageIsStarred);
     }
   }
 

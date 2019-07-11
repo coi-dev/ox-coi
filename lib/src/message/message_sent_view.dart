@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder_mixin.dart';
 import 'package:ox_coi/src/utils/colors.dart';
@@ -53,29 +54,48 @@ class MessageSent extends StatelessWidget with MessageBuilder {
   final bool hasFile;
   final int msgState;
   final bool showPadlock;
+  final bool isFlagged;
   final AttachmentWrapper attachmentWrapper;
 
-  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.attachmentWrapper}) : super(key: key);
-
+  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.isFlagged, this.attachmentWrapper}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     String time = getTimeFormTimestamp(timestamp);
     return FractionallySizedBox(
-        alignment: Alignment.topRight,
-        widthFactor: 0.8,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              decoration: buildBoxDecoration(messageBoxGrey, messageSentBackground, buildBorderRadius()),
-              child: Padding(
-                padding: EdgeInsets.all(messagesInnerPadding),
-                child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, showPadlock, msgState) : buildTextMessage(text, time, showPadlock, msgState),
+      alignment: Alignment.topRight,
+      widthFactor: 0.8,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Visibility(
+            visible: isFlagged,
+            child: Padding(
+              padding: EdgeInsets.only(right: verticalPaddingSmall),
+              child: Icon(
+                Icons.star,
+                color: Colors.yellow,
               ),
             ),
-          ],
-        ));
+          ),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  decoration: buildBoxDecoration(messageBoxGrey, messageSentBackground, buildBorderRadius()),
+                  child: Padding(
+                    padding: EdgeInsets.all(messagesInnerPadding),
+                    child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, showPadlock, msgState) : buildTextMessage(text, time, showPadlock, msgState),
+                  ),
+                ),
+              ],
+            )
+          )
+        ],
+      )
+    );
   }
 
   BorderRadius buildBorderRadius() {

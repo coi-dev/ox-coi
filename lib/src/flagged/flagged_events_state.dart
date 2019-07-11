@@ -40,79 +40,45 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
+import 'package:ox_coi/src/base/bloc_progress_state.dart';
 
-enum Type {
-  chat,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatList,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  debugViewer,
-  flagged,
-  inviteList,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  splash,
-  share,
-  showQr,
-  scanQr,
+abstract class FlaggedEvent {}
+
+class RequestFlaggedMessages extends FlaggedEvent {}
+
+class FlaggedMessagesLoaded extends FlaggedEvent {
+  final List<int> messageIds;
+  final List<int> messageLastUpdateValues;
+  final List<int> dateMarkerIds;
+
+  FlaggedMessagesLoaded({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
 }
 
-class Navigatable {
-  final Type type;
+class UpdateMessages extends FlaggedEvent {}
 
-  List params;
+abstract class FlaggedState extends ProgressState {
+  FlaggedState({progress}) : super(progress: progress);
+}
 
-  String get tag => describeEnum(type);
+class FlaggedStateInitial extends FlaggedState {}
 
-  Navigatable(this.type, {this.params});
+class FlaggedStateLoading extends FlaggedState {
+  FlaggedStateLoading({@required progress}) : super(progress: progress);
+}
 
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
-  }
+class FlaggedStateSuccess extends FlaggedState {
+  final List<int> messageIds;
+  final List<int> messageLastUpdateValues;
+  final List<int> dateMarkerIds;
 
-  bool equalType(Navigatable other) => type == other.type;
+  FlaggedStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
+}
 
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
+class FlaggedStateProvidersLoaded extends FlaggedState{}
 
-  static String getSubTag(String subTag) => subTag ?? "";
+class FlaggedStateFailure extends FlaggedState {
+  final String error;
+
+  FlaggedStateFailure({@required this.error});
 }

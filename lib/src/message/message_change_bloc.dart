@@ -66,6 +66,11 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
       }
     } else if (event is MessageDeleted) {
       yield MessageChangeStateSuccess();
+    } else if(event is FlagMessages){
+      _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+      _flagMessages(event.chatId, event.messageIds, event.star);
+    } else if (event is MessageFlagged) {
+      yield MessageChangeStateSuccess();
     }
   }
 
@@ -75,5 +80,30 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
       //TODO Delete messages from core
     }
     dispatch(MessageDeleted());
+  }
+
+  void _flagMessages(int chatId, List<int> messageIds, bool star)async {
+    Context context = Context();
+    Repository<ChatMsg> _flaggedRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
+    for(int id in messageIds)
+    {
+      ChatMsg chatMsg = _messageListRepository.get(id);
+      _flaggedRepository.remove(id: id);
+      if(chatId == Chat.typeStarred){
+        int msgChatId = await chatMsg.getChatId();
+        Repository<ChatMsg> tempMessageRepository = RepositoryManager.get(RepositoryType.chatMessage, msgChatId);
+        chatMsg = tempMessageRepository.get(id);
+        chatMsg.set(ChatMsg.methodMessageIsStarred, false);
+        chatMsg.setLastUpdate();
+      }
+    }
+    int starInt;
+    if(star){
+      starInt = Context.unstarMessage;
+    }else{
+      starInt = Context.starMessage;
+    }
+    await context.starMessages(messageIds, starInt);
+    dispatch(MessageFlagged());
   }
 }

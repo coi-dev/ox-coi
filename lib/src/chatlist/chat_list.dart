@@ -43,6 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
@@ -70,7 +71,7 @@ class ChatList extends RootChild {
   @override
   _ChatListState createState() {
     final state = _ChatListState();
-    setActions([state.getSearchAction()]);
+    setActions([state.getFlaggedAction(), state.getSearchAction()]);
     return state;
   }
 
@@ -185,6 +186,17 @@ class _ChatListState extends State<ChatList> {
     return IconButton(
       icon: Icon(Icons.search),
       onPressed: () => search.show(context),
+    );
+  }
+
+  Widget getFlaggedAction() {
+    return IconButton(
+      icon: Icon(Icons.star),
+      onPressed: () => _navigation.push(
+          context,
+          MaterialPageRoute(builder: (context) => Flagged(),
+        )
+      )
     );
   }
 

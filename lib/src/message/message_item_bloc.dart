@@ -93,6 +93,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       int timestamp = await message.getTimestamp();
       int state = await message.getState();
       int showPadlock = await message.showPadlock();
+      bool isStarred = await message.isStarred();
       String teaser = await message.getSummaryText(200);
       AttachmentWrapper attachmentWrapper;
       if (hasFile) {
@@ -131,6 +132,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         attachmentWrapper: attachmentWrapper,
         contactWrapper: contactWrapper,
         preview: teaser,
+        isStarred: isStarred,
       );
     } else if(event is DeleteMessages){
       _deleteMessages(event.messageIds);

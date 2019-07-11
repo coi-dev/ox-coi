@@ -80,6 +80,7 @@ class MessageItemStateSuccess extends MessageItemState {
   final ContactWrapper contactWrapper;
   final AttachmentWrapper attachmentWrapper;
   final String preview;
+  final bool isStarred;
 
   MessageItemStateSuccess({
     @required this.messageText,
@@ -93,6 +94,7 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.attachmentWrapper,
     @required this.contactWrapper,
     @required this.preview,
+    @required this.isStarred,
   });
 }
 

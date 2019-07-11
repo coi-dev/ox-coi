@@ -378,6 +378,13 @@ class AppLocalizations {
 
   String get chatListDeleteChatsInfoText => Intl.message('Do you want to delete these chats?', name: 'chatListDeleteChatsInfoText');
 
+  // Flagged
+  String get flaggedTitle => Intl.message('Flagged', name: 'flaggedTitle');
+
+  String get flaggedSubTitle => Intl.message('Your favorite messages', name: 'flaggedSubTitle');
+
+  String get flaggedEmpty => Intl.message('No flagged messages.', name: 'flaggedEmpty');
+
   // Chat
   String get chatTitle => Intl.message('Chat', name: 'chatTitle');
 

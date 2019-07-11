@@ -42,7 +42,12 @@
 
 import 'package:flutter/widgets.dart';
 
-enum MessageActionTag { forward, copy, delete }
+enum MessageActionTag {
+  forward,
+  copy,
+  delete,
+  flag
+}
 
 class MessageAction {
   final String title;
