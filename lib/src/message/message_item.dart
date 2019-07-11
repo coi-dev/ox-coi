@@ -149,7 +149,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
             children: buildMessageAndMarker(state),
           );
         } else {
-          return StateInfo(showLoading: true);
+          return Container();
         }
       },
     );

@@ -64,7 +64,6 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   @override
   Stream<MessageItemState> mapEventToState(MessageItemState currentState, MessageItemEvent event) async* {
     if (event is RequestMessage) {
-      yield MessageItemStateLoading();
       try {
         var chatId = event.chatId;
         if (isInvite(chatId)) {

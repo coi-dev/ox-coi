@@ -130,7 +130,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     _messageListRepository.putIfAbsent(ids: messageIds);
     await Future.forEach(messageIds, (id) async {
       ChatMsg message = _messageListRepository.get(id);
-      if (await message.isOutgoing()) {
+      if (await message.isOutgoing() && await message.getState() != ChatMsg.messageStateReceived) {
         await message.reloadValue(ChatMsg.methodMessageGetState);
       }
     });
