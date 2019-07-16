@@ -40,69 +40,7 @@
  * for more details.
  */
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/ui/color.dart';
 
-Color rgbColorFromInt(int color, [int alpha]) {
-  if (alpha == null) {
-    alpha = 255;
-  }
-  return Color.fromARGB(alpha, _red(color), _green(color), _blue(color));
-}
-
-int _red(int color) {
-  return (color >> 16) & 0xFF;
-}
-
-int _green(int color) {
-  return (color >> 8) & 0xFF;
-}
-
-int _blue(int color) {
-  return color & 0xFF;
-}
-
-// Global
-final Color primary = Colors.blue[600];
-const Color accent = Colors.blue;
-const Color transparent = Colors.transparent;
-final Color error = Colors.red[800];
-
-// Text
-const Color text = Colors.white;
-const Color textDisabled = Colors.black26;
-const Color textLessImportant = Colors.black45;
-const Color textInverted = Colors.white;
-const Color textDark = Colors.black;
-
-// Icons / images
-const Color appBarIcon = Colors.white;
-const Color textColorInverted = Colors.white;
-const Color divider = Colors.black;
-
-// Progress
-final Color progressBackground = Colors.black45;
-
-// Login
-const Color loginHintBackground = Colors.blueGrey;
-
-// Chat
-final Color chatComposeBorder = Colors.black12;
-
-// Messages
-const Color messageBoxGrey = Colors.grey;
-final Color messageSentBackground = Colors.blue[50];
-const Color messageReceivedBackground = Colors.white;
-final Color messageTimeForeground = Colors.grey[700];
-const Color messageInfoBackground = Colors.white70;
-final Color messageSetupBackground = Colors.blue[200];
-const Color messageListDateSeparatorForeground = Colors.black54;
-
-// Avatar
-const Color avatarDefaultBackground = Colors.blue;
-const Color avatarForegroundColor = Colors.white;
-
-// Profile
-final Color editUserAvatarPlaceholderIconColor = Colors.white54;
-const Color editUserAvatarEditIconColor = Colors.white;
+const primaryW500 = TextStyle(color: primary, fontWeight: FontWeight.w500);

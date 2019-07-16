@@ -42,7 +42,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlTextSpan extends TextSpan {

@@ -42,13 +42,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/message/message_builder_mixin.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/message/message_builder.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/date.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+
 import 'message_item_event_state.dart';
 
-class MessageSent extends StatelessWidget with MessageBuilder {
+class MessageSent extends StatelessWidget {
   final String text;
   final int timestamp;
   final bool hasFile;
@@ -57,52 +58,60 @@ class MessageSent extends StatelessWidget with MessageBuilder {
   final bool isFlagged;
   final AttachmentWrapper attachmentWrapper;
 
-  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.isFlagged, this.attachmentWrapper}) : super(key: key);
+  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.isFlagged, this.attachmentWrapper})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     String time = getTimeFormTimestamp(timestamp);
     return FractionallySizedBox(
-      alignment: Alignment.topRight,
-      widthFactor: 0.8,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Visibility(
-            visible: isFlagged,
-            child: Padding(
-              padding: EdgeInsets.only(right: verticalPaddingSmall),
-              child: Icon(
-                Icons.star,
-                color: Colors.yellow,
+        alignment: Alignment.topRight,
+        widthFactor: 0.8,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Visibility(
+              visible: isFlagged,
+              child: Padding(
+                padding: EdgeInsets.only(right: verticalPaddingSmall),
+                child: Icon(
+                  Icons.star,
+                  color: Colors.yellow,
+                ),
               ),
             ),
-          ),
-          Flexible(
-            child: Column(
+            Flexible(
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
-                  decoration: buildBoxDecoration(messageBoxGrey, messageSentBackground, buildBorderRadius()),
-                  child: Padding(
-                    padding: EdgeInsets.all(messagesInnerPadding),
-                    child: hasFile ? buildAttachmentMessage(attachmentWrapper, text, time, showPadlock, msgState) : buildTextMessage(text, time, showPadlock, msgState),
+                MessageData(
+                  backgroundColor: secondary,
+                  textColor: onSecondary,
+                  secondaryTextColor: onSecondary.withOpacity(fade),
+                  time: time,
+                  showPadlock: showPadlock,
+                  text: text,
+                  attachment: attachmentWrapper,
+                  state: msgState,
+                  child: MessageElevated(
+                    borderRadius: buildBorderRadius(),
+                    child: hasFile ? MessageAttachment() : MessageText(),
                   ),
                 ),
               ],
-            )
-          )
-        ],
-      )
-    );
+            ))
+          ],
+        ));
   }
 
   BorderRadius buildBorderRadius() {
     return BorderRadius.only(
-      topRight: Radius.circular(messagesBoxRadius),
-      bottomLeft: Radius.circular(messagesBoxRadius),
+      topRight: Radius.circular(messagesBoxRadiusSmall),
       topLeft: Radius.circular(messagesBoxRadius),
+      bottomRight: Radius.circular(messagesBoxRadius),
+      bottomLeft: Radius.circular(messagesBoxRadius),
     );
   }
 }

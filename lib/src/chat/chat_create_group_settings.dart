@@ -53,8 +53,8 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 

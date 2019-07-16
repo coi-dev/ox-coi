@@ -40,15 +40,16 @@
  * for more details.
  */
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/date.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
-import 'message_builder_mixin.dart';
+import 'message_builder.dart';
 
-class MessageSpecial extends StatelessWidget with MessageBuilder {
+class MessageSpecial extends StatelessWidget {
   final bool isSetupMessage;
   final String messageText;
   final int timestamp;
@@ -65,40 +66,39 @@ class MessageSpecial extends StatelessWidget with MessageBuilder {
     String time = getTimeFormTimestamp(timestamp);
     String text = AppLocalizations.of(context).securitySettingsAutocryptMessage;
     return FractionallySizedBox(
-        alignment: Alignment.topRight,
-        widthFactor: 0.8,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              decoration: buildBoxDecoration(messageBoxGrey, messageSetupBackground, buildBorderRadius()),
-              child: Padding(
-                padding: EdgeInsets.all(messagesInnerPadding),
-                child: buildTextMessage(text, time, showPadlock),
-              ),
+      alignment: Alignment.topRight,
+      widthFactor: 0.8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          MessageData(
+            backgroundColor: secondary,
+            textColor: onSecondary,
+            secondaryTextColor: onSecondary.withOpacity(fade),
+            time: time,
+            showPadlock: showPadlock,
+            text: text,
+            child: MessageElevated(
+              borderRadius: buildInfoBorderRadius(),
+              child: MessageText(),
             ),
-          ],
-        ));
-  }
-
-  Widget buildInfoMessage() {
-    return Center(
-      child: Container(
-        decoration: buildBoxDecoration(messageBoxGrey, messageInfoBackground, buildInfoBorderRadius()),
-        child: Padding(
-          padding: EdgeInsets.all(messagesInnerPadding),
-          child: Text(messageText),
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  BorderRadius buildBorderRadius() {
-    return BorderRadius.only(
-      topRight: Radius.circular(messagesBoxRadius),
-      bottomLeft: Radius.circular(messagesBoxRadius),
-      topLeft: Radius.circular(messagesBoxRadius),
+  Widget buildInfoMessage() {
+    return Center(
+      child: MessageData(
+        backgroundColor: surface,
+        textColor: onSurface,
+        child: MessageElevated(
+          borderRadius: buildInfoBorderRadius(),
+          child: Text(messageText),
+        ),
+      ),
     );
   }
 

@@ -95,11 +95,13 @@ const formVerticalPadding = 16.0;
 // Messages
 const messagesHorizontalPadding = 8.0;
 const messagesVerticalPadding = 8.0;
-const messagesInnerPadding = 8.0;
+const messagesInnerPadding = 11.0;
 const messagesContentTimePadding = 8.0;
-const messagesBoxRadius = 20.0;
+const messagesBoxRadius = 18.0;
+const messagesBoxRadiusSmall = 2.0;
 const messagesBlurRadius = 2.0;
 const messagesFileIconSize = 30.0;
+const messagesElevation = 4.0;
 
 // Profile
 const profileVerticalPadding = 8.0;

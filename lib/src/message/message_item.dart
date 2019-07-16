@@ -52,8 +52,7 @@ import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/date.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
 import 'message_action.dart';
 import 'message_change_bloc.dart';
@@ -68,7 +67,7 @@ class ChatMessageItem extends StatefulWidget {
   final bool _isGroupChat;
   final bool _hasDateMarker;
 
-  ChatMessageItem(this._chatId, this._messageId, this._isGroupChat, this._hasDateMarker, key) : super(key: Key(key));
+  ChatMessageItem(this._chatId, this._messageId, this._isGroupChat, this._hasDateMarker, key) : super(key: key);
 
   @override
   _ChatMessageItemState createState() => _ChatMessageItemState();
@@ -156,7 +155,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     List<Widget> widgets = List();
     if (widget._hasDateMarker) {
       String date = getDateFromTimestamp(state.messageTimestamp, true, true, AppLocalizations.of(context));
-      widgets.add(Center(child: Text(date, style: messageListDateSeparator)));
+      widgets.add(Center(child: Text(date)));
     }
     String name;
     String email;
@@ -277,9 +276,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       context,
       MaterialPageRoute(
         builder: (context) => SettingsAutocryptImport(
-              chatId: widget._chatId,
-              messageId: widget._messageId,
-            ),
+          chatId: widget._chatId,
+          messageId: widget._messageId,
+        ),
       ),
     );
   }

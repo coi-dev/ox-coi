@@ -42,14 +42,34 @@
 
 import 'package:flutter/material.dart';
 
+const idSeparator = "_";
+const valueSeparator = "-";
+
 String createKeyString(int id, int lastUpdateValue) {
   return "$id-$lastUpdateValue";
 }
 
-Key createKey(var value) {
+ValueKey createKey(var value) {
   if (value is String) {
-    return Key(value);
+    return ValueKey(value);
   } else {
-    return Key(value.toString());
+    return ValueKey(value.toString());
   }
+}
+
+ValueKey createKeyFromId(int id, [List values]) {
+  String keyString = "$id$idSeparator${values.join(valueSeparator)}";
+  return ValueKey(keyString);
+}
+
+int extractId(ValueKey valueKey) {
+  String value = valueKey.value;
+  final splitList = value.split(idSeparator);
+  if (splitList.length >= 1) {
+    final id = int.parse(splitList[0]);
+    if (id != null) {
+      return id;
+    }
+  }
+  throw ArgumentError("Value key does not contain an id");
 }

@@ -51,7 +51,7 @@ import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool _isGroup = false;

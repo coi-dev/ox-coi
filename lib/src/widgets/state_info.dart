@@ -41,8 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
 class StateInfo extends StatelessWidget {
@@ -97,7 +97,7 @@ class StateInfo extends StatelessWidget {
                   padding: buildEdgeInsets(),
                   child: RaisedButton(
                     color: accent,
-                    textColor: text,
+                    textColor: onAccent,
                     onPressed: action,
                     child: Text(actionTitle),
                   ),

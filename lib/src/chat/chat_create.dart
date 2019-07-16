@@ -51,9 +51,9 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -153,7 +153,7 @@ class _ChatCreateState extends State<ChatCreate> {
           ),
           title: Text(
             AppLocalizations.of(context).createChatNewContactButtonText,
-            style: createChatTitle,
+            style: Theme.of(context).textTheme.subhead.merge(primaryW500),
           ),
           onTap: newContactTapped,
         ),
@@ -170,7 +170,7 @@ class _ChatCreateState extends State<ChatCreate> {
             ),
             title: Text(
               AppLocalizations.of(context).createGroupButtonText,
-              style: createChatTitle,
+              style: Theme.of(context).textTheme.subhead.merge(primaryW500),
             ),
             onTap: createGroupTapped,
           ),

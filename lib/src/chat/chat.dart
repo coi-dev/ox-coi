@@ -64,10 +64,11 @@ import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
@@ -185,12 +186,12 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
             IconButton(
               icon: Icon(Icons.videocam),
               onPressed: null,
-              color: appBarIcon,
+              color: onPrimary,
             ),
             IconButton(
               icon: Icon(Icons.phone),
               onPressed: null,
-              color: appBarIcon,
+              color: onPrimary,
             ),
           ],
         ),
@@ -345,7 +346,7 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
                       name,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
-                      style: twoLineHeaderTitle,
+                      style: Theme.of(context).textTheme.title.apply(color: onPrimary),
                     ),
                     Row(
                       children: <Widget>[
@@ -370,7 +371,7 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
                         Expanded(
                           child: Text(
                             subTitle,
-                            style: twoLineHeaderSubTitle,
+                            style: Theme.of(context).textTheme.subtitle.apply(color: onPrimary),
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -413,16 +414,23 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
   }
 
   ListView buildListItems(MessagesStateSuccess state) {
-    return ListView.builder(
+    return ListView.custom(
       padding: new EdgeInsets.all(listItemPadding),
       reverse: true,
-      itemCount: state.messageIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        int messageId = state.messageIds[index];
-        bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-        var key = "$messageId-${state.messageLastUpdateValues[index]}";
-        return ChatMessageItem(widget.chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
-      },
+      childrenDelegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            int messageId = state.messageIds[index];
+            bool hasDateMarker = state.dateMarkerIds.contains(messageId);
+            var key = createKeyFromId(messageId, [state.messageLastUpdateValues[index]]);
+            return ChatMessageItem(widget.chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
+          },
+          childCount: state.messageIds.length,
+          findChildIndexCallback: (Key key) {
+            final ValueKey valueKey = key;
+            var id = extractId(valueKey);
+            var indexOf = state.messageIds.indexOf(id);
+            return indexOf;
+          }),
     );
   }
 
@@ -489,11 +497,11 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
       context,
       MaterialPageRoute(
         builder: (context) => Chat(
-              chatId: chatId,
-              newMessage: _textController.text,
-              newPath: _filePath,
-              newFileType: getType(),
-            ),
+          chatId: chatId,
+          newMessage: _textController.text,
+          newPath: _filePath,
+          newFileType: getType(),
+        ),
       ),
       ModalRoute.withName(Navigation.root),
       Navigatable(Type.chatList),
@@ -631,6 +639,9 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
   _getFilePath(FileType fileType, [String extension]) async {
     navigation.pop(context);
     String filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
+    if (filePath == null) {
+      return;
+    }
     _fileName = Path.basename(filePath);
 
     _selectedFileType = fileType;

@@ -45,7 +45,7 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 
 enum SettingsType {
   account,

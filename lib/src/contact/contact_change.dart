@@ -51,9 +51,10 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -189,7 +190,7 @@ class _ContactChangeState extends State<ContactChange> {
                                 ),
                                 Text(
                                   widget.email,
-                                  style: defaultText,
+                                  style: Theme.of(context).textTheme.subhead,
                                 ),
                               ],
                             ),
@@ -223,7 +224,7 @@ class _ContactChangeState extends State<ContactChange> {
                       visible: widget.contactAction == ContactAction.add,
                       child: RaisedButton(
                         color: accent,
-                        textColor: text,
+                        textColor: onAccent,
                         child: Text(AppLocalizations.of(context).contactChangeScanQrButton),
                         onPressed: scanQr,
                       ),

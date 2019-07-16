@@ -46,10 +46,11 @@ import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -115,7 +116,7 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             Text(
               AppLocalizations.of(context).loginWelcomeText,
-              style: loginTitleText,
+              style: Theme.of(context).textTheme.headline,
             ),
             Image(
               image: AssetImage(AppLocalizations.of(context).appLogoUrl),
@@ -131,7 +132,7 @@ class _LoginState extends State<Login> {
             ),
             RaisedButton(
               color: accent,
-              textColor: text,
+              textColor: onAccent,
               child: SizedBox(
                 width: loginButtonWidth,
                 child: Text(
@@ -149,7 +150,7 @@ class _LoginState extends State<Login> {
                     AppLocalizations
                         .of(context)
                         .loginRegisterButtonText,
-                    style: loginFlatButtonText,
+                    style: TextStyle(color: accent),
                   ),
                   onPressed: () {
                     _goToProviderList(ProviderListType.register);
@@ -159,7 +160,7 @@ class _LoginState extends State<Login> {
             RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                    style: loginTermsAndConditionText,
+                    style: Theme.of(context).textTheme.caption.apply(color: onBackground),
                     text: AppLocalizations.of(context).loginTermsConditionPrivacyText,
                     children: [
                       UrlTextSpan(

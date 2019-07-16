@@ -49,7 +49,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_debug_bloc.dart';
 import 'package:ox_coi/src/settings/settings_debug_event_state.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsDebug extends StatefulWidget {

@@ -45,8 +45,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/base/bloc_progress_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
 class FullscreenProgress<T extends Bloc> extends StatelessWidget {
   final String _text;
@@ -73,7 +73,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           constraints: BoxConstraints.expand(),
-          color: progressBackground,
+          color: semiTransparent,
           child: buildProgress(context, progress),
         );
       },
@@ -86,7 +86,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(textInverted),
+          valueColor: AlwaysStoppedAnimation<Color>(onPrimary),
         ),
         Padding(
           padding: EdgeInsets.only(top: verticalPadding),
@@ -94,7 +94,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
               child: Text(
             _text,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subhead.apply(color: textInverted),
+            style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
           )),
         ),
       ],
@@ -105,7 +105,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         child: Text(
           "${progress / 10}%",
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.subhead.apply(color: textInverted),
+          style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
         ),
       ));
     }

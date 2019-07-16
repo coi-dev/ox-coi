@@ -50,12 +50,13 @@ import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 
@@ -134,17 +135,17 @@ class _ProfileState extends State<UserProfileView> {
             ),
             PlaceholderText(
               text: config.username,
-              style: hugeText,
+              style: Theme.of(context).textTheme.headline,
               align: TextAlign.center,
               placeholderText: AppLocalizations.of(context).profileUsernamePlaceholder,
-              placeholderStyle: hugeDisabledText,
+              placeholderStyle: Theme.of(context).textTheme.headline.apply(color: onBackground.withOpacity(disabled)),
               placeHolderAlign: TextAlign.center,
             ),
             Padding(
               padding: const EdgeInsets.only(top: profileVerticalPadding),
               child: Text(
                 config.email,
-                style: defaultText,
+                style: Theme.of(context).textTheme.subhead,
               ),
             ),
             Padding(
@@ -152,9 +153,9 @@ class _ProfileState extends State<UserProfileView> {
               child: PlaceholderText(
                 text: config.status,
                 align: TextAlign.center,
-                style: defaultText,
+                style: Theme.of(context).textTheme.subhead,
                 placeholderText: AppLocalizations.of(context).profileStatusPlaceholder,
-                placeholderStyle: defaultDisabledText,
+                placeholderStyle: Theme.of(context).textTheme.subhead.apply(color: onBackground.withOpacity(disabled)),
                 placeHolderAlign: TextAlign.center,
               ),
             ),
@@ -163,14 +164,14 @@ class _ProfileState extends State<UserProfileView> {
               children: <Widget>[
                 RaisedButton(
                   color: accent,
-                  textColor: text,
+                  textColor: onAccent,
                   child: Text(AppLocalizations.of(context).profileEditButton),
                   onPressed: editUserSettings,
                 ),
                 Padding(padding:EdgeInsets.all(chatProfileButtonPadding)),
                 RaisedButton(
                   color: accent,
-                  textColor: text,
+                  textColor: onAccent,
                   child: Text(AppLocalizations.of(context).showQrButton),
                   onPressed: showQr,
                 ),

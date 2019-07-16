@@ -55,6 +55,7 @@ import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
 import 'package:rxdart/rxdart.dart';

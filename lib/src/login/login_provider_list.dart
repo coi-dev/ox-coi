@@ -47,8 +47,8 @@ import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -104,7 +104,7 @@ class _ProviderListState extends State<ProviderList> {
           children: <Widget>[
             Text(
               title,
-              style: loginTitleText,
+              style:  Theme.of(context).textTheme.headline,
             ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
             Text(text, textAlign: TextAlign.center,),

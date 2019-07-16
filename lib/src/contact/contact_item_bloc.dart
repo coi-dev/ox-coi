@@ -48,7 +48,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   Repository<Contact> _contactRepository;

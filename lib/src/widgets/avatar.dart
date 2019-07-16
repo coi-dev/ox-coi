@@ -43,8 +43,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
 class Avatar extends StatelessWidget {
@@ -72,8 +72,8 @@ class Avatar extends StatelessWidget {
     }
     return CircleAvatar(
       radius: listAvatarRadius,
-      foregroundColor: avatarForegroundColor,
-      backgroundColor: color != null ? color : transparent,
+      foregroundColor: onPrimary,
+      backgroundColor: color != null ? color : Colors.transparent,
       child: avatarImage != null ? avatarImage : new Text(initials),
     );
   }

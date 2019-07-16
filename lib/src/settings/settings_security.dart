@@ -49,7 +49,7 @@ import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 import 'package:ox_coi/src/settings/settings_security_event_state.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';

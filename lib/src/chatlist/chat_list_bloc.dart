@@ -85,7 +85,6 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
           setupChatList(true);
         }
       } catch (error) {
-        print("[ChatListBloc.mapEventToState] dboehrs - ${error.toString()}");
         yield ChatListStateFailure(error: error.toString());
       }
     } else if (event is SearchChatList) {
@@ -93,7 +92,6 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         _currentSearch = event.query;
         setupChatList(true);
       } catch (error) {
-        print("[ChatListBloc.mapEventToState] dboehrs - ${error.toString()}");
         yield ChatListStateFailure(error: error.toString());
       }
     } else if (event is InvitesPrepared) {

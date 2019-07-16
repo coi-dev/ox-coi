@@ -47,7 +47,7 @@ import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 class InviteItem extends StatefulWidget {
@@ -84,7 +84,7 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
           name = contactWrapper.contactAddress;
           preview = state.preview;
           timestamp = state.messageTimestamp;
-          color = avatarDefaultBackground;
+          color = primary;
         } else {
           name = "";
           preview = "";

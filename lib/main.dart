@@ -52,7 +52,7 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 

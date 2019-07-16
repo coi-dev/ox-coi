@@ -44,8 +44,8 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/qr/scan_qr.dart';
 import 'package:ox_coi/src/qr/show_qr.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
 
 

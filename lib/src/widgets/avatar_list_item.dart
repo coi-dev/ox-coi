@@ -42,10 +42,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/date.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
 class AvatarListItem extends StatelessWidget {
@@ -99,7 +99,7 @@ class AvatarListItem extends StatelessWidget {
                   )
                 : CircleAvatar(
                     radius: listAvatarRadius,
-                    foregroundColor: avatarForegroundColor,
+                    foregroundColor: primary,
                     child: Icon(avatarIcon),
                   ),
             Expanded(
@@ -112,7 +112,7 @@ class AvatarListItem extends StatelessWidget {
                         padding: const EdgeInsets.only(right: iconTextPadding),
                         child: titleIcon != null ? titleIcon : Container(),
                       ),
-                      Expanded(child: getTitle()),
+                      Expanded(child: getTitle(context)),
                       Visibility(
                           visible: timestamp != null && timestamp != 0,
                           child: Text(
@@ -144,7 +144,7 @@ class AvatarListItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Expanded(child: getSubTitle()),
+                      Expanded(child: getSubTitle(context)),
                       Visibility(
                         visible: isInvite,
                         child: Container(
@@ -185,25 +185,25 @@ class AvatarListItem extends StatelessWidget {
 
   bool shouldHighlight() => isInvite || (freshMessageCount != null && freshMessageCount > 0);
 
-  StatelessWidget getTitle() {
+  StatelessWidget getTitle(BuildContext context) {
     return Visibility(
         visible: title != null,
         child: Text(
           title != null ? title : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: chatItemTitle,
+          style: Theme.of(context).textTheme.subhead.copyWith(fontWeight: FontWeight.w500),
         ));
   }
 
-  StatelessWidget getSubTitle() {
+  StatelessWidget getSubTitle(BuildContext context) {
     return Visibility(
         visible: subTitle != null,
         child: Text(
           subTitle != null ? subTitle : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: textLessImportant),
+          style: Theme.of(context).textTheme.body1.apply(color: onBackground.withOpacity(fade)),
         ));
   }
 }

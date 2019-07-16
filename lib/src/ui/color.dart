@@ -41,80 +41,66 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/utils/colors.dart';
 
-// Global
-const twoLineHeaderTitle = TextStyle(fontSize: 18);
+// Light theme
 
-const twoLineHeaderSubTitle = TextStyle(fontSize: 15);
+const background = Colors.white;
+const surface = Colors.white;
+const primary = const Color(0xFF0E7BCC);
+const secondary = const Color(0xFF0E7BCC);
+const accent = const Color(0xFF0E7BCC);
+const onBackground = const Color(0xFF1F1F1F);
+const onSurface = const Color(0xFF1F1F1F);
+const onPrimary = Colors.white;
+const onSecondary = Colors.white;
+const onAccent = Colors.white;
+const warning = Colors.yellow;
+const onWarning = Colors.white;
+const error = Colors.red;
+const onError = Colors.white;
 
-const defaultText = TextStyle(fontSize: 16);
+// Dark theme
 
-const defaultDisabledText = TextStyle(
-  fontSize: 16,
-  color: textDisabled,
-);
+const darkBackground = Colors.black;
+const darkSurface = const Color(0xFF1F1F1F);
+const darkPrimary = const Color(0xFF052D4B);
+const darkSecondary = const Color(0xFF052D4B);
+const darkAccent = const Color(0xFF052D4B);
+const darkOnBackground = const Color(0xFFF3F3F3);
+const darkOnSurface = const Color(0xFFF3F3F3);
+const darkOnPrimary = const Color(0xFFF3F3F3);
+const darkOnSecondary = const Color(0xFFF3F3F3);
+const darkOnAccent = const Color(0xFFF3F3F3);
 
-const bigText = TextStyle(fontSize: 20);
+// Calculated values
 
-const hugeText = TextStyle(
-  fontSize: 24,
-);
+final semiTransparent = Colors.black.withOpacity(half);
 
-const hugeDisabledText = TextStyle(
-  fontSize: 24,
-  color: textDisabled,
-);
+// Constants for reusable access
 
-// Chat
-const chatItemTitle = TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0);
+const fade = 0.7;
+const half = 0.5;
+const disabled = 0.3;
+const slightly = 0.3;
+const barely = 0.1;
 
-const createChatTitle = TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0, color: accent);
+// Helper methods to generate colors
 
-const messageListDateSeparator = TextStyle(color: messageListDateSeparatorForeground);
+Color rgbColorFromInt(int color, [int alpha]) {
+  if (alpha == null) {
+    alpha = 255;
+  }
+  return Color.fromARGB(alpha, _red(color), _green(color), _blue(color));
+}
 
-// Messages
-final messageTimeText = TextStyle(
-  color: messageTimeForeground,
-  fontSize: 12,
-);
+int _red(int color) {
+  return (color >> 16) & 0xFF;
+}
 
-const chatProfileAvatarInitialText = TextStyle(
-  color: Colors.white,
-  fontSize: 50.0
-);
+int _green(int color) {
+  return (color >> 8) & 0xFF;
+}
 
-// Login
-const loginTitleText = TextStyle(
-  fontWeight: FontWeight.w500,
-  fontSize: 24
-);
-
-const loginInfoText = TextStyle(
-  fontSize: 24
-);
-
-const loginTermsAndConditionText = TextStyle(
-  fontSize: 12,
-  color: textDark
-);
-
-const loginFlatButtonText = TextStyle(
-  color: accent
-);
-
-const loginManualSettingsSignInButtonText = TextStyle(
-  color: accent,
-  fontSize: 16.0,
-);
-
-const loginManualSettingHeaderText = TextStyle(
-  fontWeight: FontWeight.w500,
-  fontSize: 16.0,
-  color: accent
-);
-
-const loginErrorOverlayText = TextStyle(
-  fontSize: 12.0,
-  color: textInverted
-);
+int _blue(int color) {
+  return color & 0xFF;
+}

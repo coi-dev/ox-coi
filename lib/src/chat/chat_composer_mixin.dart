@@ -43,8 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/utils/colors.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
 enum ComposerModeType {
   compose,
@@ -87,7 +87,7 @@ mixin ChatComposer {
         child: Container(
       padding: EdgeInsets.all(composerTextFieldPadding),
       decoration: BoxDecoration(
-        border: Border.all(color: chatComposeBorder),
+        border: Border.all(color: onBackground.withOpacity(barely)),
         borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
       ),
       child: ComposerModeType.isVoiceRecording == type ? getText(text) : getInputTextField(textController, onTextChanged, context),

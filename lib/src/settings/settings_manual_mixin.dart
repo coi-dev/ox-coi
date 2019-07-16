@@ -42,8 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 mixin ManualSettings {
@@ -114,7 +114,7 @@ mixin ManualSettings {
               visible: isLogin,
               child: Text(
                 AppLocalizations.of(context).loginManualSettings,
-                style: loginTitleText,
+                style: Theme.of(context).textTheme.headline,
               ),
             ),
             Visibility(
@@ -155,7 +155,7 @@ mixin ManualSettings {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       AppLocalizations.of(context).loginBaseSettingsTitle,
-                      style: loginManualSettingHeaderText,
+                      style: Theme.of(context).textTheme.subhead.merge(primaryW500),
                     ),
                   ),
                   isLogin ? enabledEmailField : disabledEmailField,
@@ -165,7 +165,7 @@ mixin ManualSettings {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       AppLocalizations.of(context).loginServerAddressesTitle,
-                      style: loginManualSettingHeaderText,
+                      style: Theme.of(context).textTheme.subhead.merge(primaryW500),
                     ),
                   ),
                   imapServerField,
@@ -175,7 +175,7 @@ mixin ManualSettings {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       AppLocalizations.of(context).loginAdvancedImapTitle,
-                      style: loginManualSettingHeaderText,
+                      style: Theme.of(context).textTheme.subhead.merge(primaryW500),
                     ),
                   ),
                   imapPortField,
@@ -192,7 +192,7 @@ mixin ManualSettings {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       AppLocalizations.of(context).loginAdvancedSmtpTitle,
-                      style: loginManualSettingHeaderText,
+                      style: Theme.of(context).textTheme.subhead.merge(primaryW500),
                     ),
                   ),
                   smtpPortField,

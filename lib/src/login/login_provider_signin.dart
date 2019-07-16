@@ -45,10 +45,11 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/utils/dimensions.dart';
-import 'package:ox_coi/src/utils/styles.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -58,7 +59,7 @@ import 'login_events_state.dart';
 import 'login_manual_settings.dart';
 
 class ProviderSignIn extends StatefulWidget {
-  Provider provider;
+  final Provider provider;
   final Function success;
 
   ProviderSignIn({this.provider, this.success});
@@ -151,7 +152,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
             Text(
               AppLocalizations.of(context).loginProviderSignInText(widget.provider.name),
-              style: loginTitleText,
+              style:  Theme.of(context).textTheme.headline,
             ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
             Container(
@@ -165,7 +166,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
             Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
             RaisedButton(
                 color: accent,
-                textColor: text,
+                textColor: onAccent,
                 child: SizedBox(
                   width: loginButtonWidth,
                   child: Text(
@@ -180,7 +181,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                   onPressed: _showManualSettings,
                   child: Text(
                     AppLocalizations.of(context).loginManualSettings,
-                    style: loginFlatButtonText,
+                    style: TextStyle(color: accent),
                   )),
             )
           ],
@@ -211,14 +212,14 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                           Icon(
                             Icons.report_problem,
                             size: iconSize,
-                            color: textInverted,
+                            color: onError,
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
                           ),
                           Text(
                             AppLocalizations.of(context).loginError,
-                            style: loginErrorOverlayText,
+                            style: Theme.of(context).textTheme.body1.apply(color: onError),
                           ),
                         ],
                       ),
@@ -227,7 +228,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                           icon: Icon(
                             Icons.clear,
                             size: loginErrorOverlayIconSize,
-                            color: textInverted,
+                            color: onError,
                           ),
                           onPressed: _closeError),
                     ],
