@@ -44,7 +44,6 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/colors.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
@@ -78,25 +77,25 @@ class _ManualSettingsState extends State<ManualSettings> {
   String _selectedSmtpSecurity;
 
   ValidatableTextFormField emailField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).emailAddress,
+    (context) => AppLocalizations.of(context).emailAddress,
     textFormType: TextFormType.email,
     inputType: TextInputType.emailAddress,
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).password,
+    (context) => AppLocalizations.of(context).password,
     textFormType: TextFormType.password,
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
   );
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
   ValidatableTextFormField imapServerField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).loginLabelImapServer,
+    (context) => AppLocalizations.of(context).loginLabelImapServer,
     inputType: TextInputType.url,
   );
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).loginLabelImapPort,
+    (context) => AppLocalizations.of(context).loginLabelImapPort,
     textFormType: TextFormType.port,
     inputType: TextInputType.number,
     needValidation: true,
@@ -104,17 +103,17 @@ class _ManualSettingsState extends State<ManualSettings> {
   );
   ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
   ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
+    (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
     textFormType: TextFormType.password,
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
   );
   ValidatableTextFormField smtpServerField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).loginLabelSmtpServer,
+    (context) => AppLocalizations.of(context).loginLabelSmtpServer,
     inputType: TextInputType.url,
   );
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).loginLabelSmtpPort,
+    (context) => AppLocalizations.of(context).loginLabelSmtpPort,
     textFormType: TextFormType.port,
     inputType: TextInputType.number,
     needValidation: true,
@@ -156,19 +155,16 @@ class _ManualSettingsState extends State<ManualSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: createManualSettings()
-    );
-  }
-
-  createManualSettings() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(loginManualSettingsPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.bottomRight,
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(
+              top: loginManualSettingsPadding,
+              right: loginManualSettingsPadding,
+              left: loginManualSettingsPadding,
+            ),
+            child: Align(
+              alignment: Alignment.centerRight,
               child: FlatButton(
                 onPressed: _signIn,
                 child: Text(
@@ -177,106 +173,119 @@ class _ManualSettingsState extends State<ManualSettings> {
                 ),
               ),
             ),
-            Text(
-              AppLocalizations.of(context).loginManualSettings,
-              style: loginTitleText,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: loginVerticalPadding8dp),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Visibility(
-                    visible: widget._fromError,
-                    child: Text(
-                      AppLocalizations.of(context).loginManualSettingsErrorInfoText,
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                  Text(
-                    AppLocalizations.of(context).loginManualSettingsInfoText,
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                  Text(
-                    AppLocalizations.of(context).loginManualSettingsSecondInfoText,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            Padding(padding: EdgeInsets.only(top: loginVerticalPadding20dp)),
-            Container(
-              child: Form(
-                key: _simpleLoginKey,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: loginManualSettingsPadding,
+                  right: loginManualSettingsPadding,
+                  bottom: loginManualSettingsPadding,
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context).loginBaseSettingsTitle,
-                        style: loginManualSettingHeaderText,
+                    Text(
+                      AppLocalizations.of(context).loginManualSettings,
+                      style: loginTitleText,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: loginVerticalPadding8dp),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Visibility(
+                            visible: widget._fromError,
+                            child: Text(
+                              AppLocalizations.of(context).loginManualSettingsErrorInfoText,
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                          Text(
+                            AppLocalizations.of(context).loginManualSettingsInfoText,
+                            textAlign: TextAlign.center,
+                          ),
+                          Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                          Text(
+                            AppLocalizations.of(context).loginManualSettingsSecondInfoText,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
-                    emailField,
-                    passwordField,
-                    Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context).loginServerAddressesTitle,
-                        style: loginManualSettingHeaderText,
+                    Padding(padding: EdgeInsets.only(top: loginVerticalPadding20dp)),
+                    Container(
+                        child: Form(
+                      key: _simpleLoginKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppLocalizations.of(context).loginBaseSettingsTitle,
+                              style: loginManualSettingHeaderText,
+                            ),
+                          ),
+                          emailField,
+                          passwordField,
+                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppLocalizations.of(context).loginServerAddressesTitle,
+                              style: loginManualSettingHeaderText,
+                            ),
+                          ),
+                          imapServerField,
+                          smtpServerField,
+                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppLocalizations.of(context).loginAdvancedImapTitle,
+                              style: loginManualSettingHeaderText,
+                            ),
+                          ),
+                          imapPortField,
+                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                          Text(AppLocalizations.of(context).loginLabelImapSecurity),
+                          DropdownButton(
+                              value: _selectedImapSecurity == null ? AppLocalizations.of(context).automatic : _selectedImapSecurity,
+                              items: getSecurityOptions(),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  _selectedImapSecurity = newValue;
+                                });
+                              }),
+                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              AppLocalizations.of(context).loginAdvancedSmtpTitle,
+                              style: loginManualSettingHeaderText,
+                            ),
+                          ),
+                          smtpPortField,
+                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                          Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
+                          DropdownButton(
+                              value: _selectedSmtpSecurity == null ? AppLocalizations.of(context).automatic : _selectedSmtpSecurity,
+                              items: getSecurityOptions(),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  _selectedSmtpSecurity = newValue;
+                                });
+                              }),
+                        ],
                       ),
-                    ),
-                    imapServerField,
-                    smtpServerField,
-                    Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context).loginAdvancedImapTitle,
-                        style: loginManualSettingHeaderText,
-                      ),
-                    ),
-                    imapPortField,
-                    Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                    Text(AppLocalizations.of(context).loginLabelImapSecurity),
-                    DropdownButton(
-                      value: _selectedImapSecurity == null ? AppLocalizations.of(context).automatic : _selectedImapSecurity,
-                      items: getSecurityOptions(),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          _selectedImapSecurity = newValue;
-                        });
-                      }
-                    ),
-                    Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        AppLocalizations.of(context).loginAdvancedSmtpTitle,
-                        style: loginManualSettingHeaderText,
-                      ),
-                    ),
-                    smtpPortField,
-                    Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                    Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
-                    DropdownButton(
-                      value: _selectedSmtpSecurity == null ? AppLocalizations.of(context).automatic : _selectedSmtpSecurity,
-                      items: getSecurityOptions(),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          _selectedSmtpSecurity = newValue;
-                        });
-                      }
-                    ),
+                    )),
                   ],
                 ),
-              )
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
