@@ -39,12 +39,10 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/login/providers.dart';
-import 'package:ox_coi/src/main/main_bloc.dart';
-import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/colors.dart';
@@ -60,10 +58,10 @@ import 'login_events_state.dart';
 import 'login_manual_settings.dart';
 
 class ProviderSignIn extends StatefulWidget {
-  Provider _provider;
-  final Function _success;
+  Provider provider;
+  final Function success;
 
-  ProviderSignIn(this._provider, this._success);
+  ProviderSignIn({this.provider, this.success});
 
   @override
   _ProviderSignInState createState() => _ProviderSignInState();
@@ -78,7 +76,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   var _navigation = Navigation();
 
   ValidatableTextFormField emailField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).emailAddress,
+    (context) => AppLocalizations.of(context).emailAddress,
     hintText: (context) => AppLocalizations.of(context).loginHintEmail,
     textFormType: TextFormType.email,
     inputType: TextInputType.emailAddress,
@@ -87,7 +85,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     showIcon: true,
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).password,
+    (context) => AppLocalizations.of(context).password,
     hintText: (context) => AppLocalizations.of(context).loginHintPassword,
     textFormType: TextFormType.password,
     needValidation: true,
@@ -111,9 +109,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
       }
     }
     if (state is LoginStateSuccess) {
-      widget._success();
+      widget.success();
     } else if (state is LoginStateFailure) {
-      if(widget._provider.id != AppLocalizations.of(context).other){
+      if (widget.provider.id != AppLocalizations.of(context).other) {
         setState(() {
           this._overlayEntry = this._createErrorOverlayEntry();
           Overlay.of(context).insert(this._overlayEntry);
@@ -124,79 +122,69 @@ class _ProviderSignInState extends State<ProviderSignIn> {
             navigatable: Navigatable(Type.loginErrorDialog),
           );
         });
-      }else{
+      } else {
         _navigation.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ManualSettings(widget._success, emailField.controller.text, passwordField.controller.text, true)
-          )
-        );
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginManualSettings(
+                    success: widget.success, email: emailField.controller.text, password: passwordField.controller.text, fromError: true)));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: createProviderSignIn()
-    );
+    return Scaffold(body: createProviderSignIn());
   }
 
   Widget createProviderSignIn() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image(
-            image: AssetImage(getProviderIconPath(context, widget._provider.id)),
-            height: loginProviderIconSizeBig,
-            width: loginProviderIconSizeBig,
-          ),
-          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-          Text(
-            AppLocalizations.of(context).loginProviderSignInText(widget._provider.name),
-            style: loginTitleText,
-          ),
-          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-            child: Form(
-              key: _simpleLoginKey,
-              child: Column(
-                children: <Widget>[
-                  emailField,
-                  passwordField
-                ],
-              ),
+        padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage(getProviderIconPath(context, widget.provider.id)),
+              height: loginProviderIconSizeBig,
+              width: loginProviderIconSizeBig,
+            ),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+            Text(
+              AppLocalizations.of(context).loginProviderSignInText(widget.provider.name),
+              style: loginTitleText,
+            ),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
+                child: Form(
+                  key: _simpleLoginKey,
+                  child: Column(
+                    children: <Widget>[emailField, passwordField],
+                  ),
+                )),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
+            RaisedButton(
+                color: accent,
+                textColor: text,
+                child: SizedBox(
+                  width: loginButtonWidth,
+                  child: Text(
+                    AppLocalizations.of(context).loginSignInButtonText,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                onPressed: _signIn),
+            Visibility(
+              visible: widget.provider.id == AppLocalizations.of(context).other,
+              child: FlatButton(
+                  onPressed: _showManualSettings,
+                  child: Text(
+                    AppLocalizations.of(context).loginManualSettings,
+                    style: loginFlatButtonText,
+                  )),
             )
-          ),
-          Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
-          RaisedButton(
-            color: accent,
-            textColor: text,
-            child: SizedBox(
-              width: loginButtonWidth,
-              child: Text(
-                AppLocalizations.of(context).loginSignInButtonText,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            onPressed: _signIn
-          ),
-          Visibility(
-            visible: widget._provider.id == AppLocalizations.of(context).other,
-            child: FlatButton(
-              onPressed: _showManualSettings,
-              child: Text(
-                AppLocalizations.of(context).loginManualSettings,
-                style: loginFlatButtonText,
-              )
-            ),
-          )
-        ],
-      )
-    );
+          ],
+        ));
   }
 
   OverlayEntry _createErrorOverlayEntry() {
@@ -204,50 +192,55 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     var size = renderBox.size;
 
     return OverlayEntry(
-      builder: (context) => Positioned(
-        left: 0,
-        top: 24,
-        width: size.width,
-        child: Material(
-          elevation: 4.0,
-          child: Container(
-            color: error,
-            height: loginErrorOverlayHeight,
-            child: Row(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),),
-                    Icon(
-                      Icons.report_problem,
-                      size: iconSize,
-                      color: textInverted,
-                    ),
-                    Padding(padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),),
-                    Text(
-                      AppLocalizations.of(context).loginError,
-                      style: loginErrorOverlayText,
-                    ),
-                  ],
+        builder: (context) => Positioned(
+              left: 0,
+              top: 24,
+              width: size.width,
+              child: Material(
+                elevation: 4.0,
+                child: Container(
+                  color: error,
+                  height: loginErrorOverlayHeight,
+                  child: Row(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
+                          ),
+                          Icon(
+                            Icons.report_problem,
+                            size: iconSize,
+                            color: textInverted,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).loginError,
+                            style: loginErrorOverlayText,
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            size: loginErrorOverlayIconSize,
+                            color: textInverted,
+                          ),
+                          onPressed: _closeError),
+                    ],
+                  ),
                 ),
-                Spacer(),
-                IconButton(
-                    icon: Icon(
-                      Icons.clear,
-                      size: loginErrorOverlayIconSize,
-                      color: textInverted,
-                    ),
-                    onPressed: _closeError
-                ),
-              ],
-            ),
-          ),
-        ),
-      )
-    );
+              ),
+            ));
   }
 
   void _signIn() {
+    if(_overlayEntry != null) {
+      _overlayEntry.remove();
+    }
     FocusScope.of(context).requestFocus(FocusNode());
     bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
     var email = emailField.controller.text;
@@ -258,11 +251,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);
-      _loginBloc.dispatch(ProviderLoginButtonPressed(
-        email: email,
-        password: password,
-        provider: widget._provider
-      ));
+      _loginBloc.dispatch(ProviderLoginButtonPressed(email: email, password: password, provider: widget.provider));
     }
   }
 
@@ -272,10 +261,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   void _showManualSettings() {
     _navigation.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ManualSettings(widget._success, emailField.controller.text, passwordField.controller.text, false)
-      )
-    );
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoginManualSettings(
+                success: widget.success, email: emailField.controller.text, password: passwordField.controller.text, fromError: false)));
   }
 }

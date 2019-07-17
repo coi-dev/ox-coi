@@ -44,8 +44,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
-import 'package:ox_coi/src/contact/contact_change_bloc.dart';
-import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';

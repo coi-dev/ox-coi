@@ -166,7 +166,7 @@ class _ProviderListState extends State<ProviderList> {
       navigation.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProviderSignIn(provider, widget.success),
+          builder: (context) => ProviderSignIn(provider: provider, success: widget.success),
         ),
       );
     } else if (widget.type == ProviderListType.register) {

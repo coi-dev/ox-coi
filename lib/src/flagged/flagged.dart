@@ -44,15 +44,12 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/message/message_change_bloc.dart';
-import 'package:ox_coi/src/message/message_change_event_state.dart';
 import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'flagged_bloc.dart';
 import 'flagged_events_state.dart';
@@ -76,11 +73,10 @@ class _FlaggedState extends State<Flagged> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: buildTitle(),
-      ),
-      body: buildListView()
-    );
+        appBar: new AppBar(
+          title: buildTitle(),
+        ),
+        body: buildListView());
   }
 
   buildTitle() {

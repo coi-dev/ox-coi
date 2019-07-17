@@ -44,87 +44,39 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/settings/settings_manual_mixin.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
-import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'login_bloc.dart';
 import 'login_events_state.dart';
 
-class ManualSettings extends StatefulWidget {
-  final Function _success;
-  final bool _fromError;
-  final String _email;
-  final String _password;
+class LoginManualSettings extends StatefulWidget {
+  final Function success;
+  final bool fromError;
+  final String email;
+  final String password;
 
-  ManualSettings(this._success, this._email, this._password, this._fromError);
+  LoginManualSettings({this.success, this.email, this.password, this.fromError});
 
   @override
-  _ManualSettingsState createState() => _ManualSettingsState();
+  _LoginManualSettingsState createState() => _LoginManualSettingsState();
 }
 
-class _ManualSettingsState extends State<ManualSettings> {
-  final _simpleLoginKey = GlobalKey<FormState>();
+class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSettings {
   OverlayEntry _progressOverlayEntry;
   FullscreenProgress _progress;
   LoginBloc _loginBloc = LoginBloc();
 
-  String _selectedImapSecurity;
-  String _selectedSmtpSecurity;
-
-  ValidatableTextFormField emailField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).emailAddress,
-    textFormType: TextFormType.email,
-    inputType: TextInputType.emailAddress,
-    needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
-  );
-  ValidatableTextFormField passwordField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).password,
-    textFormType: TextFormType.password,
-    needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
-  );
-  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
-  ValidatableTextFormField imapServerField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelImapServer,
-    inputType: TextInputType.url,
-  );
-  ValidatableTextFormField imapPortField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelImapPort,
-    textFormType: TextFormType.port,
-    inputType: TextInputType.number,
-    needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort,
-  );
-  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
-  ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
-    textFormType: TextFormType.password,
-    needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
-  );
-  ValidatableTextFormField smtpServerField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelSmtpServer,
-    inputType: TextInputType.url,
-  );
-  ValidatableTextFormField smtpPortField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelSmtpPort,
-    textFormType: TextFormType.port,
-    inputType: TextInputType.number,
-    needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort,
-  );
-
   @override
   void initState() {
     super.initState();
-    emailField.controller.text = widget._email;
-    passwordField.controller.text = widget._password;
+    enabledEmailField.controller.text = widget.email;
+    passwordField.controller.text = widget.password;
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginManualSettings);
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
@@ -139,7 +91,7 @@ class _ManualSettingsState extends State<ManualSettings> {
       }
     }
     if (state is LoginStateSuccess) {
-      widget._success();
+      widget.success();
     } else if (state is LoginStateFailure) {
       setState(() {
         showInformationDialog(
@@ -154,171 +106,51 @@ class _ManualSettingsState extends State<ManualSettings> {
 
   @override
   Widget build(BuildContext context) {
+//    return Scaffold(body: getFormFields(context: context, isLogin: true, fromError: widget.fromError, signIn: _signIn));
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(
-              top: loginManualSettingsPadding,
-              right: loginManualSettingsPadding,
-              left: loginManualSettingsPadding,
-            ),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: FlatButton(
-                onPressed: _signIn,
-                child: Text(
-                  AppLocalizations.of(context).loginSignInButtonText,
-                  style: loginManualSettingsSignInButtonText,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: loginManualSettingsPadding,
-                  right: loginManualSettingsPadding,
-                  bottom: loginManualSettingsPadding,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      AppLocalizations.of(context).loginManualSettings,
-                      style: loginTitleText,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: loginVerticalPadding8dp),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Visibility(
-                            visible: widget._fromError,
-                            child: Text(
-                              AppLocalizations.of(context).loginManualSettingsErrorInfoText,
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                          Text(
-                            AppLocalizations.of(context).loginManualSettingsInfoText,
-                            textAlign: TextAlign.center,
-                          ),
-                          Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                          Text(
-                            AppLocalizations.of(context).loginManualSettingsSecondInfoText,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: loginVerticalPadding20dp)),
-                    Container(
-                        child: Form(
-                      key: _simpleLoginKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppLocalizations.of(context).loginBaseSettingsTitle,
-                              style: loginManualSettingHeaderText,
-                            ),
-                          ),
-                          emailField,
-                          passwordField,
-                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppLocalizations.of(context).loginServerAddressesTitle,
-                              style: loginManualSettingHeaderText,
-                            ),
-                          ),
-                          imapServerField,
-                          smtpServerField,
-                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppLocalizations.of(context).loginAdvancedImapTitle,
-                              style: loginManualSettingHeaderText,
-                            ),
-                          ),
-                          imapPortField,
-                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                          Text(AppLocalizations.of(context).loginLabelImapSecurity),
-                          DropdownButton(
-                              value: _selectedImapSecurity == null ? AppLocalizations.of(context).automatic : _selectedImapSecurity,
-                              items: getSecurityOptions(),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  _selectedImapSecurity = newValue;
-                                });
-                              }),
-                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppLocalizations.of(context).loginAdvancedSmtpTitle,
-                              style: loginManualSettingHeaderText,
-                            ),
-                          ),
-                          smtpPortField,
-                          Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-                          Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
-                          DropdownButton(
-                              value: _selectedSmtpSecurity == null ? AppLocalizations.of(context).automatic : _selectedSmtpSecurity,
-                              items: getSecurityOptions(),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  _selectedSmtpSecurity = newValue;
-                                });
-                              }),
-                        ],
-                      ),
-                    )),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  List<DropdownMenuItem<String>> getSecurityOptions() {
-    return [
-      AppLocalizations.of(context).automatic,
-      AppLocalizations.of(context).sslTls,
-      AppLocalizations.of(context).startTLS,
-      AppLocalizations.of(context).off,
-    ].map<DropdownMenuItem<String>>((String value) {
-      return DropdownMenuItem<String>(value: value, child: Text(value));
-    }).toList();
+        body: Column(children: <Widget>[
+      Padding(
+        padding: EdgeInsets.only(
+          top: loginManualSettingsPadding,
+          right: loginManualSettingsPadding,
+          left: loginManualSettingsPadding,
+        ),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: FlatButton(
+            onPressed: _signIn,
+            child: Text(
+              AppLocalizations.of(context).loginSignInButtonText,
+              style: loginManualSettingsSignInButtonText,
+            ),
+          ),
+        ),
+      ),
+      Expanded(
+        child: getFormFields(context: context, isLogin: true, fromError: widget.fromError),
+      )
+    ]));
   }
 
   void _signIn() {
     FocusScope.of(context).requestFocus(FocusNode());
 
-    var email = emailField.controller.text;
+    var email = enabledEmailField.controller.text;
     var password = passwordField.controller.text;
     var imapLogin = imapLoginNameField.controller.text;
     var imapServer = imapServerField.controller.text;
     var imapPort = imapPortField.controller.text;
-    var imapSecurity = convertProtocolStringToInt(context, _selectedImapSecurity);
+    var imapSecurity = convertProtocolStringToInt(context, selectedImapSecurity);
     var smtpLogin = smtpLoginNameField.controller.text;
     var smtpPassword = smtpPasswordField.controller.text;
     var smtpServer = smtpServerField.controller.text;
     var smtpPort = smtpPortField.controller.text;
-    var smtpSecurity = convertProtocolStringToInt(context, _selectedSmtpSecurity);
+    var smtpSecurity = convertProtocolStringToInt(context, selectedSmtpSecurity);
 
-    bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
+    bool loginIsValid = formKey.currentState.validate();
 
-    if (simpleLoginIsValid) {
+    if (loginIsValid) {
       _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).loginProgressMessage, true, false);
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);

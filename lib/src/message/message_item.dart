@@ -40,9 +40,7 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
@@ -56,9 +54,6 @@ import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/dimensions.dart';
 import 'package:ox_coi/src/utils/styles.dart';
-import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'message_action.dart';
 import 'message_change_bloc.dart';
@@ -258,23 +253,22 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   void _showMenu() {
     List<MessageAction> actions = _hasFile ? _messageAttachmentActions : _messageActions;
     showMenu(
-      context: context,
-      position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
-      items: actions.map((MessageAction choice) {
-        return PopupMenuItem<MessageAction>(
-            value: choice,
-
-            child:  Row(
-                children: <Widget>[
-                  Icon(choice.icon),
-                  Padding(padding: EdgeInsets.only(right: iconTextPadding)),
-                  Text(choice.title),
-                ],
-              ),
-            );
-      }).toList()
-    ).then((action) {
-        _selectMessageAction(action);
+            context: context,
+            position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
+            items: actions.map((MessageAction choice) {
+              return PopupMenuItem<MessageAction>(
+                value: choice,
+                child: Row(
+                  children: <Widget>[
+                    Icon(choice.icon),
+                    Padding(padding: EdgeInsets.only(right: iconTextPadding)),
+                    Text(choice.title),
+                  ],
+                ),
+              );
+            }).toList())
+        .then((action) {
+      _selectMessageAction(action);
     });
   }
 
