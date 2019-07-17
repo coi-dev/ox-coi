@@ -56,11 +56,6 @@ Future<dynamic> getPreference(String key) async {
   return preference;
 }
 
-Future<bool> containsPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
-  return sharedPreferences.getKeys().contains(key);
-}
-
 Future<SharedPreferences> getSharedPreferences() async {
   return await SharedPreferences.getInstance();
 }

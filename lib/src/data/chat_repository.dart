@@ -74,7 +74,7 @@ class ChatRepository extends Repository<Chat> {
     if (changedChatId != 0 && chatIds.contains(changedChatId)) {
       Chat updatedChat = get(changedChatId);
       if (chatSummary != null) {
-        updatedChat.set(ChatExtension.chatSummary, chatSummary);
+        updatedChat?.set(ChatExtension.chatSummary, chatSummary);
       }
       updatedChat.setLastUpdate();
     }
