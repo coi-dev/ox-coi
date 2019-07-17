@@ -71,10 +71,24 @@ class _RootState extends State<Root> {
         actions: child.getActions(context),
         elevation: child.getElevation(),
       ),
-      body: ViewSwitcher(child),
+      body: WillPopScope(
+        child: ViewSwitcher(child),
+        onWillPop: _onWillPop,
+      ),
       bottomNavigationBar: _buildBottomBar(),
       floatingActionButton: child.getFloatingActionButton(context),
     );
+  }
+
+  Future<bool> _onWillPop() {
+    if (_selectedIndex != 0) {
+      setState(() {
+        _selectedIndex = 0;
+      });
+      return Future.value(false);
+    } else {
+      return Future.value(true);
+    }
   }
 
   Widget _buildBottomBar() {
