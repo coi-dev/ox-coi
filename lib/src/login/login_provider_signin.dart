@@ -48,7 +48,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/widgets/progress_handler.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -69,7 +69,6 @@ class ProviderSignIn extends StatefulWidget {
 class _ProviderSignInState extends State<ProviderSignIn> {
   final _simpleLoginKey = GlobalKey<FormState>();
   OverlayEntry _progressOverlayEntry;
-  FullscreenProgress _progress;
   LoginBloc _loginBloc = LoginBloc();
   OverlayEntry _overlayEntry;
   var _navigation = Navigation();
@@ -246,15 +245,15 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     var password = passwordField.controller.text;
 
     if (simpleLoginIsValid) {
-      _progress = FullscreenProgress(
-        bloc: _loginBloc,
-        text: AppLocalizations.of(context).loginProgressMessage,
-        showProgressValues: true,
-        showCancelButton: false,
+      _progressOverlayEntry = OverlayEntry(
+        builder: (context) => FullscreenProgress(
+          bloc: _loginBloc,
+          text: AppLocalizations.of(context).loginProgressMessage,
+          showProgressValues: true,
+          showCancelButton: false,
+        ),
       );
-      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-      OverlayState overlayState = Overlay.of(context);
-      overlayState.insert(_progressOverlayEntry);
+      Overlay.of(context).insert(_progressOverlayEntry);
       _loginBloc.dispatch(ProviderLoginButtonPressed(email: email, password: password, provider: widget.provider));
     }
   }

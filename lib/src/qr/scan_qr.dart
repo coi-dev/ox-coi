@@ -48,7 +48,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/progress_handler.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -59,7 +59,6 @@ class ScanQr extends StatefulWidget {
 
 class _ScanQrState extends State<ScanQr> {
   QrBloc _qrBloc = QrBloc();
-  FullscreenProgress _progress;
   OverlayEntry _progressOverlayEntry;
   bool _qrCodeDetected = false;
   Navigation _navigation = Navigation();
@@ -114,16 +113,16 @@ class _ScanQrState extends State<ScanQr> {
   }
 
   void checkAndJoinQr(String qrString) {
-    _progress = FullscreenProgress(
-      bloc: _qrBloc,
-      text: AppLocalizations.of(context).qrProgressInfoText,
-      showProgressValues: false,
-      showCancelButton: true,
-      cancelPressed: _cancelPressed,
+    _progressOverlayEntry = OverlayEntry(
+      builder: (context) => FullscreenProgress(
+        bloc: _qrBloc,
+        text: AppLocalizations.of(context).qrProgressInfoText,
+        showProgressValues: false,
+        showCancelButton: true,
+        cancelPressed: _cancelPressed,
+      ),
     );
-    _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-    OverlayState overlayState = Overlay.of(context);
-    overlayState.insert(_progressOverlayEntry);
+    Overlay.of(context).insert(_progressOverlayEntry);
     _qrBloc.dispatch(CheckQr(qrText: qrString));
   }
 

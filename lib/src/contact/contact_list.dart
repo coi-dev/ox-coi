@@ -56,6 +56,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
@@ -111,6 +112,7 @@ class _ContactListState extends State<ContactList> {
   ContactListBloc _contactListBloc = ContactListBloc();
   ContactImportBloc _contactImportBloc = ContactImportBloc();
   Navigation navigation = Navigation();
+  OverlayEntry _progressOverlayEntry;
 
   @override
   void initState() {
@@ -130,6 +132,10 @@ class _ContactListState extends State<ContactList> {
   }
 
   handleContactImport(ContactImportState state) {
+    if (_progressOverlayEntry != null) {
+      _progressOverlayEntry.remove();
+      _progressOverlayEntry = null;
+    }
     if (state is ContactsImportSuccess) {
       String contactImportSuccess = AppLocalizations.of(context).contactImportSuccess(state.changedCount);
       showToast(contactImportSuccess);
@@ -218,6 +224,15 @@ class _ContactListState extends State<ContactList> {
       content: content,
       positiveButton: importPositive,
       positiveAction: () {
+        _progressOverlayEntry = OverlayEntry(
+          builder: (context) => FullscreenProgress(
+            bloc: _contactListBloc,
+            text: AppLocalizations.of(context).contactImportProgress,
+            showProgressValues: false,
+            showCancelButton: false,
+          ),
+        );
+        Overlay.of(context).insert(_progressOverlayEntry);
         _contactImportBloc.dispatch(PerformImport());
       },
       navigatable: Navigatable(Type.contactImportDialog),

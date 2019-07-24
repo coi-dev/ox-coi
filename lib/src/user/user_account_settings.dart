@@ -56,7 +56,7 @@ import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/progress_handler.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserAccountSettings extends StatefulWidget {
@@ -69,7 +69,6 @@ class _UserAccountSettingsState extends State<UserAccountSettings> with ManualSe
   LoginBloc _loginBloc = LoginBloc();
   Navigation navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
-  FullscreenProgress _progress;
   bool _showedErrorDialog = false;
 
   bool _firstBuild = true;
@@ -88,15 +87,15 @@ class _UserAccountSettingsState extends State<UserAccountSettings> with ManualSe
 
   _handleUserChangeStateChange(UserChangeState state) {
     if (state is UserChangeStateApplied) {
-      _progress = FullscreenProgress(
-        bloc: _loginBloc,
-        text: AppLocalizations.of(context).accountSettingsDataProgressMessage,
-        showProgressValues: true,
-        showCancelButton: false,
+      _progressOverlayEntry = OverlayEntry(
+        builder: (context) => FullscreenProgress(
+          bloc: _loginBloc,
+          text: AppLocalizations.of(context).accountSettingsDataProgressMessage,
+          showProgressValues: true,
+          showCancelButton: false,
+        ),
       );
-      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-      OverlayState overlayState = Overlay.of(context);
-      overlayState.insert(_progressOverlayEntry);
+      Overlay.of(context).insert(_progressOverlayEntry);
       _showedErrorDialog = false;
       _loginBloc.dispatch(EditButtonPressed());
     }

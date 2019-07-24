@@ -478,6 +478,8 @@ class AppLocalizations {
   String get contactImportDialogContentExtensionRepeat =>
       Intl.message('Re-importing your contacts will not create duplicates.', name: 'contactImportDialogContent');
 
+  String get contactImportProgress => Intl.message('Contact import running, please wait', name: 'contactImportProgress');
+
   String contactImportSuccess(count) => Intl.message('$count system contacts imported', name: 'contactImportSuccess', args: [count]);
 
   String get contactImportFailure => Intl.message('Import failed, missing permissions', name: 'contactImportFailure');

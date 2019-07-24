@@ -52,7 +52,7 @@ import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/progress_handler.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SettingsSecurity extends StatefulWidget {
@@ -63,7 +63,6 @@ class SettingsSecurity extends StatefulWidget {
 class _SettingsSecurityState extends State<SettingsSecurity> {
   final Navigation navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
-  FullscreenProgress _progress;
   SettingsSecurityBloc _settingsSecurityBloc = SettingsSecurityBloc();
   bool _enableBack = true;
 
@@ -92,15 +91,15 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
         text = AppLocalizations.of(context).securitySettingsInitiateKeyTransferPerforming;
       }
-      _progress = FullscreenProgress(
-        bloc: _settingsSecurityBloc,
-        text: text,
-        showProgressValues: false,
-        showCancelButton: false,
+      _progressOverlayEntry = OverlayEntry(
+        builder: (context) => FullscreenProgress(
+          bloc: _settingsSecurityBloc,
+          text: text,
+          showProgressValues: false,
+          showCancelButton: false,
+        ),
       );
-      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-      OverlayState overlayState = Overlay.of(context);
-      overlayState.insert(_progressOverlayEntry);
+      Overlay.of(context).insert(_progressOverlayEntry);
     } else if (state is SettingsSecurityStateSuccess || state is SettingsSecurityStateFailure) {
       _enableBack = true;
       if (_progressOverlayEntry != null) {

@@ -49,7 +49,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/widgets/progress_handler.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'login_bloc.dart';
@@ -69,7 +69,6 @@ class LoginManualSettings extends StatefulWidget {
 
 class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSettings {
   OverlayEntry _progressOverlayEntry;
-  FullscreenProgress _progress;
   LoginBloc _loginBloc = LoginBloc();
 
   @override
@@ -150,15 +149,15 @@ class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSe
     bool loginIsValid = formKey.currentState.validate();
 
     if (loginIsValid) {
-      _progress = FullscreenProgress(
-        bloc: _loginBloc,
-        text: AppLocalizations.of(context).loginProgressMessage,
-        showProgressValues: true,
-        showCancelButton: false,
+      _progressOverlayEntry = OverlayEntry(
+        builder: (context) => FullscreenProgress(
+          bloc: _loginBloc,
+          text: AppLocalizations.of(context).loginProgressMessage,
+          showProgressValues: true,
+          showCancelButton: false,
+        ),
       );
-      _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-      OverlayState overlayState = Overlay.of(context);
-      overlayState.insert(_progressOverlayEntry);
+      Overlay.of(context).insert(_progressOverlayEntry);
       _loginBloc.dispatch(LoginButtonPressed(
         email: email,
         password: password,
