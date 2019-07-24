@@ -55,12 +55,12 @@ import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
 class ChatProfileGroup extends StatefulWidget {
-  final int _chatId;
-  final String _chatName;
-  final Color _chatColor;
-  final bool _isVerified;
+  final int chatId;
+  final String chatName;
+  final Color chatColor;
+  final bool isVerified;
 
-  ChatProfileGroup(this._chatId, this._chatName, this._chatColor, this._isVerified);
+  ChatProfileGroup({@required this.chatId, @required this.chatName, @required this.chatColor, @required this.isVerified});
 
   @override
   _ChatProfileGroupState createState() => _ChatProfileGroupState();
@@ -72,7 +72,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   @override
   void initState() {
     super.initState();
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget._chatId));
+    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget.chatId));
   }
 
   @override
@@ -93,14 +93,14 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
             children: <Widget>[
               ProfileHeader(
                 dynamicChildren: [
-                  ProfileHeaderText(text: widget._chatName),
+                  ProfileHeaderText(text: widget.chatName),
                   ProfileHeaderText(
                     text: appLocalizations.chatProfileGroupMemberCounter(state.contactIds.length),
-                    iconData: widget._isVerified ? Icons.verified_user : null,
+                    iconData: widget.isVerified ? Icons.verified_user : null,
                   )
                 ],
-                color: widget._chatColor,
-                initialsString: Avatar.getInitials(widget._chatName),
+                color: widget.chatColor,
+                initialsString: Avatar.getInitials(widget.chatName),
               ),
               ProfileActionList(tiles: [
                 ProfileAction(
@@ -129,14 +129,14 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         itemBuilder: (BuildContext context, int index) {
           var contactId = state.contactIds[index];
           var key = "$contactId-${state.contactLastUpdateValues[index]}";
-          return ChatProfileGroupContactItem(contactId, key);
+          return ChatProfileGroupContactItem(contactId: contactId, key: key);
         });
   }
 
   _leaveGroup() async {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
-    chatChangeBloc.dispatch(LeaveGroupChat(chatId: widget._chatId));
-    chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
+    chatChangeBloc.dispatch(LeaveGroupChat(chatId: widget.chatId));
+    chatChangeBloc.dispatch(DeleteChat(chatId: widget.chatId));
     Navigation navigation = Navigation();
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }

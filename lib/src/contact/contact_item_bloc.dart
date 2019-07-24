@@ -78,10 +78,15 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   void _setupContact() async {
     Contact contact = _contactRepository.get(_contactId);
     String name = await contact.getName();
-    String mail = await contact.getAddress();
+    String email = await contact.getAddress();
     int colorValue = await contact.getColor();
     bool isVerified = await contact.isVerified();
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ContactLoaded(name, mail, color, isVerified));
+    dispatch(ContactLoaded(
+      name: name,
+      email: email,
+      color: color,
+      isVerified: isVerified,
+    ));
   }
 }

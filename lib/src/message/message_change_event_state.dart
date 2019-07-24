@@ -48,7 +48,7 @@ class DeleteMessage extends MessageChangeEvent {
   final int chatId;
   final int messageId;
 
-  DeleteMessage(this.chatId, this.messageId);
+  DeleteMessage({@required this.chatId, @required this.messageId});
 }
 
 class MessageDeleted extends MessageChangeEvent {}
@@ -58,7 +58,7 @@ class FlagMessages extends MessageChangeEvent {
   final List<int> messageIds;
   final bool star;
 
-  FlagMessages(this.chatId, this.messageIds, this.star);
+  FlagMessages({@required this.chatId, @required this.messageIds, @required this.star});
 }
 
 class MessageFlagged extends MessageChangeEvent {}

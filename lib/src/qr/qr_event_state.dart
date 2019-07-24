@@ -48,44 +48,44 @@ abstract class QrEvent {}
 class RequestQrText extends QrEvent {
   final int chatId;
 
-  RequestQrText(this.chatId);
+  RequestQrText({@required this.chatId});
 }
 
-class QrTextLoaded extends QrEvent{
+class QrTextLoaded extends QrEvent {
   final String qrText;
   final int chatId;
 
   QrTextLoaded({this.qrText, this.chatId});
 }
 
-class JoinSecurejoinDone extends QrEvent {
+class JoinDone extends QrEvent {
   final int chatId;
 
-  JoinSecurejoinDone(this.chatId);
+  JoinDone({@required this.chatId});
 }
 
-class JoinSecurejoinFailed extends QrEvent{}
+class JoinFailed extends QrEvent {}
 
 class CheckQr extends QrEvent {
   final String qrText;
 
-  CheckQr(this.qrText);
+  CheckQr({@required this.qrText});
 }
 
 class CheckQrDone extends QrEvent {
   final String qrText;
 
-  CheckQrDone(this.qrText);
+  CheckQrDone({@required this.qrText});
 }
 
-class QrJoinInviteProgress extends QrEvent{
+class QrJoinInviteProgress extends QrEvent {
   final int progress;
   final error;
 
-  QrJoinInviteProgress(this.progress,[this.error]);
+  QrJoinInviteProgress({@required this.progress, this.error});
 }
 
-class CancelQrProcess extends QrEvent{}
+class CancelQrProcess extends QrEvent {}
 
 abstract class QrState extends ProgressState {
   QrState({progress}) : super(progress: progress);
@@ -104,8 +104,8 @@ class QrStateSuccess extends QrState {
   final int chatId;
 
   QrStateSuccess({
-    @required this.qrText,
-    @required this.chatId,
+    this.qrText,
+    this.chatId,
   });
 }
 

@@ -41,7 +41,6 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/base/bloc_progress_state.dart';
 
 abstract class FlaggedEvent {}
 
@@ -57,15 +56,11 @@ class FlaggedMessagesLoaded extends FlaggedEvent {
 
 class UpdateMessages extends FlaggedEvent {}
 
-abstract class FlaggedState extends ProgressState {
-  FlaggedState({progress}) : super(progress: progress);
-}
+abstract class FlaggedState {}
 
 class FlaggedStateInitial extends FlaggedState {}
 
-class FlaggedStateLoading extends FlaggedState {
-  FlaggedStateLoading({@required progress}) : super(progress: progress);
-}
+class FlaggedStateLoading extends FlaggedState {}
 
 class FlaggedStateSuccess extends FlaggedState {
   final List<int> messageIds;
@@ -75,7 +70,7 @@ class FlaggedStateSuccess extends FlaggedState {
   FlaggedStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
 }
 
-class FlaggedStateProvidersLoaded extends FlaggedState{}
+class FlaggedStateProvidersLoaded extends FlaggedState {}
 
 class FlaggedStateFailure extends FlaggedState {
   final String error;

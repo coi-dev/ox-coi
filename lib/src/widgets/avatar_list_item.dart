@@ -43,9 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
+import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
 class AvatarListItem extends StatelessWidget {

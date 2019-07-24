@@ -48,10 +48,10 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 
 class ContactItemChip extends StatefulWidget {
-  final int _contactId;
-  final Function _itemTapped;
+  final int contactId;
+  final Function itemTapped;
 
-  ContactItemChip(this._contactId, this._itemTapped) : super(key: createKey(_contactId));
+  ContactItemChip({@required this.contactId, @required this.itemTapped}) : super(key: createKey(contactId));
 
   @override
   _ContactItemChipState createState() => _ContactItemChipState();
@@ -63,11 +63,11 @@ class _ContactItemChipState extends State<ContactItemChip> with ContactItemBuild
   @override
   void initState() {
     super.initState();
-    _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
   }
 
   @override
   Widget build(BuildContext context) {
-    return getChipBlocBuilder(_contactBloc, widget._itemTapped);
+    return getChipBlocBuilder(_contactBloc, widget.itemTapped);
   }
 }

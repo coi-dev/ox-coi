@@ -47,22 +47,26 @@ abstract class ContactChangeEvent {}
 
 class ChangeContact extends ContactChangeEvent {
   final String name;
-  final String mail;
+  final String email;
   final ContactAction contactAction;
 
-  ChangeContact(this.name, this.mail, this.contactAction);
+  ChangeContact({
+    @required this.name,
+    @required this.email,
+    @required this.contactAction,
+  });
 }
 
 class DeleteContact extends ContactChangeEvent {
   final int id;
 
-  DeleteContact(this.id);
+  DeleteContact({@required this.id});
 }
 
 class ContactAdded extends ContactChangeEvent {
   final int id;
 
-  ContactAdded(this.id);
+  ContactAdded({@required this.id});
 }
 
 class ContactEdited extends ContactChangeEvent {}
@@ -84,7 +88,7 @@ class ContactBlocked extends ContactChangeEvent {}
 class UnblockContact extends ContactChangeEvent {
   final int id;
 
-  UnblockContact(this.id);
+  UnblockContact({@required this.id});
 }
 
 class ContactUnblocked extends ContactChangeEvent {}

@@ -50,24 +50,24 @@ import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/date.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 
 import 'message_action.dart';
 import 'message_change_bloc.dart';
 import 'message_change_event_state.dart';
-import 'message_received_view.dart';
-import 'message_sent_view.dart';
-import 'message_special_view.dart';
+import 'message_received.dart';
+import 'message_sent.dart';
+import 'message_special.dart';
 
 class ChatMessageItem extends StatefulWidget {
-  final int _chatId;
-  final int _messageId;
-  final bool _isGroupChat;
-  final bool _hasDateMarker;
+  final int chatId;
+  final int messageId;
+  final bool isGroupChat;
+  final bool hasDateMarker;
 
-  ChatMessageItem(this._chatId, this._messageId, this._isGroupChat, this._hasDateMarker, key) : super(key: key);
+  ChatMessageItem({@required this.chatId, @required this.messageId, @required this.isGroupChat, @required this.hasDateMarker, key}) : super(key: key);
 
   @override
   _ChatMessageItemState createState() => _ChatMessageItemState();
@@ -101,21 +101,21 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       return;
     }
     List<int> msgIds = List();
-    msgIds.add(widget._messageId);
+    msgIds.add(widget.messageId);
     switch (messageAction.messageActionTag) {
       case MessageActionTag.forward:
-        _navigation.push(context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds, messageAction.messageActionTag)));
+        _navigation.push(context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds: msgIds, messageActionTag: messageAction.messageActionTag)));
         break;
       case MessageActionTag.copy:
         copyToClipboardWithToast(text: _message, toastText: getDefaultCopyToastText(context));
         break;
       case MessageActionTag.delete:
         List<int> messageList = List();
-        messageList.add(widget._messageId);
-        _messagesBloc.dispatch(DeleteMessages(messageList));
+        messageList.add(widget.messageId);
+        _messagesBloc.dispatch(DeleteMessages(messageIds: messageList));
         break;
       case MessageActionTag.flag:
-        _messageChangeBloc.dispatch(FlagMessages(widget._chatId, msgIds, _isStarred));
+        _messageChangeBloc.dispatch(FlagMessages(chatId: widget.chatId, messageIds: msgIds, star: _isStarred));
         break;
     }
   }
@@ -123,7 +123,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    _messagesBloc.dispatch(RequestMessage(widget._chatId, widget._messageId, widget._isGroupChat));
+    _messagesBloc.dispatch(RequestMessage(chatId: widget.chatId, messageId: widget.messageId, isGroupChat: widget.isGroupChat));
   }
 
   @override
@@ -153,7 +153,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     _message = state.messageText;
     _isStarred = state.isStarred;
     List<Widget> widgets = List();
-    if (widget._hasDateMarker) {
+    if (widget.hasDateMarker) {
       String date = getDateFromTimestamp(state.messageTimestamp, true, true, AppLocalizations.of(context));
       widgets.add(Center(child: Text(date)));
     }
@@ -214,7 +214,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         name: name,
         email: email,
         color: color,
-        isGroupChat: widget._isGroupChat,
+        isGroupChat: widget.isGroupChat,
         showPadlock: showPadlock,
         isFlagged: isFlagged,
       );
@@ -237,7 +237,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   }
 
   void _openTapAttachment() {
-    _attachmentBloc.dispatch(RequestAttachment(widget._chatId, widget._messageId));
+    _attachmentBloc.dispatch(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
   }
 
   _onLongPress(bool hasFile, bool isSetupMessage) {
@@ -276,8 +276,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       context,
       MaterialPageRoute(
         builder: (context) => SettingsAutocryptImport(
-          chatId: widget._chatId,
-          messageId: widget._messageId,
+          chatId: widget.chatId,
+          messageId: widget.messageId,
         ),
       ),
     );

@@ -76,7 +76,7 @@ class QrBloc extends Bloc<QrEvent, QrState>{
     else if(event is QrTextLoaded){
       yield QrStateSuccess(qrText: event.qrText);
     }
-    else if(event is JoinSecurejoinDone){
+    else if(event is JoinDone){
       yield QrStateSuccess(chatId: event.chatId);
     }
     else if(event is CheckQr){
@@ -146,28 +146,28 @@ class QrBloc extends Bloc<QrEvent, QrState>{
     var result = await context.checkQr(qrText);
     QrCodeResult qrResult = QrCodeResult.fromMethodChannel(result);
     if(qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup){
-      dispatch(CheckQrDone(qrText));
+      dispatch(CheckQrDone(qrText: qrText));
     }
   }
 
   void _successCallback(Event event) {
     int progress = event.data2 as int;
-    dispatch(QrJoinInviteProgress(progress));
+    dispatch(QrJoinInviteProgress(progress: progress));
   }
 
   void _errorCallback(error) async {
-    dispatch(QrJoinInviteProgress(0, error));
+    dispatch(QrJoinInviteProgress(progress: 0, error: error));
   }
 
   void joinSecurejoin(String qrText) async{
     Context context = Context();
     int chatId = await context.joinSecurejoinQr(qrText);
     if(chatId == 0){
-      dispatch(JoinSecurejoinFailed());
+      dispatch(JoinFailed());
     }else{
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.putIfAbsent(id: chatId);
-      dispatch(JoinSecurejoinDone(chatId));
+      dispatch(JoinDone(chatId: chatId));
     }
   }
 

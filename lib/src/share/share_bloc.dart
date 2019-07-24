@@ -50,7 +50,7 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ShareBloc extends Bloc<ShareEvent, ShareState>{
+class ShareBloc extends Bloc<ShareEvent, ShareState> {
   ChatListBloc _chatListBloc = ChatListBloc();
   ContactListBloc _contactListBloc = ContactListBloc();
 
@@ -58,20 +58,21 @@ class ShareBloc extends Bloc<ShareEvent, ShareState>{
   ShareState get initialState => ShareStateInitial();
 
   @override
-  Stream<ShareState> mapEventToState(ShareState currentState, ShareEvent event) async*{
-    if(event is RequestChatsAndContacts){
+  Stream<ShareState> mapEventToState(ShareState currentState, ShareEvent event) async* {
+    if (event is RequestChatsAndContacts) {
       yield ShareStateLoading();
-      try{
+      try {
         createShareList();
-      }
-      catch(error){
+      } catch (error) {
         yield ShareStateFailure(error: error.toString());
       }
-    }
-    else if(event is ChatsAndContactsLoaded){
-      yield ShareStateSuccess(chatAndContactIds: event.chatAndContactList, chatIdCount: event.chatListLength, contactIdCount: event.contactListLength);
-    }
-    else if(event is ForwardMessages){
+    } else if (event is ChatsAndContactsLoaded) {
+      yield ShareStateSuccess(
+        chatAndContactIds: event.chatAndContactList,
+        chatIdCount: event.chatListLength,
+        contactIdCount: event.contactListLength,
+      );
+    } else if (event is ForwardMessages) {
       yield ShareStateLoading();
       forwardMessages(event.destinationChatId, event.messageIds);
     }
@@ -85,10 +86,14 @@ class ShareBloc extends Bloc<ShareEvent, ShareState>{
     contactListObservable.listen((state) {
       if (state is ContactListStateSuccess) {
         int index = _chatIds.length;
-        if(state.contactIds != null) {
+        if (state.contactIds != null) {
           _completeList.insertAll(index, state.contactIds);
         }
-        dispatch(ChatsAndContactsLoaded(_completeList, _chatIds.length, state.contactIds.length));
+        dispatch(ChatsAndContactsLoaded(
+          chatAndContactList: _completeList,
+          chatListLength: _chatIds.length,
+          contactListLength: state.contactIds.length,
+        ));
       }
     });
 
@@ -97,7 +102,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState>{
       if (state is ChatListStateSuccess) {
         _completeList.clear();
         _chatIds = state.chatListItemWrapper.ids;
-        if(_chatIds != null){
+        if (_chatIds != null) {
           _completeList.insertAll(0, _chatIds);
         }
         _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
@@ -106,7 +111,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState>{
     _chatListBloc.dispatch(RequestChatList(showInvites: false));
   }
 
-  void forwardMessages(int destinationChatId, List<int> messageIds) async{
+  void forwardMessages(int destinationChatId, List<int> messageIds) async {
     Context context = Context();
     await context.forwardMessages(destinationChatId, messageIds);
   }

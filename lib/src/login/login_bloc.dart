@@ -45,14 +45,14 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
-import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/core.dart';
+import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 import 'login_provider_list.dart';
 
@@ -70,10 +70,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Stream<LoginState> mapEventToState(LoginState currentState, LoginEvent event) async* {
-    if(event is RequestProviders){
-      try{
+    if (event is RequestProviders) {
+      try {
         _loadProviders(event.type);
-      }catch(error){
+      } catch (error) {
         yield LoginStateFailure(error: error.toString());
       }
     } else if (event is ProviderLoginButtonPressed) {
@@ -85,7 +85,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
       }
-    }else if (event is LoginButtonPressed) {
+    } else if (event is LoginButtonPressed) {
       yield LoginStateLoading(progress: 0);
       try {
         await _setupConfig(event);
@@ -115,7 +115,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         yield LoginStateLoading(progress: event.progress);
       }
-    } else if(event is ProvidersLoaded){
+    } else if (event is ProvidersLoaded) {
       yield LoginStateProvidersLoaded(providers: event.providers);
     }
   }
@@ -174,16 +174,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _successCallback(Event event) {
     int progress = event.data1 as int;
-    dispatch(LoginProgress(progress));
+    dispatch(LoginProgress(progress: progress));
   }
 
   void _errorCallback(error) async {
-    dispatch(LoginProgress(0, error));
+    dispatch(LoginProgress(progress: 0, error: error));
   }
 
-  void _loadProviders(ProviderListType type) async{
-    Map<String, dynamic> json = await rootBundle.loadString('lib/src/assets/json/providers.json')
-        .then((jsonStr) => jsonDecode(jsonStr));
+  void _loadProviders(ProviderListType type) async {
+    Map<String, dynamic> json = await rootBundle.loadString('assets/json/providers.json').then((jsonStr) => jsonDecode(jsonStr));
 
     Providers providers = Providers.fromJson(json);
     if (type == ProviderListType.register) {
@@ -192,7 +191,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     dispatch(ProvidersLoaded(providers: providers.providerList));
   }
 
-  _setupConfigWithProvider(ProviderLoginButtonPressed event) async{
+  _setupConfigWithProvider(ProviderLoginButtonPressed event) async {
     Config config = Config();
     Preset preset = event.provider.preset;
 

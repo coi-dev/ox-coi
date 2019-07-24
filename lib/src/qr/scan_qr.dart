@@ -39,7 +39,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
@@ -63,7 +63,7 @@ class _ScanQrState extends State<ScanQr> {
   OverlayEntry _progressOverlayEntry;
   bool _qrCodeDetected = false;
   Navigation _navigation = Navigation();
-  
+
   @override
   void initState() {
     super.initState();
@@ -72,15 +72,15 @@ class _ScanQrState extends State<ScanQr> {
     qrObservable.listen((state) {
       if (state is QrStateSuccess) {
         _qrCodeDetected = false;
-        if(state.chatId != 0){
+        if (state.chatId != 0) {
           _progressOverlayEntry.remove();
           _navigation.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Chat(chatId: state.chatId)),
             ModalRoute.withName(Navigation.root),
-            Navigatable(Type.chat)
+            Navigatable(Type.chat),
           );
-        }else{
+        } else {
           _progressOverlayEntry.remove();
           showToast(AppLocalizations.of(context).qrErrorCancelText);
         }
@@ -99,7 +99,7 @@ class _ScanQrState extends State<ScanQr> {
           ),
           qrCodeCallback: (code) {
             setState(() {
-              if(!_qrCodeDetected) {
+              if (!_qrCodeDetected) {
                 String qrString = code;
                 if (qrString.isNotEmpty) {
                   _qrCodeDetected = true;
@@ -114,11 +114,17 @@ class _ScanQrState extends State<ScanQr> {
   }
 
   void checkAndJoinQr(String qrString) {
-    _progress = FullscreenProgress(_qrBloc, AppLocalizations.of(context).qrProgressInfoText, false, true, _cancelPressed);
+    _progress = FullscreenProgress(
+      bloc: _qrBloc,
+      text: AppLocalizations.of(context).qrProgressInfoText,
+      showProgressValues: false,
+      showCancelButton: true,
+      cancelPressed: _cancelPressed,
+    );
     _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
     OverlayState overlayState = Overlay.of(context);
     overlayState.insert(_progressOverlayEntry);
-    _qrBloc.dispatch(CheckQr(qrString));
+    _qrBloc.dispatch(CheckQr(qrText: qrString));
   }
 
   void _cancelPressed() {

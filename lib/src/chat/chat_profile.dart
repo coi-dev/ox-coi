@@ -104,7 +104,12 @@ class _ChatProfileState extends State<ChatProfile> {
                 if (state is ChatStateSuccess) {
                   bool _isVerified = state.isVerified;
                   if (state.isGroupChat) {
-                    return ChatProfileGroup(widget.chatId, state.name, state.color, _isVerified);
+                    return ChatProfileGroup(
+                      chatId: widget.chatId,
+                      chatName: state.name,
+                      chatColor: state.color,
+                      isVerified: _isVerified,
+                    );
                   } else {
                     return _buildChatProfileOneToOne(state);
                   }
@@ -122,7 +127,12 @@ class _ChatProfileState extends State<ChatProfile> {
         builder: (context, state) {
           if (state is ContactListStateSuccess) {
             var key = createKeyString(state.contactIds.first, state.contactLastUpdateValues.first);
-            return ChatProfileOneToOne(widget.chatId, _isSelfTalk, state.contactIds.first, key);
+            return ChatProfileOneToOne(
+              chatId: widget.chatId,
+              isSelfTalk: _isSelfTalk,
+              contactId: state.contactIds.first,
+              key: key,
+            );
           } else {
             return Container();
           }

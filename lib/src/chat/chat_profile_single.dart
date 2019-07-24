@@ -57,11 +57,11 @@ import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
 class ChatProfileOneToOne extends StatefulWidget {
-  final int _chatId;
-  final int _contactId;
-  final bool _isSelfTalk;
+  final int chatId;
+  final int contactId;
+  final bool isSelfTalk;
 
-  ChatProfileOneToOne(this._chatId, this._isSelfTalk, this._contactId, key) : super(key: Key(key));
+  ChatProfileOneToOne({@required this.chatId, @required this.isSelfTalk, @required this.contactId, key}) : super(key: Key(key));
 
   @override
   _ChatProfileOneToOneState createState() => _ChatProfileOneToOneState();
@@ -80,10 +80,10 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     } else {
       listType = ContactRepository.validContacts;
     }
-    _contactItemBloc.dispatch(RequestContact(contactId: widget._contactId, listType: listType));
+    _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, listType: listType));
   }
 
-  bool isInvite() => widget._chatId == Chat.typeInvite;
+  bool isInvite() => widget.chatId == Chat.typeInvite;
 
   @override
   void dispose() {
@@ -123,7 +123,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
           initialsString: Avatar.getInitials(chatName, email),
         ),
         ProfileActionList(tiles: [
-          if (!widget._isSelfTalk)
+          if (!widget.isSelfTalk)
             ProfileAction(
               iconData: Icons.block,
               text: appLocalizations.chatProfileBlockContactButtonText,
@@ -142,13 +142,13 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
 
   _blockContact() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(contactId: widget._contactId, chatId: widget._chatId));
+    contactChangeBloc.dispatch(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 
   _deleteChat() {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
-    chatChangeBloc.dispatch(DeleteChat(chatId: widget._chatId));
+    chatChangeBloc.dispatch(DeleteChat(chatId: widget.chatId));
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 }

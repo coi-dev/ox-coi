@@ -53,17 +53,17 @@ import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ContactListView extends RootChild {
+class ContactList extends RootChild {
   final Navigation navigation = Navigation();
 
-  ContactListView(State<StatefulWidget> state) : super(state);
+  ContactList({State<StatefulWidget> state}) : super(state: state);
 
   @override
   _ContactListState createState() {
@@ -107,7 +107,7 @@ class ContactListView extends RootChild {
   }
 }
 
-class _ContactListState extends State<ContactListView> {
+class _ContactListState extends State<ContactList> {
   ContactListBloc _contactListBloc = ContactListBloc();
   ContactImportBloc _contactImportBloc = ContactImportBloc();
   Navigation navigation = Navigation();
@@ -231,7 +231,7 @@ class _ContactListState extends State<ContactListView> {
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];
           var key = "$contactId-${contactLastUpdateValues[index]}";
-          return ContactItem(contactId, key, ContactItemType.edit);
+          return ContactItem(contactId: contactId, contactItemType: ContactItemType.edit, key: key);
         });
   }
 }

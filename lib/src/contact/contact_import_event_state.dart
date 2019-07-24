@@ -53,7 +53,7 @@ class ImportAborted extends ContactImportEvent {}
 class ImportPerformed extends ContactImportEvent {
   final int changedCount;
 
-  ImportPerformed(this.changedCount);
+  ImportPerformed({@required this.changedCount});
 
 }
 

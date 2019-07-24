@@ -46,10 +46,8 @@ import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -152,7 +150,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
             Text(
               AppLocalizations.of(context).loginProviderSignInText(widget.provider.name),
-              style:  Theme.of(context).textTheme.headline,
+              style: Theme.of(context).textTheme.headline,
             ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
             Container(
@@ -239,7 +237,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void _signIn() {
-    if(_overlayEntry != null) {
+    if (_overlayEntry != null) {
       _overlayEntry.remove();
     }
     FocusScope.of(context).requestFocus(FocusNode());
@@ -248,7 +246,12 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     var password = passwordField.controller.text;
 
     if (simpleLoginIsValid) {
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).loginProgressMessage, true, false);
+      _progress = FullscreenProgress(
+        bloc: _loginBloc,
+        text: AppLocalizations.of(context).loginProgressMessage,
+        showProgressValues: true,
+        showCancelButton: false,
+      );
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);
@@ -257,7 +260,8 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void _closeError() {
-    this._overlayEntry.remove();
+    _overlayEntry.remove();
+    _overlayEntry = null;
   }
 
   void _showManualSettings() {

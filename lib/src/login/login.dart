@@ -47,19 +47,17 @@ import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'login_provider_list.dart';
 
 class Login extends StatefulWidget {
-  final Function _success;
+  final Function success;
 
-  Login(this._success);
+  Login({@required this.success});
 
   @override
   _LoginState createState() => _LoginState();
@@ -88,7 +86,7 @@ class _LoginState extends State<Login> {
       }
     }
     if (state is LoginStateSuccess) {
-      widget._success();
+      widget.success();
     } else if (state is LoginStateFailure) {
       if (!_showedErrorDialog) {
         _showedErrorDialog = true;
@@ -187,7 +185,7 @@ class _LoginState extends State<Login> {
     navigation.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProviderList(type: type, success: widget._success,)
+        builder: (context) => ProviderList(type: type, success: widget.success,)
       )
     );
   }

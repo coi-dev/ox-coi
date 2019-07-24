@@ -56,14 +56,20 @@ class SearchChatList extends ChatListEvent {
   final String query;
   final bool showInvites;
 
-  SearchChatList({@required this.query, @required this.showInvites});
+  SearchChatList({
+    @required this.query,
+    @required this.showInvites,
+  });
 }
 
 class InvitesPrepared extends ChatListEvent {
   final String query;
   final List<int> messageIds;
 
-  InvitesPrepared({this.query, @required this.messageIds});
+  InvitesPrepared({
+    this.query,
+    @required this.messageIds,
+  });
 }
 
 class ChatsPrepared extends ChatListEvent {
@@ -87,9 +93,7 @@ class ChatListStateLoading extends ChatListState {}
 class ChatListStateSuccess extends ChatListState {
   final ChatListItemWrapper chatListItemWrapper;
 
-  ChatListStateSuccess({
-    @required this.chatListItemWrapper,
-  });
+  ChatListStateSuccess({@required this.chatListItemWrapper});
 }
 
 class ChatListStateFailure extends ChatListState {
@@ -103,5 +107,9 @@ class ChatListItemWrapper {
   final List<ChatListItemType> types;
   final List<int> lastUpdateValues;
 
-  ChatListItemWrapper({@required this.ids, @required this.types, @required this.lastUpdateValues});
+  ChatListItemWrapper({
+    @required this.ids,
+    @required this.types,
+    @required this.lastUpdateValues,
+  });
 }

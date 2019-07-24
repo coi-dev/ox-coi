@@ -47,9 +47,9 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 import 'package:ox_coi/src/settings/settings_security_event_state.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
@@ -92,7 +92,12 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
         text = AppLocalizations.of(context).securitySettingsInitiateKeyTransferPerforming;
       }
-      _progress = FullscreenProgress(_settingsSecurityBloc, text, false, false);
+      _progress = FullscreenProgress(
+        bloc: _settingsSecurityBloc,
+        text: text,
+        showProgressValues: false,
+        showCancelButton: false,
+      );
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);

@@ -71,7 +71,7 @@ class _ShowQrState extends State<ShowQr> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.showQr);
-    _qrBloc.dispatch(RequestQrText(widget._chatId));
+    _qrBloc.dispatch(RequestQrText(chatId: widget._chatId));
     _userBloc.dispatch(RequestUser());
   }
 

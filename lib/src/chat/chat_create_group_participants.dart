@@ -150,7 +150,12 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         var contactId = state.contactIds[index];
         var key = createKeyString(contactId, state.contactLastUpdateValues[index]);
         bool isSelected = state.contactsSelected.contains(contactId);
-        return ContactItemSelectable(contactId, _itemTapped, isSelected, key);
+        return ContactItemSelectable(
+          contactId: contactId,
+          onTap: _itemTapped,
+          isSelected: isSelected,
+          key: key,
+        );
       },
     );
   }
@@ -184,7 +189,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
                   itemCount: selectedContacts.length,
                   itemBuilder: (BuildContext context, int index) {
                     var selectedContactId = selectedContacts[index];
-                    return ContactItemChip(selectedContactId, () => _itemTapped(selectedContactId));
+                    return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
                   })
               : Container(
                   padding: EdgeInsets.only(
@@ -207,7 +212,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
     if (_contactListBloc.contactsSelectedCount > 0) {
       navigation.push(
         context,
-        MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(_contactListBloc.contactsSelected)),
+        MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(selectedContacts: _contactListBloc.contactsSelected)),
       );
     } else {
       showToast(AppLocalizations.of(context).createGroupNoParticipantsSelected);

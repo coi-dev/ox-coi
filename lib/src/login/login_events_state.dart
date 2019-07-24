@@ -66,9 +66,9 @@ class ProviderLoginButtonPressed extends LoginEvent {
     @required this.email,
     @required this.password,
     @required this.provider,
-    @required this.imapLogin,
-    @required this.smtpLogin,
-    @required this.smtpPassword,
+    this.imapLogin,
+    this.smtpLogin,
+    this.smtpPassword,
   });
 }
 
@@ -105,7 +105,7 @@ class LoginProgress extends LoginEvent {
   final int progress;
   final error;
 
-  LoginProgress(this.progress, [this.error]);
+  LoginProgress({@required this.progress, this.error});
 }
 
 class ProvidersLoaded extends LoginEvent {

@@ -51,7 +51,7 @@ class RequestMessage extends MessageItemEvent {
   final int messageId;
   final bool isGroupChat;
 
-  RequestMessage(this.chatId, this.messageId, this.isGroupChat);
+  RequestMessage({@required this.chatId, @required this.messageId, @required this.isGroupChat});
 }
 
 class MessageLoaded extends MessageItemEvent {}
@@ -59,7 +59,7 @@ class MessageLoaded extends MessageItemEvent {}
 class DeleteMessages extends MessageItemEvent {
   final List<int> messageIds;
 
-  DeleteMessages(this.messageIds);
+  DeleteMessages({@required this.messageIds});
 }
 
 abstract class MessageItemState {}

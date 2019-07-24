@@ -108,7 +108,7 @@ class _OxCoiState extends State<OxCoi> {
           if (state.configured) {
             child = Root();
           } else {
-            child = Login(_loginSuccess);
+            child = Login(success: _loginSuccess);
           }
         } else {
           child = Splash();

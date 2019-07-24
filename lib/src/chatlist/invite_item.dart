@@ -51,10 +51,10 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 class InviteItem extends StatefulWidget {
-  final int _chatId;
-  final int _messageId;
+  final int chatId;
+  final int messageId;
 
-  InviteItem(this._chatId, this._messageId, key) : super(key: Key(key));
+  InviteItem({@required this.chatId, @required this.messageId, key}) : super(key: Key(key));
 
   @override
   _InviteItemState createState() => _InviteItemState();
@@ -67,7 +67,7 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
   @override
   void initState() {
     super.initState();
-    _messageItemBloc.dispatch(RequestMessage(widget._chatId, widget._messageId, false));
+    _messageItemBloc.dispatch(RequestMessage(chatId: widget.chatId, messageId: widget.messageId, isGroupChat: false));
   }
 
   @override
@@ -106,9 +106,9 @@ class _InviteItemState extends State<InviteItem> with CreateChatMixin {
       context,
       MaterialPageRoute(
         builder: (context) => Chat(
-              chatId: widget._chatId,
-              messageId: widget._messageId,
-            ),
+          chatId: widget.chatId,
+          messageId: widget.messageId,
+        ),
       ),
     );
   }

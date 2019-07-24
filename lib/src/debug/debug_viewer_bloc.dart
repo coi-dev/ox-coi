@@ -44,8 +44,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:ox_coi/src/log/log_manager.dart';
 import 'package:ox_coi/src/debug/debug_viewer_event_state.dart';
+import 'package:ox_coi/src/log/log_manager.dart';
 import 'package:ox_coi/src/platform/files.dart';
 
 class DebugViewerBloc extends Bloc<DebugViewerEvent, DebugViewerState> {

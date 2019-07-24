@@ -137,7 +137,7 @@ class _ChatCreateState extends State<ChatCreate> {
             int adjustedIndex = index - offset;
             var contactId = state.contactIds[adjustedIndex];
             var key = "$contactId-${state.contactLastUpdateValues[adjustedIndex]}";
-            return ContactItem(contactId, key, ContactItemType.createChat);
+            return ContactItem(contactId: contactId, contactItemType: ContactItemType.createChat, key: key);
           }
         });
   }

@@ -58,7 +58,7 @@ class ContactLoaded extends ContactItemEvent {
   final Color color;
   final bool isVerified;
 
-  ContactLoaded(this.name, this.email, this.color, this.isVerified);
+  ContactLoaded({ @required this.name, @required this.email, @required this.color, @required this.isVerified});
 }
 
 abstract class ContactItemState {}

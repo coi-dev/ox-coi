@@ -51,17 +51,15 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 
-class UserProfileView extends RootChild {
-  UserProfileView(State<StatefulWidget> state) : super(state);
+class UserProfile extends RootChild {
+  UserProfile({State<StatefulWidget> state}) : super(state: state);
 
   @override
   _ProfileState createState() {
@@ -96,7 +94,7 @@ class UserProfileView extends RootChild {
   }
 }
 
-class _ProfileState extends State<UserProfileView> {
+class _ProfileState extends State<UserProfile> {
   UserBloc _userBloc = UserBloc();
   Navigation navigation = Navigation();
 

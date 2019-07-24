@@ -51,14 +51,21 @@ class ChatsAndContactsLoaded extends ShareEvent {
   final int chatListLength;
   final int contactListLength;
 
-  ChatsAndContactsLoaded(this.chatAndContactList, this.chatListLength, this.contactListLength);
+  ChatsAndContactsLoaded({
+    @required this.chatAndContactList,
+    @required this.chatListLength,
+    @required this.contactListLength,
+  });
 }
 
 class ForwardMessages extends ShareEvent {
   final int destinationChatId;
   final List<int> messageIds;
 
-  ForwardMessages(this.destinationChatId, this.messageIds);
+  ForwardMessages({
+    @required this.destinationChatId,
+    @required this.messageIds,
+  });
 }
 
 abstract class ShareState {}

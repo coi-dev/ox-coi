@@ -66,7 +66,6 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
@@ -131,7 +130,7 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
     final messagesObservable = new Observable<MessageListState>(_messageListBloc.state);
     messagesObservable.listen((state) {
       if (state is MessagesStateSuccess) {
-        _chatChangeBloc.dispatch(ChatMarkMessagesSeen(state.messageIds));
+        _chatChangeBloc.dispatch(ChatMarkMessagesSeen(messageIds: state.messageIds));
       }
     });
   }
@@ -422,7 +421,13 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
             int messageId = state.messageIds[index];
             bool hasDateMarker = state.dateMarkerIds.contains(messageId);
             var key = createKeyFromId(messageId, [state.messageLastUpdateValues[index]]);
-            return ChatMessageItem(widget.chatId, messageId, _chatBloc.isGroup, hasDateMarker, key);
+            return ChatMessageItem(
+              chatId: widget.chatId,
+              messageId: messageId,
+              isGroupChat: _chatBloc.isGroup,
+              hasDateMarker: hasDateMarker,
+              key: key,
+            );
           },
           childCount: state.messageIds.length,
           findChildIndexCallback: (Key key) {
@@ -582,7 +587,7 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
         ],
       );
     });
-    Overlay.of(context).insert(this._overlayEntry);
+    Overlay.of(context).insert(_overlayEntry);
   }
 
   bool hideOverlay() {

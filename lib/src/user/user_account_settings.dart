@@ -55,7 +55,6 @@ import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
 import 'package:rxdart/rxdart.dart';
@@ -89,7 +88,12 @@ class _UserAccountSettingsState extends State<UserAccountSettings> with ManualSe
 
   _handleUserChangeStateChange(UserChangeState state) {
     if (state is UserChangeStateApplied) {
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).accountSettingsDataProgressMessage, true, false);
+      _progress = FullscreenProgress(
+        bloc: _loginBloc,
+        text: AppLocalizations.of(context).accountSettingsDataProgressMessage,
+        showProgressValues: true,
+        showCancelButton: false,
+      );
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);

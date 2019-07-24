@@ -50,13 +50,20 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 class ChatListItem extends StatefulWidget {
-  final int _chatId;
-  final Function _onTap;
-  final Function _switchMultiSelect;
-  final bool _isMultiSelect;
-  final bool _isShareItem;
+  final int chatId;
+  final Function onTap;
+  final Function switchMultiSelect;
+  final bool isMultiSelect;
+  final bool isShareItem;
 
-  ChatListItem(this._chatId, this._onTap, this._switchMultiSelect, this._isMultiSelect, this._isShareItem, key) : super(key: Key(key));
+  ChatListItem({
+    @required this.chatId,
+    @required this.onTap,
+    @required this.switchMultiSelect,
+    @required this.isMultiSelect,
+    @required this.isShareItem,
+    key,
+  }) : super(key: Key(key));
 
   @override
   _ChatListItemState createState() => _ChatListItemState();
@@ -70,7 +77,7 @@ class _ChatListItemState extends State<ChatListItem> {
   @override
   void initState() {
     super.initState();
-    _chatBloc.dispatch(RequestChat(chatId: widget._chatId));
+    _chatBloc.dispatch(RequestChat(chatId: widget.chatId));
     _isSelected = false;
   }
 
@@ -99,7 +106,7 @@ class _ChatListItemState extends State<ChatListItem> {
         return InkWell(
           //onLongPress: () => chatItemLongPress(),
           child: AvatarListItem(
-            avatarIcon: _isSelected && widget._isMultiSelect ? Icons.check : null,
+            avatarIcon: _isSelected && widget.isMultiSelect ? Icons.check : null,
             title: name,
             subTitle: _chatBloc.isGroup ? subTitle : preview,
             color: color,
@@ -119,30 +126,30 @@ class _ChatListItemState extends State<ChatListItem> {
   }
 
   chatItemTapped(String name, String subtitle) {
-    if (widget._isMultiSelect) {
+    if (widget.isMultiSelect) {
       setState(() {
         _isSelected = _isSelected ? false : true;
       });
-      widget._onTap(widget._chatId);
-    } else if (widget._isShareItem) {
-      widget._onTap(widget._chatId);
+      widget.onTap(widget.chatId);
+    } else if (widget.isShareItem) {
+      widget.onTap(widget.chatId);
     } else {
       navigation.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Chat(chatId: widget._chatId),
+          builder: (context) => Chat(chatId: widget.chatId),
         ),
       );
     }
   }
 
   chatItemLongPress() {
-    if (!widget._isMultiSelect) {
+    if (!widget.isMultiSelect) {
       setState(() {
         _isSelected = _isSelected ? false : true;
       });
-      widget._onTap(widget._chatId);
-      widget._switchMultiSelect(widget._chatId);
+      widget.onTap(widget.chatId);
+      widget.switchMultiSelect(widget.chatId);
     }
   }
 }

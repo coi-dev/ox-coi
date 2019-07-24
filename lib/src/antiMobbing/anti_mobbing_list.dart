@@ -105,7 +105,7 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
       itemBuilder: (BuildContext context, int index) {
         var messageId = messageIds[index];
         var key = "$messageId-${messageLastUpdateValues[index]}";
-        return InviteItem(Chat.typeInvite, messageId, key);
+        return InviteItem(chatId: Chat.typeInvite, messageId: messageId, key: key);
       },
     );
   }

@@ -49,7 +49,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
+import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'flagged_bloc.dart';
@@ -134,8 +134,14 @@ class _FlaggedState extends State<Flagged> {
       itemBuilder: (BuildContext context, int index) {
         int messageId = state.messageIds[index];
         bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-        var key = "$messageId-${state.messageLastUpdateValues[index]}";
-        return ChatMessageItem(Chat.typeStarred, messageId, true, hasDateMarker, key);
+        var key = createKeyFromId(messageId, [state.messageLastUpdateValues[index]]);
+        return ChatMessageItem(
+          chatId: Chat.typeStarred,
+          messageId: messageId,
+          isGroupChat: true,
+          hasDateMarker: hasDateMarker,
+          key: key,
+        );
       },
     );
   }

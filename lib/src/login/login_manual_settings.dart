@@ -44,12 +44,11 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/settings/settings_manual_mixin.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/progress_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -109,7 +108,6 @@ class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSe
   Widget build(BuildContext context) {
 //    return Scaffold(body: getFormFields(context: context, isLogin: true, fromError: widget.fromError, signIn: _signIn));
     return Scaffold(
-
         body: Column(children: <Widget>[
       Padding(
         padding: EdgeInsets.only(
@@ -152,7 +150,12 @@ class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSe
     bool loginIsValid = formKey.currentState.validate();
 
     if (loginIsValid) {
-      _progress = FullscreenProgress(_loginBloc, AppLocalizations.of(context).loginProgressMessage, true, false);
+      _progress = FullscreenProgress(
+        bloc: _loginBloc,
+        text: AppLocalizations.of(context).loginProgressMessage,
+        showProgressValues: true,
+        showCancelButton: false,
+      );
       _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
       OverlayState overlayState = Overlay.of(context);
       overlayState.insert(_progressOverlayEntry);

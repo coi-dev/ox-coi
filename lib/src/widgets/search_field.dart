@@ -43,10 +43,10 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 
-class SearchView extends StatelessWidget {
+class Search extends StatelessWidget {
   final TextEditingController controller;
 
-  SearchView({@required this.controller});
+  Search({@required this.controller});
 
   @override
   Widget build(BuildContext context) {

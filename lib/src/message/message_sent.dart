@@ -42,67 +42,76 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/date.dart';
 
-import 'message_builder.dart';
+import 'message_item_event_state.dart';
 
-class MessageSpecial extends StatelessWidget {
-  final bool isSetupMessage;
-  final String messageText;
+class MessageSent extends StatelessWidget {
+  final String text;
   final int timestamp;
+  final bool hasFile;
+  final int msgState;
   final bool showPadlock;
+  final bool isFlagged;
+  final AttachmentWrapper attachmentWrapper;
 
-  const MessageSpecial({Key key, this.isSetupMessage, this.messageText, this.timestamp, this.showPadlock}) : super(key: key);
+  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.isFlagged, this.attachmentWrapper})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return isSetupMessage ? buildSetupMessage(context) : buildInfoMessage();
-  }
-
-  Widget buildSetupMessage(BuildContext context) {
     String time = getTimeFormTimestamp(timestamp);
-    String text = AppLocalizations.of(context).securitySettingsAutocryptMessage;
     return FractionallySizedBox(
-      alignment: Alignment.topRight,
-      widthFactor: 0.8,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          MessageData(
-            backgroundColor: secondary,
-            textColor: onSecondary,
-            secondaryTextColor: onSecondary.withOpacity(fade),
-            time: time,
-            showPadlock: showPadlock,
-            text: text,
-            child: MessageElevated(
-              borderRadius: buildInfoBorderRadius(),
-              child: MessageText(),
+        alignment: Alignment.topRight,
+        widthFactor: 0.8,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Visibility(
+              visible: isFlagged,
+              child: Padding(
+                padding: EdgeInsets.only(right: verticalPaddingSmall),
+                child: Icon(
+                  Icons.star,
+                  color: Colors.yellow,
+                ),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+            Flexible(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                MessageData(
+                  backgroundColor: secondary,
+                  textColor: onSecondary,
+                  secondaryTextColor: onSecondary.withOpacity(fade),
+                  time: time,
+                  showPadlock: showPadlock,
+                  text: text,
+                  attachment: attachmentWrapper,
+                  state: msgState,
+                  child: MessageElevated(
+                    borderRadius: buildBorderRadius(),
+                    child: hasFile ? MessageAttachment() : MessageText(),
+                  ),
+                ),
+              ],
+            ))
+          ],
+        ));
   }
 
-  Widget buildInfoMessage() {
-    return Center(
-      child: MessageData(
-        backgroundColor: surface,
-        textColor: onSurface,
-        child: MessageElevated(
-          borderRadius: buildInfoBorderRadius(),
-          child: Text(messageText),
-        ),
-      ),
+  BorderRadius buildBorderRadius() {
+    return BorderRadius.only(
+      topRight: Radius.circular(messagesBoxRadiusSmall),
+      topLeft: Radius.circular(messagesBoxRadius),
+      bottomRight: Radius.circular(messagesBoxRadius),
+      bottomLeft: Radius.circular(messagesBoxRadius),
     );
-  }
-
-  BorderRadius buildInfoBorderRadius() {
-    return BorderRadius.all(Radius.circular(messagesBoxRadius));
   }
 }

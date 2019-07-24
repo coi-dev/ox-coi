@@ -60,15 +60,15 @@ import 'package:rxdart/rxdart.dart';
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
 
-class ContactDetailsView extends StatelessWidget with CreateChatMixin {
+class ContactDetails extends StatelessWidget with CreateChatMixin {
   final _contactItemBloc = ContactItemBloc();
   final _contactChangeBloc = ContactChangeBloc();
   final _navigation = Navigation();
-  final int _contactId;
+  final int contactId;
 
-  ContactDetailsView(this._contactId) {
+  ContactDetails({@required this.contactId}) {
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.dispatch(RequestContact(contactId: _contactId, listType: ContactRepository.validContacts));
+    _contactItemBloc.dispatch(RequestContact(contactId: contactId, listType: ContactRepository.validContacts));
   }
 
   @override
@@ -103,7 +103,7 @@ class ContactDetailsView extends StatelessWidget with CreateChatMixin {
                     ProfileAction(
                       iconData: Icons.chat,
                       text: appLocalizations.contactsOpenChat,
-                      onTap: () => createChatFromContact(context, _contactId),
+                      onTap: () => createChatFromContact(context, contactId),
                     ),
                     ProfileAction(
                       iconData: Icons.edit,
@@ -114,14 +114,14 @@ class ContactDetailsView extends StatelessWidget with CreateChatMixin {
                       iconData: Icons.delete,
                       text: appLocalizations.contactChangeDeleteTitle,
                       onTap: () => showActionDialog(
-                            context,
-                            ProfileActionType.deleteContact,
-                            () => _deleteContact(context),
-                            {
-                              ProfileActionParams.name: state.name,
-                              ProfileActionParams.email: state.email,
-                            },
-                          ),
+                        context,
+                        ProfileActionType.deleteContact,
+                        () => _deleteContact(context),
+                        {
+                          ProfileActionParams.name: state.name,
+                          ProfileActionParams.email: state.email,
+                        },
+                      ),
                     ),
                   ]),
                 ],
@@ -140,11 +140,11 @@ class ContactDetailsView extends StatelessWidget with CreateChatMixin {
       context,
       MaterialPageRoute(
         builder: (context) => ContactChange(
-              contactAction: ContactAction.edit,
-              id: _contactId,
-              name: name,
-              email: email,
-            ),
+          contactAction: ContactAction.edit,
+          id: contactId,
+          name: name,
+          email: email,
+        ),
       ),
     );
   }
@@ -153,7 +153,7 @@ class ContactDetailsView extends StatelessWidget with CreateChatMixin {
     _navigation.pop(context);
     final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
     contactAddedObservable.listen((state) => _handleContactChanged(context, state));
-    _contactChangeBloc.dispatch(DeleteContact(_contactId));
+    _contactChangeBloc.dispatch(DeleteContact(id: contactId));
   }
 
   _handleContactChanged(BuildContext context, ContactChangeState state) {

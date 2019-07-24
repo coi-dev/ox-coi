@@ -43,11 +43,11 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/chatlist/invite_item.dart';
+import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -66,7 +66,7 @@ enum ChatListItemType {
 class ChatList extends RootChild {
   final Navigation navigation = Navigation();
 
-  ChatList(State<StatefulWidget> state) : super(state);
+  ChatList({State<StatefulWidget> state}) : super(state: state);
 
   @override
   _ChatListState createState() {
@@ -166,9 +166,20 @@ class _ChatListState extends State<ChatList> {
         var id = chatListItemWrapper.ids[index];
         var key = createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
         if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
-          return ChatListItem(id, multiSelectItemTapped, switchMultiSelect, false, false, key);
+          return ChatListItem(
+            chatId: id,
+            onTap: multiSelectItemTapped,
+            switchMultiSelect: switchMultiSelect,
+            isMultiSelect: false,
+            isShareItem: false,
+            key: key,
+          );
         } else {
-          return InviteItem(Chat.typeInvite, id, key);
+          return InviteItem(
+            chatId: Chat.typeInvite,
+            messageId: id,
+            key: key,
+          );
         }
       },
     );
@@ -191,13 +202,12 @@ class _ChatListState extends State<ChatList> {
 
   Widget getFlaggedAction() {
     return IconButton(
-      icon: Icon(Icons.star),
-      onPressed: () => _navigation.push(
-          context,
-          MaterialPageRoute(builder: (context) => Flagged(),
-        )
-      )
-    );
+        icon: Icon(Icons.star),
+        onPressed: () => _navigation.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Flagged(),
+            )));
   }
 
   Widget onBuildResultOrSuggestion(String query) {

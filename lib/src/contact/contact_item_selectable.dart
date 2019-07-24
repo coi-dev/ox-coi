@@ -47,11 +47,11 @@ import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 
 class ContactItemSelectable extends StatefulWidget {
-  final int _contactId;
+  final int contactId;
   final Function onTap;
   final bool isSelected;
 
-  ContactItemSelectable(this._contactId, this.onTap, this.isSelected, key) : super(key: Key(key));
+  ContactItemSelectable({@required this.contactId, @required this.onTap, @required this.isSelected, key}) : super(key: Key(key));
 
   @override
   _ContactItemSelectableState createState() => _ContactItemSelectableState();
@@ -63,7 +63,7 @@ class _ContactItemSelectableState extends State<ContactItemSelectable> with Cont
   @override
   void initState() {
     super.initState();
-    _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: ContactRepository.validContacts));
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
   }
 
   @override
@@ -72,6 +72,6 @@ class _ContactItemSelectableState extends State<ContactItemSelectable> with Cont
   }
 
   _onContactTapped(String name, String email) {
-    widget.onTap(widget._contactId);
+    widget.onTap(widget.contactId);
   }
 }

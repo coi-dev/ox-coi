@@ -52,9 +52,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -162,7 +160,11 @@ class _ContactChangeState extends State<ContactChange> {
 
   _onSubmit() {
     if (_formKey.currentState.validate()) {
-      _contactChangeBloc.dispatch(ChangeContact(_getName(), _getEmail(), widget.contactAction));
+      _contactChangeBloc.dispatch(ChangeContact(
+        name: _getName(),
+        email: _getEmail(),
+        contactAction: widget.contactAction,
+      ));
     }
   }
 

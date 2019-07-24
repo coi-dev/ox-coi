@@ -47,15 +47,10 @@ import 'package:ox_coi/src/utils/text.dart';
 
 class StateInfo extends StatelessWidget {
   final bool showLoading;
-
   final String imagePath;
-
   final String title;
-
   final String subTitle;
-
   final String actionTitle;
-
   final Function action;
 
   const StateInfo({Key key, this.showLoading, this.imagePath, this.title, this.subTitle, this.actionTitle, this.action}) : super(key: key);

@@ -87,19 +87,19 @@ class AppLocalizations {
   String get other => 'other';
 
   // Image path
-  String get appLogoUrl => 'lib/src/assets/images/app_logo.png';
+  String get appLogoUrl => 'assets/images/app_logo.png';
 
-  String get outlookLogoUrl => 'lib/src/assets/images/outlook_icon.png';
+  String get outlookLogoUrl => 'assets/images/outlook_icon.png';
 
-  String get yahooLogoUrl => 'lib/src/assets/images/yahoo_icon.png';
+  String get yahooLogoUrl => 'assets/images/yahoo_icon.png';
 
-  String get gmxLogoUrl => 'lib/src/assets/images/gmx_icon.png';
+  String get gmxLogoUrl => 'assets/images/gmx_icon.png';
 
-  String get mailboxLogoUrl => 'lib/src/assets/images/mailbox_icon.jpg';
+  String get mailboxLogoUrl => 'assets/images/mailbox_icon.jpg';
 
-  String get mailcomLogoUrl => 'lib/src/assets/images/mailcom_icon.png';
+  String get mailcomLogoUrl => 'assets/images/mailcom_icon.png';
 
-  String get otherProviderLogoUrl => 'lib/src/assets/images/mail_icon.png';
+  String get otherProviderLogoUrl => 'assets/images/mail_icon.png';
 
   // Global
   String get yes => Intl.message('Yes', name: 'yes');

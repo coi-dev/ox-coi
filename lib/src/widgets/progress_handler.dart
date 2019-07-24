@@ -49,22 +49,18 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 class FullscreenProgress<T extends Bloc> extends StatelessWidget {
-  final String _text;
+  final String text;
+  final bool showProgressValues;
+  final T bloc;
+  final bool showCancelButton;
+  final Function cancelPressed;
 
-  final bool _showProgressValues;
-
-  final T _bloc;
-
-  final bool _showCancelButton;
-
-  final Function _cancelPressed;
-
-  FullscreenProgress(this._bloc, this._text, [this._showProgressValues, this._showCancelButton, this._cancelPressed]);
+  FullscreenProgress({@required this.bloc, @required this.text, this.showProgressValues, this.showCancelButton, this.cancelPressed});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _bloc,
+      bloc: bloc,
       builder: (BuildContext context, state) {
         int progress = 0;
         if (state is ProgressState) {
@@ -74,54 +70,45 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           constraints: BoxConstraints.expand(),
           color: semiTransparent,
-          child: buildProgress(context, progress),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(onPrimary),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: verticalPadding),
+                child: Center(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+                  ),
+                ),
+              ),
+              if (showProgressValues)
+                Padding(
+                  padding: EdgeInsets.only(top: verticalPaddingSmall),
+                  child: Text(
+                    buildDisplayableProgress(progress),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+                  ),
+                ),
+              if (showCancelButton)
+                Padding(
+                  padding: EdgeInsets.only(top: verticalPaddingSmall),
+                  child: Container(
+                    child: RaisedButton(child: Text(AppLocalizations.of(context).cancel), onPressed: cancelPressed),
+                  ),
+                )
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget buildProgress(BuildContext context, int progress) {
-    var column = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(onPrimary),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: verticalPadding),
-          child: Center(
-              child: Text(
-            _text,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
-          )),
-        ),
-      ],
-    );
-    if (_showProgressValues && progress != null) {
-      column.children.add(Padding(
-        padding: EdgeInsets.only(top: verticalPaddingSmall),
-        child: Text(
-          "${progress / 10}%",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
-        ),
-      ));
-    }
-    if(_showCancelButton){
-      column.children.add(Padding(
-        padding: EdgeInsets.only(top: verticalPaddingSmall),
-        child: Container(
-          child: RaisedButton(
-            child: Text(
-              AppLocalizations.of(context).cancel
-            ),
-            onPressed: _cancelPressed
-          ),
-        )
-      ));
-    }
-    return column;
-  }
+  String buildDisplayableProgress(int progress) => "${progress / 10}%";
 }

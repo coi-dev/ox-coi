@@ -41,58 +41,68 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
-import 'package:ox_coi/src/maillist/mail_list_item.dart';
-import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/date.dart';
 
-class MailListView extends RootChild {
+import 'message_builder.dart';
 
-  MailListView(State<StatefulWidget> state) : super(state);
+class MessageSpecial extends StatelessWidget {
+  final bool isSetupMessage;
+  final String messageText;
+  final int timestamp;
+  final bool showPadlock;
 
+  const MessageSpecial({Key key, this.isSetupMessage, this.messageText, this.timestamp, this.showPadlock}) : super(key: key);
 
-  _MailListState createState() => _MailListState();
-
-  @override
-  Color getColor() {
-    return primary;
-  }
-
-  @override
-  FloatingActionButton getFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.create),
-      onPressed: () {},
-    );
-  }
-
-  @override
-  String getTitle(BuildContext context) {
-    return AppLocalizations.of(context).mailTitle;
-  }
-
-  @override
-  String getNavigationText(BuildContext context) {
-    return AppLocalizations.of(context).mailTitle;
-  }
-
-  @override
-  IconData getNavigationIcon() {
-    return Icons.email;
-  }
-
-}
-
-class _MailListState extends State<MailListView> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.all(listItemPadding),
-      itemBuilder: (BuildContext context, int index) {
-        Mail contact = Mail("name $index", "subject $index", "message $index", false, false, false, false);
-        return MailListItem(contact);
-      },
+    return isSetupMessage ? buildSetupMessage(context) : buildInfoMessage();
+  }
+
+  Widget buildSetupMessage(BuildContext context) {
+    String time = getTimeFormTimestamp(timestamp);
+    String text = AppLocalizations.of(context).securitySettingsAutocryptMessage;
+    return FractionallySizedBox(
+      alignment: Alignment.topRight,
+      widthFactor: 0.8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          MessageData(
+            backgroundColor: secondary,
+            textColor: onSecondary,
+            secondaryTextColor: onSecondary.withOpacity(fade),
+            time: time,
+            showPadlock: showPadlock,
+            text: text,
+            child: MessageElevated(
+              borderRadius: buildInfoBorderRadius(),
+              child: MessageText(),
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  Widget buildInfoMessage() {
+    return Center(
+      child: MessageData(
+        backgroundColor: surface,
+        textColor: onSurface,
+        child: MessageElevated(
+          borderRadius: buildInfoBorderRadius(),
+          child: Text(messageText),
+        ),
+      ),
+    );
+  }
+
+  BorderRadius buildInfoBorderRadius() {
+    return BorderRadius.all(Radius.circular(messagesBoxRadius));
   }
 }

@@ -44,6 +44,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
@@ -52,7 +53,6 @@ import 'package:ox_coi/src/utils/security.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
 
 class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
   StreamSubscription<RecordStatus> _recorderSubscription;

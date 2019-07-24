@@ -55,6 +55,7 @@ import 'package:ox_coi/src/ui/color.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool _isGroup = false;
+
   bool get isGroup => _isGroup;
 
   @override
@@ -99,7 +100,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     String email = await contact.getAddress();
     int colorValue = await contact.getColor();
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ChatLoaded(name, email, color, 0, false, false, null, null, false));
+    dispatch(
+      ChatLoaded(
+        name: name,
+        subTitle: email,
+        color: color,
+        freshMessageCount: 0,
+        isSelfTalk: false,
+        isGroupChat: false,
+        preview: null,
+        timestamp: null,
+        isVerified: false,
+      ),
+    );
   }
 
   void _setupChat(int chatId) async {
@@ -115,6 +128,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     bool isVerified = await chat.isVerified();
     Color color = rgbColorFromInt(colorValue);
     var chatSummary = chat.get(ChatExtension.chatSummary);
-    dispatch(ChatLoaded(name, subTitle, color, freshMessageCount, isSelfTalk, _isGroup, chatSummary?.preview, chatSummary?.timestamp, isVerified));
+    dispatch(
+      ChatLoaded(
+        name: name,
+        subTitle: subTitle,
+        color: color,
+        freshMessageCount: freshMessageCount,
+        isSelfTalk: isSelfTalk,
+        isGroupChat: _isGroup,
+        preview: chatSummary?.preview,
+        timestamp: chatSummary?.timestamp,
+        isVerified: isVerified,
+      ),
+    );
   }
 }

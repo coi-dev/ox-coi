@@ -59,9 +59,9 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
-  final List<int> _selectedContacts;
+  final List<int> selectedContacts;
 
-  ChatCreateGroupSettings(this._selectedContacts);
+  ChatCreateGroupSettings({@required this.selectedContacts});
 
   @override
   _ChatCreateGroupSettingsState createState() => _ChatCreateGroupSettingsState();
@@ -120,7 +120,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
 
   Widget buildParticipantList(List<int> contactIds, List<int> contactLastUpdateValues) {
     contactIds.removeWhere((contactId) {
-      return !widget._selectedContacts.contains(contactId);
+      return !widget.selectedContacts.contains(contactId);
     });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,14 +167,14 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
       itemCount: contactIds.length,
       itemBuilder: (BuildContext context, int index) {
         var contactId = contactIds[index];
-        return ContactItem(contactId, contactId.toString());
+        return ContactItem(contactId: contactId, key: contactId.toString());
       },
     );
   }
 
   _onSubmit() {
     if (_formKey.currentState.validate()) {
-      createChatFromGroup(context, false, _groupNameField.controller.text, widget._selectedContacts);
+      createChatFromGroup(context, false, _groupNameField.controller.text, widget.selectedContacts);
     }
   }
 }

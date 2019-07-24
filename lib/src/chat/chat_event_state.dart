@@ -64,7 +64,16 @@ class ChatLoaded extends ChatEvent {
   final int timestamp;
   final bool isVerified;
 
-  ChatLoaded(this.name, this.subTitle, this.color, this.freshMessageCount, this.isSelfTalk, this.isGroupChat, this.preview, this.timestamp, this.isVerified);
+  ChatLoaded(
+      {@required this.name,
+      @required this.subTitle,
+      @required this.color,
+      @required this.freshMessageCount,
+      @required this.isSelfTalk,
+      @required this.isGroupChat,
+      @required this.preview,
+      @required this.timestamp,
+      @required this.isVerified});
 }
 
 abstract class ChatState {}
@@ -85,7 +94,7 @@ class ChatStateSuccess extends ChatState {
   final bool isVerified;
 
   ChatStateSuccess(
-    {@required this.name,
+      {@required this.name,
       @required this.subTitle,
       @required this.color,
       @required this.freshMessageCount,

@@ -44,9 +44,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
+import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/widgets.dart';
 

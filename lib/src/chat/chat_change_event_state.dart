@@ -95,7 +95,7 @@ class ChatMarkNoticed extends ChatChangeEvent {
 class ChatMarkMessagesSeen extends ChatChangeEvent {
   final List<int> messageIds;
 
-  ChatMarkMessagesSeen(this.messageIds);
+  ChatMarkMessagesSeen({@required this.messageIds});
 }
 
 abstract class ChatChangeState {}

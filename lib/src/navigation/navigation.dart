@@ -50,12 +50,12 @@ import 'package:ox_coi/src/chat/chat_create.dart';
 import 'package:ox_coi/src/contact/contact_blocked_list.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
-import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';
+import 'package:ox_coi/src/settings/settings.dart';
 import 'package:ox_coi/src/settings/settings_about.dart';
+import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';
 import 'package:ox_coi/src/settings/settings_chat.dart';
 import 'package:ox_coi/src/settings/settings_debug.dart';
 import 'package:ox_coi/src/settings/settings_security.dart';
-import 'package:ox_coi/src/settings/settings_view.dart';
 import 'package:ox_coi/src/user/user_account_settings.dart';
 
 class Navigation {
@@ -79,7 +79,7 @@ class Navigation {
     contactsAdd: (context) => ContactChange(
           contactAction: ContactAction.add,
         ),
-    settings: (context) => SettingsView(),
+    settings: (context) => Settings(),
     settingsAccount: (context) => UserAccountSettings(),
     settingsSecurity: (context) => SettingsSecurity(),
     settingsAbout: (context) => SettingsAbout(),

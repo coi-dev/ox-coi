@@ -45,6 +45,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+
 import 'flagged_events_state.dart';
 
 class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
@@ -55,23 +56,23 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
   FlaggedState get initialState => FlaggedStateInitial();
 
   @override
-  Stream<FlaggedState> mapEventToState(FlaggedState currentState, FlaggedEvent event) async*{
-    if(event is RequestFlaggedMessages){
+  Stream<FlaggedState> mapEventToState(FlaggedState currentState, FlaggedEvent event) async* {
+    if (event is RequestFlaggedMessages) {
       yield FlaggedStateLoading();
-      try{
+      try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
         _setupMessagesListener();
         _loadFlaggedMessages();
-      }catch (error) {
+      } catch (error) {
         yield FlaggedStateFailure(error: error.toString());
       }
-    }else if (event is FlaggedMessagesLoaded) {
+    } else if (event is FlaggedMessagesLoaded) {
       yield FlaggedStateSuccess(
         messageIds: event.messageIds,
         messageLastUpdateValues: event.messageLastUpdateValues,
         dateMarkerIds: event.dateMarkerIds,
       );
-    }else if(event is UpdateMessages){
+    } else if (event is UpdateMessages) {
       _loadFlaggedMessages();
     }
   }
@@ -84,15 +85,14 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
 
   void _setupMessagesListener() async {
     if (repositoryStreamHandler == null) {
-      repositoryStreamHandler =
-          RepositoryEventStreamHandler(Type.publish, Event.msgsChanged, _updateMessages);
+      repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.msgsChanged, _updateMessages);
       _messageListRepository.addListener(repositoryStreamHandler);
     }
   }
 
   void _updateMessages(Event event) => dispatch(UpdateMessages());
 
-  void _loadFlaggedMessages() async{
+  void _loadFlaggedMessages() async {
     List<int> dateMakerIds = List();
     Context context = Context();
     List<int> messageIds = List.from(await context.getChatMessages(Chat.typeStarred, Context.chatListAddDayMarker));
@@ -113,10 +113,9 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
 
     dispatch(
       FlaggedMessagesLoaded(
-        messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
-        messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
-        dateMarkerIds: dateMakerIds),
+          messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
+          messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+          dateMarkerIds: dateMakerIds),
     );
   }
-
 }

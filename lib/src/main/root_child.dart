@@ -48,7 +48,7 @@ abstract class RootChild extends StatefulWidget {
 
   final List<Widget> _actions = new List();
 
-  RootChild(this.state);
+  RootChild({@required this.state});
 
   getElevation() {
     return appBarElevationDefault;
@@ -72,5 +72,4 @@ abstract class RootChild extends StatefulWidget {
   Color getColor();
 
   FloatingActionButton getFloatingActionButton(BuildContext context);
-
 }

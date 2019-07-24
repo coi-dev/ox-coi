@@ -59,11 +59,11 @@ import 'contact_details.dart';
 enum ContactItemType { display, edit, createChat, blocked, forward }
 
 class ContactItem extends StatefulWidget {
-  final int _contactId;
+  final int contactId;
   final ContactItemType contactItemType;
-  final Function _onTap;
+  final Function onTap;
 
-  ContactItem(this._contactId, key, [this.contactItemType = ContactItemType.display, this._onTap]) : super(key: Key(key));
+  ContactItem({@required this.contactId, this.contactItemType = ContactItemType.display, this.onTap, key}) : super(key: Key(key));
 
   @override
   _ContactItemState createState() => _ContactItemState();
@@ -82,7 +82,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Crea
     } else {
       listType = ContactRepository.validContacts;
     }
-    _contactBloc.dispatch(RequestContact(contactId: widget._contactId, listType: listType));
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: listType));
   }
 
   @override
@@ -98,20 +98,20 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Crea
 
   onContactTapped(String name, String email) async {
     if (widget.contactItemType == ContactItemType.createChat || widget.contactItemType == ContactItemType.forward) {
-      return createChatFromContact(context, widget._contactId, _handleCreateChatStateChange);
+      return createChatFromContact(context, widget.contactId, _handleCreateChatStateChange);
     } else if (widget.contactItemType == ContactItemType.blocked) {
       return buildUnblockContactDialog(name, email);
     } else if (widget.contactItemType == ContactItemType.edit) {
       navigation.push(
         context,
-        MaterialPageRoute(builder: (context) => ContactDetailsView(widget._contactId)),
+        MaterialPageRoute(builder: (context) => ContactDetails(contactId: widget.contactId)),
       );
     }
   }
 
   _handleCreateChatStateChange(int chatId) {
     if (widget.contactItemType == ContactItemType.forward) {
-      widget._onTap(chatId);
+      widget.onTap(chatId);
     } else {
       navigation.pushAndRemoveUntil(
         context,
@@ -152,6 +152,6 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Crea
 
   void unblockContact() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(UnblockContact(widget._contactId));
+    contactChangeBloc.dispatch(UnblockContact(id: widget.contactId));
   }
 }

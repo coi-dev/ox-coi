@@ -65,7 +65,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
       yield ContactChangeStateLoading();
       try {
         contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-        _changeContact(event.name, event.mail, event.contactAction);
+        _changeContact(event.name, event.email, event.contactAction);
       } catch (error) {
         yield ContactChangeStateFailure(error: error.toString());
       }
@@ -102,7 +102,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     Context context = Context();
     int id = await context.createContact(name, address);
     if (contactAction == ContactAction.add) {
-      dispatch(ContactAdded(id));
+      dispatch(ContactAdded(id: id));
     } else {
       Contact contact = contactRepository.get(id);
       contact.set(Contact.methodContactGetName, name);

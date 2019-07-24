@@ -56,10 +56,10 @@ enum SettingsType {
   debug,
 }
 
-class SettingsView extends StatelessWidget {
+class Settings extends StatelessWidget {
   final Navigation _navigation = Navigation();
 
-  SettingsView() {
+  Settings() {
     _navigation.current = Navigatable(Type.settings);
   }
 

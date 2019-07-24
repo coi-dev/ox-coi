@@ -40,7 +40,7 @@
  * for more details.
  */
 
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
@@ -53,61 +53,67 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ContactBlockedList extends StatefulWidget {
-   @override
-   _ContactBlockedListState createState() => _ContactBlockedListState();
- }
+  @override
+  _ContactBlockedListState createState() => _ContactBlockedListState();
+}
 
- class _ContactBlockedListState extends State<ContactBlockedList> {
-   ContactListBloc _contactListBloc = ContactListBloc();
-   Navigation navigation = Navigation();
+class _ContactBlockedListState extends State<ContactBlockedList> {
+  ContactListBloc _contactListBloc = ContactListBloc();
+  Navigation navigation = Navigation();
 
-   @override
+  @override
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.contactListBlocked);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.blockedContacts));
   }
 
-   @override
-   Widget build(BuildContext context) {
-     return Scaffold(
-       appBar: AppBar(
-         leading: new IconButton(
-           icon: new Icon(Icons.close),
-           onPressed: () => navigation.pop(context),
-         ),
-         title: Text(AppLocalizations.of(context).blockedContactsTitle),
-       ),
-       body: buildForm());
-   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: new IconButton(
+            icon: new Icon(Icons.close),
+            onPressed: () => navigation.pop(context),
+          ),
+          title: Text(AppLocalizations.of(context).blockedContactsTitle),
+        ),
+        body: buildForm());
+  }
 
-   Widget buildForm() {
-     return BlocBuilder(
-       bloc: _contactListBloc,
-       builder: (context, state) {
-         if (state is ContactListStateSuccess) {
-           if(state.contactIds.length > 0) {
-             return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
-           } else{
-             return Center(child: Text(AppLocalizations.of(context).blockedListEmpty),);
-           }
-         } else if (state is! ContactListStateFailure) {
-           return StateInfo(showLoading: true);
-         } else {
-           return Icon(Icons.error);
-         }
-       },
-     );
-   }
+  Widget buildForm() {
+    return BlocBuilder(
+      bloc: _contactListBloc,
+      builder: (context, state) {
+        if (state is ContactListStateSuccess) {
+          if (state.contactIds.length > 0) {
+            return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
+          } else {
+            return Center(
+              child: Text(AppLocalizations.of(context).blockedListEmpty),
+            );
+          }
+        } else if (state is! ContactListStateFailure) {
+          return StateInfo(showLoading: true);
+        } else {
+          return Icon(Icons.error);
+        }
+      },
+    );
+  }
 
-   Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
-     return ListView.builder(
-       padding: EdgeInsets.only(top: listItemPadding),
-       itemCount: contactIds.length,
-       itemBuilder: (BuildContext context, int index) {
-         var contactId = contactIds[index];
-         var key = "$contactId-${contactLastUpdateValues[index]}";
-         return ContactItem(contactId, key, ContactItemType.blocked);
-       });
-   }
- }
+  Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
+    return ListView.builder(
+        padding: EdgeInsets.only(top: listItemPadding),
+        itemCount: contactIds.length,
+        itemBuilder: (BuildContext context, int index) {
+          var contactId = contactIds[index];
+          var key = "$contactId-${contactLastUpdateValues[index]}";
+          return ContactItem(
+            contactId: contactId,
+            contactItemType: ContactItemType.blocked,
+            key: key,
+          );
+        });
+  }
+}
