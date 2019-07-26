@@ -43,17 +43,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/system.dart';
-import 'package:ox_coi/src/settings/settings_manual_mixin.dart';
+import 'package:ox_coi/src/settings/settings_manual_form.dart';
+import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
+import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
-import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
@@ -64,14 +65,13 @@ class UserAccountSettings extends StatefulWidget {
   _UserAccountSettingsState createState() => _UserAccountSettingsState();
 }
 
-class _UserAccountSettingsState extends State<UserAccountSettings> with ManualSettings {
+class _UserAccountSettingsState extends State<UserAccountSettings> {
   UserChangeBloc _userChangeBloc = UserChangeBloc();
   LoginBloc _loginBloc = LoginBloc();
   Navigation navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
+  FullscreenProgress _progress;
   bool _showedErrorDialog = false;
-
-  bool _firstBuild = true;
 
   @override
   void initState() {
@@ -87,17 +87,10 @@ class _UserAccountSettingsState extends State<UserAccountSettings> with ManualSe
 
   _handleUserChangeStateChange(UserChangeState state) {
     if (state is UserChangeStateApplied) {
-      _progressOverlayEntry = OverlayEntry(
-        builder: (context) => FullscreenProgress(
-          bloc: _loginBloc,
-          text: AppLocalizations.of(context).accountSettingsDataProgressMessage,
-          showProgressValues: true,
-          showCancelButton: false,
-        ),
-      );
-      Overlay.of(context).insert(_progressOverlayEntry);
       _showedErrorDialog = false;
       _loginBloc.dispatch(EditButtonPressed());
+    } else if (state is UserChangeStateFailure) {
+      showToast(state.error);
     }
   }
 
@@ -126,81 +119,78 @@ class _UserAccountSettingsState extends State<UserAccountSettings> with ManualSe
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.close),
-            onPressed: () => navigation.pop(context),
-          ),
-          title: Text(AppLocalizations.of(context).accountSettingsTitle),
-          actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: saveAccountData)],
-        ),
-        body: buildForm());
-  }
-
-  Widget buildForm() {
-    return BlocBuilder(
-        bloc: _userChangeBloc,
-        builder: (context, state) {
-          if (state is UserChangeStateSuccess) {
-            if (_firstBuild) {
-              _firstBuild = false;
-              _fillEditAccountDataView(state.config);
-            }
-            return _buildEditAccountDataView();
-          } else if (state is UserChangeStateFailure) {
-            showToast(state.error);
-            return _buildEditAccountDataView();
-          } else if (state is UserChangeStateApplied) {
-            return _buildEditAccountDataView();
-          } else {
-            return Container();
+    return BlocProvider(
+      builder: (context) {
+        var settingsManualFormBloc = SettingsManualFormBloc();
+        settingsManualFormBloc.dispatch(SetupSettings(
+          shouldLoadConfig: true,
+        ));
+        return settingsManualFormBloc;
+      },
+      child: BlocListener<SettingsManualFormBloc, SettingsManualFormState>(
+        listener: (BuildContext context, state) {
+          if (state is SettingsManualFormStateValidationSuccess) {
+            _progress = FullscreenProgress(
+              bloc: _loginBloc,
+              text: AppLocalizations.of(context).loginProgressMessage,
+              showProgressValues: true,
+              showCancelButton: false,
+            );
+            _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
+            OverlayState overlayState = Overlay.of(context);
+            overlayState.insert(_progressOverlayEntry);
+            _userChangeBloc.dispatch(
+              UserAccountDataChanged(
+                imapLogin: state.imapLogin,
+                imapPassword: state.password,
+                imapServer: state.imapServer,
+                imapPort: state.imapPort,
+                imapSecurity: state.imapSecurity,
+                smtpLogin: state.smtpLogin,
+                smtpPassword: state.password,
+                smtpServer: state.smtpServer,
+                smtpPort: state.smtpPort,
+                smtpSecurity: state.smtpSecurity,
+              ),
+            );
           }
-        });
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: new IconButton(
+              icon: new Icon(Icons.close),
+              onPressed: () => navigation.pop(context),
+            ),
+            title: Text(AppLocalizations.of(context).accountSettingsTitle),
+            actions: <Widget>[
+              SaveDataButton(),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(loginManualSettingsPadding),
+              child: SettingsManualForm(isLogin: false),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SaveDataButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.check),
+      onPressed: () {
+        _saveData(context);
+      },
+    );
   }
 
-  _fillEditAccountDataView(Config config) {
-    disabledEmailField.controller.text = config.email;
-    imapLoginNameField.controller.text = config.imapLogin;
-    imapServerField.controller.text = config.imapServer;
-    imapPortField.controller.text = config.imapPort;
-    smtpLoginNameField.controller.text = config.smtpLogin;
-    smtpServerField.controller.text = config.imapServer;
-    smtpPortField.controller.text = config.smtpPort;
-    selectedImapSecurity = convertProtocolIntToString(context, config.imapSecurity);
-    selectedSmtpSecurity = convertProtocolIntToString(context, config.smtpSecurity);
-  }
-
-  Widget _buildEditAccountDataView() {
-    return getFormFields(context: context, isLogin: false);
-  }
-
-  saveAccountData() {
-    hideKeyboard();
-    if (formKey.currentState.validate()) {
-      var imapLogin = disabledEmailField.controller.text;
-      var imapPassword = passwordField.controller.text;
-      var imapServer = imapServerField.controller.text;
-      var imapPort = imapPortField.controller.text;
-      var imapSecurity = convertProtocolStringToInt(context, selectedImapSecurity);
-      var smtpLogin = smtpLoginNameField.controller.text;
-      var smtpPassword = smtpPasswordField.controller.text;
-      var smtpServer = smtpServerField.controller.text;
-      var smtpPort = smtpPortField.controller.text;
-      var smtpSecurity = convertProtocolStringToInt(context, selectedSmtpSecurity);
-
-      _userChangeBloc.dispatch(UserAccountDataChanged(
-        imapLogin: imapLogin,
-        imapPassword: imapPassword,
-        imapServer: imapServer,
-        imapPort: imapPort,
-        imapSecurity: imapSecurity,
-        smtpLogin: smtpLogin,
-        smtpPassword: smtpPassword,
-        smtpServer: smtpServer,
-        smtpPort: smtpPort,
-        smtpSecurity: smtpSecurity,
-      ));
-    }
+  _saveData(BuildContext context) {
+    unFocus(context);
+    BlocProvider.of<SettingsManualFormBloc>(context).dispatch(RequestValidateSettings());
   }
 }

@@ -119,7 +119,7 @@ class _ChatProfileState extends State<ChatProfile> {
         ));
   }
 
-  BlocBuilder<ContactListEvent, ContactListState> _buildChatProfileOneToOne(ChatStateSuccess state) {
+  Widget _buildChatProfileOneToOne(ChatStateSuccess state) {
     bool _isSelfTalk = state.isSelfTalk;
     return BlocBuilder(
         bloc: _contactListBloc,

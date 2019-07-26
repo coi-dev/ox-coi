@@ -118,7 +118,9 @@ abstract class LoginState extends ProgressState {
   LoginState({progress}) : super(progress: progress);
 }
 
-class LoginStateInitial extends LoginState {}
+class LoginStateInitial extends LoginState {
+  final progress = 0;
+}
 
 class LoginStateLoading extends LoginState {
   LoginStateLoading({@required progress}) : super(progress: progress);

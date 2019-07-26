@@ -63,7 +63,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
       bloc: bloc,
       builder: (BuildContext context, state) {
         int progress = 0;
-        if (state is ProgressState) {
+        if (state is ProgressState && state.progress != null) {
           progress = state.progress;
         }
         return Container(

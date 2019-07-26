@@ -41,13 +41,16 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/settings/settings_manual_mixin.dart';
+import 'package:ox_coi/src/platform/system.dart';
+import 'package:ox_coi/src/settings/settings_manual_form.dart';
+import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
+import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:rxdart/rxdart.dart';
@@ -61,21 +64,20 @@ class LoginManualSettings extends StatefulWidget {
   final String email;
   final String password;
 
-  LoginManualSettings({this.success, this.email, this.password, this.fromError});
+  LoginManualSettings({@required this.success, @required this.fromError, this.email, this.password});
 
   @override
   _LoginManualSettingsState createState() => _LoginManualSettingsState();
 }
 
-class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSettings {
+class _LoginManualSettingsState extends State<LoginManualSettings> {
   OverlayEntry _progressOverlayEntry;
+  FullscreenProgress _progress;
   LoginBloc _loginBloc = LoginBloc();
 
   @override
   void initState() {
     super.initState();
-    enabledEmailField.controller.text = widget.email;
-    passwordField.controller.text = widget.password;
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginManualSettings);
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
@@ -105,72 +107,123 @@ class _LoginManualSettingsState extends State<LoginManualSettings> with ManualSe
 
   @override
   Widget build(BuildContext context) {
-//    return Scaffold(body: getFormFields(context: context, isLogin: true, fromError: widget.fromError, signIn: _signIn));
-    return Scaffold(
-        body: Column(children: <Widget>[
-      Padding(
-        padding: EdgeInsets.only(
-          top: loginManualSettingsPadding,
-          right: loginManualSettingsPadding,
-          left: loginManualSettingsPadding,
-        ),
-        child: Align(
-          alignment: Alignment.centerRight,
-          child: FlatButton(
-            onPressed: _signIn,
-            child: Text(
-              AppLocalizations.of(context).loginSignInButtonText,
-              style: Theme.of(context).textTheme.subhead.apply(color: accent),
-            ),
+    return BlocProvider(
+      builder: (context) {
+        var settingsManualFormBloc = SettingsManualFormBloc();
+        settingsManualFormBloc.dispatch(SetupSettings(
+          shouldLoadConfig: false,
+          email: widget.email,
+          password: widget.password,
+        ));
+        return settingsManualFormBloc;
+      },
+      child: BlocListener<SettingsManualFormBloc, SettingsManualFormState>(
+        listener: (BuildContext context, state) {
+          if (state is SettingsManualFormStateValidationSuccess) {
+            _progress = FullscreenProgress(
+              bloc: _loginBloc,
+              text: AppLocalizations.of(context).loginProgressMessage,
+              showProgressValues: true,
+              showCancelButton: false,
+            );
+            _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
+            OverlayState overlayState = Overlay.of(context);
+            overlayState.insert(_progressOverlayEntry);
+            _loginBloc.dispatch(LoginButtonPressed(
+              email: state.email,
+              password: state.password,
+              imapLogin: state.imapLogin,
+              imapServer: state.imapServer,
+              imapPort: state.imapPort,
+              imapSecurity: state.imapSecurity,
+              smtpLogin: state.smtpLogin,
+              smtpPassword: state.password,
+              smtpServer: state.smtpServer,
+              smtpPort: state.smtpPort,
+              smtpSecurity: state.smtpSecurity,
+            ));
+          }
+        },
+        child: Scaffold(
+          body: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(
+                  top: loginManualSettingsPadding,
+                  right: loginManualSettingsPadding,
+                  left: loginManualSettingsPadding,
+                ),
+                child: LoginButton(),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(loginManualSettingsPadding),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).loginManualSettings,
+                          style: Theme.of(context).textTheme.headline,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: loginVerticalPadding8dp),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Visibility(
+                                visible: widget.fromError,
+                                child: Text(
+                                  AppLocalizations.of(context).loginManualSettingsErrorInfoText,
+                                ),
+                              ),
+                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                              Text(
+                                AppLocalizations.of(context).loginManualSettingsInfoText,
+                                textAlign: TextAlign.center,
+                              ),
+                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                              Text(
+                                AppLocalizations.of(context).loginManualSettingsSecondInfoText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: loginVerticalPadding),
+                          child: SettingsManualForm(isLogin: true),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
-      Expanded(
-        child: getFormFields(context: context, isLogin: true, fromError: widget.fromError),
-      )
-    ]));
+    );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: FlatButton(
+        onPressed: () => _performLogin(context),
+        child: Text(
+          AppLocalizations.of(context).loginSignInButtonText,
+          style: Theme.of(context).textTheme.subhead.apply(color: accent),
+        ),
+      ),
+    );
   }
 
-  void _signIn() {
-    FocusScope.of(context).requestFocus(FocusNode());
-
-    var email = enabledEmailField.controller.text;
-    var password = passwordField.controller.text;
-    var imapLogin = imapLoginNameField.controller.text;
-    var imapServer = imapServerField.controller.text;
-    var imapPort = imapPortField.controller.text;
-    var imapSecurity = convertProtocolStringToInt(context, selectedImapSecurity);
-    var smtpLogin = smtpLoginNameField.controller.text;
-    var smtpPassword = smtpPasswordField.controller.text;
-    var smtpServer = smtpServerField.controller.text;
-    var smtpPort = smtpPortField.controller.text;
-    var smtpSecurity = convertProtocolStringToInt(context, selectedSmtpSecurity);
-
-    bool loginIsValid = formKey.currentState.validate();
-
-    if (loginIsValid) {
-      _progressOverlayEntry = OverlayEntry(
-        builder: (context) => FullscreenProgress(
-          bloc: _loginBloc,
-          text: AppLocalizations.of(context).loginProgressMessage,
-          showProgressValues: true,
-          showCancelButton: false,
-        ),
-      );
-      Overlay.of(context).insert(_progressOverlayEntry);
-      _loginBloc.dispatch(LoginButtonPressed(
-        email: email,
-        password: password,
-        imapLogin: imapLogin,
-        imapServer: imapServer,
-        imapPort: imapPort,
-        imapSecurity: imapSecurity,
-        smtpLogin: smtpLogin,
-        smtpPassword: smtpPassword,
-        smtpServer: smtpServer,
-        smtpPort: smtpPort,
-        smtpSecurity: smtpSecurity,
-      ));
-    }
+  void _performLogin(BuildContext context) {
+    unFocus(context);
+    BlocProvider.of<SettingsManualFormBloc>(context).dispatch(RequestValidateSettings());
   }
 }

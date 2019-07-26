@@ -41,5 +41,8 @@
  */
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 hideKeyboard() => SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+unFocus(BuildContext context) => FocusScope.of(context).requestFocus(FocusNode());

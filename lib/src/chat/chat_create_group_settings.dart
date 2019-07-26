@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

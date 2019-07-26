@@ -100,6 +100,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void handleLoginStateChange(LoginState state) {
+    if (!_navigation.current.equal( Navigatable(Type.loginProviderSignIn))) {
+      return;
+    }
     if (state is LoginStateSuccess || state is LoginStateFailure) {
       if (_progressOverlayEntry != null) {
         _progressOverlayEntry.remove();

@@ -47,8 +47,8 @@ class LogBlocDelegate implements BlocDelegate {
   final Logger _logger = Logger("blocDelegate");
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
-    _logger.info(transition.toString());
+  void onEvent(Bloc bloc, Object event) {
+    _logger.info(event.toString());
   }
 
   @override
@@ -57,7 +57,7 @@ class LogBlocDelegate implements BlocDelegate {
   }
 
   @override
-  void onEvent(Bloc bloc, Object event) {
-    // TODO: implement onEvent
+  void onTransition(Bloc bloc, Transition transition) {
+    _logger.info(transition.toString());
   }
 }
