@@ -48,6 +48,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -70,6 +71,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   static final keyEmail = Key("keyEmail");
   static final keyPassword = Key("keyPassword");
   final _simpleLoginKey = GlobalKey<FormState>();
+
   OverlayEntry _progressOverlayEntry;
   LoginBloc _loginBloc = LoginBloc();
   OverlayEntry _overlayEntry;
@@ -83,7 +85,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
     showIcon: true,
-    key: keyEmail,
+    key: Key(keyProviderSignInEmailTextField),
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).password,
@@ -92,7 +94,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
     showIcon: true,
-    key: keyPassword,
+    key: Key(keyProviderSignInPasswordTextField),
   );
 
   @override

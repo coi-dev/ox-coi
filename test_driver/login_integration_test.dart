@@ -43,6 +43,7 @@
 // Imports the Flutter Driver API.
 import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
@@ -67,8 +68,8 @@ void main() {
 
     //  SerializableFinder for Coi Debug dialog Windows.
     final signInCoiDebug = find.text('Sign in with Coi debug?');
-    final email = find.byValueKey('keyEmail');
-    final password = find.byValueKey('keyPassword');
+    final email = find.byValueKey(keyProviderSignInEmailTextField);
+    final password = find.byValueKey(keyProviderSignInPasswordTextField);
     final signInCaps = find.text('SIGN IN');
     final errorMessage = find.text('Please enter a valid e-mail address');
     final chatWelcome = find.text(

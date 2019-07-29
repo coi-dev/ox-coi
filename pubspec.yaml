@@ -40,6 +40,7 @@ dependencies:
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -55,3 +56,4 @@ flutter:
     - assets/images/
     - assets/json/
   uses-material-design: true
+

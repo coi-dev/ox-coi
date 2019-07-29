@@ -50,6 +50,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:rxdart/rxdart.dart';
@@ -100,7 +101,7 @@ class _UserSettingsState extends State<UserSettings> {
             onPressed: () => navigation.pop(context),
           ),
           title: Text(AppLocalizations.of(context).userSettingsTitle),
-          actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: _saveChanges)],
+          actions: <Widget>[IconButton(icon: Icon(Icons.check), key: Key(keyUserSettingsCheckIconButton), onPressed: _saveChanges)],
         ),
         body: buildForm());
   }
@@ -140,6 +141,7 @@ class _UserSettingsState extends State<UserSettings> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                      key: Key(keyUserSettingsUserSettingsUsernameLabel),
                       maxLines: 1,
                       controller: _usernameController,
                       decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsUsernameLabel)),

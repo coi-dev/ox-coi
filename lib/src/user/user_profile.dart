@@ -53,6 +53,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
@@ -142,6 +143,7 @@ class _ProfileState extends State<UserProfile> {
               child: Text(
                 config.email,
                 style: Theme.of(context).textTheme.subhead,
+                key: Key(keyUserProfileEmailText),
               ),
             ),
             Padding(
@@ -163,6 +165,7 @@ class _ProfileState extends State<UserProfile> {
                   textColor: onAccent,
                   child: Text(AppLocalizations.of(context).profileEditButton),
                   onPressed: editUserSettings,
+                  key: Key(keyUserProfileEditProfileRaisedButton),
                 ),
                 Padding(padding: EdgeInsets.all(chatProfileButtonPadding)),
                 RaisedButton(
@@ -170,6 +173,7 @@ class _ProfileState extends State<UserProfile> {
                   textColor: onAccent,
                   child: Text(AppLocalizations.of(context).showQrButton),
                   onPressed: showQr,
+                  key: Key(keyUserProfileShowQrRaisedButton),
                 ),
               ],
             )
