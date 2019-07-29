@@ -50,6 +50,13 @@ class RequestContacts extends ContactListEvent {
   RequestContacts({@required this.listTypeOrChatId});
 }
 
+class RequestContactsForGroup extends ContactListEvent {
+  final int listTypeOrChatId;
+  final int chatId;
+
+  RequestContactsForGroup({@required this.listTypeOrChatId, @required this.chatId});
+}
+
 class ContactsChanged extends ContactListEvent {}
 
 class ContactsSelectionChanged extends ContactListEvent {

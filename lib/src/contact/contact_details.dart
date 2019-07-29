@@ -50,9 +50,9 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:rxdart/rxdart.dart';
@@ -87,32 +87,43 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  ProfileHeader(
-                    dynamicChildren: [
-                      ProfileHeaderText(text: state.name),
-                      ProfileCopyableHeaderText(
-                        text: state.email,
-                        toastMessage: appLocalizations.chatProfileClipboardToastMessage,
-                        iconData: state.isVerified ? Icons.verified_user : null,
-                      ),
-                    ],
-                    color: state.color,
-                    initialsString: Avatar.getInitials(state.name, state.email),
+                  Align(
+                      alignment: Alignment.center,
+                      child: ProfileData(
+                        color: state.color,
+                        child: ProfileAvatar(
+                          imagePath: state.imagePath,
+                        ),
+                      )),
+                  ProfileData(
+                    text: state.name,
+                    textStyle: Theme.of(context).textTheme.title,
+                    child: ProfileHeaderText(),
                   ),
+                  ProfileData(
+                      text: state.email,
+                      textStyle: Theme.of(context).textTheme.subtitle,
+                      iconData: state.isVerified ? Icons.verified_user : null,
+                      child: ProfileCopyableHeaderText(
+                        toastMessage: appLocalizations.chatProfileClipboardToastMessage,
+                      )),
                   ProfileActionList(tiles: [
                     ProfileAction(
                       iconData: Icons.chat,
                       text: appLocalizations.contactsOpenChat,
+                      color: accent,
                       onTap: () => createChatFromContact(context, contactId),
                     ),
                     ProfileAction(
                       iconData: Icons.edit,
                       text: appLocalizations.contactChangeEditTitle,
+                      color: accent,
                       onTap: () => _editContact(context, state.name, state.email),
                     ),
                     ProfileAction(
                       iconData: Icons.delete,
                       text: appLocalizations.contactChangeDeleteTitle,
+                      color: error,
                       onTap: () => showActionDialog(
                         context,
                         ProfileActionType.deleteContact,
@@ -135,8 +146,8 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
     );
   }
 
-  void _editContact(BuildContext context, String name, String email) {
-    return _navigation.push(
+  void _editContact(BuildContext context, String name, String email) async {
+    return await _navigation.push(
       context,
       MaterialPageRoute(
         builder: (context) => ContactChange(

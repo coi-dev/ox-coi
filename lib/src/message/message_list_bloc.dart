@@ -61,7 +61,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   MessageListState get initialState => MessagesStateInitial();
 
   @override
-  Stream<MessageListState> mapEventToState(MessageListState currentState, MessageListEvent event) async* {
+  Stream<MessageListState> mapEventToState(MessageListEvent event) async* {
     if (event is RequestMessages) {
       yield MessagesStateLoading();
       try {

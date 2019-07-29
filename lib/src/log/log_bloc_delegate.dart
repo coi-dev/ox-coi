@@ -47,12 +47,17 @@ class LogBlocDelegate implements BlocDelegate {
   final Logger _logger = Logger("blocDelegate");
 
   @override
-  void onTransition(Transition transition) {
+  void onTransition(Bloc bloc, Transition transition) {
     _logger.info(transition.toString());
   }
 
   @override
-  void onError(Object error, StackTrace stacktrace) {
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
     _logger.warning("Error: $error (Stacktrace: $stacktrace)");
+  }
+
+  @override
+  void onEvent(Bloc bloc, Object event) {
+    // TODO: implement onEvent
   }
 }

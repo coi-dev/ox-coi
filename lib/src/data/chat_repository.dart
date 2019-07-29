@@ -49,7 +49,7 @@ class ChatRepository extends Repository<Chat> {
 
   @override
   onData(Event event) async {
-    if (event.hasType(Event.incomingMsg) || event.hasType(Event.msgsChanged)) {
+    if (event.hasType(Event.incomingMsg) || event.hasType(Event.chatModified) || event.hasType(Event.msgsChanged)) {
       int chatId = event.data1;
       await setupChatListAfterUpdate(chatId);
     }
@@ -76,6 +76,9 @@ class ChatRepository extends Repository<Chat> {
       if (chatSummary != null) {
         updatedChat?.set(ChatExtension.chatSummary, chatSummary);
       }
+      updatedChat.reloadValue(Chat.methodChatGetSubtitle);
+      updatedChat.reloadValue(Chat.methodChatGetName);
+      updatedChat.reloadValue(Chat.methodChatGetProfileImage);
       updatedChat.setLastUpdate();
     }
     update(ids: chatIds);

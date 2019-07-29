@@ -60,21 +60,24 @@ class AvatarListItem extends StatelessWidget {
   final int timestamp;
   final bool isVerified;
   final bool isInvite;
+  final bool isGroupListItem;
+  final PopupMenuButton moreButton;
 
-  AvatarListItem({
-    @required this.title,
-    @required this.subTitle,
-    @required this.onTap,
-    this.avatarIcon,
-    this.imagePath,
-    this.color,
-    this.freshMessageCount = 0,
-    this.titleIcon,
-    this.subTitleIcon,
-    this.timestamp = 0,
-    this.isVerified = false,
-    this.isInvite = false,
-  });
+  AvatarListItem(
+      {@required this.title,
+      @required this.subTitle,
+      @required this.onTap,
+      this.avatarIcon,
+      this.imagePath,
+      this.color,
+      this.freshMessageCount = 0,
+      this.titleIcon,
+      this.subTitleIcon,
+      this.timestamp = 0,
+      this.isVerified = false,
+      this.isInvite = false,
+      this.isGroupListItem = false,
+      this.moreButton});
 
   @override
   Widget build(BuildContext context) {
@@ -170,10 +173,14 @@ class AvatarListItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Divider(),
+                  !isGroupListItem ? Padding(padding: EdgeInsets.all(8.0)) : Divider(),
                 ],
               ),
             ),
+            Visibility(
+              visible: moreButton != null,
+              child: Container(child: moreButton),
+            )
           ],
         ),
       ),

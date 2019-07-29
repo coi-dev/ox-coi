@@ -69,9 +69,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginStateInitial();
 
   @override
-  Stream<LoginState> mapEventToState(LoginState currentState, LoginEvent event) async* {
-    if (event is RequestProviders) {
-      try {
+  Stream<LoginState> mapEventToState(LoginEvent event) async* {
+    if(event is RequestProviders){
+      try{
         _loadProviders(event.type);
       } catch (error) {
         yield LoginStateFailure(error: error.toString());

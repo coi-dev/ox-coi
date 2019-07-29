@@ -52,7 +52,7 @@ import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
@@ -97,46 +97,60 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
         bloc: _contactItemBloc,
         builder: (context, state) {
           if (state is ContactItemStateSuccess) {
-            return _buildSingleProfileInfo(state.name, state.email, state.color, state.isVerified);
+            return _buildSingleProfileInfo(state.name, state.email, state.color, state.isVerified, state.imagePath);
           } else {
             return Container();
           }
         });
   }
 
-  Widget _buildSingleProfileInfo(String chatName, String email, Color color, bool isVerified) {
+  Widget _buildSingleProfileInfo(String chatName, String email, Color color, bool isVerified, String imagePath) {
     var appLocalizations = AppLocalizations.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        ProfileHeader(
-          dynamicChildren: [
-            ProfileHeaderText(text: chatName),
-            ProfileCopyableHeaderText(
-              text: email,
-              toastMessage: appLocalizations.chatProfileClipboardToastMessage,
-              iconData: isVerified ? Icons.verified_user : null,
-            ),
-          ],
-          color: color,
-          initialsString: Avatar.getInitials(chatName, email),
-        ),
-        ProfileActionList(tiles: [
-          if (!widget.isSelfTalk)
-            ProfileAction(
-              iconData: Icons.block,
-              text: appLocalizations.chatProfileBlockContactButtonText,
-              onTap: () => showActionDialog(context, ProfileActionType.block, _blockContact),
-            ),
-          if (!isInvite())
-            ProfileAction(
-              iconData: Icons.delete,
-              text: appLocalizations.chatProfileDeleteChatButtonText,
-              onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),
-            ),
-        ]),
-      ],
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Align(
+              alignment: Alignment.center,
+              child: ProfileData(
+                color: color,
+                child: ProfileAvatar(
+                  imagePath: imagePath,
+                ),
+              )),
+          ProfileData(
+            text: chatName,
+            textStyle: Theme.of(context).textTheme.title,
+            child: ProfileHeaderText(),
+          ),
+          Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ProfileData(
+                text: email,
+                textStyle: Theme.of(context).textTheme.subtitle,
+                iconData: isVerified ? Icons.verified_user : null,
+                child: ProfileCopyableHeaderText(
+                  toastMessage: appLocalizations.chatProfileClipboardToastMessage,
+                ),
+              )),
+          ProfileActionList(tiles: [
+            if (!widget.isSelfTalk)
+              ProfileAction(
+                iconData: Icons.block,
+                text: appLocalizations.chatProfileBlockContactButtonText,
+                onTap: () => showActionDialog(context, ProfileActionType.block, _blockContact),
+              ),
+            if (!isInvite())
+              ProfileAction(
+                iconData: Icons.delete,
+                color: error,
+                text: appLocalizations.chatProfileDeleteChatButtonText,
+                onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),
+              ),
+          ]),
+        ],
+      ),
     );
   }
 

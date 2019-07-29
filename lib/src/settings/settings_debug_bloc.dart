@@ -51,7 +51,7 @@ class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
   SettingsDebugState get initialState => SettingsDebugStateInitial();
 
   @override
-  Stream<SettingsDebugState> mapEventToState(SettingsDebugState currentState, SettingsDebugEvent event) async* {
+  Stream<SettingsDebugState> mapEventToState(SettingsDebugEvent event) async* {
     if (event is RequestDebug) {
       try {
         loadDebug();

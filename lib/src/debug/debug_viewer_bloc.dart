@@ -58,7 +58,7 @@ class DebugViewerBloc extends Bloc<DebugViewerEvent, DebugViewerState> {
   DebugViewerState get initialState => DebugViewerStateInitial();
 
   @override
-  Stream<DebugViewerState> mapEventToState(DebugViewerState currentState, DebugViewerEvent event) async* {
+  Stream<DebugViewerState> mapEventToState(DebugViewerEvent event) async* {
     if (event is RequestLog) {
       try {
         loadLog();

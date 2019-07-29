@@ -58,8 +58,8 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
   ShareState get initialState => ShareStateInitial();
 
   @override
-  Stream<ShareState> mapEventToState(ShareState currentState, ShareEvent event) async* {
-    if (event is RequestChatsAndContacts) {
+  Stream<ShareState> mapEventToState(ShareEvent event) async*{
+    if(event is RequestChatsAndContacts){
       yield ShareStateLoading();
       try {
         createShareList();

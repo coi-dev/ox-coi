@@ -62,7 +62,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   MessageItemState get initialState => MessageItemStateInitial();
 
   @override
-  Stream<MessageItemState> mapEventToState(MessageItemState currentState, MessageItemEvent event) async* {
+  Stream<MessageItemState> mapEventToState(MessageItemEvent event) async* {
     if (event is RequestMessage) {
       try {
         var chatId = event.chatId;

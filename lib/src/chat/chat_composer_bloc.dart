@@ -63,7 +63,7 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
   ChatComposerState get initialState => ChatComposerInitial();
 
   @override
-  Stream<ChatComposerState> mapEventToState(ChatComposerState currentState, ChatComposerEvent event) async* {
+  Stream<ChatComposerState> mapEventToState(ChatComposerEvent event) async* {
     if (event is StartAudioRecording) {
       try {
         bool hasContactPermission = await hasPermission(PermissionGroup.microphone);

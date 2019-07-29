@@ -53,7 +53,7 @@ import 'package:ox_coi/src/utils/text.dart';
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater {
   Repository<Contact> _contactRepository;
-  RepositoryEventStreamHandler _repositoryStreamHandler;
+  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   int _listTypeOrChatId;
   List<int> _contactsSelected = List();
   String _currentSearch;
@@ -66,7 +66,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   ContactListState get initialState => ContactListStateInitial();
 
   @override
-  Stream<ContactListState> mapEventToState(ContactListState currentState, ContactListEvent event) async* {
+  Stream<ContactListState> mapEventToState(ContactListEvent event) async* {
     if (event is RequestContacts) {
       yield ContactListStateLoading();
       try {
@@ -111,7 +111,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
 
   void _setupContactListener() async {
     if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.contactsChanged, _onContactsChanged);
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChanged);
       _contactRepository.addListener(_repositoryStreamHandler);
     }
   }

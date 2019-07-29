@@ -55,7 +55,7 @@ class ContactRepository extends Repository<Contact> with ContactRepositoryUpdate
 
   @override
   onData(Event event) async {
-    if (event.eventId == Event.contactsChanged) {
+    if (event.eventId == Event.contactsChanged || event.eventId == Event.chatModified) {
       List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
       update(ids: contactIds);
     }

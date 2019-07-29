@@ -48,19 +48,24 @@ import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
+import 'chat_add_group_participants.dart';
+import 'chat_bloc.dart';
+import 'chat_event_state.dart';
+import 'edit_name.dart';
+
 class ChatProfileGroup extends StatefulWidget {
   final int chatId;
-  final String chatName;
   final Color chatColor;
   final bool isVerified;
 
-  ChatProfileGroup({@required this.chatId, @required this.chatName, @required this.chatColor, @required this.isVerified});
+  ChatProfileGroup({@required this.chatId, this.chatColor, this.isVerified});
 
   @override
   _ChatProfileGroupState createState() => _ChatProfileGroupState();
@@ -68,10 +73,15 @@ class ChatProfileGroup extends StatefulWidget {
 
 class _ChatProfileGroupState extends State<ChatProfileGroup> {
   ContactListBloc _contactListBloc = ContactListBloc();
+  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
+  ChatBloc chatBloc;
+  Navigation _navigation = Navigation();
+  String chatName;
 
   @override
   void initState() {
     super.initState();
+    _navigation.current = Navigatable(Type.chatGroupProfile);
     _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget.chatId));
   }
 
@@ -83,34 +93,102 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
 
   @override
   Widget build(BuildContext context) {
+    chatBloc = BlocProvider.of<ChatBloc>(context);
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
           var appLocalizations = AppLocalizations.of(context);
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ProfileHeader(
-                dynamicChildren: [
-                  ProfileHeaderText(text: widget.chatName),
-                  ProfileHeaderText(
-                    text: appLocalizations.chatProfileGroupMemberCounter(state.contactIds.length),
-                    iconData: widget.isVerified ? Icons.verified_user : null,
-                  )
-                ],
-                color: widget.chatColor,
-                initialsString: Avatar.getInitials(widget.chatName),
+              BlocBuilder(
+                bloc: chatBloc,
+                builder: (context, state) {
+                  if (state is ChatStateSuccess) {
+                    chatName = state.name;
+                    return ProfileData(
+                        color: widget.chatColor,
+                        text: state.name,
+                        textStyle: Theme.of(context).textTheme.title,
+                        iconData: state.isVerified ? Icons.verified_user : null,
+                        imageActionCallback: _editPhotoCallback,
+                        child: Column(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.center,
+                              child: ProfileAvatar(
+                                imagePath: state.avatarPath,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  ProfileHeaderText(),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: accent,
+                                      ),
+                                      onPressed: _goToEditName)
+                                ],
+                              ),
+                            ),
+                          ],
+                        ));
+                  } else {
+                    return Container();
+                  }
+                },
               ),
-              ProfileActionList(tiles: [
-                ProfileAction(
-                  iconData: Icons.delete,
-                  text: appLocalizations.chatProfileLeaveGroupButtonText,
-                  onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
+              Padding(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: ProfileData(
+                    text: appLocalizations.chatProfileGroupMemberCounter(state.contactIds.length),
+                    child: ProfileMemberHeaderText(),
+                  )),
+              Divider(),
+              InkWell(
+                onTap: () => _navigation.push(
+                    context, MaterialPageRoute(builder: (context) => ChatAddGroupParticipants(chatId: widget.chatId, contactIds: state.contactIds))),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 16.0, bottom: 12.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: listAvatarRadius,
+                        backgroundColor: accent,
+                        foregroundColor: onAccent,
+                        child: Icon(Icons.group_add),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 4.0),
+                        child: Text(
+                          AppLocalizations.of(context).chatProfileAddParticipantsButtonText,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.subhead.apply(color: accent),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ]),
-              Divider(height: dividerHeight),
-              _buildGroupMemberList(state)
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: _buildGroupMemberList(state),
+              ),
+              Divider(
+                height: dividerHeight,
+              ),
+              ProfileAction(
+                iconData: Icons.delete,
+                text: appLocalizations.chatProfileLeaveGroupButtonText,
+                onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
+                color: Colors.red,
+              ),
             ],
           );
         } else {
@@ -120,16 +198,20 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
     );
   }
 
+  _editPhotoCallback(String avatarPath){
+    _chatChangeBloc.dispatch(SetImagePath(chatId: widget.chatId, newPath: avatarPath));
+    chatBloc.dispatch(RequestChat(chatId: widget.chatId));
+  }
+
   ListView _buildGroupMemberList(ContactListStateSuccess state) {
     return ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.only(top: listItemPadding),
         itemCount: state.contactIds.length,
         itemBuilder: (BuildContext context, int index) {
           var contactId = state.contactIds[index];
           var key = "$contactId-${state.contactLastUpdateValues[index]}";
-          return ChatProfileGroupContactItem(contactId: contactId, key: key);
+          return ChatProfileGroupContactItem(chatId: widget.chatId, contactId: contactId, showMoreButton: true, key: key);
         });
   }
 
@@ -139,5 +221,23 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
     chatChangeBloc.dispatch(DeleteChat(chatId: widget.chatId));
     Navigation navigation = Navigation();
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+  }
+
+  void _goToEditName() {
+    _navigation.push(
+      context,
+      MaterialPageRoute<EditName>(
+        builder: (context) {
+          return BlocProvider.value(
+            value: chatBloc,
+            child: EditName(
+              chatId: widget.chatId,
+              actualName: chatName,
+              title: AppLocalizations.of(context).editGroupNameTitle,
+            ),
+          );
+        },
+      ),
+    );
   }
 }

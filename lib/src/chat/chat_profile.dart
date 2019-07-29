@@ -68,12 +68,12 @@ class ChatProfile extends StatefulWidget {
 class _ChatProfileState extends State<ChatProfile> {
   ChatBloc _chatBloc = ChatBloc();
   ContactListBloc _contactListBloc = ContactListBloc();
-  final Navigation navigation = Navigation();
+  final Navigation _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.chatProfile);
+    _navigation.current = Navigatable(Type.chatProfile);
     _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
     int listTypeOrChatId;
     if (widget.chatId == Chat.typeInvite) {
@@ -106,7 +106,6 @@ class _ChatProfileState extends State<ChatProfile> {
                   if (state.isGroupChat) {
                     return ChatProfileGroup(
                       chatId: widget.chatId,
-                      chatName: state.name,
                       chatColor: state.color,
                       isVerified: _isVerified,
                     );

@@ -60,7 +60,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   ContactImportState get initialState => ContactsImportInitial();
 
   @override
-  Stream<ContactImportState> mapEventToState(ContactImportState currentState, ContactImportEvent event) async* {
+  Stream<ContactImportState> mapEventToState(ContactImportEvent event) async* {
     if (event is MarkContactsAsInitiallyLoaded) {
       markContactsAsInitiallyLoaded();
     } else if (event is PerformImport) {

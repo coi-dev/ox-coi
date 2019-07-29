@@ -317,11 +317,13 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
         String subTitle;
         Color color;
         bool isVerified = false;
+        String imagePath = "";
         if (state is ChatStateSuccess) {
           name = state.name;
           subTitle = state.subTitle;
           color = state.color;
           isVerified = state.isVerified;
+          imagePath = state.avatarPath;
         } else {
           name = "";
           subTitle = "";
@@ -331,6 +333,7 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
           child: Row(
             children: <Widget>[
               Avatar(
+                imagePath: imagePath,
                 textPrimary: name,
                 textSecondary: subTitle,
                 color: color,
@@ -667,10 +670,17 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
     });
   }
 
-  _chatTitleTapped() {
-    navigation.push(
+  _chatTitleTapped() async{
+    await navigation.push(
       context,
-      MaterialPageRoute(builder: (context) => ChatProfile(chatId: widget.chatId, messageId: widget.messageId)),
+      MaterialPageRoute(builder: (context) {
+        return BlocProvider.value(
+          value: _chatBloc,
+          child: ChatProfile(chatId: widget.chatId, messageId: widget.messageId),
+        );
+      }),
     );
+
+    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
   }
 }

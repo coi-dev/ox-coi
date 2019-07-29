@@ -49,7 +49,7 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
   SettingsAntiMobbingState get initialState => SettingsAntiMobbingStateInitial();
 
   @override
-  Stream<SettingsAntiMobbingState> mapEventToState(SettingsAntiMobbingState currentState, SettingsAntiMobbingEvent event) async* {
+  Stream<SettingsAntiMobbingState> mapEventToState(SettingsAntiMobbingEvent event) async* {
     if (event is RequestSetting) {
       try {
         loadSetting();

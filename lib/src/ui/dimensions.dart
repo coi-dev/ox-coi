@@ -108,6 +108,11 @@ const profileVerticalPadding = 8.0;
 const profileSectionsVerticalPadding = 36.0;
 const profileAvatarPlaceholderIconSize = 60.0;
 const profileAvatarMaxRadius = 64.0;
+const profileAvatarSize = 128.0;
+const profileAvatarBorderRadius = 20.0;
+
+const profileEditPhotoButtonRightPosition = 8.0;
+const profileEditPhotoButtonBottomPosition = 24.0;
 
 const editUserAvatarVerticalPadding = 24.0;
 const editUserAvatarEditIconSize = 36.0;

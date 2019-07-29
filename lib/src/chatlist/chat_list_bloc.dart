@@ -71,7 +71,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   ChatListState get initialState => ChatListStateInitial();
 
   @override
-  Stream<ChatListState> mapEventToState(ChatListState currentState, ChatListEvent event) async* {
+  Stream<ChatListState> mapEventToState(ChatListEvent event) async* {
     if (event is RequestChatList) {
       _currentSearch = null;
       yield ChatListStateLoading();
@@ -113,7 +113,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   void setupChatListListener() {
     if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _onChatListChanged);
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.chatModified, Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
 
       final messageListObservable = Observable<MessageListState>(_messageListBloc.state);

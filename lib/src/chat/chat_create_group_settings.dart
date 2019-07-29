@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +57,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
@@ -78,6 +81,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   GlobalKey<FormState> _formKey = GlobalKey();
   Repository<Core.Chat> chatRepository;
   Navigation navigation = Navigation();
+  String _avatar;
 
   @override
   void initState() {
@@ -125,6 +129,15 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: ProfileData(
+            color: accent,
+            imageActionCallback: _setAvatar,
+            child: ProfileAvatar(
+            imagePath: _avatar,
+          ),)
+        ),
         Padding(
           padding: EdgeInsets.only(
             left: formHorizontalPadding,
@@ -161,6 +174,12 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
     );
   }
 
+  _setAvatar(String avatarPath){
+    setState(() {
+      _avatar = avatarPath;
+    });
+  }
+
   ListView buildListItems(List<int> contactIds) {
     return ListView.builder(
       padding: EdgeInsets.all(listItemPadding),
@@ -174,7 +193,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
 
   _onSubmit() {
     if (_formKey.currentState.validate()) {
-      createChatFromGroup(context, false, _groupNameField.controller.text, widget.selectedContacts);
+      createChatFromGroup(context, false, _groupNameField.controller.text, widget.selectedContacts, _avatar);
     }
   }
 }

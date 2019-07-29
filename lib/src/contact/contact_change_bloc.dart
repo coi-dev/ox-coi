@@ -60,7 +60,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
   ContactChangeState get initialState => ContactChangeStateInitial();
 
   @override
-  Stream<ContactChangeState> mapEventToState(ContactChangeState currentState, ContactChangeEvent event) async* {
+  Stream<ContactChangeState> mapEventToState(ContactChangeEvent event) async* {
     if (event is ChangeContact) {
       yield ContactChangeStateLoading();
       try {

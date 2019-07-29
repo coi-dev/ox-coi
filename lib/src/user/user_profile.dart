@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/data/config.dart';
@@ -55,8 +53,8 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
-import 'package:ox_coi/src/utils/widgets.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
+import 'package:ox_coi/src/widgets/profile_header.dart';
 
 class UserProfile extends RootChild {
   UserProfile({State<StatefulWidget> state}) : super(state: state);
@@ -166,7 +164,7 @@ class _ProfileState extends State<UserProfile> {
                   child: Text(AppLocalizations.of(context).profileEditButton),
                   onPressed: editUserSettings,
                 ),
-                Padding(padding:EdgeInsets.all(chatProfileButtonPadding)),
+                Padding(padding: EdgeInsets.all(chatProfileButtonPadding)),
                 RaisedButton(
                   color: accent,
                   textColor: onAccent,
@@ -181,21 +179,12 @@ class _ProfileState extends State<UserProfile> {
     );
   }
 
-  CircleAvatar buildAvatar(Config config) {
-    var hasAvatarPath = config.avatarPath == null || config.avatarPath.isEmpty;
-    return hasAvatarPath
-        ? CircleAvatar(
-            maxRadius: profileAvatarMaxRadius,
-            child: Icon(
-              Icons.person,
-              size: profileAvatarPlaceholderIconSize,
-            ),
-          )
-        : CircleAvatar(
-            key: createKey(config.lastUpdate),
-            maxRadius: profileAvatarMaxRadius,
-            backgroundImage: FileImage(File(config.avatarPath)),
-          );
+  ProfileData buildAvatar(Config config) {
+    return ProfileData(
+        color: accent,
+        child: ProfileAvatar(
+          imagePath: config.avatarPath,
+        ));
   }
 
   Widget getSettings() {
@@ -222,6 +211,4 @@ class _ProfileState extends State<UserProfile> {
       MaterialPageRoute(builder: (context) => QrCode(chatId: 0)),
     );
   }
-
-
 }

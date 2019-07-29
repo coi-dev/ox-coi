@@ -56,8 +56,8 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
   FlaggedState get initialState => FlaggedStateInitial();
 
   @override
-  Stream<FlaggedState> mapEventToState(FlaggedState currentState, FlaggedEvent event) async* {
-    if (event is RequestFlaggedMessages) {
+  Stream<FlaggedState> mapEventToState(FlaggedEvent event) async*{
+    if(event is RequestFlaggedMessages){
       yield FlaggedStateLoading();
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);

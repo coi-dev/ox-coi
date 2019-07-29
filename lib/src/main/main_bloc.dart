@@ -66,7 +66,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   MainState get initialState => MainStateInitial();
 
   @override
-  Stream<MainState> mapEventToState(MainState currentState, MainEvent event) async* {
+  Stream<MainState> mapEventToState(MainEvent event) async* {
     if (event is PrepareApp) {
       yield MainStateLoading();
       try {

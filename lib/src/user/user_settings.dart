@@ -40,12 +40,8 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -54,6 +50,8 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
+import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserSettings extends StatefulWidget {
@@ -68,7 +66,7 @@ class _UserSettingsState extends State<UserSettings> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _statusController = TextEditingController();
 
-  File _avatar;
+  String _avatar;
 
   @override
   void initState() {
@@ -86,7 +84,7 @@ class _UserSettingsState extends State<UserSettings> {
       _statusController.text = config.status;
       String avatarPath = config.avatarPath;
       if (avatarPath != null && avatarPath.isNotEmpty) {
-        _avatar = File(config.avatarPath);
+        _avatar = config.avatarPath;
       }
     } else if (state is UserChangeStateApplied) {
       navigation.pop(context);
@@ -128,28 +126,14 @@ class _UserSettingsState extends State<UserSettings> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: editUserAvatarVerticalPadding)),
-            new GestureDetector(
-                onTap: () => _showAvatarSourceChooser(),
-                child: Stack(
-                  children: <Widget>[
-                    _avatar != null
-                        ? CircleAvatar(
-                            maxRadius: profileAvatarMaxRadius,
-                            backgroundImage: FileImage(_avatar),
-                          )
-                        : CircleAvatar(
-                            maxRadius: profileAvatarMaxRadius,
-                          ),
-                    CircleAvatar(
-                      maxRadius: profileAvatarMaxRadius,
-                      backgroundColor: Colors.transparent,
-                      child: Icon(
-                        Icons.edit,
-                        size: editUserAvatarEditIconSize,
-                        color: onPrimary,
-                      ),
-                    ),
-                  ],
+            Align(
+                alignment: Alignment.center,
+                child: ProfileData(
+                  color: accent,
+                  imageActionCallback: _setAvatar,
+                  child: ProfileAvatar(
+                    imagePath: _avatar,
+                  ),
                 )),
             Padding(
               padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
@@ -173,61 +157,14 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
-  _showAvatarSourceChooser() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.photo),
-                title: Text(AppLocalizations.of(context).gallery),
-                onTap: () => _getNewAvatarPath(ImageSource.gallery),
-              ),
-              ListTile(
-                leading: Icon(Icons.camera_alt),
-                title: Text(AppLocalizations.of(context).camera),
-                onTap: () => _getNewAvatarPath(ImageSource.camera),
-              ),
-              ListTile(
-                leading: Icon(Icons.delete),
-                title: Text(AppLocalizations.of(context).userSettingsRemoveImage),
-                onTap: () => _removeAvatar(),
-              )
-            ],
-          );
-        });
-  }
-
-  _getNewAvatarPath(ImageSource source) async {
-    navigation.pop(context);
-    File newAvatar = await ImagePicker.pickImage(source: source);
-    if (newAvatar != null) {
-      File croppedAvatar = await ImageCropper.cropImage(
-        sourcePath: newAvatar.path,
-        ratioX: editUserAvatarRation,
-        ratioY: editUserAvatarRation,
-        maxWidth: editUserAvatarImageMaxSize,
-        maxHeight: editUserAvatarImageMaxSize,
-      );
-      if (croppedAvatar != null) {
-        setState(() {
-          _avatar = croppedAvatar;
-        });
-      }
-    }
-  }
-
-  _removeAvatar() {
-    navigation.pop(context);
+  _setAvatar(String avatarPath){
     setState(() {
-      _avatar = null;
+      _avatar = avatarPath;
     });
   }
 
   void _saveChanges() async {
-    String avatarPath = _avatar != null ? _avatar.path : null;
+    String avatarPath = !isNullOrEmpty(_avatar) ? _avatar : null;
     _userChangeBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
   }
 }

@@ -420,8 +420,18 @@ class AppLocalizations {
 
   String get chatProfileLeaveGroupButtonText => Intl.message('Leave group', name: 'chatProfileLeaveGroupButtonText');
 
+  String get chatProfileAddParticipantsButtonText => Intl.message('Add participants', name: 'chatProfileAddParticipantsButtonText');
+
+  String get chatProfileAddParticipantsEmptyList => Intl.message('All your contacts are in this chat.', name: 'chatProfileAddParticipantsEmptyList');
+
+  String get chatProfileRemoveParticipantsButtonText => Intl.message('Remove participant', name: 'chatProfileRemoveParticipantsButtonText');
+
   String chatProfileGroupMemberCounter(memberCount) =>
-      Intl.message('$memberCount member(s)', name: 'chatProfileGroupMemberCounter', args: [memberCount]);
+      Intl.message('$memberCount Participant(s)', name: 'chatProfileGroupMemberCounter', args: [memberCount]);
+
+  String get setNameTextFieldHint => Intl.message('Set a name', name: 'setNameTextFieldHint');
+
+  String get editGroupNameTitle => Intl.message('Rename group', name: 'editGroupNameTitle');
 
   // Create chat
   String get createChatTitle => Intl.message('Create chat', name: 'createChatTitle');

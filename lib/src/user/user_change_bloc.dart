@@ -53,7 +53,7 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
   UserChangeState get initialState => UserChangeStateInitial();
 
   @override
-  Stream<UserChangeState> mapEventToState(UserChangeState currentState, UserChangeEvent event) async* {
+  Stream<UserChangeState> mapEventToState(UserChangeEvent event) async* {
     if (event is RequestUser) {
       yield UserChangeStateLoading();
       try {

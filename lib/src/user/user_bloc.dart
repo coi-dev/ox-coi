@@ -51,7 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserState get initialState => UserStateInitial();
 
   @override
-  Stream<UserState> mapEventToState(UserState currentState, UserEvent event) async* {
+  Stream<UserState> mapEventToState(UserEvent event) async* {
     if (event is RequestUser) {
       yield UserStateLoading();
       try {

@@ -62,20 +62,22 @@ class Avatar extends StatelessWidget {
     if (imagePath != null && imagePath.isNotEmpty) {
       avatarImage = FileImage(File(imagePath));
     } else {
+      avatarImage = FileImage(File(""));
       initials = getInitials(textPrimary, textSecondary);
     }
-    if (avatarImage == null && isNullOrEmpty(initials)) {
-      return Container(
+    return Container(
+        alignment: Alignment.center,
         height: listAvatarDiameter,
         width: listAvatarDiameter,
-      );
-    }
-    return CircleAvatar(
-      radius: listAvatarRadius,
-      foregroundColor: onPrimary,
-      backgroundColor: color != null ? color : Colors.transparent,
-      child: avatarImage != null ? avatarImage : new Text(initials),
-    );
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
+          color: color,
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: avatarImage,
+          ),
+        ),
+        child: isNullOrEmpty(imagePath) ? Text(initials, style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),) : Container());
   }
 
   static String getInitials(String textPrimary, [String textSecondary]) {
@@ -88,4 +90,3 @@ class Avatar extends StatelessWidget {
     return "";
   }
 }
-

@@ -93,7 +93,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Crea
 
   @override
   Widget build(BuildContext context) {
-    return getAvatarItemBlocBuilder(_contactBloc, onContactTapped);
+    return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped:  onContactTapped);
   }
 
   onContactTapped(String name, String email) async {

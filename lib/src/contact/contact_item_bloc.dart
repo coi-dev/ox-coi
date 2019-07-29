@@ -60,7 +60,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   ContactItemState get initialState => ContactItemStateInitial();
 
   @override
-  Stream<ContactItemState> mapEventToState(ContactItemState currentState, ContactItemEvent event) async* {
+  Stream<ContactItemState> mapEventToState(ContactItemEvent event) async* {
     if (event is RequestContact) {
       _contactId = event.contactId;
       _contactRepository = RepositoryManager.get(RepositoryType.contact, event.listType);
@@ -71,7 +71,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
         yield ContactItemStateFailure(error: error.toString());
       }
     } else if (event is ContactLoaded) {
-      yield ContactItemStateSuccess(name: event.name, email: event.email, color: event.color, isVerified: event.isVerified);
+      yield ContactItemStateSuccess(name: event.name, email: event.email, color: event.color, isVerified: event.isVerified, imagePath: event.imagePath);
     }
   }
 
@@ -81,12 +81,14 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     String email = await contact.getAddress();
     int colorValue = await contact.getColor();
     bool isVerified = await contact.isVerified();
+    String imagePath = await contact.getProfileImage();
     Color color = rgbColorFromInt(colorValue);
     dispatch(ContactLoaded(
       name: name,
       email: email,
       color: color,
       isVerified: isVerified,
+      imagePath: imagePath,
     ));
   }
 }

@@ -61,9 +61,9 @@ mixin CreateChatMixin {
     return createChatBloc;
   }
 
-  void createChatFromGroup(BuildContext context, bool verified, String name, List<int> contacts, [Function onSuccess]) {
+  void createChatFromGroup(BuildContext context, bool verified, String name, List<int> contacts, String imagePath, [Function onSuccess]) {
     ChatChangeBloc chatChangeBloc = _getChatChangeBloc(context, onSuccess);
-    chatChangeBloc.dispatch(CreateChat(verified: verified, name: name, contacts: contacts));
+    chatChangeBloc.dispatch(CreateChat(verified: verified, name: name, contacts: contacts, imagePath: imagePath));
   }
 
   void createChatFromMessage(BuildContext context, int messageId, int chatId, [Function onSuccess]) {

@@ -68,7 +68,7 @@ class _ContactItemSelectableState extends State<ContactItemSelectable> with Cont
 
   @override
   Widget build(BuildContext context) {
-    return getAvatarItemBlocBuilder(_contactBloc, _onContactTapped, widget.isSelected);
+    return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: _onContactTapped, isSelected: widget.isSelected);
   }
 
   _onContactTapped(String name, String email) {

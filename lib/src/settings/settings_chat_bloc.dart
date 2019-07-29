@@ -52,7 +52,7 @@ class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
   SettingsChatState get initialState => SettingsChatStateInitial();
 
   @override
-  Stream<SettingsChatState> mapEventToState(SettingsChatState currentState, SettingsChatEvent event) async* {
+  Stream<SettingsChatState> mapEventToState(SettingsChatEvent event) async* {
     if (event is RequestValues) {
       try {
         _requestValues();

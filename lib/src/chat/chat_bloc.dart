@@ -62,7 +62,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatState get initialState => ChatStateInitial();
 
   @override
-  Stream<ChatState> mapEventToState(ChatState currentState, ChatEvent event) async* {
+  Stream<ChatState> mapEventToState(ChatEvent event) async* {
     if (event is RequestChat) {
       yield ChatStateLoading();
       try {
@@ -77,16 +77,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     } else if (event is ChatLoaded) {
       yield ChatStateSuccess(
-        name: event.name,
-        subTitle: event.subTitle,
-        color: event.color,
-        freshMessageCount: event.freshMessageCount,
-        isSelfTalk: event.isSelfTalk,
-        isGroupChat: event.isGroupChat,
-        preview: event.preview,
-        timestamp: event.timestamp,
-        isVerified: event.isVerified,
-      );
+          name: event.name,
+          subTitle: event.subTitle,
+          color: event.color,
+          freshMessageCount: event.freshMessageCount,
+          isSelfTalk: event.isSelfTalk,
+          isGroupChat: event.isGroupChat,
+          preview: event.preview,
+          timestamp: event.timestamp,
+          isVerified: event.isVerified,
+          avatarPath: event.avatarPath);
     }
   }
 
@@ -111,6 +111,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         preview: null,
         timestamp: null,
         isVerified: false,
+        avatarPath: null,
       ),
     );
   }
@@ -127,6 +128,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _isGroup = await chat.isGroup();
     bool isVerified = await chat.isVerified();
     Color color = rgbColorFromInt(colorValue);
+    String avatarPath = await chat.getProfileImage();
     var chatSummary = chat.get(ChatExtension.chatSummary);
     dispatch(
       ChatLoaded(
@@ -139,6 +141,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         preview: chatSummary?.preview,
         timestamp: chatSummary?.timestamp,
         isVerified: isVerified,
+        avatarPath: avatarPath,
       ),
     );
   }

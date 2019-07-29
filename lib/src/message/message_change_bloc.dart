@@ -55,7 +55,7 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
   MessageChangeState get initialState => MessageChangeStateInitial();
 
   @override
-  Stream<MessageChangeState> mapEventToState(MessageChangeState currentState, MessageChangeEvent event) async* {
+  Stream<MessageChangeState> mapEventToState(MessageChangeEvent event) async* {
     if (event is DeleteMessage) {
       yield MessageChangeStateLoading();
       try {

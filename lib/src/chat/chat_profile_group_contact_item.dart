@@ -39,43 +39,135 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
+import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/contact/contact_details.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/chat/chat.dart';
+
+import 'chat_change_bloc.dart';
+import 'chat_change_event_state.dart';
+import 'chat_create_mixin.dart';
+
+enum GroupParticipantActions{
+  info,
+  sendMessage,
+  remove
+}
 
 class ChatProfileGroupContactItem extends StatefulWidget {
+  final int chatId;
   final int contactId;
+  final bool showMoreButton;
 
-  ChatProfileGroupContactItem({@required this.contactId, key}) : super(key: Key(key));
+  ChatProfileGroupContactItem({this.chatId, this.contactId, this.showMoreButton = false, key}) : super(key: Key(key));
 
   @override
-   _ChatProfileGroupContactItemState createState() => _ChatProfileGroupContactItemState();
- }
+  _ChatProfileGroupContactItemState createState() => _ChatProfileGroupContactItemState();
+}
 
- class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactItem> with ContactItemBuilder{
-   ContactItemBloc _contactBloc = ContactItemBloc();
+class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactItem> with ContactItemBuilder, CreateChatMixin {
+  ContactItemBloc _contactBloc = ContactItemBloc();
+  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
+  Navigation _navigation = Navigation();
+  List<GroupPopupMenu> choices;
+  void _select(GroupPopupMenu choice) {
+    switch(choice.action){
+      case GroupParticipantActions.info:
+        goToProfile("","");
+        break;
+      case GroupParticipantActions.sendMessage:
+        createChat();
+        break;
+      case GroupParticipantActions.remove:
+        _removeParticipant();
+    }
+  }
 
-   @override
-   void initState() {
-     super.initState();
-     _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
-   }
+  @override
+  void initState() {
+    super.initState();
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
+    if(widget.contactId != Core.Contact.idSelf){
+      choices = participantChoices;
+    }else{
+      choices = meChoices;
+    }
+  }
 
-   @override
-   void dispose() {
+  @override
+  void dispose() {
     _contactBloc.dispose();
     super.dispose();
   }
 
   @override
-   Widget build(BuildContext context) {
-    return getAvatarItemBlocBuilder(_contactBloc, onContactTapped);
-   }
+  Widget build(BuildContext context) {
+    return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: goToProfile, moreButton: getMoreButton());
+  }
 
-   onContactTapped(String name, String email) async {
-     //Not implemented yet
-   }
- }
+  goToProfile(String title, String subtitle) {
+    _navigation.push(
+      context,
+      MaterialPageRoute(builder: (context) => ContactDetails(contactId: widget.contactId)),
+    );
+  }
+
+  createChat(){
+    createChatFromContact(context, widget.contactId, _handleCreateChatStateChange);
+  }
+
+  getMoreButton(){
+    return PopupMenuButton<GroupPopupMenu>(
+      elevation: 3.2,
+      onSelected: _select,
+      itemBuilder: (BuildContext context) {
+        return choices.map((GroupPopupMenu choice) {
+          return PopupMenuItem<GroupPopupMenu>(
+            value: choice,
+            child: Text(choice.title),
+          );
+        }).toList();
+      },
+    );
+  }
+
+  void _removeParticipant() {
+    if(widget.contactId != Core.Contact.idSelf) {
+      _chatChangeBloc.dispatch(ChatRemoveParticipant(chatId: widget.chatId, contactId: widget.contactId));
+    }
+  }
+
+  _handleCreateChatStateChange(int chatId) {
+    _navigation.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
+        ModalRoute.withName(Navigation.root),
+        Navigatable(Type.chat)
+    );
+  }
+}
+
+List<GroupPopupMenu> participantChoices = <GroupPopupMenu>[
+  GroupPopupMenu(title: 'Info', action: GroupParticipantActions.info),
+  GroupPopupMenu(title: 'Send message', action: GroupParticipantActions.sendMessage),
+  GroupPopupMenu(title: 'Remove from group', action: GroupParticipantActions.remove),
+];
+
+List<GroupPopupMenu> meChoices = <GroupPopupMenu>[
+  GroupPopupMenu(title: 'Info', action: GroupParticipantActions.info),
+  GroupPopupMenu(title: 'Send message', action: GroupParticipantActions.sendMessage),
+];
+
+class GroupPopupMenu {
+  String title;
+  GroupParticipantActions action;
+
+  GroupPopupMenu({this.title, this.action});
+}

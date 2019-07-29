@@ -51,6 +51,7 @@ class CreateChat extends ChatChangeEvent {
   final bool verified;
   final String name;
   final List<int> contacts;
+  final String imagePath;
 
   CreateChat({
     this.contactId,
@@ -59,6 +60,7 @@ class CreateChat extends ChatChangeEvent {
     this.verified,
     this.name,
     this.contacts,
+    this.imagePath,
   });
 }
 
@@ -98,6 +100,36 @@ class ChatMarkMessagesSeen extends ChatChangeEvent {
   ChatMarkMessagesSeen({@required this.messageIds});
 }
 
+class ChatAddParticipants extends ChatChangeEvent{
+  final int chatId;
+  final List<int> contactIds;
+
+  ChatAddParticipants({@required this.chatId, @required this.contactIds});
+}
+
+class ChatRemoveParticipant extends ChatChangeEvent{
+  final int chatId;
+  final int contactId;
+
+  ChatRemoveParticipant({@required this.chatId, @required this.contactId});
+}
+
+class SetName extends ChatChangeEvent{
+  final int chatId;
+  final String newName;
+
+  SetName({@required this.chatId, @required this.newName});
+}
+
+class SetImagePath extends ChatChangeEvent{
+  final int chatId;
+  final String newPath;
+
+  SetImagePath({@required this.chatId, @required this.newPath});
+}
+
+class SetNameCompleted extends ChatChangeEvent{}
+
 abstract class ChatChangeState {}
 
 class CreateChatStateInitial extends ChatChangeState {}
@@ -115,3 +147,5 @@ class CreateChatStateFailure extends ChatChangeState {
 
   CreateChatStateFailure({@required this.error});
 }
+
+class ChangeNameSuccess extends ChatChangeState {}

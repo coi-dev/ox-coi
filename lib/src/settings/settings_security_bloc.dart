@@ -65,7 +65,7 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   SettingsSecurityState get initialState => SettingsSecurityStateInitial();
 
   @override
-  Stream<SettingsSecurityState> mapEventToState(SettingsSecurityState currentState, SettingsSecurityEvent event) async* {
+  Stream<SettingsSecurityState> mapEventToState(SettingsSecurityEvent event) async* {
     if (event is ExportKeys) {
       yield SettingsSecurityStateLoading(type: SettingsSecurityType.exportKeys);
       try {

@@ -106,10 +106,10 @@ class Navigation {
 
   Navigation._internal();
 
-  void push(BuildContext context, MaterialPageRoute route) {
+  Future push(BuildContext context, MaterialPageRoute route) {
     _logger.info("Push");
     Navigatable savedNavigatable = _navigationStack.last;
-    Navigator.push(context, route).then((value) {
+    return Navigator.push(context, route).then((value) {
       current = savedNavigatable;
     });
   }
@@ -138,9 +138,9 @@ class Navigation {
     });
   }
 
-  void pop(BuildContext context) {
+  void pop(BuildContext context, {Object result}) {
     _logger.info("Pop latest");
-    Navigator.pop(context);
+    Navigator.pop(context, result);
   }
 
   void popUntil(BuildContext context, RoutePredicate predicate) {

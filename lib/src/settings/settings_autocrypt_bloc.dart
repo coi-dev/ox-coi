@@ -53,7 +53,7 @@ class SettingsAutocryptBloc extends Bloc<SettingsAutocryptEvent, SettingsAutocry
   SettingsAutocryptState get initialState => SettingsAutocryptStateInitial();
 
   @override
-  Stream<SettingsAutocryptState> mapEventToState(SettingsAutocryptState currentState, SettingsAutocryptEvent event) async* {
+  Stream<SettingsAutocryptState> mapEventToState(SettingsAutocryptEvent event) async* {
     if (event is PrepareKeyTransfer) {
       _prepareKeyTransfer(event.chatId, event.messageId);
     } else if (event is KeyTransferPrepared) {

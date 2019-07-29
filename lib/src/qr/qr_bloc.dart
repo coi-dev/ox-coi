@@ -62,7 +62,7 @@ class QrBloc extends Bloc<QrEvent, QrState>{
   QrState get initialState => QrStateInitial();
 
   @override
-  Stream<QrState> mapEventToState(QrState currentState, QrEvent event) async*{
+  Stream<QrState> mapEventToState(QrEvent event) async*{
     if(event is RequestQrText){
       yield QrStateLoading(progress: 0);
       try{

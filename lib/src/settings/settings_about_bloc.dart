@@ -51,7 +51,7 @@ class SettingsAboutBloc extends Bloc<SettingsAboutEvent, SettingsAboutState> {
   SettingsAboutState get initialState => SettingsAboutStateInitial();
 
   @override
-  Stream<SettingsAboutState> mapEventToState(SettingsAboutState currentState, SettingsAboutEvent event) async* {
+  Stream<SettingsAboutState> mapEventToState(SettingsAboutEvent event) async* {
     if (event is RequestAbout) {
       try {
         loadAbout();

@@ -57,8 +57,9 @@ class ContactLoaded extends ContactItemEvent {
   final String email;
   final Color color;
   final bool isVerified;
+  final String imagePath;
 
-  ContactLoaded({ @required this.name, @required this.email, @required this.color, @required this.isVerified});
+  ContactLoaded({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath});
 }
 
 abstract class ContactItemState {}
@@ -72,8 +73,9 @@ class ContactItemStateSuccess extends ContactItemState {
   final String email;
   final Color color;
   final bool isVerified;
+  final String imagePath;
 
-  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified});
+  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath});
 }
 
 class ContactItemStateFailure extends ContactItemState {

@@ -56,7 +56,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
   MessageAttachmentState get initialState => MessageAttachmentStateInitial();
 
   @override
-  Stream<MessageAttachmentState> mapEventToState(MessageAttachmentState currentState, MessageAttachmentEvent event) async* {
+  Stream<MessageAttachmentState> mapEventToState(MessageAttachmentEvent event) async* {
     if (event is RequestAttachment) {
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
       yield MessageAttachmentStateLoading();

@@ -59,7 +59,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
   AntiMobbingListState get initialState => AntiMobbingListStateInitial();
 
   @override
-  Stream<AntiMobbingListState> mapEventToState(AntiMobbingListState currentState, AntiMobbingListEvent event) async* {
+  Stream<AntiMobbingListState> mapEventToState(AntiMobbingListEvent event) async* {
     if (event is RequestMessages) {
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);

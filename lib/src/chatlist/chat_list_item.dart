@@ -92,6 +92,7 @@ class _ChatListItemState extends State<ChatListItem> {
         int freshMessageCount = 0;
         int timestamp = 0;
         String preview;
+        String imagePath = "";
         if (state is ChatStateSuccess) {
           name = state.name;
           subTitle = state.subTitle;
@@ -99,6 +100,7 @@ class _ChatListItemState extends State<ChatListItem> {
           freshMessageCount = state.freshMessageCount;
           timestamp = state.timestamp;
           preview = state.preview;
+          imagePath = state.avatarPath;
         } else {
           name = "";
           subTitle = "";
@@ -110,6 +112,7 @@ class _ChatListItemState extends State<ChatListItem> {
             title: name,
             subTitle: _chatBloc.isGroup ? subTitle : preview,
             color: color,
+            imagePath: imagePath,
             freshMessageCount: freshMessageCount,
             timestamp: timestamp,
             subTitleIcon: _chatBloc.isGroup

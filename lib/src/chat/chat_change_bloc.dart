@@ -48,6 +48,7 @@ import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   Repository<ChatMsg> _messageListRepository;
@@ -57,12 +58,12 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   ChatChangeState get initialState => CreateChatStateInitial();
 
   @override
-  Stream<ChatChangeState> mapEventToState(ChatChangeState currentState, ChatChangeEvent event) async* {
+  Stream<ChatChangeState> mapEventToState(ChatChangeEvent event) async* {
     if (event is CreateChat) {
       yield CreateChatStateLoading();
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
-        _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name, contacts: event.contacts);
+        _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name, contacts: event.contacts, imagePath: event.imagePath);
       } catch (error) {
         yield CreateChatStateFailure(error: error.toString());
       }
@@ -78,10 +79,20 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       _markNoticedChat(event.chatId);
     } else if (event is ChatMarkMessagesSeen) {
       _markMessagesSeen(event.messageIds);
+    } else if (event is ChatAddParticipants) {
+      _addParticipants(event.chatId, event.contactIds);
+    } else if (event is ChatRemoveParticipant) {
+      _removeParticipant(event.chatId, event.contactId);
+    } else if (event is SetName) {
+      _setName(event.chatId, event.newName);
+    } else if (event is SetImagePath) {
+      _setProfileImage(event.chatId, event.newPath);
+    } else if (event is SetNameCompleted) {
+      yield ChangeNameSuccess();
     }
   }
 
-  void _createChat({int contactId, int messageId, bool verified, String name, List<int> contacts}) async {
+  void _createChat({int contactId, int messageId, bool verified, String name, List<int> contacts, String imagePath}) async {
     Context context = Context();
     var chatId;
     if (contactId != null) {
@@ -101,6 +112,9 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       chatId = await context.createGroupChat(verified, name);
       for (int i = 0; i < contacts.length; i++) {
         context.addContactToChat(chatId, contacts[i]);
+      }
+      if(!isNullOrEmpty(imagePath)){
+        _setProfileImage(chatId, imagePath);
       }
     }
 
@@ -135,12 +149,37 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     if (!_chatRepository.contains(chatId)) {
       return;
     }
-    Chat chat = _chatRepository.get(chatId);
-    chat.setLastUpdate();
+    _chatRepository.get(chatId).setLastUpdate();
   }
 
   void _markMessagesSeen(List<int> messageIds) async {
     Context context = Context();
     await context.markSeenMessages(messageIds);
+  }
+
+  void _addParticipants(int chatId, List<int> contactIds) async {
+    Context context = Context();
+    for (int i = 0; i < contactIds.length; i++) {
+      await context.addContactToChat(chatId, contactIds[i]);
+    }
+  }
+
+  void _removeParticipant(int chatId, int contactId) async {
+    Context context = Context();
+    await context.removeContactFromChat(chatId, contactId);
+    RepositoryManager.get(RepositoryType.contact, chatId).remove(id: contactId);
+  }
+
+  void _setName(int chatId, String newName) async {
+    Context context = Context();
+    await context.setChatName(chatId, newName);
+    RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetName, newName);
+    dispatch(SetNameCompleted());
+  }
+
+  void _setProfileImage(int chatId, String newPath) async {
+    Context context = Context();
+    await context.setChatProfileImage(chatId, newPath);
+    RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetProfileImage, newPath);
   }
 }

@@ -45,106 +45,217 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/text.dart';
-import 'package:ox_coi/src/utils/widgets.dart';
 
-class ProfileHeader extends StatelessWidget {
-  final String initialsString;
-
-  final List<Widget> dynamicChildren;
+class ProfileData extends InheritedWidget {
   final Color color;
-  final String imagePath;
-  final int lastUpdate;
+  final String text;
+  final IconData iconData;
+  final TextStyle textStyle;
+  final Function imageActionCallback;
 
-  ProfileHeader({
-    @required this.initialsString,
-    this.dynamicChildren,
+  const ProfileData({
+    Key key,
+    @required Widget child,
     this.color,
-    this.imagePath,
-    this.lastUpdate,
-  });
+    this.text,
+    this.iconData,
+    this.textStyle,
+    this.imageActionCallback,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  static ProfileData of(BuildContext context) {
+    return context.inheritFromWidgetOfExactType(ProfileData) as ProfileData;
+  }
+
+  @override
+  bool updateShouldNotify(ProfileData old) {
+    return true;
+  }
+}
+
+class ProfileAvatar extends StatelessWidget {
+  final String imagePath;
+
+  ProfileAvatar({this.imagePath});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
-          child: isNullOrEmpty(imagePath)
-              ? CircleAvatar(
-                  maxRadius: profileAvatarMaxRadius,
-                  backgroundColor: color,
-                  child: Text(
-                    initialsString,
-                    style: Theme.of(context).textTheme.display3.apply(color: onPrimary),
-                  ),
-                )
-              : CircleAvatar(
-                  key: lastUpdate ?? createKey(lastUpdate),
-                  maxRadius: profileAvatarMaxRadius,
-                  backgroundColor: color,
-                  backgroundImage: FileImage(File(imagePath)),
+    double avatarSize = profileAvatarSize;
+    File imageFile;
+    if (isNullOrEmpty(imagePath)) {
+      imageFile = File("");
+    } else {
+      imageFile = File(imagePath);
+    }
+
+    Navigation _navigation = Navigation();
+
+    _getNewAvatarPath(ImageSource source) async {
+      _navigation.pop(context);
+      File newAvatar = await ImagePicker.pickImage(source: source);
+      if (newAvatar != null) {
+        File croppedAvatar = await ImageCropper.cropImage(
+          sourcePath: newAvatar.path,
+          ratioX: editUserAvatarRation,
+          ratioY: editUserAvatarRation,
+          maxWidth: editUserAvatarImageMaxSize,
+          maxHeight: editUserAvatarImageMaxSize,
+        );
+        if (croppedAvatar != null) {
+          ProfileData.of(context).imageActionCallback(croppedAvatar.path);
+        }
+      }
+    }
+
+    _removeAvatar() {
+      _navigation.pop(context);
+      ProfileData.of(context).imageActionCallback("");
+    }
+
+    _editPhoto() {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.photo),
+                  title: Text(AppLocalizations.of(context).gallery),
+                  onTap: () => _getNewAvatarPath(ImageSource.gallery),
                 ),
-        ),
-        for (var child in dynamicChildren) Padding(padding: EdgeInsets.only(top: 8.0), child: child),
+                ListTile(
+                  leading: Icon(Icons.camera_alt),
+                  title: Text(AppLocalizations.of(context).camera),
+                  onTap: () => _getNewAvatarPath(ImageSource.camera),
+                ),
+                ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text(AppLocalizations.of(context).userSettingsRemoveImage),
+                  onTap: () => _removeAvatar(),
+                )
+              ],
+            );
+          });
+    }
+
+
+
+    return Stack(
+      children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: chatProfileVerticalPadding),
-          child: Divider(
-            height: dividerHeight,
-          ),
-        )
+            padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: ProfileData.of(context).color,
+                borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: FileImage(imageFile),
+                ),
+              ),
+              height: avatarSize,
+              width: avatarSize,
+            )),
+        Visibility(
+          visible: ProfileData.of(context).imageActionCallback != null,
+          child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: ProfileData.of(context).color,
+                    borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
+                    gradient: LinearGradient(begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter, colors: [
+                      Colors.black.withOpacity(0.0),
+                      Colors.black.withOpacity(0.5),
+                    ], stops: [
+                      0.7,
+                      1.0
+                    ])),
+                height: avatarSize,
+                width: avatarSize,
+              )),
+        ),
+        Visibility(
+            visible: ProfileData.of(context).imageActionCallback != null,
+            child: Positioned(
+                bottom: profileEditPhotoButtonBottomPosition,
+                right: profileEditPhotoButtonRightPosition,
+                child: InkWell(
+                  child: Icon(
+                    Icons.add_a_photo,
+                    color: onPrimary,
+                  ),
+                  onTap: _editPhoto,
+                )))
       ],
     );
   }
 }
 
 class ProfileHeaderText extends StatelessWidget {
-  final String text;
-
-  final IconData iconData;
-
-  const ProfileHeaderText({Key key, @required this.text, this.iconData}) : super(key: key);
+  const ProfileHeaderText({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var content = Text(text, style: Theme.of(context).textTheme.subhead);
-    return iconData != null
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(iconData),
-              Padding(
-                padding: const EdgeInsets.only(left: iconTextPadding),
-                child: content,
-              ),
-            ],
-          )
-        : content;
+    var content = Text(
+      ProfileData.of(context).text,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: ProfileData.of(context).textStyle,
+    );
+    return Flexible(
+        child: ProfileData.of(context).iconData != null
+            ? Row(
+                children: <Widget>[
+                  Icon(ProfileData.of(context).iconData),
+                  Padding(
+                    padding: const EdgeInsets.only(left: iconTextPadding),
+                    child: content,
+                  ),
+                ],
+              )
+            : content);
+  }
+}
+
+class ProfileMemberHeaderText extends StatelessWidget {
+  const ProfileMemberHeaderText({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      ProfileData.of(context).text,
+      style: Theme.of(context).textTheme.subtitle,
+    );
   }
 }
 
 class ProfileCopyableHeaderText extends StatelessWidget {
-  final String text;
   final String toastMessage;
-  final IconData iconData;
 
-  const ProfileCopyableHeaderText({Key key, @required this.text, @required this.toastMessage, this.iconData}) : super(key: key);
+  const ProfileCopyableHeaderText({Key key, @required this.toastMessage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        copyToClipboardWithToast(text: text, toastText: toastMessage);
+        copyToClipboardWithToast(text: ProfileData.of(context).text, toastText: toastMessage);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: iconTextPadding),
-            child: ProfileHeaderText(text: text, iconData: iconData),
-          ),
+          ProfileHeaderText(),
+          Padding(padding: EdgeInsets.all(iconTextPadding)),
           Icon(Icons.content_copy),
         ],
       ),
