@@ -77,7 +77,12 @@ class Avatar extends StatelessWidget {
             image: avatarImage,
           ),
         ),
-        child: isNullOrEmpty(imagePath) ? Text(initials, style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),) : Container());
+        child: isNullOrEmpty(imagePath)
+            ? Text(
+                initials,
+                style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+              )
+            : Container());
   }
 
   static String getInitials(String textPrimary, [String textSecondary]) {

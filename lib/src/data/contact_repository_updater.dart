@@ -44,7 +44,6 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 
 mixin ContactRepositoryUpdater {
-
   Future<List<int>> getContactIdsAfterUpdate(int listTypeOrChatId) async {
     Context context = Context();
     List<int> contactIds;
@@ -61,5 +60,4 @@ mixin ContactRepositoryUpdater {
     }
     return contactIds;
   }
-
 }

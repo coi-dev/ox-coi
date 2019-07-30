@@ -187,9 +187,9 @@ class _ChatCreateState extends State<ChatCreate> {
       context,
       MaterialPageRoute(
         builder: (context) => ContactChange(
-              contactAction: ContactAction.add,
-              createChat: true,
-            ),
+          contactAction: ContactAction.add,
+          createChat: true,
+        ),
       ),
     );
   }

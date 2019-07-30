@@ -72,7 +72,7 @@ class SettingsAutocryptBloc extends Bloc<SettingsAutocryptEvent, SettingsAutocry
     }
   }
 
-  void _prepareKeyTransfer(int chatId, int messageId) async{
+  void _prepareKeyTransfer(int chatId, int messageId) async {
     ChatMessageRepository messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
     ChatMsg chatMsg = messageListRepository.get(messageId);
     String setupCodeBegin = await chatMsg.getSetupCodeBegin();

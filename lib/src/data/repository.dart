@@ -174,7 +174,7 @@ abstract class Repository<T extends Base> {
   void tearDownCoreListener(int eventId, int listenerId) {
     _core.removeListener(eventId, listenerId);
   }
-  
+
   void transferTo(Repository<T> repository, int id) {
     var value = _items[id];
     if (value != null) {

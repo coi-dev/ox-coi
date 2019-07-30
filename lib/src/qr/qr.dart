@@ -39,15 +39,13 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/qr/scan_qr.dart';
 import 'package:ox_coi/src/qr/show_qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-
-
 
 class QrCode extends StatefulWidget {
   final int chatId;

@@ -39,7 +39,7 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +62,7 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
   AntiMobbingListBloc _antiMobbingListBloc = AntiMobbingListBloc();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.antiMobbingList);
@@ -70,7 +70,7 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _antiMobbingListBloc.dispose();
     super.dispose();
   }
@@ -83,10 +83,12 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
         bloc: _antiMobbingListBloc,
         builder: (context, state) {
           if (state is AntiMobbingListStateSuccess) {
-            if(state.messageIds.length > 0) {
+            if (state.messageIds.length > 0) {
               return buildListViewItems(state.messageIds, state.messageLastUpdateValues);
-            }else{
-              return Center(child: Text(AppLocalizations.of(context).inviteEmptyList),);
+            } else {
+              return Center(
+                child: Text(AppLocalizations.of(context).inviteEmptyList),
+              );
             }
           } else if (state is! MessagesLoaded) {
             return StateInfo(showLoading: true);
@@ -109,5 +111,4 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
       },
     );
   }
-
 }

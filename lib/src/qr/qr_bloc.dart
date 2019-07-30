@@ -48,13 +48,14 @@ import 'package:ox_coi/src/qr/qr_event_state.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:rxdart/rxdart.dart';
 
-class QrBloc extends Bloc<QrEvent, QrState>{
+class QrBloc extends Bloc<QrEvent, QrState> {
   DeltaChatCore _core = DeltaChatCore();
   int _qrInviterListenerId;
   int _qrJoinerListenerId;
   int _errorSubjectListenerId;
 
   PublishSubject<Event> _qrSubject = new PublishSubject();
+
   // ignore: close_sinks
   BehaviorSubject<Event> _errorSubject = new BehaviorSubject();
 
@@ -62,43 +63,37 @@ class QrBloc extends Bloc<QrEvent, QrState>{
   QrState get initialState => QrStateInitial();
 
   @override
-  Stream<QrState> mapEventToState(QrEvent event) async*{
-    if(event is RequestQrText){
+  Stream<QrState> mapEventToState(QrEvent event) async* {
+    if (event is RequestQrText) {
       yield QrStateLoading(progress: 0);
-      try{
+      try {
         _registerListeners();
         getQrText(event.chatId);
-      }
-      catch(error){
+      } catch (error) {
         yield QrStateFailure(error: error.toString());
       }
-    }
-    else if(event is QrTextLoaded){
+    } else if (event is QrTextLoaded) {
       yield QrStateSuccess(qrText: event.qrText);
-    }
-    else if(event is JoinDone){
+    } else if (event is JoinDone) {
       yield QrStateSuccess(chatId: event.chatId);
-    }
-    else if(event is CheckQr){
+    } else if (event is CheckQr) {
       yield QrStateLoading(progress: 0);
       checkQr(event.qrText);
-    }
-    else if(event is CheckQrDone){
-     joinSecurejoin(event.qrText);
-    }
-    else if(event is QrJoinInviteProgress){
-      if(_joinInviteSuccess(event.progress)){
+    } else if (event is CheckQrDone) {
+      joinSecurejoin(event.qrText);
+    } else if (event is QrJoinInviteProgress) {
+      if (_joinInviteSuccess(event.progress)) {
         yield QrStateVerificationFinished();
-      }else if(_joinInviteFailed(event.progress)){
+      } else if (_joinInviteFailed(event.progress)) {
         String error = event.error;
         if (error == null) {
           error = getErrorMessage(_errorSubject.value);
         }
         yield QrStateFailure(error: error);
-      }else{
+      } else {
         yield QrStateLoading(progress: event.progress);
       }
-    }else if(event is CancelQrProcess){
+    } else if (event is CancelQrProcess) {
       cancelQrProcess();
     }
   }
@@ -135,17 +130,17 @@ class QrBloc extends Bloc<QrEvent, QrState>{
     _errorSubjectListenerId = null;
   }
 
-  void getQrText(int chatId) async{
+  void getQrText(int chatId) async {
     Context context = Context();
     String qrText = await context.getSecureJoinQr(chatId);
     dispatch(QrTextLoaded(qrText: qrText));
   }
 
-  void checkQr(String qrText) async{
+  void checkQr(String qrText) async {
     Context context = Context();
     var result = await context.checkQr(qrText);
     QrCodeResult qrResult = QrCodeResult.fromMethodChannel(result);
-    if(qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup){
+    if (qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup) {
       dispatch(CheckQrDone(qrText: qrText));
     }
   }
@@ -159,19 +154,19 @@ class QrBloc extends Bloc<QrEvent, QrState>{
     dispatch(QrJoinInviteProgress(progress: 0, error: error));
   }
 
-  void joinSecurejoin(String qrText) async{
+  void joinSecurejoin(String qrText) async {
     Context context = Context();
     int chatId = await context.joinSecurejoinQr(qrText);
-    if(chatId == 0){
+    if (chatId == 0) {
       dispatch(JoinFailed());
-    }else{
+    } else {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.putIfAbsent(id: chatId);
       dispatch(JoinDone(chatId: chatId));
     }
   }
 
-  void cancelQrProcess() async{
+  void cancelQrProcess() async {
     Context context = Context();
     await context.stopOngoingProcess();
   }

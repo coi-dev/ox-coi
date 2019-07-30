@@ -103,10 +103,13 @@ class _ProviderListState extends State<ProviderList> {
           children: <Widget>[
             Text(
               title,
-              style:  Theme.of(context).textTheme.headline,
+              style: Theme.of(context).textTheme.headline,
             ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Text(text, textAlign: TextAlign.center,),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+            ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
             Expanded(
                 child: BlocBuilder(

@@ -61,10 +61,11 @@ class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'messages';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "chatTitle" : MessageLookupByLibrary.simpleMessage("Chat"),
-    "contactsTitle" : MessageLookupByLibrary.simpleMessage("Contacts"),
-    "mailTitle" : MessageLookupByLibrary.simpleMessage("Mail"),
-    "profileTitle" : MessageLookupByLibrary.simpleMessage("Profile")
-  };
+
+  static _notInlinedMessages(_) => <String, Function>{
+        "chatTitle": MessageLookupByLibrary.simpleMessage("Chat"),
+        "contactsTitle": MessageLookupByLibrary.simpleMessage("Contacts"),
+        "mailTitle": MessageLookupByLibrary.simpleMessage("Mail"),
+        "profileTitle": MessageLookupByLibrary.simpleMessage("Profile")
+      };
 }

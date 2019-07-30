@@ -49,7 +49,6 @@ import 'package:ox_coi/src/log/log_manager.dart';
 import 'package:ox_coi/src/platform/files.dart';
 
 class DebugViewerBloc extends Bloc<DebugViewerEvent, DebugViewerState> {
-
   String _data;
 
   String get data => _data;

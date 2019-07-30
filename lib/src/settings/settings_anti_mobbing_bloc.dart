@@ -56,13 +56,11 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
       } catch (error) {
         yield SettingsAntiMobbingStateFailure();
       }
-    }else if(event is SettingLoaded){
+    } else if (event is SettingLoaded) {
       yield SettingsAntiMobbingStateSuccess(antiMobbingActivated: event.antiMobbingActivated);
-    }
-    else if(event is ActionSuccess){
+    } else if (event is ActionSuccess) {
       yield SettingsAntiMobbingStateSuccess(antiMobbingActivated: event.antiMobbingActivated);
-    }
-    else if(event is ChangeSetting){
+    } else if (event is ChangeSetting) {
       changeSetting();
     }
   }
@@ -70,7 +68,7 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
   void loadSetting() async {
     bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
 
-    if(antiMobbingPreference == null){
+    if (antiMobbingPreference == null) {
       await setPreference(preferenceAntiMobbing, false);
       antiMobbingPreference = false;
     }
@@ -78,7 +76,7 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
     dispatch(SettingLoaded(antiMobbingActivated: antiMobbingPreference));
   }
 
-  void changeSetting() async{
+  void changeSetting() async {
     bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
     await setPreference(preferenceAntiMobbing, !antiMobbingPreference);
     dispatch(ActionSuccess(antiMobbingActivated: !antiMobbingPreference));

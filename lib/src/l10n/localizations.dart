@@ -668,7 +668,8 @@ class AppLocalizations {
       Intl.message('Messages from unknown contacts do not appear in chats anymore. Instead, you can access such messages here:',
           name: 'antiMobbingSettingsHelpText');
 
-  String get antiMobbingSettingsUnknownContactsButtonText => Intl.message('Messages from unknown contacts', name: 'antiMobbingSettingsUnknownContactsButtonText');
+  String get antiMobbingSettingsUnknownContactsButtonText =>
+      Intl.message('Messages from unknown contacts', name: 'antiMobbingSettingsUnknownContactsButtonText');
 
   // Notifications
   String get moreMessages => Intl.message('more messages', name: 'moreMessages');

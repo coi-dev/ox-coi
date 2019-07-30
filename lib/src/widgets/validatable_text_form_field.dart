@@ -62,18 +62,17 @@ class ValidatableTextFormField extends StatefulWidget {
   final bool showIcon;
   final TextEditingController controller = TextEditingController();
 
-  ValidatableTextFormField(
-    this.labelText, {
-    this.hintText,
-    Key key,
-    this.textFormType = TextFormType.normal,
-    this.inputType = TextInputType.text,
-    this.needValidation = false,
-    this.validationHint,
-    this.enabled = true,
-    this.maxLines = 1,
-    this.showIcon = false
-  }) : super(key: key);
+  ValidatableTextFormField(this.labelText,
+      {this.hintText,
+      Key key,
+      this.textFormType = TextFormType.normal,
+      this.inputType = TextInputType.text,
+      this.needValidation = false,
+      this.validationHint,
+      this.enabled = true,
+      this.maxLines = 1,
+      this.showIcon = false})
+      : super(key: key);
 
   @override
   _ValidatableTextFormFieldState createState() => _ValidatableTextFormFieldState();

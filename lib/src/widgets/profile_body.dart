@@ -76,9 +76,7 @@ class ProfileAction extends StatelessWidget {
       ),
       title: Text(
         text,
-        style: TextStyle(
-          color: color
-        ),
+        style: TextStyle(color: color),
       ),
       onTap: onTap,
     );

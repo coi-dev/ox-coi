@@ -46,7 +46,7 @@ abstract class SettingsAntiMobbingEvent {}
 
 class RequestSetting extends SettingsAntiMobbingEvent {}
 
-class SettingLoaded extends SettingsAntiMobbingEvent{
+class SettingLoaded extends SettingsAntiMobbingEvent {
   final bool antiMobbingActivated;
 
   SettingLoaded({@required this.antiMobbingActivated});

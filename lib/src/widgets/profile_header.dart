@@ -43,12 +43,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
@@ -145,8 +145,6 @@ class ProfileAvatar extends StatelessWidget {
             );
           });
     }
-
-
 
     return Stack(
       children: <Widget>[

@@ -90,12 +90,11 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
                 trailing: Switch(value: state.antiMobbingActivated, onChanged: (value) => _changeAntiMobbingSetting()),
               ),
               Visibility(
-                visible: state.antiMobbingActivated,
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  subtitle: Text(AppLocalizations.of(context).antiMobbingSettingsInfoText),
-                )
-              ),
+                  visible: state.antiMobbingActivated,
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                    subtitle: Text(AppLocalizations.of(context).antiMobbingSettingsInfoText),
+                  )),
               Visibility(
                   visible: state.antiMobbingActivated,
                   child: ListTile(
@@ -104,8 +103,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
                     onTap: () {
                       _showAntiMobbingList();
                     },
-                  )
-              ),
+                  )),
             ]).toList(),
           );
         } else {

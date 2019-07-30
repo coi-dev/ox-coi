@@ -65,13 +65,14 @@ class Preset {
   String outgoingServer;
   int outgoingPort;
 
-  Preset({this.incomingSecurity,
-    this.incomingServer,
-    this.incomingProtocol,
-    this.incomingPort,
-    this.outgoingSecurity,
-    this.outgoingServer,
-    this.outgoingPort});
+  Preset(
+      {this.incomingSecurity,
+      this.incomingServer,
+      this.incomingProtocol,
+      this.incomingPort,
+      this.outgoingSecurity,
+      this.outgoingServer,
+      this.outgoingPort});
 
   Preset.fromJson(Map<String, dynamic> json) {
     incomingSecurity = json['incoming_security'];
@@ -115,15 +116,16 @@ class Oauth {
   }
 }
 
-int getSecurityId(String securityString){
-  switch(securityString){
+int getSecurityId(String securityString) {
+  switch (securityString) {
     case "ssltls":
       return 1;
       break;
     case "starttls":
       return 2;
       break;
-    default: return 0;
+    default:
+      return 0;
   }
 }
 

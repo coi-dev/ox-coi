@@ -54,7 +54,6 @@ class ImportPerformed extends ContactImportEvent {
   final int changedCount;
 
   ImportPerformed({@required this.changedCount});
-
 }
 
 abstract class ContactImportState {}

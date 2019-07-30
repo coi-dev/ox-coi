@@ -70,19 +70,19 @@ class ChatCreated extends ChatChangeEvent {
   ChatCreated({this.chatId});
 }
 
-class DeleteChat extends ChatChangeEvent{
+class DeleteChat extends ChatChangeEvent {
   final int chatId;
 
   DeleteChat({@required this.chatId});
 }
 
-class LeaveGroupChat extends ChatChangeEvent{
+class LeaveGroupChat extends ChatChangeEvent {
   final int chatId;
 
   LeaveGroupChat({@required this.chatId});
 }
 
-class DeleteChats extends ChatChangeEvent{
+class DeleteChats extends ChatChangeEvent {
   final List<int> chatIds;
 
   DeleteChats({@required this.chatIds});
@@ -100,35 +100,35 @@ class ChatMarkMessagesSeen extends ChatChangeEvent {
   ChatMarkMessagesSeen({@required this.messageIds});
 }
 
-class ChatAddParticipants extends ChatChangeEvent{
+class ChatAddParticipants extends ChatChangeEvent {
   final int chatId;
   final List<int> contactIds;
 
   ChatAddParticipants({@required this.chatId, @required this.contactIds});
 }
 
-class ChatRemoveParticipant extends ChatChangeEvent{
+class ChatRemoveParticipant extends ChatChangeEvent {
   final int chatId;
   final int contactId;
 
   ChatRemoveParticipant({@required this.chatId, @required this.contactId});
 }
 
-class SetName extends ChatChangeEvent{
+class SetName extends ChatChangeEvent {
   final int chatId;
   final String newName;
 
   SetName({@required this.chatId, @required this.newName});
 }
 
-class SetImagePath extends ChatChangeEvent{
+class SetImagePath extends ChatChangeEvent {
   final int chatId;
   final String newPath;
 
   SetImagePath({@required this.chatId, @required this.newPath});
 }
 
-class SetNameCompleted extends ChatChangeEvent{}
+class SetNameCompleted extends ChatChangeEvent {}
 
 abstract class ChatChangeState {}
 

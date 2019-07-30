@@ -157,7 +157,7 @@ class _UserSettingsState extends State<UserSettings> {
     );
   }
 
-  _setAvatar(String avatarPath){
+  _setAvatar(String avatarPath) {
     setState(() {
       _avatar = avatarPath;
     });

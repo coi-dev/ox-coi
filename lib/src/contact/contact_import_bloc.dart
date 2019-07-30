@@ -101,5 +101,4 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       dispatch(ImportAborted());
     }
   }
-
 }

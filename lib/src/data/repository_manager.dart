@@ -85,5 +85,4 @@ class RepositoryManager {
     int evaluatedId = id != null ? id : _noIdIdentifier;
     return type.toString() + evaluatedId.toString();
   }
-
 }

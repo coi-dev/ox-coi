@@ -124,7 +124,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          if(state.contactIds.length != widget.contactIds.length){
+          if (state.contactIds.length != widget.contactIds.length) {
             return Column(
               children: <Widget>[
                 _buildSelectedParticipantList(state.contactsSelected),
@@ -133,7 +133,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
                 ),
               ],
             );
-          }else{
+          } else {
             return Center(
               child: Text(AppLocalizations.of(context).chatProfileAddParticipantsEmptyList),
             );
@@ -152,12 +152,12 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.contactIds.length,
       itemBuilder: (BuildContext context, int index) {
-        if(!widget.contactIds.contains(state.contactIds[index])){
+        if (!widget.contactIds.contains(state.contactIds[index])) {
           var contactId = state.contactIds[index];
           var key = createKeyString(contactId, state.contactLastUpdateValues[index]);
           bool isSelected = state.contactsSelected.contains(contactId);
           return ContactItemSelectable(contactId: contactId, onTap: _itemTapped, isSelected: isSelected, key: key);
-        }else{
+        } else {
           return Container();
         }
       },
@@ -189,20 +189,20 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
           height: 40.0,
           child: selectedContacts.isNotEmpty
               ? ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: selectedContacts.length,
-              itemBuilder: (BuildContext context, int index) {
-                var selectedContactId = selectedContacts[index];
-                return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
-              })
+                  scrollDirection: Axis.horizontal,
+                  itemCount: selectedContacts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var selectedContactId = selectedContacts[index];
+                    return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
+                  })
               : Container(
-            padding: EdgeInsets.only(
-              left: listItemPadding,
-              right: listItemPadding,
-              top: listItemPadding,
-            ),
-            child: Text(AppLocalizations.of(context).createGroupNoParticipantsHint),
-          ),
+                  padding: EdgeInsets.only(
+                    left: listItemPadding,
+                    right: listItemPadding,
+                    top: listItemPadding,
+                  ),
+                  child: Text(AppLocalizations.of(context).createGroupNoParticipantsHint),
+                ),
         ),
       ],
     );

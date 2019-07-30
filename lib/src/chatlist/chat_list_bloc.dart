@@ -113,7 +113,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   void setupChatListListener() {
     if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.chatModified, Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _onChatListChanged);
+      _repositoryStreamHandler =
+          RepositoryMultiEventStreamHandler(Type.publish, [Dcc.Event.chatModified, Dcc.Event.incomingMsg, Dcc.Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
 
       final messageListObservable = Observable<MessageListState>(_messageListBloc.state);

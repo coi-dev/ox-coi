@@ -71,7 +71,8 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
         yield ContactItemStateFailure(error: error.toString());
       }
     } else if (event is ContactLoaded) {
-      yield ContactItemStateSuccess(name: event.name, email: event.email, color: event.color, isVerified: event.isVerified, imagePath: event.imagePath);
+      yield ContactItemStateSuccess(
+          name: event.name, email: event.email, color: event.color, isVerified: event.isVerified, imagePath: event.imagePath);
     }
   }
 

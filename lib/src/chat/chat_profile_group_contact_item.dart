@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_details.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
@@ -49,17 +50,12 @@ import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/chat/chat.dart';
 
 import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
 import 'chat_create_mixin.dart';
 
-enum GroupParticipantActions{
-  info,
-  sendMessage,
-  remove
-}
+enum GroupParticipantActions { info, sendMessage, remove }
 
 class ChatProfileGroupContactItem extends StatefulWidget {
   final int chatId;
@@ -77,10 +73,11 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
   Navigation _navigation = Navigation();
   List<GroupPopupMenu> choices;
+
   void _select(GroupPopupMenu choice) {
-    switch(choice.action){
+    switch (choice.action) {
       case GroupParticipantActions.info:
-        goToProfile("","");
+        goToProfile("", "");
         break;
       case GroupParticipantActions.sendMessage:
         createChat();
@@ -94,9 +91,9 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   void initState() {
     super.initState();
     _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
-    if(widget.contactId != Core.Contact.idSelf){
+    if (widget.contactId != Core.Contact.idSelf) {
       choices = participantChoices;
-    }else{
+    } else {
       choices = meChoices;
     }
   }
@@ -119,11 +116,11 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
     );
   }
 
-  createChat(){
+  createChat() {
     createChatFromContact(context, widget.contactId, _handleCreateChatStateChange);
   }
 
-  getMoreButton(){
+  getMoreButton() {
     return PopupMenuButton<GroupPopupMenu>(
       elevation: 3.2,
       onSelected: _select,
@@ -139,18 +136,14 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   }
 
   void _removeParticipant() {
-    if(widget.contactId != Core.Contact.idSelf) {
+    if (widget.contactId != Core.Contact.idSelf) {
       _chatChangeBloc.dispatch(ChatRemoveParticipant(chatId: widget.chatId, contactId: widget.contactId));
     }
   }
 
   _handleCreateChatStateChange(int chatId) {
     _navigation.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
-        ModalRoute.withName(Navigation.root),
-        Navigatable(Type.chat)
-    );
+        context, MaterialPageRoute(builder: (context) => Chat(chatId: chatId)), ModalRoute.withName(Navigation.root), Navigatable(Type.chat));
   }
 }
 

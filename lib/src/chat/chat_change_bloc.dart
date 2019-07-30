@@ -63,7 +63,13 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       yield CreateChatStateLoading();
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
-        _createChat(contactId: event.contactId, messageId: event.messageId, verified: event.verified, name: event.name, contacts: event.contacts, imagePath: event.imagePath);
+        _createChat(
+            contactId: event.contactId,
+            messageId: event.messageId,
+            verified: event.verified,
+            name: event.name,
+            contacts: event.contacts,
+            imagePath: event.imagePath);
       } catch (error) {
         yield CreateChatStateFailure(error: error.toString());
       }
@@ -113,7 +119,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       for (int i = 0; i < contacts.length; i++) {
         context.addContactToChat(chatId, contacts[i]);
       }
-      if(!isNullOrEmpty(imagePath)){
+      if (!isNullOrEmpty(imagePath)) {
         _setProfileImage(chatId, imagePath);
       }
     }

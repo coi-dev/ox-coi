@@ -102,33 +102,31 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: createWelcomeScreen()
-    );
+    return Scaffold(body: createWelcomeScreen());
   }
 
-  Widget createWelcomeScreen(){
+  Widget createWelcomeScreen() {
     return SingleChildScrollView(
       padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
       child: Column(
-          children: <Widget>[
-            Text(
-              AppLocalizations.of(context).loginWelcomeText,
-              style: Theme.of(context).textTheme.headline,
+        children: <Widget>[
+          Text(
+            AppLocalizations.of(context).loginWelcomeText,
+            style: Theme.of(context).textTheme.headline,
+          ),
+          Image(
+            image: AssetImage(AppLocalizations.of(context).appLogoUrl),
+            height: loginLogoSize,
+            width: loginLogoSize,
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: loginVerticalPadding),
+            child: Text(
+              AppLocalizations.of(context).loginFirstInformationText,
+              textAlign: TextAlign.center,
             ),
-            Image(
-              image: AssetImage(AppLocalizations.of(context).appLogoUrl),
-              height: loginLogoSize,
-              width: loginLogoSize,
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: loginVerticalPadding),
-              child: Text(
-                AppLocalizations.of(context).loginFirstInformationText,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            RaisedButton(
+          ),
+          RaisedButton(
               color: accent,
               textColor: onAccent,
               child: SizedBox(
@@ -140,53 +138,41 @@ class _LoginState extends State<Login> {
               ),
               onPressed: () {
                 _goToProviderList(ProviderListType.login);
-              }
-            ),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding8dp),
-              child: FlatButton(
-                  child: Text(
-                    AppLocalizations
-                        .of(context)
-                        .loginRegisterButtonText,
-                    style: TextStyle(color: accent),
-                  ),
-                  onPressed: () {
-                    _goToProviderList(ProviderListType.register);
-                  }
-              ),
-            ),
-            RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    style: Theme.of(context).textTheme.caption.apply(color: onBackground),
-                    text: AppLocalizations.of(context).loginTermsConditionPrivacyText,
-                    children: [
-                      UrlTextSpan(
-                          url: null,
-                          text: AppLocalizations.of(context).loginTermsConditionText
-                      ),
-                      TextSpan(
-                          text: AppLocalizations.of(context).loginTermsConditionPrivacyAndText
-                      ),
-                      UrlTextSpan(
-                          url: null,
-                          text: AppLocalizations.of(context).loginPrivacyDeclarationText
-                      )
-                    ]
-                )
-            ),
-          ],
-        ),
+              }),
+          Padding(
+            padding: EdgeInsets.all(loginVerticalPadding8dp),
+            child: FlatButton(
+                child: Text(
+                  AppLocalizations.of(context).loginRegisterButtonText,
+                  style: TextStyle(color: accent),
+                ),
+                onPressed: () {
+                  _goToProviderList(ProviderListType.register);
+                }),
+          ),
+          RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  style: Theme.of(context).textTheme.caption.apply(color: onBackground),
+                  text: AppLocalizations.of(context).loginTermsConditionPrivacyText,
+                  children: [
+                    UrlTextSpan(url: null, text: AppLocalizations.of(context).loginTermsConditionText),
+                    TextSpan(text: AppLocalizations.of(context).loginTermsConditionPrivacyAndText),
+                    UrlTextSpan(url: null, text: AppLocalizations.of(context).loginPrivacyDeclarationText)
+                  ])),
+        ],
+      ),
     );
   }
 
   void _goToProviderList(ProviderListType type) {
     var navigation = Navigation();
     navigation.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProviderList(type: type, success: widget.success,)
-      )
-    );
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProviderList(
+                  type: type,
+                  success: widget.success,
+                )));
   }
 }

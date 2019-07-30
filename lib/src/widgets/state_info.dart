@@ -107,5 +107,6 @@ class StateInfo extends StatelessWidget {
     );
   }
 
-  EdgeInsets buildEdgeInsets() => EdgeInsets.only(top: listStateInfoVerticalPadding, left: listStateInfoHorizontalPadding, right: listStateInfoHorizontalPadding);
+  EdgeInsets buildEdgeInsets() =>
+      EdgeInsets.only(top: listStateInfoVerticalPadding, left: listStateInfoHorizontalPadding, right: listStateInfoHorizontalPadding);
 }

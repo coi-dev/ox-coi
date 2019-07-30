@@ -89,43 +89,43 @@ class _ShowQrState extends State<ShowQr> {
     );
   }
 
-  Widget buildInfoText(){
+  Widget buildInfoText() {
     return BlocBuilder(
-      bloc: _userBloc,
-      builder: (context,state){
-        if(state is UserStateSuccess){
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context).qrInviteInfoText(state.config.email), textAlign: TextAlign.center,),
-          );
-        }
-        else{
-          return Container();
-        }
-      }
-    );
+        bloc: _userBloc,
+        builder: (context, state) {
+          if (state is UserStateSuccess) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                AppLocalizations.of(context).qrInviteInfoText(state.config.email),
+                textAlign: TextAlign.center,
+              ),
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 
-  Widget buildQrCodeArea(){
+  Widget buildQrCodeArea() {
     return BlocBuilder(
       bloc: _qrBloc,
-      builder: (context, state){
-        if(state is QrStateSuccess){
-          if(state.qrText != null && state.qrText.isNotEmpty){
+      builder: (context, state) {
+        if (state is QrStateSuccess) {
+          if (state.qrText != null && state.qrText.isNotEmpty) {
             _qrText = state.qrText;
           }
           return buildQrCode(_qrText);
-        }else if(state is QrStateLoading){
+        } else if (state is QrStateLoading) {
           showToast(AppLocalizations.of(context).qrVerifyingText);
           return buildQrCode(_qrText);
-        }else if(state is QrStateVerificationFinished){
+        } else if (state is QrStateVerificationFinished) {
           showToast(AppLocalizations.of(context).qrVerifyCompleteText);
           return buildQrCode(_qrText);
-        }else if(state is QrStateFailure){
+        } else if (state is QrStateFailure) {
           showToast(state.error);
           return buildQrCode(_qrText);
-        }
-        else{
+        } else {
           return Container();
         }
       },

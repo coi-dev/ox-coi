@@ -128,14 +128,14 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Align(
-          alignment: Alignment.center,
-          child: ProfileData(
-            color: accent,
-            imageActionCallback: _setAvatar,
-            child: ProfileAvatar(
-            imagePath: _avatar,
-          ),)
-        ),
+            alignment: Alignment.center,
+            child: ProfileData(
+              color: accent,
+              imageActionCallback: _setAvatar,
+              child: ProfileAvatar(
+                imagePath: _avatar,
+              ),
+            )),
         Padding(
           padding: EdgeInsets.only(
             left: formHorizontalPadding,
@@ -172,7 +172,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
     );
   }
 
-  _setAvatar(String avatarPath){
+  _setAvatar(String avatarPath) {
     setState(() {
       _avatar = avatarPath;
     });

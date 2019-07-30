@@ -137,5 +137,4 @@ class LogManager {
   Future<dynamic> getLogFiles() {
     return getPreference(preferenceLogFiles) ?? List<String>();
   }
-
 }

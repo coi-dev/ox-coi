@@ -55,7 +55,6 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
-
 void main() {
   LogManager _logManager = LogManager();
   _logManager.setup(logToFile: false, logLevel: Level.INFO);

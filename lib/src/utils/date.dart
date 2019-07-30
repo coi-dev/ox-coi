@@ -55,7 +55,6 @@ String getTimeFormTimestamp(int timestamp) {
 
 DateTime _getDateTimeFromTimestamp(int timestamp) => DateTime.fromMillisecondsSinceEpoch(timestamp);
 
-
 String getDateFromTimestamp(int timestamp, bool longMonth, [bool prependWordsWhereApplicable, AppLocalizations appLocalizations]) {
   var date = formatDate(_getDateTimeFromTimestamp(timestamp), longMonth ? formatterDateLong : formatterDate);
   if (prependWordsWhereApplicable != null && prependWordsWhereApplicable && appLocalizations != null) {

@@ -670,7 +670,7 @@ class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteM
     });
   }
 
-  _chatTitleTapped() async{
+  _chatTitleTapped() async {
     await navigation.push(
       context,
       MaterialPageRoute(builder: (context) {

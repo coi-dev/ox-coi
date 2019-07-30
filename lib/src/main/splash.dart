@@ -45,7 +45,6 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
 class Splash extends StatelessWidget {
-
   Splash() {
     var navigation = Navigation();
     navigation.current = Navigatable(Type.splash);

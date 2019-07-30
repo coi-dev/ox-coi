@@ -44,48 +44,54 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 
-enum ProtocolType{imap,smtp}
+enum ProtocolType { imap, smtp }
 
-int convertProtocolStringToInt(BuildContext context, String value){
+int convertProtocolStringToInt(BuildContext context, String value) {
   int newValue = 0;
-  if(value == AppLocalizations.of(context).sslTls) newValue = 1;
-  else if(value == AppLocalizations.of(context).startTLS) newValue = 2;
-  else if(value == AppLocalizations.of(context).off) newValue = 3;
+  if (value == AppLocalizations.of(context).sslTls)
+    newValue = 1;
+  else if (value == AppLocalizations.of(context).startTLS)
+    newValue = 2;
+  else if (value == AppLocalizations.of(context).off) newValue = 3;
   return newValue;
 }
 
 String convertProtocolIntToString(BuildContext context, int value) {
   String newValue;
-  if(value == 1) newValue = AppLocalizations.of(context).sslTls;
-  else if(value == 2) newValue = AppLocalizations.of(context).startTLS;
-  else if(value == 3) newValue = AppLocalizations.of(context).off;
-  else newValue = AppLocalizations.of(context).automatic;
+  if (value == 1)
+    newValue = AppLocalizations.of(context).sslTls;
+  else if (value == 2)
+    newValue = AppLocalizations.of(context).startTLS;
+  else if (value == 3)
+    newValue = AppLocalizations.of(context).off;
+  else
+    newValue = AppLocalizations.of(context).automatic;
   return newValue;
 }
 
-int getSavedImapSecurityOption(int serverFlags){
+int getSavedImapSecurityOption(int serverFlags) {
   int sel = 0;
-  if((serverFlags & Context.serverFlagsImapSsl) != 0) sel = 1;
-  if((serverFlags & Context.serverFlagsImapStartTls) != 0) sel = 2;
-  if((serverFlags & Context.serverFlagsImapPlain) !=0 ) sel = 3;
+  if ((serverFlags & Context.serverFlagsImapSsl) != 0) sel = 1;
+  if ((serverFlags & Context.serverFlagsImapStartTls) != 0) sel = 2;
+  if ((serverFlags & Context.serverFlagsImapPlain) != 0) sel = 3;
   return sel;
 }
 
-int getSavedSmtpSecurityOption(int serverFlags){
+int getSavedSmtpSecurityOption(int serverFlags) {
   int sel = 0;
-  if((serverFlags & Context.serverFlagsSmtpSsl) != 0) sel = 1;
-  if((serverFlags & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
-  if((serverFlags & Context.serverFlagsSmtpPlain) != 0) sel = 3;
+  if ((serverFlags & Context.serverFlagsSmtpSsl) != 0) sel = 1;
+  if ((serverFlags & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
+  if ((serverFlags & Context.serverFlagsSmtpPlain) != 0) sel = 3;
   return sel;
 }
 
-int createServerFlagInteger(int imapOption, int smtpOption){
+int createServerFlagInteger(int imapOption, int smtpOption) {
   int serverFlags = 0;
-  if(imapOption == 1) serverFlags |= Context.serverFlagsImapSsl;
-  if(imapOption == 2) serverFlags |= Context.serverFlagsImapStartTls;
-  if(imapOption == 3) serverFlags |= Context.serverFlagsImapPlain;
-  if(smtpOption == 1) serverFlags |= Context.serverFlagsSmtpSsl;
-  if(smtpOption == 2) serverFlags |= Context.serverFlagsSmtpStartTls;
-  if(smtpOption == 3) serverFlags |= Context.serverFlagsSmtpPlain;
+  if (imapOption == 1) serverFlags |= Context.serverFlagsImapSsl;
+  if (imapOption == 2) serverFlags |= Context.serverFlagsImapStartTls;
+  if (imapOption == 3) serverFlags |= Context.serverFlagsImapPlain;
+  if (smtpOption == 1) serverFlags |= Context.serverFlagsSmtpSsl;
+  if (smtpOption == 2) serverFlags |= Context.serverFlagsSmtpStartTls;
+  if (smtpOption == 3) serverFlags |= Context.serverFlagsSmtpPlain;
   return serverFlags;
 }
