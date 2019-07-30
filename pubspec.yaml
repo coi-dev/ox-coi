@@ -44,6 +44,8 @@ dev_dependencies:
   intl_translation: ^0.17.5
   mockito: ^4.1.0
   test: any
+flutter_driver:
+  sdk: flutter
 
 
 

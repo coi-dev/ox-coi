@@ -67,6 +67,8 @@ class ProviderSignIn extends StatefulWidget {
 }
 
 class _ProviderSignInState extends State<ProviderSignIn> {
+  static final keyEmail = Key("keyEmail");
+  static final keyPassword = Key("keyPassword");
   final _simpleLoginKey = GlobalKey<FormState>();
   OverlayEntry _progressOverlayEntry;
   LoginBloc _loginBloc = LoginBloc();
@@ -81,6 +83,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
     showIcon: true,
+    key: keyEmail,
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).password,
@@ -89,6 +92,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     needValidation: true,
     validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
     showIcon: true,
+    key: keyPassword,
   );
 
   @override
