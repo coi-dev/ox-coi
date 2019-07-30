@@ -214,6 +214,8 @@ class ProfileHeaderText extends StatelessWidget {
     return Flexible(
         child: ProfileData.of(context).iconData != null
             ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Icon(ProfileData.of(context).iconData),
                   Padding(
@@ -251,6 +253,7 @@ class ProfileCopyableHeaderText extends StatelessWidget {
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ProfileHeaderText(),
           Padding(padding: EdgeInsets.all(iconTextPadding)),

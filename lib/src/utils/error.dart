@@ -42,8 +42,11 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 
-const contactDelete = "contact-delete-1";
+// Internal app errors
+const contactDeleteGeneric = "contactDelete-generic";
+const contactDeleteChatExists = "contactDelete-chatExists";
 
+// Helper for DCC event errors
 int getErrorType(Event event) {
   if (_isErrorEvent(event)) {
     return event.data1;

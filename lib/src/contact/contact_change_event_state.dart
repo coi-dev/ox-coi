@@ -43,6 +43,8 @@
 import 'package:meta/meta.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 
+import 'contact_change_bloc.dart';
+
 abstract class ContactChangeEvent {}
 
 class ChangeContact extends ContactChangeEvent {
@@ -73,7 +75,11 @@ class ContactEdited extends ContactChangeEvent {}
 
 class ContactDeleted extends ContactChangeEvent {}
 
-class ContactDeleteFailed extends ContactChangeEvent {}
+class ContactDeleteFailed extends ContactChangeEvent {
+  final String error;
+
+  ContactDeleteFailed({@required this.error});
+}
 
 class BlockContact extends ContactChangeEvent {
   final int contactId;
@@ -100,12 +106,10 @@ class ContactChangeStateInitial extends ContactChangeState {}
 class ContactChangeStateLoading extends ContactChangeState {}
 
 class ContactChangeStateSuccess extends ContactChangeState {
-  final bool add;
-  final bool delete;
-  final bool blocked;
   final int id;
+  final ContactChangeType type;
 
-  ContactChangeStateSuccess({@required this.add, @required this.delete, @required this.blocked, @required this.id});
+  ContactChangeStateSuccess({@required this.type, this.id});
 }
 
 class ContactChangeStateFailure extends ContactChangeState {

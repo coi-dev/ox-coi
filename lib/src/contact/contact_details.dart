@@ -169,20 +169,31 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
 
   _handleContactChanged(BuildContext context, ContactChangeState state) {
     if (state is ContactChangeStateSuccess) {
-      if (state.delete) {
-        showToast(_getDeleteToastString(context));
+      if (state.type == ContactChangeType.delete) {
+        showToast(_getDeleteMessage(context));
         _navigation.pop(context);
       }
-    } else if (state is ContactChangeStateFailure && state.error == contactDelete) {
-      showToast(getDeleteFailedToastString(context));
+    } else if (state is ContactChangeStateFailure) {
+      switch (state.error) {
+        case contactDeleteGeneric:
+          showToast(getDeleteFailedMessage(context));
+          break;
+        case contactDeleteChatExists:
+          showToast(getDeleteFailedBecauseChatExistsMessage(context));
+          break;
+      }
     }
   }
 
-  String _getDeleteToastString(BuildContext context) {
+  String _getDeleteMessage(BuildContext context) {
     return AppLocalizations.of(context).contactChangeDeleteToast;
   }
 
-  String getDeleteFailedToastString(BuildContext context) {
+  String getDeleteFailedMessage(BuildContext context) {
     return AppLocalizations.of(context).contactChangeDeleteFailedToast;
+  }
+
+  String getDeleteFailedBecauseChatExistsMessage(BuildContext context) {
+    return AppLocalizations.of(context).contactChangeDeleteBecauseChatExistsFailedToast;
   }
 }
