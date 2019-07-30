@@ -49,7 +49,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'flagged_bloc.dart';

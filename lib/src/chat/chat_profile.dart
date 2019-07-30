@@ -53,7 +53,7 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 
 class ChatProfile extends StatefulWidget {
   final int chatId;

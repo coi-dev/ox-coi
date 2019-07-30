@@ -45,7 +45,7 @@ import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/utils/widgets.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 
 class ContactItemChip extends StatefulWidget {
   final int contactId;
