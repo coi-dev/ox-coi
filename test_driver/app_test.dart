@@ -69,7 +69,7 @@ void main() {
     final signInCoiDebug = find.text('Sign in with Coi debug?');
     final email = find.byValueKey('keyEmail');
     final password = find.byValueKey('keyPassword');
-    final SIGNIN = find.text('SIGN IN');
+    final signInCaps = find.text('SIGN IN');
     final errorMessage = find.text('Please enter a valid e-mail address');
     final chatWelcome = find.text(
         'Welcome to OX Coi!\nPlease start a new chat by tapping the chat bubble icon.');
@@ -109,7 +109,7 @@ void main() {
           driver,
           welcomeMessage,
           welcomeDescription,
-          SIGNIN,
+          signInCaps,
           register,
           outlook,
           yahoo,
@@ -132,24 +132,24 @@ void main() {
       //  Try fake authentication.
       print('SIGN IN without email and password.');
       await getAuthentication(
-          driver, email, ' ', password, ' ', SIGNIN);
+          driver, email, ' ', password, ' ', signInCaps);
       await driver.waitFor(errorMessage);
       await catchScreenshot(driver, 'screenshots/withoutEmailandPassword.png');
       print('SIGN IN without email.');
       await getAuthentication(
-          driver, email, ' ', password, fakePassword, SIGNIN);
+          driver, email, ' ', password, fakePassword, signInCaps);
       await driver.waitFor(errorMessage);
       await catchScreenshot(driver, 'screenshots/withoutEmail.png');
       print('SIGN IN without password.');
       await getAuthentication(
-          driver, email,fakeEmail, password, ' ', SIGNIN);
+          driver, email,fakeEmail, password, ' ', signInCaps);
       await driver.waitFor(errorMessage);
       await catchScreenshot(driver, 'screenshots/withoutPassword.png');
 
       //  Check real authentication and get chat.
       print('Real authentication.');
       await getAuthentication(
-          driver, email, realEmail, password, realPassword, SIGNIN);
+          driver, email, realEmail, password, realPassword, signInCaps);
       await catchScreenshot(driver, 'screenshots/entered.png');
       Invoker.current.heartbeat();
       print('SIGN IN ist done. Wait for chat.');
@@ -165,7 +165,7 @@ Future checkOxCoiWelcomeAndProviderList(
     FlutterDriver driver,
     SerializableFinder welcomeMessage,
     SerializableFinder welcomeDescription,
-    SerializableFinder SIGNIN,
+    SerializableFinder signInCaps,
     SerializableFinder register,
     SerializableFinder outlook,
     SerializableFinder yahoo,
@@ -175,9 +175,9 @@ Future checkOxCoiWelcomeAndProviderList(
     SerializableFinder mailbox) async {
   await driver.waitFor(welcomeMessage);
   await driver.waitFor(welcomeDescription);
-  await driver.waitFor(SIGNIN);
+  await driver.waitFor(signInCaps);
   await driver.waitFor(register);
-  await driver.tap(SIGNIN);
+  await driver.tap(signInCaps);
 
   //  Check if all providers are found in the list.
   await driver.waitFor(outlook);
@@ -206,13 +206,13 @@ Future getAuthentication(
     String fakeEmail,
     SerializableFinder password,
     String realPassword,
-    SerializableFinder SIGNIN) async {
+    SerializableFinder signInCaps) async {
   await driver.tap(email);
   await driver.enterText(fakeEmail);
   await driver.waitFor(email);
   await driver.tap(password);
   await driver.enterText(realPassword);
   Invoker.current.heartbeat();
-  await driver.tap(SIGNIN);
+  await driver.tap(signInCaps);
   Invoker.current.heartbeat();
 }
