@@ -45,19 +45,24 @@ import 'package:meta/meta.dart';
 abstract class ContactListEvent {}
 
 class RequestContacts extends ContactListEvent {
-  final int listTypeOrChatId;
+  final int typeOrChatId;
 
-  RequestContacts({@required this.listTypeOrChatId});
+  RequestContacts({@required this.typeOrChatId});
 }
 
 class RequestContactsForGroup extends ContactListEvent {
-  final int listTypeOrChatId;
+  final int typeOrChatId;
   final int chatId;
 
-  RequestContactsForGroup({@required this.listTypeOrChatId, @required this.chatId});
+  RequestContactsForGroup({@required this.typeOrChatId, @required this.chatId});
 }
 
-class ContactsChanged extends ContactListEvent {}
+class ContactsChanged extends ContactListEvent {
+  final List<int> ids;
+  final List<int> lastUpdates;
+
+  ContactsChanged({@required this.ids, @required this.lastUpdates});
+}
 
 class ContactsSelectionChanged extends ContactListEvent {
   final int id;

@@ -82,7 +82,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chatGroupProfile);
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: widget.chatId));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: widget.chatId));
   }
 
   @override

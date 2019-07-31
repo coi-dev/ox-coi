@@ -68,7 +68,7 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
 
   ContactDetails({@required this.contactId}) {
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.dispatch(RequestContact(contactId: contactId, listType: ContactRepository.validContacts));
+    _contactItemBloc.dispatch(RequestContact(contactId: contactId, typeOrChatId: validContacts));
   }
 
   @override

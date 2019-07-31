@@ -70,7 +70,7 @@ class _ChatCreateState extends State<ChatCreate> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatCreate);
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
 
   @override
@@ -107,7 +107,7 @@ class _ChatCreateState extends State<ChatCreate> {
   }
 
   void onSearchClose() {
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
 
   Widget buildList(bool showNewContactAndAddGroup) {

@@ -65,7 +65,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.contactListBlocked);
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.blockedContacts));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: blockedContacts));
   }
 
   @override

@@ -46,7 +46,6 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
@@ -61,8 +60,8 @@ enum ContactChangeType {
 }
 
 class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> with InviteMixin {
-  final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-  Repository<Contact> contactRepository;
+  final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
+  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
 
   @override
   ContactChangeState get initialState => ContactChangeStateInitial();
@@ -72,7 +71,6 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     if (event is ChangeContact) {
       yield ContactChangeStateLoading();
       try {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
         _changeContact(event.name, event.email, event.contactAction);
       } catch (error) {
         yield ContactChangeStateFailure(error: error.toString());
@@ -82,24 +80,16 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     } else if (event is ContactEdited) {
       yield ContactChangeStateSuccess(type: ContactChangeType.edit);
     } else if (event is DeleteContact) {
-      contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
       _deleteContact(event.id);
     } else if (event is ContactDeleted) {
       yield ContactChangeStateSuccess(type: ContactChangeType.delete);
     } else if (event is ContactDeleteFailed) {
       yield ContactChangeStateFailure(error: event.error);
     } else if (event is BlockContact) {
-      int chatId = event.chatId;
-      if (isInviteChat(chatId)) {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
-      } else {
-        contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-      }
       _blockContact(event.contactId, event.chatId, event.messageId);
     } else if (event is ContactBlocked) {
       yield ContactChangeStateSuccess(type: ContactChangeType.block);
     } else if (event is UnblockContact) {
-      contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.blockedContacts);
       _unblockContact(event.id);
     } else if (event is ContactUnblocked) {
       yield ContactChangeStateSuccess(type: ContactChangeType.unblock);
@@ -116,11 +106,15 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
       contact.set(Contact.methodContactGetName, name);
       int chatId = await context.getChatByContactId(id);
       if (chatId != 0) {
-        Chat chat = chatRepository.get(chatId);
-        chat.set(Chat.methodChatGetName, name);
+        renameChat(chatId, name);
       }
       dispatch(ContactEdited());
     }
+  }
+
+  void renameChat(int chatId, String name) {
+    Chat chat = _chatRepository.get(chatId);
+    chat.set(Chat.methodChatGetName, name);
   }
 
   void _deleteContact(int id) async {
@@ -140,24 +134,31 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     if (contactId == null && messageId != null) {
       contactId = await getContactIdFromMessage(messageId);
     }
-    var blockedContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.blockedContacts);
-    contactRepository.transferTo(blockedContactRepository, contactId);
     Context context = Context();
     await context.blockContact(contactId);
     Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     messageListRepository.clear();
-    if (chatId != null && chatId != Chat.typeInvite) {
-      Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
-      chatRepository.remove(id: chatId);
-    }
+    adjustChatListOnBlockUnblock(chatId, block: true);
     dispatch(ContactBlocked());
   }
 
+  void adjustChatListOnBlockUnblock(int chatId, {bool block}) {
+    if (block) {
+      if (chatId != null && chatId != Chat.typeInvite) {
+        _chatRepository.remove(id: chatId);
+      }
+    } else {
+      if (chatId != 0) {
+        _chatRepository.putIfAbsent(id: chatId);
+      }
+    }
+  }
+
   void _unblockContact(int id) async {
-    var validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-    contactRepository.transferTo(validContactRepository, id);
     Context context = Context();
     await context.unblockContact(id);
+    var chatId = await context.getChatByContactId(id);
+    adjustChatListOnBlockUnblock(chatId, block: false);
     dispatch(ContactUnblocked());
   }
 }

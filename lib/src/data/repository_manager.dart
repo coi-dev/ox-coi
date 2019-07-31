@@ -71,7 +71,7 @@ class RepositoryManager {
           repository = ChatMessageRepository(ChatMsg.getCreator());
           break;
         case RepositoryType.contact:
-          repository = ContactRepository(Contact.getCreator(), id);
+          repository = ContactRepository(Contact.getCreator());
           break;
       }
       if (repository != null) {

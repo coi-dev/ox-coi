@@ -48,7 +48,6 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -94,8 +93,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     ChatMsg message = messageListRepository.get(messageId);
     int contactId = await message.getFromId();
-    Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
-    Contact contact = inviteContactRepository.get(contactId);
+    Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
+    Contact contact = contactRepository.get(contactId);
     String name = await contact.getName();
     String email = await contact.getAddress();
     int colorValue = await contact.getColor();

@@ -85,7 +85,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatCreateGroupSettings);
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
 

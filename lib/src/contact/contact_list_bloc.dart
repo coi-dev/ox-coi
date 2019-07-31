@@ -45,16 +45,16 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
-import 'package:ox_coi/src/data/contact_repository_updater.dart';
+import 'package:ox_coi/src/contact/contacts_updater_mixin.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
-class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactRepositoryUpdater {
-  Repository<Contact> _contactRepository;
+class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactsUpdaterMixin {
+  Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
-  int _listTypeOrChatId;
+  int _typeOrChatId;
   List<int> _contactsSelected = List();
   String _currentSearch;
 
@@ -71,8 +71,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       yield ContactListStateLoading();
       try {
         _currentSearch = null;
-        _listTypeOrChatId = event.listTypeOrChatId;
-        _contactRepository = RepositoryManager.get(RepositoryType.contact, _listTypeOrChatId);
+        _typeOrChatId = event.typeOrChatId;
         _setupContactListener();
         _setupContacts();
       } catch (error) {
@@ -87,8 +86,8 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     } else if (event is ContactsChanged) {
       yield ContactListStateSuccess(
-        contactIds: _contactRepository.getAllIds(),
-        contactLastUpdateValues: _contactRepository.getAllLastUpdateValues(),
+        contactIds: event.ids,
+        contactLastUpdateValues: event.lastUpdates,
         contactsSelected: _contactsSelected,
       );
     } else if (event is ContactsSearched) {
@@ -116,14 +115,17 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     }
   }
 
-  void _onContactsChanged(event) {
-    dispatch(ContactsChanged());
+  void _onContactsChanged([event]) async {
+    List<int> ids = await getIds(_typeOrChatId);
+    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(ids);
+    dispatch(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
   }
 
   Future _setupContacts() async {
-    List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
-    _contactRepository.update(ids: contactIds);
-    dispatch(ContactsChanged());
+    List<int> ids = await getIds(_typeOrChatId);
+    _contactRepository.update(ids: ids);
+    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(ids);
+    dispatch(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
   }
 
   void _searchContacts() async {
@@ -143,7 +145,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       _contactsSelected.add(id);
     }
     if (isNullOrEmpty(_currentSearch)) {
-      dispatch(ContactsChanged());
+      _onContactsChanged();
     } else {
       _searchContacts();
     }

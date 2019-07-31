@@ -75,13 +75,13 @@ class _ChatProfileState extends State<ChatProfile> {
     super.initState();
     _navigation.current = Navigatable(Type.chatProfile);
     _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
-    int listTypeOrChatId;
+    int typeOrChatId;
     if (widget.chatId == Chat.typeInvite) {
-      listTypeOrChatId = ContactRepository.inviteContacts;
+      typeOrChatId = inviteContacts;
     } else {
-      listTypeOrChatId = widget.chatId;
+      typeOrChatId = widget.chatId;
     }
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: listTypeOrChatId));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: typeOrChatId));
   }
 
   @override

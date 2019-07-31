@@ -471,7 +471,8 @@ class AppLocalizations {
 
   String get contactChangeDeleteFailedToast => Intl.message('Could not delete contact.', name: 'contactChangeDeleteFailedToast');
 
-  String get contactChangeDeleteBecauseChatExistsFailedToast => Intl.message('Could not delete contact. Active chats with contact found, please remove first.', name: 'contactChangeDeleteFailedToast');
+  String get contactChangeDeleteBecauseChatExistsFailedToast =>
+      Intl.message('Could not delete contact. Active chats with contact found, please remove first.', name: 'contactChangeDeleteFailedToast');
 
   String contactChangeDeleteDialogContent(email, name) =>
       Intl.message('Do you really want to delete $email ($name)?', name: 'contactChangeDeleteDialogContent', args: [email, name]);

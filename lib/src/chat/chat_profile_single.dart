@@ -74,13 +74,13 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
   @override
   void initState() {
     super.initState();
-    var listType;
+    var typeOrChatId;
     if (isInvite()) {
-      listType = ContactRepository.inviteContacts;
+      typeOrChatId = inviteContacts;
     } else {
-      listType = ContactRepository.validContacts;
+      typeOrChatId = validContacts;
     }
-    _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, listType: listType));
+    _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: typeOrChatId));
   }
 
   bool isInvite() => widget.chatId == Chat.typeInvite;

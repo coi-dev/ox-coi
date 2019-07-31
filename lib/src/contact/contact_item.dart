@@ -78,11 +78,11 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Crea
     super.initState();
     var listType;
     if (widget.contactItemType == ContactItemType.blocked) {
-      listType = ContactRepository.blockedContacts;
+      listType = blockedContacts;
     } else {
-      listType = ContactRepository.validContacts;
+      listType = validContacts;
     }
-    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: listType));
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: listType));
   }
 
   @override

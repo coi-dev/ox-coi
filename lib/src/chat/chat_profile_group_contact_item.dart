@@ -90,7 +90,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   @override
   void initState() {
     super.initState();
-    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     if (widget.contactId != Core.Contact.idSelf) {
       choices = participantChoices;
     } else {

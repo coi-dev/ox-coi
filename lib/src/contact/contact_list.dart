@@ -118,9 +118,11 @@ class _ContactListState extends State<ContactList> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.contactList);
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    requestValidContacts();
     setupContactImport();
   }
+
+  void requestValidContacts() => _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
 
   setupContactImport() async {
     if (await _contactImportBloc.isInitialContactsOpening()) {
@@ -137,6 +139,7 @@ class _ContactListState extends State<ContactList> {
       _progressOverlayEntry = null;
     }
     if (state is ContactsImportSuccess) {
+      requestValidContacts();
       String contactImportSuccess = AppLocalizations.of(context).contactImportSuccess(state.changedCount);
       showToast(contactImportSuccess);
     } else if (state is ContactsImportFailure) {
@@ -204,7 +207,7 @@ class _ContactListState extends State<ContactList> {
   }
 
   void onSearchClose() {
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    requestValidContacts();
   }
 
   _showBlockedUserList(BuildContext context) {

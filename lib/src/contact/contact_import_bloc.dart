@@ -46,7 +46,6 @@ import 'package:bloc/bloc.dart';
 import 'package:contacts_service/contacts_service.dart' as SystemContacts;
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
@@ -54,7 +53,7 @@ import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
-  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
 
   @override
   ContactImportState get initialState => ContactsImportInitial();
@@ -64,7 +63,10 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     if (event is MarkContactsAsInitiallyLoaded) {
       markContactsAsInitiallyLoaded();
     } else if (event is PerformImport) {
-      loadSystemContacts();
+      String contacts = await loadSystemContacts();
+      if (contacts != null) {
+        importSystemContacts(contacts);
+      }
     } else if (event is ImportPerformed) {
       yield ContactsImportSuccess(changedCount: event.changedCount);
     } else if (event is ImportAborted) {
@@ -81,24 +83,28 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     await setPreference(preferenceSystemContactsImportShown, true);
   }
 
-  void loadSystemContacts() async {
+  Future<String> loadSystemContacts() async {
     bool hasContactPermission = await hasPermission(PermissionGroup.contacts);
     if (hasContactPermission) {
-      Iterable<SystemContacts.Contact> contacts = await SystemContacts.ContactsService.getContacts();
-      String addressBook = "";
-      contacts.forEach((contact) {
+      Iterable<SystemContacts.Contact> systemContacts = await SystemContacts.ContactsService.getContacts();
+      String contacts = "";
+      systemContacts.forEach((contact) {
         if (contact.emails.length != 0) {
           contact.emails.forEach((email) {
-            addressBook += "${contact.displayName}\n${email.value}\n";
+            contacts += "${contact.displayName}\n${email.value}\n";
           });
         }
       });
-      contactRepository.clear();
-      Context context = Context();
-      int changedCount = await context.addAddressBook(addressBook);
-      dispatch(ImportPerformed(changedCount: changedCount));
+      return contacts;
     } else {
       dispatch(ImportAborted());
+      return null;
     }
+  }
+
+  void importSystemContacts(String contacts) async {
+    Context context = Context();
+    int changedCount = await context.addAddressBook(contacts);
+    dispatch(ImportPerformed(changedCount: changedCount));
   }
 }

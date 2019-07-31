@@ -63,7 +63,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   Stream<ContactItemState> mapEventToState(ContactItemEvent event) async* {
     if (event is RequestContact) {
       _contactId = event.contactId;
-      _contactRepository = RepositoryManager.get(RepositoryType.contact, event.listType);
+      _contactRepository = RepositoryManager.get(RepositoryType.contact);
       yield ContactItemStateLoading();
       try {
         _setupContact();

@@ -51,12 +51,12 @@ class ChatRepository extends Repository<Chat> {
   onData(Event event) async {
     if (event.hasType(Event.incomingMsg) || event.hasType(Event.chatModified) || event.hasType(Event.msgsChanged)) {
       int chatId = event.data1;
-      await setupChatListAfterUpdate(chatId);
+      await updateChatAndRefreshChatList(chatId);
     }
     super.onData(event);
   }
 
-  Future<void> setupChatListAfterUpdate(int changedChatId) async {
+  Future<void> updateChatAndRefreshChatList(int changedChatId) async {
     ChatList chatList = ChatList();
     await chatList.setup();
     int chatCount = await chatList.getChatCnt();
@@ -73,13 +73,15 @@ class ChatRepository extends Repository<Chat> {
     await chatList.tearDown();
     if (changedChatId != 0 && chatIds.contains(changedChatId)) {
       Chat updatedChat = get(changedChatId);
-      if (chatSummary != null) {
-        updatedChat?.set(ChatExtension.chatSummary, chatSummary);
+      if (updatedChat != null) {
+        if (chatSummary != null) {
+          updatedChat.set(ChatExtension.chatSummary, chatSummary);
+        }
+        updatedChat.reloadValue(Chat.methodChatGetSubtitle);
+        updatedChat.reloadValue(Chat.methodChatGetName);
+        updatedChat.reloadValue(Chat.methodChatGetProfileImage);
+        updatedChat.setLastUpdate();
       }
-      updatedChat.reloadValue(Chat.methodChatGetSubtitle);
-      updatedChat.reloadValue(Chat.methodChatGetName);
-      updatedChat.reloadValue(Chat.methodChatGetProfileImage);
-      updatedChat.setLastUpdate();
     }
     update(ids: chatIds);
   }

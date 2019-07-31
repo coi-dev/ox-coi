@@ -72,6 +72,14 @@ abstract class Repository<T extends Base> {
     return _items.values.map<int>((Base item) => item.lastUpdate).toList();
   }
 
+  List<int> getLastUpdateValuesForIds(List<int> ids) {
+    var lastUpdateValues = List<int>();
+    ids.forEach((id) {
+      lastUpdateValues.add(_items[id].lastUpdate);
+    });
+    return lastUpdateValues;
+  }
+
   void _set(int id, T value) {
     _items[id] = value;
   }

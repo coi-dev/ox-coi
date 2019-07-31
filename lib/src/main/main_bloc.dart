@@ -112,7 +112,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   void _setupInitialAppState() {
     ContactListBloc contactListBloc = ContactListBloc();
-    contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
 
   onLoginSuccess() {

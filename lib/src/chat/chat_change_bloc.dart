@@ -45,7 +45,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/utils/text.dart';
@@ -106,14 +105,8 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       inviteMessageRepository.clear();
       chatId = await context.createChatByContactId(contactId);
     } else if (messageId != null) {
-      var messageContactId = await _messageListRepository.get(messageId).getFromId();
-      Repository<Contact> inviteContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
-      Repository<Contact> validContactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
-      inviteContactRepository.remove(id: messageContactId);
       _messageListRepository.clear();
       chatId = await context.createChatByMessageId(messageId);
-      List<int> contactIds = await context.getChatContacts(chatId);
-      validContactRepository.putIfAbsent(ids: contactIds);
     } else if (verified != null && name != null && contacts != null) {
       chatId = await context.createGroupChat(verified, name);
       for (int i = 0; i < contacts.length; i++) {
@@ -173,7 +166,6 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   void _removeParticipant(int chatId, int contactId) async {
     Context context = Context();
     await context.removeContactFromChat(chatId, contactId);
-    RepositoryManager.get(RepositoryType.contact, chatId).remove(id: contactId);
   }
 
   void _setName(int chatId, String newName) async {

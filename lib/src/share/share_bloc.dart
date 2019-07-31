@@ -105,7 +105,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
         if (_chatIds != null) {
           _completeList.insertAll(0, _chatIds);
         }
-        _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+        _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
       }
     });
     _chatListBloc.dispatch(RequestChatList(showInvites: false));

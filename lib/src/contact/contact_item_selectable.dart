@@ -63,7 +63,7 @@ class _ContactItemSelectableState extends State<ContactItemSelectable> with Cont
   @override
   void initState() {
     super.initState();
-    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, listType: ContactRepository.validContacts));
+    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
   }
 
   @override

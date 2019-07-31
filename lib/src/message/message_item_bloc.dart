@@ -45,7 +45,6 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
@@ -67,9 +66,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       try {
         var chatId = event.chatId;
         if (isInvite(chatId)) {
-          _contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.inviteContacts);
+          _contactRepository = RepositoryManager.get(RepositoryType.contact);
         } else {
-          _contactRepository = RepositoryManager.get(RepositoryType.contact, ContactRepository.validContacts);
+          _contactRepository = RepositoryManager.get(RepositoryType.contact);
         }
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
         _messageId = event.messageId;

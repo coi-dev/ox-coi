@@ -55,8 +55,8 @@ import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
+import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -74,7 +74,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatCreateGroupParticipants);
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
 
@@ -117,7 +117,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   void onSearchClose() {
-    _contactListBloc.dispatch(RequestContacts(listTypeOrChatId: ContactRepository.validContacts));
+    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
 
   Widget buildList() {

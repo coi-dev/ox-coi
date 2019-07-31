@@ -41,25 +41,28 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_coi/src/data/contact_repository_updater.dart';
 import 'package:ox_coi/src/data/repository.dart';
 
-class ContactRepository extends Repository<Contact> with ContactRepositoryUpdater {
-  ContactRepository(RepositoryItemCreator<Contact> creator, this._listTypeOrChatId) : super(creator);
+const int validContacts = 0;
+const int inviteContacts = 1;
+const int blockedContacts = 2;
 
-  static const int validContacts = 0;
-  static const int inviteContacts = 1;
-  static const int blockedContacts = 2;
-
-  final int _listTypeOrChatId;
+class ContactRepository extends Repository<Contact> {
+  ContactRepository(RepositoryItemCreator<Contact> creator) : super(creator);
 
   @override
   onData(Event event) async {
-    if (event.eventId == Event.contactsChanged || event.eventId == Event.chatModified) {
-      List<int> contactIds = await getContactIdsAfterUpdate(_listTypeOrChatId);
-      update(ids: contactIds);
+    if (event.eventId == Event.contactsChanged) {
+      var contactId = event.data1;
+      updateContact(contactId);
     }
     super.onData(event);
+  }
+
+  void updateContact(contactId) {
+    if (contactId != 0) {
+      update(id: contactId);
+    }
   }
 
   @override
