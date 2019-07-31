@@ -69,7 +69,7 @@ class ContactItem extends StatefulWidget {
   _ContactItemState createState() => _ContactItemState();
 }
 
-class _ContactItemState extends State<ContactItem> with ContactItemBuilder, CreateChatMixin {
+class _ContactItemState extends State<ContactItem> with ContactItemBuilder, ChatCreateMixin {
   ContactItemBloc _contactBloc = ContactItemBloc();
   Navigation navigation = Navigation();
 

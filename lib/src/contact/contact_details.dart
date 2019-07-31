@@ -60,15 +60,47 @@ import 'package:rxdart/rxdart.dart';
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
 
-class ContactDetails extends StatelessWidget with CreateChatMixin {
+class ContactDetails extends StatefulWidget {
+  final int contactId;
+
+  ContactDetails({@required this.contactId});
+
+  @override
+  _ContactDetailsState createState() => _ContactDetailsState();
+}
+
+class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   final _contactItemBloc = ContactItemBloc();
   final _contactChangeBloc = ContactChangeBloc();
   final _navigation = Navigation();
-  final int contactId;
 
-  ContactDetails({@required this.contactId}) {
+  @override
+  void initState() {
+    super.initState();
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.dispatch(RequestContact(contactId: contactId, typeOrChatId: validContacts));
+    _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
+    contactAddedObservable.listen((state) => _handleContactChanged(context, state));
+  }
+
+  _handleContactChanged(BuildContext context, ContactChangeState state) {
+    if (state is ContactChangeStateSuccess) {
+      if (state.type == ContactChangeType.delete) {
+        showToast(_getDeleteMessage(context));
+      } else if (state.type == ContactChangeType.block) {
+        showToast(_getBlockMessage(context));
+      }
+      _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    } else if (state is ContactChangeStateFailure) {
+      switch (state.error) {
+        case contactDeleteGeneric:
+          showToast(getDeleteFailedMessage(context));
+          break;
+        case contactDeleteChatExists:
+          showToast(getDeleteFailedBecauseChatExistsMessage(context));
+          break;
+      }
+    }
   }
 
   @override
@@ -112,7 +144,7 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
                       iconData: Icons.chat,
                       text: appLocalizations.contactsOpenChat,
                       color: accent,
-                      onTap: () => createChatFromContact(context, contactId),
+                      onTap: () => createChatFromContact(context, widget.contactId),
                     ),
                     ProfileAction(
                       iconData: Icons.edit,
@@ -121,13 +153,27 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
                       onTap: () => _editContact(context, state.name, state.email),
                     ),
                     ProfileAction(
+                      iconData: Icons.block,
+                      text: appLocalizations.chatProfileBlockContactButtonText,
+                      color: accent,
+                      onTap: () => showActionDialog(
+                        context,
+                        ProfileActionType.block,
+                        _blockContact,
+                        {
+                          ProfileActionParams.name: state.name,
+                          ProfileActionParams.email: state.email,
+                        },
+                      ),
+                    ),
+                    ProfileAction(
                       iconData: Icons.delete,
                       text: appLocalizations.contactChangeDeleteTitle,
                       color: error,
                       onTap: () => showActionDialog(
                         context,
                         ProfileActionType.deleteContact,
-                        () => _deleteContact(context),
+                        _deleteContact,
                         {
                           ProfileActionParams.name: state.name,
                           ProfileActionParams.email: state.email,
@@ -152,7 +198,7 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
       MaterialPageRoute(
         builder: (context) => ContactChange(
           contactAction: ContactAction.edit,
-          id: contactId,
+          id: widget.contactId,
           name: name,
           email: email,
         ),
@@ -160,33 +206,22 @@ class ContactDetails extends StatelessWidget with CreateChatMixin {
     );
   }
 
-  _deleteContact(BuildContext context) {
+  _deleteContact() {
     _navigation.pop(context);
-    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
-    contactAddedObservable.listen((state) => _handleContactChanged(context, state));
-    _contactChangeBloc.dispatch(DeleteContact(id: contactId));
+    _contactChangeBloc.dispatch(DeleteContact(id: widget.contactId));
   }
 
-  _handleContactChanged(BuildContext context, ContactChangeState state) {
-    if (state is ContactChangeStateSuccess) {
-      if (state.type == ContactChangeType.delete) {
-        showToast(_getDeleteMessage(context));
-        _navigation.pop(context);
-      }
-    } else if (state is ContactChangeStateFailure) {
-      switch (state.error) {
-        case contactDeleteGeneric:
-          showToast(getDeleteFailedMessage(context));
-          break;
-        case contactDeleteChatExists:
-          showToast(getDeleteFailedBecauseChatExistsMessage(context));
-          break;
-      }
-    }
+  _blockContact() {
+    _navigation.pop(context);
+    _contactChangeBloc.dispatch(BlockContact(contactId: widget.contactId));
   }
 
   String _getDeleteMessage(BuildContext context) {
     return AppLocalizations.of(context).contactChangeDeleteToast;
+  }
+
+  String _getBlockMessage(BuildContext context) {
+    return AppLocalizations.of(context).contactChangeBlockToast;
   }
 
   String getDeleteFailedMessage(BuildContext context) {

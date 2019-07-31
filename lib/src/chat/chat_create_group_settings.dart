@@ -68,7 +68,7 @@ class ChatCreateGroupSettings extends StatefulWidget {
   _ChatCreateGroupSettingsState createState() => _ChatCreateGroupSettingsState();
 }
 
-class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with CreateChatMixin {
+class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with ChatCreateMixin {
   ContactListBloc _contactListBloc = ContactListBloc();
   ValidatableTextFormField _groupNameField = ValidatableTextFormField(
     (context) => AppLocalizations.of(context).createGroupTextFieldLabel,

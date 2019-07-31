@@ -69,7 +69,7 @@ class ChatProfileOneToOne extends StatefulWidget {
 
 class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
   ContactItemBloc _contactItemBloc = ContactItemBloc();
-  Navigation navigation = Navigation();
+  Navigation _navigation = Navigation();
 
   @override
   void initState() {
@@ -139,7 +139,16 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               ProfileAction(
                 iconData: Icons.block,
                 text: appLocalizations.chatProfileBlockContactButtonText,
-                onTap: () => showActionDialog(context, ProfileActionType.block, _blockContact),
+                color: accent,
+                onTap: () => showActionDialog(
+                  context,
+                  ProfileActionType.block,
+                  _blockContact,
+                  {
+                    ProfileActionParams.name: chatName,
+                    ProfileActionParams.email: email,
+                  },
+                ),
               ),
             if (!isInvite())
               ProfileAction(
@@ -157,12 +166,12 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
   _blockContact() {
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
     contactChangeBloc.dispatch(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 
   _deleteChat() {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.dispatch(DeleteChat(chatId: widget.chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 }

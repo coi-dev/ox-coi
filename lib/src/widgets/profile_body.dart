@@ -97,7 +97,7 @@ showActionDialog(BuildContext context, ProfileActionType action, Function onPerf
   switch (action) {
     case ProfileActionType.block:
       title = appLocalizations.block;
-      content = appLocalizations.chatProfileBlockContactInfoText;
+      content = appLocalizations.chatProfileBlockContactContent(params[ProfileActionParams.email], params[ProfileActionParams.name]);
       positiveButton = appLocalizations.chatProfileBlockContactButtonText;
       type = Type.contactBlockDialog;
       break;

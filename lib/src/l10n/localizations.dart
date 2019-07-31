@@ -406,7 +406,8 @@ class AppLocalizations {
   String get chatInviteQuestion => Intl.message('Do you want to chat with this new contact?', name: 'chatInviteQuestion');
 
   // Chat profile view
-  String get chatProfileBlockContactInfoText => Intl.message('Do you want to block the contact?', name: 'chatProfileBlockContactInfoText');
+  String chatProfileBlockContactContent(email, name) =>
+      Intl.message('Do you really want to block $email ($name)?', name: 'chatProfileBlockContactContent', args: [email, name]);
 
   String get chatProfileBlockContactButtonText => Intl.message('Block contact', name: 'chatProfileBlockContactButtonText');
 
@@ -464,6 +465,8 @@ class AppLocalizations {
   String get contactChangeEditTitle => Intl.message('Edit contact', name: 'contactChangeEditTitle');
 
   String get contactChangeEditToast => Intl.message('Contact successfully edited', name: 'contactChangeEditToast');
+
+  String get contactChangeBlockToast => Intl.message('Contact successfully blocked', name: 'contactChangeBlockToast');
 
   String get contactChangeDeleteTitle => Intl.message('Delete contact', name: 'contactChangeDeleteTitle');
 

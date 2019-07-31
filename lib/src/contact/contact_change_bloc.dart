@@ -135,9 +135,14 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
       contactId = await getContactIdFromMessage(messageId);
     }
     Context context = Context();
+    if (chatId == null) {
+      chatId = await context.getChatByContactId(contactId);
+    }
     await context.blockContact(contactId);
-    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-    messageListRepository.clear();
+    if (isInviteChat(chatId)) {
+      Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+      messageListRepository.clear();
+    }
     adjustChatListOnBlockUnblock(chatId, block: true);
     dispatch(ContactBlocked());
   }

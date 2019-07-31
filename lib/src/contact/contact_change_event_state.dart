@@ -86,7 +86,7 @@ class BlockContact extends ContactChangeEvent {
   final int chatId;
   final int messageId;
 
-  BlockContact({@required this.chatId, this.contactId, this.messageId});
+  BlockContact({this.chatId, this.contactId, this.messageId});
 }
 
 class ContactBlocked extends ContactChangeEvent {}

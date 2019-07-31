@@ -48,7 +48,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:rxdart/rxdart.dart';
 
-mixin CreateChatMixin {
+mixin ChatCreateMixin {
   void createChatFromContact(BuildContext context, int contactId, [Function onSuccess]) {
     ChatChangeBloc createChatBloc = _getChatChangeBloc(context, onSuccess);
     createChatBloc.dispatch(CreateChat(contactId: contactId));

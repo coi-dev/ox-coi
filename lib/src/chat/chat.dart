@@ -88,7 +88,7 @@ class Chat extends StatefulWidget {
   _ChatState createState() => new _ChatState();
 }
 
-class _ChatState extends State<Chat> with ChatComposer, CreateChatMixin, InviteMixin {
+class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteMixin {
   Navigation navigation = Navigation();
   ChatBloc _chatBloc = ChatBloc();
   MessageListBloc _messageListBloc = MessageListBloc();

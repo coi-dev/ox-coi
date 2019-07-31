@@ -68,7 +68,7 @@ class ChatProfileGroupContactItem extends StatefulWidget {
   _ChatProfileGroupContactItemState createState() => _ChatProfileGroupContactItemState();
 }
 
-class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactItem> with ContactItemBuilder, CreateChatMixin {
+class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactItem> with ContactItemBuilder, ChatCreateMixin {
   ContactItemBloc _contactBloc = ContactItemBloc();
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
   Navigation _navigation = Navigation();
