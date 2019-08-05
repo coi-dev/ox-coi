@@ -95,7 +95,8 @@ const formVerticalPadding = 16.0;
 // Messages
 const messagesHorizontalPadding = 8.0;
 const messagesVerticalPadding = 8.0;
-const messagesInnerPadding = 11.0;
+const messagesVerticalInnerPadding = 11.0;
+const messagesHorizontalInnerPadding = 16.0;
 const messagesContentTimePadding = 8.0;
 const messagesBoxRadius = 18.0;
 const messagesBoxRadiusSmall = 2.0;

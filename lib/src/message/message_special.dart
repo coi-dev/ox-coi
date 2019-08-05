@@ -76,11 +76,11 @@ class MessageSpecial extends StatelessWidget {
             backgroundColor: secondary,
             textColor: onSecondary,
             secondaryTextColor: onSecondary.withOpacity(fade),
+            borderRadius: buildInfoBorderRadius(),
             time: time,
             showPadlock: showPadlock,
             text: text,
             child: MessageElevated(
-              borderRadius: buildInfoBorderRadius(),
               child: MessageText(),
             ),
           ),
@@ -94,8 +94,8 @@ class MessageSpecial extends StatelessWidget {
       child: MessageData(
         backgroundColor: surface,
         textColor: onSurface,
+        borderRadius: buildInfoBorderRadius(),
         child: MessageElevated(
-          borderRadius: buildInfoBorderRadius(),
           child: Text(messageText),
         ),
       ),

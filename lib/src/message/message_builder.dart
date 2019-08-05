@@ -45,6 +45,7 @@ import 'dart:io';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
 
@@ -59,11 +60,13 @@ class MessageData extends InheritedWidget {
   final int state;
   final String text;
   final AttachmentWrapper attachment;
+  final BorderRadius borderRadius;
 
   MessageData({
     Key key,
     @required this.backgroundColor,
     @required this.textColor,
+    @required this.borderRadius,
     this.secondaryTextColor,
     this.time,
     this.showPadlock,
@@ -82,22 +85,18 @@ class MessageData extends InheritedWidget {
 }
 
 class MessageElevated extends StatelessWidget {
-  final BorderRadius borderRadius;
   final Widget child;
 
-  const MessageElevated({Key key, @required this.borderRadius, @required this.child}) : super(key: key);
+  const MessageElevated({Key key, @required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: messagesElevation,
-      borderRadius: borderRadius,
+      borderRadius: MessageData.of(context).borderRadius,
       color: MessageData.of(context).backgroundColor,
       textStyle: TextStyle(color: MessageData.of(context).textColor),
-      child: Padding(
-        padding: const EdgeInsets.all(messagesInnerPadding),
-        child: child,
-      ),
+      child: child,
     );
   }
 }
@@ -105,21 +104,24 @@ class MessageElevated extends StatelessWidget {
 class MessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Flexible(
-          child: Text(
-            MessageData.of(context).text,
-            style: Theme.of(context).textTheme.subhead.apply(color: MessageData.of(context).textColor),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              MessageData.of(context).text,
+              style: Theme.of(context).textTheme.subhead.apply(color: MessageData.of(context).textColor),
+            ),
           ),
-        ),
-        Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-        MessagePartTime(),
-        MessagePartPadlock(),
-        MessagePartState(),
-      ],
+          Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
+          MessagePartTime(),
+          MessagePartPadlock(),
+          MessagePartState(),
+        ],
+      ),
     );
   }
 }
@@ -127,32 +129,67 @@ class MessageText extends StatelessWidget {
 class MessageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MessageData.of(context).attachment.type == ChatMsg.typeImage ? MessagePartImageAttachment() : MessagePartGenericAttachment();
+    return isImage(context) ? MessagePartImageAttachment() : MessagePartGenericAttachment();
   }
 }
 
-class MessagePartImageAttachment extends StatelessWidget {
+class MessagePartImageAttachment extends StatefulWidget {
+  @override
+  _MessagePartImageAttachmentState createState() => _MessagePartImageAttachmentState();
+}
+
+class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment> {
+  ImageProvider imageProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    File file = File(MessageData.of(context).attachment.path);
+    imageProvider = FileImage(file);
+    precacheImage(imageProvider, context, onError: (error, stacktrace) {
+      setState(() {
+        imageProvider = MemoryImage(kTransparentImage);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    File file = File(MessageData.of(context).attachment.path);
-    String text = MessageData.of(context).text;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Image.file(file),
-        text.isNotEmpty ? Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)) : Container(),
-        text.isNotEmpty ? Flexible(child: Text(text)) : Container(),
-        Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            MessagePartTime(),
-            MessagePartPadlock(),
-            MessagePartState(),
-          ],
-        ),
-      ],
+    var text = MessageData.of(context).text;
+    var messageBorderRadius = MessageData.of(context).borderRadius;
+    var borderRadius = BorderRadius.only(topLeft: messageBorderRadius.topLeft, topRight: messageBorderRadius.topRight);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: messagesVerticalInnerPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          AspectRatio(
+            child: ClipRRect(
+              borderRadius: borderRadius,
+              child: Image(
+                image: imageProvider,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+            aspectRatio: 4 / 3,
+          ),
+          text.isNotEmpty ? Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)) : Container(),
+          text.isNotEmpty ? Flexible(child: Text(text)) : Container(),
+          Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
+          Padding(
+            padding: const EdgeInsets.only(right: messagesHorizontalInnerPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                MessagePartTime(),
+                MessagePartPadlock(),
+                MessagePartState(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -161,34 +198,37 @@ class MessagePartGenericAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AttachmentWrapper attachment = MessageData.of(context).attachment;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.attach_file,
-          size: messagesFileIconSize,
-          color: MessageData.of(context).textColor,
-        ),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                attachment.filename,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(byteToPrintableSize(attachment.size)),
-            ],
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(
+            Icons.attach_file,
+            size: messagesFileIconSize,
+            color: MessageData.of(context).textColor,
           ),
-        ),
-        Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-        MessagePartTime(),
-        MessagePartPadlock(),
-        MessagePartState(),
-      ],
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  attachment.filename,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(byteToPrintableSize(attachment.size)),
+              ],
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
+          MessagePartTime(),
+          MessagePartPadlock(),
+          MessagePartState(),
+        ],
+      ),
     );
   }
 }
@@ -245,4 +285,9 @@ class MessagePartState extends StatelessWidget {
         return Container();
     }
   }
+}
+
+bool isImage(BuildContext context) {
+  final attachment = MessageData.of(context).attachment;
+  return attachment != null && attachment.type == ChatMsg.typeImage;
 }

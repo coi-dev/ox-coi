@@ -87,7 +87,7 @@ class MessageReceived extends StatelessWidget {
         children: <Widget>[
           isGroupChat
               ? Padding(
-                  padding: const EdgeInsets.only(right: messagesInnerPadding),
+                  padding: const EdgeInsets.only(right: messagesVerticalInnerPadding),
                   child: Avatar(
                     textPrimary: name,
                     textSecondary: email,
@@ -100,12 +100,12 @@ class MessageReceived extends StatelessWidget {
               backgroundColor: surface,
               textColor: onSurface,
               secondaryTextColor: onSurface.withOpacity(fade),
+              borderRadius: buildBorderRadius(),
               time: time,
               showPadlock: showPadlock,
               text: text,
               attachment: attachmentWrapper,
               child: MessageElevated(
-                borderRadius: buildBorderRadius(),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
