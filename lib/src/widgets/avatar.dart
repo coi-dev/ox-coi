@@ -46,6 +46,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Avatar extends StatelessWidget {
   final String imagePath;
@@ -58,11 +59,11 @@ class Avatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String initials;
-    FileImage avatarImage;
+    ImageProvider avatarImage;
     if (imagePath != null && imagePath.isNotEmpty) {
       avatarImage = FileImage(File(imagePath));
     } else {
-      avatarImage = FileImage(File(""));
+      avatarImage = MemoryImage(kTransparentImage);
       initials = getInitials(textPrimary, textSecondary);
     }
     return Container(

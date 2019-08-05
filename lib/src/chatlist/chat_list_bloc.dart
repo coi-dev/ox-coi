@@ -104,6 +104,16 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   @override
+  Stream<ChatListState> transform(Stream<ChatListEvent> events, Stream<ChatListState> Function(ChatListEvent event) next) {
+    return super.transform(
+      (events as Observable<ChatListEvent>).debounceTime(
+        Duration(milliseconds: 300),
+      ),
+      next,
+    );
+  }
+
+  @override
   void dispose() {
     _chatRepository.removeListener(_repositoryStreamHandler);
     _repositoryStreamHandler?.tearDown();
