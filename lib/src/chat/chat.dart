@@ -104,6 +104,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   String _selectedExtension = "";
   String _fileName = "";
   GlobalKey _imageVideoKey = GlobalKey();
+  var _scrollController = ScrollController();
 
   OverlayEntry _overlayEntry;
 
@@ -417,6 +418,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   ListView buildListItems(MessagesStateSuccess state) {
     return ListView.custom(
+      controller: _scrollController,
       padding: new EdgeInsets.all(listItemPadding),
       reverse: true,
       childrenDelegate: SliverChildBuilderDelegate(
@@ -492,6 +494,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void _onPrepareMessageSend() {
+    _scrollController.jumpTo(0.0);
     if (isInviteChat(widget.chatId)) {
       _messageListBloc.dispose();
       createChatFromMessage(context, widget.messageId, widget.chatId, _handleCreateChatSuccess);
