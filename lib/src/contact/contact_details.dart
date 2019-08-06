@@ -57,6 +57,7 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
@@ -107,7 +108,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(key: Key("back"),
         title: Text(L10n.get(L.profile)),
       ),
       body: SingleChildScrollView(
@@ -141,18 +142,21 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       )),
                   ProfileActionList(tiles: [
                     ProfileAction(
+                      key: Key(keyContact_detailOpen_chatProfileActionIcon),
                       iconData: Icons.chat,
                       text: L10n.get(L.chatOpen),
                       color: accent,
                       onTap: () => createChatFromContact(context, widget.contactId),
                     ),
                     ProfileAction(
+                      key: Key(keyContact_detailEdit_contactProfileActionIcon),
                       iconData: Icons.edit,
                       text: L10n.get(L.contactEdit),
                       color: accent,
                       onTap: () => _editContact(context, state.name, state.email),
                     ),
                     ProfileAction(
+                      key: Key(keyContact_detailBlock_contactProfileActionIcon),
                       iconData: Icons.block,
                       text: L10n.get(L.contactBlock),
                       color: accent,
@@ -167,6 +171,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       ),
                     ),
                     ProfileAction(
+                      key: Key(keyContact_detailDelete_contactProfileActionIcon),
                       iconData: Icons.delete,
                       text: L10n.get(L.contactDelete),
                       color: error,

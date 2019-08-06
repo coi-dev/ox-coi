@@ -103,12 +103,12 @@ class _RootState extends State<Root> {
   List<BottomNavigationBarItem> getBottomBarItems() {
     var bottomBarItems = List<BottomNavigationBarItem>();
     childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
-          icon: Icon(
-            item.getNavigationIcon(),
-            key: Key(item.getNavigationText(context)),
-          ),
-          title: Text(item.getNavigationText(context)),
-        )));
+      icon: Icon(
+        item.getNavigationIcon(),
+        key: Key(item.getNavigationText(context)),
+      ),
+      title: Text(item.getNavigationText(context)),
+    )));
     return bottomBarItems;
   }
 

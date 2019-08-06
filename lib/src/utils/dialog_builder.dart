@@ -46,7 +46,13 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
-showNavigatableDialog({@required BuildContext context, @required Widget dialog, @required Navigatable navigatable, Navigatable previousNavigatable}) {
+import 'keyMapping.dart';
+
+showNavigatableDialog(
+    {@required BuildContext context,
+    @required Widget dialog,
+    @required Navigatable navigatable,
+    Navigatable previousNavigatable}) {
   Navigation navigation = Navigation();
   previousNavigatable = previousNavigatable ?? navigation.current;
   navigation.current = navigatable;
@@ -81,7 +87,10 @@ showConfirmationDialog(
       content: new Text(content),
       actions: <Widget>[
         new FlatButton(
-          child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : L10n.get(L.cancel)),
+          child: new Text(negativeButton != null && negativeButton.isNotEmpty
+              ? negativeButton
+              : L10n.get(L.cancel)),
+          key: Key(keyDialog_builderCancelFlatButton),
           onPressed: () {
             if (negativeAction != null) {
               negativeAction();
@@ -91,6 +100,7 @@ showConfirmationDialog(
         ),
         new FlatButton(
           child: new Text(positiveButton),
+          key: Key(keyDialog_builderPositiveFlatButton),
           onPressed: () {
             positiveAction();
             if (selfClose) {

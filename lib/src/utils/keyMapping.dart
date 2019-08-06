@@ -53,3 +53,18 @@ const keyRootIconProfileTitleText = "Profile";
 
 const keyUserSettingsCheckIconButton = "keyUserSettingsCheckIconButton";
 const keyUserSettingsUserSettingsUsernameLabel = "keyUserSettingsUserSettingsUsernameLabel";
+
+const keyDialog_builderPositiveFlatButton = "keyDialog_builderImportFlatButton";
+const keyDialog_builderCancelFlatButton = "keyDialog_builderCancelFlatButton";
+
+const keyContact_listPerson_addFloatingActionButton = "keyContact_listPerson_addFloatingActionButton";
+
+const keyContact_changeCheckIconButton = "keyContact_changeCheckIconButton";
+const keyContact_changeCloseIconButton = "keyContact_changeCloseIconButton";
+const keyContact_changeEmailValidatableTextFormField = "keyContact_changeEmailValidatableTextFormField";
+const keyContact_changeNameValidatableTextFormField = "keyContact_changeNameValidatableTextFormField";
+
+const keyContact_detailOpen_chatProfileActionIcon = "keyContact_detailOpen_chatProfileActionIcon";
+const keyContact_detailEdit_contactProfileActionIcon = "keyContact_detailEdit_contactProfileActionIcon";
+const keyContact_detailBlock_contactProfileActionIcon = "keyContact_detailBlock_contactProfileActionIcon";
+const keyContact_detailDelete_contactProfileActionIcon = "keyContact_detaildelete_contactProfileActionIcon";
