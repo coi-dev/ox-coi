@@ -494,7 +494,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void _onPrepareMessageSend() {
-    _scrollController.jumpTo(0.0);
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0.0);
+    }
     if (isInviteChat(widget.chatId)) {
       _messageListBloc.dispose();
       createChatFromMessage(context, widget.messageId, widget.chatId, _handleCreateChatSuccess);
