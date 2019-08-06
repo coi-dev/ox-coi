@@ -46,6 +46,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:superellipse_shape/superellipse_shape.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Avatar extends StatelessWidget {
@@ -67,23 +68,26 @@ class Avatar extends StatelessWidget {
       initials = getInitials(textPrimary, textSecondary);
     }
     return Container(
-        alignment: Alignment.center,
-        height: listAvatarDiameter,
-        width: listAvatarDiameter,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
-          color: color,
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: avatarImage,
-          ),
+      alignment: Alignment.center,
+      height: listAvatarDiameter,
+      width: listAvatarDiameter,
+      decoration: ShapeDecoration(
+        shape: SuperellipseShape(
+          borderRadius: BorderRadius.circular(32.0),
         ),
-        child: isNullOrEmpty(imagePath)
-            ? Text(
-                initials,
-                style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
-              )
-            : Container());
+        color: color,
+        image: DecorationImage(
+          fit: BoxFit.fill,
+          image: avatarImage,
+        ),
+      ),
+      child: isNullOrEmpty(imagePath)
+          ? Text(
+              initials,
+              style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+            )
+          : Container(),
+    );
   }
 
   static String getInitials(String textPrimary, [String textSecondary]) {
