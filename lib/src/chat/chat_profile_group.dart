@@ -47,7 +47,8 @@ import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -98,7 +99,6 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          var appLocalizations = AppLocalizations.of(context);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -146,7 +146,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
               Padding(
                   padding: EdgeInsets.only(left: 20.0),
                   child: ProfileData(
-                    text: appLocalizations.chatProfileGroupMemberCounter(state.contactIds.length),
+                    text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
                     child: ProfileMemberHeaderText(),
                   )),
               Divider(),
@@ -167,7 +167,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                       Padding(
                         padding: EdgeInsets.only(left: 4.0),
                         child: Text(
-                          AppLocalizations.of(context).chatProfileAddParticipantsButtonText,
+                          L10n.get(L.participantAdd),
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.subhead.apply(color: accent),
                         ),
@@ -185,7 +185,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
               ),
               ProfileAction(
                 iconData: Icons.delete,
-                text: appLocalizations.chatProfileLeaveGroupButtonText,
+                text: L10n.get(L.groupLeave),
                 onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
                 color: Colors.red,
               ),
@@ -231,7 +231,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
             child: EditName(
               chatId: widget.chatId,
               actualName: chatName,
-              title: AppLocalizations.of(context).editGroupNameTitle,
+              title: L10n.get(L.groupRename),
             ),
           );
         },

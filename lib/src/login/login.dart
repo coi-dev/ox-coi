@@ -41,13 +41,15 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 import 'package:rxdart/rxdart.dart';
@@ -92,7 +94,7 @@ class _LoginState extends State<Login> {
         _showedErrorDialog = true;
         showInformationDialog(
           context: context,
-          title: AppLocalizations.of(context).loginErrorDialogTitle,
+          title: L10n.get(L.loginFailed),
           content: state.error,
           navigatable: Navigatable(Type.loginErrorDialog),
         );
@@ -111,18 +113,18 @@ class _LoginState extends State<Login> {
       child: Column(
         children: <Widget>[
           Text(
-            AppLocalizations.of(context).loginWelcomeText,
+            L10n.get(L.welcome),
             style: Theme.of(context).textTheme.headline,
           ),
           Image(
-            image: AssetImage(AppLocalizations.of(context).appLogoUrl),
+            image: AssetImage(appLogoUrl),
             height: loginLogoSize,
             width: loginLogoSize,
           ),
           Padding(
             padding: EdgeInsets.only(bottom: loginVerticalPadding),
             child: Text(
-              AppLocalizations.of(context).loginFirstInformationText,
+              L10n.get(L.loginWelcome),
               textAlign: TextAlign.center,
             ),
           ),
@@ -132,7 +134,7 @@ class _LoginState extends State<Login> {
               child: SizedBox(
                 width: loginButtonWidth,
                 child: Text(
-                  AppLocalizations.of(context).loginSignInButtonText,
+                  L10n.get(L.loginSignIn).toUpperCase(),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -143,7 +145,7 @@ class _LoginState extends State<Login> {
             padding: EdgeInsets.all(loginVerticalPadding8dp),
             child: FlatButton(
                 child: Text(
-                  AppLocalizations.of(context).loginRegisterButtonText,
+                  L10n.get(L.register).toUpperCase(),
                   style: TextStyle(color: accent),
                 ),
                 onPressed: () {
@@ -154,11 +156,11 @@ class _LoginState extends State<Login> {
               textAlign: TextAlign.center,
               text: TextSpan(
                   style: Theme.of(context).textTheme.caption.apply(color: onBackground),
-                  text: AppLocalizations.of(context).loginTermsConditionPrivacyText,
+                  text: L10n.get(L.agreeTo),
                   children: [
-                    UrlTextSpan(url: null, text: AppLocalizations.of(context).loginTermsConditionText),
-                    TextSpan(text: AppLocalizations.of(context).loginTermsConditionPrivacyAndText),
-                    UrlTextSpan(url: null, text: AppLocalizations.of(context).loginPrivacyDeclarationText)
+                    UrlTextSpan(url: null, text: L10n.get(L.termsConditions)),
+                    TextSpan(text: " ${L10n.get(L.and)} "),
+                    UrlTextSpan(url: null, text: L10n.get(L.privacyDeclaration))
                   ])),
         ],
       ),

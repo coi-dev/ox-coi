@@ -44,7 +44,8 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chatlist/invite_item.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -78,7 +79,9 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(L10n.get(L.invites)),
+      ),
       body: BlocBuilder(
         bloc: _antiMobbingListBloc,
         builder: (context, state) {
@@ -86,8 +89,14 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
             if (state.messageIds.length > 0) {
               return buildListViewItems(state.messageIds, state.messageLastUpdateValues);
             } else {
-              return Center(
-                child: Text(AppLocalizations.of(context).inviteEmptyList),
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    L10n.get(L.settingChatMessagesUnknownNoMessages),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               );
             }
           } else if (state is! MessagesLoaded) {

@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
@@ -99,7 +100,7 @@ mixin ChatComposer {
       controller: textController,
       onChanged: onTextChanged,
       decoration: new InputDecoration.collapsed(
-        hintText: AppLocalizations.of(context).composePlaceholder,
+        hintText: L10n.get(L.typeSomething),
       ),
     );
   }

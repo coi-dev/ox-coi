@@ -41,7 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 
 class Search extends StatelessWidget {
   final TextEditingController controller;
@@ -54,7 +55,7 @@ class Search extends StatelessWidget {
       child: TextField(
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          labelText: AppLocalizations.of(context).contactsSearchHint,
+          labelText: L10n.get(L.contactSearch),
           prefixIcon: Icon(Icons.search),
           suffixIcon: GestureDetector(
             child: Icon(Icons.close),

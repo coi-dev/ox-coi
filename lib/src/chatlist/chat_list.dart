@@ -48,7 +48,8 @@ import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/chatlist/invite_item.dart';
 import 'package:ox_coi/src/flagged/flagged.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -96,12 +97,12 @@ class ChatList extends RootChild {
 
   @override
   String getTitle(BuildContext context) {
-    return AppLocalizations.of(context).chatTitle;
+    return L10n.get(L.chatP, count: L10n.plural);
   }
 
   @override
   String getNavigationText(BuildContext context) {
-    return AppLocalizations.of(context).chatTitle;
+    return L10n.get(L.chatP, count: L10n.plural);
   }
 
   @override
@@ -142,7 +143,7 @@ class _ChatListState extends State<ChatList> {
               padding: const EdgeInsets.all(listItemPaddingBig),
               child: Center(
                 child: Text(
-                  AppLocalizations.of(context).chatListEmpty,
+                  L10n.get(L.chatListPlaceholder),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -224,7 +225,7 @@ class _ChatListState extends State<ChatList> {
             return buildListItems(state);
           } else {
             return Center(
-              child: Text(AppLocalizations.of(context).searchEmpty),
+              child: Text(L10n.get(L.noResultsFound)),
             );
           }
         } else if (state is! ChatListStateFailure) {

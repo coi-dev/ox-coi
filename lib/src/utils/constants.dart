@@ -40,22 +40,20 @@
  * for more details.
  */
 
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/l.dart';
-import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/utils/toast.dart';
+// Image paths
+String get appLogoUrl => 'assets/images/app_logo.png';
 
-void copyToClipboard(String text) {
-  var clipboardData = ClipboardData(text: text);
-  Clipboard.setData(clipboardData);
-}
+String get outlookLogoUrl => 'assets/images/outlook_icon.png';
 
-void copyToClipboardWithToast({@required String text, @required String toastText}) {
-  copyToClipboard(text);
-  showToast(toastText);
-}
+String get yahooLogoUrl => 'assets/images/yahoo_icon.png';
 
-String getDefaultCopyToastText(BuildContext context) {
-  return context != null ? L10n.get(L.clipboardCopied) : "";
-}
+String get gmxLogoUrl => 'assets/images/gmx_icon.png';
+
+String get mailboxLogoUrl => 'assets/images/mailbox_icon.png';
+
+String get mailcomLogoUrl => 'assets/images/mailcom_icon.png';
+
+String get otherProviderLogoUrl => 'assets/images/mail_icon.png';
+
+// Other provider identifier
+String get other => 'other';

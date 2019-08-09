@@ -47,7 +47,8 @@ import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -105,10 +106,9 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var appLocalizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(appLocalizations.profileTitle),
+        title: Text(L10n.get(L.profile)),
       ),
       body: SingleChildScrollView(
         child: BlocBuilder(
@@ -137,24 +137,24 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       textStyle: Theme.of(context).textTheme.subtitle,
                       iconData: state.isVerified ? Icons.verified_user : null,
                       child: ProfileCopyableHeaderText(
-                        toastMessage: appLocalizations.chatProfileClipboardToastMessage,
+                        toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.email).toLowerCase()]),
                       )),
                   ProfileActionList(tiles: [
                     ProfileAction(
                       iconData: Icons.chat,
-                      text: appLocalizations.contactsOpenChat,
+                      text: L10n.get(L.chatOpen),
                       color: accent,
                       onTap: () => createChatFromContact(context, widget.contactId),
                     ),
                     ProfileAction(
                       iconData: Icons.edit,
-                      text: appLocalizations.contactChangeEditTitle,
+                      text: L10n.get(L.contactEdit),
                       color: accent,
                       onTap: () => _editContact(context, state.name, state.email),
                     ),
                     ProfileAction(
                       iconData: Icons.block,
-                      text: appLocalizations.chatProfileBlockContactButtonText,
+                      text: L10n.get(L.contactBlock),
                       color: accent,
                       onTap: () => showActionDialog(
                         context,
@@ -168,7 +168,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     ),
                     ProfileAction(
                       iconData: Icons.delete,
-                      text: appLocalizations.contactChangeDeleteTitle,
+                      text: L10n.get(L.contactDelete),
                       color: error,
                       onTap: () => showActionDialog(
                         context,
@@ -219,18 +219,18 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   }
 
   String _getDeleteMessage(BuildContext context) {
-    return AppLocalizations.of(context).contactChangeDeleteToast;
+    return L10n.get(L.contactDeletedSuccess);
   }
 
   String _getBlockMessage(BuildContext context) {
-    return AppLocalizations.of(context).contactChangeBlockToast;
+    return L10n.get(L.contactBlockedSuccess);
   }
 
   String getDeleteFailedMessage(BuildContext context) {
-    return AppLocalizations.of(context).contactChangeDeleteFailedToast;
+    return L10n.get(L.contactDeleteFailed);
   }
 
   String getDeleteFailedBecauseChatExistsMessage(BuildContext context) {
-    return AppLocalizations.of(context).contactChangeDeleteBecauseChatExistsFailedToast;
+    return L10n.get(L.contactDeleteWithActiveChatFailed);
   }
 }

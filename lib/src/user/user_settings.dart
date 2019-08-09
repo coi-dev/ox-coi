@@ -43,7 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/data/config.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -100,7 +101,7 @@ class _UserSettingsState extends State<UserSettings> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context),
           ),
-          title: Text(AppLocalizations.of(context).userSettingsTitle),
+          title: Text(L10n.get(L.profileEdit)),
           actions: <Widget>[IconButton(icon: Icon(Icons.check), key: Key(keyUserSettingsCheckIconButton), onPressed: _saveChanges)],
         ),
         body: buildForm());
@@ -144,11 +145,11 @@ class _UserSettingsState extends State<UserSettings> {
                       key: Key(keyUserSettingsUserSettingsUsernameLabel),
                       maxLines: 1,
                       controller: _usernameController,
-                      decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsUsernameLabel)),
+                      decoration: InputDecoration(labelText: L10n.get(L.username))),
                   TextFormField(
                     maxLines: 2,
                     controller: _statusController,
-                    decoration: InputDecoration(labelText: AppLocalizations.of(context).userSettingsStatusLabel),
+                    decoration: InputDecoration(labelText: L10n.get(L.signature)),
                   ),
                 ],
               ),

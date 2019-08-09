@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/system.dart';
@@ -97,7 +98,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
       setState(() {
         showInformationDialog(
           context: context,
-          title: AppLocalizations.of(context).loginErrorDialogTitle,
+          title: L10n.get(L.loginFailed),
           content: state.error,
           navigatable: Navigatable(Type.loginErrorDialog),
         );
@@ -122,7 +123,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
           if (state is SettingsManualFormStateValidationSuccess) {
             _progress = FullscreenProgress(
               bloc: _loginBloc,
-              text: AppLocalizations.of(context).loginProgressMessage,
+              text: L10n.get(L.loginRunning),
               showProgressValues: true,
               showCancelButton: false,
             );
@@ -163,7 +164,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          AppLocalizations.of(context).loginManualSettings,
+                          L10n.get(L.settingManual),
                           style: Theme.of(context).textTheme.headline,
                         ),
                         Padding(
@@ -174,17 +175,17 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
                               Visibility(
                                 visible: widget.fromError,
                                 child: Text(
-                                  AppLocalizations.of(context).loginManualSettingsErrorInfoText,
+                                  L10n.get(L.loginManualSetupRequired),
                                 ),
                               ),
                               Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
                               Text(
-                                AppLocalizations.of(context).loginManualSettingsInfoText,
+                                L10n.get(L.loginCheckServer),
                                 textAlign: TextAlign.center,
                               ),
                               Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
                               Text(
-                                AppLocalizations.of(context).loginManualSettingsSecondInfoText,
+                                L10n.get(L.loginWelcomeManual),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -215,7 +216,7 @@ class LoginButton extends StatelessWidget {
       child: FlatButton(
         onPressed: () => _performLogin(context),
         child: Text(
-          AppLocalizations.of(context).loginSignInButtonText,
+          L10n.get(L.loginSignIn).toUpperCase(),
           style: Theme.of(context).textTheme.subhead.apply(color: accent),
         ),
       ),

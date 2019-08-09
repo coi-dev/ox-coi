@@ -41,7 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/qr/scan_qr.dart';
 import 'package:ox_coi/src/qr/show_qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -71,7 +72,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         elevation: zero,
-        title: Text(AppLocalizations.of(context).qrTitle),
+        title: Text(L10n.get(L.qrProfile)),
       ),
       body: buildBody(),
     );
@@ -87,12 +88,12 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
             tabs: <Widget>[
               Tab(
                 child: Text(
-                  AppLocalizations.of(context).showQrTabTitle,
+                  L10n.get(L.qrShow),
                 ),
               ),
               Tab(
                 child: Text(
-                  AppLocalizations.of(context).scanQrTabTitle,
+                  L10n.get(L.qrScan),
                 ),
               ),
             ],

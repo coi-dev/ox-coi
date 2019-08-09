@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_bloc.dart';
@@ -82,18 +83,18 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
   void handleAutocryptImport(SettingsAutocryptState state) {
     if (state is SettingsAutocryptStatePrepared) {
       _setupCodeField = ValidatableTextFormField(
-        (context) => AppLocalizations.of(context).securitySettingsAutocryptImportLabel,
-        hintText: (context) => AppLocalizations.of(context).securitySettingsAutocryptImportHint,
+        (context) => L10n.get(L.autocryptSetupCode),
+        hintText: (context) => L10n.get(L.autocryptInputHint),
         inputType: TextInputType.number,
         maxLines: 2,
         needValidation: true,
-        validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintEmptyString,
+        validationHint: (context) => L10n.get(L.textFieldEmptyHint),
       );
       setupCodeStart = state.setupCodeStart;
     } else if (state is SettingsAutocryptStateFailure) {
-      showToast(AppLocalizations.of(context).securitySettingsAutocryptImportFailed);
+      showToast(L10n.get(L.autocryptFailed));
     } else if (state is SettingsAutocryptStateSuccess) {
-      showToast(AppLocalizations.of(context).securitySettingsAutocryptImportSuccess);
+      showToast(L10n.get(L.autocryptSuccess));
       navigation.pop(context);
     }
   }
@@ -106,7 +107,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
           icon: new Icon(Icons.close),
           onPressed: () => navigation.pop(context),
         ),
-        title: Text(AppLocalizations.of(context).securitySettingsAutocryptImport),
+        title: Text(L10n.get(L.autocryptImport)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
@@ -143,11 +144,11 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: formVerticalPadding),
-              child: Text(AppLocalizations.of(context).securitySettingsAutocryptImportText),
+              child: Text(L10n.get(L.autocryptCompleteImport)),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: formVerticalPadding),
-              child: Text(AppLocalizations.of(context).securitySettingsAutocryptImportCodeHint(setupCodeStart)),
+              child: Text(L10n.getFormatted(L.autocryptImportHintX, [setupCodeStart])),
             ),
             _setupCodeField,
           ],

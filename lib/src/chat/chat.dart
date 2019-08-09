@@ -58,13 +58,15 @@ import 'package:ox_coi/src/chat/chat_profile.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
@@ -160,9 +162,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       _composingAudioTimer = null;
       String chatComposeAborted;
       if (state.error == ChatComposerStateError.missingMicrophonePermission) {
-        chatComposeAborted = AppLocalizations.of(context).recordingAudioMessageFailure;
+        chatComposeAborted = L10n.get(L.chatAudioRecordingFailed);
       } else if (state.error == ChatComposerStateError.missingCameraPermission) {
-        chatComposeAborted = AppLocalizations.of(context).recordingVideoMessageFailure;
+        chatComposeAborted = L10n.get(L.chatVideoRecordingFailed);
       }
       showToast(chatComposeAborted);
     }
@@ -213,7 +215,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         Divider(),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(AppLocalizations.of(context).chatInviteQuestion, style: Theme.of(context).textTheme.subhead),
+          child: Text(L10n.get(L.chatCreateText), style: Theme.of(context).textTheme.subhead),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 16.0),
@@ -227,7 +229,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   highlightedBorderColor: error,
                   onPressed: _blockContact,
                   child: Text(
-                    AppLocalizations.of(context).block.toUpperCase(),
+                    L10n.get(L.block).toUpperCase(),
                     style: TextStyle(color: error),
                   ),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
@@ -239,7 +241,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   highlightedBorderColor: primary,
                   onPressed: _createChat,
                   child: Text(
-                    AppLocalizations.of(context).ok.toUpperCase(),
+                    L10n.get(L.ok).toUpperCase(),
                     style: TextStyle(color: primary),
                   ),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
@@ -403,7 +405,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               padding: const EdgeInsets.all(listItemPaddingBig),
               child: Center(
                 child: Text(
-                  AppLocalizations.of(context).chatEmpty,
+                  L10n.get(L.chatNewPlaceholder),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -621,27 +623,27 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.image),
-                title: Text(AppLocalizations.of(context).image),
+                title: Text(L10n.get(L.image)),
                 onTap: () => _getFilePath(FileType.IMAGE),
               ),
               ListTile(
                 leading: Icon(Icons.video_library),
-                title: Text(AppLocalizations.of(context).video),
+                title: Text(L10n.get(L.video)),
                 onTap: () => _getFilePath(FileType.VIDEO),
               ),
               ListTile(
                 leading: Icon(Icons.picture_as_pdf),
-                title: Text(AppLocalizations.of(context).pdf),
+                title: Text(pdf),
                 onTap: () => _getFilePath(FileType.CUSTOM, "pdf"),
               ),
               ListTile(
                 leading: Icon(Icons.gif),
-                title: Text(AppLocalizations.of(context).gif),
+                title: Text(gif),
                 onTap: () => _getFilePath(FileType.CUSTOM, "gif"),
               ),
               ListTile(
                 leading: Icon(Icons.insert_drive_file),
-                title: Text(AppLocalizations.of(context).file),
+                title: Text(L10n.get(L.file)),
                 onTap: () => _getFilePath(FileType.ANY),
               ),
             ],

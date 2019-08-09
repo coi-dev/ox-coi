@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 
 class Providers {
   List<Provider> providerList;
@@ -133,25 +133,25 @@ String getProviderIconPath(BuildContext context, String id) {
   String path = "";
   switch (id) {
     case "outlook":
-      path = AppLocalizations.of(context).outlookLogoUrl;
+      path = outlookLogoUrl;
       break;
     case "yahoo":
-      path = AppLocalizations.of(context).yahooLogoUrl;
+      path = yahooLogoUrl;
       break;
     case "gmx":
-      path = AppLocalizations.of(context).gmxLogoUrl;
+      path = gmxLogoUrl;
       break;
     case "mailbox":
-      path = AppLocalizations.of(context).mailboxLogoUrl;
+      path = mailboxLogoUrl;
       break;
     case "mail_com":
-      path = AppLocalizations.of(context).mailcomLogoUrl;
+      path = mailcomLogoUrl;
       break;
     case "other":
-      path = AppLocalizations.of(context).otherProviderLogoUrl;
+      path = otherProviderLogoUrl;
       break;
     case "coi":
-      path = AppLocalizations.of(context).appLogoUrl;
+      path = appLogoUrl;
       break;
   }
   return path;

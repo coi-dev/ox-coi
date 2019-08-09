@@ -42,7 +42,8 @@
 
 import 'package:date_format/date_format.dart';
 import 'package:mockito/mockito.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:test/test.dart';
 
@@ -50,7 +51,7 @@ const date20190520_120000 = 1558346400000;
 const today = "Today";
 const yesterday = "Yesterday";
 
-class MockAppLocalizations extends Mock implements AppLocalizations {}
+class MockAppLocalizations extends Mock {}
 
 void main() {
   test('Should get time from timestamp', () {
@@ -74,10 +75,9 @@ void main() {
     var nowDateTime = DateTime.now();
     String todayDate = formatDate(nowDateTime, [dd, '.', mm]);
     var todayTimestamp = nowDateTime.millisecondsSinceEpoch;
-    MockAppLocalizations appLocalizations = MockAppLocalizations();
-    when(appLocalizations.today).thenReturn(today);
+    when(L10n.get(L.today)).thenReturn(today);
 
-    var dateFormTimestamp = getDateFromTimestamp(todayTimestamp, false, true, appLocalizations);
+    var dateFormTimestamp = getDateFromTimestamp(todayTimestamp, false, true);
 
     expect(dateFormTimestamp, "$today - $todayDate");
   });
@@ -86,10 +86,9 @@ void main() {
     var yesterdayDateTime = DateTime.now().subtract(Duration(days: 1));
     String yesterdayDate = formatDate(yesterdayDateTime, [dd, '.', mm]);
     var yesterdayTimestamp = yesterdayDateTime.millisecondsSinceEpoch;
-    MockAppLocalizations appLocalizations = MockAppLocalizations();
-    when(appLocalizations.yesterday).thenReturn(yesterday);
+    when(L10n.get(L.yesterday)).thenReturn(yesterday);
 
-    var dateFormTimestamp = getDateFromTimestamp(yesterdayTimestamp, false, true, appLocalizations);
+    var dateFormTimestamp = getDateFromTimestamp(yesterdayTimestamp, false, true);
 
     expect(dateFormTimestamp, "$yesterday - $yesterdayDate");
   });
@@ -107,31 +106,28 @@ void main() {
   });
 
   test('Get chat list date from timestamp', () {
-    MockAppLocalizations appLocalizations = MockAppLocalizations();
 
-    var dateFormTimestamp = getChatListTime(appLocalizations, date20190520_120000);
+    var dateFormTimestamp = getChatListTime(date20190520_120000);
 
     expect(dateFormTimestamp, "20.05");
   });
 
   test('Get chat list date for today from timestamp', () {
-    MockAppLocalizations appLocalizations = MockAppLocalizations();
     var nowDateTime = DateTime.now();
     int nowTimestamp = nowDateTime.millisecondsSinceEpoch;
     String hour = formatDate(nowDateTime, [HH]);
     String minute = formatDate(nowDateTime, [nn]);
 
-    var dateFormTimestamp = getChatListTime(appLocalizations, nowTimestamp);
+    var dateFormTimestamp = getChatListTime(nowTimestamp);
 
     expect(dateFormTimestamp, "$hour:$minute");
   });
 
   test('Get chat list date for yesterday from timestamp', () {
     var yesterdayTimestamp = DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch;
-    MockAppLocalizations appLocalizations = MockAppLocalizations();
-    when(appLocalizations.yesterday).thenReturn(yesterday);
+    when(L10n.get(L.yesterday)).thenReturn(yesterday);
 
-    var dateFormTimestamp = getChatListTime(appLocalizations, yesterdayTimestamp);
+    var dateFormTimestamp = getChatListTime(yesterdayTimestamp);
 
     expect(dateFormTimestamp, yesterday);
   });

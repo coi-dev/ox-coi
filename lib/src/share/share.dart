@@ -45,7 +45,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_action.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -84,8 +85,8 @@ class _ShareScreenState extends State<ShareScreen> {
     return Scaffold(
       appBar: AppBar(
         title: widget.messageActionTag == MessageActionTag.forward
-            ? Text(AppLocalizations.of(context).forward)
-            : Text(AppLocalizations.of(context).share),
+            ? Text(L10n.get(L.forward))
+            : Text(L10n.get(L.share)),
       ),
       body: _buildShareList(),
     );
@@ -163,7 +164,7 @@ class _ShareScreenState extends State<ShareScreen> {
       child: Column(
         children: <Widget>[
           Text(
-            AppLocalizations.of(context).chats,
+            L10n.get(L.chatP, count: L10n.plural),
             style: Theme.of(context).textTheme.headline,
           ),
           ChatListItem(
@@ -178,7 +179,7 @@ class _ShareScreenState extends State<ShareScreen> {
       child: Column(
         children: <Widget>[
           Text(
-            AppLocalizations.of(context).contacts,
+            L10n.get(L.contactP, count: L10n.plural),
             style: Theme.of(context).textTheme.headline,
           ),
           ContactItem(contactId: contactId, contactItemType: ContactItemType.forward, onTap: chatItemTapped, key: contactId.toString()),

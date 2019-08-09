@@ -152,13 +152,13 @@ void main() {
 }
 
 Future getAuthentication(FlutterDriver driver, SerializableFinder email, String fakeEmail, SerializableFinder password, String realPassword,
-    SerializableFinder SIGNIN) async {
+    SerializableFinder signIn) async {
   await driver.tap(email);
   await driver.enterText(fakeEmail);
   await driver.waitFor(email);
   await driver.tap(password);
   await driver.enterText(realPassword);
   Invoker.current.heartbeat();
-  await driver.tap(SIGNIN);
+  await driver.tap(signIn);
   Invoker.current.heartbeat();
 }

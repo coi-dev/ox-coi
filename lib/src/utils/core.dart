@@ -42,30 +42,32 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 
 enum ProtocolType { imap, smtp }
 
 int convertProtocolStringToInt(BuildContext context, String value) {
   int newValue = 0;
-  if (value == AppLocalizations.of(context).sslTls)
+  if (value == sslTls)
     newValue = 1;
-  else if (value == AppLocalizations.of(context).startTLS)
+  else if (value == startTLS)
     newValue = 2;
-  else if (value == AppLocalizations.of(context).off) newValue = 3;
+  else if (value == L10n.get(L.off)) newValue = 3;
   return newValue;
 }
 
 String convertProtocolIntToString(BuildContext context, int value) {
   String newValue;
   if (value == 1)
-    newValue = AppLocalizations.of(context).sslTls;
+    newValue = sslTls;
   else if (value == 2)
-    newValue = AppLocalizations.of(context).startTLS;
+    newValue = startTLS;
   else if (value == 3)
-    newValue = AppLocalizations.of(context).off;
+    newValue = L10n.get(L.off);
   else
-    newValue = AppLocalizations.of(context).automatic;
+    newValue = L10n.get(L.automatic);
   return newValue;
 }
 

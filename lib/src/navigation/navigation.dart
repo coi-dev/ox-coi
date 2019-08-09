@@ -74,11 +74,9 @@ class Navigation {
   static const String chatCreate = '/chat/create';
   static const String contactsBlocked = '/contacts/blocked';
 
-  final Map<String, WidgetBuilder> routeMapping = {
+  final Map<String, WidgetBuilder> routesMapping = {
     root: (context) => OxCoi(),
-    contactsAdd: (context) => ContactChange(
-          contactAction: ContactAction.add,
-        ),
+    contactsAdd: (context) => ContactChange(contactAction: ContactAction.add),
     settings: (context) => Settings(),
     settingsAccount: (context) => UserAccountSettings(),
     settingsSecurity: (context) => SettingsSecurity(),

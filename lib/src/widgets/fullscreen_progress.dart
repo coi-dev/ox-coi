@@ -44,7 +44,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/base/bloc_progress_state.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
@@ -100,7 +101,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: verticalPaddingSmall),
                   child: Container(
-                    child: RaisedButton(child: Text(AppLocalizations.of(context).cancel), onPressed: cancelPressed),
+                    child: RaisedButton(child: Text(L10n.get(L.cancel)), onPressed: cancelPressed),
                   ),
                 )
             ],

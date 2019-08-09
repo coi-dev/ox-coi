@@ -40,22 +40,64 @@
  * for more details.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/l.dart';
-import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/utils/toast.dart';
+import "package:gettext/gettext.dart";
+import "package:gettext_parser/gettext_parser.dart";
+import 'package:ox_coi/src/utils/text.dart';
+import 'package:sprintf/sprintf.dart';
 
-void copyToClipboard(String text) {
-  var clipboardData = ClipboardData(text: text);
-  Clipboard.setData(clipboardData);
-}
+class L10n {
+  static const plural = 2;
 
-void copyToClipboardWithToast({@required String text, @required String toastText}) {
-  copyToClipboard(text);
-  showToast(toastText);
-}
+  static final Gettext _getText = Gettext(onWarning: print);
+  static final _loadedLocales = List<String>();
 
-String getDefaultCopyToastText(BuildContext context) {
-  return context != null ? L10n.get(L.clipboardCopied) : "";
+  static String get locale => _getText.locale;
+
+  static List<String> get loadedLocales => _loadedLocales;
+
+  static void loadTranslation(Locale locale) {
+    String localeString = _getLocaleString(locale);
+    if (loadedLocales.contains(localeString)) {
+      return;
+    }
+    rootBundle.loadString('assets/l10n/$localeString.po').then((data) {
+      _getText.addLocale(po.parse(data));
+      loadedLocales.add(localeString);
+    }).catchError((error) {});
+  }
+
+  static String _getLocaleString(Locale locale) {
+    return "${locale.languageCode}_${locale.countryCode}";
+  }
+
+  static void setLanguage(Locale locale) {
+    String localeString = _getLocaleString(locale);
+    if (!loadedLocales.contains(localeString)) {
+      loadTranslation(locale);
+    }
+    _getText.locale = localeString;
+  }
+
+  static String get(List<String> msgIds, {int count}) {
+    String msgId = msgIds[0];
+    String msgIdPlural;
+    if (msgId == null) {
+      throw ArgumentError("Missing msgId, could not translate");
+    } else {
+      msgIdPlural = msgIds[1];
+    }
+    if (isNullOrEmpty(msgIdPlural) || count == null) {
+      return _getText.gettext(msgId);
+    } else {
+      return _getText.ngettext(msgId, msgIdPlural, count);
+    }
+  }
+
+  static String getFormatted(List<String> msgIds, List values, {int count}) {
+    String unformattedString = get(msgIds, count: count);
+    return sprintf(unformattedString, values);
+  }
 }

@@ -41,7 +41,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/date.dart';
@@ -118,7 +117,7 @@ class AvatarListItem extends StatelessWidget {
                       Visibility(
                           visible: timestamp != null && timestamp != 0,
                           child: Text(
-                            getChatListTime(AppLocalizations.of(context), timestamp),
+                            getChatListTime(timestamp),
                             style: TextStyle(
                                 color: shouldHighlight() ? Colors.black : Colors.grey,
                                 fontWeight: shouldHighlight() ? FontWeight.bold : FontWeight.normal,

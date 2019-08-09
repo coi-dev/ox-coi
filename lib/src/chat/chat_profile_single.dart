@@ -50,7 +50,8 @@ import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
@@ -105,7 +106,6 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
   }
 
   Widget _buildSingleProfileInfo(String chatName, String email, Color color, bool isVerified, String imagePath) {
-    var appLocalizations = AppLocalizations.of(context);
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -131,14 +131,14 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
                 textStyle: Theme.of(context).textTheme.subtitle,
                 iconData: isVerified ? Icons.verified_user : null,
                 child: ProfileCopyableHeaderText(
-                  toastMessage: appLocalizations.chatProfileClipboardToastMessage,
+                  toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.email).toLowerCase()]),
                 ),
               )),
           ProfileActionList(tiles: [
             if (!widget.isSelfTalk)
               ProfileAction(
                 iconData: Icons.block,
-                text: appLocalizations.chatProfileBlockContactButtonText,
+                text: L10n.get(L.contactBlock),
                 color: accent,
                 onTap: () => showActionDialog(
                   context,
@@ -154,7 +154,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               ProfileAction(
                 iconData: Icons.delete,
                 color: error,
-                text: appLocalizations.chatProfileDeleteChatButtonText,
+                text: L10n.get(L.chatDeleteP),
                 onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),
               ),
           ]),

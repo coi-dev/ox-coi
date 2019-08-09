@@ -49,7 +49,8 @@ import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
@@ -129,17 +130,17 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
       context: context,
       navigatable: Navigatable(Type.contactUnblockDialog),
       dialog: AlertDialog(
-        title: Text(AppLocalizations.of(context).unblockDialogTitle),
-        content: new Text(AppLocalizations.of(context).unblockDialogText(contact)),
+        title: Text(L10n.get(L.contactUnblock)),
+        content: new Text(L10n.getFormatted(L.contactUnblockTextX, [contact])),
         actions: <Widget>[
           new FlatButton(
-            child: new Text(AppLocalizations.of(context).cancel),
+            child: new Text(L10n.get(L.cancel)),
             onPressed: () {
               navigation.pop(context);
             },
           ),
           new FlatButton(
-            child: new Text(AppLocalizations.of(context).unblock),
+            child: Text(L10n.get(L.unblock)),
             onPressed: () {
               unblockContact();
               navigation.pop(context);

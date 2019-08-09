@@ -42,9 +42,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/core.dart';
@@ -62,52 +64,52 @@ class SettingsManualForm extends StatefulWidget {
 class _SettingsManualFormState extends State<SettingsManualForm> {
   ValidatableTextFormField emailField;
   ValidatableTextFormField passwordField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).password,
+    (context) => L10n.get(L.password),
     textFormType: TextFormType.password,
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
+    validationHint: (context) => L10n.get(L.loginCheckPassword),
   );
-  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelImapName);
+  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => L10n.get(L.settingIMAPName));
   ValidatableTextFormField imapServerField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelImapServer,
+    (context) => L10n.get(L.settingIMAPServer),
     inputType: TextInputType.url,
   );
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelImapPort,
+    (context) => L10n.get(L.settingIMAPPort),
     textFormType: TextFormType.port,
     inputType: TextInputType.number,
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort,
+    validationHint: (context) => L10n.get(L.loginCheckPort),
   );
-  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => AppLocalizations.of(context).loginLabelSmtpName);
+  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => L10n.get(L.settingSMTPLogin));
   ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelSmtpPassword,
+    (context) => L10n.get(L.settingSMTPPassword),
     textFormType: TextFormType.password,
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
+    validationHint: (context) => L10n.get(L.loginCheckPassword),
   );
   ValidatableTextFormField smtpServerField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelSmtpServer,
+    (context) => L10n.get(L.settingSMTPServer),
     inputType: TextInputType.url,
   );
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).loginLabelSmtpPort,
+    (context) => L10n.get(L.settingSMTPPort),
     textFormType: TextFormType.port,
     inputType: TextInputType.number,
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPort,
+    validationHint: (context) => L10n.get(L.loginCheckPort),
   );
 
   @override
   void initState() {
     super.initState();
     emailField = ValidatableTextFormField(
-      (context) => AppLocalizations.of(context).emailAddress,
+      (context) => L10n.get(L.email),
       textFormType: TextFormType.email,
       inputType: TextInputType.emailAddress,
       needValidation: true,
       enabled: widget.isLogin,
-      validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
+      validationHint: (context) => L10n.get(L.loginCheckMail),
     );
   }
 
@@ -155,7 +157,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                AppLocalizations.of(context).loginBaseSettingsTitle,
+                L10n.get(L.settingBase),
                 style: Theme.of(context).textTheme.subhead.merge(primaryW500),
               ),
             ),
@@ -165,7 +167,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                AppLocalizations.of(context).loginServerAddressesTitle,
+                L10n.get(L.loginServerAddresses),
                 style: Theme.of(context).textTheme.subhead.merge(primaryW500),
               ),
             ),
@@ -175,15 +177,15 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                AppLocalizations.of(context).loginAdvancedImapTitle,
+                L10n.get(L.settingAdvancedImap),
                 style: Theme.of(context).textTheme.subhead.merge(primaryW500),
               ),
             ),
             imapPortField,
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Text(AppLocalizations.of(context).loginLabelImapSecurity),
+            Text(L10n.get(L.settingIMAPSecurity)),
             DropdownButton(
-                value: selectedImapSecurity == null ? AppLocalizations.of(context).automatic : selectedImapSecurity,
+                value: selectedImapSecurity == null ? L10n.get(L.automatic) : selectedImapSecurity,
                 items: getSecurityOptions(context),
                 onChanged: (String newValue) {
                   setState(() {
@@ -194,15 +196,15 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                AppLocalizations.of(context).loginAdvancedSmtpTitle,
+                L10n.get(L.settingAdvancedSmtp),
                 style: Theme.of(context).textTheme.subhead.merge(primaryW500),
               ),
             ),
             smtpPortField,
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Text(AppLocalizations.of(context).loginLabelSmtpSecurity),
+            Text(L10n.get(L.settingSMTPSecurity)),
             DropdownButton(
-              value: selectedSmtpSecurity == null ? AppLocalizations.of(context).automatic : selectedSmtpSecurity,
+              value: selectedSmtpSecurity == null ? L10n.get(L.automatic) : selectedSmtpSecurity,
               items: getSecurityOptions(context),
               onChanged: (String newValue) {
                 setState(() {
@@ -218,10 +220,10 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
 
   List<DropdownMenuItem<String>> getSecurityOptions(BuildContext context) {
     return [
-      AppLocalizations.of(context).automatic,
-      AppLocalizations.of(context).sslTls,
-      AppLocalizations.of(context).startTLS,
-      AppLocalizations.of(context).off,
+      L10n.get(L.automatic),
+      sslTls,
+      startTLS,
+      L10n.get(L.off),
     ].map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(value: value, child: Text(value));
     }).toList();

@@ -43,7 +43,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -102,14 +103,14 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
       }
     }
     if (state is LoginStateSuccess) {
-      showToast(AppLocalizations.of(context).accountSettingsSuccess);
+      showToast(L10n.get(L.settingAccountChanged));
       navigation.pop(context);
     } else if (state is LoginStateFailure) {
       if (!_showedErrorDialog) {
         _showedErrorDialog = true;
         showInformationDialog(
           context: context,
-          title: AppLocalizations.of(context).accountSettingsErrorDialogTitle,
+          title: L10n.get(L.settingConfigurationChangeFailed),
           content: state.error,
           navigatable: Navigatable(Type.loginErrorDialog),
         );
@@ -132,7 +133,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
           if (state is SettingsManualFormStateValidationSuccess) {
             _progress = FullscreenProgress(
               bloc: _loginBloc,
-              text: AppLocalizations.of(context).loginProgressMessage,
+              text: L10n.get(L.loginRunning),
               showProgressValues: true,
               showCancelButton: false,
             );
@@ -161,7 +162,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
               icon: new Icon(Icons.close),
               onPressed: () => navigation.pop(context),
             ),
-            title: Text(AppLocalizations.of(context).accountSettingsTitle),
+            title: Text(L10n.get(L.settingAccount)),
             actions: <Widget>[
               SaveDataButton(),
             ],

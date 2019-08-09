@@ -40,22 +40,48 @@
  * for more details.
  */
 
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/l.dart';
-import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 
-void copyToClipboard(String text) {
-  var clipboardData = ClipboardData(text: text);
-  Clipboard.setData(clipboardData);
-}
+import 'l.dart';
+import 'l10n.dart';
 
-void copyToClipboardWithToast({@required String text, @required String toastText}) {
-  copyToClipboard(text);
-  showToast(toastText);
-}
-
-String getDefaultCopyToastText(BuildContext context) {
-  return context != null ? L10n.get(L.clipboardCopied) : "";
+Map<int, String> getStringMap(BuildContext context) {
+  return {
+    1: L10n.get(L.chatNoMessages),
+    2: L10n.get(L.me),
+    3: L10n.get(L.draft),
+    4: L10n.get(L.coreMembers),
+    6: L10n.get(L.coreContacts),
+    7: L10n.get(L.voiceMessage),
+    8: L10n.get(L.contactRequest),
+    9: L10n.get(L.image),
+    10: L10n.get(L.video),
+    11: L10n.get(L.audio),
+    12: L10n.get(L.file),
+    13: "${L10n.get(L.profileDefaultStatus)}: $feedbackUrl",
+    14: L10n.get(L.groupNewDraft),
+    15: L10n.get(L.groupNameChanged),
+    16: L10n.get(L.groupImageChanged),
+    17: L10n.get(L.memberAdded),
+    18: L10n.get(L.memberRemoved),
+    19: L10n.get(L.groupLeft),
+    20: L10n.get(L.error),
+    23: gif,
+    29: L10n.get(L.errorCannotDecrypt),
+    31: L10n.get(L.settingReadReceiptP),
+    32: L10n.get(L.readReceiptText),
+    33: L10n.get(L.groupImageDeleted),
+    35: L10n.get(L.contactVerifiedSuccess),
+    36: L10n.get(L.contactVerifyFailed),
+    37: L10n.get(L.contactSetupChanged),
+    40: L10n.get(L.chatArchived),
+    42: L10n.get(L.autocryptSetupMessage),
+    43: L10n.get(L.autocryptSetupText),
+    50: L10n.get(L.chatMessagesSelf),
+    60: L10n.get(L.loginErrorWrongCredentials),
+    61: L10n.get(L.loginErrorResponseXY),
+    62: L10n.get(L.byXY),
+    63: L10n.get(L.byMeX)
+  };
 }

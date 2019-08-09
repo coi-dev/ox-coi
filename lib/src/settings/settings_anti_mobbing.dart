@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_anti_mobbing_bloc.dart';
@@ -70,7 +71,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).antiMobbing),
+          title: Text(L10n.get(L.settingAntiMobbing)),
         ),
         body: _buildPreferenceList(context));
   }
@@ -86,20 +87,15 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).antiMobbingSettingsChangeSetting),
+                title: Text(L10n.get(L.settingAntiMobbing)),
+                subtitle: Text(L10n.get(L.settingAntiMobbingText)),
                 trailing: Switch(value: state.antiMobbingActivated, onChanged: (value) => _changeAntiMobbingSetting()),
               ),
               Visibility(
                   visible: state.antiMobbingActivated,
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                    subtitle: Text(AppLocalizations.of(context).antiMobbingSettingsInfoText),
-                  )),
-              Visibility(
-                  visible: state.antiMobbingActivated,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                    title: Text(AppLocalizations.of(context).antiMobbingSettingsUnknownContactsButtonText),
+                    contentPadding: EdgeInsets.symmetric(horizontal: listItemPaddingBig),
+                    title: Text(L10n.get(L.settingChatMessagesUnknownShow)),
                     onTap: () {
                       _showAntiMobbingList();
                     },

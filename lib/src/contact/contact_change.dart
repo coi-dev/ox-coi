@@ -47,7 +47,8 @@ import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
@@ -79,8 +80,8 @@ class _ContactChangeState extends State<ContactChange> {
   Navigation navigation = Navigation();
   GlobalKey<FormState> _formKey = GlobalKey();
   ValidatableTextFormField _nameField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).name,
-    hintText: (context) => AppLocalizations.of(context).contactChangeNameHint,
+    (context) => L10n.get(L.name),
+    hintText: (context) => L10n.get(L.contactName),
   );
   ValidatableTextFormField _emailField;
 
@@ -97,11 +98,11 @@ class _ContactChangeState extends State<ContactChange> {
     navigation.current = Navigatable(Type.contactChange);
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
-        (context) => AppLocalizations.of(context).emailAddress,
+        (context) => L10n.get(L.email),
         textFormType: TextFormType.email,
         inputType: TextInputType.emailAddress,
         needValidation: true,
-        validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
+        validationHint: (context) => L10n.get(L.loginCheckMail),
       );
     } else {
       _nameField.controller.text = widget.name != null ? widget.name : "";
@@ -135,11 +136,11 @@ class _ContactChangeState extends State<ContactChange> {
   @override
   Widget build(BuildContext context) {
     if (widget.contactAction == ContactAction.add) {
-      title = widget.createChat ? AppLocalizations.of(context).createChatTitle : AppLocalizations.of(context).contactChangeAddTitle;
-      changeToast = AppLocalizations.of(context).contactChangeAddToast;
+      title = widget.createChat ? L10n.get(L.chatCreate) : L10n.get(L.contactAdd);
+      changeToast = L10n.get(L.contactAddedSuccess);
     } else {
-      title = AppLocalizations.of(context).contactChangeEditTitle;
-      changeToast = AppLocalizations.of(context).contactChangeEditToast;
+      title = L10n.get(L.contactEdit);
+      changeToast = L10n.get(L.contactEditedSuccess);
     }
     return Scaffold(
         appBar: AppBar(
@@ -227,7 +228,7 @@ class _ContactChangeState extends State<ContactChange> {
                       child: RaisedButton(
                         color: accent,
                         textColor: onAccent,
-                        child: Text(AppLocalizations.of(context).contactChangeScanQrButton),
+                        child: Text(L10n.get(L.qrScan)),
                         onPressed: scanQr,
                       ),
                     )

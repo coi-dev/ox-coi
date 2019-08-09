@@ -50,7 +50,8 @@ import 'package:ox_coi/src/chat/chat_profile_single.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
@@ -95,7 +96,7 @@ class _ChatProfileState extends State<ChatProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).profileTitle),
+          title: Text(L10n.get(L.profile)),
         ),
         body: SingleChildScrollView(
           child: BlocBuilder(

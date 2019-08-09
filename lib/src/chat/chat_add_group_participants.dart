@@ -47,7 +47,8 @@ import 'package:ox_coi/src/contact/contact_item_selectable.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -89,7 +90,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
           icon: Icon(Icons.close),
           onPressed: () => navigation.pop(context),
         ),
-        title: Text(AppLocalizations.of(context).chatProfileAddParticipantsButtonText),
+        title: Text(L10n.get(L.participantAdd)),
         actions: <Widget>[
           getSearchAction(),
           IconButton(
@@ -135,7 +136,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
             );
           } else {
             return Center(
-              child: Text(AppLocalizations.of(context).chatProfileAddParticipantsEmptyList),
+              child: Text(L10n.get(L.groupAddContactsAlreadyIn)),
             );
           }
         } else if (state is! ContactListStateFailure) {
@@ -176,7 +177,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
             top: listItemPadding,
             bottom: listItemPaddingSmall,
           ),
-          child: Text("${selectedContacts.length} ${AppLocalizations.of(context).participants}"),
+          child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
         ),
         Container(
           padding: EdgeInsets.only(bottom: 4.0),
@@ -201,7 +202,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
                     right: listItemPadding,
                     top: listItemPadding,
                   ),
-                  child: Text(AppLocalizations.of(context).createGroupNoParticipantsHint),
+                  child: Text(L10n.get(L.groupAddContactAdd)),
                 ),
         ),
       ],
@@ -221,7 +222,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       _chatChangeBloc.dispatch(ChatAddParticipants(chatId: widget.chatId, contactIds: _contactListBloc.contactsSelected));
       navigation.pop(context);
     } else {
-      showToast(AppLocalizations.of(context).createGroupNoParticipantsSelected);
+      showToast(L10n.get(L.groupAddNoParticipants));
     }
   }
 }

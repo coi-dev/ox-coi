@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -88,11 +89,11 @@ class _ProviderListState extends State<ProviderList> {
   @override
   Widget build(BuildContext context) {
     if (widget.type == ProviderListType.login) {
-      title = AppLocalizations.of(context).loginSignInTitle;
-      text = AppLocalizations.of(context).loginSignInInfoText;
+      title = L10n.get(L.loginSignIn);
+      text = L10n.get(L.loginChooseProvider);
     } else if (widget.type == ProviderListType.register) {
-      title = AppLocalizations.of(context).registerTitle;
-      text = AppLocalizations.of(context).registerText;
+      title = L10n.get(L.register);
+      text = L10n.get(L.providerRegisterChoose);
     }
     return Scaffold(body: createProviderList());
   }
@@ -135,7 +136,7 @@ class _ProviderListState extends State<ProviderList> {
               child: RaisedButton(
                 elevation: 0,
                 onPressed: () => _onItemTap(otherProvider),
-                child: Text(AppLocalizations.of(context).loginOtherMailProvider),
+                child: Text(L10n.get(L.providerOtherMailProvider)),
                 textColor: accent,
                 color: background,
                 shape: RoundedRectangleBorder(

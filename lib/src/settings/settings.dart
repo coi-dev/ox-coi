@@ -41,7 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
@@ -67,7 +68,7 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).settings),
+          title: Text(L10n.get(L.settingP, count: L10n.plural)),
         ),
         body: buildPreferenceList(context));
   }
@@ -80,7 +81,7 @@ class Settings extends StatelessWidget {
             Icons.account_circle,
             color: accent,
           ),
-          title: Text(AppLocalizations.of(context).accountSettingsTitle),
+          title: Text(L10n.get(L.settingAccount)),
           onTap: () => _onPressed(context, SettingsType.account),
         ),
         ListTile(
@@ -88,7 +89,7 @@ class Settings extends StatelessWidget {
             Icons.security,
             color: accent,
           ),
-          title: Text(AppLocalizations.of(context).security),
+          title: Text(L10n.get(L.security)),
           onTap: () => _onPressed(context, SettingsType.security),
         ),
         ListTile(
@@ -96,7 +97,7 @@ class Settings extends StatelessWidget {
             Icons.chat,
             color: accent,
           ),
-          title: Text(AppLocalizations.of(context).chat),
+          title: Text(L10n.get(L.chatP)),
           onTap: () => _onPressed(context, SettingsType.chat),
         ),
         ListTile(
@@ -104,7 +105,7 @@ class Settings extends StatelessWidget {
             Icons.https,
             color: accent,
           ),
-          title: Text(AppLocalizations.of(context).antiMobbing),
+          title: Text(L10n.get(L.settingAntiMobbing)),
           onTap: () => _onPressed(context, SettingsType.antiMobbing),
         ),
         ListTile(
@@ -112,7 +113,7 @@ class Settings extends StatelessWidget {
             Icons.info,
             color: accent,
           ),
-          title: Text(AppLocalizations.of(context).about),
+          title: Text(L10n.get(L.about)),
           onTap: () => _onPressed(context, SettingsType.about),
         ),
         if (!isRelease())
@@ -121,7 +122,7 @@ class Settings extends StatelessWidget {
               Icons.bug_report,
               color: accent,
             ),
-            title: Text(AppLocalizations.of(context).debugTitle),
+            title: Text(L10n.get(L.debug)),
             onTap: () => _onPressed(context, SettingsType.debug),
           ),
       ]).toList(),

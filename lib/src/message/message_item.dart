@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
@@ -159,7 +158,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     _isStarred = state.isStarred;
     List<Widget> widgets = List();
     if (widget.hasDateMarker) {
-      String date = getDateFromTimestamp(state.messageTimestamp, true, true, AppLocalizations.of(context));
+      String date = getDateFromTimestamp(state.messageTimestamp, true, true);
       widgets.add(Center(child: Text(date)));
     }
     String name;

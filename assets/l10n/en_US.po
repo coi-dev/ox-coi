@@ -1,0 +1,832 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OX Coi\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-06 15:10+0200\n"
+"PO-Revision-Date: 2019-08-07 10:18+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
+msgid "%i system contacts imported"
+msgstr "%i system contacts imported"
+
+msgid "%i Participant(s)"
+msgstr "%i Participant(s)"
+
+msgid "%i contact(s)"
+msgstr "%i contact(s)"
+
+msgid "%i member(s)"
+msgstr "%i member(s)"
+
+msgid "%s by %s"
+msgstr "%s by %s"
+
+msgid "%s by me"
+msgstr "%s by me"
+
+msgid "About"
+msgstr "About"
+
+msgid "Account settings"
+msgstr "Account settings"
+
+msgid "Account settings successfully changed"
+msgstr "Account settings successfully changed"
+
+msgid "Add contact"
+msgstr "Add contact"
+
+msgid "Add participants"
+msgstr "Add participants"
+
+msgid "Advanced"
+msgstr "Advanced"
+
+msgid "Advanced IMAP Settings"
+msgstr "Advanced IMAP Settings"
+
+msgid "Advanced SMTP Settings"
+msgstr "Advanced SMTP Settings"
+
+msgid "All your contacts are in this chat."
+msgstr "All your contacts are in this chat."
+
+msgid ""
+"An Autocrypt Setup Message securely shares your end-to-end setup with other "
+"Autocrypt-compliant apps. The setup will be encrypted by a setup code which "
+"is displayed here and must be typed on the other device"
+msgstr ""
+"An Autocrypt Setup Message securely shares your end-to-end setup with other "
+"Autocrypt-compliant apps. The setup will be encrypted by a setup code which "
+"is displayed here and must be typed on the other device"
+
+msgid "Anti-Mobbing"
+msgstr "Anti-Mobbing"
+
+msgid "App name"
+msgstr "App name"
+
+msgid "App version"
+msgstr "App version"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Applying new settings, this may take a moment"
+
+msgid "Archived chats"
+msgstr "Archived chats"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Audio recording failed, missing permissions"
+msgstr "Audio recording failed, missing permissions"
+
+msgid "Autocrypt Setup Message"
+msgstr "Autocrypt Setup Message"
+
+msgid "Autocrypt setup adjustment failed. Please check the entered setup code."
+msgstr ""
+"Autocrypt setup adjustment failed. Please check the entered setup code."
+
+msgid "Autocrypt setup code"
+msgstr "Autocrypt setup code"
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Autocrypt setup successfully changed"
+
+msgid "Automatic"
+msgstr "Automatic"
+
+msgid "Base Settings"
+msgstr "Base Settings"
+
+msgid "Block"
+msgstr "Block"
+
+msgid "Block contact"
+msgstr "Block contact"
+
+msgid "Blocked contacts"
+msgstr "Blocked contacts"
+
+msgid "By using OX Coi you agree to our"
+msgstr "By using OX Coi you agree to our"
+
+msgid "Camera"
+msgstr "Camera"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Cannot verify contact"
+msgstr "Cannot verify contact"
+
+msgid "Changed setup for contact"
+msgstr "Changed setup for contact"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Chats"
+msgstr "Chats"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr "Choose a provider from the list below to create a new account"
+
+msgid "Code copied to clipboard"
+msgstr "Code copied to clipboard"
+
+msgid "Configuration change aborted"
+msgstr "Configuration change aborted"
+
+msgid "Contact import running, please wait"
+msgstr "Contact import running, please wait"
+
+msgid "Contact request"
+msgstr "Contact request"
+
+msgid "Contact successfully added"
+msgstr "Contact successfully added"
+
+msgid "Contact successfully blocked"
+msgstr "Contact successfully blocked"
+
+msgid "Contact successfully deleted"
+msgstr "Contact successfully deleted"
+
+msgid "Contact successfully edited"
+msgstr "Contact successfully edited"
+
+msgid "Contact verified"
+msgstr "Contact verified"
+
+msgid "Contacts"
+msgstr "Contacts"
+
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+msgid "Copy code"
+msgstr "Copy code"
+
+msgid "Could not delete contact."
+msgstr "Could not delete contact."
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"first."
+msgstr ""
+"Could not delete contact. Active chats with contact found, please remove "
+"first."
+
+msgid "Create chat"
+msgstr "Create chat"
+
+msgid "Create group"
+msgstr "Create group"
+
+msgid "Create group chat"
+msgstr "Create group chat"
+
+msgid ""
+"Creates an Autocrypt Setup Message on the server, you can load on other "
+"devices to use your current encryption setup."
+msgstr ""
+"Creates an Autocrypt Setup Message on the server, you can load on other "
+"devices to use your current encryption setup."
+
+msgid "Debug"
+msgstr "Debug"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Delete chat"
+msgstr "Delete chat"
+
+msgid "Delete chats"
+msgstr "Delete chats"
+
+msgid "Delete contact"
+msgstr "Delete contact"
+
+msgid "Do you really want to block %s (%s)?"
+msgstr "Do you really want to block %s (%s)?"
+
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Do you really want to delete %s (%s)?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Do you really want to leave the group?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Do you want to chat with this new contact?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Do you want to delete this chat?"
+
+msgid ""
+"Do you want to import your keys from \"%s\"? If there are no keys present in "
+"that folder, the operation will fail."
+msgstr ""
+"Do you want to import your keys from \"%s\"? If there are no keys present in "
+"that folder, the operation will fail."
+
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Do you want to save your keys in \"%s\"?"
+
+msgid "Do you want to unblock %s?"
+msgstr "Do you want to unblock %s?"
+
+msgid "Draft"
+msgstr "Draft"
+
+msgid "E-mail address"
+msgstr "E-mail address"
+
+msgid "Edit contact"
+msgstr "Edit contact"
+
+msgid "Edit profile"
+msgstr "Edit profile"
+
+msgid "Edit user settings"
+msgstr "Edit user settings"
+
+msgid "Email address"
+msgstr "Email address"
+
+msgid "Email copied to clipboard"
+msgstr "Email copied to clipboard"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Enable sending and requesting of read receipts."
+
+msgid "Enter the contact name"
+msgstr "Enter the contact name"
+
+msgid "Error:"
+msgstr "Error:"
+
+msgid "Export keys"
+msgstr "Export keys"
+
+msgid "FCM token"
+msgstr "FCM token"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "File"
+msgstr "File"
+
+msgid "Flagged"
+msgstr "Flagged"
+
+msgid ""
+"For known email providers additional settings are setup automatically. "
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"For known email providers additional settings are setup automatically. "
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+
+msgid "Forward"
+msgstr "Forward"
+
+msgid "GIF"
+msgstr "GIF"
+
+msgid "Gallery"
+msgstr "Gallery"
+
+msgid "Group image changed"
+msgstr "Group image changed"
+
+msgid "Group image deleted"
+msgstr "Group image deleted"
+
+msgid "Group left"
+msgstr "Group left"
+
+msgid "Group name"
+msgstr "Group name"
+
+msgid "Group name changed"
+msgstr "Group name changed"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Hello, I have just created this group for us"
+
+msgid "IMAP Security"
+msgstr "IMAP Security"
+
+msgid "IMAP login-name"
+msgstr "IMAP login-name"
+
+msgid "IMAP password"
+msgstr "IMAP password"
+
+msgid "IMAP port"
+msgstr "IMAP port"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "IMAP server (e.g. imap.coi.me)"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Import Autocrypt message"
+msgstr "Import Autocrypt message"
+
+msgid "Import failed, missing permissions"
+msgstr "Import failed, missing permissions"
+
+msgid "Import keys"
+msgstr "Import keys"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr ""
+"Import keys from your local storage to change your current encryption setup"
+
+msgid "Import system contacts"
+msgstr "Import system contacts"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "Initiate key transfer"
+msgstr "Initiate key transfer"
+
+msgid "Invites"
+msgstr "Invites"
+
+msgid "Key action failed"
+msgstr "Key action failed"
+
+msgid "Key action failed, missing permissions"
+msgstr "Key action failed, missing permissions"
+
+msgid "Key action successfully done"
+msgstr "Key action successfully done"
+
+msgid "Leave group"
+msgstr "Leave group"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Logging in, this may take a moment"
+msgstr "Logging in, this may take a moment"
+
+msgid "Login failed"
+msgstr "Login failed"
+
+msgid "Login to OX Coi"
+msgstr "Login to OX Coi"
+
+msgid "Mail"
+msgstr "Mail"
+
+msgid "Manual Settings"
+msgstr "Manual Settings"
+
+msgid "Me"
+msgstr "Me"
+
+msgid "Member added"
+msgstr "Member added"
+
+msgid "Member removed"
+msgstr "Member removed"
+
+msgid "Message syncing"
+msgstr "Message syncing"
+
+msgid "Messages I sent to myself"
+msgstr "Messages I sent to myself"
+
+msgid "Messages from unknown contacts"
+msgstr "Messages from unknown contacts"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "New contact"
+msgstr "New contact"
+
+msgid "No"
+msgstr "No"
+
+msgid "No blocked contacts"
+msgstr "No blocked contacts"
+
+msgid "No flagged messages"
+msgstr "No flagged messages"
+
+msgid "No invites"
+msgstr "No invites"
+
+msgid "No messages"
+msgstr "No messages"
+
+msgid "No participants selected. Please select at least one person."
+msgstr "No participants selected. Please select at least one person."
+
+msgid "No results found"
+msgstr "No results found"
+
+msgid "No status set"
+msgstr "No status set"
+
+msgid "No username set"
+msgstr "No username set"
+
+msgid ""
+"OX Coi works with any email account. If you have one, please sign in, "
+"otherwise register a new account first."
+msgstr ""
+"OX Coi works with any email account. If you have one, please sign in, "
+"otherwise register a new account first."
+
+msgid "Off"
+msgstr "Off"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Only show messages of known contacts"
+msgstr "Only show messages of known contacts"
+
+msgid "Open chat"
+msgstr "Open chat"
+
+msgid "Other mail account"
+msgstr "Other mail account"
+
+msgid "Outbox"
+msgstr "Outbox"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "Participants"
+msgstr "Participants"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Performing key export"
+msgstr "Performing key export"
+
+msgid "Performing key import"
+msgstr "Performing key import"
+
+msgid "Performing key transfer"
+msgstr "Performing key transfer"
+
+msgid "Please check your username and password"
+msgstr "Please check your username and password"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Please choose what kind of messages you would like to see."
+
+msgid "Please enter a valid e-mail address"
+msgstr "Please enter a valid e-mail address"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Please enter a valid port (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Please enter your password"
+
+msgid "Please select your email provider to sign in"
+msgstr "Please select your email provider to sign in"
+
+msgid "Please specify your email server settings."
+msgstr "Please specify your email server settings."
+
+msgid "Please wait a moment."
+msgstr "Please wait a moment."
+
+msgid "Poll"
+msgstr "Poll"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "QR"
+msgstr "QR"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "Re-importing your contacts will not create duplicates."
+
+msgid "Read receipt"
+msgstr "Read receipt"
+
+msgid "Read receipts"
+msgstr "Read receipts"
+
+msgid "Register"
+msgstr "Register"
+
+msgid "Remove current image"
+msgstr "Remove current image"
+
+msgid "Remove participant"
+msgstr "Remove participant"
+
+msgid "Rename group"
+msgstr "Rename group"
+
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+
+msgid "Sign in"
+msgstr "Sign in"
+
+msgid "SMTP Security"
+msgstr "SMTP Security"
+
+msgid "SMTP login-name"
+msgstr "SMTP login-name"
+
+msgid "SMTP password"
+msgstr "SMTP password"
+
+msgid "SMTP port"
+msgstr "SMTP port"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "SMTP server (e.g. smtp.coi.me)"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Scan QR"
+msgstr "Scan QR"
+
+msgid "Scan this code to create a verified chat with %s."
+msgstr "Scan this code to create a verified chat with %s."
+
+msgid "Search contacts"
+msgstr "Search contacts"
+
+msgid "Security"
+msgstr "Security"
+
+msgid "Sent with OX Coi"
+msgstr "Sent with OX Coi"
+
+msgid "Server addresses"
+msgstr "Server addresses"
+
+msgid "Set a group name"
+msgstr "Set a group name"
+
+msgid "Set a name"
+msgstr "Set a name"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Setup message created"
+msgstr "Setup message created"
+
+msgid "Share"
+msgstr "Share"
+
+msgid "Show QR"
+msgstr "Show QR"
+
+msgid "Show all messages, including normal email messages"
+msgstr "Show all messages, including normal email messages"
+
+msgid "Show only chat messages "
+msgstr "Show only chat messages "
+
+msgid "Show only messages of my contacts"
+msgstr "Show only messages of my contacts"
+
+msgid "Sign in with %s?"
+msgstr "Sign in with %s?"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Simply add one by tapping on a contact."
+
+msgid "Start a chat with %s?"
+msgstr "Start a chat with %s?"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "The associated setup code starts with: %s"
+msgstr "The associated setup code starts with: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "The code can be entered with or without minus signs"
+
+msgid "There was an error or the progress was canceled."
+msgstr "There was an error or the progress was canceled."
+
+msgid ""
+"This action can be also done later via the import button in the top action "
+"bar."
+msgstr ""
+"This action can be also done later via the import button in the top action "
+"bar."
+
+msgid "This field can not be empty"
+msgstr "This field can not be empty"
+
+msgid "This is a new chat. Send a message to connect!"
+msgstr "This is a new chat. Send a message to connect!"
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient\"s device, not "
+"necessarily that the content was read."
+msgstr ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient\"s device, not "
+"necessarily that the content was read."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage"
+msgstr ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage"
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might already help to simply reply to this message and ask the sender to "
+"send the message again.\n"
+"\n"
+"In case you re-installed OX Coi or another email program on this or another "
+"device you may want to send an Autocrypt Setup Message from there."
+msgstr ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might already help to simply reply to this message and ask the sender to "
+"send the message again.\n"
+"\n"
+"In case you re-installed OX Coi or another email program on this or another "
+"device you may want to send an Autocrypt Setup Message from there."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+
+msgid ""
+"To complete the import of the Autocrypt Setup Message please provide the "
+"security code shown in a dialog during creation of the message. After "
+"entering the code below the Autocrypt settings will be applied to your "
+"current encryption setup."
+msgstr ""
+"To complete the import of the Autocrypt Setup Message please provide the "
+"security code shown in a dialog during creation of the message. After "
+"entering the code below the Autocrypt settings will be applied to your "
+"current encryption setup."
+
+msgid "Today"
+msgstr "Today"
+
+msgid "Type something..."
+msgstr "Type something..."
+
+msgid "Unblock"
+msgstr "Unblock"
+
+msgid "Unblock contact"
+msgstr "Unblock contact"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Verification finished."
+msgstr "Verification finished."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Verifying. Please wait a moment."
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Video recording failed, missing permissions"
+msgstr "Video recording failed, missing permissions"
+
+msgid "Voice message"
+msgstr "Voice message"
+
+msgid "We could not determine all settings automatically."
+msgstr "We could not determine all settings automatically."
+
+msgid "Welcome to OX Coi"
+msgstr "Welcome to OX Coi"
+
+msgid ""
+"Welcome to OX Coi!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Welcome to OX Coi!\n"
+"Please start a new chat by tapping the chat bubble icon."
+
+msgid "Would you like to import your system contacts?"
+msgstr "Would you like to import your system contacts?"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "Yesterday"
+msgstr "Yesterday"
+
+msgid "Your favorite messages"
+msgstr "Your favorite messages"
+
+msgid ""
+"Your key has been sent to yourself. Switch to the other device and open the "
+"setup message. You should be prompted for a setup code. Type the following "
+"digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Your key has been sent to yourself. Switch to the other device and open the "
+"setup message. You should be prompted for a setup code. Type the following "
+"digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+
+msgid "more messages"
+msgstr "more messages"
+
+msgid "privacy declaration"
+msgstr "privacy declaration"
+
+msgid "terms & conditions"
+msgstr "terms & conditions"

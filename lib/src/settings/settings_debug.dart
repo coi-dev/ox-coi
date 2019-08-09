@@ -43,7 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_debug_bloc.dart';
@@ -81,7 +82,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).debugTitle),
+          title: Text(L10n.get(L.debug)),
         ),
         body: _buildPreferenceList(context));
   }
@@ -98,7 +99,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).debugFcmToken),
+                title: Text(L10n.get(L.debugFCMToken)),
                 subtitle: Text(token),
                 onTap: () {
                   _logger.info(token);

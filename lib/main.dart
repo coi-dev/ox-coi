@@ -44,7 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/log/log_manager.dart';
 import 'package:ox_coi/src/login/login.dart';
 import 'package:ox_coi/src/main/main_bloc.dart';
@@ -62,7 +62,7 @@ void main() {
 }
 
 class OxCoiApp extends StatelessWidget {
-  final Navigation navigation = Navigation();
+  final navigation = Navigation();
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +72,16 @@ class OxCoiApp extends StatelessWidget {
         accentColor: accent,
       ),
       localizationsDelegates: [
-        AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        L10n.loadTranslation(deviceLocale);
+        L10n.setLanguage(deviceLocale);
+        return deviceLocale;
+      },
       initialRoute: Navigation.root,
-      routes: navigation.routeMapping,
+      routes: navigation.routesMapping,
     );
   }
 }

@@ -46,7 +46,8 @@ import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -76,7 +77,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
             icon: new Icon(Icons.close),
             onPressed: () => navigation.pop(context),
           ),
-          title: Text(AppLocalizations.of(context).blockedContactsTitle),
+          title: Text(L10n.get(L.contactBlocked)),
         ),
         body: buildForm());
   }
@@ -90,7 +91,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
             return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
           } else {
             return Center(
-              child: Text(AppLocalizations.of(context).blockedListEmpty),
+              child: Text(L10n.get(L.contactNoBlocked)),
             );
           }
         } else if (state is! ContactListStateFailure) {

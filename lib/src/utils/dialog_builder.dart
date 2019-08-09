@@ -41,7 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
@@ -80,7 +81,7 @@ showConfirmationDialog(
       content: new Text(content),
       actions: <Widget>[
         new FlatButton(
-          child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : AppLocalizations.of(context).cancel),
+          child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : L10n.get(L.cancel)),
           onPressed: () {
             if (negativeAction != null) {
               negativeAction();
@@ -118,7 +119,7 @@ showInformationDialog(
       content: new Text(content),
       actions: <Widget>[
         new FlatButton(
-          child: new Text(AppLocalizations.of(context).ok),
+          child: new Text(L10n.get(L.ok)),
           onPressed: () {
             navigation.pop(context);
           },

@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
@@ -97,7 +98,7 @@ class _ShowQrState extends State<ShowQr> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                AppLocalizations.of(context).qrInviteInfoText(state.config.email),
+                L10n.getFormatted(L.qrScanTextX, [state.config.email]),
                 textAlign: TextAlign.center,
               ),
             );
@@ -117,10 +118,10 @@ class _ShowQrState extends State<ShowQr> {
           }
           return buildQrCode(_qrText);
         } else if (state is QrStateLoading) {
-          showToast(AppLocalizations.of(context).qrVerifyingText);
+          showToast(L10n.get(L.contactVerificationRunning));
           return buildQrCode(_qrText);
         } else if (state is QrStateVerificationFinished) {
-          showToast(AppLocalizations.of(context).qrVerifyCompleteText);
+          showToast(L10n.get(L.contactVerificationFinished));
           return buildQrCode(_qrText);
         } else if (state is QrStateFailure) {
           showToast(state.error);

@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
@@ -69,10 +70,10 @@ class _EditNameState extends State<EditName> {
   Navigation _navigation = Navigation();
 
   ValidatableTextFormField _nameField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).name,
-    hintText: (context) => AppLocalizations.of(context).setNameTextFieldHint,
+    (context) => L10n.get(L.name),
+    hintText: (context) => L10n.get(L.setName),
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintEmptyString,
+    validationHint: (context) => L10n.get(L.textFieldEmptyHint),
   );
   GlobalKey<FormState> _formKey = GlobalKey();
 

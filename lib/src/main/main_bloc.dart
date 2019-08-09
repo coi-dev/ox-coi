@@ -49,12 +49,12 @@ import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/notifications/local_push_manager.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();
@@ -101,7 +101,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   _setupDefaultValues(BuildContext context) async {
     Config config = Config();
-    config.setValue(Context.configSelfStatus, AppLocalizations.of(context).userSettingsStatusDefaultValue);
+    config.setValue(Context.configSelfStatus, defaultStatus);
     config.setValue(Context.configShowEmails, Context.showEmailsOff);
     String version = await getAppVersion();
     await setPreference(preferenceAppVersion, version);

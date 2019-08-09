@@ -41,12 +41,14 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
@@ -78,21 +80,21 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   var _navigation = Navigation();
 
   ValidatableTextFormField emailField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).emailAddress,
-    hintText: (context) => AppLocalizations.of(context).loginHintEmail,
+    (context) => L10n.get(L.email),
+    hintText: (context) => L10n.get(L.email),
     textFormType: TextFormType.email,
     inputType: TextInputType.emailAddress,
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidEmail,
+    validationHint: (context) => L10n.get(L.loginCheckMail),
     showIcon: true,
     key: Key(keyProviderSignInEmailTextField),
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).password,
-    hintText: (context) => AppLocalizations.of(context).loginHintPassword,
+    (context) => L10n.get(L.password),
+    hintText: (context) => L10n.get(L.password),
     textFormType: TextFormType.password,
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintInvalidPassword,
+    validationHint: (context) => L10n.get(L.loginCheckPassword),
     showIcon: true,
     key: Key(keyProviderSignInPasswordTextField),
   );
@@ -118,13 +120,13 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     if (state is LoginStateSuccess) {
       widget.success();
     } else if (state is LoginStateFailure) {
-      if (widget.provider.id != AppLocalizations.of(context).other) {
+      if (widget.provider.id != other) {
         setState(() {
           this._overlayEntry = this._createErrorOverlayEntry();
           Overlay.of(context).insert(this._overlayEntry);
           showInformationDialog(
             context: context,
-            title: AppLocalizations.of(context).loginErrorDialogTitle,
+            title: L10n.get(L.loginFailed),
             content: state.error,
             navigatable: Navigatable(Type.loginErrorDialog),
           );
@@ -157,7 +159,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
             ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
             Text(
-              AppLocalizations.of(context).loginProviderSignInText(widget.provider.name),
+              L10n.getFormatted(L.providerSignInTextX, [widget.provider.name]),
               style: Theme.of(context).textTheme.headline,
             ),
             Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
@@ -176,17 +178,17 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                 child: SizedBox(
                   width: loginButtonWidth,
                   child: Text(
-                    AppLocalizations.of(context).loginSignInButtonText,
+                    L10n.get(L.loginSignIn).toUpperCase(),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 onPressed: _signIn),
             Visibility(
-              visible: widget.provider.id == AppLocalizations.of(context).other,
+              visible: widget.provider.id == other,
               child: FlatButton(
                   onPressed: _showManualSettings,
                   child: Text(
-                    AppLocalizations.of(context).loginManualSettings,
+                    L10n.get(L.settingManual),
                     style: TextStyle(color: accent),
                   )),
             )
@@ -224,7 +226,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                             padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
                           ),
                           Text(
-                            AppLocalizations.of(context).loginError,
+                            L10n.get(L.loginCheckUsernamePassword),
                             style: Theme.of(context).textTheme.body1.apply(color: onError),
                           ),
                         ],
@@ -257,7 +259,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
       _progressOverlayEntry = OverlayEntry(
         builder: (context) => FullscreenProgress(
           bloc: _loginBloc,
-          text: AppLocalizations.of(context).loginProgressMessage,
+          text: L10n.get(L.loginRunning),
           showProgressValues: true,
           showCancelButton: false,
         ),

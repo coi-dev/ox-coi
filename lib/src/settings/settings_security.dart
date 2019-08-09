@@ -41,7 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/files.dart';
@@ -85,11 +86,11 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       _enableBack = false;
       String text;
       if (state.type == SettingsSecurityType.importKeys) {
-        text = AppLocalizations.of(context).securitySettingsImportKeysPerforming;
+        text = L10n.get(L.settingKeyImportRunning);
       } else if (state.type == SettingsSecurityType.exportKeys) {
-        text = AppLocalizations.of(context).securitySettingsExportKeysPerforming;
+        text = L10n.get(L.settingKeyExportRunning);
       } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
-        text = AppLocalizations.of(context).securitySettingsInitiateKeyTransferPerforming;
+        text = L10n.get(L.settingKeyTransferRunning);
       }
       _progressOverlayEntry = OverlayEntry(
         builder: (context) => FullscreenProgress(
@@ -112,19 +113,19 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
             context: context,
             navigatable: Navigatable(Type.settingsKeyTransferDoneDialog),
             dialog: AlertDialog(
-              title: Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferDone),
-              content: new Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferDoneDialog(state.setupCode)),
+              title: Text(L10n.get(L.autocryptMessageCreated)),
+              content: new Text(L10n.getFormatted(L.autocryptMessageSentX, [state.setupCode])),
               actions: <Widget>[
                 new FlatButton(
-                  child: new Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopy),
+                  child: new Text(L10n.get(L.settingCopyCode)),
                   onPressed: () {
-                    var toastText = AppLocalizations.of(context).securitySettingsInitiateKeyTransferCopyDone;
+                    var toastText = L10n.getFormatted(L.clipboardCopiedX, [L.code]);
                     copyToClipboardWithToast(text: state.setupCode, toastText: toastText);
                     navigation.pop(context);
                   },
                 ),
                 new FlatButton(
-                  child: new Text(AppLocalizations.of(context).ok),
+                  child: new Text(L10n.get(L.ok)),
                   onPressed: () {
                     navigation.pop(context);
                   },
@@ -133,16 +134,16 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
             ),
           );
         } else {
-          showToast(AppLocalizations.of(context).securitySettingsKeyActionSuccess);
+          showToast(L10n.get(L.settingKeyTransferSuccess));
         }
       }
       if (state is SettingsSecurityStateFailure) {
         if (state.error == null) {
-          showToast(AppLocalizations.of(context).securitySettingsKeyActionFailed);
+          showToast(L10n.get(L.settingKeyTransferFailed));
         } else {
           switch (state.error) {
             case SettingsSecurityStateError.missingStoragePermission:
-              showToast(AppLocalizations.of(context).securitySettingsKeyActionFailedNoPermission);
+              showToast(L10n.get(L.settingKeyTransferPermissionFailed));
               break;
           }
         }
@@ -156,7 +157,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       onWillPop: () async => _enableBack,
       child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).security),
+            title: Text(L10n.get(L.security)),
           ),
           body: _buildPreferenceList(context)),
     );
@@ -167,20 +168,20 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       children: ListTile.divideTiles(context: context, tiles: [
         ListTile(
           contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-          title: Text(AppLocalizations.of(context).securitySettingsExportKeys),
-          subtitle: Text(AppLocalizations.of(context).securitySettingsExportKeysText),
+          title: Text(L10n.get(L.settingExportKey)),
+          subtitle: Text(L10n.get(L.settingSecurityExportText)),
           onTap: () => _onPressed(context, SettingsSecurityType.exportKeys),
         ),
         ListTile(
           contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-          title: Text(AppLocalizations.of(context).securitySettingsImportKeys),
-          subtitle: Text(AppLocalizations.of(context).securitySettingsImportKeysText),
+          title: Text(L10n.get(L.settingImportKeys)),
+          subtitle: Text(L10n.get(L.settingImportKeysText)),
           onTap: () => _onPressed(context, SettingsSecurityType.importKeys),
         ),
         ListTile(
           contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-          title: Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransfer),
-          subtitle: Text(AppLocalizations.of(context).securitySettingsInitiateKeyTransferText),
+          title: Text(L10n.get(L.settingKeyTransferStart)),
+          subtitle: Text(L10n.get(L.autocryptCreateMessageText)),
           onTap: () => _onPressed(context, SettingsSecurityType.initiateKeyTransfer),
         ),
       ]).toList(),
@@ -207,19 +208,19 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     String path = await getExportImportPath();
     Type navigationType;
     if (type == SettingsSecurityType.exportKeys) {
-      title = AppLocalizations.of(context).securitySettingsExportKeys;
-      text = AppLocalizations.of(context).securitySettingsExportKeysDialog(path);
+      title = L10n.get(L.settingExportKey);
+      text = L10n.getFormatted(L.settingSecurityExportKeysTextX, [path]);
       navigationType = Type.settingsExportKeysDialog;
     } else if (type == SettingsSecurityType.importKeys) {
-      title = AppLocalizations.of(context).securitySettingsImportKeys;
-      text = AppLocalizations.of(context).securitySettingsImportKeysDialog(path);
+      title = L10n.get(L.settingImportKeys);
+      text = L10n.getFormatted(L.settingSecurityImportKeysTextX, [path]);
       navigationType = Type.settingsImportKeysDialog;
     }
     showConfirmationDialog(
       context: context,
       title: title,
       content: text,
-      positiveButton: AppLocalizations.of(context).ok,
+      positiveButton: L10n.get(L.ok),
       positiveAction: () => _exportImport(type),
       navigatable: Navigatable(navigationType),
     );
@@ -236,9 +237,9 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   void _showKeyTransferDialog() {
     showConfirmationDialog(
       context: context,
-      title: AppLocalizations.of(context).securitySettingsInitiateKeyTransfer,
-      content: AppLocalizations.of(context).securitySettingsInitiateKeyTransferDialog,
-      positiveButton: AppLocalizations.of(context).ok,
+      title: L10n.get(L.settingKeyTransferStart),
+      content: L10n.get(L.autocryptText),
+      positiveButton: L10n.get(L.ok),
       positiveAction: _keyTransfer,
       navigatable: Navigatable(Type.settingsKeyTransferDialog),
     );

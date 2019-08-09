@@ -42,7 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/date.dart';
@@ -64,7 +65,7 @@ class MessageSpecial extends StatelessWidget {
 
   Widget buildSetupMessage(BuildContext context) {
     String time = getTimeFormTimestamp(timestamp);
-    String text = AppLocalizations.of(context).securitySettingsAutocryptMessage;
+    String text = L10n.get(L.autocryptChatMessagePlaceholder);
     return FractionallySizedBox(
       alignment: Alignment.topRight,
       widthFactor: 0.8,

@@ -41,7 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 
@@ -93,30 +94,29 @@ showActionDialog(BuildContext context, ProfileActionType action, Function onPerf
   String positiveButton;
   Type type;
 
-  var appLocalizations = AppLocalizations.of(context);
   switch (action) {
     case ProfileActionType.block:
-      title = appLocalizations.block;
-      content = appLocalizations.chatProfileBlockContactContent(params[ProfileActionParams.email], params[ProfileActionParams.name]);
-      positiveButton = appLocalizations.chatProfileBlockContactButtonText;
+      title = L10n.get(L.block);
+      content = L10n.getFormatted(L.contactBlockTextXY, [params[ProfileActionParams.email], params[ProfileActionParams.name]]);
+      positiveButton = L10n.get(L.contactBlock);
       type = Type.contactBlockDialog;
       break;
     case ProfileActionType.deleteChat:
-      title = appLocalizations.delete;
-      content = appLocalizations.chatProfileDeleteChatInfoText;
-      positiveButton = appLocalizations.chatProfileDeleteChatButtonText;
+      title = L10n.get(L.delete);
+      content = L10n.get(L.chatDeleteP);
+      positiveButton = L10n.get(L.chatDeleteText);
       type = Type.chatDeleteDialog;
       break;
     case ProfileActionType.leave:
-      title = appLocalizations.chatProfileLeaveGroupButtonText;
-      content = appLocalizations.chatProfileLeaveGroupInfoText;
-      positiveButton = appLocalizations.chatProfileLeaveGroupButtonText;
+      title = L10n.get(L.groupLeave);
+      content = L10n.get(L.groupLeaveText);
+      positiveButton = L10n.get(L.groupLeave);
       type = Type.chatLeaveGroupDialog;
       break;
     case ProfileActionType.deleteContact:
-      title = appLocalizations.contactChangeDeleteTitle;
-      content = appLocalizations.contactChangeDeleteDialogContent(params[ProfileActionParams.email], params[ProfileActionParams.name]);
-      positiveButton = appLocalizations.delete;
+      title = L10n.get(L.contactDelete);
+      content = L10n.getFormatted(L.contactDeleteTextXY, [params[ProfileActionParams.email], params[ProfileActionParams.name]]);
+      positiveButton = L10n.get(L.delete);
       type = Type.contactDeleteDialog;
       break;
   }

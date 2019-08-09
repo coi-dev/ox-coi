@@ -50,7 +50,8 @@ import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -71,10 +72,10 @@ class ChatCreateGroupSettings extends StatefulWidget {
 class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with ChatCreateMixin {
   ContactListBloc _contactListBloc = ContactListBloc();
   ValidatableTextFormField _groupNameField = ValidatableTextFormField(
-    (context) => AppLocalizations.of(context).createGroupTextFieldLabel,
-    hintText: (context) => AppLocalizations.of(context).createGroupTextFieldHint,
+    (context) => L10n.get(L.groupName),
+    hintText: (context) => L10n.get(L.groupNameLabel),
     needValidation: true,
-    validationHint: (context) => AppLocalizations.of(context).validatableTextFormFieldHintEmptyString,
+    validationHint: (context) => L10n.get(L.textFieldEmptyHint),
   );
   GlobalKey<FormState> _formKey = GlobalKey();
   Repository<Core.Chat> chatRepository;
@@ -93,7 +94,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).createGroupTitle),
+        title: Text(L10n.get(L.groupCreate)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
@@ -143,7 +144,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
             top: formVerticalPadding,
           ),
           child: Text(
-            AppLocalizations.of(context).createGroupNameAndAvatarHeader,
+            L10n.get(L.groupName),
             style: Theme.of(context).textTheme.body2.apply(color: primary),
           ),
         ),
@@ -161,7 +162,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
             top: formVerticalPadding,
           ),
           child: Text(
-            AppLocalizations.of(context).participants,
+            L10n.get(L.participantP, count: L10n.plural),
             style: Theme.of(context).textTheme.body2.apply(color: primary),
           ),
         ),

@@ -65,14 +65,14 @@ class Config {
 
   int get lastUpdate => _lastUpdate;
 
-  Config._internal();
-
   factory Config() {
     if (_instance == null) {
       _instance = new Config._internal();
     }
     return _instance;
   }
+
+  Config._internal();
 
   load() async {
     if (_lastUpdate != -1) {

@@ -51,7 +51,8 @@ import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -86,7 +87,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
           icon: Icon(Icons.close),
           onPressed: () => navigation.pop(context),
         ),
-        title: Text(AppLocalizations.of(context).createGroupTitle),
+        title: Text(L10n.get(L.groupCreate)),
         actions: <Widget>[
           getSearchAction(),
           IconButton(
@@ -172,7 +173,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
             top: listItemPadding,
             bottom: listItemPaddingSmall,
           ),
-          child: Text("${selectedContacts.length} ${AppLocalizations.of(context).participants}"),
+          child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
         ),
         Container(
           padding: EdgeInsets.only(bottom: 4.0),
@@ -197,7 +198,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
                     right: listItemPadding,
                     top: listItemPadding,
                   ),
-                  child: Text(AppLocalizations.of(context).createGroupNoParticipantsHint),
+                  child: Text(L10n.get(L.groupAddContactAdd)),
                 ),
         ),
       ],
@@ -215,7 +216,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(selectedContacts: _contactListBloc.contactsSelected)),
       );
     } else {
-      showToast(AppLocalizations.of(context).createGroupNoParticipantsSelected);
+      showToast(L10n.get(L.groupAddNoParticipants));
     }
   }
 }

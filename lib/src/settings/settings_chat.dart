@@ -43,7 +43,8 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_chat_bloc.dart';
@@ -71,7 +72,7 @@ class _SettingsChatState extends State<SettingsChat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).chat),
+          title: Text(L10n.get(L.chatP)),
         ),
         body: _buildPreferenceList(context));
   }
@@ -85,17 +86,17 @@ class _SettingsChatState extends State<SettingsChat> {
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).chatSettingsChangeReadReceipts),
-                subtitle: Text(AppLocalizations.of(context).chatSettingsChangeReadReceiptsText),
+                title: Text(L10n.get(L.settingReadReceiptP, count: L10n.plural)),
+                subtitle: Text(L10n.get(L.settingReadReceiptText)),
                 trailing: Switch(value: state.readReceiptsEnabled, onChanged: (value) => _changeReadReceipts()),
               ),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                 title: Text(
-                  AppLocalizations.of(context).chatSettingsChangeMessageSync,
+                  L10n.get(L.settingMessageSyncing),
                 ),
                 subtitle: Text(
-                  AppLocalizations.of(context).chatSettingsChangeMessageSyncText,
+                  L10n.get(L.settingChooseMessageSyncingType),
                 ),
                 onTap: () {
                   _buildMessageSyncChooserDialog(state.inviteSetting);
@@ -119,22 +120,22 @@ class _SettingsChatState extends State<SettingsChat> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text(AppLocalizations.of(context).chatSettingsChangeMessageSyncText),
+            title: Text(L10n.get(L.settingChooseMessageSyncingType)),
             children: <Widget>[
               RadioListTile<int>(
-                title: Text(AppLocalizations.of(context).chatSettingsChangeMessageSyncOption1),
+                title: Text(L10n.get(L.settingMessageSyncingTypeChats)),
                 value: Context.showEmailsOff,
                 groupValue: inviteSetting,
                 onChanged: _onMessageSyncChooserTab,
               ),
               RadioListTile<int>(
-                title: Text(AppLocalizations.of(context).chatSettingsChangeMessageSyncOption2),
+                title: Text(L10n.get(L.settingMessageSyncingTypeKnown)),
                 value: Context.showEmailsAcceptedContacts,
                 groupValue: inviteSetting,
                 onChanged: _onMessageSyncChooserTab,
               ),
               RadioListTile<int>(
-                title: Text(AppLocalizations.of(context).chatSettingsChangeMessageSyncOption3),
+                title: Text(L10n.get(L.settingMessageSyncingTypeAll)),
                 value: Context.showEmailsAll,
                 groupValue: inviteSetting,
                 onChanged: _onMessageSyncChooserTab,

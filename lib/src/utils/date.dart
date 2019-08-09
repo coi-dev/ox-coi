@@ -41,7 +41,8 @@
  */
 
 import 'package:date_format/date_format.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 
 const formatterTime = [HH, ':', nn];
 const formatterDate = [dd, '.', mm];
@@ -55,13 +56,13 @@ String getTimeFormTimestamp(int timestamp) {
 
 DateTime _getDateTimeFromTimestamp(int timestamp) => DateTime.fromMillisecondsSinceEpoch(timestamp);
 
-String getDateFromTimestamp(int timestamp, bool longMonth, [bool prependWordsWhereApplicable, AppLocalizations appLocalizations]) {
+String getDateFromTimestamp(int timestamp, bool longMonth, [bool prependWordsWhereApplicable]) {
   var date = formatDate(_getDateTimeFromTimestamp(timestamp), longMonth ? formatterDateLong : formatterDate);
-  if (prependWordsWhereApplicable != null && prependWordsWhereApplicable && appLocalizations != null) {
+  if (prependWordsWhereApplicable != null && prependWordsWhereApplicable) {
     if (_compareDate(getNowTimestamp(), timestamp) == 0) {
-      return "${appLocalizations.today} - $date";
+      return "${L10n.get(L.today)} - $date";
     } else if (_compareDate(getYesterdayTimestamp(), timestamp) == 0) {
-      return "${appLocalizations.yesterday} - $date";
+      return "${L10n.get(L.yesterday)} - $date";
     }
   }
   return date;
@@ -87,11 +88,11 @@ String getTimerFromTimestamp(int timestamp) {
   return formatDate(_getDateTimeFromTimestamp(timestamp), formatterTimer);
 }
 
-String getChatListTime(AppLocalizations appLocalizations, int timestamp) {
+String getChatListTime(int timestamp) {
   if (_compareDate(timestamp, getNowTimestamp()) == 0) {
     return getTimeFormTimestamp(timestamp);
   } else if (_compareDate(getYesterdayTimestamp(), timestamp) == 0) {
-    return appLocalizations.yesterday;
+    return L10n.get(L.yesterday);
   } else {
     return formatDate(_getDateTimeFromTimestamp(timestamp), formatterDate);
   }

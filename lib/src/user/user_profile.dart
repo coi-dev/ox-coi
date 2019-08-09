@@ -43,7 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/data/config.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -79,12 +80,12 @@ class UserProfile extends RootChild {
 
   @override
   String getTitle(BuildContext context) {
-    return AppLocalizations.of(context).profileTitle;
+    return L10n.get(L.profile);
   }
 
   @override
   String getNavigationText(BuildContext context) {
-    return AppLocalizations.of(context).profileTitle;
+    return L10n.get(L.profile);
   }
 
   @override
@@ -134,7 +135,7 @@ class _ProfileState extends State<UserProfile> {
               text: config.username,
               style: Theme.of(context).textTheme.headline,
               align: TextAlign.center,
-              placeholderText: AppLocalizations.of(context).profileUsernamePlaceholder,
+              placeholderText: L10n.get(L.profileNoUsername),
               placeholderStyle: Theme.of(context).textTheme.headline.apply(color: onBackground.withOpacity(disabled)),
               placeHolderAlign: TextAlign.center,
             ),
@@ -152,7 +153,7 @@ class _ProfileState extends State<UserProfile> {
                 text: config.status,
                 align: TextAlign.center,
                 style: Theme.of(context).textTheme.subhead,
-                placeholderText: AppLocalizations.of(context).profileStatusPlaceholder,
+                placeholderText: L10n.get(L.profileNoSignature),
                 placeholderStyle: Theme.of(context).textTheme.subhead.apply(color: onBackground.withOpacity(disabled)),
                 placeHolderAlign: TextAlign.center,
               ),
@@ -163,7 +164,7 @@ class _ProfileState extends State<UserProfile> {
                 RaisedButton(
                   color: accent,
                   textColor: onAccent,
-                  child: Text(AppLocalizations.of(context).profileEditButton),
+                  child: Text(L10n.get(L.profileEdit)),
                   onPressed: editUserSettings,
                   key: Key(keyUserProfileEditProfileRaisedButton),
                 ),
@@ -171,7 +172,7 @@ class _ProfileState extends State<UserProfile> {
                 RaisedButton(
                   color: accent,
                   textColor: onAccent,
-                  child: Text(AppLocalizations.of(context).showQrButton),
+                  child: Text(L10n.get(L.qrProfile)),
                   onPressed: showQr,
                   key: Key(keyUserProfileShowQrRaisedButton),
                 ),

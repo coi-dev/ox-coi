@@ -42,11 +42,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_about_bloc.dart';
 import 'package:ox_coi/src/settings/settings_about_event_state.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
@@ -77,7 +79,7 @@ class _SettingsAboutState extends State<SettingsAbout> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).about),
+          title: Text(L10n.get(L.about)),
         ),
         body: _buildPreferenceList(context));
   }
@@ -93,21 +95,21 @@ class _SettingsAboutState extends State<SettingsAbout> {
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).aboutSettingsName),
+                title: Text(L10n.get(L.appName)),
                 subtitle: Text(state.name),
               ),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(AppLocalizations.of(context).aboutSettingsVersion),
+                title: Text(L10n.get(L.appVersion)),
                 subtitle: Text(state.version),
               ),
               ListTile(
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  title: Text(AppLocalizations.of(context).feedback),
+                  title: Text(L10n.get(L.feedback)),
                   subtitle: RichText(
                     text: TextSpan(
                       children: <TextSpan>[
-                        UrlTextSpan(url: AppLocalizations.of(context).feedbackUrl),
+                        UrlTextSpan(url: feedbackUrl),
                       ],
                     ),
                   )),

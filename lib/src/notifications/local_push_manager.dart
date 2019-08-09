@@ -45,7 +45,8 @@ import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
@@ -93,7 +94,7 @@ class LocalPushManager {
         String title = await _chatRepository.get(chatId).getName();
         int count = (await _context.getFreshMessageCount(chatId)) - 1;
         if (count > 1) {
-          title = "$title (+ $count ${AppLocalizations.of(_buildContext).moreMessages})";
+          title = "$title (+ $count ${L10n.get(L.moreMessages)})";
         }
         String preview = await message.getSummaryText(200);
         showNotificationIfRequired(chatId, title, preview);

@@ -45,7 +45,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -128,17 +129,17 @@ class ProfileAvatar extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   leading: Icon(Icons.photo),
-                  title: Text(AppLocalizations.of(context).gallery),
+                  title: Text(L10n.get(L.gallery)),
                   onTap: () => _getNewAvatarPath(ImageSource.gallery),
                 ),
                 ListTile(
                   leading: Icon(Icons.camera_alt),
-                  title: Text(AppLocalizations.of(context).camera),
+                  title: Text(L10n.get(L.camera)),
                   onTap: () => _getNewAvatarPath(ImageSource.camera),
                 ),
                 ListTile(
                   leading: Icon(Icons.delete),
-                  title: Text(AppLocalizations.of(context).userSettingsRemoveImage),
+                  title: Text(L10n.get(L.groupRemoveImage)),
                   onTap: () => _removeAvatar(),
                 )
               ],

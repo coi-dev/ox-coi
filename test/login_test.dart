@@ -44,7 +44,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
 import 'package:ox_coi/src/login/login.dart';
 import 'package:ox_coi/src/login/login_provider_list.dart';
 
@@ -269,11 +268,9 @@ class TestWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       localizationsDelegates: [
-        AppLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
       home: child,
       navigatorObservers: [mockObserver],
     );

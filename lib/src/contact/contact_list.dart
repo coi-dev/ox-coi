@@ -48,7 +48,8 @@ import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/l10n/localizations.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -94,12 +95,12 @@ class ContactList extends RootChild {
 
   @override
   String getTitle(BuildContext context) {
-    return AppLocalizations.of(context).contacts;
+    return L10n.get(L.contactP, count: L10n.plural);
   }
 
   @override
   String getNavigationText(BuildContext context) {
-    return AppLocalizations.of(context).contacts;
+    return L10n.get(L.contactP, count: L10n.plural);
   }
 
   @override
@@ -140,10 +141,10 @@ class _ContactListState extends State<ContactList> {
     }
     if (state is ContactsImportSuccess) {
       requestValidContacts();
-      String contactImportSuccess = AppLocalizations.of(context).contactImportSuccess(state.changedCount);
+      String contactImportSuccess = L10n.getFormatted(L.contactImportedXP, [state.changedCount], count: state.changedCount);
       showToast(contactImportSuccess);
     } else if (state is ContactsImportFailure) {
-      String contactImportFailure = AppLocalizations.of(context).contactImportFailure;
+      String contactImportFailure = L10n.get(L.contactImportFailed);
       showToast(contactImportFailure);
     }
   }
@@ -215,12 +216,12 @@ class _ContactListState extends State<ContactList> {
   }
 
   void _showImportDialog(bool initialImport, BuildContext context) {
-    var importTitle = AppLocalizations.of(context).contactImportDialogTitle;
-    var importText = AppLocalizations.of(context).contactImportDialogContent;
-    var importTextInitial = AppLocalizations.of(context).contactImportDialogContentExtensionInitial;
-    var importTextRepeat = AppLocalizations.of(context).contactImportDialogContentExtensionRepeat;
+    var importTitle = L10n.get(L.contactImport);
+    var importText = L10n.get(L.contactSystemImportText);
+    var importTextInitial = L10n.get(L.contactInitialImportText);
+    var importTextRepeat = L10n.get(L.contactReImportText);
     var content = "$importText ${initialImport ? importTextInitial : importTextRepeat}";
-    var importPositive = AppLocalizations.of(context).import;
+    var importPositive = L10n.get(L.import);
     showConfirmationDialog(
       context: context,
       title: importTitle,
@@ -230,7 +231,7 @@ class _ContactListState extends State<ContactList> {
         _progressOverlayEntry = OverlayEntry(
           builder: (context) => FullscreenProgress(
             bloc: _contactListBloc,
-            text: AppLocalizations.of(context).contactImportProgress,
+            text: L10n.get(L.contactImportRunning),
             showProgressValues: false,
             showCancelButton: false,
           ),
