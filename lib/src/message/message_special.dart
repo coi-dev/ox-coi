@@ -96,7 +96,10 @@ class MessageSpecial extends StatelessWidget {
         textColor: onSurface,
         borderRadius: buildInfoBorderRadius(),
         child: MessageElevated(
-          child: Text(messageText),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
+            child: Text(messageText),
+          ),
         ),
       ),
     );
