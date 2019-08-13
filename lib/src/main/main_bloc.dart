@@ -44,7 +44,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/background/background_manager.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
@@ -59,7 +58,6 @@ import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/push/push_manager.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/constants.dart';
-import 'package:sqflite/sqflite.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();

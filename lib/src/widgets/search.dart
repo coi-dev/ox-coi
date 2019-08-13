@@ -43,6 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class Search extends SearchDelegate {
   final Function onBuildResults;
@@ -68,7 +69,7 @@ class Search extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: Icon(Icons.arrow_back), key: Key(keySearchReturnIconButton),
       onPressed: () {
         close(context, query);
       },

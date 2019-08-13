@@ -46,6 +46,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 enum ComposerModeType {
   compose,
@@ -104,7 +105,7 @@ mixin ChatComposer {
       onChanged: onTextChanged,
       decoration: new InputDecoration.collapsed(
         hintText: L10n.get(L.typeSomething),
-      ),
+      ),key: Key(L.getKey(L.typeSomething)),
     );
   }
 
@@ -127,6 +128,7 @@ mixin ChatComposer {
         widgets.add(new IconButton(
           icon: new Icon(Icons.mic),
           onPressed: onRecordAudioPressed,
+          key: Key(KeyChat_Composer_MixinOnRecordAudioPressedIcon),
         ));
         widgets.add(new IconButton(
           icon: new Icon(Icons.camera_alt),
@@ -140,13 +142,13 @@ mixin ChatComposer {
       case ComposerModeType.isComposing:
         widgets.add(new IconButton(
           icon: new Icon(Icons.send),
-          onPressed: onSendText,
+          onPressed: onSendText,key: Key(KeyChat_Composer_MixinOnSendTextIcon),
         ));
         break;
       case ComposerModeType.isVoiceRecording:
         widgets.add(new IconButton(
           icon: new Icon(Icons.send),
-          onPressed: onRecordAudioPressed,
+          onPressed: onRecordAudioPressed,key: Key(KeyChat_Momposer_MixinOnRecordAudioSendIcon),
         ));
         break;
     }
