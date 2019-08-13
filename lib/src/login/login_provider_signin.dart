@@ -169,7 +169,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                     children: <Widget>[emailField, passwordField],
                   ),
                 )),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
+            Padding(padding: EdgeInsets.all(loginVerticalPadding24dp)),
             RaisedButton(
                 color: accent,
                 textColor: onAccent,

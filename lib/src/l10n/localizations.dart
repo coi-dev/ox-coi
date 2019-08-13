@@ -95,7 +95,7 @@ class AppLocalizations {
 
   String get gmxLogoUrl => 'assets/images/gmx_icon.png';
 
-  String get mailboxLogoUrl => 'assets/images/mailbox_icon.jpg';
+  String get mailboxLogoUrl => 'assets/images/mailbox_icon.png';
 
   String get mailcomLogoUrl => 'assets/images/mailcom_icon.png';
 
@@ -308,7 +308,7 @@ class AppLocalizations {
 
   String get loginSignInInfoText => Intl.message('Please select your email provider to sign in', name: 'loginSignInInfoText');
 
-  String get loginOtherMailAccount => Intl.message('Other mail account', name: 'loginOtherMailAccount');
+  String get loginOtherMailProvider => Intl.message('Other Mail Provider', name: 'loginOtherMailProvider');
 
   String loginProviderSignInText(name) => Intl.message('Sign in with $name?', name: 'loginProviderSignInText', args: [name]);
 

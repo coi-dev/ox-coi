@@ -47,6 +47,7 @@ import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,6 +75,7 @@ class _ProviderListState extends State<ProviderList> {
   final LoginBloc _loginBloc = LoginBloc();
   String title;
   String text;
+  Provider otherProvider;
 
   @override
   void initState() {
@@ -100,30 +102,48 @@ class _ProviderListState extends State<ProviderList> {
         padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
               title,
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline,
             ),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+            Padding(padding: EdgeInsets.only(top: loginVerticalPadding24dp)),
             Text(
               text,
               textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.body1,
             ),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding20dp)),
-            Expanded(
-                child: BlocBuilder(
-              bloc: _loginBloc,
-              builder: (context, state) {
-                if (state is LoginStateProvidersLoaded) {
-                  return buildListItems(state);
-                } else if (state is! LoginStateFailure) {
-                  return StateInfo(showLoading: true);
-                } else {
-                  return Icon(Icons.error);
-                }
-              },
-            )),
+            Padding(padding: EdgeInsets.only(top: loginVerticalPadding24dp)),
+            Flexible(
+              child: BlocBuilder(
+                bloc: _loginBloc,
+                builder: (context, state) {
+                  if (state is LoginStateProvidersLoaded) {
+                    return buildListItems(state);
+                  } else if (state is! LoginStateFailure) {
+                    return StateInfo(showLoading: true);
+                  } else {
+                    return Icon(Icons.error);
+                  }
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: loginVerticalPadding24dp),
+              child: RaisedButton(
+                elevation: 0,
+                onPressed: () => _onItemTap(otherProvider),
+                child: Text(AppLocalizations.of(context).loginOtherMailProvider),
+                textColor: accent,
+                color: background,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
+                  side: BorderSide(color: accent),
+                ),
+              ),
+            ),
           ],
         ));
   }
@@ -146,19 +166,45 @@ class _ProviderListState extends State<ProviderList> {
     if (provider.id == "coi" && isRelease()) {
       return Container();
     }
-    return Column(
-      children: <Widget>[
-        ListTile(
-          onTap: () => _onItemTap(provider),
-          leading: Image(
-            image: AssetImage(getProviderIconPath(context, provider.id)),
-            height: loginProviderIconSize,
-            width: loginProviderIconSize,
-          ),
-          title: provider.id != AppLocalizations.of(context).other ? Text(provider.name) : Text(AppLocalizations.of(context).loginOtherMailAccount),
+    if (provider.id == "other") {
+      otherProvider = provider;
+      return Container();
+    }
+    return SizedBox(
+      height: loginListItemHeight,
+      child: InkWell(
+        onTap: () => _onItemTap(provider),
+        child: Column(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: loginVerticalPadding12dp, horizontal: loginHorizontalPadding16dp),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(right: loginHorizontalPadding16dp),
+                          child: Image(
+                            image: AssetImage(getProviderIconPath(context, provider.id)),
+                            height: loginProviderIconSize,
+                            width: loginProviderIconSize,
+                          ),
+                        ),
+                        Text(
+                          provider.name,
+                          style: Theme.of(context).textTheme.body1.apply(color: onBackground),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+            Divider(
+              height: loginListItemDividerHeight,
+              color: onBackground.withOpacity(barely),
+            ),
+          ],
         ),
-        Divider(),
-      ],
+      ),
     );
   }
 
