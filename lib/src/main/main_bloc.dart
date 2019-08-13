@@ -81,7 +81,9 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         yield MainStateFailure(error: error.toString());
       }
     } else if (event is AppLoaded) {
-      _setupInitialAppState();
+      if (event.configured) {
+        _setupInitialAppState();
+      }
       yield MainStateSuccess(configured: event.configured);
     }
   }

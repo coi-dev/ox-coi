@@ -203,7 +203,9 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
           email: email,
         ),
       ),
-    );
+    ).then((value) {
+      _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+    });
   }
 
   _deleteContact() {
