@@ -85,6 +85,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
     const MessageAction(title: 'Delete locally', icon: Icons.delete, messageActionTag: MessageActionTag.delete),
     const MessageAction(title: 'Flag/Unflag', icon: Icons.star, messageActionTag: MessageActionTag.flag),
+    const MessageAction(title: 'Share', icon: Icons.share, messageActionTag: MessageActionTag.share),
   ];
 
   MessageItemBloc _messagesBloc = MessageItemBloc();
@@ -117,6 +118,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         break;
       case MessageActionTag.flag:
         _messageChangeBloc.dispatch(FlagMessages(chatId: widget.chatId, messageIds: msgIds, star: _isStarred));
+        break;
+      case MessageActionTag.share:
+        _attachmentBloc.dispatch(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
         break;
     }
   }

@@ -51,6 +51,13 @@ class RequestAttachment extends MessageAttachmentEvent {
   RequestAttachment({@required this.chatId, @required this.messageId});
 }
 
+class ShareAttachment extends MessageAttachmentEvent {
+  final int chatId;
+  final int messageId;
+
+  ShareAttachment({@required this.chatId, @required this.messageId});
+}
+
 class AttachmentLoaded extends MessageAttachmentEvent {}
 
 abstract class MessageAttachmentState {}

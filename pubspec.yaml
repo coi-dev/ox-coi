@@ -16,6 +16,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   date_format: ^1.0.6
   downloads_path_provider: ^0.1.0
+  esys_flutter_share: ^1.0.2
   firebase_messaging: ^5.1.1
   file_picker: ^1.3.8
   flutter_bloc: ^0.20.0

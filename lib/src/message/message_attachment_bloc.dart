@@ -41,9 +41,12 @@
  */
 
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:open_file/open_file.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
@@ -66,6 +69,15 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       } catch (error) {
         yield MessageAttachmentStateFailure(error: error.toString());
       }
+    } if (event is ShareAttachment) {
+      _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
+      yield MessageAttachmentStateLoading();
+      try {
+        _shareFile(event.messageId);
+        dispatch(AttachmentLoaded());
+      } catch (error) {
+        yield MessageAttachmentStateFailure(error: error.toString());
+      }
     } else if (event is AttachmentLoaded) {
       yield MessageAttachmentStateSuccess();
     }
@@ -74,6 +86,16 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
   void _openFile(int messageId) async {
     ChatMsg message = _getMessage(messageId);
     OpenFile.open(await message.getFile());
+  }
+
+  void _shareFile(int messageId) async {
+    ChatMsg message = _getMessage(messageId);
+    var fileName = await message.getFileName();
+    var text = await message.getText();
+    var filePath = await message.getFile();
+    List<int> bytes = await File(filePath).readAsBytes();
+    var mime = await message.getFileMime();
+    await Share.file(text, fileName, bytes, mime, text: text);
   }
 
   ChatMsg _getMessage(int messageId) {
