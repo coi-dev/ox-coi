@@ -101,7 +101,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           )
         ],
       ),
-      body: buildBody(),
+      body: SingleChildScrollView(child: buildBody()),
     );
   }
 
@@ -165,8 +165,22 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
             style: Theme.of(context).textTheme.body2.apply(color: primary),
           ),
         ),
-        Flexible(
-          child: buildListItems(contactIds),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: listItemPaddingSmall),
+          child: Divider(),
+        ),
+        Column(
+          children: <Widget>[
+            for (var contactId in contactIds)
+              ContactItem(
+                contactId: contactId,
+                key: contactId.toString(),
+              ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: listItemPaddingSmall),
+          child: Divider(),
         ),
       ],
     );
@@ -176,17 +190,6 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
     setState(() {
       _avatar = avatarPath;
     });
-  }
-
-  ListView buildListItems(List<int> contactIds) {
-    return ListView.builder(
-      padding: EdgeInsets.all(listItemPadding),
-      itemCount: contactIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var contactId = contactIds[index];
-        return ContactItem(contactId: contactId, key: contactId.toString());
-      },
-    );
   }
 
   _onSubmit() {
