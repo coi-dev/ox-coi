@@ -65,6 +65,7 @@ import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -83,8 +84,9 @@ class Chat extends StatefulWidget {
   final String newMessage;
   final String newPath;
   final int newFileType;
+  final SharedData sharedData;
 
-  Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType});
+  Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType, this.sharedData});
 
   @override
   _ChatState createState() => new _ChatState();
@@ -135,6 +137,42 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       if (state is MessagesStateSuccess) {
         _chatChangeBloc.dispatch(ChatMarkMessagesSeen(messageIds: state.messageIds));
       }
+    });
+
+    if(widget.sharedData != null){
+      if(widget.sharedData.mimeType.contains("text/")) {
+        _textController.text = widget.sharedData.text;
+        setState(() {
+          _isComposingText = true;
+        });
+      }else{
+        setFileData();
+      }
+    }
+  }
+
+  void setFileData(){
+    var path = widget.sharedData.path;
+    FileType type;
+    switch(widget.sharedData.mimeType){
+      case "image/*":
+        type = FileType.IMAGE;
+        break;
+      case "audio/*":
+        type = FileType.AUDIO;
+        break;
+      case "video/*":
+        type = FileType.VIDEO;
+        break;
+      default:
+        type = FileType.ANY;
+        break;
+    }
+    setState(() {
+      _filePath = path;
+      _selectedFileType = type;
+      _fileName = widget.sharedData.fileName;
+      _isComposingText = true;
     });
   }
 
@@ -535,7 +573,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       _messageListBloc.dispatch(SendMessage(text: text));
     } else {
       int type = getType();
-      _messageListBloc.dispatch(SendMessage(path: _filePath, fileType: type, text: text));
+      _messageListBloc.dispatch(SendMessage(path: _filePath, fileType: type, text: text, isShared: widget.sharedData != null));
     }
 
     _closePreview();
@@ -674,6 +712,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   void _closePreview() {
     setState(() {
+      if(widget.sharedData != null){
+        _messageListBloc.dispatch(DeleteCacheFile(path: _filePath));
+      }
       _filePath = "";
       _selectedExtension = "";
       if (_textController.text.isEmpty) {

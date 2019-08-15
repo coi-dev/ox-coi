@@ -40,7 +40,10 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
@@ -52,6 +55,8 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/share/share_bloc.dart';
+import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
@@ -93,6 +98,8 @@ class OxCoi extends StatefulWidget {
 
 class _OxCoiState extends State<OxCoi> {
   MainBloc _mainBloc = MainBloc();
+  ShareBloc shareBloc = ShareBloc();
+
 
   @override
   void initState() {

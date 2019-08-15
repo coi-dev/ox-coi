@@ -65,8 +65,15 @@ class SendMessage extends MessageListEvent {
   final String text;
   final String path;
   final int fileType;
+  final bool isShared;
 
-  SendMessage({this.text, this.path, this.fileType});
+  SendMessage({this.text, this.path, this.fileType, this.isShared});
+}
+
+class DeleteCacheFile extends MessageListEvent{
+  final String path;
+
+  DeleteCacheFile({this.path});
 }
 
 abstract class MessageListState {}

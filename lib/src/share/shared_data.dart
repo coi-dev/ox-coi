@@ -39,66 +39,23 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+ 
+class SharedData{
+  static const String sharedMimeType = "shared_mime_type";
+  static const String sharedText = "shared_text";
+  static const String sharedPath = "shared_path";
+  static const String sharedFileName = "shared_file_name";
+  static const String sharingChannelName = "oxcoi.sharing";
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/share/shared_data.dart';
+  String mimeType;
+  String text;
+  String path;
+  String fileName;
 
-abstract class ShareEvent {}
-
-class RequestChatsAndContacts extends ShareEvent {}
-
-class ChatsAndContactsLoaded extends ShareEvent {
-  final List<int> chatAndContactList;
-  final int chatListLength;
-  final int contactListLength;
-
-  ChatsAndContactsLoaded({
-    @required this.chatAndContactList,
-    @required this.chatListLength,
-    @required this.contactListLength,
-  });
-}
-
-class ForwardMessages extends ShareEvent {
-  final int destinationChatId;
-  final List<int> messageIds;
-
-  ForwardMessages({
-    @required this.destinationChatId,
-    @required this.messageIds,
-  });
-}
-
-class LoadSharedData extends ShareEvent {}
-
-class SharedDataLoaded extends ShareEvent{
-  final SharedData sharedData;
-
-  SharedDataLoaded({@required this.sharedData});
-}
-
-abstract class ShareState {}
-
-class ShareStateInitial extends ShareState {}
-
-class ShareStateLoading extends ShareState {}
-
-class ShareStateSuccess extends ShareState {
-  final List<int> chatAndContactIds;
-  final int chatIdCount;
-  final int contactIdCount;
-  final SharedData sharedData;
-
-  ShareStateSuccess({
-    @required this.chatAndContactIds,
-    @required this.chatIdCount,
-    @required this.contactIdCount,
-    this.sharedData
-  });
-}
-
-class ShareStateFailure extends ShareState {
-  final String error;
-
-  ShareStateFailure({@required this.error});
+  SharedData(Map<dynamic, dynamic> data){
+    mimeType = data.containsKey(sharedMimeType) ? data[sharedMimeType] : "";
+    text = data.containsKey(sharedText) ? data[sharedText] : "";
+    path = data.containsKey(sharedPath) ? data[sharedPath] : "";
+    fileName = data.containsKey(sharedFileName) ? data[sharedFileName] : "";
+  }
 }

@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
@@ -51,13 +52,18 @@ import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
+import 'package:ox_coi/src/message/message_action.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/share/share.dart';
+import 'package:ox_coi/src/share/share_bloc.dart';
+import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:rxdart/rxdart.dart';
 
 enum ChatListItemType {
   chat,
@@ -114,6 +120,7 @@ class ChatList extends RootChild {
 class _ChatListState extends State<ChatList> {
   ChatListBloc _chatListBloc = ChatListBloc();
   ChatListBloc _chatListSearchBloc = ChatListBloc();
+  ShareBloc shareBloc = ShareBloc();
   Navigation _navigation = Navigation();
 
   @override
@@ -121,6 +128,33 @@ class _ChatListState extends State<ChatList> {
     super.initState();
     _navigation.current = Navigatable(Type.chatList);
     _chatListBloc.dispatch(RequestChatList(showInvites: true));
+    _init();
+    final shareObservable = Observable<ShareState>(shareBloc.state);
+    shareObservable.listen((state) => handleStateChange(state));
+  }
+
+  _init() async {
+    SystemChannels.lifecycle.setMessageHandler((msg) async{
+      if (msg == AppLifecycleState.resumed.toString()) {
+        shareBloc.dispatch(LoadSharedData());
+      }
+      return msg;
+    });
+
+    shareBloc.dispatch(LoadSharedData());
+  }
+
+  handleStateChange(ShareState state) {
+    if(state is ShareStateSuccess){
+      if(state.sharedData != null ){
+        _navigation.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Share(messageActionTag: MessageActionTag.share, sharedData: state.sharedData,)),
+          ModalRoute.withName(Navigation.root),
+          Navigatable(Type.chatList),
+        );
+      }
+    }
   }
 
   @override

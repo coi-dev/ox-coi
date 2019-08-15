@@ -108,7 +108,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     switch (messageAction.messageActionTag) {
       case MessageActionTag.forward:
         _navigation.push(
-            context, MaterialPageRoute(builder: (context) => ShareScreen(msgIds: msgIds, messageActionTag: messageAction.messageActionTag)));
+            context, MaterialPageRoute(builder: (context) => Share(msgIds: msgIds, messageActionTag: messageAction.messageActionTag)));
         break;
       case MessageActionTag.copy:
         copyToClipboardWithToast(text: _message, toastText: getDefaultCopyToastText(context));

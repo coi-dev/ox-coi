@@ -42,17 +42,20 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/services.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
+import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ShareBloc extends Bloc<ShareEvent, ShareState> {
   ChatListBloc _chatListBloc = ChatListBloc();
   ContactListBloc _contactListBloc = ContactListBloc();
+  static const platform = const MethodChannel(SharedData.sharingChannelName);
 
   @override
   ShareState get initialState => ShareStateInitial();
@@ -75,6 +78,10 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     } else if (event is ForwardMessages) {
       yield ShareStateLoading();
       forwardMessages(event.destinationChatId, event.messageIds);
+    } else if (event is LoadSharedData){
+      loadSharedData();
+    } else if (event is SharedDataLoaded){
+      yield ShareStateSuccess(sharedData: event.sharedData);
     }
   }
 
@@ -115,4 +122,16 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     Context context = Context();
     await context.forwardMessages(destinationChatId, messageIds);
   }
+
+  void loadSharedData() async{
+    Map<dynamic, dynamic> data = {};
+    data = await _getSharedData();
+    SharedData sharedData;
+    if(data.length > 0){
+      sharedData = SharedData(data);
+    }
+    dispatch(SharedDataLoaded(sharedData: sharedData));
+  }
+
+  Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');
 }

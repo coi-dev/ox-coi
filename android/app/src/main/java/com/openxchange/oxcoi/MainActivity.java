@@ -42,14 +42,64 @@
 
 package com.openxchange.oxcoi;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import io.flutter.app.FlutterActivity;
+import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    GeneratedPluginRegistrant.registerWith(this);
-  }
+    private Map<String, String> sharedData = new HashMap();
+    private static final String SHARED_MIME_TYPE = "shared_mime_type";
+    private static final String SHARED_TEXT = "shared_text";
+    private static final String SHARED_PATH = "shared_path";
+    private static final String SHARED_FILE_NAME = "shared_file_name";
+    private static final String SHARING_CHANNEL_NAME = "oxcoi.sharing";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        GeneratedPluginRegistrant.registerWith(this);
+
+        handleSendIntent(getIntent());
+
+        new MethodChannel(getFlutterView(), SHARING_CHANNEL_NAME).setMethodCallHandler(
+                (call, result) -> {
+                    if (call.method.contentEquals("getSharedData")) {
+                        result.success(sharedData);
+                        sharedData.clear();
+                    }
+                });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleSendIntent(intent);
+    }
+
+    private void handleSendIntent(Intent intent) {
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if (type.startsWith("text/")) {
+                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+                sharedData.put(SHARED_MIME_TYPE, type);
+                sharedData.put(SHARED_TEXT, text);
+            } else if (type.startsWith("application/") || type.startsWith("audio/") || type.startsWith("image/") || type.startsWith("video/")) {
+                Uri uri = (Uri) getIntent().getExtras().get(Intent.EXTRA_STREAM);
+                ShareHelper shareHelper = new ShareHelper();
+                String uriPath = shareHelper.getUriRealPath(this, uri);
+                sharedData.put(SHARED_MIME_TYPE, type);
+                sharedData.put(SHARED_PATH, uriPath);
+                sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
+            }
+        }
+    }
 }

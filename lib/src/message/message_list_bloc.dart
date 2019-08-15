@@ -41,6 +41,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
@@ -56,6 +57,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   int _chatId;
   int _messageId;
   String who;
+  String _cacheFilePath = "";
 
   @override
   MessageListState get initialState => MessagesStateInitial();
@@ -89,10 +91,12 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       );
     } else if (event is SendMessage) {
       if (event.path != null) {
-        _submitAttachmentMessage(event.path, event.fileType, event.text);
+        _submitAttachmentMessage(event.path, event.fileType, event.isShared, event.text);
       } else {
         _submitMessage(event.text);
       }
+    } else if (event is DeleteCacheFile) {
+      _deleteCacheFile(event.path);
     }
   }
 
@@ -114,7 +118,22 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     }
   }
 
-  void _onMessagesChanged(event) => dispatch(UpdateMessages());
+  void _onMessagesChanged(event) => _updateMessages(event);
+
+  void _updateMessages(event) {
+    _deleteCacheFile(_cacheFilePath);
+    dispatch(UpdateMessages());
+  }
+
+  void _deleteCacheFile(String path) {
+    if (path.isNotEmpty) {
+      var cacheFile = File(path);
+      if (cacheFile.existsSync()) {
+        cacheFile.delete();
+      }
+      _cacheFilePath = "";
+    }
+  }
 
   void _setupMessages() async {
     List<int> dateMakerIds = List();
@@ -152,8 +171,14 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     } else {
       dispatch(
         MessagesLoaded(
-            messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
-            messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+            messageIds: _messageListRepository
+                .getAllIds()
+                .reversed
+                .toList(growable: false),
+            messageLastUpdateValues: _messageListRepository
+                .getAllLastUpdateValues()
+                .reversed
+                .toList(growable: false),
             dateMarkerIds: dateMakerIds),
       );
     }
@@ -164,8 +189,11 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     await context.createChatMessage(_chatId, text);
   }
 
-  void _submitAttachmentMessage(String path, int fileType, [String text]) async {
+  void _submitAttachmentMessage(String path, int fileType, bool isShared, [String text]) async {
     Context _context = Context();
+    if (isShared) {
+      _cacheFilePath = path;
+    }
     await _context.createChatAttachmentMessage(_chatId, path, fileType, text);
   }
 }

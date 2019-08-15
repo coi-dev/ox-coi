@@ -52,20 +52,22 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
+import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-class ShareScreen extends StatefulWidget {
+class Share extends StatefulWidget {
   final List<int> msgIds;
   final MessageActionTag messageActionTag;
+  final SharedData sharedData;
 
-  ShareScreen({this.msgIds, this.messageActionTag});
+  Share({this.msgIds, this.messageActionTag, this.sharedData});
 
   @override
-  _ShareScreenState createState() => _ShareScreenState();
+  _ShareState createState() => _ShareState();
 }
 
-class _ShareScreenState extends State<ShareScreen> {
+class _ShareState extends State<Share> {
   ShareBloc _shareBloc = ShareBloc();
 
   @override
@@ -150,10 +152,13 @@ class _ShareScreenState extends State<ShareScreen> {
 
   chatItemTapped(int chatId) {
     Navigation navigation = Navigation();
-    _shareBloc.dispatch(ForwardMessages(destinationChatId: chatId, messageIds: widget.msgIds));
+    if(widget.messageActionTag == MessageActionTag.forward) {
+      _shareBloc.dispatch(ForwardMessages(destinationChatId: chatId, messageIds: widget.msgIds));
+    }
+
     navigation.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
+      MaterialPageRoute(builder: (context) => Chat(chatId: chatId, sharedData: widget.sharedData,)),
       ModalRoute.withName(Navigation.root),
       Navigatable(Type.chat, params: [chatId]),
     );
