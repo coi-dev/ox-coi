@@ -45,9 +45,11 @@ import 'dart:io';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
+import 'package:ox_coi/src/utils/date.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'message_item_event_state.dart';
 
@@ -56,11 +58,14 @@ class MessageData extends InheritedWidget {
   final Color textColor;
   final Color secondaryTextColor;
   final String time;
-  final bool showPadlock;
   final int state;
   final String text;
+  final Icon icon;
   final AttachmentWrapper attachment;
   final BorderRadius borderRadius;
+  final bool isFlagged;
+  final bool isGroup;
+  final bool isSent;
 
   MessageData({
     Key key,
@@ -69,10 +74,13 @@ class MessageData extends InheritedWidget {
     @required this.borderRadius,
     this.secondaryTextColor,
     this.time,
-    this.showPadlock,
     this.state,
     this.text,
+    this.icon,
     this.attachment,
+    this.isFlagged = false,
+    this.isGroup = false,
+    this.isSent,
     @required Widget child,
   }) : super(key: key, child: child);
 
@@ -84,15 +92,16 @@ class MessageData extends InheritedWidget {
   }
 }
 
-class MessageElevated extends StatelessWidget {
+class MessageMaterial extends StatelessWidget {
   final Widget child;
+  final double elevation;
 
-  const MessageElevated({Key key, @required this.child}) : super(key: key);
+  const MessageMaterial({Key key, @required this.child, this.elevation = messagesElevation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: messagesElevation,
+      elevation: elevation,
       borderRadius: MessageData.of(context).borderRadius,
       color: MessageData.of(context).backgroundColor,
       textStyle: TextStyle(color: MessageData.of(context).textColor),
@@ -105,24 +114,46 @@ class MessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Flexible(
-            child: Text(
-              MessageData.of(context).text,
-              style: Theme.of(context).textTheme.subhead.apply(color: MessageData.of(context).textColor),
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-          MessagePartTime(),
-          MessagePartPadlock(),
-          MessagePartState(),
-        ],
+      padding: getNamePaddingForGroups(context),
+      child: Text(
+        MessageData.of(context).text,
+        style: Theme.of(context).textTheme.subhead.apply(color: MessageData.of(context).textColor),
       ),
     );
+  }
+}
+
+class MessageStatus extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Icon icon = MessageData.of(context).icon;
+    if (icon != null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: iconTextPadding),
+              child: icon,
+            ),
+            Flexible(
+              child: Text(
+                MessageData.of(context).text,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
+        child: Text(
+          MessageData.of(context).text,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
   }
 }
 
@@ -131,6 +162,11 @@ class MessageAttachment extends StatelessWidget {
   Widget build(BuildContext context) {
     return isImage(context) ? MessagePartImageAttachment() : MessagePartGenericAttachment();
   }
+}
+
+bool isImage(BuildContext context) {
+  final attachment = MessageData.of(context).attachment;
+  return attachment != null && attachment.type == ChatMsg.typeImage;
 }
 
 class MessagePartImageAttachment extends StatefulWidget {
@@ -156,36 +192,93 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
   @override
   Widget build(BuildContext context) {
     var text = MessageData.of(context).text;
-    var messageBorderRadius = MessageData.of(context).borderRadius;
-    var borderRadius = BorderRadius.only(topLeft: messageBorderRadius.topLeft, topRight: messageBorderRadius.topRight);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: messagesVerticalInnerPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          AspectRatio(
-            child: ClipRRect(
-              borderRadius: borderRadius,
-              child: Image(
-                image: imageProvider,
-                fit: BoxFit.fitWidth,
-              ),
+    BorderRadius imageBorderRadius = getImageBorderRadius(context, text);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        AspectRatio(
+          child: ClipRRect(
+            borderRadius: imageBorderRadius,
+            child: Image(
+              image: imageProvider,
+              fit: BoxFit.fitWidth,
             ),
-            aspectRatio: 4 / 3,
           ),
-          text.isNotEmpty ? Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)) : Container(),
-          text.isNotEmpty ? Flexible(child: Text(text)) : Container(),
-          Padding(padding: EdgeInsets.only(top: messagesContentTimePadding)),
-          Padding(
-            padding: const EdgeInsets.only(right: messagesHorizontalInnerPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                MessagePartTime(),
-                MessagePartPadlock(),
-                MessagePartState(),
-              ],
+          aspectRatio: 4 / 3,
+        ),
+        Visibility(
+          visible: text.isNotEmpty,
+          child: Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: messagesVerticalPadding,
+                  bottom: messagesVerticalInnerPadding,
+                  left: messagesHorizontalInnerPadding,
+                  right: messagesHorizontalInnerPadding),
+              child: Text(text),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  BorderRadius getImageBorderRadius(BuildContext context, String text) {
+    var messageBorderRadius = MessageData.of(context).borderRadius;
+    if (MessageData.of(context).isGroup && !MessageData.of(context).isSent && text.isNotEmpty) {
+      messageBorderRadius = BorderRadius.zero;
+    } else if (MessageData.of(context).isGroup && !MessageData.of(context).isSent && text.isEmpty) {
+      messageBorderRadius = BorderRadius.only(bottomLeft: messageBorderRadius.bottomLeft, bottomRight: messageBorderRadius.bottomRight);
+    } else if (text.isNotEmpty) {
+      messageBorderRadius = BorderRadius.only(topLeft: messageBorderRadius.topLeft, topRight: messageBorderRadius.topRight);
+    }
+    return messageBorderRadius;
+  }
+}
+
+class MessagePartGenericAttachment extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var text = MessageData.of(context).text;
+    AttachmentWrapper attachment = MessageData.of(context).attachment;
+    return Padding(
+      padding: getNamePaddingForGroups(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: iconTextPadding),
+                child: Icon(
+                  Icons.attach_file,
+                  size: messagesFileIconSize,
+                  color: MessageData.of(context).textColor,
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      attachment.filename,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(byteToPrintableSize(attachment.size)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Visibility(
+            visible: text.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(top: messagesVerticalInnerPadding),
+              child: Text(text),
             ),
           ),
         ],
@@ -194,40 +287,29 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
   }
 }
 
-class MessagePartGenericAttachment extends StatelessWidget {
+class MessageDateTime extends StatelessWidget {
+  final int timestamp;
+  final bool hasDateMarker;
+  final bool showTime;
+
+  const MessageDateTime({Key key, @required this.timestamp, this.hasDateMarker = false, this.showTime = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    AttachmentWrapper attachment = MessageData.of(context).attachment;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(
-            Icons.attach_file,
-            size: messagesFileIconSize,
-            color: MessageData.of(context).textColor,
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  attachment.filename,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(byteToPrintableSize(attachment.size)),
-              ],
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(left: messagesContentTimePadding)),
-          MessagePartTime(),
-          MessagePartPadlock(),
-          MessagePartState(),
-        ],
+    String date;
+    if (hasDateMarker && showTime) {
+      date = "${getDateFromTimestamp(timestamp, true, true)} - ${getTimeFormTimestamp(timestamp)}";
+    } else if (hasDateMarker) {
+      date = getDateFromTimestamp(timestamp, true, true);
+    } else {
+      date = getTimeFormTimestamp(timestamp);
+    }
+    return Center(
+      child: Text(
+        date,
+        style: TextStyle(
+          color: onSurface.withOpacity(fade),
+        ),
       ),
     );
   }
@@ -236,23 +318,9 @@ class MessagePartGenericAttachment extends StatelessWidget {
 class MessagePartTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(MessageData.of(context).time, style: TextStyle(color: MessageData.of(context).secondaryTextColor));
-  }
-}
-
-class MessagePartPadlock extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Visibility(
-      visible: MessageData.of(context).showPadlock,
-      child: Padding(
-        padding: EdgeInsets.only(left: iconTextPadding, bottom: iconPadlockBottomPadding),
-        child: Icon(
-          Icons.lock,
-          size: iconPadlockSize,
-          color: MessageData.of(context).secondaryTextColor,
-        ),
-      ),
+    return Text(
+      MessageData.of(context).time,
+      style: TextStyle(color: MessageData.of(context).secondaryTextColor),
     );
   }
 }
@@ -263,31 +331,57 @@ class MessagePartState extends StatelessWidget {
     switch (MessageData.of(context).state) {
       case ChatMsg.messageStateDelivered:
         return Padding(
-          padding: EdgeInsets.only(left: iconTextPadding),
+          padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
           child: Icon(
             Icons.done,
-            size: 14.0,
+            size: 16.0,
             color: MessageData.of(context).secondaryTextColor,
           ),
         );
         break;
       case ChatMsg.messageStateReceived:
         return Padding(
-          padding: EdgeInsets.only(left: iconTextPadding),
+          padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
           child: Icon(
             Icons.done_all,
-            size: 14.0,
+            size: 16.0,
             color: MessageData.of(context).secondaryTextColor,
           ),
         );
         break;
       default:
-        return Container();
+        return Container(
+          width: 20.0,
+        );
     }
   }
 }
 
-bool isImage(BuildContext context) {
-  final attachment = MessageData.of(context).attachment;
-  return attachment != null && attachment.type == ChatMsg.typeImage;
+class MessagePartFlag extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: MessageData.of(context).isFlagged,
+      child: Padding(
+        padding: EdgeInsets.only(top: 8.0, right: 4.0, left: 4.0),
+        child: Icon(
+          Icons.star,
+          color: Colors.yellow,
+        ),
+      ),
+    );
+  }
+}
+
+EdgeInsetsGeometry getNamePaddingForGroups(BuildContext context) {
+  if (MessageData.of(context).isGroup) {
+    return EdgeInsets.only(
+      top: 2.0,
+      bottom: messagesVerticalInnerPadding,
+      left: messagesHorizontalInnerPadding,
+      right: messagesHorizontalInnerPadding,
+    );
+  } else {
+    return EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding);
+  }
 }

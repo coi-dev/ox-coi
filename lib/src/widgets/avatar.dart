@@ -54,8 +54,9 @@ class Avatar extends StatelessWidget {
   final String textPrimary;
   final String textSecondary;
   final Color color;
+  final double size;
 
-  Avatar({this.imagePath, @required this.textPrimary, @required this.textSecondary, this.color});
+  Avatar({this.imagePath, @required this.textPrimary, @required this.textSecondary, this.color, this.size = listAvatarDiameter});
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +70,11 @@ class Avatar extends StatelessWidget {
     }
     return Container(
       alignment: Alignment.center,
-      height: listAvatarDiameter,
-      width: listAvatarDiameter,
+      height: size,
+      width: size,
       decoration: ShapeDecoration(
         shape: SuperellipseShape(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(size * 0.67),
         ),
         color: color,
         image: DecorationImage(

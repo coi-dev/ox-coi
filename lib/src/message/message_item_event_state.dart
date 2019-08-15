@@ -49,9 +49,10 @@ abstract class MessageItemEvent {}
 class RequestMessage extends MessageItemEvent {
   final int chatId;
   final int messageId;
+  final int nextMessageId;
   final bool isGroupChat;
 
-  RequestMessage({@required this.chatId, @required this.messageId, @required this.isGroupChat});
+  RequestMessage({@required this.chatId, @required this.messageId,  @required this.nextMessageId, @required this.isGroupChat});
 }
 
 class MessageLoaded extends MessageItemEvent {}
@@ -81,6 +82,8 @@ class MessageItemStateSuccess extends MessageItemState {
   final AttachmentWrapper attachmentWrapper;
   final String preview;
   final bool isStarred;
+  final bool showTime;
+  final bool encryptionStatusChanged;
 
   MessageItemStateSuccess({
     @required this.messageText,
@@ -95,6 +98,8 @@ class MessageItemStateSuccess extends MessageItemState {
     @required this.contactWrapper,
     @required this.preview,
     @required this.isStarred,
+    @required this.showTime,
+    @required this.encryptionStatusChanged,
   });
 }
 

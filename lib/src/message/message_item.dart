@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
+import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -51,7 +52,6 @@ import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
-import 'package:ox_coi/src/utils/date.dart';
 
 import 'message_action.dart';
 import 'message_change_bloc.dart';
@@ -63,10 +63,13 @@ import 'message_special.dart';
 class ChatMessageItem extends StatefulWidget {
   final int chatId;
   final int messageId;
+  final int nextMessageId;
   final bool isGroupChat;
   final bool hasDateMarker;
 
-  ChatMessageItem({@required this.chatId, @required this.messageId, @required this.isGroupChat, @required this.hasDateMarker, key}) : super(key: key);
+  ChatMessageItem(
+      {@required this.chatId, @required this.messageId, @required this.nextMessageId, @required this.isGroupChat, @required this.hasDateMarker, key})
+      : super(key: key);
 
   @override
   _ChatMessageItemState createState() => _ChatMessageItemState();
@@ -87,7 +90,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     const MessageAction(title: 'Share', icon: Icons.share, messageActionTag: MessageActionTag.share),
   ];
 
-  MessageItemBloc _messagesBloc = MessageItemBloc();
+  MessageItemBloc _messageBloc = MessageItemBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
   MessageChangeBloc _messageChangeBloc = MessageChangeBloc();
   Navigation _navigation = Navigation();
@@ -113,7 +116,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       case MessageActionTag.delete:
         List<int> messageList = List();
         messageList.add(widget.messageId);
-        _messagesBloc.dispatch(DeleteMessages(messageIds: messageList));
+        _messageBloc.dispatch(DeleteMessages(messageIds: messageList));
         break;
       case MessageActionTag.flag:
         _messageChangeBloc.dispatch(FlagMessages(chatId: widget.chatId, messageIds: msgIds, star: _isStarred));
@@ -127,7 +130,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    _messagesBloc.dispatch(RequestMessage(chatId: widget.chatId, messageId: widget.messageId, isGroupChat: widget.isGroupChat));
+    _messageBloc.dispatch(
+        RequestMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
   }
 
   @override
@@ -136,15 +140,42 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   Widget build(BuildContext context) {
     super.build(context);
     return BlocBuilder(
-      bloc: _messagesBloc,
+      bloc: _messageBloc,
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
           _hasFile = state.hasFile;
           _message = state.messageText;
           _isStarred = state.isStarred;
+          String name = state.contactWrapper?.contactName;
+          String email = state.contactWrapper?.contactAddress;
+          Color color = state.contactWrapper?.contactColor;
           return Column(
             crossAxisAlignment: state.messageIsOutgoing ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            children: buildMessageAndMarker(state),
+            children: [
+              if (widget.hasDateMarker || state.showTime)
+                Padding(
+                  padding: EdgeInsets.only(bottom: messagesVerticalPadding),
+                  child: MessageDateTime(
+                    timestamp: state.messageTimestamp,
+                    hasDateMarker: widget.hasDateMarker,
+                    showTime: state.showTime,
+                  ),
+                ),
+              if (state.encryptionStatusChanged)
+                Padding(
+                  padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
+                  child: MessageSpecial(type: MessageSpecialType.encryptionStatusChanged),
+                ),
+              GestureDetector(
+                onTap: () => _onTap(state.hasFile, state.isSetupMessage),
+                onTapDown: _onTapDown,
+                onLongPress: () => _onLongPress(state.hasFile, state.isSetupMessage),
+                child: Container(
+                  padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
+                  child: buildMessage(state, name, email, color),
+                ),
+              ),
+            ],
           );
         } else {
           return Container();
@@ -153,51 +184,19 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     );
   }
 
-  List<Widget> buildMessageAndMarker(MessageItemStateSuccess state) {
-    _message = state.messageText;
-    _isStarred = state.isStarred;
-    List<Widget> widgets = List();
-    if (widget.hasDateMarker) {
-      String date = getDateFromTimestamp(state.messageTimestamp, true, true);
-      widgets.add(Center(child: Text(date)));
-    }
-    String name;
-    String email;
-    Color color;
-    if (state.contactWrapper != null) {
-      name = state.contactWrapper.contactName;
-      email = state.contactWrapper.contactAddress;
-      color = state.contactWrapper.contactColor;
-    }
-    Widget message = buildMessage(state, name, email, color);
-    widgets.add(GestureDetector(
-      onTap: () => _onTap(state.hasFile, state.isSetupMessage),
-      onTapDown: _onTapDown,
-      onLongPress: () => _onLongPress(state.hasFile, state.isSetupMessage),
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: messagesVerticalPadding),
-        child: message,
-      ),
-    ));
-    return widgets;
-  }
-
   Widget buildMessage(MessageItemStateSuccess state, String name, String email, Color color) {
     Widget message;
-    bool showPadlock = state.showPadlock == 1;
     bool isFlagged = state.isStarred;
     if (state.isInfo) {
       message = MessageSpecial(
-        isSetupMessage: state.isSetupMessage,
+        type: MessageSpecialType.info,
         messageText: state.messageText,
         timestamp: state.messageTimestamp,
-        showPadlock: showPadlock,
       );
     } else if (state.isSetupMessage) {
       message = MessageSpecial(
-        isSetupMessage: state.isSetupMessage,
+        type: MessageSpecialType.setup,
         timestamp: state.messageTimestamp,
-        showPadlock: showPadlock,
       );
     } else if (state.messageIsOutgoing) {
       message = MessageSent(
@@ -206,7 +205,6 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         hasFile: state.hasFile,
         msgState: state.state,
         attachmentWrapper: state.attachmentWrapper,
-        showPadlock: showPadlock,
         isFlagged: isFlagged,
       );
     } else {
@@ -219,7 +217,6 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         email: email,
         color: color,
         isGroupChat: widget.isGroupChat,
-        showPadlock: showPadlock,
         isFlagged: isFlagged,
       );
     }

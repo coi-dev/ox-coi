@@ -54,56 +54,45 @@ class MessageSent extends StatelessWidget {
   final int timestamp;
   final bool hasFile;
   final int msgState;
-  final bool showPadlock;
   final bool isFlagged;
   final AttachmentWrapper attachmentWrapper;
 
-  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.showPadlock, this.isFlagged, this.attachmentWrapper})
+  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.isFlagged, this.attachmentWrapper})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String time = getTimeFormTimestamp(timestamp);
     return FractionallySizedBox(
-        alignment: Alignment.topRight,
-        widthFactor: 0.8,
+      alignment: Alignment.topRight,
+      widthFactor: 0.8,
+      child: MessageData(
+        backgroundColor: secondary,
+        textColor: onSecondary,
+        secondaryTextColor: onBackground,
+        borderRadius: buildBorderRadius(),
+        time: time,
+        text: text,
+        attachment: attachmentWrapper,
+        state: msgState,
+        isFlagged: isFlagged,
+        isSent: true,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            Visibility(
-              visible: isFlagged,
-              child: Padding(
-                padding: EdgeInsets.only(right: verticalPaddingSmall),
-                child: Icon(
-                  Icons.star,
-                  color: Colors.yellow,
-                ),
+            MessagePartFlag(),
+            Flexible(
+              child: MessageMaterial(
+                child: hasFile ? MessageAttachment() : MessageText(),
               ),
             ),
-            Flexible(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                MessageData(
-                  backgroundColor: secondary,
-                  textColor: onSecondary,
-                  secondaryTextColor: onSecondary.withOpacity(fade),
-                  borderRadius: buildBorderRadius(),
-                  time: time,
-                  showPadlock: showPadlock,
-                  text: text,
-                  attachment: attachmentWrapper,
-                  state: msgState,
-                  child: MessageElevated(
-                    child: hasFile ? MessageAttachment() : MessageText(),
-                  ),
-                ),
-              ],
-            ))
+            MessagePartState(),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   BorderRadius buildBorderRadius() {

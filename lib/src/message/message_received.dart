@@ -58,22 +58,11 @@ class MessageReceived extends StatelessWidget {
   final int timestamp;
   final bool hasFile;
   final bool isGroupChat;
-  final bool showPadlock;
   final bool isFlagged;
   final AttachmentWrapper attachmentWrapper;
 
   const MessageReceived(
-      {Key key,
-      this.name,
-      this.email,
-      this.color,
-      this.text,
-      this.timestamp,
-      this.hasFile,
-      this.isGroupChat,
-      this.showPadlock,
-      this.isFlagged,
-      this.attachmentWrapper})
+      {Key key, this.name, this.email, this.color, this.text, this.timestamp, this.hasFile, this.isGroupChat, this.isFlagged, this.attachmentWrapper})
       : super(key: key);
 
   @override
@@ -82,52 +71,59 @@ class MessageReceived extends StatelessWidget {
     return FractionallySizedBox(
       alignment: Alignment.topLeft,
       widthFactor: 0.8,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          isGroupChat
-              ? Padding(
-                  padding: const EdgeInsets.only(right: messagesVerticalInnerPadding),
-                  child: Avatar(
-                    textPrimary: name,
-                    textSecondary: email,
-                    color: color,
-                  ),
-                )
-              : Container(),
-          Flexible(
-            child: MessageData(
-              backgroundColor: surface,
-              textColor: onSurface,
-              secondaryTextColor: onSurface.withOpacity(fade),
-              borderRadius: buildBorderRadius(),
-              time: time,
-              showPadlock: showPadlock,
-              text: text,
-              attachment: attachmentWrapper,
-              child: MessageElevated(
+      child: MessageData(
+        backgroundColor: surface,
+        textColor: onSurface,
+        secondaryTextColor: onSurface.withOpacity(fade),
+        borderRadius: buildBorderRadius(),
+        time: time,
+        text: text,
+        attachment: attachmentWrapper,
+        isFlagged: isFlagged,
+        isGroup: isGroupChat,
+        isSent: false,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Visibility(
+              visible: isGroupChat,
+              child: Padding(
+                padding: const EdgeInsets.only(right: messagesHorizontalPadding),
+                child: Avatar(
+                  textPrimary: name,
+                  textSecondary: email,
+                  color: color,
+                  size: 34.0,
+                ),
+              ),
+            ),
+            Flexible(
+              child: MessageMaterial(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    isGroupChat ? Text(name, style: TextStyle(color: color)) : Container(constraints: BoxConstraints(maxWidth: zero)),
+                    isGroupChat
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                top: messagesVerticalPadding,
+                                bottom: 2.0,
+                                left: messagesHorizontalInnerPadding,
+                                right: messagesHorizontalInnerPadding),
+                            child: Text(
+                              name.isNotEmpty ? name : email,
+                              style: TextStyle(color: color),
+                            ),
+                          )
+                        : Container(constraints: BoxConstraints(maxWidth: zero)),
                     hasFile ? MessageAttachment() : MessageText(),
                   ],
                 ),
               ),
             ),
-          ),
-          Visibility(
-            visible: isFlagged,
-            child: Padding(
-              padding: EdgeInsets.only(left: verticalPaddingSmall),
-              child: Icon(
-                Icons.star,
-                color: Colors.yellow,
-              ),
-            ),
-          ),
-        ],
+            MessagePartFlag(),
+          ],
+        ),
       ),
     );
   }

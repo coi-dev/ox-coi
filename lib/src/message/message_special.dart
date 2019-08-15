@@ -50,22 +50,38 @@ import 'package:ox_coi/src/utils/date.dart';
 
 import 'message_builder.dart';
 
+enum MessageSpecialType { setup, encryptionStatusChanged, info }
+
 class MessageSpecial extends StatelessWidget {
-  final bool isSetupMessage;
+  final MessageSpecialType type;
   final String messageText;
   final int timestamp;
-  final bool showPadlock;
 
-  const MessageSpecial({Key key, this.isSetupMessage, this.messageText, this.timestamp, this.showPadlock}) : super(key: key);
+  const MessageSpecial({Key key, this.type, this.messageText, this.timestamp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return isSetupMessage ? buildSetupMessage(context) : buildInfoMessage();
+    if (type == MessageSpecialType.setup) {
+      return MessageSetup(timestamp: timestamp);
+    } else if (type == MessageSpecialType.encryptionStatusChanged) {
+      return MessageInfo(
+        messageText: L10n.get(L.chatEncryptionStatusChanged),
+        icon: Icon(Icons.lock),
+      );
+    } else if (type == MessageSpecialType.info) {
+      return MessageInfo(messageText: messageText);
+    }
+    throw ArgumentError("Type is not supported, please choose a valid MessageSpecialType");
   }
+}
 
-  Widget buildSetupMessage(BuildContext context) {
-    String time = getTimeFormTimestamp(timestamp);
-    String text = L10n.get(L.autocryptChatMessagePlaceholder);
+class MessageSetup extends StatelessWidget {
+  final int timestamp;
+
+  const MessageSetup({Key key, this.timestamp}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return FractionallySizedBox(
       alignment: Alignment.topRight,
       widthFactor: 0.8,
@@ -78,10 +94,9 @@ class MessageSpecial extends StatelessWidget {
             textColor: onSecondary,
             secondaryTextColor: onSecondary.withOpacity(fade),
             borderRadius: buildInfoBorderRadius(),
-            time: time,
-            showPadlock: showPadlock,
-            text: text,
-            child: MessageElevated(
+            time: getTimeFormTimestamp(timestamp),
+            text: L10n.get(L.autocryptChatMessagePlaceholder),
+            child: MessageMaterial(
               child: MessageText(),
             ),
           ),
@@ -89,24 +104,37 @@ class MessageSpecial extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget buildInfoMessage() {
+class MessageInfo extends StatelessWidget {
+  final String messageText;
+  final Icon icon;
+
+  const MessageInfo({Key key, this.messageText, this.icon}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
-      child: MessageData(
-        backgroundColor: surface,
-        textColor: onSurface,
-        borderRadius: buildInfoBorderRadius(),
-        child: MessageElevated(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
-            child: Text(messageText),
+      child: FractionallySizedBox(
+        widthFactor: 0.8,
+        child: Center(
+          child: MessageData(
+            backgroundColor: info,
+            textColor: onInfo,
+            borderRadius: buildInfoBorderRadius(),
+            text: messageText,
+            icon: icon,
+            child: MessageMaterial(
+              elevation: zero,
+              child: MessageStatus(),
+            ),
           ),
         ),
       ),
     );
   }
+}
 
-  BorderRadius buildInfoBorderRadius() {
-    return BorderRadius.all(Radius.circular(messagesBoxRadius));
-  }
+BorderRadius buildInfoBorderRadius() {
+  return BorderRadius.all(Radius.circular(messagesBoxRadius));
 }

@@ -123,7 +123,6 @@ class L {
   static final autocryptCompleteImport = _translationKey("To complete the import of the Autocrypt setup message please provide the security code shown on the originating device. After entering the code below the Autocrypt settings will be applied to your current encryption setup.");
   static final autocryptMessageSentX = _translationKey("Your Autocrypt setup has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt:\n%s\nOnce you are done, your other device will be ready to use Autocrypt.");
 
-
   static final chatP = _translationKey("Chat", "Chats");
   static final chatArchived = _translationKey("Archived chats");
   static final chatCreateText = _translationKey("Do you want to chat with this new contact?");
@@ -142,6 +141,7 @@ class L {
   static final chatVideoRecordingFailed = _translationKey("Video recording failed, please grant the permissions to record video in the app settings on your device.");
   static final chatFavoriteMessages = _translationKey("Your favorite messages");
   static final chatFlagged = _translationKey("Flagged");
+  static final chatEncryptionStatusChanged = _translationKey("Your messages are encrypted from now on.");
 
   static final clipboardCopied = _translationKey("Copied to clipboard");
   // Content X copied to clipboard (e.g. Text copied to clipboard)

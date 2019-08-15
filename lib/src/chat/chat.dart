@@ -421,11 +421,15 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   ListView buildListItems(MessagesStateSuccess state) {
     return ListView.custom(
       controller: _scrollController,
-      padding: new EdgeInsets.all(listItemPadding),
+      padding: new EdgeInsets.all(8.0),
       reverse: true,
       childrenDelegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             int messageId = state.messageIds[index];
+            int nextMessageId = -1;
+            if (index < (state.messageIds.length - 1)) {
+              nextMessageId = state.messageIds[index + 1];
+            }
             bool hasDateMarker = state.dateMarkerIds.contains(messageId);
             var key = createKeyFromId(messageId, [state.messageLastUpdateValues[index]]);
             return ChatMessageItem(
@@ -433,6 +437,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               messageId: messageId,
               isGroupChat: _chatBloc.isGroup,
               hasDateMarker: hasDateMarker,
+              nextMessageId: nextMessageId,
               key: key,
             );
           },

@@ -49,11 +49,13 @@ import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/utils/date.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
-  Repository<Contact> _contactRepository;
+  Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
   Repository<ChatMsg> _messageListRepository;
   int _messageId;
+  int _nextMessageId;
   int _contactId;
   bool _addContact;
 
@@ -65,23 +67,24 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     if (event is RequestMessage) {
       try {
         var chatId = event.chatId;
-        if (isInvite(chatId)) {
-          _contactRepository = RepositoryManager.get(RepositoryType.contact);
-        } else {
-          _contactRepository = RepositoryManager.get(RepositoryType.contact);
-        }
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
         _messageId = event.messageId;
+        _nextMessageId = event.nextMessageId;
         _addContact = event.isGroupChat || isInvite(chatId);
         if (_addContact) {
           await _setupContact();
         }
-        _setupMessage();
+        if (_hasNextMessage()) {
+          await _setupNextMessage();
+        }
+        await _setupMessage();
         dispatch(MessageLoaded());
       } catch (error) {
         yield MessageItemStateFailure(error: error.toString());
       }
     } else if (event is MessageLoaded) {
+      bool showTime = await _getShowTime();
+      bool encryptionStatusChanged = await _getEncryptionStatusChanged();
       ChatMsg message = _getMessage();
       bool isOutgoing = await message.isOutgoing();
       String text = await message.getText();
@@ -131,6 +134,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         contactWrapper: contactWrapper,
         preview: teaser,
         isStarred: isStarred,
+        showTime: showTime,
+        encryptionStatusChanged: encryptionStatusChanged,
       );
     } else if (event is DeleteMessages) {
       _deleteMessages(event.messageIds);
@@ -152,7 +157,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     ]);
   }
 
-  void _setupMessage() async {
+  Future<void> _setupMessage() async {
     await _getMessage().loadValues(keys: [
       ChatMsg.methodMessageGetText,
       ChatMsg.methodMessageGetTimestamp,
@@ -168,6 +173,10 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     ]);
   }
 
+  Future<void> _setupNextMessage() async {
+    await _getNextMessage().loadValue(ChatMsg.methodMessageGetTimestamp);
+  }
+
   Contact _getContact() {
     return _contactRepository.get(_contactId);
   }
@@ -176,9 +185,39 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     return _messageListRepository.get(_messageId);
   }
 
+  ChatMsg _getNextMessage() {
+    return _messageListRepository.get(_nextMessageId);
+  }
+
   void _deleteMessages(List<int> messageIds) async {
     Context context = Context();
     _messageListRepository.remove(ids: messageIds);
     await context.deleteMessages(messageIds);
+  }
+
+  bool _hasNextMessage() {
+    return _nextMessageId != -1;
+  }
+
+  Future<bool> _getShowTime() async {
+    if (!_hasNextMessage()) {
+      return true;
+    }
+    ChatMsg _nextChatMsg = _getNextMessage();
+    int nextTimestamp = await _nextChatMsg.getTimestamp();
+    ChatMsg _chatMsg = _getMessage();
+    int timestamp = await _chatMsg.getTimestamp();
+    return getDateAndTimeFromTimestamp(nextTimestamp) != getDateAndTimeFromTimestamp(timestamp);
+  }
+
+  Future<bool> _getEncryptionStatusChanged() async {
+    ChatMsg _chatMsg = _getMessage();
+    if (!_hasNextMessage()) {
+      return await _chatMsg.showPadlock() == 1;
+    }
+    ChatMsg _nextChatMsg = _getNextMessage();
+    int nextPadlock = await _nextChatMsg.showPadlock();
+    int padlock = await _chatMsg.showPadlock();
+    return nextPadlock != padlock;
   }
 }

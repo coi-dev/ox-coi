@@ -44,6 +44,7 @@ import 'package:date_format/date_format.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 
+const formatterDateAndTime = [dd, '.', mm, '.', yyyy, ' - ', HH, ':', nn];
 const formatterTime = [HH, ':', nn];
 const formatterDate = [dd, '.', mm];
 const formatterDateLong = [dd, '. ', MM];
@@ -103,4 +104,8 @@ String getDateTimeFileFormTimestamp([int timestamp]) {
     timestamp = getNowTimestamp();
   }
   return formatDate(_getDateTimeFromTimestamp(timestamp), formatterDateTimeFile);
+}
+
+String getDateAndTimeFromTimestamp(int timestamp) {
+  return formatDate(_getDateTimeFromTimestamp(timestamp), formatterDateAndTime);
 }
