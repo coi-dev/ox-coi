@@ -53,7 +53,9 @@ class L {
   static final audio = _translationKey("Audio");
   static final block = _translationKey("Block");
   static final automatic = _translationKey("Automatic");
+  // Action X performed by user Y (e.g. Login by alice)
   static final byXY = _translationKey("%s by %s");
+  // Action X performed by the current user (e.g. Login by me)
   static final byMeX = _translationKey("%s by me");
   static final about = _translationKey("About");
   static final agreeTo = _translationKey("By using OX Coi Messenger you agree to our");
@@ -133,6 +135,7 @@ class L {
   static final chatNoMessages = _translationKey("No messages");
   static final chatOpen = _translationKey("Open chat");
   static final chatNewPlaceholder = _translationKey("This is a new chat. Send a message to connect!");
+  // Start a chat with a new user (e.g. Start a chat with alice?)
   static final chatStartWithTextX = _translationKey("Start a chat with %s?");
   static final chatListPlaceholder = _translationKey("Welcome to the OX Coi Messenger!\nPlease start a new chat by tapping the chat bubble icon.");
   static final chatAudioRecordingFailed = _translationKey("Audio recording failed, please grant the permissions to record audio in the app settings on your device.");
@@ -141,6 +144,7 @@ class L {
   static final chatFlagged = _translationKey("Flagged");
 
   static final clipboardCopied = _translationKey("Copied to clipboard");
+  // Content X copied to clipboard (e.g. Text copied to clipboard)
   static final clipboardCopiedX = _translationKey("%s copied to clipboard");
 
   static final contactP = _translationKey("Contact", "Contacts");
@@ -161,9 +165,12 @@ class L {
   static final contactDeleteFailed = _translationKey("Could not delete contact.");
   static final contactDeleteWithActiveChatFailed = _translationKey("Could not delete contact. Active chats with contact found, please remove those chats first.");
   static final contactDelete = _translationKey("Delete contact");
+  // Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
   static final contactBlockTextXY = _translationKey("Do you really want to block %s (%s)?");
+  // Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
   static final contactDeleteTextXY = _translationKey("Do you really want to delete %s (%s)?");
   static final contactEdit = _translationKey("Edit contact");
+  // Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
   static final contactUnblockTextX = _translationKey("Do you want to unblock %s?");
   static final contactName = _translationKey("Enter the contact name");
   static final contactImportFailed = _translationKey("Import failed, missing permissions");
@@ -177,10 +184,11 @@ class L {
   static final contactVerificationRunning = _translationKey("Verifying. Please wait a moment.");
   static final contactSystemImportText = _translationKey("Would you like to import your contacts from this device?");
   static final contactUnblock = _translationKey("Unblock contact");
-  
+
   static final coreMembers = _translationKey('%1\$d member(s)');
   static final coreContacts = _translationKey('%1\$d contact(s)');
 
+  // Security token of the FCM service. FCM is a abbreviation and mustn't be translated
   static final debugFCMToken = _translationKey("FCM token");
 
   static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might already help to simply reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX Coi Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
@@ -215,6 +223,7 @@ class L {
   static final loginChooseProvider = _translationKey("Please select your email provider to sign in");
   static final loginCheckServer = _translationKey("Please specify your email server settings.");
   static final loginErrorWrongCredentials = _translationKey("Cannot login. Please check if the email-address and the password are correct.");
+  // Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
   static final loginErrorResponseXY = _translationKey("Response from %s: %s\n\nSome providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your provider or friends if you run into problems.");
   static final loginSignIn = _translationKey("Sign in");
   static final loginServerAddresses = _translationKey("Server addresses");
@@ -236,17 +245,21 @@ class L {
   static final providerRegisterChoose = _translationKey("Choose a provider from the list below to create a new account");
   static final providerAutocompleteText = _translationKey("For known email providers additional settings are setup automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");
   static final providerOtherMailProvider = _translationKey("Other mail provider");
+  // Sign in with provide X (e.g. Sign in with provider.com)
   static final providerSignInTextX = _translationKey("Sign in with %s?");
 
   static final qrProfile = _translationKey("Profile QR");
   static final qrScan = _translationKey("Scan QR");
+  // Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
   static final qrScanTextX = _translationKey("Scan this QR code to create a new contact or verify a contact with %s.");
   static final qrShow = _translationKey("Show QR");
 
   static final settingP = _translationKey("Setting", "Settings");
   static final settingBase = _translationKey("Base Settings");
   static final settingConfigurationChangeFailed = _translationKey("Configuration change aborted");
+  // Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
   static final settingSecurityImportKeysTextX = _translationKey("Do you want to import your keys from \"%s\"? If no keys are in that folder, the operation will fail.");
+  // Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
   static final settingSecurityExportKeysTextX = _translationKey("Do you want to save your keys in \"%s\"?");
   static final settingCopyCode = _translationKey("Copy code");
   static final settingExportKey = _translationKey("Expert: Export keys");
