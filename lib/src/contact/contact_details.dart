@@ -137,7 +137,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       textStyle: Theme.of(context).textTheme.subtitle,
                       iconData: state.isVerified ? Icons.verified_user : null,
                       child: ProfileCopyableHeaderText(
-                        toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.email).toLowerCase()]),
+                        toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.emailAddress).toLowerCase()]),
                       )),
                   ProfileActionList(tiles: [
                     ProfileAction(

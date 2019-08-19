@@ -104,7 +104,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   void initState() {
     super.initState();
     emailField = ValidatableTextFormField(
-      (context) => L10n.get(L.email),
+      (context) => L10n.get(L.emailAddress),
       textFormType: TextFormType.email,
       inputType: TextInputType.emailAddress,
       needValidation: true,

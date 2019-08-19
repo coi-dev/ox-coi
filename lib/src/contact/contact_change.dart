@@ -98,7 +98,7 @@ class _ContactChangeState extends State<ContactChange> {
     navigation.current = Navigatable(Type.contactChange);
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
-        (context) => L10n.get(L.email),
+        (context) => L10n.get(L.emailAddress),
         textFormType: TextFormType.email,
         inputType: TextInputType.emailAddress,
         needValidation: true,

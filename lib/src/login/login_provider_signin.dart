@@ -80,8 +80,8 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   var _navigation = Navigation();
 
   ValidatableTextFormField emailField = ValidatableTextFormField(
-    (context) => L10n.get(L.email),
-    hintText: (context) => L10n.get(L.email),
+    (context) => L10n.get(L.emailAddress),
+    hintText: (context) => L10n.get(L.emailAddress),
     textFormType: TextFormType.email,
     inputType: TextInputType.emailAddress,
     needValidation: true,

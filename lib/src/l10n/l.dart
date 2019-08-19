@@ -64,7 +64,7 @@ class L {
   static final debug = _translationKey("Debug");
   static final delete = _translationKey("Delete");
   static final draft = _translationKey("Draft");
-  static final email = _translationKey("E-mail address");
+  static final emailAddress = _translationKey("Email address");
   static final feedback = _translationKey("Feedback");
   static final file = _translationKey("File");
   static final error = _translationKey("Error");
@@ -74,7 +74,7 @@ class L {
   static final import = _translationKey("Import");
   static final inbox = _translationKey("Inbox");
   static final invites= _translationKey("Invites");
-  static final mail = _translationKey("Mail");
+  static final email = _translationKey("Email");
   static final location = _translationKey("Location");
   static final me = _translationKey("Me");
   static final name = _translationKey("Name");
@@ -101,7 +101,7 @@ class L {
   static final yes = _translationKey("Yes");
   static final yesterday = _translationKey("Yesterday");
   static final textFieldEmptyHint = _translationKey("This field can not be empty");
-  static final readReceiptText = _translationKey("This is a read receipt.\n\nIt means the message was displayed on the recipient\"s device, not necessarily that the content was read.");
+  static final readReceiptText = _translationKey("This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
   static final voiceMessage = _translationKey("Voice message");
   static final moreMessages = _translationKey("more messages");
   static final privacyDeclaration = _translationKey("privacy declaration");
@@ -112,7 +112,7 @@ class L {
   static final autocryptSetupCode = _translationKey("Autocrypt setup code");
   static final autocryptFailed = _translationKey("Autocrypt setup failed. Please check your setup code.");
   static final autocryptSuccess = _translationKey("Autocrypt setup successfully changed");
-  static final autocryptText = _translationKey("An Autocrypt setup message securely shares your encryption setup with other Autocrypt-compliant apps. The setup will be secured by a setup code which is displayed here and must be typed on the other device.");
+  static final autocryptText = _translationKey("An Autocrypt setup message securely shares your encryption setup with other Autocrypt-compliant apps. The setup will be secured by a setup code which is displayed here and must be entered on the other device.");
   static final autocryptCreateMessageText = _translationKey("Creates an Autocrypt setup message, which you can load on other devices to use your current encryption setup.");
   static final autocryptImport = _translationKey("Import Autocrypt setup message");
   static final autocryptMessageCreated = _translationKey("Setup message created");
@@ -134,7 +134,7 @@ class L {
   static final chatNoFlagged = _translationKey("No flagged messages");
   static final chatNoMessages = _translationKey("No messages");
   static final chatOpen = _translationKey("Open chat");
-  static final chatNewPlaceholder = _translationKey("This is a new chat. Send a message to connect!");
+  static final chatNewPlaceholder = _translationKey("This is a new chat. Send a message to connect.");
   // Start a chat with a new user (e.g. Start a chat with alice?)
   static final chatStartWithTextX = _translationKey("Start a chat with %s?");
   static final chatListPlaceholder = _translationKey("Welcome to the OX Coi Messenger!\nPlease start a new chat by tapping the chat bubble icon.");
@@ -179,7 +179,7 @@ class L {
   static final contactNoBlocked = _translationKey("No blocked contacts");
   static final contactReImportText = _translationKey("Re-importing your contacts will not create duplicates.");
   static final contactSearch = _translationKey("Search contacts");
-  static final contactInitialImportText = _translationKey("This action can be also done later via the import button in the top action bar.");
+  static final contactInitialImportText = _translationKey("This action can also be done later via the import button in the top action bar.");
   static final contactVerificationFinished = _translationKey("Verification finished.");
   static final contactVerificationRunning = _translationKey("Verifying. Please wait a moment.");
   static final contactSystemImportText = _translationKey("Would you like to import your contacts from this device?");
@@ -191,7 +191,7 @@ class L {
   // Security token of the FCM service. FCM is a abbreviation and mustn't be translated
   static final debugFCMToken = _translationKey("FCM token");
 
-  static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might already help to simply reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX Coi Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
+  static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might help to reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX Coi Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
   static final errorProgressCanceled = _translationKey("There was an error or the progress was canceled.");
 
   static final groupAddContactsAlreadyIn = _translationKey("All your contacts are in this chat.");
@@ -213,11 +213,11 @@ class L {
 
   static final loginRunning = _translationKey("Logging in, this may take a moment");
   static final loginFailed = _translationKey("Login failed");
-  static final login = _translationKey("Login to OX Coi Messenger");
+  static final login = _translationKey("Log in to OX Coi Messenger");
   static final loginWelcome = _translationKey("OX Coi Messenger works with any email provider, but best with COI-compatible providers. If you have an existing email account, please sign in, otherwise register a new account first.");
   static final loginWelcomeManual = _translationKey("Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.");
   static final loginCheckUsernamePassword = _translationKey("Please check your username and password");
-  static final loginCheckMail = _translationKey("Please enter a valid e-mail address");
+  static final loginCheckMail = _translationKey("Please enter a valid email address");
   static final loginCheckPort = _translationKey("Please enter a valid port (1-65535)");
   static final loginCheckPassword = _translationKey("Please enter your password");
   static final loginChooseProvider = _translationKey("Please select your email provider to sign in");
@@ -229,24 +229,24 @@ class L {
   static final loginServerAddresses = _translationKey("Server addresses");
   static final loginManualSetupRequired = _translationKey("We could not determine all settings automatically.");
 
-  static final memberXP = _translationKey("1 Member","%i Members");
+  static final memberXP = _translationKey("1 member","%i members");
   static final memberAdded = _translationKey("Member added");
   static final memberRemoved = _translationKey("Member removed");
 
-  static final participantXP = _translationKey("1 Participant", "%i Participants");
+  static final participantXP = _translationKey("1 participant", "%i participants");
   static final participantAdd = _translationKey("Add participants");
 
   static final profileEdit = _translationKey("Edit profile");
   static final profileNoSignature = _translationKey("No signature set");
   static final profileNoUsername = _translationKey("No username set");
   static final profile = _translationKey("Profile");
-  static final profileDefaultStatus = _translationKey("Sent with OX Coi");
+  static final profileDefaultStatus = _translationKey("Sent with OX Coi Messenger");
 
   static final providerRegisterChoose = _translationKey("Choose a provider from the list below to create a new account");
-  static final providerAutocompleteText = _translationKey("For known email providers additional settings are setup automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");
+  static final providerAutocompleteText = _translationKey("For known email providers additional settings are set up automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");
   static final providerOtherMailProvider = _translationKey("Other mail provider");
   // Sign in with provide X (e.g. Sign in with provider.com)
-  static final providerSignInTextX = _translationKey("Sign in with %s?");
+  static final providerSignInTextX = _translationKey("Sign in with %s");
 
   static final qrProfile = _translationKey("Profile QR");
   static final qrScan = _translationKey("Scan QR");
@@ -266,7 +266,7 @@ class L {
   static final settingImportKeys = _translationKey("Expert: Import keys");
   static final settingImportKeysText = _translationKey("Import keys from your local storage to change your current encryption setup");
   static final settingIMAPSecurity = _translationKey("IMAP Security");
-  static final settingIMAPName = _translationKey("IMAP login-name");
+  static final settingIMAPName = _translationKey("IMAP login name");
   static final settingIMAPPassword = _translationKey("IMAP password");
   static final settingIMAPPort = _translationKey("IMAP port");
   static final settingIMAPServer = _translationKey("IMAP server (e.g. imap.coi.me)");
@@ -286,15 +286,15 @@ class L {
   static final settingKeyTransferRunning = _translationKey("Performing key transfer");
   static final settingChooseMessageSyncingType = _translationKey("Please choose what kind of messages you would like to see.");
   static final settingSMTPSecurity = _translationKey("SMTP Security");
-  static final settingSMTPLogin = _translationKey("SMTP login-name");
+  static final settingSMTPLogin = _translationKey("SMTP login name");
   static final settingSMTPPassword = _translationKey("SMTP password");
   static final settingSMTPPort = _translationKey("SMTP port");
   static final settingSMTPServer = _translationKey("SMTP server (e.g. smtp.coi.me)");
   static final settingReadReceiptP = _translationKey("Read receipt", "Read receipts");
   static final settingReadReceiptText = _translationKey("Enable sending and requesting of read receipts.");
-  static final settingMessageSyncingTypeAll = _translationKey("Show both chat and mail messages from all senders");
+  static final settingMessageSyncingTypeAll = _translationKey("Show both chat and email messages from all senders");
   static final settingMessageSyncingTypeChats = _translationKey("Show only chat messages ");
-  static final settingMessageSyncingTypeKnown = _translationKey("Show both chat and mail messages from my contacts");
+  static final settingMessageSyncingTypeKnown = _translationKey("Show both chat and email messages from my contacts");
   static final settingAccount = _translationKey("Account settings");
   static final settingAccountChanged = _translationKey("Account settings successfully changed");
   static final settingApplying = _translationKey("Applying new settings, this may take a moment");
