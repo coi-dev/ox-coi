@@ -97,6 +97,9 @@ mixin ChatComposer {
 
   TextField getInputTextField(TextEditingController textController, Function onTextChanged, BuildContext context) {
     return TextField(
+      keyboardType: TextInputType.multiline,
+      minLines: 1,
+      maxLines: 4,
       controller: textController,
       onChanged: onTextChanged,
       decoration: new InputDecoration.collapsed(
