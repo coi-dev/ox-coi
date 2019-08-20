@@ -114,6 +114,7 @@ class _LoginState extends State<Login> {
         children: <Widget>[
           Text(
             L10n.get(L.welcome),
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline,
           ),
           Image(
@@ -158,6 +159,7 @@ class _LoginState extends State<Login> {
                   style: Theme.of(context).textTheme.caption.apply(color: onBackground),
                   text: L10n.get(L.agreeTo),
                   children: [
+                    TextSpan(text: " "),
                     UrlTextSpan(url: null, text: L10n.get(L.termsConditions)),
                     TextSpan(text: " ${L10n.get(L.and)} "),
                     UrlTextSpan(url: null, text: L10n.get(L.privacyDeclaration))

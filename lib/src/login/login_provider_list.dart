@@ -131,20 +131,21 @@ class _ProviderListState extends State<ProviderList> {
                 },
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: loginVerticalPadding24dp),
-              child: RaisedButton(
-                elevation: 0,
-                onPressed: () => _onItemTap(otherProvider),
-                child: Text(L10n.get(L.providerOtherMailProvider)),
-                textColor: accent,
-                color: background,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
-                  side: BorderSide(color: accent),
+            if (widget.type == ProviderListType.login)
+              Padding(
+                padding: EdgeInsets.only(top: loginVerticalPadding24dp),
+                child: RaisedButton(
+                  elevation: 0,
+                  onPressed: () => _onItemTap(otherProvider),
+                  child: Text(L10n.get(L.providerOtherMailProvider)),
+                  textColor: accent,
+                  color: background,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
+                    side: BorderSide(color: accent),
+                  ),
                 ),
               ),
-            ),
           ],
         ));
   }
