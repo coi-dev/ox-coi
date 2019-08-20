@@ -142,21 +142,21 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       )),
                   ProfileActionList(tiles: [
                     ProfileAction(
-                      key: Key(keyContact_detailOpen_chatProfileActionIcon),
+                      key: Key(keyContactDetailOpenChatProfileActionIcon),
                       iconData: Icons.chat,
                       text: L10n.get(L.chatOpen),
                       color: accent,
                       onTap: () => createChatFromContact(context, widget.contactId),
                     ),
                     ProfileAction(
-                      key: Key(keyContact_detailEdit_contactProfileActionIcon),
+                      key: Key(keyContactDetailEditContactProfileActionIcon),
                       iconData: Icons.edit,
                       text: L10n.get(L.contactEdit),
                       color: accent,
                       onTap: () => _editContact(context, state.name, state.email),
                     ),
                     ProfileAction(
-                      key: Key(keyContact_detailBlock_contactProfileActionIcon),
+                      key: Key(keyContactDetailBlockContactProfileActionIcon),
                       iconData: Icons.block,
                       text: L10n.get(L.contactBlock),
                       color: accent,
@@ -171,7 +171,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       ),
                     ),
                     ProfileAction(
-                      key: Key(keyContact_detailDelete_contactProfileActionIcon),
+                      key: Key(keyContactDetailDeleteContactProfileActionIcon),
                       iconData: Icons.delete,
                       text: L10n.get(L.contactDelete),
                       color: error,

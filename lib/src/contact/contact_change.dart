@@ -54,6 +54,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -81,6 +82,7 @@ class _ContactChangeState extends State<ContactChange> {
   GlobalKey<FormState> _formKey = GlobalKey();
   ValidatableTextFormField _nameField = ValidatableTextFormField(
     (context) => L10n.get(L.name),
+    key: Key(keyContactChangeNameValidatableTextFormField),
     hintText: (context) => L10n.get(L.contactName),
   );
   ValidatableTextFormField _emailField;
@@ -99,6 +101,7 @@ class _ContactChangeState extends State<ContactChange> {
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
         (context) => L10n.get(L.emailAddress),
+        key: Key(keyContactChangeEmailValidatableTextFormField),
         textFormType: TextFormType.email,
         inputType: TextInputType.emailAddress,
         needValidation: true,
@@ -151,6 +154,7 @@ class _ContactChangeState extends State<ContactChange> {
           title: Text(title),
           actions: <Widget>[
             IconButton(
+              key: Key(keyContactChangeCheckIconButton),
               icon: Icon(Icons.check),
               onPressed: () => _onSubmit(),
             )

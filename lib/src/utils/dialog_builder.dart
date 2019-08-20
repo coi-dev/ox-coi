@@ -90,7 +90,7 @@ showConfirmationDialog(
           child: new Text(negativeButton != null && negativeButton.isNotEmpty
               ? negativeButton
               : L10n.get(L.cancel)),
-          key: Key(keyDialog_builderCancelFlatButton),
+          key: Key(keyDialogBuilderCancelFlatButton),
           onPressed: () {
             if (negativeAction != null) {
               negativeAction();
@@ -100,7 +100,7 @@ showConfirmationDialog(
         ),
         new FlatButton(
           child: new Text(positiveButton),
-          key: Key(keyDialog_builderPositiveFlatButton),
+          key: Key(keyDialogBuilderPositiveFlatButton),
           onPressed: () {
             positiveAction();
             if (selfClose) {

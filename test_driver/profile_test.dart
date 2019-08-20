@@ -44,12 +44,13 @@
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
-  group('Ox coi test', () {
+  group('Ox coi test:', () {
 // Define the driver.
     FlutterDriver driver;
     final timeout = Duration(seconds: 120);
@@ -57,11 +58,11 @@ void main() {
     final testUserNameUserProfile = 'EDN tester';
     final realEmail = 'enyakam3@ox.com';
     final realPassword = 'secret';
-    final profileUserStatus = "Sent with OX Coi - https://github.com/open-xchange/ox-coi";
-    final singIn = 'SIGN IN';
+    final profileUserStatus = "Sent with OX Coi Messenger - https://github.com/open-xchange/ox-coi";
+    final singIn = L.getKey(L.loginSignIn).toUpperCase();
     final coiDebug = 'Coi debug';
     final mailCom = 'Mail.com';
-    final chatWelcomeMessage = 'Welcome to OX Coi!\nPlease start a new chat by tapping the chat bubble icon.';
+    final chatWelcomeMessage = L.getKey(L.chatListPlaceholder);
 
 //  SerializableFinder for the Ox coi welcome and provider page.
     final finderCoiDebugProvider = find.text(coiDebug);

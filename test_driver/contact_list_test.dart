@@ -43,6 +43,7 @@
 // Imports the Flutter Driver API.
 import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
@@ -68,11 +69,10 @@ void main() {
     final realPassword = 'secret';
     final contacts = "Contacts";
 
-    final singIn = 'SIGN IN';
+    final singIn = L.getKey(L.loginSignIn).toUpperCase();
     final coiDebug = 'Coi debug';
     final mailCom = 'Mail.com';
-    final chatWelcomeMessage =
-        'Welcome to OX Coi!\nPlease start a new chat by tapping the chat bubble icon.';
+    final chatWelcomeMessage = L.getKey(L.chatListPlaceholder);
 
     //  SerializableFinder for the Ox coi welcome and provider page.
     final finderCoiDebugProvider = find.text(coiDebug);
@@ -88,21 +88,20 @@ void main() {
 
     //  SerializableFinder for Contacts and edit profile windows.
     final contactsFinder = find.text(contacts);
-    final positiveFinder = find.byValueKey(keyDialog_builderPositiveFlatButton);
-    final cancelFinder = find.byValueKey(keyDialog_builderCancelFlatButton);
+    final positiveFinder = find.byValueKey(keyDialogBuilderPositiveFlatButton);
+    final cancelFinder = find.byValueKey(keyDialogBuilderCancelFlatButton);
     final personAddFinder =
-        find.byValueKey(keyContact_listPerson_addFloatingActionButton);
+        find.byValueKey(keyContactListPersonAddFloatingActionButton);
     final keyContactChangeNameFinder =
-        find.byValueKey(keyContact_changeNameValidatableTextFormField);
+        find.byValueKey(keyContactChangeNameValidatableTextFormField);
     final keyContactChangeEmailFinder =
-        find.byValueKey(keyContact_changeEmailValidatableTextFormField);
+        find.byValueKey(keyContactChangeEmailValidatableTextFormField);
     final keyContactChangeCheckFinder =
-        find.byValueKey(keyContact_changeCheckIconButton);
+        find.byValueKey(keyContactChangeCheckIconButton);
 
     // Connect to a running Flutter application instance.
     setUpAll(() async {
-      final String adbPath =
-          '/Users/openxchange/Library/Android/sdk/platform-tools/adb';
+      final String adbPath = 'adb';
       await Process.run(adbPath, [
         'shell',
         'pm',
@@ -223,7 +222,7 @@ Future manageContact(
   Invoker.current.heartbeat();
   await driver.waitFor(find.text(newTestName));
   await driver
-      .tap(find.byValueKey(keyContact_detailEdit_contactProfileActionIcon));
+      .tap(find.byValueKey(keyContactDetailEditContactProfileActionIcon));
   await driver.tap(keyContactChangeNameFinder);
   await driver.enterText(newMe);
   await driver.tap(keyContactChangeCheckFinder);
@@ -238,7 +237,7 @@ Future deleteContact(
   await driver.tap(find.text(newTestName));
   Invoker.current.heartbeat();
   await driver
-      .tap(find.byValueKey(keyContact_detailDelete_contactProfileActionIcon));
+      .tap(find.byValueKey(keyContactDetailDeleteContactProfileActionIcon));
   await driver.tap(positiveFinder);
 }
 

@@ -302,8 +302,6 @@ class L {
   static final settingAdvancedSmtp = _translationKey("Advanced SMTP Settings");
   static final settingSecurityExportText = _translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
 
-
-
   static List<String> _translationKey(String key, [String pluralKey]) {
     String logging = "Registered localization key: '$key'";
     if (!isNullOrEmpty(pluralKey)) {
@@ -311,5 +309,13 @@ class L {
     }
     _logger.fine(logging);
     return [key, pluralKey];
+  }
+
+  static String getKey(List<String> translationKeys) {
+    return translationKeys[0];
+  }
+
+  static String getPluralKey(List<String> translationKeys) {
+    return translationKeys[1];
   }
 }

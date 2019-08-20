@@ -42,38 +42,38 @@
 
 // Imports the Flutter Driver API.
 import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
-  group('Ox coi test', () {
+  group('Ox coi test:', () {
     //  Define the driver.
     FlutterDriver driver;
     final timeout = Duration(seconds: 120);
 
     //  SerializableFinder for the Ox coi welcome and provider page.
-    final welcomeMessage = find.text('Welcome to OX Coi');
-    final welcomeDescription = find.text(
-        'OX Coi works with any email account. If you have one, please sign in, otherwise register a new account first.');
-    final register = find.text('SIGN IN');
-    final signIn = find.text('Sign in');
+    final welcomeMessage = find.text(L.getKey(L.welcome));
+    final welcomeDescription = find.text(L.getKey(L.loginWelcome));
+    final register = find.text(L.getKey(L.register).toUpperCase());
+    final signIn = find.text(L.getKey(L.loginSignIn));
+    final other = find.text(L.getKey(L.providerOtherMailProvider));
     final outlook = find.text('Outlook');
     final yahoo = find.text('Yahoo');
     final coiDebug = find.text('Coi debug');
     final mailCom = find.text('Mail.com');
-    final other = find.text('Other mail account');
     final mailbox = find.text('Mailbox.org');
 
     //  SerializableFinder for Coi Debug dialog Windows.
-    final signInCoiDebug = find.text('Sign in with Coi debug?');
+    final signInCoiDebug = find.text('Sign in with Coi debug');
     final email = find.byValueKey(keyProviderSignInEmailTextField);
     final password = find.byValueKey(keyProviderSignInPasswordTextField);
-    final signInCaps = find.text('SIGN IN');
-    final errorMessage = find.text('Please enter a valid e-mail address');
-    final chatWelcome = find.text(
-        'Welcome to OX Coi!\nPlease start a new chat by tapping the chat bubble icon.');
+    final signInCaps = find.text(L.getKey(L.loginSignIn).toUpperCase());
+    final errorMessage = find.text(L.getKey(L.loginCheckMail));
+    final chatWelcome = find.text(L.getKey(L.chatListPlaceholder));
     final fakeEmail = 'enyakam3@ox.com3';
     final fakePassword = 'secret2';
     final realEmail = 'enyakam3@ox.com';
