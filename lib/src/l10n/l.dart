@@ -295,12 +295,16 @@ class L {
   static final settingMessageSyncingTypeAll = _translationKey("Show both chat and email messages from all senders");
   static final settingMessageSyncingTypeChats = _translationKey("Show only chat messages ");
   static final settingMessageSyncingTypeKnown = _translationKey("Show both chat and email messages from my contacts");
-  static final settingAccount = _translationKey("Account settings");
+  static final settingAccount = _translationKey("Account");
   static final settingAccountChanged = _translationKey("Account settings successfully changed");
   static final settingApplying = _translationKey("Applying new settings, this may take a moment");
   static final settingAdvancedImap = _translationKey("Advanced IMAP Settings");
   static final settingAdvancedSmtp = _translationKey("Advanced SMTP Settings");
   static final settingSecurityExportText = _translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
+  static final settingNotificationP = _translationKey("Notification", "Notifications");
+  static final settingNotificationPull = _translationKey("Enable background updates");
+  static final settingNotificationPullText = _translationKey("If enabled this settings allows the app to perform periodic background tasks to get new messages");
+
 
   static List<String> _translationKey(String key, [String pluralKey]) {
     String logging = "Registered localization key: '$key'";

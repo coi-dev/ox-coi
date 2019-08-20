@@ -46,60 +46,52 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/settings/settings_anti_mobbing_bloc.dart';
-import 'package:ox_coi/src/settings/settings_anti_mobbing_event_state.dart';
+import 'package:ox_coi/src/settings/settings_notifications_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-class SettingsAntiMobbing extends StatefulWidget {
+import 'settings_notifications_bloc.dart';
+
+class SettingsNotifications extends StatefulWidget {
   @override
-  _SettingsAntiMobbingState createState() => _SettingsAntiMobbingState();
+  _SettingsNotificationsState createState() => _SettingsNotificationsState();
 }
 
-class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
-  SettingsAntiMobbingBloc _settingsAntiMobbingBloc = SettingsAntiMobbingBloc();
+class _SettingsNotificationsState extends State<SettingsNotifications> {
+  SettingsNotificationsBloc _settingsNotificationsBloc = SettingsNotificationsBloc();
   Navigation _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
-    _navigation.current = Navigatable(Type.settingsAntiMobbing);
-    _settingsAntiMobbingBloc.dispatch(RequestSettings());
+    _navigation.current = Navigatable(Type.settingsNotifications);
+    _settingsNotificationsBloc.dispatch(RequestSetting());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(L10n.get(L.settingAntiMobbing)),
+          title: Text(L10n.get(L.settingNotificationP, count: L10n.plural)),
         ),
         body: _buildPreferenceList(context));
   }
 
   Widget _buildPreferenceList(BuildContext context) {
     return BlocBuilder(
-      bloc: _settingsAntiMobbingBloc,
+      bloc: _settingsNotificationsBloc,
       builder: (context, state) {
-        if (state is SettingsAntiMobbingStateInitial) {
+        if (state is SettingsNotificationsStateInitial) {
           return StateInfo(showLoading: true);
-        } else if (state is SettingsAntiMobbingStateSuccess) {
+        } else if (state is SettingsNotificationsStateSuccess) {
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                title: Text(L10n.get(L.settingAntiMobbing)),
-                subtitle: Text(L10n.get(L.settingAntiMobbingText)),
-                trailing: Switch(value: state.antiMobbingActive, onChanged: (value) => _changeAntiMobbingSetting()),
+                title: Text(L10n.get(L.settingNotificationPull)),
+                subtitle: Text(L10n.get(L.settingNotificationPullText)),
+                trailing: Switch(value: state.pullActive, onChanged: (value) => _changeNotificationsSetting()),
               ),
-              Visibility(
-                  visible: state.antiMobbingActive,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: listItemPaddingBig),
-                    title: Text(L10n.get(L.settingChatMessagesUnknownShow)),
-                    onTap: () {
-                      _showAntiMobbingList();
-                    },
-                  )),
             ]).toList(),
           );
         } else {
@@ -111,11 +103,8 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
     );
   }
 
-  _changeAntiMobbingSetting() {
-    _settingsAntiMobbingBloc.dispatch(ChangeSettings());
+  _changeNotificationsSetting() {
+    _settingsNotificationsBloc.dispatch(ChangeSetting());
   }
 
-  void _showAntiMobbingList() {
-    _navigation.pushNamed(context, Navigation.settingsAntiMobbingList);
-  }
 }

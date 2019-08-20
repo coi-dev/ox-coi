@@ -41,63 +41,70 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
 import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/navigation/navigatable.dart';
-import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LocalPushManager {
   static LocalPushManager _instance;
+  final Logger _logger = Logger("local_push_manager");
 
   Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
   Repository<ChatMsg> _temporaryMessageRepository = ChatMessageRepository(ChatMsg.getCreator());
   PublishSubject<Event> _messageSubject = new PublishSubject();
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
-  Navigation navigation = Navigation();
   NotificationManager _notificationManager;
   int _listenerId;
 
-  final BuildContext _buildContext;
+  factory LocalPushManager() => _instance ??= LocalPushManager._internal();
 
-  factory LocalPushManager(BuildContext buildContext) => _instance ??= new LocalPushManager._internal(buildContext);
+  LocalPushManager._internal();
 
-  LocalPushManager._internal(this._buildContext);
-
-  setup() async {
+  Future<void> setup() async {
     if (_listenerId == null) {
-      _notificationManager = NotificationManager(_buildContext);
+      _notificationManager = NotificationManager();
       _messageSubject.listen(_successCallback);
       _listenerId = await _core.listen(Event.incomingMsg, _messageSubject);
     }
   }
 
-  tearDown() async {
+  Future<void> tearDown() async {
     await _core.removeListener(Event.incomingMsg, _listenerId);
     _listenerId = null;
   }
 
-  _successCallback(Event event) async {
+  void _successCallback(Event event) {
+    _logger.info("Callback event for local push received");
+    triggerLocalPush();
+  }
+
+  Future<void> triggerLocalPush() async {
+    _logger.info("Local push triggered");
     List<int> createdNotifications = List();
     List<int> freshMessages = await getAndFilterFreshMessages();
     Future.forEach(freshMessages, (int messageId) async {
       ChatMsg message = _temporaryMessageRepository.get(messageId);
       int chatId = await message.getChatId();
       if (!createdNotifications.contains(chatId)) {
+        Chat chat = _chatRepository.get(chatId);
+        if (chat == null) {
+          _chatRepository.putIfAbsent(id: chatId);
+          chat = _chatRepository.get(chatId);
+        }
         createdNotifications.add(chatId);
-        String title = await _chatRepository.get(chatId).getName();
+        String title = await chat.getName();
         int count = (await _context.getFreshMessageCount(chatId)) - 1;
         if (count > 1) {
           title = "$title (+ $count ${L10n.get(L.moreMessages)})";
         }
-        String preview = await message.getSummaryText(200);
-        showNotificationIfRequired(chatId, title, preview);
+        String teaser = await message.getSummaryText(200);
+        _notificationManager.showNotification(chatId, title, teaser, payload: chatId.toString());
       }
     });
   }
@@ -106,13 +113,7 @@ class LocalPushManager {
     var freshMessages = List<int>.from(await _context.getFreshMessages());
     freshMessages.removeWhere((int messageId) => _temporaryMessageRepository.contains(messageId));
     _temporaryMessageRepository.putIfAbsent(ids: freshMessages);
+    _logger.info("Temporary push repository contains ${_temporaryMessageRepository.length()} messages");
     return freshMessages;
-  }
-
-  void showNotificationIfRequired(int chatId, String title, String teaser) {
-    if (navigation.current.equal(Navigatable(Type.chat, params: [chatId]))) {
-      return;
-    }
-    _notificationManager.showNotification(chatId, title, teaser, payload: chatId.toString());
   }
 }

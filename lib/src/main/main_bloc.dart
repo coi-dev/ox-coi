@@ -45,6 +45,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/background/background_manager.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/config.dart';
@@ -55,12 +56,14 @@ import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/ui/strings.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
-  NotificationManager _notificationManager;
-  LocalPushManager _localPushManager;
+  var _notificationManager = NotificationManager();
+  var _localPushManager = LocalPushManager();
+  var _backgroundManager = BackgroundManager();
 
   @override
   MainState get initialState => MainStateInitial();
@@ -75,7 +78,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         if (appVersion == null || appVersion.isEmpty) {
           await _setupDefaultValues(event.context);
         }
-        _setupManagers(event);
+        await _setupManagers(event);
         _checkLogin();
       } catch (error) {
         yield MainStateFailure(error: error.toString());
@@ -88,18 +91,22 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     }
   }
 
-  void _setupManagers(PrepareApp event) {
-    _localPushManager = LocalPushManager(event.context);
+  Future<void> _setupManagers(PrepareApp event) async {
+    _notificationManager.setup(event.context);
     _localPushManager.setup();
-    _notificationManager = NotificationManager(event.context);
-    _notificationManager.setup();
+    bool pullPreference = await getPreference(preferenceNotificationsPull);
+    if (pullPreference == null || !pullPreference) {
+      _backgroundManager.stop();
+    } else {
+      _backgroundManager.start();
+    }
   }
 
-  _initCore() async {
-    await _core.init();
+  Future<void> _initCore() async {
+    await _core.init(dbName);
   }
 
-  _setupDefaultValues(BuildContext context) async {
+  Future<void> _setupDefaultValues(BuildContext context) async {
     Config config = Config();
     config.setValue(Context.configSelfStatus, defaultStatus);
     config.setValue(Context.configShowEmails, Context.showEmailsOff);
@@ -107,17 +114,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     await setPreference(preferenceAppVersion, version);
   }
 
-  void _checkLogin() async {
+  Future<void> _checkLogin() async {
     bool configured = await _context.isConfigured();
     dispatch(AppLoaded(configured: configured));
   }
 
-  void _setupInitialAppState() {
+  Future<void> _setupInitialAppState() async {
     ContactListBloc contactListBloc = ContactListBloc();
     contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
 
-  onLoginSuccess() {
-    dispatch(AppLoaded(configured: true));
-  }
 }

@@ -42,8 +42,9 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/background/background_bloc.dart';
+import 'package:ox_coi/src/background/background_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
@@ -128,28 +129,21 @@ class _ChatListState extends State<ChatList> {
     super.initState();
     _navigation.current = Navigatable(Type.chatList);
     _chatListBloc.dispatch(RequestChatList(showInvites: true));
-    _init();
     final shareObservable = Observable<ShareState>(shareBloc.state);
     shareObservable.listen((state) => handleStateChange(state));
-  }
-
-  _init() async {
-    SystemChannels.lifecycle.setMessageHandler((msg) async{
-      if (msg == AppLifecycleState.resumed.toString()) {
-        shareBloc.dispatch(LoadSharedData());
-      }
-      return msg;
-    });
-
     shareBloc.dispatch(LoadSharedData());
   }
 
   handleStateChange(ShareState state) {
-    if(state is ShareStateSuccess){
-      if(state.sharedData != null ){
+    if (state is ShareStateSuccess) {
+      if (state.sharedData != null) {
         _navigation.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Share(messageActionTag: MessageActionTag.share, sharedData: state.sharedData,)),
+          MaterialPageRoute(
+              builder: (context) => Share(
+                    messageActionTag: MessageActionTag.share,
+                    sharedData: state.sharedData,
+                  )),
           ModalRoute.withName(Navigation.root),
           Navigatable(Type.chatList),
         );
@@ -166,29 +160,38 @@ class _ChatListState extends State<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _chatListBloc,
-      builder: (context, state) {
-        if (state is ChatListStateSuccess) {
-          if (state.chatListItemWrapper.ids.length > 0) {
-            return buildListItems(state);
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(listItemPaddingBig),
-              child: Center(
-                child: Text(
-                  L10n.get(L.chatListPlaceholder),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+    return BlocListener<BackgroundBloc, BackgroundState>(
+      listener: (context, state) {
+        if (state is BackgroundStateSuccess) {
+          if (state.state == AppLifecycleState.resumed.toString()) {
+            shareBloc.dispatch(LoadSharedData());
           }
-        } else if (state is! ChatListStateFailure) {
-          return StateInfo(showLoading: true);
-        } else {
-          return Icon(Icons.error);
         }
       },
+      child: BlocBuilder(
+        bloc: _chatListBloc,
+        builder: (context, state) {
+          if (state is ChatListStateSuccess) {
+            if (state.chatListItemWrapper.ids.length > 0) {
+              return buildListItems(state);
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(listItemPaddingBig),
+                child: Center(
+                  child: Text(
+                    L10n.get(L.chatListPlaceholder),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
+          } else if (state is! ChatListStateFailure) {
+            return StateInfo(showLoading: true);
+          } else {
+            return Icon(Icons.error);
+          }
+        },
+      ),
     );
   }
 

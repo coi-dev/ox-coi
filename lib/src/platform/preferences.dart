@@ -46,6 +46,7 @@ const preferenceSystemContactsImportShown = "preferenceSystemContactsImportShown
 const preferenceAppVersion = "preferenceAppVersion";
 const preferenceLogFiles = "preferenceLogFiles";
 const preferenceAntiMobbing = "preferenceAntiMobbing";
+const preferenceNotificationsPull = "preferenceNotificationsPull";
 
 Future<dynamic> getPreference(String key) async {
   SharedPreferences sharedPreferences = await getSharedPreferences();

@@ -40,34 +40,41 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'dart:async';
+import 'dart:ui';
 
-abstract class SettingsAntiMobbingEvent {}
+import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 
-class RequestSettings extends SettingsAntiMobbingEvent {}
+import 'background_event_state.dart';
 
-class SettingsLoaded extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+class BackgroundBloc extends Bloc<BackgroundEvent, BackgroundState> {
+  String _currentBackgroundState;
 
-  SettingsLoaded({@required this.antiMobbingActive});
+  String get currentBackgroundState => _currentBackgroundState;
+
+  @override
+  BackgroundState get initialState => BackgroundStateInitial();
+
+  @override
+  Stream<BackgroundState> mapEventToState(BackgroundEvent event) async* {
+    if (event is BackgroundListenerSetup) {
+      try {
+        setup();
+      } catch (error) {
+        yield BackgroundStateFailure();
+      }
+    } else if (event is BackgroundStateChange) {
+      _currentBackgroundState = event.state;
+      yield BackgroundStateSuccess(state: _currentBackgroundState);
+    }
+  }
+
+  void setup() {
+    SystemChannels.lifecycle.setMessageHandler((state) async {
+      dispatch(BackgroundStateChange(state: state));
+      return state;
+    });
+    dispatch(BackgroundStateChange(state: AppLifecycleState.resumed.toString()));
+  }
 }
-
-class ChangeSettings extends SettingsAntiMobbingEvent {}
-
-class ActionSuccess extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
-
-  ActionSuccess({@required this.antiMobbingActive});
-}
-
-abstract class SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
-  final bool antiMobbingActive;
-
-  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActive});
-}
-
-class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}

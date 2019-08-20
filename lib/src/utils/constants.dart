@@ -40,6 +40,9 @@
  * for more details.
  */
 
+// Data base name
+String get dbName => "messenger.db";
+
 // Image paths
 String get appLogoUrl => 'assets/images/app_logo.png';
 

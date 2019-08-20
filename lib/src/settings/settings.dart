@@ -55,6 +55,7 @@ enum SettingsType {
   chat,
   antiMobbing,
   debug,
+  notifications,
 }
 
 class Settings extends StatelessWidget {
@@ -86,14 +87,6 @@ class Settings extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(
-            Icons.security,
-            color: accent,
-          ),
-          title: Text(L10n.get(L.security)),
-          onTap: () => _onPressed(context, SettingsType.security),
-        ),
-        ListTile(
-          leading: Icon(
             Icons.chat,
             color: accent,
           ),
@@ -102,11 +95,27 @@ class Settings extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(
+            Icons.notifications,
+            color: accent,
+          ),
+          title: Text(L10n.get(L.settingNotificationP, count: L10n.plural)),
+          onTap: () => _onPressed(context, SettingsType.notifications),
+        ),
+        ListTile(
+          leading: Icon(
             Icons.https,
             color: accent,
           ),
           title: Text(L10n.get(L.settingAntiMobbing)),
           onTap: () => _onPressed(context, SettingsType.antiMobbing),
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.security,
+            color: accent,
+          ),
+          title: Text(L10n.get(L.security)),
+          onTap: () => _onPressed(context, SettingsType.security),
         ),
         ListTile(
           leading: Icon(
@@ -145,6 +154,9 @@ class Settings extends StatelessWidget {
         break;
       case SettingsType.antiMobbing:
         _navigation.pushNamed(context, Navigation.settingsAntiMobbing);
+        break;
+      case SettingsType.notifications:
+        _navigation.pushNamed(context, Navigation.settingsNotifications);
         break;
       case SettingsType.debug:
         _navigation.pushNamed(context, Navigation.settingsDebug);

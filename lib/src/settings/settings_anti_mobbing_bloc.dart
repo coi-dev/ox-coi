@@ -50,22 +50,22 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
 
   @override
   Stream<SettingsAntiMobbingState> mapEventToState(SettingsAntiMobbingEvent event) async* {
-    if (event is RequestSetting) {
+    if (event is RequestSettings) {
       try {
-        loadSetting();
+        loadSettings();
       } catch (error) {
         yield SettingsAntiMobbingStateFailure();
       }
-    } else if (event is SettingLoaded) {
-      yield SettingsAntiMobbingStateSuccess(antiMobbingActivated: event.antiMobbingActivated);
+    } else if (event is SettingsLoaded) {
+      yield SettingsAntiMobbingStateSuccess(antiMobbingActive: event.antiMobbingActive);
     } else if (event is ActionSuccess) {
-      yield SettingsAntiMobbingStateSuccess(antiMobbingActivated: event.antiMobbingActivated);
-    } else if (event is ChangeSetting) {
-      changeSetting();
+      yield SettingsAntiMobbingStateSuccess(antiMobbingActive: event.antiMobbingActive);
+    } else if (event is ChangeSettings) {
+      changeSettings();
     }
   }
 
-  void loadSetting() async {
+  void loadSettings() async {
     bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
 
     if (antiMobbingPreference == null) {
@@ -73,12 +73,12 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
       antiMobbingPreference = false;
     }
 
-    dispatch(SettingLoaded(antiMobbingActivated: antiMobbingPreference));
+    dispatch(SettingsLoaded(antiMobbingActive: antiMobbingPreference));
   }
 
-  void changeSetting() async {
+  void changeSettings() async {
     bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
     await setPreference(preferenceAntiMobbing, !antiMobbingPreference);
-    dispatch(ActionSuccess(antiMobbingActivated: !antiMobbingPreference));
+    dispatch(ActionSuccess(antiMobbingActive: !antiMobbingPreference));
   }
 }

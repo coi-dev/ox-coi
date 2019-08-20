@@ -40,34 +40,51 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:bloc/bloc.dart';
+import 'package:ox_coi/src/background/background_manager.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
+import 'settings_notifications_event_state.dart';
 
-abstract class SettingsAntiMobbingEvent {}
+class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, SettingsNotificationsState> {
+  @override
+  SettingsNotificationsState get initialState => SettingsNotificationsStateInitial();
 
-class RequestSettings extends SettingsAntiMobbingEvent {}
+  @override
+  Stream<SettingsNotificationsState> mapEventToState(SettingsNotificationsEvent event) async* {
+    if (event is RequestSetting) {
+      try {
+        loadSettings();
+      } catch (error) {
+        yield SettingsNotificationsStateFailure();
+      }
+    } else if (event is SettingLoaded) {
+      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive);
+    } else if (event is ActionSuccess) {
+      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive);
+    } else if (event is ChangeSetting) {
+      changeSettings();
+    }
+  }
 
-class SettingsLoaded extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+  void loadSettings() async {
+    bool pullPreference = await getPreference(preferenceNotificationsPull);
+    if (pullPreference == null) {
+      await setPreference(preferenceNotificationsPull, false);
+      pullPreference = false;
+    }
+    dispatch(SettingLoaded(pullActive: pullPreference));
+  }
 
-  SettingsLoaded({@required this.antiMobbingActive});
+  void changeSettings() async {
+    bool pullPreference = await getPreference(preferenceNotificationsPull);
+    bool newPullPreference = pullPreference == null ? true : !pullPreference;
+    await setPreference(preferenceNotificationsPull, newPullPreference);
+    var backgroundManager = BackgroundManager();
+    if (newPullPreference) {
+      backgroundManager.start();
+    } else {
+      backgroundManager.stop();
+    }
+    dispatch(ActionSuccess(pullActive: newPullPreference));
+  }
 }
-
-class ChangeSettings extends SettingsAntiMobbingEvent {}
-
-class ActionSuccess extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
-
-  ActionSuccess({@required this.antiMobbingActive});
-}
-
-abstract class SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
-  final bool antiMobbingActive;
-
-  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActive});
-}
-
-class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}

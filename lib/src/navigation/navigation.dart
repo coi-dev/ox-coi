@@ -55,6 +55,7 @@ import 'package:ox_coi/src/settings/settings_about.dart';
 import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';
 import 'package:ox_coi/src/settings/settings_chat.dart';
 import 'package:ox_coi/src/settings/settings_debug.dart';
+import 'package:ox_coi/src/settings/settings_notifications.dart';
 import 'package:ox_coi/src/settings/settings_security.dart';
 import 'package:ox_coi/src/user/user_account_settings.dart';
 
@@ -69,6 +70,7 @@ class Navigation {
   static const String settingsAbout = '/settings/about';
   static const String settingsChat = '/settings/chat';
   static const String settingsAntiMobbing = '/settings/antiMobbing';
+  static const String settingsNotifications = '/settings/notifications';
   static const String settingsAntiMobbingList = '/settings/antiMobbingList';
   static const String settingsDebug = '/settings/debug';
   static const String chatCreate = '/chat/create';
@@ -84,6 +86,7 @@ class Navigation {
     settingsChat: (context) => SettingsChat(),
     settingsAntiMobbing: (context) => SettingsAntiMobbing(),
     settingsAntiMobbingList: (context) => AntiMobbingList(),
+    settingsNotifications: (context) => SettingsNotifications(),
     settingsDebug: (context) => SettingsDebug(),
     chatCreate: (context) => ChatCreate(),
     contactsBlocked: (context) => ContactBlockedList(),
@@ -144,5 +147,9 @@ class Navigation {
   void popUntil(BuildContext context, RoutePredicate predicate) {
     _logger.info("Pop multiple");
     Navigator.popUntil(context, predicate);
+  }
+
+  bool hasElements() {
+    return _navigationStack.isNotEmpty;
   }
 }

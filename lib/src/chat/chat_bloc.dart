@@ -116,9 +116,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _setupChat(int chatId) async {
-    Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
+    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     Context context = Context();
-    Chat chat = _chatRepository.get(chatId);
+    Chat chat = chatRepository.get(chatId);
+    if (chat == null) {
+      chatRepository.putIfAbsent(id: chatId);
+      chat = chatRepository.get(chatId);
+    }
     String name = await chat.getName();
     String subTitle = await chat.getSubtitle();
     int colorValue = await chat.getColor();

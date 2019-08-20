@@ -44,9 +44,12 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:ox_coi/src/background/background_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/debug/debug_viewer.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 
@@ -57,13 +60,14 @@ class NotificationManager {
 
   static NotificationManager _instance;
 
-  final BuildContext _buildContext;
+  BuildContext _buildContext;
 
-  factory NotificationManager(BuildContext buildContext) => _instance ??= new NotificationManager._internal(buildContext);
+  factory NotificationManager() => _instance ??= new NotificationManager._internal();
 
-  NotificationManager._internal(this._buildContext);
+  NotificationManager._internal();
 
-  void setup() {
+  void setup(BuildContext buildContext) {
+    this._buildContext = buildContext;
     //localNotification setup
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
@@ -125,7 +129,18 @@ class NotificationManager {
     );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
+    var backgroundBloc;
+    if (_buildContext != null) {
+      backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);
+    }
+    var navigation = Navigation();
+    if (navigation.hasElements() && backgroundBloc?.currentBackgroundState == AppLifecycleState.resumed.toString()) {
+      var isChatNavigatable = navigation.current.equal(Navigatable(Type.chat, params: [chatId]));
+      var isChatListNavigatable = navigation.current.equal(Navigatable(Type.chatList));
+      if (isChatNavigatable || isChatListNavigatable) {
+        return;
+      }
+    }
     await _flutterLocalNotificationsPlugin.show(chatId, title, body, platformChannelSpecifics, payload: payload);
   }
 

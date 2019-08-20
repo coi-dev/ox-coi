@@ -40,34 +40,72 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:background_fetch/background_fetch.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/notifications/local_push_manager.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 
-abstract class SettingsAntiMobbingEvent {}
-
-class RequestSettings extends SettingsAntiMobbingEvent {}
-
-class SettingsLoaded extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
-
-  SettingsLoaded({@required this.antiMobbingActive});
+void backgroundHeadlessTask() async {
+  var core = DeltaChatCore();
+  var init = await core.init(dbName);
+  if (init) {
+    await getMessages();
+    await core.stop();
+  }
+  BackgroundFetch.finish();
 }
 
-class ChangeSettings extends SettingsAntiMobbingEvent {}
-
-class ActionSuccess extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
-
-  ActionSuccess({@required this.antiMobbingActive});
+Future<void> getMessages() async {
+  var context = Context();
+  await context.performImap();
+  var localPushManager = LocalPushManager();
+  await localPushManager.setup();
+  await localPushManager.triggerLocalPush();
 }
 
-abstract class SettingsAntiMobbingState {}
+class BackgroundManager {
+  final Logger _logger = Logger("background_manager");
 
-class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
+  static BackgroundManager _instance;
 
-class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
-  final bool antiMobbingActive;
+  bool _running;
 
-  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActive});
+  factory BackgroundManager() => _instance ??= BackgroundManager._internal();
+
+  BackgroundManager._internal() {
+    BackgroundFetch.registerHeadlessTask(backgroundHeadlessTask);
+    BackgroundFetch.configure(
+        BackgroundFetchConfig(
+          minimumFetchInterval: 15,
+          stopOnTerminate: false,
+          enableHeadless: true,
+          startOnBoot: true,
+        ),
+        _callback);
+    _running = true;
+  }
+
+  Future<void> _callback() async {
+    await getMessages();
+    BackgroundFetch.finish();
+  }
+
+  void start() async {
+    if (_running) {
+      return;
+    }
+    await BackgroundFetch.start();
+    _logger.info("Started background fetch");
+    _running = true;
+  }
+
+  void stop() {
+    if (!_running) {
+      return;
+    }
+    BackgroundFetch.stop();
+    _logger.info("Stopped background fetch");
+    _running = false;
+  }
 }
-
-class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}

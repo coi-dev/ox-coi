@@ -90,9 +90,9 @@ class ShareStateSuccess extends ShareState {
   final SharedData sharedData;
 
   ShareStateSuccess({
-    @required this.chatAndContactIds,
-    @required this.chatIdCount,
-    @required this.contactIdCount,
+    this.chatAndContactIds,
+    this.chatIdCount,
+    this.contactIdCount,
     this.sharedData
   });
 }

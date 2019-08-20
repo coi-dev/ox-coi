@@ -48,13 +48,14 @@ import android.os.Bundle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
-    private Map<String, String> sharedData = new HashMap();
+    private Map<String, String> sharedData = new HashMap<>();
     private static final String SHARED_MIME_TYPE = "shared_mime_type";
     private static final String SHARED_TEXT = "shared_text";
     private static final String SHARED_PATH = "shared_path";
@@ -93,9 +94,9 @@ public class MainActivity extends FlutterActivity {
                 sharedData.put(SHARED_MIME_TYPE, type);
                 sharedData.put(SHARED_TEXT, text);
             } else if (type.startsWith("application/") || type.startsWith("audio/") || type.startsWith("image/") || type.startsWith("video/")) {
-                Uri uri = (Uri) getIntent().getExtras().get(Intent.EXTRA_STREAM);
+                Uri uri = (Uri) Objects.requireNonNull(getIntent().getExtras()).get(Intent.EXTRA_STREAM);
                 ShareHelper shareHelper = new ShareHelper();
-                String uriPath = shareHelper.getUriRealPath(this, uri);
+                String uriPath = shareHelper.getFilePathForUri(this, uri);
                 sharedData.put(SHARED_MIME_TYPE, type);
                 sharedData.put(SHARED_PATH, uriPath);
                 sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());

@@ -42,32 +42,32 @@
 
 import 'package:meta/meta.dart';
 
-abstract class SettingsAntiMobbingEvent {}
+abstract class SettingsNotificationsEvent {}
 
-class RequestSettings extends SettingsAntiMobbingEvent {}
+class RequestSetting extends SettingsNotificationsEvent {}
 
-class SettingsLoaded extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+class SettingLoaded extends SettingsNotificationsEvent {
+  final bool pullActive;
 
-  SettingsLoaded({@required this.antiMobbingActive});
+  SettingLoaded({@required this.pullActive});
 }
 
-class ChangeSettings extends SettingsAntiMobbingEvent {}
+class ChangeSetting extends SettingsNotificationsEvent {}
 
-class ActionSuccess extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+class ActionSuccess extends SettingsNotificationsEvent {
+  final bool pullActive;
 
-  ActionSuccess({@required this.antiMobbingActive});
+  ActionSuccess({@required this.pullActive});
 }
 
-abstract class SettingsAntiMobbingState {}
+abstract class SettingsNotificationsState {}
 
-class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
+class SettingsNotificationsStateInitial extends SettingsNotificationsState {}
 
-class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
-  final bool antiMobbingActive;
+class SettingsNotificationsStateSuccess extends SettingsNotificationsState {
+  final bool pullActive;
 
-  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActive});
+  SettingsNotificationsStateSuccess({@required this.pullActive});
 }
 
-class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}
+class SettingsNotificationsStateFailure extends SettingsNotificationsState {}

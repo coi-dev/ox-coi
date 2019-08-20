@@ -40,34 +40,27 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:flutter/widgets.dart';
 
-abstract class SettingsAntiMobbingEvent {}
+abstract class BackgroundEvent {}
 
-class RequestSettings extends SettingsAntiMobbingEvent {}
+class BackgroundListenerSetup extends BackgroundEvent {}
 
-class SettingsLoaded extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+class BackgroundStateChange extends BackgroundEvent {
+  final String state;
 
-  SettingsLoaded({@required this.antiMobbingActive});
+  BackgroundStateChange({@required this.state});
 }
 
-class ChangeSettings extends SettingsAntiMobbingEvent {}
+abstract class BackgroundState {}
 
-class ActionSuccess extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+class BackgroundStateInitial extends BackgroundState {}
 
-  ActionSuccess({@required this.antiMobbingActive});
+class BackgroundStateFailure extends BackgroundState {}
+
+class BackgroundStateSuccess extends BackgroundState {
+  final String state;
+
+  BackgroundStateSuccess({@required this.state});
 }
 
-abstract class SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
-  final bool antiMobbingActive;
-
-  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActive});
-}
-
-class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}

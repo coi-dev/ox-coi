@@ -16,22 +16,15 @@ import java.io.OutputStream;
 class ShareHelper {
     private String fileName;
 
-    /* Get uri related content real local file path. */
-    String getUriRealPath(Context context, Uri uri)
-    {
-        String ret;
-
-        ret = getUriPath(context, uri);
-
-        return ret;
+    String getFilePathForUri(Context context, Uri uri) {
+        return getUriPath(context, uri);
     }
 
-    String getFileName(){
+    String getFileName() {
         return fileName;
     }
 
-    private String getUriPath(Context context, Uri uri)
-    {
+    private String getUriPath(Context context, Uri uri) {
         fileName = "";
         ContentResolver contentResolver = context.getContentResolver();
 
