@@ -426,7 +426,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       childrenDelegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             int messageId = state.messageIds[index];
-            int nextMessageId = -1;
+            int nextMessageId;
             if (index < (state.messageIds.length - 1)) {
               nextMessageId = state.messageIds[index + 1];
             }

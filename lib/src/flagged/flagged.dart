@@ -134,6 +134,10 @@ class _FlaggedState extends State<Flagged> {
       itemCount: state.messageIds.length,
       itemBuilder: (BuildContext context, int index) {
         int messageId = state.messageIds[index];
+        int nextMessageId;
+        if (index < (state.messageIds.length - 1)) {
+          nextMessageId = state.messageIds[index + 1];
+        }
         bool hasDateMarker = state.dateMarkerIds.contains(messageId);
         var key = createKeyFromId(messageId, [state.messageLastUpdateValues[index]]);
         return ChatMessageItem(
@@ -141,6 +145,7 @@ class _FlaggedState extends State<Flagged> {
           messageId: messageId,
           isGroupChat: true,
           hasDateMarker: hasDateMarker,
+          nextMessageId: nextMessageId,
           key: key,
         );
       },

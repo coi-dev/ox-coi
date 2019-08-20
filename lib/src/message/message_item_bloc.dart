@@ -196,7 +196,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   bool _hasNextMessage() {
-    return _nextMessageId != -1;
+    return _nextMessageId != null;
   }
 
   Future<bool> _getShowTime() async {

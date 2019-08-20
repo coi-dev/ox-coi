@@ -52,7 +52,7 @@ class RequestMessage extends MessageItemEvent {
   final int nextMessageId;
   final bool isGroupChat;
 
-  RequestMessage({@required this.chatId, @required this.messageId,  @required this.nextMessageId, @required this.isGroupChat});
+  RequestMessage({@required this.chatId, @required this.messageId, this.nextMessageId, @required this.isGroupChat});
 }
 
 class MessageLoaded extends MessageItemEvent {}
