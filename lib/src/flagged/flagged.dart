@@ -88,12 +88,14 @@ class _FlaggedState extends State<Flagged> {
       children: <Widget>[
         Text(
           L10n.get(L.chatFlagged),
+          key: Key(L10n.get(L.chatFlagged)),
           softWrap: true,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.title.apply(color: onPrimary),
         ),
         Text(
           L10n.get(L.chatFavoriteMessages),
+          key: Key( L10n.get(L.chatFavoriteMessages)),
           style: Theme.of(context).textTheme.subtitle.apply(color: onPrimary),
           softWrap: true,
           overflow: TextOverflow.ellipsis,
@@ -115,6 +117,7 @@ class _FlaggedState extends State<Flagged> {
               child: Center(
                 child: Text(
                   L10n.get(L.chatNoFlagged),
+                  key: Key(L10n.get(L.chatNoFlagged)),
                   textAlign: TextAlign.center,
                 ),
               ),

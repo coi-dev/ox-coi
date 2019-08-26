@@ -86,6 +86,45 @@ void main() {
 
 // Connect to a running Flutter application instance.
     setUpAll(() async {
+      final String adbPath =
+          '/Users/openxchange/Library/Android/sdk/platform-tools/adb';
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.WRITE_CONTACTS'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.READ_CONTACTS'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.RECORD_AUDIO'
+      ]);
+
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.READ_EXTERNAL_STORAGE'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.WRITE_EXTERNAL_STORAGE'
+      ]);
+
       driver = await FlutterDriver.connect();
       driver.setSemantics(true, timeout: timeout);
     });

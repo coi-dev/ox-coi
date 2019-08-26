@@ -93,7 +93,7 @@ class ChatList extends RootChild {
   FloatingActionButton getFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       child: new Icon(Icons.chat),
-      key: Key(keyChat_listChatFloatingActionButton),
+      key: Key(keyChatListChatFloatingActionButton),
       onPressed: () {
         _showCreateChatView(context);
       },
@@ -238,14 +238,14 @@ class _ChatListState extends State<ChatList> {
     return IconButton(
       icon: Icon(Icons.search),
       onPressed: () => search.show(context),
-      key: Key(keyChat_list_SearchIconButton),
+      key: Key(keyChatListSearchIconButton),
     );
   }
 
   Widget getFlaggedAction() {
     return IconButton(
         icon: Icon(Icons.star),
-        key: Key(keyChat_list_getFlaggedActionIconButton),
+        key: Key(keyChatListGetFlaggedActionIconButton),
         onPressed: () => _navigation.push(
             context,
             MaterialPageRoute(

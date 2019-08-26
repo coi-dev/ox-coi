@@ -58,7 +58,7 @@ class Search extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: Icon(Icons.clear),key: Key(keySearchClearIconButton),
         onPressed: () {
           query = "";
         },
@@ -69,7 +69,8 @@ class Search extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back), key: Key(keySearchReturnIconButton),
+      icon: Icon(Icons.arrow_back),
+      key: Key(keySearchReturnIconButton),
       onPressed: () {
         close(context, query);
       },

@@ -52,6 +52,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class ContactBlockedList extends StatefulWidget {
   @override
@@ -75,6 +76,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
         appBar: AppBar(
           leading: new IconButton(
             icon: new Icon(Icons.close),
+            key: Key(keyContactBlockedListCloseIconButton),
             onPressed: () => navigation.pop(context),
           ),
           title: Text(L10n.get(L.contactBlocked)),

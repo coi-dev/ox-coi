@@ -56,6 +56,56 @@ const keyUserSettingsCheckIconButton = "keyUserSettingsCheckIconButton";
 const keyUserSettingsUserSettingsUsernameLabel =
     "keyUserSettingsUserSettingsUsernameLabel";
 
+const keyDialogBuilderPositiveFlatButton = "keyDialog_builderImportFlatButton";
+const keyDialogBuilderCancelFlatButton = "keyDialog_builderCancelFlatButton";
+
+const keyContactListPersonAddFloatingActionButton =
+    "keyContact_listPerson_addFloatingActionButton";
+
+const keyContactChangeCheckIconButton = "keyContact_changeCheckIconButton";
+const keyContactChangeCloseIconButton = "keyContact_changeCloseIconButton";
+const keyContactChangeEmailValidatableTextFormField =
+    "keyContact_changeEmailValidatableTextFormField";
+const keyContactChangeNameValidatableTextFormField =
+    "keyContact_changeNameValidatableTextFormField";
+const keyContactListImportContactIconButton= "key_Contact_List_ImportContactIconButton";
+const keyContactListBlockIconButton="key_Contact_List_BlockIconButton";
+const keyContactListSearchIconButton ="key_Contact_ListSearchIconButton";
+
+const keyContactDetailOpenChatProfileActionIcon =
+    "keyContact_detailOpen_chatProfileActionIcon";
+const keyContactDetailEditContactProfileActionIcon =
+    "keyContact_detailEdit_contactProfileActionIcon";
+const keyContactDetailBlockContactProfileActionIcon =
+    "keyContact_detailBlock_contactProfileActionIcon";
+const keyContactDetailDeleteContactProfileActionIcon =
+    "keyContact_detaildelete_contactProfileActionIcon";
+
+const keyContactBlockedListCloseIconButton="key_Contact_Blocked_List_CloseIconButton";
+
+const keyChatListGetFlaggedActionIconButton =
+    "keyChat_list_getFlaggedActionIconButton";
+const keyChatListChatFloatingActionButton =
+    "keyChat_listChatFloatingActionButton";
+const keyChatListSearchIconButton = "keyChat_list_SearchIconButton";
+const keyChatListSearchEmptyIconButton = "keyChat_list_SearchEmptyIconButton";
+
+const keyChatCreatePersonAddIcon = "keyChat_createPerson_addIcon";
+const keyChatCreateGroupAddIcon = "keyChat_createGroup_addIcon";
+const keyChatCreateSearchIcon = "keyChat_createSearchIcon";
+
+const KeyChatMomposerMixinOnRecordAudioSendIcon =
+    "KeyChat_composer_mixinOnRecordAudioPressedSendIcon";
+const KeyChatComposerMixinOnSendTextIcon =
+    "KeyChat_composer_mixinOnSendTextIcon";
+const KeyChatComposerMixinOnRecordAudioPressedIcon =
+    "keyChat_Composite_MixinOnRecordAudioPressedIcon";
+
+const keySearchReturnIconButton = "keySearch_Return_IconButton";
+const keySearchFieldCloseIcon = "key_Search_FieldCloseIcon";
+const keySearchClearIconButton = "key_SearchClear_IconButton";
+
+
 const keyDialog_builderPositiveFlatButton = "keyDialog_builderImportFlatButton";
 const keyDialog_builderCancelFlatButton = "keyDialog_builderCancelFlatButton";
 
@@ -95,20 +145,3 @@ const KeyChat_Composer_MixinOnSendTextIcon =
     "KeyChat_composer_mixinOnSendTextIcon";
 const KeyChat_Composer_MixinOnRecordAudioPressedIcon =
     "keyChat_Composite_MixinOnRecordAudioPressedIcon";
-
-const keySearchReturnIconButton = "keySearchReturnIconButton";
-
-const keyDialogBuilderPositiveFlatButton = "keyDialog_builderImportFlatButton";
-const keyDialogBuilderCancelFlatButton = "keyDialog_builderCancelFlatButton";
-
-const keyContactListPersonAddFloatingActionButton = "keyContact_listPerson_addFloatingActionButton";
-
-const keyContactChangeCheckIconButton = "keyContact_changeCheckIconButton";
-const keyContactChangeCloseIconButton = "keyContact_changeCloseIconButton";
-const keyContactChangeEmailValidatableTextFormField = "keyContact_changeEmailValidatableTextFormField";
-const keyContactChangeNameValidatableTextFormField = "keyContact_changeNameValidatableTextFormField";
-
-const keyContactDetailOpenChatProfileActionIcon = "keyContact_detailOpen_chatProfileActionIcon";
-const keyContactDetailEditContactProfileActionIcon = "keyContact_detailEdit_contactProfileActionIcon";
-const keyContactDetailBlockContactProfileActionIcon = "keyContact_detailBlock_contactProfileActionIcon";
-const keyContactDetailDeleteContactProfileActionIcon = "keyContact_detaildelete_contactProfileActionIcon";
