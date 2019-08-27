@@ -64,9 +64,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       markContactsAsInitiallyLoaded();
     } else if (event is PerformImport) {
       String contacts = await loadSystemContacts();
-      if (contacts != null) {
-        importSystemContacts(contacts);
-      }
+      importSystemContacts(contacts);
     } else if (event is ImportPerformed) {
       yield ContactsImportSuccess(changedCount: event.changedCount);
     } else if (event is ImportAborted) {
@@ -104,7 +102,10 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
 
   void importSystemContacts(String contacts) async {
     Context context = Context();
-    int changedCount = await context.addAddressBook(contacts);
+    int changedCount = 0;
+    if (contacts != null && contacts.isNotEmpty) {
+      await context.addAddressBook(contacts);
+    }
     dispatch(ImportPerformed(changedCount: changedCount));
   }
 }

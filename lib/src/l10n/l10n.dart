@@ -97,6 +97,9 @@ class L10n {
   }
 
   static String getFormatted(List<String> msgIds, List values, {int count}) {
+    if (count != null && count == 0) {
+      count = plural;
+    }
     String unformattedString = get(msgIds, count: count);
     return sprintf(unformattedString, values);
   }
