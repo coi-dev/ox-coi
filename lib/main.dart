@@ -54,6 +54,8 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/push/push_bloc.dart';
+import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
@@ -62,12 +64,19 @@ void main() {
   LogManager _logManager = LogManager();
   _logManager.setup(logToFile: false, logLevel: Level.INFO);
   runApp(
-    BlocProvider(
-      builder: (BuildContext context) {
-        var backgroundBloc = BackgroundBloc();
-        backgroundBloc.dispatch(BackgroundListenerSetup());
-        return backgroundBloc;
-      },
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<BackgroundBloc>(
+          builder: (BuildContext context) {
+            var backgroundBloc = BackgroundBloc();
+            backgroundBloc.dispatch(BackgroundListenerSetup());
+            return backgroundBloc;
+          },
+        ),
+        BlocProvider<PushBloc>(
+          builder: (BuildContext context) => PushBloc(),
+        )
+      ],
       child: OxCoiApp(),
     ),
   );
@@ -134,6 +143,7 @@ class _OxCoiState extends State<OxCoi> {
   }
 
   _loginSuccess() {
+    BlocProvider.of<PushBloc>(context).dispatch(RegisterPush());
     Navigation navigation = Navigation();
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
     _mainBloc.dispatch(AppLoaded(configured: true));

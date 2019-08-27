@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,25 +40,51 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/data/push_resource.dart';
 
-// Internal app errors
-const contactDeleteGeneric = "contactDelete-generic";
-const contactDeleteChatExists = "contactDelete-chatExists";
+abstract class PushEvent {}
 
-// Helper for DCC event errors
-int getErrorType(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data1;
-  }
-  return -1;
+class RegisterPush extends PushEvent {}
+
+class GetPush extends PushEvent {}
+
+class PatchPush extends PushEvent {
+  final String pushToken;
+
+  PatchPush({@required this.pushToken});
 }
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
+class DeletePush extends PushEvent {}
 
-String getErrorMessage(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data2;
-  }
-  return "";
+class PushActionFailed extends PushEvent {
+  final String error;
+
+  PushActionFailed({@required this.error});
+}
+
+class PushActionDone extends PushEvent {
+  final ResponsePushResource responsePushResource;
+
+  PushActionDone({@required this.responsePushResource});
+}
+
+abstract class PushState {}
+
+class PushStateInitial extends PushState {}
+
+class PushStateLoading extends PushState {}
+
+class PushStateVerificationFinished extends PushState {}
+
+class PushStateSuccess extends PushState {
+  final ResponsePushResource responsePushResource;
+
+  PushStateSuccess({@required this.responsePushResource});
+}
+
+class PushStateFailure extends PushState {
+  final String error;
+
+  PushStateFailure({@required this.error});
 }

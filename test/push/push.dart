@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,25 +40,43 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 
-// Internal app errors
-const contactDeleteGeneric = "contactDelete-generic";
-const contactDeleteChatExists = "contactDelete-chatExists";
+import 'package:pointycastle/export.dart';
+import 'package:test/test.dart';
+import 'package:uuid/uuid.dart';
 
-// Helper for DCC event errors
-int getErrorType(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data1;
-  }
-  return -1;
+
+void main() {
+  test('p256dh', () {
+    var domainParameters = ECCurve_secp256r1();
+    var params = ECKeyGeneratorParameters(domainParameters);
+    var generator = ECKeyGenerator();
+    generator.init(ParametersWithRandom(params, getSecureRandom()));
+    var generateKeyPair = generator.generateKeyPair();
+    ECPublicKey publicKey = generateKeyPair.publicKey;
+    print("Point: ${publicKey.Q}");
+    var bytes = utf8.encode(publicKey.Q.toString());
+    var base64Str = base64Url.encode(bytes);
+    print("Base64 $base64Str");
+  });
+
+  test('UUID', () {
+    var uuid = new Uuid();
+    print("Secret ${uuid.v4()}");
+  });
 }
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
 
-String getErrorMessage(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data2;
+SecureRandom getSecureRandom() {
+  var secureRandom = FortunaRandom();
+  var random = Random.secure();
+  List<int> seeds = [];
+  for (int i = 0; i < 32; i++) {
+    seeds.add(random.nextInt(255));
   }
-  return "";
+  secureRandom.seed(new KeyParameter(Uint8List.fromList(seeds)));
+  return secureRandom;
 }

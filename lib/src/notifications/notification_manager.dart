@@ -40,23 +40,16 @@
  * for more details.
  */
 
-import 'dart:convert';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ox_coi/src/background/background_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
-import 'package:ox_coi/src/debug/debug_viewer.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/platform/app_information.dart';
 
-//TODO: Prepare iOS project (https://pub.dev/packages/flutter_local_notifications, https://firebase.google.com/docs/cloud-messaging/ & https://firebase.google.com/docs/cloud-messaging/concept-options)
 class NotificationManager {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   static NotificationManager _instance;
 
@@ -73,36 +66,6 @@ class NotificationManager {
     var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
-
-    //firebase setup
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        //TODO: Add functionality
-        print('on message $message');
-        if (!isRelease()) {
-          Navigation navigation = Navigation();
-          navigation.push(
-            _buildContext,
-            MaterialPageRoute(builder: (context) {
-              var prettifiedMessage = JsonEncoder.withIndent('  ').convert(message);
-              return DebugViewer(input: prettifiedMessage);
-            }),
-          );
-        }
-      },
-      onResume: (Map<String, dynamic> message) {
-        //TODO: Add functionality
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        //TODO: Add functionality
-        print('on launch $message');
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.getToken().then((token) {
-      //Device token for server
-    });
   }
 
   Future onDidReceiveLocalNotification(int id, String title, String body, String payload) {

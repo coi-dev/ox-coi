@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,25 +40,47 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'dart:math';
+import 'dart:typed_data';
 
-// Internal app errors
-const contactDeleteGeneric = "contactDelete-generic";
-const contactDeleteChatExists = "contactDelete-chatExists";
+import 'package:pointycastle/api.dart';
+import 'package:pointycastle/ecc/api.dart';
+import 'package:pointycastle/ecc/curves/secp256r1.dart';
+import 'package:pointycastle/key_generators/api.dart';
+import 'package:pointycastle/key_generators/ec_key_generator.dart';
+import 'package:pointycastle/random/fortuna_random.dart';
+import 'package:uuid/uuid.dart';
 
-// Helper for DCC event errors
-int getErrorType(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data1;
-  }
-  return -1;
+AsymmetricKeyPair generateEcKeyPair() {
+  var domainParameters = ECCurve_secp256r1();
+  var params = ECKeyGeneratorParameters(domainParameters);
+  var generator = ECKeyGenerator();
+  generator.init(ParametersWithRandom(params, _getSecureRandom()));
+  return generator.generateKeyPair();
 }
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
+String getPublicEcKey(AsymmetricKeyPair keyPair) {
+  ECPublicKey publicKey = keyPair.publicKey;
+  return publicKey.Q.toString();
+}
 
-String getErrorMessage(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data2;
+String getPrivateEcKey(AsymmetricKeyPair keyPair) {
+  ECPrivateKey privateKey = keyPair.privateKey;
+  return privateKey.d.toString();
+}
+
+String generateUuid() {
+  var uuid = new Uuid();
+  return uuid.v4();
+}
+
+SecureRandom _getSecureRandom() {
+  var secureRandom = FortunaRandom();
+  var random = Random.secure();
+  List<int> seeds = [];
+  for (int i = 0; i < 32; i++) {
+    seeds.add(random.nextInt(255));
   }
-  return "";
+  secureRandom.seed(new KeyParameter(Uint8List.fromList(seeds)));
+  return secureRandom;
 }

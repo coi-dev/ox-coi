@@ -47,6 +47,10 @@ const preferenceAppVersion = "preferenceAppVersion";
 const preferenceLogFiles = "preferenceLogFiles";
 const preferenceAntiMobbing = "preferenceAntiMobbing";
 const preferenceNotificationsPull = "preferenceNotificationsPull";
+const preferenceNotificationsPush = "preferenceNotificationsPush";
+const preferenceNotificationsAuth = "preferenceNotificationsAuth";
+const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic";
+const preferenceNotificationsP256dhPrivate = "preferenceNotificationsP256dhPrivate";
 
 Future<dynamic> getPreference(String key) async {
   SharedPreferences sharedPreferences = await getSharedPreferences();
@@ -74,4 +78,9 @@ Future<void> setPreference(String key, value) async {
   } else if (value is List) {
     sharedPreferences.setStringList(key, value);
   }
+}
+
+Future<void> removePreference(String key) async {
+  SharedPreferences sharedPreferences = await getSharedPreferences();
+  sharedPreferences.remove(key);
 }

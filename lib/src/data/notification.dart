@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,25 +40,16 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+class NotificationData {
+  String content;
+  bool valid;
 
-// Internal app errors
-const contactDeleteGeneric = "contactDelete-generic";
-const contactDeleteChatExists = "contactDelete-chatExists";
-
-// Helper for DCC event errors
-int getErrorType(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data1;
+  NotificationData.fromJson(Map<String, dynamic> json) : content = json['data']['content'] {
+    valid = content != null && content.isNotEmpty;
   }
-  return -1;
-}
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
-
-String getErrorMessage(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data2;
+  @override
+  String toString() {
+    return content;
   }
-  return "";
 }

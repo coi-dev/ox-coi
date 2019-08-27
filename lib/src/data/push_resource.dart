@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,25 +40,75 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+const transportFirebase = "firebase";
 
-// Internal app errors
-const contactDeleteGeneric = "contactDelete-generic";
-const contactDeleteChatExists = "contactDelete-chatExists";
+class RequestPushPatch {
+  String pushToken;
 
-// Helper for DCC event errors
-int getErrorType(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data1;
-  }
-  return -1;
+  RequestPushPatch(this.pushToken);
+
+  RequestPushPatch.fromJson(Map<String, dynamic> json) : pushToken = json['pushToken'];
+
+  Map<String, dynamic> toJson() => {
+        'pushToken': pushToken,
+      };
 }
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
+class RequestPushRegistration {
+  String appId;
+  String transport;
+  String publicKey;
+  String pushToken;
 
-String getErrorMessage(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data2;
+  RequestPushRegistration(this.appId, this.publicKey, this.pushToken, {this.transport = transportFirebase});
+
+  RequestPushRegistration.fromJson(Map<String, dynamic> json)
+      : appId = json['appId'],
+        transport = json['transport'],
+        publicKey = json['publicKey'],
+        pushToken = json['pushToken'];
+
+  Map<String, dynamic> toJson() => {
+        'appId': appId,
+        'transport': transport,
+        'publicKey': publicKey,
+        'pushToken': pushToken,
+      };
+}
+
+class ResponsePushResource {
+  String id;
+  int lastModified;
+  int expireDate;
+  String endpoint;
+  String appId;
+  String transport;
+  String publicKey;
+  String pushToken;
+
+  ResponsePushResource.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        lastModified = json['lastModified'],
+        expireDate = json['expireDate'],
+        endpoint = json['endpoint'],
+        appId = json['appId'],
+        transport = json['transport'],
+        publicKey = json['publicKey'],
+        pushToken = json['pushToken'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'lastModified': lastModified,
+        'expireDate': expireDate,
+        'endpoint': endpoint,
+        'appId': appId,
+        'transport': transport,
+        'publicKey': publicKey,
+        'pushToken': pushToken,
+      };
+
+  @override
+  String toString() {
+    return toJson().toString();
   }
-  return "";
 }

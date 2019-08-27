@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:convert';
+
 isNullOrEmpty(String text) => text == null || text.isEmpty;
 
 bool isEmail(String email) {
@@ -58,4 +60,10 @@ bool isPort(String portString) {
     return false;
   }
   return true;
+}
+
+String encodeBase64(String text) {
+  var bytes = utf8.encode(text);
+  var base64 = base64Url.encode(bytes);
+  return base64;
 }

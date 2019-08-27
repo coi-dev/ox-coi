@@ -56,6 +56,7 @@ import 'package:ox_coi/src/notifications/local_push_manager.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/push/push_manager.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:sqflite/sqflite.dart';
@@ -64,6 +65,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
   var _notificationManager = NotificationManager();
+  var _pushManager = PushManager();
   var _localPushManager = LocalPushManager();
   var _backgroundManager = BackgroundManager();
 
@@ -97,6 +99,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> _setupManagers(PrepareApp event) async {
     _notificationManager.setup(event.context);
+    _pushManager.setup(event.context);
     _localPushManager.setup();
     bool pullPreference = await getPreference(preferenceNotificationsPull);
     if (pullPreference == null || !pullPreference) {

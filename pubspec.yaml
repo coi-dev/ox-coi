@@ -14,6 +14,7 @@ dependencies:
   background_fetch: ^0.2.0
   bloc: ^0.14.4
   contacts_service: ^0.2.8
+  crypto_keys: ^0.1.0
   cupertino_icons: ^0.1.2
   date_format: ^1.0.6
   downloads_path_provider: ^0.1.0
@@ -26,6 +27,7 @@ dependencies:
   fluttertoast: ^3.1.0
   gettext: ^1.1.0+2
   gettext_parser: ^0.1.0+1
+  http: ^0.12.0+2
   image_cropper: ^1.0.2
   image_picker: ^0.6.0+17
   logging: ^0.11.3+2
@@ -33,6 +35,7 @@ dependencies:
   package_info: ^0.4.0+5
   path_provider: ^1.1.2
   permission_handler: ^3.2.0
+  pointycastle: ^1.0.1
   rxdart: ^0.22.1
   shared_preferences: ^0.5.3+4
   sprintf: ^4.0.2
@@ -43,6 +46,7 @@ dependencies:
   video_player: ^0.10.1+4
   qr_flutter: ^2.1.0+55
   qr_mobile_vision: ^0.2.2
+  uuid: 2.0.1
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 

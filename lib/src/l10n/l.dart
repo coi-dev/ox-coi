@@ -194,6 +194,11 @@ class L {
 
   // Security token of the FCM service. FCM is a abbreviation and mustn't be translated
   static final debugFCMToken = _translationKey("FCM token");
+  static final debugCoiServerPublicKey = _translationKey("Coi Server Public key");
+  static final debugSecrets = _translationKey("Secrets");
+  static final debugPushResource = _translationKey("Push resource (via push service)");
+  static final debugPushResourceRegister = _translationKey("Register new push resource");
+  static final debugPushResourceDelete = _translationKey("Delete push resource");
 
   static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might help to reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX Coi Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
   static final errorProgressCanceled = _translationKey("There was an error or the progress was canceled.");

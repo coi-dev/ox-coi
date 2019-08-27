@@ -32,7 +32,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -40,25 +40,53 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'dart:convert';
+import 'dart:io';
 
-// Internal app errors
-const contactDeleteGeneric = "contactDelete-generic";
-const contactDeleteChatExists = "contactDelete-chatExists";
+import 'package:http/http.dart';
+import 'package:http/io_client.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/data/push_resource.dart';
 
-// Helper for DCC event errors
-int getErrorType(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data1;
+class PushService {
+  static PushService _instance;
+
+  var _logger = Logger("push_service");
+  var url = 'https://10.50.0.26:443/push/resource/';
+  var headers = {"Content-type": "application/json"};
+
+  factory PushService() => _instance ??= PushService._internal();
+
+  PushService._internal();
+
+  Future<Response> registerPush(RequestPushRegistration requestRegistration) async {
+    String encodedBody = json.encode(requestRegistration);
+    _logger.info("Register ($url): $encodedBody");
+    IOClient ioClient = createIOClient();
+    return await ioClient.put(url, headers: headers, body: encodedBody);
   }
-  return -1;
-}
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
-
-String getErrorMessage(Event event) {
-  if (_isErrorEvent(event)) {
-    return event.data2;
+  IOClient createIOClient() {
+    HttpClient httpClient = HttpClient()..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    return IOClient(httpClient);
   }
-  return "";
+
+  Future<Response> getPush(String id) async {
+    IOClient ioClient = createIOClient();
+    _logger.info("Get ($url): $id");
+    return await ioClient.get(url + id, headers: headers);
+  }
+
+  Future<Response> patchPush(String id, RequestPushPatch requestPushPatch) async {
+    IOClient ioClient = createIOClient();
+    String encodedBody = json.encode(requestPushPatch);
+    _logger.info("Patch ($url): $id - $encodedBody");
+    return await ioClient.patch(url + id, headers: headers, body: encodedBody);
+  }
+
+  Future<Response> deletePush(String id) async {
+    IOClient ioClient = createIOClient();
+    _logger.info("Delete ($url): $id");
+    return await ioClient.delete(url + id, headers: headers);
+  }
 }

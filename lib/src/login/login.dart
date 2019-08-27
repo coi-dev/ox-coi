@@ -155,15 +155,12 @@ class _LoginState extends State<Login> {
           ),
           RichText(
               textAlign: TextAlign.center,
-              text: TextSpan(
-                  style: Theme.of(context).textTheme.caption.apply(color: onBackground),
-                  text: L10n.get(L.agreeTo),
-                  children: [
-                    TextSpan(text: " "),
-                    UrlTextSpan(url: null, text: L10n.get(L.termsConditions)),
-                    TextSpan(text: " ${L10n.get(L.and)} "),
-                    UrlTextSpan(url: null, text: L10n.get(L.privacyDeclaration))
-                  ])),
+              text: TextSpan(style: Theme.of(context).textTheme.caption.apply(color: onBackground), text: L10n.get(L.agreeTo), children: [
+                TextSpan(text: " "),
+                UrlTextSpan(url: null, text: L10n.get(L.termsConditions)),
+                TextSpan(text: " ${L10n.get(L.and)} "),
+                UrlTextSpan(url: null, text: L10n.get(L.privacyDeclaration))
+              ])),
         ],
       ),
     );

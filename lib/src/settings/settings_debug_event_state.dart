@@ -48,8 +48,19 @@ class RequestDebug extends SettingsDebugEvent {}
 
 class DebugLoaded extends SettingsDebugEvent {
   final String token;
+  final String pushResource;
+  final String publicKey;
+  final String publicKeyBase64;
+  final String privateKey;
+  final String auth;
 
-  DebugLoaded({@required this.token});
+  DebugLoaded(
+      {@required this.token,
+      @required this.pushResource,
+      @required this.publicKey,
+      @required this.publicKeyBase64,
+      @required this.privateKey,
+      @required this.auth});
 }
 
 abstract class SettingsDebugState {}
@@ -58,8 +69,19 @@ class SettingsDebugStateInitial extends SettingsDebugState {}
 
 class SettingsDebugStateSuccess extends SettingsDebugState {
   final String token;
+  final String pushResource;
+  final String publicKey;
+  final String publicKeyBase64;
+  final String privateKey;
+  final String auth;
 
-  SettingsDebugStateSuccess({@required this.token});
+  SettingsDebugStateSuccess(
+      {@required this.token,
+      @required this.pushResource,
+      @required this.publicKey,
+      @required this.publicKeyBase64,
+      @required this.privateKey,
+      @required this.auth});
 }
 
 class SettingsDebugStateFailure extends SettingsDebugState {}
