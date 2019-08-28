@@ -104,7 +104,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     Context context = Context();
     int changedCount = 0;
     if (contacts != null && contacts.isNotEmpty) {
-      await context.addAddressBook(contacts);
+      changedCount = await context.addAddressBook(contacts);
     }
     dispatch(ImportPerformed(changedCount: changedCount));
   }
