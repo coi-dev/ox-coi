@@ -111,10 +111,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   String _selectedExtension = "";
   String _fileName = "";
   String _phoneNumbers;
-  GlobalKey _imageVideoKey = GlobalKey();
   var _scrollController = ScrollController();
-
-  OverlayEntry _overlayEntry;
 
   @override
   void initState() {
@@ -506,9 +503,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     widgets.addAll(buildRightComposerPart(
       onRecordAudioPressed: _onRecordAudioPressed,
       onRecordVideoPressed: _onRecordVideoPressed,
+      onCaptureImagePressed: _onCaptureImagePressed,
       type: _getComposerType(),
       onSendText: _onPrepareMessageSend,
-      imageVideoKey: _imageVideoKey,
     ));
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).accentColor),
@@ -624,37 +621,12 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     _chatComposerBloc.dispatch(StopAudioRecording(shouldSend: false));
   }
 
+  _onCaptureImagePressed() {
+    _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: true));
+  }
+
   _onRecordVideoPressed() {
-    if (hideOverlay()) {
-      return;
-    }
-    _overlayEntry = OverlayEntry(builder: (context) {
-      return Stack(
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              hideOverlay();
-            },
-          ),
-          buildCameraChooserOverlay(context, _imageVideoKey, _onCameraStateChange),
-        ],
-      );
-    });
-    Overlay.of(context).insert(_overlayEntry);
-  }
-
-  bool hideOverlay() {
-    if (_overlayEntry != null) {
-      _overlayEntry.remove();
-      _overlayEntry = null;
-      return true;
-    }
-    return false;
-  }
-
-  _onCameraStateChange(bool pickImage) async {
-    hideOverlay();
-    _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: pickImage));
+    _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: false));
   }
 
   void _showAttachmentChooser() {

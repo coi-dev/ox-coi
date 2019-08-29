@@ -120,7 +120,7 @@ mixin ChatComposer {
       @required Function onSendText,
       @required Function onRecordAudioPressed,
       @required Function onRecordVideoPressed,
-      @required Key imageVideoKey}) {
+      @required Function onCaptureImagePressed}) {
     List<Widget> widgets = List();
     switch (type) {
       case ComposerModeType.compose:
@@ -129,8 +129,11 @@ mixin ChatComposer {
           onPressed: onRecordAudioPressed,
         ));
         widgets.add(new IconButton(
-          key: imageVideoKey,
           icon: new Icon(Icons.camera_alt),
+          onPressed: onCaptureImagePressed,
+        ));
+        widgets.add(new IconButton(
+          icon: new Icon(Icons.videocam),
           onPressed: onRecordVideoPressed,
         ));
         break;
@@ -148,36 +151,5 @@ mixin ChatComposer {
         break;
     }
     return widgets;
-  }
-
-  Widget buildCameraChooserOverlay(BuildContext context, GlobalKey key, Function onCameraStateChange) {
-    final RenderBox renderBox = key.currentContext.findRenderObject();
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-    return Positioned(
-      left: offset.dx - size.width + 2.0,
-      top: offset.dy - size.height - 4.0,
-      width: size.width * 2 + 2.0,
-      child: IconTheme(
-        data: IconThemeData(color: Theme.of(context).accentColor),
-        child: Container(
-          child: Material(
-            elevation: 4.0,
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.camera),
-                  onPressed: () => onCameraStateChange(true),
-                ),
-                IconButton(
-                  icon: Icon(Icons.videocam),
-                  onPressed: () => onCameraStateChange(false),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
