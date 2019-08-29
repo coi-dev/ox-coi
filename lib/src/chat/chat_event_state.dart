@@ -64,6 +64,7 @@ class ChatLoaded extends ChatEvent {
   final int timestamp;
   final bool isVerified;
   final String avatarPath;
+  final String phoneNumbers;
 
   ChatLoaded(
       {@required this.name,
@@ -75,7 +76,8 @@ class ChatLoaded extends ChatEvent {
       @required this.preview,
       @required this.timestamp,
       @required this.isVerified,
-      @required this.avatarPath});
+      @required this.avatarPath,
+      this.phoneNumbers});
 }
 
 abstract class ChatState {}
@@ -95,6 +97,7 @@ class ChatStateSuccess extends ChatState {
   final int timestamp;
   final bool isVerified;
   final String avatarPath;
+  final String phoneNumbers;
 
   ChatStateSuccess(
       {@required this.name,
@@ -106,7 +109,8 @@ class ChatStateSuccess extends ChatState {
       @required this.preview,
       @required this.timestamp,
       @required this.isVerified,
-      @required this.avatarPath});
+      @required this.avatarPath,
+      this.phoneNumbers});
 }
 
 class ChatStateFailure extends ChatState {

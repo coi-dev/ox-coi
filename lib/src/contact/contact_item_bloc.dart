@@ -46,6 +46,7 @@ import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -72,7 +73,12 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
       }
     } else if (event is ContactLoaded) {
       yield ContactItemStateSuccess(
-          name: event.name, email: event.email, color: event.color, isVerified: event.isVerified, imagePath: event.imagePath);
+          name: event.name,
+          email: event.email,
+          color: event.color,
+          isVerified: event.isVerified,
+          imagePath: event.imagePath,
+          phoneNumbers: event.phoneNumbers);
     }
   }
 
@@ -83,6 +89,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     int colorValue = await contact.getColor();
     bool isVerified = await contact.isVerified();
     String imagePath = await contact.getProfileImage();
+    String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
     Color color = rgbColorFromInt(colorValue);
     dispatch(ContactLoaded(
       name: name,
@@ -90,6 +97,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
       color: color,
       isVerified: isVerified,
       imagePath: imagePath,
+      phoneNumbers: phoneNumbers,
     ));
   }
 }

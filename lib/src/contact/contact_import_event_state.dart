@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-
 abstract class ContactImportEvent {}
 
 class MarkContactsAsInitiallyLoaded extends ContactImportEvent {}
@@ -50,20 +48,12 @@ class PerformImport extends ContactImportEvent {}
 
 class ImportAborted extends ContactImportEvent {}
 
-class ImportPerformed extends ContactImportEvent {
-  final int changedCount;
-
-  ImportPerformed({@required this.changedCount});
-}
+class ImportPerformed extends ContactImportEvent {}
 
 abstract class ContactImportState {}
 
 class ContactsImportInitial extends ContactImportState {}
 
-class ContactsImportSuccess extends ContactImportState {
-  final int changedCount;
-
-  ContactsImportSuccess({@required this.changedCount});
-}
+class ContactsImportSuccess extends ContactImportState {}
 
 class ContactsImportFailure extends ContactImportState {}

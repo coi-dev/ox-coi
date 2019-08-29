@@ -43,7 +43,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:superellipse_shape/superellipse_shape.dart';
@@ -85,7 +84,7 @@ class Avatar extends StatelessWidget {
       child: isNullOrEmpty(imagePath)
           ? Text(
               initials,
-              style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+              style: Theme.of(context).textTheme.subhead.apply(color: Colors.white),
             )
           : Container(),
     );

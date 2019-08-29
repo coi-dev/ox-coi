@@ -57,6 +57,7 @@ import 'package:ox_coi/src/chat/chat_event_state.dart';
 import 'package:ox_coi/src/chat/chat_profile.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -67,14 +68,16 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/strings.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
 import 'package:rxdart/rxdart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'chat_create_mixin.dart';
 
@@ -107,6 +110,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   FileType _selectedFileType;
   String _selectedExtension = "";
   String _fileName = "";
+  String _phoneNumbers;
   GlobalKey _imageVideoKey = GlobalKey();
   var _scrollController = ScrollController();
 
@@ -120,6 +124,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     final chatObservable = new Observable<ChatState>(_chatBloc.state);
     chatObservable.listen((state) {
       if (state is ChatStateSuccess) {
+        _phoneNumbers = state.phoneNumbers;
         _messageListBloc.dispatch(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
         if (widget.newMessage != null || widget.newPath != null) {
           if (widget.newPath.isEmpty) {
@@ -139,22 +144,22 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       }
     });
 
-    if(widget.sharedData != null){
-      if(widget.sharedData.mimeType.contains("text/")) {
+    if (widget.sharedData != null) {
+      if (widget.sharedData.mimeType.contains("text/")) {
         _textController.text = widget.sharedData.text;
         setState(() {
           _isComposingText = true;
         });
-      }else{
+      } else {
         setFileData();
       }
     }
   }
 
-  void setFileData(){
+  void setFileData() {
     var path = widget.sharedData.path;
     FileType type;
-    switch(widget.sharedData.mimeType){
+    switch (widget.sharedData.mimeType) {
       case "image/*":
         type = FileType.IMAGE;
         break;
@@ -224,13 +229,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           title: buildTitle(),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.videocam),
-              onPressed: null,
-              color: onPrimary,
-            ),
-            IconButton(
               icon: Icon(Icons.phone),
-              onPressed: null,
+              onPressed: onPhonePressed,
               color: onPrimary,
             ),
           ],
@@ -712,7 +712,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   void _closePreview() {
     setState(() {
-      if(widget.sharedData != null){
+      if (widget.sharedData != null) {
         _messageListBloc.dispatch(DeleteCacheFile(path: _filePath));
       }
       _filePath = "";
@@ -736,4 +736,41 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
     _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
   }
+
+  void onPhonePressed() {
+    if (_phoneNumbers == null || _phoneNumbers.isEmpty) {
+      showInformationDialog(
+        context: context,
+        title: L10n.get(L.contactNoPhoneNumber),
+        content: L10n.get(L.contactNoPhoneNumberText),
+        navigatable: Navigatable(Type.contactNoNumberDialog),
+      );
+    } else {
+      var phoneNumberList = ContactExtension.getPhoneNumberList(_phoneNumbers);
+      if (phoneNumberList.length == 1) {
+        callNumber(phoneNumberList.first);
+      } else {
+        var phoneNumberWidgetList = List<Widget>();
+        phoneNumberList.forEach((phoneNumber) {
+          phoneNumberWidgetList.add(SimpleDialogOption(
+            child: Text(phoneNumber),
+            onPressed: () {
+              navigation.pop(context);
+              callNumber(phoneNumber);
+            },
+          ));
+        });
+        showNavigatableDialog(
+          context: context,
+          navigatable: Navigatable(Type.contactStartCallDialog),
+          dialog: SimpleDialog(
+            title: new Text(L10n.get(L.chatChooseCallNumber)),
+            children: phoneNumberWidgetList,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<bool> callNumber(String phoneNumber) => launch("tel://$phoneNumber");
 }

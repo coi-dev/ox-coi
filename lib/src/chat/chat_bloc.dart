@@ -48,6 +48,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/ui/color.dart';
@@ -85,7 +86,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           preview: event.preview,
           timestamp: event.timestamp,
           isVerified: event.isVerified,
-          avatarPath: event.avatarPath);
+          avatarPath: event.avatarPath,
+          phoneNumbers: event.phoneNumbers);
     }
   }
 
@@ -116,7 +118,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _setupChat(int chatId) async {
-    Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
+    var chatRepository = RepositoryManager.get(RepositoryType.chat);
+    var contactRepository = RepositoryManager.get(RepositoryType.contact);
     Context context = Context();
     Chat chat = chatRepository.get(chatId);
     if (chat == null) {
@@ -133,6 +136,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Color color = rgbColorFromInt(colorValue);
     String avatarPath = await chat.getProfileImage();
     var chatSummary = chat.get(ChatExtension.chatSummary);
+    var phoneNumbers;
+    if (!_isGroup) {
+      var contactId = (await context.getChatContacts(chatId)).first;
+      Contact contact = contactRepository.get(contactId);
+      phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
+    }
     dispatch(
       ChatLoaded(
         name: name,
@@ -145,6 +154,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         timestamp: chatSummary?.timestamp,
         isVerified: isVerified,
         avatarPath: avatarPath,
+        phoneNumbers: phoneNumbers,
       ),
     );
   }

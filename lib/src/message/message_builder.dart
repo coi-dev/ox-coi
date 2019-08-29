@@ -202,7 +202,7 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
             borderRadius: imageBorderRadius,
             child: Image(
               image: imageProvider,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
             ),
           ),
           aspectRatio: 4 / 3,

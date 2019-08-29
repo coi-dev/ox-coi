@@ -143,7 +143,7 @@ class _ContactListState extends State<ContactList> {
     }
     if (state is ContactsImportSuccess) {
       requestValidContacts();
-      String contactImportSuccess = L10n.getFormatted(L.contactImportedXP, [state.changedCount], count: state.changedCount);
+      String contactImportSuccess = L10n.get(L.contactImportSuccessful);
       showToast(contactImportSuccess);
     } else if (state is ContactsImportFailure) {
       String contactImportFailure = L10n.get(L.contactImportFailed);

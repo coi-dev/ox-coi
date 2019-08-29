@@ -49,6 +49,7 @@ import 'package:ox_coi/src/background/background_manager.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/notifications/local_push_manager.dart';
@@ -120,6 +121,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupInitialAppState() async {
+    var core = DeltaChatCore();
+    var contactExtensionProvider = ContactExtensionProvider();
+    await contactExtensionProvider.open(core.dbPath);
+    await contactExtensionProvider.createTable();
     ContactListBloc contactListBloc = ContactListBloc();
     contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }

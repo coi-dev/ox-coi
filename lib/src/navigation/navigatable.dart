@@ -65,6 +65,8 @@ enum Type {
   contactInviteDialog,
   contactProfile,
   contactUnblockDialog,
+  contactStartCallDialog,
+  contactNoNumberDialog,
   debugViewer,
   editName,
   flagged,

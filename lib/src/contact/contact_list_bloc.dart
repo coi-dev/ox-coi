@@ -46,6 +46,7 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/contact/contacts_updater_mixin.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
@@ -122,10 +123,18 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   }
 
   Future _setupContacts() async {
-    List<int> ids = await getIds(_typeOrChatId);
-    _contactRepository.update(ids: ids);
-    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(ids);
-    dispatch(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
+    List<int> contactIs = await getIds(_typeOrChatId);
+    _contactRepository.update(ids: contactIs);
+    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(contactIs);
+    var contactExtensionProvider = ContactExtensionProvider();
+    await Future.forEach(contactIs, (contactId) async {
+      var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+      if (contactExtension != null) {
+        _contactRepository.get(contactId).set(ContactExtension.contactPhoneNumber, contactExtension.phoneNumbers);
+      }
+    });
+
+    dispatch(ContactsChanged(ids: contactIs, lastUpdates: lastUpdates));
   }
 
   void _searchContacts() async {

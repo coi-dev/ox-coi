@@ -142,6 +142,7 @@ class L {
   static final chatFavoriteMessages = _translationKey("Your favorite messages");
   static final chatFlagged = _translationKey("Flagged");
   static final chatEncryptionStatusChanged = _translationKey("Your messages are encrypted from now on.");
+  static final chatChooseCallNumber = _translationKey("Please choose a number");
 
   static final clipboardCopied = _translationKey("Copied to clipboard");
   // Content X copied to clipboard (e.g. Text copied to clipboard)
@@ -149,7 +150,7 @@ class L {
 
   static final contactP = _translationKey("Contact", "Contacts");
   static final contactXP = _translationKey("1 contact", "%d contacts");
-  static final contactImportedXP = _translationKey("1 system contact imported", "%i system contacts imported");
+  static final contactImportSuccessful = _translationKey("System contacts imported successfully");
   static final contactAdd = _translationKey("Add contact");
   static final contactBlock = _translationKey("Block contact");
   static final contactBlocked = _translationKey("Blocked contacts");
@@ -184,6 +185,9 @@ class L {
   static final contactVerificationRunning = _translationKey("Verifying. Please wait a moment.");
   static final contactSystemImportText = _translationKey("Would you like to import your contacts from this device?");
   static final contactUnblock = _translationKey("Unblock contact");
+  static final contactEditPhoneNumberText = _translationKey("Phone numbers can be added or edited via the local address book and imported afterwards.");
+  static final contactNoPhoneNumber = _translationKey("No phone number");
+  static final contactNoPhoneNumberText = _translationKey("This contact has no phone number. Please edit this contact in your device address book and add the phone number there.");
 
   static final coreMembers = _translationKey('%1\$d member(s)');
   static final coreContacts = _translationKey('%1\$d contact(s)');

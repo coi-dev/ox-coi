@@ -45,6 +45,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -69,9 +70,11 @@ class ContactChange extends StatefulWidget {
   final int id;
   final String name;
   final String email;
+  final String phoneNumbers;
+
   final bool createChat;
 
-  ContactChange({@required this.contactAction, this.id, this.name, this.email, this.createChat = false});
+  ContactChange({@required this.contactAction, this.id, this.name, this.email, this.phoneNumbers, this.createChat = false});
 
   @override
   _ContactChangeState createState() => _ContactChangeState();
@@ -160,7 +163,7 @@ class _ContactChangeState extends State<ContactChange> {
             )
           ],
         ),
-        body: _buildForm());
+        body: SingleChildScrollView(child: _buildForm()));
   }
 
   _onSubmit() {
@@ -179,67 +182,90 @@ class _ContactChangeState extends State<ContactChange> {
         padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: formVerticalPadding),
-                child: Column(
-                  children: <Widget>[
-                    widget.contactAction != ContactAction.add
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.mail),
-                                Padding(
-                                  padding: EdgeInsets.only(right: iconFormPadding),
-                                ),
-                                Text(
-                                  widget.email,
-                                  style: Theme.of(context).textTheme.subhead,
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(),
-                    Row(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: formVerticalPadding),
+            child: Column(
+              children: <Widget>[
+                Visibility(
+                  visible: widget.contactAction != ContactAction.add,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                    child: Row(
                       children: <Widget>[
-                        Icon(Icons.person),
+                        Icon(Icons.mail),
                         Padding(
                           padding: EdgeInsets.only(right: iconFormPadding),
                         ),
-                        Expanded(child: _nameField),
+                        Text(
+                          widget.email ?? "",
+                          style: Theme.of(context).textTheme.subhead,
+                        ),
                       ],
                     ),
-                    Visibility(
-                      visible: widget.contactAction == ContactAction.add,
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.mail),
-                          Padding(
-                            padding: EdgeInsets.only(right: iconFormPadding),
-                          ),
-                          Expanded(child: _emailField),
-                        ],
-                      ),
-                    ),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.person),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: formVerticalPadding),
+                      padding: EdgeInsets.only(right: iconFormPadding),
                     ),
-                    Visibility(
-                      visible: widget.contactAction == ContactAction.add,
-                      child: RaisedButton(
-                        color: accent,
-                        textColor: onAccent,
-                        child: Text(L10n.get(L.qrScan)),
-                        onPressed: scanQr,
-                      ),
-                    )
+                    Expanded(child: _nameField),
                   ],
                 ),
-              ),
-            ],
+                Visibility(
+                  visible: widget.contactAction == ContactAction.add,
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.mail),
+                      Padding(
+                        padding: EdgeInsets.only(right: iconFormPadding),
+                      ),
+                      Expanded(child: _emailField),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: widget.contactAction != ContactAction.add && widget.phoneNumbers != null,
+                  child: Column(
+                    children: <Widget>[
+                      for (var phoneNumber in ContactExtension.getPhoneNumberList(widget.phoneNumbers))
+                        Padding(
+                          padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.phone),
+                              Padding(
+                                padding: EdgeInsets.only(right: iconFormPadding),
+                              ),
+                              Text(
+                                phoneNumber,
+                                style: Theme.of(context).textTheme.subhead,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                  child: Text(
+                    L10n.get(L.contactEditPhoneNumberText),
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                ),
+                Visibility(
+                  visible: widget.contactAction == ContactAction.add,
+                  child: RaisedButton(
+                    color: accent,
+                    textColor: onAccent,
+                    child: Text(L10n.get(L.qrScan)),
+                    onPressed: scanQr,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

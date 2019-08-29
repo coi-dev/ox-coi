@@ -46,6 +46,7 @@ import 'package:bloc/bloc.dart';
 import 'package:contacts_service/contacts_service.dart' as SystemContacts;
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
+import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
@@ -53,7 +54,7 @@ import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
-  final Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
+  final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
 
   @override
   ContactImportState get initialState => ContactsImportInitial();
@@ -63,10 +64,10 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     if (event is MarkContactsAsInitiallyLoaded) {
       markContactsAsInitiallyLoaded();
     } else if (event is PerformImport) {
-      String contacts = await loadSystemContacts();
+      Iterable<SystemContacts.Contact> contacts = await loadSystemContacts();
       importSystemContacts(contacts);
     } else if (event is ImportPerformed) {
-      yield ContactsImportSuccess(changedCount: event.changedCount);
+      yield ContactsImportSuccess();
     } else if (event is ImportAborted) {
       yield ContactsImportFailure();
     }
@@ -81,31 +82,78 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     await setPreference(preferenceSystemContactsImportShown, true);
   }
 
-  Future<String> loadSystemContacts() async {
+  Future<Iterable<SystemContacts.Contact>> loadSystemContacts() async {
     bool hasContactPermission = await hasPermission(PermissionGroup.contacts);
     if (hasContactPermission) {
-      Iterable<SystemContacts.Contact> systemContacts = await SystemContacts.ContactsService.getContacts();
-      String contacts = "";
-      systemContacts.forEach((contact) {
-        if (contact.emails.length != 0) {
-          contact.emails.forEach((email) {
-            contacts += "${contact.displayName}\n${email.value}\n";
-          });
-        }
-      });
-      return contacts;
+      return await SystemContacts.ContactsService.getContacts();
     } else {
       dispatch(ImportAborted());
       return null;
     }
   }
 
-  void importSystemContacts(String contacts) async {
-    Context context = Context();
-    int changedCount = 0;
-    if (contacts != null && contacts.isNotEmpty) {
-      changedCount = await context.addAddressBook(contacts);
+  void importSystemContacts(Iterable<SystemContacts.Contact> systemContacts) async {
+    String coreContacts = "";
+    Map<String, String> phoneNumbers = Map();
+    systemContacts.forEach((contact) {
+      if (contact.emails.length != 0) {
+        contact.emails.forEach((email) {
+          coreContacts += getFormattedContactData(contact, email);
+          updatePhoneNumbers(phoneNumbers, contact, email);
+        });
+      }
+    });
+    var context = Context();
+    await updateContacts(coreContacts, context);
+
+    if (phoneNumbers.isNotEmpty) {
+      List<int> ids = List.from(await context.getContacts(2, null));
+      await updateContactExtensions(ids, phoneNumbers);
     }
-    dispatch(ImportPerformed(changedCount: changedCount));
+    dispatch(ImportPerformed());
+  }
+
+  String getFormattedContactData(SystemContacts.Contact contact, SystemContacts.Item email) {
+    return "${contact.displayName}\n${email.value}\n";
+  }
+
+  void updatePhoneNumbers(Map<String, String> phoneNumbers, SystemContacts.Contact contact, SystemContacts.Item email) {
+    if (contact.phones.isNotEmpty) {
+      contact.phones.forEach((phoneNumber) {
+        var currentPhoneNumber = phoneNumbers[email.value];
+        if (currentPhoneNumber == null) {
+          phoneNumbers[email.value] = "";
+        }
+        phoneNumbers[email.value] += "${phoneNumber.value}\n";
+      });
+    }
+  }
+
+  Future<int> updateContacts(String coreContacts, Context context) async {
+    int changedCount = 0;
+    if (coreContacts != null && coreContacts.isNotEmpty) {
+      changedCount = await context.addAddressBook(coreContacts);
+    }
+    return changedCount;
+  }
+
+  Future updateContactExtensions(List<int> contactIds, Map<String, String> phoneNumbers) async {
+    var contactExtensionProvider = ContactExtensionProvider();
+    _contactRepository.update(ids: contactIds);
+    contactIds.forEach((contactId) async {
+      var contact = _contactRepository.get(contactId);
+      var mail = await contact.getAddress();
+      var contactPhoneNumbers = phoneNumbers[mail];
+      if (contactPhoneNumbers != null && contactPhoneNumbers.isNotEmpty) {
+        var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+        if (contactExtension == null) {
+          contactExtension = ContactExtension(contactId, phoneNumbers: contactPhoneNumbers);
+          contactExtensionProvider.insert(contactExtension);
+        } else {
+          contactExtension.phoneNumbers = contactPhoneNumbers;
+          contactExtensionProvider.update(contactExtension);
+        }
+      }
+    });
   }
 }

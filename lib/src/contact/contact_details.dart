@@ -53,11 +53,11 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
@@ -153,7 +153,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       iconData: Icons.edit,
                       text: L10n.get(L.contactEdit),
                       color: accent,
-                      onTap: () => _editContact(context, state.name, state.email),
+                      onTap: () => _editContact(context, state.name, state.email, state.phoneNumbers),
                     ),
                     ProfileAction(
                       key: Key(keyContactDetailBlockContactProfileActionIcon),
@@ -197,7 +197,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
     );
   }
 
-  void _editContact(BuildContext context, String name, String email) async {
+  void _editContact(BuildContext context, String name, String email, String phoneNumbers) async {
     return await _navigation.push(
       context,
       MaterialPageRoute(
@@ -206,6 +206,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
           id: widget.contactId,
           name: name,
           email: email,
+          phoneNumbers: phoneNumbers,
         ),
       ),
     ).then((value) {
