@@ -107,8 +107,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     msgIds.add(widget.messageId);
     switch (messageAction.messageActionTag) {
       case MessageActionTag.forward:
-        _navigation.push(
-            context, MaterialPageRoute(builder: (context) => Share(msgIds: msgIds, messageActionTag: messageAction.messageActionTag)));
+        _navigation.push(context, MaterialPageRoute(builder: (context) => Share(msgIds: msgIds, messageActionTag: messageAction.messageActionTag)));
         break;
       case MessageActionTag.copy:
         copyToClipboardWithToast(text: _message, toastText: getDefaultCopyToastText(context));
@@ -228,8 +227,6 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       _showAutocryptSetup();
     } else if (hasFile) {
       _openTapAttachment();
-    } else {
-      _showMenu();
     }
   }
 
@@ -242,12 +239,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   }
 
   _onLongPress(bool hasFile, bool isSetupMessage) {
-    if (isSetupMessage) {
-      return null;
-    } else if (hasFile) {
+    if (!isSetupMessage) {
       _showMenu();
     }
-    return null;
   }
 
   void _showMenu() {
