@@ -1,6 +1,6 @@
-# OX Coi
+# OX Coi Messenger
 
-OX Coi is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
+The OX Coi Messenger app is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
 
 - **Android state:** Currently in development
 - **iOS state:** Currently in development (27.06.19 - just started, no release yet)
