@@ -52,6 +52,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProfileData extends InheritedWidget {
   final Color color;
@@ -89,11 +90,11 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double avatarSize = profileAvatarSize;
-    File imageFile;
+    ImageProvider avatarImage;
     if (isNullOrEmpty(imagePath)) {
-      imageFile = File("");
+      avatarImage = MemoryImage(kTransparentImage);
     } else {
-      imageFile = File(imagePath);
+      avatarImage = FileImage(File(imagePath));
     }
 
     Navigation _navigation = Navigation();
@@ -158,7 +159,7 @@ class ProfileAvatar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: FileImage(imageFile),
+                  image: avatarImage,
                 ),
               ),
               height: avatarSize,

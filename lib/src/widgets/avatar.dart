@@ -55,18 +55,19 @@ class Avatar extends StatelessWidget {
   final Color color;
   final double size;
 
-  Avatar({this.imagePath, @required this.textPrimary, @required this.textSecondary, this.color, this.size = listAvatarDiameter});
+  Avatar({this.imagePath, @required this.textPrimary, this.textSecondary, this.color, this.size = listAvatarDiameter});
 
   @override
   Widget build(BuildContext context) {
     String initials;
     ImageProvider avatarImage;
-    if (imagePath != null && imagePath.isNotEmpty) {
-      avatarImage = FileImage(File(imagePath));
-    } else {
+    if (isNullOrEmpty(imagePath)) {
       avatarImage = MemoryImage(kTransparentImage);
       initials = getInitials(textPrimary, textSecondary);
+    } else {
+      avatarImage = FileImage(File(imagePath));
     }
+
     return Container(
       alignment: Alignment.center,
       height: size,
