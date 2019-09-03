@@ -58,6 +58,7 @@ import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/constants.dart';
+import 'package:sqflite/sqflite.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   DeltaChatCore _core = DeltaChatCore();
@@ -75,6 +76,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       yield MainStateLoading();
       try {
         await _initCore();
+        await _openExtensionDatabase();
         String appVersion = await getPreference(preferenceAppVersion);
         if (appVersion == null || appVersion.isEmpty) {
           await _setupDatabaseExtensions();
@@ -109,9 +111,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupDatabaseExtensions() async {
-    var core = DeltaChatCore();
     var contactExtensionProvider = ContactExtensionProvider();
-    await contactExtensionProvider.open(core.dbPath);
     await contactExtensionProvider.createTable();
   }
 
@@ -133,4 +133,9 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
 
+  Future<void> _openExtensionDatabase() async {
+    var core = DeltaChatCore();
+    var contactExtensionProvider = ContactExtensionProvider();
+    contactExtensionProvider.open(core.dbPath);
+  }
 }
