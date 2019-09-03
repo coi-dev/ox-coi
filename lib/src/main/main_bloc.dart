@@ -77,7 +77,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         await _initCore();
         String appVersion = await getPreference(preferenceAppVersion);
         if (appVersion == null || appVersion.isEmpty) {
-          await _setupDefaultValues(event.context);
+          await _setupDatabaseExtensions();
+          await _setupDefaultValues();
         }
         await _setupManagers(event);
         _checkLogin();
@@ -86,7 +87,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       }
     } else if (event is AppLoaded) {
       if (event.configured) {
-        _setupInitialAppState();
+        await _setupInitialAppState();
       }
       yield MainStateSuccess(configured: event.configured);
     }
@@ -107,7 +108,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     await _core.init(dbName);
   }
 
-  Future<void> _setupDefaultValues(BuildContext context) async {
+  Future<void> _setupDatabaseExtensions() async {
+    var core = DeltaChatCore();
+    var contactExtensionProvider = ContactExtensionProvider();
+    await contactExtensionProvider.open(core.dbPath);
+    await contactExtensionProvider.createTable();
+  }
+
+  Future<void> _setupDefaultValues() async {
     Config config = Config();
     config.setValue(Context.configSelfStatus, defaultStatus);
     config.setValue(Context.configShowEmails, Context.showEmailsOff);
@@ -121,10 +129,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupInitialAppState() async {
-    var core = DeltaChatCore();
-    var contactExtensionProvider = ContactExtensionProvider();
-    await contactExtensionProvider.open(core.dbPath);
-    await contactExtensionProvider.createTable();
     ContactListBloc contactListBloc = ContactListBloc();
     contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }

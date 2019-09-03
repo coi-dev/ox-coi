@@ -95,17 +95,17 @@ class ContactExtensionProvider {
 
   ContactExtensionProvider._internal();
 
-  Future open(String path) async {
+  Future<void> open(String path) async {
     db = await openDatabase(path);
   }
 
   Future createTable() async {
     await db.execute('''
-        create table if not exists $_tableContactExtension ( 
-          $_columnId integer primary key autoincrement, 
-          $_columnContactId integer not null,
-          $_columnPhoneNumbers text,
-          $_columnAvatar text)
+        CREATE TABLE IF NOT EXISTS $_tableContactExtension ( 
+          $_columnId INTEGER PRIMARY KEY, 
+          $_columnContactId INTEGER NOT NULL,
+          $_columnPhoneNumbers TEXT,
+          $_columnAvatar TEXT);
         ''');
   }
 
