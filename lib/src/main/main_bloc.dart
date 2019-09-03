@@ -136,6 +136,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   Future<void> _openExtensionDatabase() async {
     var core = DeltaChatCore();
     var contactExtensionProvider = ContactExtensionProvider();
-    contactExtensionProvider.open(core.dbPath);
+    await contactExtensionProvider.open(core.dbPath);
   }
 }
