@@ -69,7 +69,7 @@ class MessageSent extends StatelessWidget {
       child: MessageData(
         backgroundColor: secondary,
         textColor: onSecondary,
-        secondaryTextColor: onBackground,
+        secondaryTextColor: accent,
         borderRadius: buildBorderRadius(),
         time: time,
         text: text,
