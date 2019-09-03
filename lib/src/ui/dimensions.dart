@@ -102,7 +102,7 @@ const messagesBoxRadius = 18.0;
 const messagesBoxRadiusSmall = 2.0;
 const messagesBlurRadius = 2.0;
 const messagesFileIconSize = 30.0;
-const messagesElevation = 2.0;
+const messagesElevation = 3.0;
 
 // Profile
 const profileVerticalPadding = 8.0;
