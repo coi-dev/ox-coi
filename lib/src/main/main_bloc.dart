@@ -44,6 +44,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:logging/logging.dart';
 import 'package:ox_coi/src/background/background_manager.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
@@ -60,6 +61,7 @@ import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
+  var _logger = Logger("main_bloc");
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
   var _notificationManager = NotificationManager();
@@ -130,6 +132,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupInitialAppState() async {
+    var context = Context();
+    var isCoiSupported = (await context.isCoiSupported()) == 1;
+    if (isCoiSupported) {
+      await context.setCoiEnabled(1, 1);
+      _logger.info("Setting coi enable to 1");
+      await context.setCoiMessageFilter(1, 1);
+      _logger.info("Setting coi message filter to 1");
+    }
     ContactListBloc contactListBloc = ContactListBloc();
     contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
   }
@@ -139,4 +149,5 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     var contactExtensionProvider = ContactExtensionProvider();
     await contactExtensionProvider.open(core.dbPath);
   }
+
 }

@@ -143,7 +143,7 @@ class _OxCoiState extends State<OxCoi> {
   }
 
   _loginSuccess() {
-    BlocProvider.of<PushBloc>(context).dispatch(RegisterPush());
+    BlocProvider.of<PushBloc>(context).dispatch(RegisterPushResource());
     Navigation navigation = Navigation();
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
     _mainBloc.dispatch(AppLoaded(configured: true));

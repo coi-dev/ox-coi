@@ -40,63 +40,73 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:ox_coi/src/data/push_resource.dart';
-import 'package:ox_coi/src/push/push_bloc.dart';
+import 'package:flutter/widgets.dart';
 
-abstract class PushEvent {}
+class PushSubscribeMetaData {
+  String client;
+  String device;
+  String msgtype;
+  PushSubscribeMetaDataResource resource;
 
-class RegisterPushResource extends PushEvent {}
+  PushSubscribeMetaData({@required this.client, @required this.device, this.msgtype = "chat", @required this.resource});
 
-class GetPushResource extends PushEvent {}
+  PushSubscribeMetaData.fromJson(Map<String, dynamic> json)
+      : client = json['client'],
+        device = json['device'],
+        msgtype = json['msgtype'],
+        resource = json['resource'] != null ? PushSubscribeMetaDataResource.fromJson(json['resource']) : null;
 
-class PatchPushResource extends PushEvent {
-  final String pushToken;
+  Map<String, dynamic> toJson() => {
+        'client': client,
+        'device': device,
+        'msgtype': msgtype,
+        'resource': resource.toJson(),
+      };
 
-  PatchPushResource({@required this.pushToken});
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
-class DeletePushResource extends PushEvent {}
+class PushSubscribeMetaDataResource {
+  String endpoint;
+  PushSubscribeMetaDataResourceKeys keys;
 
-class SubscribeMetadata extends PushEvent {
-  final ResponsePushResource pushResource;
+  PushSubscribeMetaDataResource({@required this.endpoint, @required this.keys});
 
-  SubscribeMetadata({@required this.pushResource});
+  PushSubscribeMetaDataResource.fromJson(Map<String, dynamic> json)
+      : endpoint = json['endpoint'],
+        keys = json['keys'] != null ? PushSubscribeMetaDataResourceKeys.fromJson(json['keys']) : null;
+
+  Map<String, dynamic> toJson() => {
+        'endpoint': endpoint,
+        'keys': keys.toJson(),
+      };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
-class ValidateMetadata extends PushEvent {
-  final String validation;
+class PushSubscribeMetaDataResourceKeys {
+  String p256dh;
+  String auth;
 
-  ValidateMetadata({@required this.validation});
-}
+  PushSubscribeMetaDataResourceKeys({@required this.p256dh, @required this.auth});
 
-class PushActionFailed extends PushEvent {
-  final String error;
+  PushSubscribeMetaDataResourceKeys.fromJson(Map<String, dynamic> json)
+      : p256dh = json['p256dh'],
+        auth = json['auth'];
 
-  PushActionFailed({@required this.error});
-}
+  Map<String, dynamic> toJson() => {
+        'p256dh': p256dh,
+        'auth': auth,
+      };
 
-class PushActionDone extends PushEvent {
-  final ResponsePushResource responsePushResource;
-
-  PushActionDone({@required this.responsePushResource});
-}
-
-abstract class PushState {}
-
-class PushStateInitial extends PushState {}
-
-class PushStateVerificationFinished extends PushState {}
-
-class PushStateSuccess extends PushState {
-  final bool pushAvailable;
-  final PushSetupState pushSetupState;
-
-  PushStateSuccess({@required this.pushAvailable, @required this.pushSetupState});
-}
-
-class PushStateFailure extends PushState {
-  final String error;
-
-  PushStateFailure({@required this.error});
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

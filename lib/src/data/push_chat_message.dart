@@ -40,63 +40,56 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:ox_coi/src/data/push_resource.dart';
-import 'package:ox_coi/src/push/push_bloc.dart';
+import 'package:flutter/foundation.dart';
 
-abstract class PushEvent {}
+class PushChatMessage {
+  String folder;
+  int uidvalidity;
+  int uid;
+  String date;
+  String fromEmail;
+  String subject;
+  String msgId;
+  String contentType;
+  String content;
 
-class RegisterPushResource extends PushEvent {}
+  PushChatMessage({
+    @required this.folder,
+    @required this.uidvalidity,
+    @required this.uid,
+    @required this.date,
+    @required this.fromEmail,
+    @required this.subject,
+    @required this.msgId,
+    @required this.contentType,
+    @required this.content,
+  });
 
-class GetPushResource extends PushEvent {}
+  PushChatMessage.fromJson(Map<String, dynamic> json)
+      : folder = json['folder'],
+        uidvalidity = json['uidvalidity'],
+        uid = json['uid'],
+        date = json['date'],
+        fromEmail = json['from-email'],
+        subject = json['subject'],
+        msgId = json['msg-id'],
+        contentType = json['content-type'],
+        content = json['content'];
 
-class PatchPushResource extends PushEvent {
-  final String pushToken;
+  Map<String, dynamic> toJson() => {
+        'folder': folder,
+        'uidvalidity': uidvalidity,
+        'uid': uid,
+        'date': date,
+        'from-email': fromEmail,
+        'subject': subject,
+        'msg-id': msgId,
+        'content-type': contentType,
+        'content': content,
+      };
 
-  PatchPushResource({@required this.pushToken});
-}
-
-class DeletePushResource extends PushEvent {}
-
-class SubscribeMetadata extends PushEvent {
-  final ResponsePushResource pushResource;
-
-  SubscribeMetadata({@required this.pushResource});
-}
-
-class ValidateMetadata extends PushEvent {
-  final String validation;
-
-  ValidateMetadata({@required this.validation});
-}
-
-class PushActionFailed extends PushEvent {
-  final String error;
-
-  PushActionFailed({@required this.error});
-}
-
-class PushActionDone extends PushEvent {
-  final ResponsePushResource responsePushResource;
-
-  PushActionDone({@required this.responsePushResource});
-}
-
-abstract class PushState {}
-
-class PushStateInitial extends PushState {}
-
-class PushStateVerificationFinished extends PushState {}
-
-class PushStateSuccess extends PushState {
-  final bool pushAvailable;
-  final PushSetupState pushSetupState;
-
-  PushStateSuccess({@required this.pushAvailable, @required this.pushSetupState});
-}
-
-class PushStateFailure extends PushState {
-  final String error;
-
-  PushStateFailure({@required this.error});
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

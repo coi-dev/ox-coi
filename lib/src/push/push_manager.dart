@@ -44,19 +44,23 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/data/notification.dart';
-import 'package:ox_coi/src/debug/debug_viewer.dart';
-import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/platform/app_information.dart';
+import 'package:ox_coi/src/data/push_chat_message.dart';
+import 'package:ox_coi/src/data/push_validation.dart';
+import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
-
-import 'push_bloc.dart';
-import 'push_event_state.dart';
+import 'package:ox_coi/src/push/push_bloc.dart';
+import 'package:ox_coi/src/push/push_event_state.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 class PushManager {
+  static const securityChannelName = const MethodChannel("oxcoi.security");
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  var _notificationManager = NotificationManager();
   BuildContext _buildContext;
+  PushBloc _pushBloc;
 
   static PushManager _instance;
 
@@ -66,27 +70,23 @@ class PushManager {
 
   void setup(BuildContext buildContext) async {
     this._buildContext = buildContext;
+    _pushBloc = BlocProvider.of<PushBloc>(_buildContext);
     //firebase setup
     _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        //TODO: Add functionality
+      onMessage: (Map<String, dynamic> message) async {
         print('on message $message');
-        if (!isRelease()) {
-          Navigation navigation = Navigation();
-          navigation.push(
-            _buildContext,
-            MaterialPageRoute(builder: (context) {
-              var notificationData = NotificationData.fromJson(message);
-              String contentString;
-              if (notificationData.valid) {
-                contentString = notificationData.content;
-              } else {
-                contentString = "This message does not contain a 'content' field in the 'data' section and can't be shown / decrypted";
-              }
-              var prettifiedMessage = JsonEncoder.withIndent('  ').convert(message);
-              return DebugViewer(input: "$prettifiedMessage \n\nContent: $contentString");
-            }),
-          );
+        var notificationData = NotificationData.fromJson(message);
+        if (notificationData.valid) {
+          String decryptedContent = await decrypt(notificationData.content);
+          if (_isValidationPush(decryptedContent)) {
+            var validation = _getPushValidation(decryptedContent).validation;
+            _pushBloc.dispatch(ValidateMetadata(validation: validation));
+          } else {
+            var pushChatMessage = _getPushChatMessage(decryptedContent);
+            String fromEmail = pushChatMessage.fromEmail;
+            String body = "I sent you a new chat message";
+            await _notificationManager.showNotificationFromPush(fromEmail, body);
+          }
         }
         return Future(null);
       },
@@ -103,7 +103,8 @@ class PushManager {
     );
     _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.getToken().then((token) {
-      BlocProvider.of<PushBloc>(buildContext).dispatch(PatchPush(pushToken: token));
+      //TODO Use in production
+      //_pushBloc.dispatch(PatchPushResource(pushToken: token));
     });
   }
 
@@ -113,5 +114,25 @@ class PushManager {
 
   Future<String> getPushResource() async {
     return await getPreference(preferenceNotificationsPush);
+  }
+
+  Future<String> decrypt(String base64content) async {
+    return await securityChannelName.invokeMethod('decrypt', {"input": base64content});
+  }
+
+  bool _isValidationPush(String decryptedContent) {
+    var pushValidationMap = jsonDecode(decryptedContent);
+    var pushValidation = PushValidation.fromJson(pushValidationMap);
+    return !isNullOrEmpty(pushValidation.validation);
+  }
+
+  PushValidation _getPushValidation(String decryptedContent) {
+    var pushValidationMap = jsonDecode(decryptedContent);
+    return PushValidation.fromJson(pushValidationMap);
+  }
+
+  PushChatMessage _getPushChatMessage(String decryptedContent) {
+    var pushValidationMap = jsonDecode(decryptedContent);
+    return PushChatMessage.fromJson(pushValidationMap);
   }
 }

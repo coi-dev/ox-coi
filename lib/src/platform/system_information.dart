@@ -40,63 +40,16 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:ox_coi/src/data/push_resource.dart';
-import 'package:ox_coi/src/push/push_bloc.dart';
+import 'dart:io';
 
-abstract class PushEvent {}
+import 'package:device_info/device_info.dart';
 
-class RegisterPushResource extends PushEvent {}
-
-class GetPushResource extends PushEvent {}
-
-class PatchPushResource extends PushEvent {
-  final String pushToken;
-
-  PatchPushResource({@required this.pushToken});
-}
-
-class DeletePushResource extends PushEvent {}
-
-class SubscribeMetadata extends PushEvent {
-  final ResponsePushResource pushResource;
-
-  SubscribeMetadata({@required this.pushResource});
-}
-
-class ValidateMetadata extends PushEvent {
-  final String validation;
-
-  ValidateMetadata({@required this.validation});
-}
-
-class PushActionFailed extends PushEvent {
-  final String error;
-
-  PushActionFailed({@required this.error});
-}
-
-class PushActionDone extends PushEvent {
-  final ResponsePushResource responsePushResource;
-
-  PushActionDone({@required this.responsePushResource});
-}
-
-abstract class PushState {}
-
-class PushStateInitial extends PushState {}
-
-class PushStateVerificationFinished extends PushState {}
-
-class PushStateSuccess extends PushState {
-  final bool pushAvailable;
-  final PushSetupState pushSetupState;
-
-  PushStateSuccess({@required this.pushAvailable, @required this.pushSetupState});
-}
-
-class PushStateFailure extends PushState {
-  final String error;
-
-  PushStateFailure({@required this.error});
+Future<String> getDeviceName() async {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  if (Platform.isIOS) {
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    return iosInfo.utsname.machine;
+  }
+  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  return androidInfo.model;
 }

@@ -46,7 +46,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/platform/system.dart';
+import 'package:ox_coi/src/platform/system_interaction.dart';
 import 'package:ox_coi/src/settings/settings_manual_form.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';

@@ -48,9 +48,13 @@ const preferenceLogFiles = "preferenceLogFiles";
 const preferenceAntiMobbing = "preferenceAntiMobbing";
 const preferenceNotificationsPull = "preferenceNotificationsPull";
 const preferenceNotificationsPush = "preferenceNotificationsPush";
-const preferenceNotificationsAuth = "preferenceNotificationsAuth";
-const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic";
-const preferenceNotificationsP256dhPrivate = "preferenceNotificationsP256dhPrivate";
+const preferenceNotificationsPushServiceUrl = "preferenceNotificationsPushServiceUrl";
+const preferenceNotificationsEndpoint = "preferenceNotificationsEndpoint";
+const preferenceNotificationsStatus = "preferenceNotificationsStatus";
+
+const preferenceNotificationsAuth = "preferenceNotificationsAuth"; // Unused
+const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic"; // Unused
+const preferenceNotificationsP256dhPrivate = "preferenceNotificationsP256dhPrivate"; // Unused
 
 Future<dynamic> getPreference(String key) async {
   SharedPreferences sharedPreferences = await getSharedPreferences();

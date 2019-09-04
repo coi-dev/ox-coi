@@ -45,7 +45,9 @@ package com.openxchange.oxcoi;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 
+import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -60,21 +62,61 @@ public class MainActivity extends FlutterActivity {
     private static final String SHARED_TEXT = "shared_text";
     private static final String SHARED_PATH = "shared_path";
     private static final String SHARED_FILE_NAME = "shared_file_name";
+    // TODO create constants for channel methods
     private static final String SHARING_CHANNEL_NAME = "oxcoi.sharing";
+    // TODO create constants for channel methods
+    private static final String SECURITY_CHANNEL_NAME = "oxcoi.security";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
-
+        SecurityHelper securityHelper = new SecurityHelper(this);
         handleSendIntent(getIntent());
+        setupSharingMethodChannel();
+        setupSecurityMethodChannel(securityHelper);
+    }
 
+    private void setupSharingMethodChannel() {
         new MethodChannel(getFlutterView(), SHARING_CHANNEL_NAME).setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.contentEquals("getSharedData")) {
                         result.success(sharedData);
                         sharedData.clear();
                     }
+                });
+    }
+
+    private void setupSecurityMethodChannel(SecurityHelper securityHelper) {
+        new MethodChannel(getFlutterView(), SECURITY_CHANNEL_NAME).setMethodCallHandler(
+                (call, result) -> {
+                    if (call.method.contentEquals("generateSecrets")) {
+                        KeyPair keyPair = securityHelper.generateKey();
+                        if (keyPair != null) {
+                            securityHelper.persistKeyPair(keyPair);
+                        } else {
+                            throw new IllegalStateException("Key pair is empty");
+                        }
+                        String authSecret = securityHelper.generateAuthSecret();
+                        if (authSecret != null && !authSecret.isEmpty()) {
+                            securityHelper.persisAuthSecret(authSecret);
+                        } else {
+                            throw new IllegalStateException("Auth secret is empty");
+                        }
+                        result.success(null);
+                    } else if (call.method.contentEquals("getKey")) {
+                        String publicKeyBase64 = securityHelper.getPublicKeyBase64();
+                        result.success(publicKeyBase64);
+                    } else if (call.method.contentEquals("getAuthSecret")) {
+                        String authSecret = securityHelper.getAuthSecretFromPersistedData();
+                        result.success(authSecret);
+                    } else if (call.method.contentEquals("decrypt")) {
+                        String input = call.argument("input");
+                        byte[] inputBytes = Base64.decode(input, Base64.NO_WRAP);
+                        String decryptMessage = securityHelper.decryptMessage(inputBytes);
+                        result.success(decryptMessage);
+                    }
+
                 });
     }
 

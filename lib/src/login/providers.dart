@@ -28,6 +28,7 @@ class Provider {
   String id;
   String name;
   String registerLink;
+  String pushServiceUrl;
   Oauth oauth;
   Preset preset;
 
@@ -37,6 +38,7 @@ class Provider {
     id = json['id'];
     name = json['name'];
     registerLink = json['register_link'];
+    pushServiceUrl = json['push_service_url'];
     oauth = json['oauth'] != null ? new Oauth.fromJson(json['oauth']) : null;
     preset = json['preset'] != null ? new Preset.fromJson(json['preset']) : null;
   }
@@ -46,6 +48,7 @@ class Provider {
     data['id'] = this.id;
     data['name'] = this.name;
     data['register_link'] = this.registerLink;
+    data['push_service_url'] = pushServiceUrl;
     if (this.oauth != null) {
       data['oauth'] = this.oauth.toJson();
     }
@@ -151,6 +154,12 @@ String getProviderIconPath(BuildContext context, String id) {
       path = otherProviderLogoUrl;
       break;
     case "coi":
+      path = appLogoUrl;
+      break;
+    case "coi-integration":
+      path = appLogoUrl;
+      break;
+    case "coi-dovecot":
       path = appLogoUrl;
       break;
   }

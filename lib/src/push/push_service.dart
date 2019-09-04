@@ -47,12 +47,12 @@ import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/data/push_resource.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 
 class PushService {
   static PushService _instance;
 
   var _logger = Logger("push_service");
-  var url = 'https://10.50.0.26:443/push/resource/';
   var headers = {"Content-type": "application/json"};
 
   factory PushService() => _instance ??= PushService._internal();
@@ -61,6 +61,7 @@ class PushService {
 
   Future<Response> registerPush(RequestPushRegistration requestRegistration) async {
     String encodedBody = json.encode(requestRegistration);
+    var url = await getUrl();
     _logger.info("Register ($url): $encodedBody");
     IOClient ioClient = createIOClient();
     return await ioClient.put(url, headers: headers, body: encodedBody);
@@ -73,6 +74,7 @@ class PushService {
 
   Future<Response> getPush(String id) async {
     IOClient ioClient = createIOClient();
+    var url = await getUrl();
     _logger.info("Get ($url): $id");
     return await ioClient.get(url + id, headers: headers);
   }
@@ -80,13 +82,19 @@ class PushService {
   Future<Response> patchPush(String id, RequestPushPatch requestPushPatch) async {
     IOClient ioClient = createIOClient();
     String encodedBody = json.encode(requestPushPatch);
+    var url = await getUrl();
     _logger.info("Patch ($url): $id - $encodedBody");
     return await ioClient.patch(url + id, headers: headers, body: encodedBody);
   }
 
   Future<Response> deletePush(String id) async {
     IOClient ioClient = createIOClient();
+    var url = await getUrl();
     _logger.info("Delete ($url): $id");
     return await ioClient.delete(url + id, headers: headers);
+  }
+
+  Future<String> getUrl() async {
+    return await getPreference(preferenceNotificationsPushServiceUrl);
   }
 }

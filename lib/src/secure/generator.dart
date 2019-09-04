@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -61,7 +62,8 @@ AsymmetricKeyPair generateEcKeyPair() {
 
 String getPublicEcKey(AsymmetricKeyPair keyPair) {
   ECPublicKey publicKey = keyPair.publicKey;
-  return publicKey.Q.toString();
+  var encoded = publicKey.Q.getEncoded(false);
+  return base64UrlEncode(encoded);
 }
 
 String getPrivateEcKey(AsymmetricKeyPair keyPair) {

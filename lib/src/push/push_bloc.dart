@@ -43,122 +43,259 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/data/push_metadata.dart';
 import 'package:ox_coi/src/data/push_resource.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/platform/system_information.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/push/push_manager.dart';
 import 'package:ox_coi/src/secure/generator.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'push_service.dart';
 
-class PushBloc extends Bloc<PushEvent, PushState> {
-  static String publicKey = "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEX9kaIRaLRIMAsJBkMGns2oOg8Rj9gb9ofeYpbZkFxGrWUMM4xFA0EjmzwnnOLwIcmA+6SDmyimKVEz1r3szOFQ==-----END PUBLIC KEY-----"; //TODO use real key
+enum PushSetupState {
+  initial,
+  resourceRegistered,
+  prepareMetadataSubscribed,
+  metadataSubscribed,
+  prepareMetadataValidated,
+  metadataValidated,
+  unchanged,
+}
 
-  PushService _pushService;
+class PushBloc extends Bloc<PushEvent, PushState> {
+  var _logger = Logger("push_bloc");
   var _pushManager = PushManager();
+  var pushService = PushService();
+  var _core = DeltaChatCore();
+  var _context = Context();
+  int _metadataListenerId;
+  int _webPushSubscriptionListenerId;
+  int _errorListenerId;
+  static const _localWebPushId = 1;
+
+  PublishSubject<Event> pushSubject = new PublishSubject();
+  static const securityChannelName = const MethodChannel("oxcoi.security");
 
   @override
-  PushState get initialState {
-    _pushService = PushService();
-    return PushStateInitial();
-  }
+  PushState get initialState => PushStateInitial();
 
   @override
   Stream<PushState> mapEventToState(PushEvent event) async* {
-    if (event is RegisterPush) {
-      yield PushStateLoading();
+    bool pushAvailable = await _checkWebPushAvailable();
+    if (!pushAvailable) {
+      yield PushStateSuccess(pushAvailable: false, pushSetupState: PushSetupState.initial);
+      return;
+    }
+    if (event is RegisterPushResource) {
       try {
-        await generateSecrets();
-        RequestPushRegistration requestPushRegistration = await createRegistrationRequest();
-        var response = await _pushService.registerPush(requestPushRegistration);
-        validateResponse(response);
+        RequestPushRegistration requestPushRegistration = await _createRegistrationRequest();
+        var response = await pushService.registerPush(requestPushRegistration);
+        var valid = _validatePushServiceResponse(response);
+        if (valid) {
+          ResponsePushResource pushResource = _getPushResource(response);
+          await _persistPushResource(pushResource);
+          yield PushStateSuccess(
+            pushAvailable: true,
+            pushSetupState: PushSetupState.resourceRegistered,
+          );
+          dispatch(SubscribeMetadata(pushResource: pushResource));
+        }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
       }
-    } else if (event is GetPush) {
-      yield PushStateLoading();
+    } else if (event is GetPushResource) {
       try {
-        String id = await getId();
-        var response = await _pushService.getPush(id);
-        validateResponse(response);
+        String id = await _getId();
+        var response = await pushService.getPush(id);
+        var valid = _validatePushServiceResponse(response);
+        if (valid) {
+          yield PushStateSuccess(
+            pushAvailable: true,
+            pushSetupState: PushSetupState.unchanged,
+          );
+        }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
       }
-    } else if (event is PatchPush) {
-      yield PushStateLoading();
+    } else if (event is PatchPushResource) {
       try {
-        String id = await getId();
-        RequestPushPatch requestPushPatch = createPatchRequest(event.pushToken);
-        var response = await _pushService.patchPush(id, requestPushPatch);
-        validateResponse(response);
+        String id = await _getId();
+        RequestPushPatch requestPushPatch = _createPatchRequest(event.pushToken);
+        var response = await pushService.patchPush(id, requestPushPatch);
+        var valid = _validatePushServiceResponse(response);
+        if (valid) {
+          ResponsePushResource pushResource = _getPushResource(response);
+          await _persistPushResource(pushResource);
+          yield PushStateSuccess(
+            pushAvailable: true,
+            pushSetupState: PushSetupState.resourceRegistered,
+          );
+          dispatch(SubscribeMetadata(pushResource: pushResource));
+        }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
       }
-    } else if (event is DeletePush) {
-      yield PushStateLoading();
+    } else if (event is DeletePushResource) {
       try {
-        String id = await getId();
-        var response = await _pushService.deletePush(id);
-        validateResponse(response);
+        String id = await _getId();
+        var response = await pushService.deletePush(id);
+        var valid = _validatePushServiceResponse(response);
+        if (valid) {
+          _removePushResource();
+          yield PushStateSuccess(
+            pushAvailable: true,
+            pushSetupState: PushSetupState.initial,
+          );
+        }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
       }
-    } else if (event is PushActionDone) {
-      var pushResource = event.responsePushResource;
-      if (pushResource == null) {
-        await removePreference(preferenceNotificationsPush);
-      } else {
-        await setPreference(preferenceNotificationsPush, jsonEncode(pushResource));
-      }
-      yield PushStateSuccess(responsePushResource: pushResource);
-    } else if (event is PushActionFailed) {
-      yield PushStateFailure(error: event.error);
+    } else if (event is SubscribeMetadata) {
+      await _subscribeMetaData(event.pushResource);
+      yield PushStateSuccess(
+        pushAvailable: true,
+        pushSetupState: PushSetupState.prepareMetadataSubscribed,
+      );
+    } else if (event is ValidateMetadata) {
+      await _confirmValidation(event.validation);
+      yield PushStateSuccess(
+        pushAvailable: true,
+        pushSetupState: PushSetupState.prepareMetadataValidated,
+      );
     }
   }
 
-  Future<RequestPushRegistration> createRegistrationRequest() async {
+  @override
+  void dispose() {
+    _unregisterListeners();
+    super.dispose();
+  }
+
+  Future<RequestPushRegistration> _createRegistrationRequest() async {
     var appId = await getPackageName();
     var pushToken = await _pushManager.getPushToken();
+    var publicKey = await _getCoiServerPublicKey();
+    publicKey = publicKey.replaceAll("\n", "");
     var requestPushRegistration = RequestPushRegistration(appId, publicKey, pushToken);
     return requestPushRegistration;
   }
 
-  RequestPushPatch createPatchRequest(String pushToken) {
+  RequestPushPatch _createPatchRequest(String pushToken) {
     var requestPushRegistration = RequestPushPatch(pushToken);
     return requestPushRegistration;
   }
 
-  Future<String> getId() async {
-    var pushResourceString = await getPreference(preferenceNotificationsPush);
-    var jsonDecode2 = jsonDecode(pushResourceString);
-    var pushResource = ResponsePushResource.fromJson(jsonDecode2);
-
+  Future<String> _getId() async {
+    var pushResourceJsonString = await getPreference(preferenceNotificationsPush);
+    var pushResourceJsonMap = jsonDecode(pushResourceJsonString);
+    var pushResource = ResponsePushResource.fromJson(pushResourceJsonMap);
     return pushResource.id;
   }
 
-  Future<void> generateSecrets() async {
-
-    var keyPair = generateEcKeyPair();
-    String publicKey = getPublicEcKey(keyPair);
-    String privateKey = getPrivateEcKey(keyPair);
-    String uuid = generateUuid();
-    await setPreference(preferenceNotificationsP256dhPublic, publicKey);
-    await setPreference(preferenceNotificationsP256dhPrivate, privateKey);
-    await setPreference(preferenceNotificationsAuth, uuid);
+  bool _validatePushServiceResponse(Response response) {
+    return response.statusCode == 200 || response.statusCode == 201;
   }
 
-  void validateResponse(Response response) {
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var pushResource;
-      if (response.body != null && response.body.isNotEmpty) {
-        Map responseMap = jsonDecode(response.body);
-        pushResource = ResponsePushResource.fromJson(responseMap);
-      }
-      dispatch(PushActionDone(responsePushResource: pushResource));
-    } else {
-      dispatch(PushActionFailed(error: response.body));
+  ResponsePushResource _getPushResource(Response response) {
+    var pushResource;
+    if (response.body != null && response.body.isNotEmpty) {
+      Map responseMap = jsonDecode(response.body);
+      pushResource = ResponsePushResource.fromJson(responseMap);
+    }
+    return pushResource;
+  }
+
+  Future<void> _persistPushResource(ResponsePushResource pushResource) async {
+    if (pushResource != null) {
+      await setPreference(preferenceNotificationsPush, jsonEncode(pushResource));
     }
   }
+
+  Future<void> _removePushResource() async {
+    await removePreference(preferenceNotificationsPush);
+  }
+
+  Future<bool> _checkWebPushAvailable() async {
+    _context = Context();
+    return await _context.isWebPushSupported() == 1;
+  }
+
+  Future<String> _getCoiServerPublicKey() async {
+    _context = Context();
+    return await _context.getWebPushVapidKey();
+  }
+
+  Future<void> _subscribeMetaData(ResponsePushResource responsePushResource) async {
+    await _generateSecrets();
+    String publicKey = await _getKey();
+    String auth = await _getAuthSecret();
+    String clientEndpoint = generateUuid();
+    await setPreference(preferenceNotificationsEndpoint, clientEndpoint);
+
+    String client = await getAppName();
+    String device = await getDeviceName();
+    var pushSubscribeMetaData = PushSubscribeMetaData(
+      client: client,
+      device: device,
+      resource: PushSubscribeMetaDataResource(
+        keys: PushSubscribeMetaDataResourceKeys(
+          p256dh: publicKey,
+          auth: auth,
+        ),
+        endpoint: responsePushResource.endpoint,
+      ),
+    );
+    _registerListeners();
+    _context = Context();
+    String encodedBody = json.encode(pushSubscribeMetaData);
+    await _context.subscribeWebPush(clientEndpoint, encodedBody, _localWebPushId);
+    print("[PushBloc._subscribeMetaData] dboehrs");
+  }
+
+  Future<void> _confirmValidation(String message) async {
+    String clientEndpoint = await getPreference(preferenceNotificationsEndpoint);
+    await _context.validateWebPush(clientEndpoint, message, _localWebPushId);
+    print("[PushBloc._confirmValidation] dboehrs");
+  }
+
+  void _registerListeners() async {
+    if (_metadataListenerId == null) {
+      pushSubject.listen(_successCallback, onError: _errorCallback);
+      _metadataListenerId = await _core.listen(Event.setMetaDataDone, pushSubject);
+      _webPushSubscriptionListenerId = await _core.listen(Event.webPushSubscription, pushSubject);
+      _errorListenerId = await _core.listen(Event.error, pushSubject);
+    }
+  }
+
+  void _unregisterListeners() {
+    _core.removeListener(Event.setMetaDataDone, _metadataListenerId);
+    _core.removeListener(Event.webPushSubscription, _webPushSubscriptionListenerId);
+    _core.removeListener(Event.error, _errorListenerId);
+    _metadataListenerId = null;
+    _webPushSubscriptionListenerId = null;
+    _errorListenerId = null;
+  }
+
+  void _successCallback(Event event) {
+    print("[PushBloc._successCallback] dboehrs ${event.eventId}");
+    _logger.info("Received event ${event.eventId} with payload 1: ${event.data1} and payload 2: ${event.data2}");
+  }
+
+  _errorCallback(error) {
+    _logger.info("An error occured while listening: $error");
+  }
+
+  Future<void> _generateSecrets() async => await securityChannelName.invokeMethod('generateSecrets');
+
+  Future<String> _getKey() async => await securityChannelName.invokeMethod('getKey');
+
+  Future<String> _getAuthSecret() async => await securityChannelName.invokeMethod('getAuthSecret');
+
 }

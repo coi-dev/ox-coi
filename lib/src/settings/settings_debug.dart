@@ -47,12 +47,14 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/settings/settings_debug_bloc.dart';
 import 'package:ox_coi/src/settings/settings_debug_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
+import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -103,11 +105,11 @@ class _SettingsDebugState extends State<SettingsDebug> {
           } else if (state is SettingsDebugStateSuccess) {
             var token = state.token;
             var pushResource = state.pushResource;
-            var coiServerPublicKey = PushBloc.publicKey;
-            var secrets = "EC public key: ${state.publicKey}\n"
-                "EC public key base64: ${state.publicKeyBase64}\n"
+            var secrets = "EC public key base64: ${state.publicKeyBase64}\n"
                 "EC private key: ${state.privateKey}\n"
-                "Symmetric auth secret: ${state.auth}\n"
+                "Stymmetric auth secret: ${state.auth}\n"
+                "Push endpoint: ${state.endpoint}\n"
+                "Push service url: ${state.pushServiceUrl}\n"
                 "Values are updated on new push resource registration";
             return ListView(
               children: ListTile.divideTiles(context: context, tiles: [
@@ -118,15 +120,6 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   onTap: () {
                     _logger.info(token);
                     copyToClipboardWithToast(text: token, toastText: getDefaultCopyToastText(context));
-                  },
-                ),
-                ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  title: Text(L10n.get(L.debugCoiServerPublicKey)),
-                  subtitle: Text(coiServerPublicKey),
-                  onTap: () {
-                    _logger.info(coiServerPublicKey);
-                    copyToClipboardWithToast(text: coiServerPublicKey, toastText: getDefaultCopyToastText(context));
                   },
                 ),
                 ListTile(
@@ -151,15 +144,27 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                   title: Text(L10n.get(L.debugPushResourceRegister)),
                   onTap: () {
-                    _pushBloc.dispatch(RegisterPush());
+                    _pushBloc.dispatch(RegisterPushResource());
                   },
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                   title: Text(L10n.get(L.debugPushResourceDelete)),
                   onTap: () {
-                    _pushBloc.dispatch(DeletePush());
+                    _pushBloc.dispatch(DeletePushResource());
                   },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                  title: Text("Manually set push service url"),
+                  subtitle: TextField(
+                    // TODO remove
+                    onSubmitted: (text) async {
+                      await setPreference(preferenceNotificationsPushServiceUrl, text);
+                      showToast("$text was set as push service URL");
+                      _settingsDebugBloc.dispatch(RequestDebug());
+                    },
+                  ),
                 ),
               ]).toList(),
             );

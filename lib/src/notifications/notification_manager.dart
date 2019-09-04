@@ -40,16 +40,31 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart' as DeltaChatCore;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ox_coi/src/background/background_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
+import 'package:ox_coi/src/data/repository.dart';
+import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 class NotificationManager {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  //TODO: Add better AndroidNotificationDetails
+  final platformChannelSpecifics = NotificationDetails(
+    AndroidNotificationDetails(
+      'com.android.oxcoi.notification.single',
+      'Message notification',
+      'Notification for incoming messages',
+      importance: Importance.Max,
+      priority: Priority.High,
+    ),
+    IOSNotificationDetails(),
+  );
 
   static NotificationManager _instance;
 
@@ -75,23 +90,36 @@ class NotificationManager {
 
   Future onSelectNotification(String payload) {
     Navigation navigation = Navigation();
-    navigation.push(
-      _buildContext,
-      MaterialPageRoute(builder: (context) => Chat(chatId: int.parse(payload))),
-    );
+    if (!isNullOrEmpty(payload)) {
+      navigation.push(
+        _buildContext,
+        MaterialPageRoute(builder: (context) => Chat(chatId: int.parse(payload))),
+      );
+    }
   }
 
-  Future<void> showNotification(int chatId, String title, String body, {String payload}) async {
-    //TODO: Add better AndroidNotificationDetails
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.android.oxcoi.notification.single',
-      'Message notification',
-      'Notification for incoming messages',
-      importance: Importance.Max,
-      priority: Priority.High,
-    );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  Future<void> showNotificationFromPush(String fromEmail, String body) async {
+    if (_buildContext != null) {
+      var backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);
+      if (backgroundBloc.currentBackgroundState == AppLifecycleState.resumed.toString()) {
+        return;
+      }
+    }
+    Repository<DeltaChatCore.Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
+    String name = fromEmail;
+    int chatId;
+    await Future.forEach(_contactRepository.getAll(), (DeltaChatCore.Contact contact) async {
+      String address = await contact.getAddress();
+      if (address == fromEmail) {
+        name = await contact.getName();
+        var context = DeltaChatCore.Context();
+        chatId = await context.getChatByContactId(contact.id);
+      }
+    });
+    await _flutterLocalNotificationsPlugin.show(chatId, name, body, platformChannelSpecifics, payload: chatId.toString());
+  }
+
+  Future<void> showNotificationFromLocal(int chatId, String title, String body, {String payload}) async {
     var backgroundBloc;
     if (_buildContext != null) {
       backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);

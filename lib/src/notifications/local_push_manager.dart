@@ -104,7 +104,7 @@ class LocalPushManager {
           title = "$title (+ $count ${L10n.get(L.moreMessages)})";
         }
         String teaser = await message.getSummaryText(200);
-        _notificationManager.showNotification(chatId, title, teaser, payload: chatId.toString());
+        _notificationManager.showNotificationFromLocal(chatId, title, teaser, payload: chatId.toString());
       }
     });
   }

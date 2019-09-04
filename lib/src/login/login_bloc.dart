@@ -49,6 +49,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/text.dart';
@@ -193,7 +194,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   _setupConfigWithProvider(ProviderLoginButtonPressed event) async {
     Config config = Config();
-    Preset preset = event.provider.preset;
+    var provider = event.provider;
+    Preset preset = provider.preset;
 
     await config.setValue(Context.configAddress, event.email);
     await config.setValue(Context.configMailPassword, event.password);
@@ -207,7 +209,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     int imapSecurity = getSecurityId(preset.incomingSecurity);
     int smtpSecurity = getSecurityId(preset.outgoingSecurity);
     int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
-
     await config.setValue(Context.configServerFlags, serverFlags);
+    await setPreference(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
   }
 }

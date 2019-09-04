@@ -49,18 +49,21 @@ class RequestDebug extends SettingsDebugEvent {}
 class DebugLoaded extends SettingsDebugEvent {
   final String token;
   final String pushResource;
-  final String publicKey;
   final String publicKeyBase64;
   final String privateKey;
   final String auth;
+  final String endpoint;
+  final String pushServiceUrl;
 
-  DebugLoaded(
-      {@required this.token,
-      @required this.pushResource,
-      @required this.publicKey,
-      @required this.publicKeyBase64,
-      @required this.privateKey,
-      @required this.auth});
+  DebugLoaded({
+    @required this.token,
+    @required this.pushResource,
+    @required this.publicKeyBase64,
+    @required this.privateKey,
+    @required this.auth,
+    @required this.endpoint,
+    @required this.pushServiceUrl,
+  });
 }
 
 abstract class SettingsDebugState {}
@@ -70,18 +73,21 @@ class SettingsDebugStateInitial extends SettingsDebugState {}
 class SettingsDebugStateSuccess extends SettingsDebugState {
   final String token;
   final String pushResource;
-  final String publicKey;
   final String publicKeyBase64;
   final String privateKey;
   final String auth;
+  final String endpoint;
+  final String pushServiceUrl;
 
-  SettingsDebugStateSuccess(
-      {@required this.token,
-      @required this.pushResource,
-      @required this.publicKey,
-      @required this.publicKeyBase64,
-      @required this.privateKey,
-      @required this.auth});
+  SettingsDebugStateSuccess({
+    @required this.token,
+    @required this.pushResource,
+    @required this.publicKeyBase64,
+    @required this.privateKey,
+    @required this.auth,
+    @required this.endpoint,
+    @required this.pushServiceUrl,
+  });
 }
 
 class SettingsDebugStateFailure extends SettingsDebugState {}

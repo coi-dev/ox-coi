@@ -40,63 +40,23 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
-import 'package:ox_coi/src/data/push_resource.dart';
-import 'package:ox_coi/src/push/push_bloc.dart';
 
-abstract class PushEvent {}
+import 'package:flutter/foundation.dart';
 
-class RegisterPushResource extends PushEvent {}
+class PushValidation {
+  String validation;
 
-class GetPushResource extends PushEvent {}
+  PushValidation({@required this.validation});
 
-class PatchPushResource extends PushEvent {
-  final String pushToken;
+  PushValidation.fromJson(Map<String, dynamic> json)
+      : validation = json['validation'];
 
-  PatchPushResource({@required this.pushToken});
-}
+  Map<String, dynamic> toJson() => {
+        'validation': validation,
+      };
 
-class DeletePushResource extends PushEvent {}
-
-class SubscribeMetadata extends PushEvent {
-  final ResponsePushResource pushResource;
-
-  SubscribeMetadata({@required this.pushResource});
-}
-
-class ValidateMetadata extends PushEvent {
-  final String validation;
-
-  ValidateMetadata({@required this.validation});
-}
-
-class PushActionFailed extends PushEvent {
-  final String error;
-
-  PushActionFailed({@required this.error});
-}
-
-class PushActionDone extends PushEvent {
-  final ResponsePushResource responsePushResource;
-
-  PushActionDone({@required this.responsePushResource});
-}
-
-abstract class PushState {}
-
-class PushStateInitial extends PushState {}
-
-class PushStateVerificationFinished extends PushState {}
-
-class PushStateSuccess extends PushState {
-  final bool pushAvailable;
-  final PushSetupState pushSetupState;
-
-  PushStateSuccess({@required this.pushAvailable, @required this.pushSetupState});
-}
-
-class PushStateFailure extends PushState {
-  final String error;
-
-  PushStateFailure({@required this.error});
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

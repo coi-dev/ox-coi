@@ -49,7 +49,7 @@ import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/platform/system.dart';
+import 'package:ox_coi/src/platform/system_interaction.dart';
 import 'package:ox_coi/src/settings/settings_manual_form.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';

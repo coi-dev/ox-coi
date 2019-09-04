@@ -63,6 +63,9 @@ bool isPort(String portString) {
 }
 
 String encodeBase64(String text) {
+  if (text == null) {
+    return null;
+  }
   var bytes = utf8.encode(text);
   var base64 = base64Url.encode(bytes);
   return base64;
