@@ -51,7 +51,7 @@ import 'package:sprintf/sprintf.dart';
 class L10n {
   static const plural = 2;
 
-  static final Gettext _getText = Gettext(onWarning: print);
+  static final Gettext _getText = Gettext();
   static final _loadedLocales = List<String>();
 
   static String get locale => _getText.locale;
