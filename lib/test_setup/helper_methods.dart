@@ -139,10 +139,18 @@ Future chatSearch(
   await driver.tap(searchReturnIconButton);
 }
 
-Future chatTest(FlutterDriver driver, String chatName,
-    SerializableFinder typeSomethingComposePlaceholder, String helloWord) async {
+Future chatTest(
+    FlutterDriver driver,
+    String chatName,
+    SerializableFinder typeSomethingComposePlaceholder,
+    String helloWord) async {
   Invoker.current.heartbeat();
   await driver.tap(find.text(chatName));
+  await writeChatFromChat(driver, helloWord);
+  await catchScreenshot(driver, 'screenshots/ $chatName.png');
+}
+
+Future writeChatFromChat(FlutterDriver driver, String helloWord) async {
   await driver.tap(typeSomethingComposePlaceholderFinder);
   await driver.enterText(helloWord);
   await driver.tap(find.byValueKey(KeyChatComposerMixinOnSendTextIcon));
@@ -152,6 +160,9 @@ Future chatTest(FlutterDriver driver, String chatName,
       .tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioPressedIcon));
   sleep(Duration(seconds: 3));
   await driver.tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioSendIcon));
+  await driver.tap(find.byValueKey(keyChatIconButtonIconPhone));
+  await catchScreenshot(driver, 'screenshots/callTest.png');
+  await driver.tap(find.text("Ok"));
   await driver.tap(find.pageBack());
   await catchScreenshot(driver, 'screenshots/ $chatName.png');
 }

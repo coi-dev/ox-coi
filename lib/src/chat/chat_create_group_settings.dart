@@ -59,6 +59,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
   final List<int> selectedContacts;
@@ -73,6 +74,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   ContactListBloc _contactListBloc = ContactListBloc();
   ValidatableTextFormField _groupNameField = ValidatableTextFormField(
     (context) => L10n.get(L.groupName),
+    key: Key(keyChatCreateGroupSettingsGroupNameField),
     hintText: (context) => L10n.get(L.groupNameLabel),
     needValidation: true,
     validationHint: (context) => L10n.get(L.textFieldEmptyHint),
@@ -98,6 +100,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
+            key: Key(keyChatCreateGroupSettingCheckIconButton),
             onPressed: () => _onSubmit(),
           )
         ],

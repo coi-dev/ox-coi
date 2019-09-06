@@ -71,6 +71,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
@@ -228,6 +229,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.phone),
+              key: Key(keyChatIconButtonIconPhone),
               onPressed: onPhonePressed,
               color: onPrimary,
             ),
@@ -399,6 +401,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.title.apply(color: onPrimary),
+                key: Key(keyChatNameText),
               ),
               Row(
                 children: <Widget>[

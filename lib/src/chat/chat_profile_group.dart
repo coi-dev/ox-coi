@@ -55,6 +55,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'chat_add_group_participants.dart';
 import 'chat_bloc.dart';
@@ -130,6 +131,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                                   IconButton(
                                       icon: Icon(
                                         Icons.edit,
+                                        key: Key(keyChatProfileGroupEditIcon),
                                         color: accent,
                                       ),
                                       onPressed: _goToEditName)
@@ -163,6 +165,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         backgroundColor: accent,
                         foregroundColor: onAccent,
                         child: Icon(Icons.group_add),
+                        key: Key(keyChatProfileGroupAddParticipant),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 4.0),
@@ -185,6 +188,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
               ),
               ProfileAction(
                 iconData: Icons.delete,
+                key: Key(keyChatProfileGroupDelete),
                 text: L10n.get(L.groupLeave),
                 onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
                 color: Colors.red,

@@ -88,6 +88,7 @@ void main() {
           keyContactChangeEmailFinder,
           newTestContact01,
           keyContactChangeCheckFinder);
+
       await addNewContact(
           setup.driver,
           personAddFinder,

@@ -61,6 +61,7 @@ import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
   @override
@@ -86,6 +87,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.close),
+          key: Key(keyChatCreateGroupParticipantsCloseIconButton),
           onPressed: () => navigation.pop(context),
         ),
         title: Text(L10n.get(L.groupCreate)),
@@ -93,6 +95,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
           getSearchAction(),
           IconButton(
             icon: Icon(Icons.arrow_forward),
+            key: Key(keyChatCreateGroupParticipantsSummitIconButton),
             onPressed: () => _onSubmit(),
           )
         ],

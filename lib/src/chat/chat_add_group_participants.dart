@@ -56,6 +56,7 @@ import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
@@ -88,6 +89,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.close),
+          key: Key(keyChatAddGroupParticipantsCloseIcon),
           onPressed: () => navigation.pop(context),
         ),
         title: Text(L10n.get(L.participantAdd)),
@@ -95,6 +97,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
           getSearchAction(),
           IconButton(
             icon: Icon(Icons.check),
+            key: Key(keyChatAddGroupParticipantsCheckIcon),
             onPressed: () => _onSubmit(),
           )
         ],
@@ -111,6 +114,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
     );
     return IconButton(
       icon: Icon(Icons.search),
+      key: Key(keyChatAddGroupParticipantsSearchIcon),
       onPressed: () => search.show(context),
     );
   }
