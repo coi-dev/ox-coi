@@ -41,164 +41,60 @@
  */
 
 // Imports the Flutter Driver API.
-import 'dart:io';
-
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/test_setup/global_consts.dart';
+import 'package:ox_coi/test_setup/helper_methods.dart';
+import 'package:ox_coi/test_setup/main_test_setup.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
-  group('Ox coi test:', () {
-// Define the driver.
-    FlutterDriver driver;
-    final timeout = Duration(seconds: 120);
+  group('Ox coi test.', () {
+    // Setup for the test.
+    Setup setup = new Setup(driver);
+    setup.main(timeout);
 
-    final testUserNameUserProfile = 'EDN tester';
-    final realEmail = 'enyakam3@ox.com';
-    final realPassword = 'secret';
-    final profileUserStatus = "Sent with OX COI Messenger Messenger - https://github.com/open-xchange/ox-coi";
-    final singIn = L.getKey(L.loginSignIn).toUpperCase();
-    final coiDebug = 'Coi debug';
-    final mailCom = 'Mail.com';
-    final chatWelcomeMessage = L.getKey(L.chatListPlaceholder);
+    SerializableFinder userSettingsUsernameLabelFinder =
+        find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
+    SerializableFinder userProfileUserNameTextFinder =
+        find.text(testUserNameUserProfile);
+    SerializableFinder userProfileEmailTextFinder =
+        find.byValueKey(keyUserProfileEmailText);
+    SerializableFinder userProfileStatusTextFinder =
+        find.text(profileUserStatus);
 
-//  SerializableFinder for the Ox coi welcome and provider page.
-    final finderCoiDebugProvider = find.text(coiDebug);
-    final finderMailComProvider = find.text(mailCom);
+    test('Test create profile integration tests.', () async {
+      await getAuthentication(
+          setup.driver,
+          signInFinder,
+          coiDebugProviderFinder,
+          providerEmailFinder,
+          realEmail,
+          providerPasswordFinder,
+          realPassword);
 
-//  SerializableFinder for Coi Debug dialog Windows.
-    final finderProviderEmail = find.byValueKey(keyProviderSignInEmailTextField);
-    final finderProviderPassword = find.byValueKey(keyProviderSignInPasswordTextField);
-    final finderSIGNIN = find.text(singIn);
-    final finderChatWelcome = find.text(chatWelcomeMessage);
-
-//  SerializableFinder for profile and edit profile windows.
-    final finderRootIconProfileTextTitle = find.byValueKey(keyRootIconProfileTitleText);
-
-    final finderUserProfileEditRaisedButton = find.byValueKey(keyUserProfileEditProfileRaisedButton);
-    final finderUserSettingsCheckIconButton = find.byValueKey(keyUserSettingsCheckIconButton);
-    final userSettingsUserSettingsUsernameLabel = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
-    final finderUserProfileUserNameText = find.text(testUserNameUserProfile);
-    final finderUserProfileEmailText = find.byValueKey(keyUserProfileEmailText);
-    final finderUserProfileStatusText = find.text(profileUserStatus);
-
-// Connect to a running Flutter application instance.
-    setUpAll(() async {
-      final String adbPath =
-          '/Users/openxchange/Library/Android/sdk/platform-tools/adb';
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.WRITE_CONTACTS'
-      ]);
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.READ_CONTACTS'
-      ]);
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.RECORD_AUDIO'
-      ]);
-
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.READ_EXTERNAL_STORAGE'
-      ]);
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.WRITE_EXTERNAL_STORAGE'
-      ]);
-
-      driver = await FlutterDriver.connect();
-      driver.setSemantics(true, timeout: timeout);
-    });
-
-//  Close the connection to the driver after the tests have completed.
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-    });
-
-//  Take screenshot
-    catchScreenshot(FlutterDriver driver, String path) async {
-      final List<int> pixels = await driver.screenshot();
-      final File file = new File(path);
-      await file.writeAsBytes(pixels);
-      print(path);
-    }
-
-    test('Test create profile integration tests', () async {
-      //  Get and print driver status.
-      Health health = await driver.checkHealth();
-      print(health.status);
-
-      await driver.waitFor(finderSIGNIN);
-      await driver.tap(finderSIGNIN);
-      await catchScreenshot(driver, 'screenshots/providerList1.png');
-      await driver.scroll(finderMailComProvider, 0, -300, Duration(milliseconds: 300));
-      await catchScreenshot(driver, 'screenshots/providerList2.png');
-      Invoker.current.heartbeat();
-      await catchScreenshot(driver, 'screenshots/CoiDebug.png');
-
-      //  Check real authentication and get chat.
-      await driver.tap(finderCoiDebugProvider);
-      print('\nReal authentication.');
-      await getAuthentication(driver, finderProviderEmail, realEmail, finderProviderPassword, realPassword, finderSIGNIN);
-      await catchScreenshot(driver, 'screenshots/entered.png');
-      Invoker.current.heartbeat();
-      print('\nSIGN IN ist done. Wait for chat.');
-      await driver.waitFor(finderChatWelcome);
-      Invoker.current.heartbeat();
-      await catchScreenshot(driver, 'screenshots/chat.png');
-      print('\nGet chat.');
-      await driver.tap(finderRootIconProfileTextTitle);
-      await driver.waitFor(finderUserProfileEmailText);
-      await driver.waitFor(finderUserProfileStatusText);
+      await catchScreenshot(setup.driver, 'screenshots/signInDone.png');
+      await setup.driver.waitFor(chatWelcomeFinder);
+      await setup.driver.tap(profileFinder);
+      await setup.driver.waitFor(userProfileEmailTextFinder);
+      await setup.driver.waitFor(userProfileStatusTextFinder);
       print("Check E-Mail and status ok.");
       print('\nGet Profile');
-      await driver.tap(finderUserProfileEditRaisedButton);
+      await setup.driver.tap(userProfileEditRaisedButtonFinder);
       Invoker.current.heartbeat();
       print('\nGet user Edit user settings to edit username.');
-      await driver.tap(userSettingsUserSettingsUsernameLabel);
-      await driver.enterText(testUserNameUserProfile);
+      await setup.driver.tap(userSettingsUsernameLabelFinder);
+      await setup.driver.enterText(testUserNameUserProfile);
       print('\nGet Profile after changes saved and check changes.');
-      await driver.tap(finderUserSettingsCheckIconButton);
-      await driver.waitFor(finderUserProfileUserNameText);
-      await driver.tap(finderRootIconProfileTextTitle);
-      await driver.waitFor(finderUserProfileEmailText);
-      await driver.waitFor(finderUserProfileStatusText);
+      await setup.driver.tap(userSettingsCheckIconButtonFinder);
+      await setup.driver.waitFor(userProfileUserNameTextFinder);
+      await setup.driver.waitFor(userProfileEmailTextFinder);
+      await setup.driver.waitFor(userProfileStatusTextFinder);
       print("\nUser name, status, email after edited profile is ok.");
       Invoker.current.heartbeat();
-      await catchScreenshot(driver, 'screenshots/UserChangeProfile.png');
+      await catchScreenshot(setup.driver, 'screenshots/UserChangeProfile.png');
+      await navigateTo(setup.driver, chat);
     });
   });
-}
-
-Future getAuthentication(FlutterDriver driver, SerializableFinder email, String fakeEmail, SerializableFinder password, String realPassword,
-    SerializableFinder signIn) async {
-  await driver.tap(email);
-  await driver.enterText(fakeEmail);
-  await driver.waitFor(email);
-  await driver.tap(password);
-  await driver.enterText(realPassword);
-  Invoker.current.heartbeat();
-  await driver.tap(signIn);
-  Invoker.current.heartbeat();
 }

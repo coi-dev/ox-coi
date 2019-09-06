@@ -40,13 +40,74 @@
  * for more details.
  */
 
-import 'package:flutter_driver/driver_extension.dart';
-import 'package:ox_coi/main.dart' as ox_coi;
+import 'package:flutter_driver/flutter_driver.dart';
+import 'dart:io';
+import 'package:test/test.dart';
 
-void main() {
-  // This line enables the extension.
-  enableFlutterDriverExtension();
-  // Call the `main()` function of the app, or call `runApp` with
-  // any widget you are interested in testing.
-  ox_coi.main();
+class Setup {
+  FlutterDriver _drivers;
+
+  Setup(FlutterDriver driver) {
+    this._drivers = driver;
+  }
+
+  FlutterDriver get driver => this._drivers;
+
+  main(Duration timeout) {
+    setUpAll(() async {
+      final String adbPath =
+          '/Users/openxchange/Library/Android/sdk/platform-tools/adb';
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.RECORD_AUDIO'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.READ_EXTERNAL_STORAGE'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.WRITE_EXTERNAL_STORAGE'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.WRITE_CONTACTS'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.READ_CONTACTS'
+      ]);
+      await Process.run(adbPath, [
+        'shell',
+        'pm',
+        'grant',
+        'com.openxchange.oxcoi.dev',
+        'android.permission.RECORD_AUDIO'
+      ]);
+
+      this._drivers = await FlutterDriver.connect();
+      this._drivers.setSemantics(true, timeout: timeout);
+    });
+
+    tearDownAll(() async {
+      if (this._drivers != null) {
+        this._drivers.close();
+      }
+    });
+  }
 }

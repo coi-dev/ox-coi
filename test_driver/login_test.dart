@@ -41,19 +41,21 @@
  */
 
 // Imports the Flutter Driver API.
-import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/test_setup/global_consts.dart';
+import 'package:ox_coi/test_setup/helper_methods.dart';
+import 'package:ox_coi/test_setup/main_test_setup.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
   group('Ox coi test:', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    final timeout = Duration(seconds: 120);
+    // Setup for the test.
+    Setup setup = new Setup(driver);
+    setup.main(timeout);
 
     //  SerializableFinder for the Ox coi welcome and provider page.
     final welcomeMessage = find.text(L.getKey(L.welcome));
@@ -63,51 +65,21 @@ void main() {
     final other = find.text(L.getKey(L.providerOtherMailProvider));
     final outlook = find.text('Outlook');
     final yahoo = find.text('Yahoo');
-    final coiDebug = find.text('Coi debug');
-    final mailCom = find.text('Mail.com');
     final mailbox = find.text('Mailbox.org');
+    final loginProviderSignInText = 'Sign in with Coi debug';
 
     //  SerializableFinder for Coi Debug dialog Windows.
-    final signInCoiDebug = find.text('Sign in with Coi debug');
+    final signInCoiDebug = find.text(loginProviderSignInText);
     final email = find.byValueKey(keyProviderSignInEmailTextField);
     final password = find.byValueKey(keyProviderSignInPasswordTextField);
     final signInCaps = find.text(L.getKey(L.loginSignIn).toUpperCase());
     final errorMessage = find.text(L.getKey(L.loginCheckMail));
     final chatWelcome = find.text(L.getKey(L.chatListPlaceholder));
-    final fakeEmail = 'enyakam3@ox.com3';
-    final fakePassword = 'secret2';
-    final realEmail = 'enyakam3@ox.com';
-    final realPassword = 'secret';
 
-    // Connect to a running Flutter application instance.
-    setUpAll(() async {
-      driver = await FlutterDriver.connect();
-      driver.setSemantics(true, timeout: timeout);
-    });
-
-    //  Close the connection to the driver after the tests have completed.
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-    });
-
-    //  Take screenshot
-    catchScreenshot(FlutterDriver driver, String path) async {
-      final List<int> pixels = await driver.screenshot();
-      final File file = new File(path);
-      await file.writeAsBytes(pixels);
-      print(path);
-    }
-
-    test('Test login', () async {
-      //  Get and print driver status.
-      Health health = await driver.checkHealth();
-      print(health.status);
-
+    test('Test login.', () async {
       //  Test Ox.coi welcome screen and tap on SIGN In to get the provider list, and test if all provider are contained in the list.
       await checkOxCoiWelcomeAndProviderList(
-          driver,
+          setup.driver,
           welcomeMessage,
           welcomeDescription,
           signInCaps,
@@ -115,15 +87,14 @@ void main() {
           outlook,
           yahoo,
           signIn,
-          coiDebug,
+          find.text(coiDebug),
           other,
           mailbox);
-      await catchScreenshot(driver, 'screenshots/providerList1.png');
-      await driver.scroll(mailCom, 0, -600, Duration(milliseconds: 500));
-      await catchScreenshot(driver, 'screenshots/providerList2.png');
+      await setup.driver
+          .scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
       await selectAndTapProvider(
-          driver, coiDebug, signInCoiDebug, email, password);
-      await catchScreenshot(driver, 'screenshots/CoiDebug.png');
+          setup.driver, find.text(coiDebug), signInCoiDebug, email, password);
+      await catchScreenshot(setup.driver, 'screenshots/CoiDebug.png');
 
       //  Try to sign in without email an password.
       /*  Try to sign in only whit email.
@@ -133,30 +104,31 @@ void main() {
       //  Try fake authentication.
       print('SIGN IN without email and password.');
       await getAuthentication(
-          driver, email, ' ', password, ' ', signInCaps);
-      await driver.waitFor(errorMessage);
-      await catchScreenshot(driver, 'screenshots/withoutEmailandPassword.png');
+          setup.driver, email, ' ', password, ' ', signInCaps);
+      await setup.driver.waitFor(errorMessage);
+      await catchScreenshot(
+          setup.driver, 'screenshots/withoutEmailandPassword.png');
       print('SIGN IN without email.');
       await getAuthentication(
-          driver, email, ' ', password, fakePassword, signInCaps);
-      await driver.waitFor(errorMessage);
-      await catchScreenshot(driver, 'screenshots/withoutEmail.png');
+          setup.driver, email, ' ', password, fakePassword, signInCaps);
+      await setup.driver.waitFor(errorMessage);
+      await catchScreenshot(setup.driver, 'screenshots/withoutEmail.png');
       print('SIGN IN without password.');
       await getAuthentication(
-          driver, email,fakeEmail, password, ' ', signInCaps);
-      await driver.waitFor(errorMessage);
-      await catchScreenshot(driver, 'screenshots/withoutPassword.png');
+          setup.driver, email, fakeEmail, password, ' ', signInCaps);
+      await setup.driver.waitFor(errorMessage);
+      await catchScreenshot(setup.driver, 'screenshots/withoutPassword.png');
 
       //  Check real authentication and get chat.
       print('Real authentication.');
       await getAuthentication(
-          driver, email, realEmail, password, realPassword, signInCaps);
-      await catchScreenshot(driver, 'screenshots/entered.png');
+          setup.driver, email, realEmail, password, realPassword, signInCaps);
+      await catchScreenshot(setup.driver, 'screenshots/entered.png');
       Invoker.current.heartbeat();
       print('SIGN IN ist done. Wait for chat.');
-      await driver.waitFor(chatWelcome);
+      await setup.driver.waitFor(chatWelcome);
       Invoker.current.heartbeat();
-      await catchScreenshot(driver, 'screenshots/chat.png');
+      await catchScreenshot(setup.driver, 'screenshots/chat.png');
       print('Get chat.');
     });
   });

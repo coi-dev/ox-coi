@@ -55,7 +55,8 @@ void main() {
 
     // All constants we need for the test
     final welcomeMessage = 'Welcome to OX COI Messenger';
-    final welcomeMessageOxCoi = 'OX COI Messenger works with any email account. If you have one, please sign in, otherwise register a new account first.';
+    final welcomeMessageOxCoi =
+        'OX COI Messenger works with any email account. If you have one, please sign in, otherwise register a new account first.';
     final enterEmailMessage = 'Please enter a valid e-mail address';
     final signInMessage = 'Sign in';
     final signInButton = 'SIGN IN';
@@ -80,7 +81,15 @@ void main() {
     final coiDebug = 'Coi debug';
     final manualSetting = 'Manual Settings';
 
-    final providerList = [yahoo, outlook, gmx, mailboxOrg, mailCom, otherMail, coiDebug];
+    final providerList = [
+      yahoo,
+      outlook,
+      gmx,
+      mailboxOrg,
+      mailCom,
+      otherMail,
+      coiDebug
+    ];
 
     // Run thought all provider list and get provider.
     for (int i = 0; i < providerList.length; i++) {
@@ -95,10 +104,12 @@ void main() {
           await tester.pumpAndSettle();
 
           // Test the full welcome page.
-          expectWelcomePage(welcomeMessage, welcomeMessageOxCoi, signInButton, registerButton);
+          expectWelcomePage(welcomeMessage, welcomeMessageOxCoi, signInButton,
+              registerButton);
 
           // Get loginButton and tap it to get the provider page, then test the providers welcome message.
-          await getProviderPage(tester, signInMessage, loginButton, selectProviderMethod);
+          await getProviderPage(
+              tester, signInMessage, loginButton, selectProviderMethod);
 
           if (provider != otherMail) {
             if (provider == coiDebug) {
@@ -118,12 +129,22 @@ void main() {
 
             //Try to sign in with provider.
             // Without credential.
-            await signInWithoutCredential(signInButton, tester, enterEmailMessage, emailAddress, finderSINGIN);
+            await signInWithoutCredential(signInButton, tester,
+                enterEmailMessage, emailAddress, finderSINGIN);
 
             // Test now with all credential possibilities.
             // Make credential test after selecting the provider.
-            await completeCredentialTest(tester, validEmailAddress, finderSINGIN, emailAddress, fakeEmailAddress, fakePassword, signInButton,
-                errorMessageForCredential, validPassword, errorLoginFail);
+            await completeCredentialTest(
+                tester,
+                validEmailAddress,
+                finderSINGIN,
+                emailAddress,
+                fakeEmailAddress,
+                fakePassword,
+                signInButton,
+                errorMessageForCredential,
+                validPassword,
+                errorLoginFail);
           } else {
             // We navigate in the screen to get other Provider
             await tester.drag(find.text(mailCom), Offset(0.0, -600.0));
@@ -139,7 +160,14 @@ void main() {
             expect(find.text('Sign in with other?'), findsOneWidget);
             expect(find.text(signInButton), findsOneWidget);
             await testManualSettingOtherMail(
-                emailAddress, password, signInButton, tester, fakeEmailAddress, fakePassword, finderSINGIN, manualSetting);
+                emailAddress,
+                password,
+                signInButton,
+                tester,
+                fakeEmailAddress,
+                fakePassword,
+                finderSINGIN,
+                manualSetting);
           }
         });
       });
@@ -147,8 +175,15 @@ void main() {
   });
 }
 
-Future testManualSettingOtherMail(String emailAddress, String password, String signInButton, WidgetTester tester, String fakeEmailAddress,
-    String fakePassword, Finder finderSINGIN, String manualSetting) async {
+Future testManualSettingOtherMail(
+    String emailAddress,
+    String password,
+    String signInButton,
+    WidgetTester tester,
+    String fakeEmailAddress,
+    String fakePassword,
+    Finder finderSINGIN,
+    String manualSetting) async {
   // Scroll in Other mail to tap or test  Manual settings
   final settingHelpMessage =
       "Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.";
@@ -210,8 +245,17 @@ Future testManualSettingOtherMail(String emailAddress, String password, String s
   await tester.pumpAndSettle();
 }
 
-Future completeCredentialTest(WidgetTester tester, String validEmailAddress, Finder finderSINGIN, String emailAddress, String fakeEmailAddress,
-    String fakePassword, String signInButton, String errorMessageForCredential, String validPassword, String errorLoginFail) async {
+Future completeCredentialTest(
+    WidgetTester tester,
+    String validEmailAddress,
+    Finder finderSINGIN,
+    String emailAddress,
+    String fakeEmailAddress,
+    String fakePassword,
+    String signInButton,
+    String errorMessageForCredential,
+    String validPassword,
+    String errorLoginFail) async {
   await tester.enterText(find.byType(TextField).at(0), validEmailAddress);
   await tester.tap(finderSINGIN);
   await tester.pumpAndSettle();
@@ -232,14 +276,16 @@ Future completeCredentialTest(WidgetTester tester, String validEmailAddress, Fin
   expect(find.text(errorLoginFail), findsWidgets);
 }
 
-Future signInWithoutCredential(String signInButton, WidgetTester tester, String enterEmailMessage, String emailAddress, Finder finderSINGIN) async {
+Future signInWithoutCredential(String signInButton, WidgetTester tester,
+    String enterEmailMessage, String emailAddress, Finder finderSINGIN) async {
   await tester.tap(finderSINGIN);
   await tester.pumpAndSettle();
   expect(find.text(enterEmailMessage), findsOneWidget);
   expect(find.text(emailAddress), findsWidgets);
 }
 
-Future getProviderPage(WidgetTester tester, String signInMessage, Finder loginButton, String selectProviderMethod) async {
+Future getProviderPage(WidgetTester tester, String signInMessage,
+    Finder loginButton, String selectProviderMethod) async {
   await tester.tap(loginButton);
   await tester.pumpAndSettle();
   final providerList = find.byType(ProviderList);
@@ -249,7 +295,8 @@ Future getProviderPage(WidgetTester tester, String signInMessage, Finder loginBu
   expect(providerList, findsOneWidget);
 }
 
-void expectWelcomePage(String welcomeMessage, String welcomeMessageOxCoi, String signInButton, String registerButton) {
+void expectWelcomePage(String welcomeMessage, String welcomeMessageOxCoi,
+    String signInButton, String registerButton) {
   expect(find.byType(Text), findsNWidgets(4));
   expect(find.text(welcomeMessage), findsOneWidget);
   expect(find.text(welcomeMessageOxCoi), findsOneWidget);

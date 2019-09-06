@@ -128,7 +128,7 @@ mixin ChatComposer {
         widgets.add(new IconButton(
           icon: new Icon(Icons.mic),
           onPressed: onRecordAudioPressed,
-          key: Key(KeyChat_Composer_MixinOnRecordAudioPressedIcon),
+          key: Key(KeyChatComposerMixinOnRecordAudioPressedIcon),
         ));
         widgets.add(new IconButton(
           icon: new Icon(Icons.camera_alt),
@@ -142,13 +142,13 @@ mixin ChatComposer {
       case ComposerModeType.isComposing:
         widgets.add(new IconButton(
           icon: new Icon(Icons.send),
-          onPressed: onSendText,key: Key(KeyChat_Composer_MixinOnSendTextIcon),
+          onPressed: onSendText,key: Key(KeyChatComposerMixinOnSendTextIcon),
         ));
         break;
       case ComposerModeType.isVoiceRecording:
         widgets.add(new IconButton(
           icon: new Icon(Icons.send),
-          onPressed: onRecordAudioPressed,key: Key(KeyChat_Momposer_MixinOnRecordAudioSendIcon),
+          onPressed: onRecordAudioPressed,key: Key(KeyChatComposerMixinOnRecordAudioSendIcon),
         ));
         break;
     }

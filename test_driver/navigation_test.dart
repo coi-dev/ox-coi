@@ -41,128 +41,49 @@
  */
 
 // Imports the Flutter Driver API.
-import 'dart:io';
+//import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
+import 'package:ox_coi/test_setup/helper_methods.dart';
+import 'package:ox_coi/test_setup/main_test_setup.dart';
+import 'package:ox_coi/test_setup/global_consts.dart';
 
 void main() {
-  group('Create chat list integration tests', () {
-// Define the driver.
-    FlutterDriver driver;
-    final timeout = Duration(seconds: 120);
-    final realEmail = 'enyakam3@ox.com';
-    final realPassword = 'secret';
-    final singIn = 'SIGN IN';
-    final coiDebug = 'Coi debug';
-    final meContact = "Me";
-    final profile = "Profile";
-    final chat = "Chats";
-    final contacts = "Contacts";
-    final searchReturnIconButton = find.byValueKey(keySearchReturnIconButton);
+  group('Create chat list integration tests.', () {
+    // Setup for the test.
+    Setup setup = new Setup(driver);
+    setup.main(timeout);
 
-//  SerializableFinder.
-    final finderCoiDebugProvider = find.text(coiDebug);
-    final finderProviderEmail =
-        find.byValueKey(keyProviderSignInEmailTextField);
-    final finderProviderPassword =
-        find.byValueKey(keyProviderSignInPasswordTextField);
-    final finderSIGNIN = find.text(singIn);
-    final cancelFinder = find.byValueKey(keyDialogBuilderCancelFlatButton);
-    final personAddFinder =
-        find.byValueKey(keyContactListPersonAddFloatingActionButton);
-    final finderCreateChat =
-        find.byValueKey(keyChatListChatFloatingActionButton);
-    final profileFinder = find.text(profile);
-    final contactsFinder = find.text(contacts);
-    final chatsFinder = find.text(chat);
-    final finderUserProfileEditRaisedButton =
-        find.byValueKey(keyUserProfileEditProfileRaisedButton);
-    final finderUserSettingsCheckIconButton =
-        find.byValueKey(keyUserSettingsCheckIconButton);
-    final userSettingsUserSettingsUsernameLabel =
+    SerializableFinder searchReturnIconButton =
+        find.byValueKey(keySearchReturnIconButton);
+    SerializableFinder settingsUserSettingsUsernameLabelFinder =
         find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
 
-    // Connect to a running Flutter application instance.
-    setUpAll(() async {
-      final String adbPath =
-          '/Users/openxchange/Library/Android/sdk/platform-tools/adb';
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.WRITE_CONTACTS'
-      ]);
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.READ_CONTACTS'
-      ]);
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.RECORD_AUDIO'
-      ]);
-
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.READ_EXTERNAL_STORAGE'
-      ]);
-      await Process.run(adbPath, [
-        'shell',
-        'pm',
-        'grant',
-        'com.openxchange.oxcoi.dev',
-        'android.permission.WRITE_EXTERNAL_STORAGE'
-      ]);
-      driver = await FlutterDriver.connect();
-      driver.setSemantics(true, timeout: timeout);
-    });
-
-//  Close the connection to the driver after the tests have completed.
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-    });
-
-    test('Test Create chat list integration tests', () async {
-      //  Get and print driver status.
-      await driver.waitFor(finderSIGNIN);
-      await driver.tap(finderSIGNIN);
-      await catchScreenshot(driver, 'screenshots/providerList1.png');
-
+    test('Test Create chat list integration tests.', () async {
       //  Check real authentication and get chat.
-      await driver.tap(finderCoiDebugProvider);
-      print('\nReal authentication.');
-      await getAuthentication(driver, finderProviderEmail, realEmail,
-          finderProviderPassword, realPassword, finderSIGNIN);
+      await getAuthentication(
+          setup.driver,
+          signInFinder,
+          coiDebugProviderFinder,
+          providerEmailFinder,
+          realEmail,
+          providerPasswordFinder,
+          realPassword);
 
-      await driver.tap(profileFinder);
-      await driver.tap(contactsFinder);
-      await driver.tap(cancelFinder);
-      await driver.tap(chatsFinder);
+      await setup.driver.tap(profileFinder);
+      await setup.driver.tap(contactsFinder);
+      await setup.driver.tap(cancelFinder);
+      await setup.driver.tap(chatsFinder);
 
       //  Test chat navigation.
-      await checkChat(
-        driver,
-        finderCreateChat,
-        searchReturnIconButton,
-      );
+      await checkChat(setup.driver, createChatFinder, searchReturnIconButton);
 
       //  Test contact navigation.
       await checkContact(
-        driver,
+        setup.driver,
         searchReturnIconButton,
         personAddFinder,
         meContact,
@@ -172,11 +93,11 @@ void main() {
 
       //  Test profile navigation.
       await checkProfile(
-          driver,
+          setup.driver,
           profileFinder,
-          finderUserProfileEditRaisedButton,
-          userSettingsUserSettingsUsernameLabel,
-          finderUserSettingsCheckIconButton,
+          userProfileEditRaisedButtonFinder,
+          settingsUserSettingsUsernameLabelFinder,
+          userSettingsCheckIconButtonFinder,
           contactsFinder,
           cancelFinder);
     });
@@ -202,31 +123,6 @@ Future checkProfile(
   await catchScreenshot(driver, 'screenshots/UserChangeProfile.png');
   await driver.tap(contactsFinder);
   await driver.waitForAbsent(cancelFinder);
-}
-
-Future getAuthentication(
-    FlutterDriver driver,
-    SerializableFinder email,
-    String fakeEmail,
-    SerializableFinder password,
-    String realPassword,
-    SerializableFinder signIn) async {
-  await driver.tap(email);
-  await driver.enterText(fakeEmail);
-  await driver.waitFor(email);
-  await driver.tap(password);
-  await driver.enterText(realPassword);
-  Invoker.current.heartbeat();
-  await driver.tap(signIn);
-  Invoker.current.heartbeat();
-}
-
-//  Take screenshot
-Future catchScreenshot(FlutterDriver driver, String path) async {
-  final List<int> pixels = await driver.screenshot();
-  final File file = new File(path);
-  await file.writeAsBytes(pixels);
-  print(path);
 }
 
 Future checkChat(
@@ -277,5 +173,5 @@ Future checkContact(
   await driver.tap(find.byValueKey(keyContactListSearchIconButton));
   await driver.waitFor(find.text(newTestName));
   await driver.tap(searchReturnIconButton);
-  print('\nNew contact is added');
+  print('\nNew contact is added.');
 }
