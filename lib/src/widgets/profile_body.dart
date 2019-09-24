@@ -102,9 +102,9 @@ showActionDialog(BuildContext context, ProfileActionType action, Function onPerf
       type = Type.contactBlockDialog;
       break;
     case ProfileActionType.deleteChat:
-      title = L10n.get(L.delete);
-      content = L10n.get(L.chatDeleteP);
-      positiveButton = L10n.get(L.chatDeleteText);
+      title = L10n.get(L.chatDeleteP);
+      content = L10n.get(L.chatDeleteText);
+      positiveButton = L10n.get(L.delete);
       type = Type.chatDeleteDialog;
       break;
     case ProfileActionType.leave:
