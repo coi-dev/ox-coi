@@ -46,8 +46,8 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
-import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
@@ -128,10 +128,12 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
           imapServerField.controller.text = state.imapServer;
           imapPortField.controller.text = state.imapPort;
           smtpLoginNameField.controller.text = state.smtpLogin;
-          smtpServerField.controller.text = state.imapServer;
+          smtpServerField.controller.text = state.smtpServer;
           smtpPortField.controller.text = state.smtpPort;
-          selectedImapSecurity = convertProtocolIntToString(context, state.imapSecurity);
-          selectedSmtpSecurity = convertProtocolIntToString(context, state.smtpSecurity);
+          setState(() {
+            selectedImapSecurity = convertProtocolIntToString(context, state.imapSecurity);
+            selectedSmtpSecurity = convertProtocolIntToString(context, state.smtpSecurity);
+          });
         } else if (state is SettingsManualFormStateValidation) {
           var success = formKey.currentState.validate();
           if (success) {
