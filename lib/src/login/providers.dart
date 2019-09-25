@@ -123,10 +123,10 @@ int getSecurityId(String securityString) {
   switch (securityString) {
     case "ssltls":
       return 1;
-      break;
     case "starttls":
       return 2;
-      break;
+    case "plain":
+      return 3;
     default:
       return 0;
   }
@@ -153,13 +153,7 @@ String getProviderIconPath(BuildContext context, String id) {
     case "other":
       path = otherProviderLogoUrl;
       break;
-    case "coi":
-      path = appLogoUrl;
-      break;
-    case "coi-integration":
-      path = appLogoUrl;
-      break;
-    case "coi-dovecot":
+    default:
       path = appLogoUrl;
       break;
   }
