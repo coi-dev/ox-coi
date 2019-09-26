@@ -63,11 +63,9 @@ class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
       yield SettingsDebugStateSuccess(
         token: event.token,
         pushResource: event.pushResource,
-        publicKeyBase64: event.publicKeyBase64,
-        privateKey: event.privateKey,
-        auth: event.auth,
         endpoint: event.endpoint,
         pushServiceUrl: event.pushServiceUrl,
+        pushState: event.pushState,
       );
     }
   }
@@ -76,19 +74,15 @@ class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
     var pushManager = PushManager();
     String token = await pushManager.getPushToken();
     String pushResource = await pushManager.getPushResource();
-    String publicKeyBase64 = await getPreference(preferenceNotificationsP256dhPublic);
-    String privateKey = await getPreference(preferenceNotificationsP256dhPrivate);
-    String auth = await getPreference(preferenceNotificationsAuth);
     String endpoint = await getPreference(preferenceNotificationsEndpoint);
     String pushServiceUrl = await getPreference(preferenceNotificationsPushServiceUrl);
+    String pushState = await getPreference(preferenceNotificationsPushStatus);
     dispatch(DebugLoaded(
       token: token,
       pushResource: pushResource ?? "Not set",
-      publicKeyBase64: publicKeyBase64,
-      privateKey: privateKey,
-      auth: auth,
       endpoint: endpoint,
       pushServiceUrl: pushServiceUrl,
+      pushState: pushState,
     ));
   }
 }

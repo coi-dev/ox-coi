@@ -98,7 +98,7 @@ class SecurityHelper {
 
     KeyPair generateKey() {
         ECGenParameterSpec params = new ECGenParameterSpec(CURVE_NAME);
-        KeyPairGenerator generator = new KeyPairGenerator.EC();
+        KeyPairGenerator generator = new KeyPairGenerator.ECDH();
         try {
             generator.initialize(params, new SecureRandom());
         } catch (InvalidAlgorithmParameterException e) {

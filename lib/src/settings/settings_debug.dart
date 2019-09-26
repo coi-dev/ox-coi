@@ -105,12 +105,9 @@ class _SettingsDebugState extends State<SettingsDebug> {
           } else if (state is SettingsDebugStateSuccess) {
             var token = state.token;
             var pushResource = state.pushResource;
-            var secrets = "EC public key base64: ${state.publicKeyBase64}\n"
-                "EC private key: ${state.privateKey}\n"
-                "Stymmetric auth secret: ${state.auth}\n"
+            var pushData = "Push status: ${state.pushState}\n"
                 "Push endpoint: ${state.endpoint}\n"
-                "Push service url: ${state.pushServiceUrl}\n"
-                "Values are updated on new push resource registration";
+                "Push service url: ${state.pushServiceUrl}";
             return ListView(
               children: ListTile.divideTiles(context: context, tiles: [
                 ListTile(
@@ -124,11 +121,11 @@ class _SettingsDebugState extends State<SettingsDebug> {
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  title: Text(L10n.get(L.debugSecrets)),
-                  subtitle: Text(secrets),
+                  title: Text(L10n.get(L.debugPushData)),
+                  subtitle: Text(pushData),
                   onTap: () {
-                    _logger.info(secrets);
-                    copyToClipboardWithToast(text: secrets, toastText: getDefaultCopyToastText(context));
+                    _logger.info(pushData);
+                    copyToClipboardWithToast(text: pushData, toastText: getDefaultCopyToastText(context));
                   },
                 ),
                 ListTile(

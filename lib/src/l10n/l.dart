@@ -194,7 +194,7 @@ class L {
 
   // Security token of the FCM service. FCM is a abbreviation and mustn't be translated
   static final debugFCMToken = _translationKey("FCM token");
-  static final debugSecrets = _translationKey("Secrets");
+  static final debugPushData = _translationKey("Push data");
   static final debugPushResource = _translationKey("Push resource (via push service)");
   static final debugPushResourceRegister = _translationKey("Register new push resource");
   static final debugPushResourceDelete = _translationKey("Delete push resource");

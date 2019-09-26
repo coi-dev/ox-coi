@@ -44,6 +44,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
@@ -62,9 +63,9 @@ import 'push_service.dart';
 enum PushSetupState {
   initial,
   resourceRegistered,
-  prepareMetadataSubscribed,
+  sendMetadataSubscribe,
   metadataSubscribed,
-  prepareMetadataValidated,
+  sendMetadataValidate,
   metadataValidated,
   unchanged,
 }
@@ -78,7 +79,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   int _metadataListenerId;
   int _webPushSubscriptionListenerId;
   int _errorListenerId;
-  static const _localWebPushId = 1;
+  static const _subscribeListenerId = 1001;
+  static const _validateListenerId = 1002;
 
   PublishSubject<Event> pushSubject = new PublishSubject();
   static const securityChannelName = const MethodChannel("oxcoi.security");
@@ -91,6 +93,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     bool pushAvailable = await _checkWebPushAvailable();
     if (!pushAvailable) {
       yield PushStateSuccess(pushAvailable: false, pushSetupState: PushSetupState.initial);
+      _setNotificationPushStatus(PushSetupState.initial);
       return;
     }
     if (event is RegisterPushResource) {
@@ -105,6 +108,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
             pushAvailable: true,
             pushSetupState: PushSetupState.resourceRegistered,
           );
+          _setNotificationPushStatus(PushSetupState.resourceRegistered);
           dispatch(SubscribeMetadata(pushResource: pushResource));
         }
       } catch (error) {
@@ -137,6 +141,8 @@ class PushBloc extends Bloc<PushEvent, PushState> {
             pushAvailable: true,
             pushSetupState: PushSetupState.resourceRegistered,
           );
+          _setNotificationPushStatus(PushSetupState.resourceRegistered);
+          // TODO is requesting a new metadata subscription actually needed? Does the push resource ID or endpoint changes?
           dispatch(SubscribeMetadata(pushResource: pushResource));
         }
       } catch (error) {
@@ -153,6 +159,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
             pushAvailable: true,
             pushSetupState: PushSetupState.initial,
           );
+          _setNotificationPushStatus(PushSetupState.initial);
         }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
@@ -161,14 +168,16 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       await _subscribeMetaData(event.pushResource);
       yield PushStateSuccess(
         pushAvailable: true,
-        pushSetupState: PushSetupState.prepareMetadataSubscribed,
+        pushSetupState: PushSetupState.sendMetadataSubscribe,
       );
+      _setNotificationPushStatus(PushSetupState.sendMetadataSubscribe);
     } else if (event is ValidateMetadata) {
       await _confirmValidation(event.validation);
       yield PushStateSuccess(
         pushAvailable: true,
-        pushSetupState: PushSetupState.prepareMetadataValidated,
+        pushSetupState: PushSetupState.sendMetadataValidate,
       );
+      _setNotificationPushStatus(PushSetupState.sendMetadataValidate);
     }
   }
 
@@ -235,6 +244,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   Future<void> _subscribeMetaData(ResponsePushResource responsePushResource) async {
     await _generateSecrets();
     String publicKey = await _getKey();
+    //TODO decide where to get / load / generate all keys, we should prefer Dart if possible
     String auth = await _getAuthSecret();
     String clientEndpoint = generateUuid();
     await setPreference(preferenceNotificationsEndpoint, clientEndpoint);
@@ -255,19 +265,17 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     _registerListeners();
     _context = Context();
     String encodedBody = json.encode(pushSubscribeMetaData);
-    await _context.subscribeWebPush(clientEndpoint, encodedBody, _localWebPushId);
-    print("[PushBloc._subscribeMetaData] dboehrs");
+    await _context.subscribeWebPush(clientEndpoint, encodedBody, _subscribeListenerId);
   }
 
   Future<void> _confirmValidation(String message) async {
     String clientEndpoint = await getPreference(preferenceNotificationsEndpoint);
-    await _context.validateWebPush(clientEndpoint, message, _localWebPushId);
-    print("[PushBloc._confirmValidation] dboehrs");
+    await _context.validateWebPush(clientEndpoint, message, _validateListenerId);
   }
 
   void _registerListeners() async {
     if (_metadataListenerId == null) {
-      pushSubject.listen(_successCallback, onError: _errorCallback);
+      pushSubject.listen(_metadataSuccessCallback, onError: _errorCallback);
       _metadataListenerId = await _core.listen(Event.setMetaDataDone, pushSubject);
       _webPushSubscriptionListenerId = await _core.listen(Event.webPushSubscription, pushSubject);
       _errorListenerId = await _core.listen(Event.error, pushSubject);
@@ -283,13 +291,22 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     _errorListenerId = null;
   }
 
-  void _successCallback(Event event) {
-    print("[PushBloc._successCallback] dboehrs ${event.eventId}");
-    _logger.info("Received event ${event.eventId} with payload 1: ${event.data1} and payload 2: ${event.data2}");
+  void _metadataSuccessCallback(Event event) {
+    var data1 = event.data1;
+    _logger.info("Received event ${event.eventId} with payload 1: $data1 and payload 2: ${event.data2}");
+    if (data1 == _subscribeListenerId) {
+      _setNotificationPushStatus(PushSetupState.metadataSubscribed);
+    } else if (data1 == _validateListenerId) {
+      _setNotificationPushStatus(PushSetupState.metadataValidated);
+    }
   }
 
   _errorCallback(error) {
     _logger.info("An error occured while listening: $error");
+  }
+
+  _setNotificationPushStatus(PushSetupState state) {
+    setPreference(preferenceNotificationsPushStatus, describeEnum(state));
   }
 
   Future<void> _generateSecrets() async => await securityChannelName.invokeMethod('generateSecrets');
@@ -297,5 +314,4 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   Future<String> _getKey() async => await securityChannelName.invokeMethod('getKey');
 
   Future<String> _getAuthSecret() async => await securityChannelName.invokeMethod('getAuthSecret');
-
 }
