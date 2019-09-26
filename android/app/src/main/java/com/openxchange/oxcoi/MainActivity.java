@@ -112,7 +112,7 @@ public class MainActivity extends FlutterActivity {
                         result.success(authSecret);
                     } else if (call.method.contentEquals("decrypt")) {
                         String input = call.argument("input");
-                        byte[] inputBytes = Base64.decode(input, Base64.NO_WRAP);
+                        byte[] inputBytes = Base64.decode(input, Base64.URL_SAFE);
                         String decryptMessage = securityHelper.decryptMessage(inputBytes);
                         result.success(decryptMessage);
                     }
