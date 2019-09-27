@@ -51,6 +51,7 @@ import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/security.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
@@ -98,8 +99,10 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     systemContacts.forEach((contact) {
       if (contact.emails.length != 0) {
         contact.emails.forEach((email) {
-          coreContacts += getFormattedContactData(contact, email);
-          updatePhoneNumbers(phoneNumbers, contact, email);
+          if (isEmail(email.value)) {
+            coreContacts += getFormattedContactData(contact, email);
+            updatePhoneNumbers(phoneNumbers, contact, email);
+          }
         });
       }
     });
