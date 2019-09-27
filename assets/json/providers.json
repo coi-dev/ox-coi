@@ -91,13 +91,13 @@
       "id": "coi",
       "name": "Coi debug",
       "preset": {
-        "incoming_security": "",
+        "incoming_security": "starttls",
         "incoming_server": "mobile-coi.open-xchange.com",
         "incoming_protocol": "",
-        "incoming_port": 0,
-        "outgoing_security": "",
+        "incoming_port": 143,
+        "outgoing_security": "starttls",
         "outgoing_server": "mobile-coi.open-xchange.com",
-        "outgoing_port": 0
+        "outgoing_port": 25
       }
     },
     {
