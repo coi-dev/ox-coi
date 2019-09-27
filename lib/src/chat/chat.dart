@@ -88,8 +88,9 @@ class Chat extends StatefulWidget {
   final String newPath;
   final int newFileType;
   final SharedData sharedData;
+  final bool headlessStart;
 
-  Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType, this.sharedData});
+  Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType, this.sharedData, this.headlessStart = false});
 
   @override
   _ChatState createState() => new _ChatState();
@@ -117,7 +118,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
-    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
+    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
     final chatObservable = new Observable<ChatState>(_chatBloc.state);
     chatObservable.listen((state) {
       if (state is ChatStateSuccess) {
@@ -366,65 +367,73 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           name = "";
           subTitle = "";
         }
-        return InkWell(
-          onTap: () => _chatTitleTapped(),
-          child: Row(
+        if (isInviteChat(widget.chatId)) {
+          return buildRow(imagePath, name, subTitle, color, context, isVerified);
+        } else {
+          return InkWell(
+            onTap: () => _chatTitleTapped(),
+            child: buildRow(imagePath, name, subTitle, color, context, isVerified),
+          );
+        }
+      },
+    );
+  }
+
+  Row buildRow(String imagePath, String name, String subTitle, Color color, BuildContext context, bool isVerified) {
+    return Row(
+      children: <Widget>[
+        Avatar(
+          imagePath: imagePath,
+          textPrimary: name,
+          textSecondary: subTitle,
+          color: color,
+        ),
+        Padding(padding: EdgeInsets.only(left: appBarAvatarTextPadding)),
+        Flexible(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Avatar(
-                imagePath: imagePath,
-                textPrimary: name,
-                textSecondary: subTitle,
-                color: color,
+              Text(
+                name,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.title.apply(color: onPrimary),
               ),
-              Padding(padding: EdgeInsets.only(left: appBarAvatarTextPadding)),
-              Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      name,
+              Row(
+                children: <Widget>[
+                  Visibility(
+                    visible: _chatBloc.isGroup,
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: iconTextPadding),
+                        child: Icon(
+                          Icons.group,
+                          size: iconSize,
+                        )),
+                  ),
+                  Visibility(
+                    visible: isVerified,
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: iconTextPadding),
+                        child: Icon(
+                          Icons.verified_user,
+                          size: iconSize,
+                        )),
+                  ),
+                  Expanded(
+                    child: Text(
+                      subTitle,
+                      style: Theme.of(context).textTheme.subtitle.apply(color: onPrimary),
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.title.apply(color: onPrimary),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Visibility(
-                          visible: _chatBloc.isGroup,
-                          child: Padding(
-                              padding: const EdgeInsets.only(right: iconTextPadding),
-                              child: Icon(
-                                Icons.group,
-                                size: iconSize,
-                              )),
-                        ),
-                        Visibility(
-                          visible: isVerified,
-                          child: Padding(
-                              padding: const EdgeInsets.only(right: iconTextPadding),
-                              child: Icon(
-                                Icons.verified_user,
-                                size: iconSize,
-                              )),
-                        ),
-                        Expanded(
-                          child: Text(
-                            subTitle,
-                            style: Theme.of(context).textTheme.subtitle.apply(color: onPrimary),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 

@@ -70,7 +70,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         if (chatId == Chat.typeInvite) {
           _setupInviteChat(event.messageId);
         } else {
-          _setupChat(chatId);
+          _setupChat(chatId, event.isHeadless);
         }
       } catch (error) {
         yield ChatStateFailure(error: error.toString());
@@ -117,12 +117,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
   }
 
-  void _setupChat(int chatId) async {
+  void _setupChat(int chatId, bool isHeadless) async {
     var chatRepository = RepositoryManager.get(RepositoryType.chat);
     var contactRepository = RepositoryManager.get(RepositoryType.contact);
     Context context = Context();
     Chat chat = chatRepository.get(chatId);
-    if (chat == null) {
+    if (chat == null && isHeadless) {
       chatRepository.putIfAbsent(id: chatId);
       chat = chatRepository.get(chatId);
     }

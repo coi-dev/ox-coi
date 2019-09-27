@@ -54,6 +54,7 @@ import 'package:ox_coi/src/utils/text.dart';
 
 class NotificationManager {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   //TODO: Add better AndroidNotificationDetails
   final platformChannelSpecifics = NotificationDetails(
     AndroidNotificationDetails(
@@ -93,7 +94,12 @@ class NotificationManager {
     if (!isNullOrEmpty(payload)) {
       navigation.push(
         _buildContext,
-        MaterialPageRoute(builder: (context) => Chat(chatId: int.parse(payload))),
+        MaterialPageRoute(
+          builder: (context) => Chat(
+            chatId: int.parse(payload),
+            headlessStart: true,
+          ),
+        ),
       );
     }
   }

@@ -170,6 +170,8 @@ class L {
   static final contactBlockTextXY = _translationKey("Do you really want to block %s (%s)?");
   // Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
   static final contactDeleteTextXY = _translationKey("Do you really want to delete %s (%s)?");
+  // Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+  static final contactDeleteTextX = _translationKey("Do you really want to delete %s?");
   static final contactEdit = _translationKey("Edit contact");
   // Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
   static final contactUnblockTextX = _translationKey("Do you want to unblock %s?");

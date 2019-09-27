@@ -49,8 +49,9 @@ abstract class ChatEvent {}
 class RequestChat extends ChatEvent {
   final int chatId;
   final int messageId;
+  final bool isHeadless;
 
-  RequestChat({@required this.chatId, this.messageId});
+  RequestChat({@required this.chatId, this.isHeadless, this.messageId});
 }
 
 class ChatLoaded extends ChatEvent {
