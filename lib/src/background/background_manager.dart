@@ -73,7 +73,9 @@ class BackgroundManager {
 
   factory BackgroundManager() => _instance ??= BackgroundManager._internal();
 
-  BackgroundManager._internal() {
+  BackgroundManager._internal();
+
+  setupAndStart() {
     BackgroundFetch.registerHeadlessTask(backgroundHeadlessTask);
     BackgroundFetch.configure(
         BackgroundFetchConfig(
@@ -84,6 +86,7 @@ class BackgroundManager {
         ),
         _callback);
     _running = true;
+    _logger.info("Configured and started background fetch");
   }
 
   Future<void> _callback() async {

@@ -90,7 +90,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
 
   @override
   Stream<PushState> mapEventToState(PushEvent event) async* {
-    bool pushAvailable = await _checkWebPushAvailable();
+    bool pushAvailable = await _isWebPushAvailable();
     if (!pushAvailable) {
       yield PushStateSuccess(pushAvailable: false, pushSetupState: PushSetupState.initial);
       _setNotificationPushStatus(PushSetupState.initial);
@@ -231,7 +231,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     await removePreference(preferenceNotificationsPush);
   }
 
-  Future<bool> _checkWebPushAvailable() async {
+  Future<bool> _isWebPushAvailable() async {
     _context = Context();
     return await _context.isWebPushSupported() == 1;
   }

@@ -41,6 +41,7 @@
  */
 
 import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/background/background_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'settings_notifications_event_state.dart';
@@ -69,8 +70,9 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
   void loadSettings() async {
     bool pullPreference = await getPreference(preferenceNotificationsPull);
     if (pullPreference == null) {
-      await setPreference(preferenceNotificationsPull, false);
-      pullPreference = false;
+      bool defaultPullPreference = !(await isCoiSupported());
+      await setPreference(preferenceNotificationsPull, defaultPullPreference);
+      pullPreference = defaultPullPreference;
     }
     dispatch(SettingLoaded(pullActive: pullPreference));
   }
@@ -86,5 +88,11 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
       backgroundManager.stop();
     }
     dispatch(ActionSuccess(pullActive: newPullPreference));
+  }
+
+  Future<bool> isCoiSupported() async {
+    var context = Context();
+    var isCoiSupported = (await context.isCoiSupported()) == 1;
+    return isCoiSupported;
   }
 }

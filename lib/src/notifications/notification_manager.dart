@@ -92,15 +92,23 @@ class NotificationManager {
   Future onSelectNotification(String payload) {
     Navigation navigation = Navigation();
     if (!isNullOrEmpty(payload)) {
-      navigation.push(
-        _buildContext,
-        MaterialPageRoute(
-          builder: (context) => Chat(
-            chatId: int.parse(payload),
-            headlessStart: true,
+      var chatId = int.parse(payload);
+      var isChatNavigatable = navigation.current?.equal(Navigatable(Type.chat, params: [chatId]));
+      if (isChatNavigatable == null || !isChatNavigatable) {
+        navigation.pushAndRemoveUntil(
+          _buildContext,
+          MaterialPageRoute(
+            builder: (context) {
+              return Chat(
+                chatId: chatId,
+                headlessStart: true,
+              );
+            },
           ),
-        ),
-      );
+          ModalRoute.withName(Navigation.root),
+          Navigatable(Type.chatList),
+        );
+      }
     }
   }
 

@@ -67,7 +67,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   var _notificationManager = NotificationManager();
   var _pushManager = PushManager();
   var _localPushManager = LocalPushManager();
-  var _backgroundManager = BackgroundManager();
 
   @override
   MainState get initialState => MainStateInitial();
@@ -91,7 +90,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       }
     } else if (event is AppLoaded) {
       if (event.configured) {
-        await _setupInitialAppState();
+        await _setupLoggedInAppState();
       }
       yield MainStateSuccess(configured: event.configured);
     }
@@ -101,11 +100,13 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     _notificationManager.setup(event.context);
     _pushManager.setup(event.context);
     _localPushManager.setup();
+  }
+
+  Future<void> setupBackgroundManager(bool coiSupported) async {
     bool pullPreference = await getPreference(preferenceNotificationsPull);
-    if (pullPreference == null || !pullPreference) {
-      _backgroundManager.stop();
-    } else {
-      _backgroundManager.start();
+    if ((pullPreference == null && !coiSupported) || (pullPreference != null && pullPreference)) {
+      var backgroundManager = BackgroundManager();
+      backgroundManager.setupAndStart();
     }
   }
 
@@ -131,17 +132,23 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     dispatch(AppLoaded(configured: configured));
   }
 
-  Future<void> _setupInitialAppState() async {
+  Future<void> _setupLoggedInAppState() async {
     var context = Context();
-    var isCoiSupported = (await context.isCoiSupported()) == 1;
-    if (isCoiSupported) {
+    bool coiSupported = await isCoiSupported(context);
+    if (coiSupported) {
       await context.setCoiEnabled(1, 1);
       _logger.info("Setting coi enable to 1");
       await context.setCoiMessageFilter(1, 1);
       _logger.info("Setting coi message filter to 1");
     }
+    await setupBackgroundManager(coiSupported);
     ContactListBloc contactListBloc = ContactListBloc();
     contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+  }
+
+  Future<bool> isCoiSupported(Context context) async {
+    var isCoiSupported = (await context.isCoiSupported()) == 1;
+    return isCoiSupported;
   }
 
   Future<void> _openExtensionDatabase() async {
@@ -149,5 +156,4 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     var contactExtensionProvider = ContactExtensionProvider();
     await contactExtensionProvider.open(core.dbPath);
   }
-
 }
