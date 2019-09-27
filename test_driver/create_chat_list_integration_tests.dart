@@ -64,7 +64,7 @@ void main() {
     final coiDebug = 'Coi debug';
     final searchString = "Douglas00";
     final chatWelcomeMessage =
-        'Welcome to OX Coi!\nPlease start a new chat by tapping the chat bubble icon.';
+        'Welcome to OX COI Messenger!\nPlease start a new chat by tapping the chat bubble icon.';
     final typeSomethingComposePlaceholder = "Type something...";
     final helloWord = "Hello word";
 

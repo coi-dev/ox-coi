@@ -54,8 +54,8 @@ void main() {
     final mockObserver = MockNavigatorObserver();
 
     // All constants we need for the test
-    final welcomeMessage = 'Welcome to OX Coi';
-    final welcomeMessageOxCoi = 'OX Coi works with any email account. If you have one, please sign in, otherwise register a new account first.';
+    final welcomeMessage = 'Welcome to OX COI Messenger';
+    final welcomeMessageOxCoi = 'OX COI Messenger works with any email account. If you have one, please sign in, otherwise register a new account first.';
     final enterEmailMessage = 'Please enter a valid e-mail address';
     final signInMessage = 'Sign in';
     final signInButton = 'SIGN IN';

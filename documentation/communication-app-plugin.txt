@@ -5,7 +5,7 @@ digraph G {
 		style = filled,
 		fontname = "Helvetica-Outline" 
 		];
-	"OX Coi App (Flutter)" -> "Delta Chat Core Plugin API (Dart)"
+	"OX COI Messenger App (Flutter)" -> "Delta Chat Core Plugin API (Dart)"
 	"Delta Chat Core Plugin API (Dart)" -> "Delta Chat Core Plugin Native Android API (Java/Kotlin)"
 	"Delta Chat Core Plugin API (Dart)" -> "Delta Chat Core Plugin Native iOS API (ObjC/Swift)"
 	"Delta Chat Core Plugin Native Android API (Java/Kotlin)" -> "Delta Chat Core IMAP/SMTP logic (C)"

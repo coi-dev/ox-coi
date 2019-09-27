@@ -58,7 +58,7 @@ void main() {
     final testUserNameUserProfile = 'EDN tester';
     final realEmail = 'enyakam3@ox.com';
     final realPassword = 'secret';
-    final profileUserStatus = "Sent with OX Coi Messenger - https://github.com/open-xchange/ox-coi";
+    final profileUserStatus = "Sent with OX COI Messenger Messenger - https://github.com/open-xchange/ox-coi";
     final singIn = L.getKey(L.loginSignIn).toUpperCase();
     final coiDebug = 'Coi debug';
     final mailCom = 'Mail.com';
