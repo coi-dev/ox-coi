@@ -125,7 +125,8 @@ class NotificationManager {
     await Future.forEach(_contactRepository.getAll(), (DeltaChatCore.Contact contact) async {
       String address = await contact.getAddress();
       if (address == fromEmail) {
-        name = await contact.getName();
+        var contactName = await contact.getName();
+        name = contactName.isNotEmpty ? contactName : fromEmail;
         var context = DeltaChatCore.Context();
         chatId = await context.getChatByContactId(contact.id);
       }

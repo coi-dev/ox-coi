@@ -118,7 +118,7 @@ const profileEditPhotoButtonBottomPosition = 24.0;
 const editUserAvatarVerticalPadding = 24.0;
 const editUserAvatarEditIconSize = 36.0;
 const editUserAvatarImageMaxSize = 512;
-const editUserAvatarRation = 1.0;
+const editUserAvatarRatio = 1.0;
 
 // Login
 const loginLogoSize = 200.0;

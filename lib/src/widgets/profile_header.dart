@@ -105,8 +105,7 @@ class ProfileAvatar extends StatelessWidget {
       if (newAvatar != null) {
         File croppedAvatar = await ImageCropper.cropImage(
           sourcePath: newAvatar.path,
-          ratioX: editUserAvatarRation,
-          ratioY: editUserAvatarRation,
+          aspectRatio: CropAspectRatio(ratioX: editUserAvatarRatio, ratioY: editUserAvatarRatio),
           maxWidth: editUserAvatarImageMaxSize,
           maxHeight: editUserAvatarImageMaxSize,
         );
