@@ -1,0 +1,886 @@
+# Ivar Snaaijer <Ivar@workshop-chapina.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: oxappsuite\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-08-28 20:34+0200\n"
+"Last-Translator: Ivar Snaaijer <Ivar@workshop-chapina.com>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s door %s"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "%s door mijzelf"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "%s gekopieerd naar het klembord"
+
+#, c-format
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "1 contact"
+msgstr[1] "%d contacten"
+
+#, c-format
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "1 deelnemer"
+msgstr[1] "%i deelnemers"
+
+#, c-format
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "1 deelnemer"
+msgstr[1] "%i deelnemers"
+
+#, c-format
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "1 systeemcontact geïmporteerd"
+msgstr[1] "%i systeemcontacten geïmporteerd"
+
+msgid "About"
+msgstr "Over"
+
+msgid "Account settings"
+msgstr "Accountinstellingen"
+
+msgid "Account settings successfully changed"
+msgstr "Accountinstellingen zijn succesvol aangepast"
+
+msgid "Add contact"
+msgstr "Contactpersoon toevoegen"
+
+msgid "Add participants"
+msgstr "Deelnemers toevoegen"
+
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+msgid "Advanced IMAP Settings"
+msgstr "Geavanceerde IMAP Instellingen"
+
+msgid "Advanced SMTP Settings"
+msgstr "Geavanceerde SMTP Instellingen"
+
+msgid "All your contacts are in this chat."
+msgstr "Al uw contacten zijn in deze chat."
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr ""
+"een Autocrypt configuratie bericht deelt op een veilige manier uw"
+" versleutelingsinstellingen met andere Autocrypt-compatibele apps. De"
+" instellingen worden beveiligd met een configuratiecode die hier wordt"
+" getoond, deze moet ingevoerd worden op het andere apparaat."
+
+msgid "App name"
+msgstr "App naam"
+
+msgid "App version"
+msgstr "App versie"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Instellingen toepassen, dit kan even duren"
+
+msgid "Archived chats"
+msgstr "Gearchiveerde berichten"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr ""
+"Geluidsopname is mislukt, geef alstublieft toestemming om audio op te nemen"
+" in de app-instellingen van uw apparaat."
+
+msgid "Autocrypt Setup Message"
+msgstr "Autocrypt Configuratie Bericht"
+
+msgid "Autocrypt setup code"
+msgstr "Autocrypt configuratiecode"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr ""
+"Autocrypt configuratie is mislukt. Controleer alstublieft uw configuratiecode."
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Autocrypt configuratie succesvol aangepast."
+
+msgid "Automatic"
+msgstr "Automatisch"
+
+msgid "Base Settings"
+msgstr "Basisinstellingen"
+
+msgid "Block"
+msgstr "Blokkeren"
+
+msgid "Block contact"
+msgstr "Contact blokkeren"
+
+msgid "Blocked contacts"
+msgstr "Geblokkerde contacten"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "Door gebruik te maken van de OX Coi Messager gaat u akkoord met onze"
+
+msgid "Camera"
+msgstr "Camera"
+
+msgid "Cancel"
+msgstr "Annuleren"
+
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
+msgstr ""
+"Kan niet aanmelden. Controleer alstublieft of het e-mailadres en het"
+" wachtwoord correct zijn."
+
+msgid "Cannot verify contact"
+msgstr "Kan contact niet controleren"
+
+msgid "Changed encryption setup for this contact"
+msgstr "Versleutelingsinstellingen voor dit contact zijn aangepast"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "Chat"
+msgstr[1] "Chats"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr ""
+"Kies een aanbieder uit de lijst hieronder om een nieuw account aan te maken"
+
+msgid "Configuration change aborted"
+msgstr "Configuratie aanpassing geannuleerd"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Contact"
+msgstr[1] "Contacten"
+
+msgid "Contact import running, please wait"
+msgstr ""
+"Bezig met het importeren van contacten, een ogenblik geduld alstublieft"
+
+msgid "Contact request"
+msgstr "Contactverzoek"
+
+msgid "Contact successfully added"
+msgstr "Contact is succesvol toegevoegd"
+
+msgid "Contact successfully blocked"
+msgstr "Contact is succesvol toegevoegd"
+
+msgid "Contact successfully deleted"
+msgstr "Abonnement succesvol verwijderd"
+
+msgid "Contact successfully edited"
+msgstr "Abonnement succesvol aangepast"
+
+msgid "Contact verified"
+msgstr "Contact gecontroleerd"
+
+msgid "Copied to clipboard"
+msgstr "Gekopieerd naar het klembord"
+
+msgid "Copy code"
+msgstr "Code kopiëren"
+
+msgid "Could not delete contact."
+msgstr "Kan contact niet verwijderen"
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr ""
+"Kan contact niet verwijderen. Er zijn actieve chatsessies met dit contact"
+" gevonden, verwijder deze chatsessies eerst."
+
+msgid "Create chat"
+msgstr "Chat starten"
+
+msgid "Create group"
+msgstr "Nieuw groep aanmaken"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr ""
+"Maakt een Autocrypt configuratie bericht, deze kan u inladen in andere"
+" apparaten om uw huidige versleutelingsinstellingen te gebruiken."
+
+msgid "Debug"
+msgstr "Debug"
+
+msgid "Delete"
+msgstr "Verwijderen"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "Chatsessie verwijderen"
+msgstr[1] "Chatsessies verwijderen"
+
+msgid "Delete contact"
+msgstr "Verwijder contactpersoon"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "Weet u zeker dat u %s (%s) wilt blokkeren?"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Weet u zeker dat u %s (%s) wilt verwijderen?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Weet u zeker dat u de groep wilt verlaten?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Weet u zeker dat u wilt chatten met dit nieuwe contact?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Weet u zeker dat u deze chat wilt verwijderen?"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr ""
+"Wilt u uw sleutels van \"%s\" importeren?  Als er geen sleutels in deze map"
+" zijn kan deze operatie niet uitgevoerd worden."
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Weet u zeker dat u uw sleutels wilt opslaan in \"%s\"?"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "Wilt u %s deblokkeren?"
+
+msgid "Draft"
+msgstr "Concept"
+
+msgid "Edit contact"
+msgstr "Bewerk contactpersoon"
+
+msgid "Edit profile"
+msgstr "Profiel bewerken"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Email address"
+msgstr "E-mailadres"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Verzenden en aanvragen van leesbevestigingen toestaan."
+
+msgid "Enter the contact name"
+msgstr "Geef de naam van het contact"
+
+msgid "Error"
+msgstr "Fout"
+
+msgid "Expert: Export keys"
+msgstr "Expert: Sleutels exporteren"
+
+msgid "Expert: Import keys"
+msgstr "Expert: Sleutels importeren"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "FCM token"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "File"
+msgstr "Bestand"
+
+msgid "Flagged"
+msgstr "Gemarkeerd"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"Voor bekende e-maildienstverleners is het mogelijk extra instellingen"
+" automatisch te maken.\n"
+"Soms moet IMAP ingeschakeld worden vanuit de web-interface. Vraag uw"
+" e-maildienstverlener of vrienden om hulp."
+
+msgid "Forward"
+msgstr "Doorsturen"
+
+msgid "Gallery"
+msgstr "Galerij"
+
+msgid "Group image changed"
+msgstr "Groepsafbeelding is veranderd"
+
+msgid "Group image deleted"
+msgstr "Groepsafbeelding is verwijderd"
+
+msgid "Group left"
+msgstr "Groep verlaten"
+
+msgid "Group name"
+msgstr "Groepsnaam"
+
+msgid "Group name changed"
+msgstr "Groepsnaam is veranderd"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Hallo, Ik heb zojuist deze groep voor ons gemaakt"
+
+msgid "IMAP Security"
+msgstr "IMAP beveiliging"
+
+msgid "IMAP login name"
+msgstr "IMAP aanmeldnaam"
+
+msgid "IMAP password"
+msgstr "IMAP wachtwoord"
+
+msgid "IMAP port"
+msgstr "IMAP poort"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "IMAP server (b.v. imap.coi.me)"
+
+msgid "Image"
+msgstr "Afbeelding"
+
+msgid "Import"
+msgstr "Importeren"
+
+msgid "Import Autocrypt setup message"
+msgstr "Importeer Autocrypt configuratie bericht"
+
+msgid "Import device contacts"
+msgstr "Importeer apparaat-contacten"
+
+msgid "Import failed, missing permissions"
+msgstr "Importeren is mislukt, onvoldoende rechten"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr ""
+"Importeer sleutels vanuit uw lokale opslag om om uw huidige"
+" versleutelingsinstellingen aan te passen"
+
+msgid "Inbox"
+msgstr "Postvak IN"
+
+msgid "Initiate key transfer"
+msgstr "Start sleuteloverdracht"
+
+msgid "Invites"
+msgstr "Uitnodigingen"
+
+# (Reinout)
+# Elma: links wordt veel vaker gebruikt?
+msgid "Key action failed"
+msgstr "Sleutelactie is mislukt"
+
+msgid "Key action failed, missing permissions"
+msgstr "Sleutelactie is mislukt, onvoldoende rechten"
+
+msgid "Key action successfully done"
+msgstr "Sleutelactie was succesvol"
+
+msgid "Leave group"
+msgstr "Groep verlaten"
+
+msgid "Location"
+msgstr "Locatie"
+
+msgid "Log in to OX COI Messenger"
+msgstr "Aanmelden bij de OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "Aanmelden, dit kan een moment duren"
+
+msgid "Login failed"
+msgstr "Aanmelden is mislukt"
+
+msgid "Manual Settings"
+msgstr "Handmatige Instellingen"
+
+msgid "Me"
+msgstr "Mij"
+
+msgid "Member added"
+msgstr "Deelnemer toegevoegd"
+
+msgid "Member removed"
+msgstr "Deelnemer verwijderd"
+
+msgid "Message syncing"
+msgstr "Bericht synchroniseren"
+
+msgid "Messages I sent to myself"
+msgstr "Berichten die ik naar mijzelf heb gestuurd"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr ""
+"Berichten van onbekende contacten verschijnen niet meer in chats. U kan"
+" dergelijke berichten hier vinden:"
+
+msgid "Name"
+msgstr "Naam"
+
+msgid "New contact"
+msgstr "Nieuw contact"
+
+msgid "No"
+msgstr "Nee"
+
+msgid "No blocked contacts"
+msgstr "Niet-geblokkeerde contacten"
+
+msgid "No flagged messages"
+msgstr "Ongemarkeerde berichten"
+
+msgid "No messages"
+msgstr "Geen berichten"
+
+msgid "No participants selected. Please select at least one person."
+msgstr ""
+"Geen deelnemers geselecteerd. Selecteer alstublieft minimaal één persoon."
+
+msgid "No results found"
+msgstr "Geen resultaten gevonden"
+
+msgid "No signature set"
+msgstr "Geen ondertekening ingesteld"
+
+msgid "No username set"
+msgstr "Geen gebruikersnaam ingesteld"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr ""
+"OX COI Messenger werkt met elke e-maildienstverlener, maar het beste met"
+" COI-compatibele diensten. Als u een bestaand e-mailaccount heeft, meld uzelf"
+" dan aan, anders moet u eerst een nieuw account maken."
+
+msgid "Off"
+msgstr "Uit"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Vaak hoeft u alleen uw e-mailadres, wachtwoord en serveradres te geven. De"
+" overige waarden worden automatisch bepaald. Soms moet u IMAP inschakelen via"
+" uw e-mail website. Vraag uw e-maildienstverlener of vrienden om hulp."
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Only show messages of known contacts"
+msgstr "Toon alleen berichten van bekende contacten"
+
+msgid "Open chat"
+msgstr "Open chat"
+
+msgid "Other mail provider"
+msgstr "Andere e-maildienstverlener"
+
+msgid "Outbox"
+msgstr "Postvak Uit"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Deelnemer"
+msgstr[1] "Deelnemers"
+
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgid "Performing key export"
+msgstr "Sleutel exporteren"
+
+msgid "Performing key import"
+msgstr "Sleutel importeren"
+
+msgid "Performing key transfer"
+msgstr "Sleutel overdragen"
+
+msgid "Please check your username and password"
+msgstr "Controleer uw gebruikersnaam en wachtwoord"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Kies alstublieft wat voor soort berichten u wilt zien."
+
+msgid "Please enter a valid email address"
+msgstr "Voer alstublieft een geldig e-mailadres in"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Voer een geldige poort in (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Voer alstublieft uw wachtwoord in"
+
+msgid "Please select your email provider to sign in"
+msgstr "Selecteer alstublieft uw e-maildienstverlener om aan te melden"
+
+msgid "Please specify your email server settings."
+msgstr "Controleer alstublieft uw e-mailserverinstellingen."
+
+msgid "Please wait a moment."
+msgstr "Een ogenblik geduld alstublieft."
+
+msgid "Privacy and Mobbing Protection"
+msgstr "Privacy en Mobbing Bescherming"
+
+msgid "Profile"
+msgstr "Profiel"
+
+msgid "Profile QR"
+msgstr "Profiel QR-code"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "Het opnieuw importeren van uw contacten veroorzaakt geen dubbelen."
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "Leesbevestiging"
+msgstr[1] "Leesbevestigingen"
+
+msgid "Register"
+msgstr "Registreer"
+
+msgid "Remove current image"
+msgstr "Verwijder huidige afbeelding"
+
+msgid "Remove participant"
+msgstr "Verwijder deelnemers"
+
+msgid "Rename group"
+msgstr "Groep hernoemen"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Antwoord van %s: %s\n"
+"\n"
+"Sommige dienstverleners plaatsen extra informatie in uw Postvak In; u kan"
+" deze controleren vanuit bijvoorbeeld de web interface. Vraag uw"
+" dienstverlener of vrienden als u problemen heeft."
+
+msgid "SMTP Security"
+msgstr "SMTP Beveiliging"
+
+msgid "SMTP login name"
+msgstr "SMTP aanmeldnaam"
+
+msgid "SMTP password"
+msgstr "SMTP wachtwoord"
+
+msgid "SMTP port"
+msgstr "SMTP poort"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "SMTP server (b.v. smtp.coi.me)"
+
+msgid "Save"
+msgstr "Opslaan"
+
+msgid "Scan QR"
+msgstr "Scan QR-Code"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr ""
+"Scan deze QR-code om een nieuw account te maken of een contact te controleren"
+" met %s."
+
+msgid "Search contacts"
+msgstr "Zoek contacten"
+
+msgid "Security"
+msgstr "Beveiliging"
+
+msgid "Sent with OX COI Messenger"
+msgstr "Verzenden met OX COI Messenger"
+
+msgid "Server addresses"
+msgstr "Serveradres"
+
+msgid "Set a group name"
+msgstr "Stel een groepsnaam in"
+
+msgid "Set a name"
+msgstr "Stel een naam in"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Instelling"
+msgstr[1] "Instellingen"
+
+msgid "Setup message created"
+msgstr "Configuratie bericht aangemaakt"
+
+msgid "Share"
+msgstr "Delen"
+
+msgid "Show QR"
+msgstr "Toon QR-code"
+
+# Reinout: kalenders => agenda's
+msgid "Show both chat and email messages from all senders"
+msgstr "Toon zowel chat en e-mail berichten van alle verzenders"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "Toon zowel chat en e-mail berichten van mijn contacten"
+
+msgid "Show messages from unknown contacts"
+msgstr "Toon berichten van onbekende contacten"
+
+msgid "Show only chat messages "
+msgstr "Toon alleen chat berichten"
+
+msgid "Sign in"
+msgstr "Aanmelden"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "Aanmelden met %s"
+
+msgid "Signature"
+msgstr "Ondertekening"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Voeg er één toe door op een contact te tikken."
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "Start chatsessie met %s?"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "De gekoppelde configuratiecode start met: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "De code kan met of zonder streepjes ingegeven worden"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "Er zijn momenteel geen berichten van onbekende contacten"
+
+msgid "There was an error or the progress was canceled."
+msgstr "Er was een fout of het proces was geannuleerd."
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr ""
+"Deze actie kan ook later gedaan worden via de import knop aan de bovenkant"
+" van de actiebalk."
+
+msgid "This field can not be empty"
+msgstr "Dit veld mag niet leeg zijn"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "Dit is een nieuw chatsessie. Stuur een bericht om te verbinden."
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"Dit is een leesbevestiging.\n"
+"\n"
+"Het betekent dat het bericht is getoond op het apparaat van de ontvanger, de"
+" inhoud hoeft niet gelezen te zijn."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"Dit is het Autocrypt Configuratie Bericht waarmee u uw"
+" versleutelingsinstellingen kan delen tussen apparaten.\n"
+"\n"
+"Om te decoderen en uw instellingen te gebruiken opent u het bericht met een"
+" Autocrypt-compatible apparaat en geeft u de configuratiecode die werd"
+" getoond op het apparaat dat het bericht heeft gemaakt."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr ""
+"Deze sleutels maken het mogelijk om vanaf een ander apparaat gebruik te maken"
+" van uw huidige versleutelingsinstellingen. Sleutels worden opgeslagen in uw"
+" lokale opslag."
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"Dit bericht kan niet gedecodeerd worden.\n"
+"\n"
+"Het kan helpen als u reageert op dit bericht en de verzender vraagt het"
+" bericht opnieuw te sturen.\n"
+"\n"
+"In het geval dat u de OX COI Messenger opnieuw heeft geïnstalleerd, een ander"
+" e-mailprogramma of een ander apparaat heeft, dan kan u het beste een"
+" Autocrypt configuratie bericht versturen vanuit het apparaat."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"Dit is een Autocrypt Configuratie Bericht. Tik er op om het import proces te"
+" starten. U wordt door het proces geleid."
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"Om het importeren van het Autocrypt Configuratie Bericht te starten moet u de"
+" beveiligingscode invoeren die u heeft gekregen van het bronapparaat. Na het"
+" invoeren van de code worden de Autocrypt instellingen toegepast op uw"
+" huidige versleutelingsconfiguratie."
+
+msgid "Today"
+msgstr "Vandaag"
+
+msgid "Type something..."
+msgstr "Voer iets in..."
+
+msgid "Unblock"
+msgstr "Deblokkeren"
+
+msgid "Unblock contact"
+msgstr "Deblokkeer contact"
+
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgid "Verification finished."
+msgstr "Controle afgerond."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Controleren. Een ogenblik geduld alstublieft."
+
+msgid "Video"
+msgstr "Video"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr ""
+"Video-opname is mislukt, geef alstublieft toestemming om video op te nemen in"
+" de app-instellingen van uw apparaat."
+
+msgid "Voice message"
+msgstr "Spraakbericht"
+
+msgid "We could not determine all settings automatically."
+msgstr "We konden niet alle instellingen automatisch vaststellen."
+
+msgid "Welcome to OX COI Messenger"
+msgstr "Welkom bij de OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Welkom bij de OX COI Messenger!\n"
+"Start alstublieft een nieuwe chat door op het spraakballon pictogram te"
+" tikken."
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "Wilt u de contacten van dit apparaat importeren?"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yesterday"
+msgstr "Gisteren"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Uw Autocrypt configuratie is naar uzelf gestuurd. Schakel naar het andere"
+" apparaat en open het configuratie bericht. U wordt gevraagd om de"
+" configuratiecode. Typ de volgende cijfers in het veld:\n"
+"%s\n"
+"Als u hier mee klaar bent, is uw andere apparaat klaar om Autocrypt te"
+" gebruiken."
+
+msgid "Your favorite messages"
+msgstr "Uw favoriete berichten"
+
+msgid "and"
+msgstr "en"
+
+msgid "code"
+msgstr "code"
+
+msgid "more messages"
+msgstr "meer berichten"
+
+msgid "privacy declaration"
+msgstr "Privacy verklaring"
+
+msgid "terms & conditions"
+msgstr "Voorwaarden"
+

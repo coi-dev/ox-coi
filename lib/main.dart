@@ -96,6 +96,7 @@ class OxCoiApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
+      supportedLocales: L10n.supportedLocales,
       localeResolutionCallback: (deviceLocale, supportedLocales) {
         L10n.loadTranslation(deviceLocale);
         L10n.setLanguage(deviceLocale);

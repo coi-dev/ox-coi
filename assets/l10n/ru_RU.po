@@ -1,0 +1,842 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-08-20 09:46+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 2.1.1\n"
+"Last-Translator: \n"
+"Language: ru_RU\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s: %s"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "%s: я"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "%s скопировано в буфер"
+
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "1 контакт"
+msgstr[1] "%d контакта"
+msgstr[2] "%d контактов"
+
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "1 участник"
+msgstr[1] "%i участника"
+msgstr[2] "%i участников"
+
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "1 участник"
+msgstr[1] "%i участника"
+msgstr[2] "%i участников"
+
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "Импортирован 1 контакт из системы"
+msgstr[1] "Импортировано %i контакта из системы"
+msgstr[2] "Импортировано %i контактов из системы"
+
+msgid "About"
+msgstr "О приложении"
+
+msgid "Account settings"
+msgstr "Параметры учетной записи"
+
+msgid "Account settings successfully changed"
+msgstr "Параметры учетной записи изменены"
+
+msgid "Add contact"
+msgstr "Добавить контакт"
+
+msgid "Add participants"
+msgstr "Добавить участников"
+
+msgid "Advanced"
+msgstr "Дополнительно"
+
+msgid "Advanced IMAP Settings"
+msgstr "Дополнительные параметры IMAP"
+
+msgid "Advanced SMTP Settings"
+msgstr "Дополнительные параметры SMTP"
+
+msgid "All your contacts are in this chat."
+msgstr "Все ваши контакты добавлены в чат."
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr "Сообщение конфигурации Autocrypt скрыто передает ваши настройки шифрования другим совместимым приложениям. Вы можете защитить свою конфигурацию с помощью указанного кода, который надо будет ввести на другом устройстве."
+
+msgid "App name"
+msgstr "Название приложения"
+
+msgid "App version"
+msgstr "Версия приложения"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Применение настроек... Пожалуйста, подождите..."
+
+msgid "Archived chats"
+msgstr "Архивные чаты"
+
+msgid "Audio"
+msgstr "Аудио"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr "Не удалось записать аудио. Настройте необходимые разрешения в настройках приложения."
+
+msgid "Autocrypt Setup Message"
+msgstr "Сообщение конфигурации Autocrypt"
+
+msgid "Autocrypt setup code"
+msgstr "Код Autocrypt"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr "Ошибка конфигурации Autocrypt. Проверьте код доступа."
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Конфигурация Autocrypt изменена"
+
+msgid "Automatic"
+msgstr "Автоматически"
+
+msgid "Base Settings"
+msgstr "Основные настройки"
+
+msgid "Block"
+msgstr "Блокировать"
+
+msgid "Block contact"
+msgstr "Заблокировать контакт"
+
+msgid "Blocked contacts"
+msgstr "Заблокированные контакты"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "Используя OX COI Messenger, вы принимаете наши"
+
+msgid "Camera"
+msgstr "Камера"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Cannot login. Please check if the email-address and the password are correct."
+msgstr "Ошибка авторизации. Проверьте электронный адрес и пароль."
+
+msgid "Cannot verify contact"
+msgstr "Невозможно подтвердить контакт"
+
+msgid "Changed encryption setup for this contact"
+msgstr "Настройки шифрования для этого контакта изменились"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "Чат"
+msgstr[1] "Чаты"
+msgstr[2] "Чаты"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr "Для создания новой учетной записи выберите поставщика услуг"
+
+msgid "Configuration change aborted"
+msgstr "Изменения конфигурации были отменены"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Контакт"
+msgstr[1] "Контакты"
+msgstr[2] "Контакты"
+
+msgid "Contact import running, please wait"
+msgstr "Импортируются контакты... Пожалуйста, подождите..."
+
+msgid "Contact request"
+msgstr "Запрос контактных данных"
+
+msgid "Contact successfully added"
+msgstr "Контакт добавлен"
+
+msgid "Contact successfully blocked"
+msgstr "Контакт заблокирован"
+
+msgid "Contact successfully deleted"
+msgstr "Контакт удален"
+
+msgid "Contact successfully edited"
+msgstr "Контакт изменен"
+
+msgid "Contact verified"
+msgstr "Контакт подтвержден"
+
+msgid "Copied to clipboard"
+msgstr "Скопировано в буфер обмена"
+
+msgid "Copy code"
+msgstr "Копировать код"
+
+msgid "Could not delete contact."
+msgstr "Не удалось удалить контакт."
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr "Не удалось удалить контакт. Обнаружены активные чаты, которые надо удалить в первую очередь."
+
+msgid "Create chat"
+msgstr "Создать чат"
+
+msgid "Create group"
+msgstr "Создать группу"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr "Создает сообщение конфигурации Autocrypt, которое можно будет загрузить на другие устройства для использования текущих настроек шифрования."
+
+msgid "Debug"
+msgstr "Отладка"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "Удалить чат"
+msgstr[1] "Удалить чаты"
+msgstr[2] "Удалить чаты"
+
+msgid "Delete contact"
+msgstr "Удалить контакт"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "Вы действительно хотите заблокировать %s (%s)?"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Вы действительно хотите удалить %s (%s)?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Вы действительно хотите покинуть эту группу?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Создать чат с новым контактом?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Удалить чат?"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr "Импортировать ключи из «%s»? Если эта папка не содержит ключей, операция завершится ошибкой."
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Сохранить ключи в «%s»?"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "Разблокировать %s?"
+
+msgid "Draft"
+msgstr "Черновик"
+
+msgid "Edit contact"
+msgstr "Изменить контакт"
+
+msgid "Edit profile"
+msgstr "Изменить профиль"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Email address"
+msgstr "Электронный адрес"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Разрешить отправлять и запрашивать уведомления о прочтении."
+
+msgid "Enter the contact name"
+msgstr "Введите имя контакта"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "Expert: Export keys"
+msgstr "Эксперт: Экспорт ключей"
+
+msgid "Expert: Import keys"
+msgstr "Эксперт: Импорт ключей"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "Токен FCM"
+
+msgid "Feedback"
+msgstr "Обратная связь"
+
+msgid "File"
+msgstr "Файл"
+
+msgid "Flagged"
+msgstr "Отмеченные"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"Для известных поставщиков услуг электронной почты расширенные настройки будут настроены автоматически.\n"
+"В некоторых случаях может потребоваться включить IMAP. За дополнительной информацией обратитесь к поставщику услуг."
+
+msgid "Forward"
+msgstr "Переслать"
+
+msgid "Gallery"
+msgstr "Галерея"
+
+msgid "Group image changed"
+msgstr "Групповое изображение изменено"
+
+msgid "Group image deleted"
+msgstr "Групповое изображение удалено"
+
+msgid "Group left"
+msgstr "Выход из группы"
+
+msgid "Group name"
+msgstr "Имя группы"
+
+msgid "Group name changed"
+msgstr "Имя группы изменено"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Здравствуйте! Эта группа была создана для нас"
+
+msgid "IMAP Security"
+msgstr "Безопасность IMAP"
+
+msgid "IMAP login name"
+msgstr "Логин IMAP"
+
+msgid "IMAP password"
+msgstr "Пароль IMAP"
+
+msgid "IMAP port"
+msgstr "Порт IMAP"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "Сервер IMAP (например: imap.coi.me)"
+
+msgid "Image"
+msgstr "Изображение"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Import Autocrypt setup message"
+msgstr "Импорт сообщения конфигурации Autocrypt"
+
+msgid "Import device contacts"
+msgstr "Импорт контактов с устройства"
+
+msgid "Import failed, missing permissions"
+msgstr "Ошибка импорта: недостаточно разрешений"
+
+msgid "Import keys from your local storage to change your current encryption setup"
+msgstr "Чтобы изменить текущие настройки шифрования, импортируйте ключи из локального хранилища."
+
+msgid "Inbox"
+msgstr "Входящие"
+
+msgid "Initiate key transfer"
+msgstr "Начать передачу ключей"
+
+msgid "Invites"
+msgstr "Приглашения"
+
+msgid "Key action failed"
+msgstr "Сбой действий с ключом"
+
+msgid "Key action failed, missing permissions"
+msgstr "Сбой действий с ключом: недостаточно разрешений"
+
+msgid "Key action successfully done"
+msgstr "Действие над ключом завершено"
+
+msgid "Leave group"
+msgstr "Покинуть группу"
+
+msgid "Location"
+msgstr "Расположение"
+
+msgid "Log in to OX COI Messenger"
+msgstr "Вход в OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "Идет авторизация. Пожалуйста, подождите..."
+
+msgid "Login failed"
+msgstr "Не удалось войти"
+
+msgid "Manual Settings"
+msgstr "Ручные настройки"
+
+msgid "Me"
+msgstr "Я"
+
+msgid "Member added"
+msgstr "Участник добавлен"
+
+msgid "Member removed"
+msgstr "Участник удален"
+
+msgid "Message syncing"
+msgstr "Синхронизация сообщения"
+
+msgid "Messages I sent to myself"
+msgstr "Сообщения, отправленные себе"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr "Сообщения от незнакомых контактов больше не будут показываться в чате. Вы можете их найти здесь:"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "New contact"
+msgstr "Новый контакт"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "No blocked contacts"
+msgstr "Нет заблокированных контактов"
+
+msgid "No flagged messages"
+msgstr "Нет отмеченных сообщений"
+
+msgid "No messages"
+msgstr "Нет сообщений"
+
+msgid "No participants selected. Please select at least one person."
+msgstr "Выберите хотя бы одного участника."
+
+msgid "No results found"
+msgstr "Нет результатов."
+
+msgid "No signature set"
+msgstr "Подпись не настроена"
+
+msgid "No username set"
+msgstr "Имя пользователя не задано"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr "OX COI Messenger работает со всеми поставщиками услуг электронной почты, однако мы рекомендуем выбирать COI-совместимых поставщиков. Если у вас уже есть учетная запись электронной почты, авторизуйтесь; в противном случае вы можете создать новую учетную запись."
+
+msgid "Off"
+msgstr "Откл."
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Обычно требуется указать только свой адрес электронной почты, пароль и адреса сервера."
+"Остальные параметры будут определены автоматически, хотя в некоторых случаях может потребоваться включить IMAP."
+"За подробной информацией обратитесь к поставщику услуг электронной почты."
+""
+
+msgid "Ok"
+msgstr "ОК"
+
+msgid "Only show messages of known contacts"
+msgstr "Показывать сообщения только от известных контактов"
+
+msgid "Open chat"
+msgstr "Открыть чат"
+
+msgid "Other mail provider"
+msgstr "Другой поставщик"
+
+msgid "Outbox"
+msgstr "Исходящие"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Участник"
+msgstr[1] "Участники"
+msgstr[2] "Участники"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Performing key export"
+msgstr "Идет экспорт ключа..."
+
+msgid "Performing key import"
+msgstr "Импортирование ключа..."
+
+msgid "Performing key transfer"
+msgstr "Выполняется передача ключа..."
+
+msgid "Please check your username and password"
+msgstr "Проверьте имя пользователя и пароль"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Выберите типы сообщений, которые вы хотели бы видеть."
+
+msgid "Please enter a valid email address"
+msgstr "Введите действительный электронный адрес"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Введите действительный номер порта (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Введите пароль"
+
+msgid "Please select your email provider to sign in"
+msgstr "Выберите поставщика услуг электронной почты"
+
+msgid "Please specify your email server settings."
+msgstr "Укажите настройки почтового сервера"
+
+msgid "Please wait a moment."
+msgstr "Пожалуйста, подождите..."
+
+msgid "Privacy and Mobbing Protection"
+msgstr "Конфиденциальность и безопасность"
+
+msgid "Profile"
+msgstr "Профиль"
+
+msgid "Profile QR"
+msgstr "QR-код профиля"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "При повторном импорте контактов дубликаты будут исключаться."
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "Уведомление о прочтении"
+msgstr[1] "Уведомления о прочтении"
+msgstr[2] "Уведомления о прочтении"
+
+msgid "Register"
+msgstr "Регистрация"
+
+msgid "Remove current image"
+msgstr "Удалить текущее изображение"
+
+msgid "Remove participant"
+msgstr "Удалить участника"
+
+msgid "Rename group"
+msgstr "Переименовать группу"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Ответ %s: %s\n"
+"\n"
+"Некоторые поставщики могут размещать дополнительную информацию в папке входящих. Чтобы это проверить, попробуйте открыть почту в окне веб-браузера."
+"В случае проблем обратитесь к поставщику услуг."
+
+msgid "SMTP Security"
+msgstr "Безопасность SMTP"
+
+msgid "SMTP login name"
+msgstr "Логин SMTP"
+
+msgid "SMTP password"
+msgstr "Пароль SMTP"
+
+msgid "SMTP port"
+msgstr "Порт SMTP"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "Сервер SMTP (например: smtp.coi.me)"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Scan QR"
+msgstr "Сканировать QR-код"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr ""
+"Отсканируйте QR-код, чтобы создать новый контакт или подтвердить существующий контакт на %s."
+""
+
+msgid "Search contacts"
+msgstr "Поиск контактов"
+
+msgid "Security"
+msgstr "Безопасность"
+
+msgid "Sent with OX COI Messenger"
+msgstr "Отправлено из OX COI Messenger"
+
+msgid "Server addresses"
+msgstr "Адреса сервера"
+
+msgid "Set a group name"
+msgstr "Настройте имя группы"
+
+msgid "Set a name"
+msgstr "Настройте имя"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Параметр"
+msgstr[1] "Параметры"
+msgstr[1] "Параметры"
+
+msgid "Setup message created"
+msgstr "Сообщение конфигурации создано"
+
+msgid "Share"
+msgstr "Поделиться"
+
+msgid "Show QR"
+msgstr "Показать QR-код"
+
+msgid "Show both chat and email messages from all senders"
+msgstr "Показывать письма и сообщения из чатов от всех отправителей"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "Показывать письма и сообщения из чатов от моих контактов"
+
+msgid "Show messages from unknown contacts"
+msgstr "Показывать сообщения от незнакомых контактов"
+
+msgid "Show only chat messages "
+msgstr "Показывать только сообщения из чатов "
+
+msgid "Sign in"
+msgstr "Вход"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "Вход %s"
+
+msgid "Signature"
+msgstr "Подпись"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Чтобы добавить, коснитесь контакта."
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "Начать чат с %s?"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "Соответствующий код начинается с: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "Код можно ввести со знаками дефиса или без"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "Нет сообщений от незнакомых контактов"
+
+msgid "There was an error or the progress was canceled."
+msgstr "Произошла ошибка или операция отменена."
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr "Эта операция может быть выполнена позднее. Для этого нажмите кнопку импорта на верхней панели."
+
+msgid "This field can not be empty"
+msgstr "Поле не может быть пустым"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "Это новый чат. Отправьте первое сообщение, чтобы начать разговор."
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"Это уведомление о прочтении.\n"
+"\n"
+"Это означает, что сообщение было открыто на устройстве получателя, но не гарантирует, что оно было прочитано."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"Сообщение конфигурации Autocrypt используется для передачи настроек между клиентами.\n"
+"\n"
+"Чтобы расшифровать и применить ваши настройки, откройте это сообщение в окне клиента, совместимого с Autocrypt, и введите код доступа, сгенерированный на исходном устройстве."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr "Эти ключи позволяют использовать текущие настройки шифрования на другом устройстве. Ключи хранятся в локальном хранилище."
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"Не удалось расшифровать сообщение.\n"
+"\n"
+"Вы можете ответить на это сообщение и попросить отправителя отправить его повторно.\n"
+"\n"
+"Если вы переустановили OX COI Messenger или другую почтовую программу на этом или другом устройстве, попробуйте отправить сообщение конфигурации Autocrypt оттуда."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr "Это сообщение конфигурации Autocrypt. Коснитесь, чтобы начать пошаговый процесс импортирования."
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"Чтобы завершить процесс импорта сообщения конфигурации Autocrypt, введите код доступа, сгенерированный на исходном устройстве."
+"Настройки Autocrypt будут применены после проверки введенного кода."
+
+msgid "Today"
+msgstr "Сегодня"
+
+msgid "Type something..."
+msgstr "Введите текст..."
+
+msgid "Unblock"
+msgstr "Разблокировать"
+
+msgid "Unblock contact"
+msgstr "Разблокировать контакт"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Verification finished."
+msgstr "Проверка завершена."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Выполняется проверка. Пожалуйста, подождите..."
+
+msgid "Video"
+msgstr "Видео"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr "Не удалось записать видео. Настройте необходимые разрешения в настройках приложения."
+
+msgid "Voice message"
+msgstr "Голосовое сообщение"
+
+msgid "We could not determine all settings automatically."
+msgstr "Не удалось автоматически определить все настройки."
+
+msgid "Welcome to OX COI Messenger"
+msgstr "Добро пожаловать в OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Добро пожаловать в OX COI Messenger!\n"
+"Чтобы начать разговор, нажмите на текстовое облако."
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "Импортировать контакты с этого устройства?"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "Yesterday"
+msgstr "Вчера"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Вы переслали себе свою конфигурацию Autocrypt. Переключитесь на другое устройство и откройте сообщение конфигурации. Вам будет предложено ввести код доступа. Ваш код:\n"
+"%s\n"
+"После этого вы сможете использовать Autocrypt на новом устройстве."
+
+msgid "Your favorite messages"
+msgstr "Избранные сообщения"
+
+msgid "and"
+msgstr "и"
+
+msgid "code"
+msgstr "код"
+
+msgid "more messages"
+msgstr "больше сообщений"
+
+msgid "privacy declaration"
+msgstr "декларация о конфиденциальности"
+
+msgid "terms & conditions"
+msgstr "условия и положения"

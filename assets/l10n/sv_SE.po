@@ -1,0 +1,874 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Open-Xchange 7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-08-23 20:15+0200\n"
+"Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
+"Language-Team: Swedish <ox@workshop-chapina.com>\n"
+"Language: sv_SE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s av %s"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "%s av mig"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "%s kopierades till klippbord"
+
+#, c-format
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "1 kontakt"
+msgstr[1] "%d kontakter"
+
+#, c-format
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "1 medlem"
+msgstr[1] "%i medlemmar"
+
+#, c-format
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "1 deltagare"
+msgstr[1] "%i deltagare"
+
+#, c-format
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "1 systemkontakt importerad"
+msgstr[1] "%i systemkontakter importerade"
+
+msgid "About"
+msgstr "Om"
+
+msgid "Account settings"
+msgstr "Kontoinställningar"
+
+msgid "Account settings successfully changed"
+msgstr "Kontoinställningarna ändrades"
+
+msgid "Add contact"
+msgstr "Lägg till medlem"
+
+msgid "Add participants"
+msgstr "Lägg till deltagare"
+
+msgid "Advanced"
+msgstr "Avancerat"
+
+msgid "Advanced IMAP Settings"
+msgstr "Avancerade IMAP-inställningar"
+
+msgid "Advanced SMTP Settings"
+msgstr "Avancerade SMTP-inställningar"
+
+msgid "All your contacts are in this chat."
+msgstr "Alla dina kontakter finns i denna chatt."
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr ""
+"Ett inställningsmeddelande från Autocrypt delar säkert dina "
+"krypteringsinställningar med andra program som följer Autocrypts standard. "
+"Inställningarna kommer att skyddas med en installationskod som visas här och "
+"måste matas in på den andra enheten."
+
+msgid "App name"
+msgstr "Programnamn"
+
+msgid "App version"
+msgstr "Programversion"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Verkställer nya inställningar, detta kan ta en stund"
+
+msgid "Archived chats"
+msgstr "Arkiverade chattar"
+
+msgid "Audio"
+msgstr "Ljud"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr ""
+"Ljudinspelning misslyckades, ge tillstånd att spela in ljud i "
+"programinställningarna på din enhet."
+
+msgid "Autocrypt Setup Message"
+msgstr "Autocrypt installationsmeddelande"
+
+msgid "Autocrypt setup code"
+msgstr "Autocrypt installationskod"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr "Autocrypt-installation misslyckades. Kontrollera din installationskod."
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Autocrypt-inställningar ändrades"
+
+msgid "Automatic"
+msgstr "Automatiskt"
+
+msgid "Base Settings"
+msgstr "Basinställningar"
+
+msgid "Block"
+msgstr "Blockera"
+
+msgid "Block contact"
+msgstr "Blockera kontakt"
+
+msgid "Blocked contacts"
+msgstr "Blockerade kontakter"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "Genom att använda OX COI Messenger accepterar du vårt"
+
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
+msgstr ""
+"Kan inte logga in. Kontrollera att e-postadressen och lösenordet är korrekta."
+
+msgid "Cannot verify contact"
+msgstr "Kan inte verifiera kontakt"
+
+msgid "Changed encryption setup for this contact"
+msgstr "Ändrade krypterinsinställningar för den här kontakten"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "Chatt"
+msgstr[1] "Chattar"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr "Välj en leverantör från listan nedanför för att skapa ett nytt konto"
+
+msgid "Configuration change aborted"
+msgstr "Konfigurationsändring avbröts"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakter"
+
+msgid "Contact import running, please wait"
+msgstr "Kör kontaktimport, var god vänta"
+
+msgid "Contact request"
+msgstr "Kontaktbegäran"
+
+msgid "Contact successfully added"
+msgstr "Kontakt lades till"
+
+msgid "Contact successfully blocked"
+msgstr "Kontakt blockerades"
+
+msgid "Contact successfully deleted"
+msgstr "Kontakt raderades"
+
+msgid "Contact successfully edited"
+msgstr "Kontakt redigerades"
+
+msgid "Contact verified"
+msgstr "Kontakt verifierades"
+
+msgid "Copied to clipboard"
+msgstr "Kopierad till klippbord"
+
+msgid "Copy code"
+msgstr "Kopiera kod"
+
+msgid "Could not delete contact."
+msgstr "Kunde inte radera kontakt."
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr ""
+"Kunde inte radera kontakt. Aktiva chattar med kontakten hittades, ta bort "
+"dessa chattar först."
+
+msgid "Create chat"
+msgstr "Skapa chatt"
+
+msgid "Create group"
+msgstr "Skapa grupp"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr ""
+"Skapar ett Autocrypt-installationsmeddelande, som du kan läsa in på andra "
+"enheter för att använda din nuvarande krypteringsinstallation."
+
+msgid "Debug"
+msgstr "Felsökning"
+
+msgid "Delete"
+msgstr "Ta bort"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "Radera chatt"
+msgstr[1] "Radera chattar"
+
+msgid "Delete contact"
+msgstr "Ta bort kontakt"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "Vill du verkligen blockera %s (%s)?"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Vill du verkligen radera %s (%s)?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Vill du verkligen lämna gruppen?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Vill du chatta med den här nya kontakten?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Vill du radera den här chatten?"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr ""
+"Vill du importera dina nycklar från \"%s\"? Om inga nycklar finns i den "
+"mappen kommer åtgärden att misslyckas."
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Vill du spara dina nycklar i \"%s\"?"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "Vill du avblockera %s?"
+
+msgid "Draft"
+msgstr "Utkast"
+
+msgid "Edit contact"
+msgstr "Redigera kontakt"
+
+msgid "Edit profile"
+msgstr "Redigera profil"
+
+msgid "Email"
+msgstr "E-post"
+
+msgid "Email address"
+msgstr "E-postadress"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Aktivera skickande och mottagning av läskvitton."
+
+msgid "Enter the contact name"
+msgstr "Skriv kontaktens namn"
+
+msgid "Error"
+msgstr "Fel"
+
+msgid "Expert: Export keys"
+msgstr "Expert: Exportera nycklar"
+
+msgid "Expert: Import keys"
+msgstr "Expert: Importera nycklar"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "FCM-token"
+
+msgid "Feedback"
+msgstr "Synpunkter"
+
+msgid "File"
+msgstr "Fil"
+
+msgid "Flagged"
+msgstr "Flaggat"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"För kända e-postleverantörer anpassas ytterligare inställningar "
+"automatiskt.\n"
+"Ibland behöver IMAP aktiveras i webbframänden. Kontakta din e-postleverantör "
+"eller dina vänner för hjälp."
+
+msgid "Forward"
+msgstr "Vidarebefordra"
+
+msgid "Gallery"
+msgstr "Galleri"
+
+msgid "Group image changed"
+msgstr "Gruppbild ändrad"
+
+msgid "Group image deleted"
+msgstr "Gruppbild raderad"
+
+msgid "Group left"
+msgstr "Gruppen lämnade"
+
+msgid "Group name"
+msgstr "Gruppnamn"
+
+msgid "Group name changed"
+msgstr "Gruppnamnet ändrades"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Hej, jag har precis skapat den här gruppen åt oss"
+
+msgid "IMAP Security"
+msgstr "IMAP-säkerhet"
+
+msgid "IMAP login name"
+msgstr "IMAP-inloggningsnamn"
+
+msgid "IMAP password"
+msgstr "IMAP-lösenord"
+
+msgid "IMAP port"
+msgstr "IMAP-port"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "IMAP-server (t.ex. imap.coi.me)"
+
+msgid "Image"
+msgstr "Bild"
+
+msgid "Import"
+msgstr "Importera"
+
+msgid "Import Autocrypt setup message"
+msgstr "Importera Autocrypt-installationsmeddelande"
+
+msgid "Import device contacts"
+msgstr "Importera enhetens kontakter"
+
+msgid "Import failed, missing permissions"
+msgstr "Importering misslyckades, saknar rättigheter"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr ""
+"Importera nycklar från din lokala lagring för att ändra dina nuvarande "
+"krypteringsinställningar"
+
+msgid "Inbox"
+msgstr "Inkorg"
+
+msgid "Initiate key transfer"
+msgstr "Initiera nyckelöverföring"
+
+msgid "Invites"
+msgstr "Inbjudningar"
+
+msgid "Key action failed"
+msgstr "Nyckelåtgärd misslyckades"
+
+msgid "Key action failed, missing permissions"
+msgstr "Nyckelåtgärd misslyckades, saknar rättigheter"
+
+msgid "Key action successfully done"
+msgstr "Nyckelåtgärd slutfördes"
+
+msgid "Leave group"
+msgstr "Lämna grupp"
+
+msgid "Location"
+msgstr "Plats"
+
+msgid "Log in to OX COI Messenger"
+msgstr "Logga in på OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "Loggar in, detta kan ta en stund"
+
+msgid "Login failed"
+msgstr "Inloggning misslyckades"
+
+msgid "Manual Settings"
+msgstr "Manuella inställningar"
+
+msgid "Me"
+msgstr "Mig"
+
+msgid "Member added"
+msgstr "Medlem tillagd"
+
+msgid "Member removed"
+msgstr "Medlem borttagen"
+
+msgid "Message syncing"
+msgstr "Meddelandesynkning"
+
+msgid "Messages I sent to myself"
+msgstr "Meddelanden jag skickat till mig själv"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr ""
+"Meddelanden från okända kontakter som inte längre visas i chatten. Du kan "
+"istället komma åt dessa meddelanden här:"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "New contact"
+msgstr "Ny kontakt"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "No blocked contacts"
+msgstr "Inga blockerade kontakter"
+
+msgid "No flagged messages"
+msgstr "Inga flaggade meddelanden"
+
+msgid "No messages"
+msgstr "Inga meddelanden"
+
+msgid "No participants selected. Please select at least one person."
+msgstr "Inga deltagare markerade. Markera minst en person."
+
+msgid "No results found"
+msgstr "Inga resultat hittades"
+
+msgid "No signature set"
+msgstr "Ingen signatur angiven"
+
+msgid "No username set"
+msgstr "Inget användarnamn angivet"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr ""
+"OX COI Messenger fungerar med vilken e-postleverantör som helst, men bäst "
+"med COI-kompatibla leverantörer. Om du har ett befintligt e-postkonto, logga "
+"in. Registrera annars ett nytt konto först."
+
+msgid "Off"
+msgstr "Av"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Ofta behöver du bara ange din e-postadress, ditt lösenord och dina "
+"serveradresser. Återstående värden bestäms automatiskt. Ibland behöver IMAP "
+"aktiveras i din e-posts webbplats. Kontakta din e-postleverantör eller dina "
+"vänner för hjälp."
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Only show messages of known contacts"
+msgstr "Visa endast meddelanden från kända kontakter"
+
+msgid "Open chat"
+msgstr "Öppna chatt"
+
+msgid "Other mail provider"
+msgstr "Annan e-postleverantör"
+
+msgid "Outbox"
+msgstr "Utkorg"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Deltagare"
+msgstr[1] "Deltagare"
+
+msgid "Password"
+msgstr "Lösenord"
+
+msgid "Performing key export"
+msgstr "Utför nyckelexport"
+
+msgid "Performing key import"
+msgstr "Utför nyckelimport"
+
+msgid "Performing key transfer"
+msgstr "Utför nyckelöverföring"
+
+msgid "Please check your username and password"
+msgstr "Kontrollera ditt användarnamn och lösenord"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Välj vilken sorts meddelanden du vill se."
+
+msgid "Please enter a valid email address"
+msgstr "Ange en giltig e-postadress"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Ange en giltig port (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Ange ditt lösenord"
+
+msgid "Please select your email provider to sign in"
+msgstr "Välj din e-postleverantör för att logga in"
+
+msgid "Please specify your email server settings."
+msgstr "Ange dina e-postserverinställningar."
+
+msgid "Please wait a moment."
+msgstr "Vänta ett ögonblick."
+
+msgid "Privacy and Mobbing Protection"
+msgstr "Integritet och Mobbningsskydd"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Profile QR"
+msgstr "Profil QR"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "Att återimportera dina kontakter kommer inte att skapa dubletter."
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "Läskvitto"
+msgstr[1] "Läskvitton"
+
+msgid "Register"
+msgstr "Registrera"
+
+msgid "Remove current image"
+msgstr "Ta bort nuvarande bild"
+
+msgid "Remove participant"
+msgstr "Ta bort deltagare"
+
+msgid "Rename group"
+msgstr "Ta bort grupp"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Svar från %s: %s\n"
+"\n"
+"Vissa leverantörer placerar ytterligare information i din inkorg; du kan "
+"kontrollera dessa exempelvis i webbframänden. Kontakta din leverantör eller "
+"dina vänner om du får problem."
+
+msgid "SMTP Security"
+msgstr "SMTP-säkerhet"
+
+msgid "SMTP login name"
+msgstr "SMTP-inloggningsnamn"
+
+msgid "SMTP password"
+msgstr "SMTP-lösenord"
+
+msgid "SMTP port"
+msgstr "SMTP-port"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "SMTP-server (t.ex. smtp.coi.me)"
+
+msgid "Save"
+msgstr "Spara"
+
+msgid "Scan QR"
+msgstr "Skanna QR"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr ""
+"Skanna denna QR-kod för att skapa en ny kontakt eller verifiera en kontakt "
+"med %s."
+
+msgid "Search contacts"
+msgstr "Sök kontakter"
+
+msgid "Security"
+msgstr "Säkerhet"
+
+msgid "Sent with OX COI Messenger"
+msgstr "Skickades med OX COI Messenger"
+
+msgid "Server addresses"
+msgstr "Serveradresser"
+
+msgid "Set a group name"
+msgstr "Ange ett gruppnamn"
+
+msgid "Set a name"
+msgstr "Ange ett namn"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Inställning"
+msgstr[1] "Inställningar"
+
+msgid "Setup message created"
+msgstr "Installationsmeddelande skapades"
+
+msgid "Share"
+msgstr "Dela"
+
+msgid "Show QR"
+msgstr "Visa QR"
+
+msgid "Show both chat and email messages from all senders"
+msgstr "Visa både chatt- och e-postmeddelanden från alla avsändare"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "Visa både chatt- och e-postmeddelanden från mina kontakter"
+
+msgid "Show messages from unknown contacts"
+msgstr "Visa meddelanden från okända kontakter"
+
+msgid "Show only chat messages "
+msgstr "Visa endast chattmeddelanden "
+
+msgid "Sign in"
+msgstr "Logga in"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "Logga in med %s"
+
+msgid "Signature"
+msgstr "Signatur"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Lägg till en enkelt genom att peka på en kontakt."
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "Inled chatt med %s?"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "Den associerade installationskoden inleds med: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "Koden kan matas in med eller utan minustecken"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "Det finns för närvarande inga meddelanden från okända kontakter"
+
+msgid "There was an error or the progress was canceled."
+msgstr "Ett fel inträffade, eller processen avbröts."
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr ""
+"Den här åtgärden kan också utföras senare via importknappen i det övre "
+"åtgärdsfältet."
+
+msgid "This field can not be empty"
+msgstr "Detta fält får inte vara tomt"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "Detta är en ny chatt. Skicka ett meddelande för att ansluta."
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"Detta är ett läskvitto.\n"
+"\n"
+"Det betyder att meddelanden visades på mottagarens enhet, men inte "
+"nödvändigtvis att innehållet lästes."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"Detta är Autocrypt-installationsmeddelandet som används för att överföra din "
+"end-to-end-installation mellan klienter.\n"
+"\n"
+"För att avkryptera och använda dina inställningar, öppna meddelandet i en "
+"Autocrypt-kompatibel klient och ange installationskoden som visas på den "
+"genererande enheten."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr ""
+"Dessa nycklar låter en annan enhet använda dina nuvarande "
+"krypteringsinställningar. Nycklar sparas på din lokala lagring."
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"Det här meddelandet kan inte avkrypteras.\n"
+"\n"
+"Det kan hjälpa att svara på meddelandet och be avsändaren att skicka "
+"meddelandet igen.\n"
+"\n"
+"Om du ominstallerade OX COI Messenger eller ett annat e-postprogram på den "
+"här eller en annan enhet kan du behöva skicka ett Autocrypt-"
+"installationsmeddelande därifrån."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"Det här meddelandet är ett Autocrypt-installationsmeddelande. Peka på det "
+"för att starta importprocessen. Du kommer vägledas igenom den."
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"För att slutföra importeringen av Autocrypt-installationsmeddelandet, ange "
+"säkerhetskoden som visas på ursprungsenheten. Efter att du matat in koden "
+"nedanför kommer Autocrypt-inställningarna att verkställas för din nuvarande "
+"krypteringsinstallation."
+
+msgid "Today"
+msgstr "Idag"
+
+msgid "Type something..."
+msgstr "Skriv något..."
+
+msgid "Unblock"
+msgstr "Avblockera"
+
+msgid "Unblock contact"
+msgstr "Avblockera kontakt"
+
+msgid "Username"
+msgstr "Användarnamn"
+
+msgid "Verification finished."
+msgstr "Verifiering slutförd."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Verifierar. Vänta ett ögonblick."
+
+msgid "Video"
+msgstr "Video"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr ""
+"Videoinspelning misslyckades, ge rättighet att spela in video i "
+"programinställningarna på din enhet."
+
+msgid "Voice message"
+msgstr "Röstmeddelande"
+
+msgid "We could not determine all settings automatically."
+msgstr "Vi kunde inte bestämma alla inställningar automatiskt."
+
+msgid "Welcome to OX COI Messenger"
+msgstr "Välkommen till OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Välkommen till OX COI Messenger!\n"
+"Starta en ny chatt genom att peka på chattbubbleikonen."
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "Vill du importera dina kontakter från den här enheten?"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Yesterday"
+msgstr "Igår"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Dina Autocrypt-inställningar har skickats till dig själv. Byt till den andra "
+"enheten och öppna installationsmeddelandet. Du bör tillfrågas om en "
+"installationskod. Skriv in följande siffror i prompten:\n"
+"%s\n"
+"När du är färdig kommer din andra enhet att vara redo att använda Autocrypt."
+
+msgid "Your favorite messages"
+msgstr "Dina favoritmeddelanden"
+
+msgid "and"
+msgstr "och"
+
+msgid "code"
+msgstr "kod"
+
+msgid "more messages"
+msgstr "fler meddelanden"
+
+msgid "privacy declaration"
+msgstr "integritetsdekalration"
+
+msgid "terms & conditions"
+msgstr "villkor"

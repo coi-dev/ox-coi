@@ -93,10 +93,6 @@ class _ScanQrState extends State<ScanQr> {
     return Container(
       child: Center(
         child: QrCamera(
-          onError: (context, error) => Text(
-            error.toString(),
-            style: TextStyle(color: Colors.red),
-          ),
           qrCodeCallback: (code) {
             setState(() {
               if (!_qrCodeDetected) {

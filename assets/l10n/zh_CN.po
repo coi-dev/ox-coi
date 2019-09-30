@@ -1,0 +1,832 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-08-28 11:48+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.2.3\n"
+"Last-Translator: \n"
+"Language: zh_CN\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s 动作（由 %s 进行）"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "我进行的 %s"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "已复制 %s 到剪贴簿"
+
+#, c-format
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "%d 位联系人"
+
+#, c-format
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "%d 名会员"
+
+#, c-format
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "%i 位参与者"
+
+#, c-format
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "已导入 %i 位系统联系人"
+
+msgid "About"
+msgstr "关于"
+
+msgid "Account settings"
+msgstr "户口设定"
+
+msgid "Account settings successfully changed"
+msgstr "已成功更改户口设定"
+
+msgid "Add contact"
+msgstr "添加联系人"
+
+msgid "Add participants"
+msgstr "添加参与者"
+
+msgid "Advanced"
+msgstr "进阶"
+
+msgid "Advanced IMAP Settings"
+msgstr "进阶 IMAP 设定"
+
+msgid "Advanced SMTP Settings"
+msgstr "进阶 SMTP 设定"
+
+msgid "All your contacts are in this chat."
+msgstr "您的所有联系人都在聊天里。"
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr ""
+"Autocrypt 设置消息安全地与其他符合 Autocrypt 功能的应用程序分享您的加密设置。"
+"设置将由此处显示的设置码进行保护，并且必须在其他设备上输入。"
+
+msgid "App name"
+msgstr "应用程序名称"
+
+msgid "App version"
+msgstr "应用程序版本"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "套用新设定中，会花一点时间"
+
+msgid "Archived chats"
+msgstr "已归档聊天"
+
+msgid "Audio"
+msgstr "音频"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr "音频录制失败，请授予在设备上的应用设置中录制音频的权限。"
+
+msgid "Autocrypt Setup Message"
+msgstr "Autocrypt 设置消息"
+
+msgid "Autocrypt setup code"
+msgstr "Autocrypt 设置码"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr "Autocrypt 设置失败。请检查您的设置码。"
+
+msgid "Autocrypt setup successfully changed"
+msgstr "已成功更改 Autocrypt 设置"
+
+msgid "Automatic"
+msgstr "自动"
+
+msgid "Base Settings"
+msgstr "基础设置"
+
+msgid "Block"
+msgstr "块"
+
+msgid "Block contact"
+msgstr "屏蔽联系人"
+
+msgid "Blocked contacts"
+msgstr "已屏蔽联系人"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "使用 OX COI Messenger 代表您同意我们的"
+
+msgid "Camera"
+msgstr "相机"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
+msgstr "不能登录。请检查电子邮件和密码皆正确。"
+
+msgid "Cannot verify contact"
+msgstr "不能认证联系人"
+
+msgid "Changed encryption setup for this contact"
+msgstr "为此联系人更改加密"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "聊天"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr "从以下列表里选择一个提供者以创建一个新户口"
+
+msgid "Configuration change aborted"
+msgstr "已放弃配置更改"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "联系人"
+
+msgid "Contact import running, please wait"
+msgstr "正运行联系人导入，请稍等"
+
+msgid "Contact request"
+msgstr "联系人请求"
+
+msgid "Contact successfully added"
+msgstr "已成功添加联系人"
+
+msgid "Contact successfully blocked"
+msgstr "已成功屏蔽联系人"
+
+msgid "Contact successfully deleted"
+msgstr "已成功删除联系人"
+
+msgid "Contact successfully edited"
+msgstr "已成功编辑联系人"
+
+msgid "Contact verified"
+msgstr "已确认联系人"
+
+msgid "Copied to clipboard"
+msgstr "已复制到剪贴板"
+
+msgid "Copy code"
+msgstr "复制代码"
+
+msgid "Could not delete contact."
+msgstr "不能删除联系人。"
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr "不能删除联系人。找到联系人的活跃聊天，请先移除那些聊天。"
+
+msgid "Create chat"
+msgstr "创建聊天"
+
+msgid "Create group"
+msgstr "创建组"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr ""
+"创建 Autocrypt 设置消息，您可以在其他设备上加载该消息以使用当前加密设置。"
+
+msgid "Debug"
+msgstr "调试"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "删除聊天"
+
+msgid "Delete contact"
+msgstr "删除联系人"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "您真的要屏蔽 %s （%s）？"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "您真的要删除 %s （%s）？"
+
+msgid "Do you really want to leave the group?"
+msgstr "你真的要离开这个小组吗？"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "您真的要与此新联系人聊天码？"
+
+msgid "Do you want to delete this chat?"
+msgstr "您要删除此聊天吗？"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr "您要从 \"%s\" 导入您的钥码？"
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "是否要将密钥保存在 \"%s\" 中？"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "是否要取消 %s 的屏蔽？"
+
+msgid "Draft"
+msgstr "草稿"
+
+msgid "Edit contact"
+msgstr "编辑联系"
+
+msgid "Edit profile"
+msgstr "编辑个人资料"
+
+msgid "Email"
+msgstr "电子邮件"
+
+msgid "Email address"
+msgstr "电子邮件地址"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "启用已读回执的发送和请求。"
+
+msgid "Enter the contact name"
+msgstr "输入联系人姓名"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Expert: Export keys"
+msgstr "专业：导出密钥"
+
+msgid "Expert: Import keys"
+msgstr "专业：导入密钥"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "FCM 令牌"
+
+msgid "Feedback"
+msgstr "意見反馈"
+
+msgid "File"
+msgstr "文件"
+
+msgid "Flagged"
+msgstr "已标记"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"对于已知的电子邮件提供商，将自动设置其他设置。\n"
+"有时需要在 Web 前端启用 IMAP。请咨询您的电子邮件提供商或朋友寻求帮助。"
+
+msgid "Forward"
+msgstr "转发"
+
+msgid "Gallery"
+msgstr "相簿"
+
+msgid "Group image changed"
+msgstr "已更改群图像"
+
+msgid "Group image deleted"
+msgstr "已删除组图像"
+
+msgid "Group left"
+msgstr "组左"
+
+msgid "Group name"
+msgstr "群组名称"
+
+msgid "Group name changed"
+msgstr "已更改组名称"
+
+msgid "Hello, I have just created this group for us"
+msgstr "您好，我刚刚为我们创建了这个小组"
+
+msgid "IMAP Security"
+msgstr "IMAP 安全"
+
+msgid "IMAP login name"
+msgstr "IMAP 登录名称"
+
+msgid "IMAP password"
+msgstr "IMAP 密码"
+
+msgid "IMAP port"
+msgstr "IMAP 端口"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "IMAP 服务器（例如：imap.coi.me)"
+
+msgid "Image"
+msgstr "图像"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Import Autocrypt setup message"
+msgstr "导入 Autocrypt 设置消息"
+
+msgid "Import device contacts"
+msgstr "导入设备联系人"
+
+msgid "Import failed, missing permissions"
+msgstr "导入失败，缺少权限"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr "从本地存储导入密钥以更改当前加密设置"
+
+msgid "Inbox"
+msgstr "收件箱"
+
+msgid "Initiate key transfer"
+msgstr "启动密钥传输"
+
+msgid "Invites"
+msgstr "邀请"
+
+msgid "Key action failed"
+msgstr "钥动作失败"
+
+msgid "Key action failed, missing permissions"
+msgstr "钥动作失败，缺少权限"
+
+msgid "Key action successfully done"
+msgstr "成功完成钥动作"
+
+msgid "Leave group"
+msgstr "退出群组"
+
+msgid "Location"
+msgstr "地点"
+
+msgid "Log in to OX COI Messenger"
+msgstr "登陆到 OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "登录中，这可能需要一段时间"
+
+msgid "Login failed"
+msgstr "登录失败"
+
+msgid "Manual Settings"
+msgstr "手动设定"
+
+msgid "Me"
+msgstr "我"
+
+msgid "Member added"
+msgstr "已添加成员"
+
+msgid "Member removed"
+msgstr "已删除成员"
+
+msgid "Message syncing"
+msgstr "消息同步中"
+
+msgid "Messages I sent to myself"
+msgstr "我发送给自己的消息"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr "来自未知联系人的消息不再显示在聊天中。相反，您可以在此处访问此类消息："
+
+msgid "Name"
+msgstr "名称"
+
+msgid "New contact"
+msgstr "新联系人"
+
+msgid "No"
+msgstr "否"
+
+msgid "No blocked contacts"
+msgstr "无已屏蔽联系人"
+
+msgid "No flagged messages"
+msgstr "无已标志消息"
+
+msgid "No messages"
+msgstr "没有消息"
+
+msgid "No participants selected. Please select at least one person."
+msgstr "没有选择参与者。请选择最少一位。"
+
+msgid "No results found"
+msgstr "没有找到结果"
+
+msgid "No signature set"
+msgstr "没有设置签名"
+
+msgid "No username set"
+msgstr "没有设置用户名称"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr ""
+"OX COI Messenger 可以与任何电子邮件提供商合作，但最好与 COI 兼容的提供商合"
+"作。如果您有现有的电子邮件户口，请登录，否则请先注册新帐户。"
+
+msgid "Off"
+msgstr "关"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"通常您只需要提供您的电子邮件地址、密码和服务器地址。其余值将自动确定。有时，"
+"IMAP 需要在您的电子邮件网站中启用。请咨询您的电子邮件提供商或朋友寻求帮助。"
+
+msgid "Ok"
+msgstr "确定"
+
+msgid "Only show messages of known contacts"
+msgstr "仅显示已知联系人的消息"
+
+msgid "Open chat"
+msgstr "打开聊天"
+
+msgid "Other mail provider"
+msgstr "其他邮件供应商"
+
+msgid "Outbox"
+msgstr "发件箱"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "参与者"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Performing key export"
+msgstr "进行钥导出中"
+
+msgid "Performing key import"
+msgstr "进行钥导入中"
+
+msgid "Performing key transfer"
+msgstr "进行钥转移"
+
+msgid "Please check your username and password"
+msgstr "请检查您的用户名称和密码"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "请选择您希望查看的消息类型。"
+
+msgid "Please enter a valid email address"
+msgstr "请输入一个有效电子邮件地址"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "请输入有效的端口 （1-65535）"
+
+msgid "Please enter your password"
+msgstr "请输入密码"
+
+msgid "Please select your email provider to sign in"
+msgstr "请选择您的电子邮件提供商以登录"
+
+msgid "Please specify your email server settings."
+msgstr "请指定您的电子邮件服务器设置。"
+
+msgid "Please wait a moment."
+msgstr "请稍等。"
+
+msgid "Privacy and Mobbing Protection"
+msgstr "隐私和移动保护"
+
+msgid "Profile"
+msgstr "个人档案"
+
+msgid "Profile QR"
+msgstr "个人档案 QR"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "重新导入联系人将不会创建重复项。"
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "读取收据"
+
+msgid "Register"
+msgstr "注册"
+
+msgid "Remove current image"
+msgstr "删除当前图像"
+
+msgid "Remove participant"
+msgstr "删除参与者"
+
+msgid "Rename group"
+msgstr "重命名组"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"来自 %s 的响应：%s\n"
+"\n"
+"某些提供商在收件箱中放置其他信息;你可以检查它们。在网络前端。如果您遇到问题，"
+"请咨询您的提供商或朋友。"
+
+msgid "SMTP Security"
+msgstr "SMTP 安全"
+
+msgid "SMTP login name"
+msgstr "SMTP 登录名称"
+
+msgid "SMTP password"
+msgstr "SMTP 密码"
+
+msgid "SMTP port"
+msgstr "SMTP 端口"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "SMTP 服务器（例如：smtp.coi.me）"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Scan QR"
+msgstr "扫描 QR"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr "扫描此 QR 代码以创建新联系人或验证具有 %s 的联系人。"
+
+msgid "Search contacts"
+msgstr "搜寻联系人"
+
+msgid "Security"
+msgstr "安全性"
+
+msgid "Sent with OX COI Messenger"
+msgstr "以 OX COI Messenger 发送"
+
+msgid "Server addresses"
+msgstr "服务器地址"
+
+msgid "Set a group name"
+msgstr "设置一个组名称"
+
+msgid "Set a name"
+msgstr "设置一个名称"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "设置"
+
+msgid "Setup message created"
+msgstr "已创建设置消息"
+
+msgid "Share"
+msgstr "分享"
+
+msgid "Show QR"
+msgstr "显示 QR"
+
+msgid "Show both chat and email messages from all senders"
+msgstr "显示来自所有发件人的聊天和电子邮件"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "显示来自我的联系人的聊天和电子邮件"
+
+msgid "Show messages from unknown contacts"
+msgstr "显示来自未知联系人的消息"
+
+msgid "Show only chat messages "
+msgstr "仅显示聊天消息 "
+
+msgid "Sign in"
+msgstr "登录"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "用 %s 登录"
+
+msgid "Signature"
+msgstr "签名"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "只需点击联系人即可添加一个。"
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "开始与 %s 聊天？"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "关联的设置代码以此开头：%s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "代码输入时可以带或不带减号"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "当前没有来自未知联系人的消息"
+
+msgid "There was an error or the progress was canceled."
+msgstr "出现错误或进度已取消。"
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr "此动作也可以稍后通过顶部动作栏中的导入按钮完成。"
+
+msgid "This field can not be empty"
+msgstr "此字段不能为空白"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "这是一个新的聊天。发送消息已连接。"
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"这是已读收据。\n"
+"\n"
+"这意味着邮件显示在收件人的设备上，不一定等于内容已被阅读。"
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"这是用于在客户端之间传输端到端设置的 Autocrypt 设置消息。\n"
+"\n"
+"要解密和使用设置，请在符合 Autocrypt 的客户端中打开消息，然后输入生成设备上显"
+"示的设置代码。"
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr "此密钥允许其他设备使用当前加密设置。密钥保存在本地存储中。"
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"不能解密此消息。\n"
+"\n"
+"回复此邮件并要求发件人再次发送该邮件可能会有所帮助。\n"
+"\n"
+"如果您在此设备或其他设备上重新安装了 OX COI Messenger 或其他电子邮件程序，则"
+"可能需要从那里发送 Autocrypt 设置消息。"
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"此消息是 Autocrypt 设置消息。轻点可启动导入过程。您将被引导完成整个过程。"
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"要完成 Autocrypt 设置消息的导入，请提供原始设备上显示的安全代码。输入下面的代"
+"码后，自动加密设置将应用于您当前的加密设置。"
+
+msgid "Today"
+msgstr "今天"
+
+msgid "Type something..."
+msgstr "输入一些东西……"
+
+msgid "Unblock"
+msgstr "取消屏蔽"
+
+msgid "Unblock contact"
+msgstr "取消联系人屏蔽"
+
+msgid "Username"
+msgstr "用户名称"
+
+msgid "Verification finished."
+msgstr "验证已完成。"
+
+msgid "Verifying. Please wait a moment."
+msgstr "验证中。请稍等。"
+
+msgid "Video"
+msgstr "视频"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr "视频录制失败，请授予在设备上的应用设置中录制视频的权限。"
+
+msgid "Voice message"
+msgstr "语音留言"
+
+msgid "We could not determine all settings automatically."
+msgstr "我们不能自动确定所有设置。"
+
+msgid "Welcome to OX COI Messenger"
+msgstr "欢迎来到 OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"欢迎来到OX COI Messenger！\n"
+"请轻点聊天气泡图标以开始新的聊天。"
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "您想从此设备导入联系人吗？"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "Yesterday"
+msgstr "昨天"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"您的 Autocrypt 设置已发送给您自己。切换到其他设备并打开设置消息。系统应提示您"
+"输入设置代码。在提示符中键入以下数字：\n"
+"%s\n"
+"完成后，您的其他设备将可以使用 Autocrypt。"
+
+msgid "Your favorite messages"
+msgstr "您最喜爱的消息"
+
+msgid "and"
+msgstr "和"
+
+msgid "code"
+msgstr "代码"
+
+msgid "more messages"
+msgstr "更多消息"
+
+msgid "privacy declaration"
+msgstr "隐私声明"
+
+msgid "terms & conditions"
+msgstr "项目及条款"

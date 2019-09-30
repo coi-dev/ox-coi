@@ -58,6 +58,33 @@ class L10n {
 
   static List<String> get loadedLocales => _loadedLocales;
 
+  static Iterable<Locale> get supportedLocales => [
+        Locale("cs"),
+        Locale("da"),
+        Locale("en"),
+        Locale("en", "GB"),
+        Locale("en", "US"),
+        Locale("es"),
+        Locale("es", "MX"),
+        Locale("fi"),
+        Locale("fr"),
+        Locale("fr", "CA"),
+        Locale("hu"),
+        Locale("it"),
+        Locale("ja"),
+        Locale("lv"),
+        Locale("nl"),
+        Locale("pl"),
+        Locale("pt"),
+        Locale("ro"),
+        Locale("ru"),
+        Locale("sk"),
+        Locale("sv"),
+        Locale("zh"),
+        Locale("zh", "CN"),
+        Locale("zh", "TW"),
+      ];
+
   static void loadTranslation(Locale locale) {
     String localeString = _getLocaleString(locale);
     if (loadedLocales.contains(localeString)) {

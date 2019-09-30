@@ -96,7 +96,7 @@ class Navigation {
 
   Queue<Navigatable> _navigationStack = Queue();
 
-  Navigatable get current => _navigationStack.last;
+  Navigatable get current => _navigationStack.isEmpty ? null : _navigationStack.last;
 
   set current(Navigatable navigatable) {
     _logger.info("Set current: ${navigatable.tag}");

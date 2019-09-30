@@ -1,0 +1,888 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-08-28 11:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: x\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 2.2.3\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s, %s"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "%s, ja"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "%s bol skopírovaný do schránky"
+
+#, c-format
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "1 kontakt"
+msgstr[1] "%d kontakty"
+msgstr[2] "%d kontaktov"
+
+#, c-format
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "1 člen"
+msgstr[1] "%i členovia"
+msgstr[2] "%i členov"
+
+#, c-format
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "1 účastník"
+msgstr[1] "%i účastníci"
+msgstr[2] "%i účastníkov"
+
+#, c-format
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "1 systémový kontakt"
+msgstr[1] "%d systémové kontakty"
+msgstr[2] "%d systémových kontaktov"
+
+msgid "About"
+msgstr "O aplikácii"
+
+msgid "Account settings"
+msgstr "Nastavenia účtu"
+
+msgid "Account settings successfully changed"
+msgstr "Nastavenia účtu boli úspešne zmenené"
+
+msgid "Add contact"
+msgstr "Pridať kontakt"
+
+msgid "Add participants"
+msgstr "Pridať účastníkov"
+
+msgid "Advanced"
+msgstr "Pokročilé"
+
+msgid "Advanced IMAP Settings"
+msgstr "Pokročilé nastavenie IMAP"
+
+msgid "Advanced SMTP Settings"
+msgstr "Pokročilé nastavenie SMTP"
+
+msgid "All your contacts are in this chat."
+msgstr "Všetky vaše kontakty sa zúčastňujú tejto konverzácie."
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr ""
+"Hlásenie nastavenia Autocrypt bezpečne zdieľa nastavenia šifrovania s inými "
+"aplikáciami kompatibilnými s Autocrypt. Nastavenie bude zabezpečené kódom, "
+"ktorý sa tu zobrazí a musíte ho zadať v druhom zariadení."
+
+msgid "App name"
+msgstr "Názov aplikácie"
+
+msgid "App version"
+msgstr "Verzia aplikácie"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Používajú sa nové nastavenia. To môže chvíľu trvať"
+
+msgid "Archived chats"
+msgstr "Archivované konverzácie"
+
+msgid "Audio"
+msgstr "Zvuk"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr ""
+"Nahrávanie zvuku zlyhalo. Prosím udeľte aplikácii oprávnenie na záznam zvuku "
+"v nastaveniach aplikácie vo vašom zariadení."
+
+msgid "Autocrypt Setup Message"
+msgstr "Hlásenie nastavenia Autocrypt"
+
+msgid "Autocrypt setup code"
+msgstr "Kód Autocrypt"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr "Nastavenie Autocrypt zlyhalo. Skontrolujte správnosť kódu."
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Nastavenie Autocrypt bolo úspešne zmenené"
+
+msgid "Automatic"
+msgstr "Automaticky"
+
+msgid "Base Settings"
+msgstr "Základné nastavenie"
+
+msgid "Block"
+msgstr "Blokovať"
+
+msgid "Block contact"
+msgstr "Zablokovať kontakt"
+
+msgid "Blocked contacts"
+msgstr "Zablokované kontakty"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "Používaním OX COI Messenger vyjadrujete súhlas s našimi"
+
+msgid "Camera"
+msgstr "Fotoaparát"
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
+msgstr ""
+"Nie je možné prihlásiť sa. Skontrolujte správnosť emailovej adresy a hesla."
+
+msgid "Cannot verify contact"
+msgstr "Nie je možné overiť kontakt"
+
+msgid "Changed encryption setup for this contact"
+msgstr "Zmenené nastavenie šifrovania pre tento kontakt"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "Konverzácia"
+msgstr[1] "Konverzácie"
+msgstr[2] "Konverzácií"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr ""
+"Vyberte si z poskytovateľov zo zoznamu nižšie, ak si chcete vytvoriť nový "
+"účet"
+
+msgid "Configuration change aborted"
+msgstr "Zmena konfigurácie zrušená"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakty"
+msgstr[2] "Kontaktov"
+
+msgid "Contact import running, please wait"
+msgstr "Kontakt import prebieha. Prosím, počkajte"
+
+msgid "Contact request"
+msgstr "Žiadosť o kontakt"
+
+msgid "Contact successfully added"
+msgstr "Kontakt úspešne pridaný"
+
+msgid "Contact successfully blocked"
+msgstr "Kontakt úspešne zablokovaný"
+
+msgid "Contact successfully deleted"
+msgstr "Kontakt úspešne zmazaný"
+
+msgid "Contact successfully edited"
+msgstr "Kontakt úspešne upravený"
+
+msgid "Contact verified"
+msgstr "Kontakt overený"
+
+msgid "Copied to clipboard"
+msgstr "Skopírované do schránky"
+
+msgid "Copy code"
+msgstr "Skopírovať kód"
+
+msgid "Could not delete contact."
+msgstr "Nebolo možné zmazať kontakt."
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr ""
+"Nebolo možné zmazať kontakt. Našli sa aktívne rozhovory s kontaktom. Prosím, "
+"najprv zmažte príslušné konverzácie."
+
+msgid "Create chat"
+msgstr "Vytvoriť konverzáciu"
+
+msgid "Create group"
+msgstr "Vytvoriť skupinu"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr ""
+"Vytvorí hlásenie nastavenia Autocrypt, ktoré môžete načítať na iných "
+"zariadeniach spolu s vašim aktuálnym nastavením šifrovania."
+
+msgid "Debug"
+msgstr "Ladenie"
+
+msgid "Delete"
+msgstr "Zmazať konverzáciu"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "Zmazať konverzáciu"
+msgstr[1] "Zmazať konverzácie"
+msgstr[2] "Zmazať konverzácie"
+
+msgid "Delete contact"
+msgstr "Zmazať kontakt"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "Naozaj chcete zablokovať „%s“ (%s)?"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Skutočne chcete zmazať %s (%s)?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Skutočne chcete opustiť túto skupinu?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Chcete začať konverzáciu s týmto novým kontaktom?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Chcete zmazať túto konverzáciu?"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr ""
+"Chcete importovať vaše kľúče zo servera „%s“? Ak uvedený priečinok "
+"neobsahuje žiadne kľúče, operácia zlyhá."
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Chcete uložiť vaše kľúče do „%s“?"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "Chcete odblokovať %s?"
+
+msgid "Draft"
+msgstr "Rozpísaná správa"
+
+msgid "Edit contact"
+msgstr "Upraviť kontakt"
+
+msgid "Edit profile"
+msgstr "Upraviť profil"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Email address"
+msgstr "E-mailová adresa"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Povoliť odosielanie a žiadosti potvrdení o prečítaní správy."
+
+msgid "Enter the contact name"
+msgstr "Zadajte meno kontaktu"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Expert: Export keys"
+msgstr "Expert: Export kľúčov"
+
+msgid "Expert: Import keys"
+msgstr "Expert: Import kľúčov"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "FCM token"
+
+msgid "Feedback"
+msgstr "Spätná väzba"
+
+msgid "File"
+msgstr "Súbor"
+
+msgid "Flagged"
+msgstr "Označené"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"U známych poskytovateľov e-mailových schránok budú ďalšie parametre "
+"nastavené automaticky.\n"
+"V niektorých prípadoch je potrebné zapnúť IMAP vo webovom rozhraní. "
+"Informujte sa u svojho poskytovateľa e-mailovej schránky."
+
+msgid "Forward"
+msgstr "Preposlať"
+
+msgid "Gallery"
+msgstr "Galéria"
+
+msgid "Group image changed"
+msgstr "Obrázok skupiny bol zmenený"
+
+msgid "Group image deleted"
+msgstr "Obrázok skupiny bol zmazaný"
+
+msgid "Group left"
+msgstr "Skupina odišla"
+
+msgid "Group name"
+msgstr "Meno skupiny"
+
+msgid "Group name changed"
+msgstr "Meno skupiny bolo zmenené"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Dobrý deň, práve som pre nás vytvoril túto skupinu"
+
+msgid "IMAP Security"
+msgstr "Zabezpečenie IMAP"
+
+msgid "IMAP login name"
+msgstr "Prihlasovacie meno IMAP"
+
+msgid "IMAP password"
+msgstr "Heslo IMAP"
+
+msgid "IMAP port"
+msgstr "Port IMAP"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "Server IMAP (napr. imap.coi.me)"
+
+msgid "Image"
+msgstr "Obrázok"
+
+msgid "Import"
+msgstr "Importovať"
+
+msgid "Import Autocrypt setup message"
+msgstr "Importovať hlásenie nastavenia Autocrypt"
+
+msgid "Import device contacts"
+msgstr "Importovať kontakty zariadenia"
+
+msgid "Import failed, missing permissions"
+msgstr "Import zlyhal z dôvodu nedostatočných oprávnení"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr ""
+"Importovať kľúče z vášho miestneho úložiska na zmenu aktuálneho nastavenia "
+"šifrovania"
+
+msgid "Inbox"
+msgstr "Doručená pošta"
+
+msgid "Initiate key transfer"
+msgstr "Spustiť prenos kľúča"
+
+msgid "Invites"
+msgstr "Pozvánky"
+
+msgid "Key action failed"
+msgstr "Operácia s kľúčom zlyhala"
+
+msgid "Key action failed, missing permissions"
+msgstr "Operácia s kľúčom zlyhala z dôvodu nedostatočných oprávnení"
+
+msgid "Key action successfully done"
+msgstr "Operácia s kľúčom bola úspešne dokončená"
+
+msgid "Leave group"
+msgstr "Opustiť skupinu"
+
+msgid "Location"
+msgstr "Umiestnenie"
+
+msgid "Log in to OX COI Messenger"
+msgstr "Prihláste sa do OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "Prebieha prihlasovanie. To môže chvíľu trvať"
+
+msgid "Login failed"
+msgstr "Prihlásenie zlyhalo"
+
+msgid "Manual Settings"
+msgstr "Manuálne nastavenie"
+
+msgid "Me"
+msgstr "Ja"
+
+msgid "Member added"
+msgstr "Člen bol pridaný"
+
+msgid "Member removed"
+msgstr "Člen bol odstránený"
+
+msgid "Message syncing"
+msgstr "Synchronizácia správ"
+
+msgid "Messages I sent to myself"
+msgstr "Správy, ktoré som poslal sám sebe"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr ""
+"Správy od neznámych kontaktov sa v konverzáciách už nezobrazujú. Namiesto "
+"toho môžete zobraziť takéto správy tu:"
+
+msgid "Name"
+msgstr "Meno"
+
+msgid "New contact"
+msgstr "Nový kontakt"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "No blocked contacts"
+msgstr "Žiadne zablokované kontakty"
+
+msgid "No flagged messages"
+msgstr "Žiadne správy označené príznakom"
+
+msgid "No messages"
+msgstr "Žiadne správy"
+
+msgid "No participants selected. Please select at least one person."
+msgstr "Neboli vybraní žiadni účastníci. Prosím, vyberte aspoň jednu osobu."
+
+msgid "No results found"
+msgstr "Neboli nájdené žiadne výsledky"
+
+msgid "No signature set"
+msgstr "Nebol nastavený žiadny podpis"
+
+msgid "No username set"
+msgstr "Nebolo nastavené používateľské meno"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr ""
+"OX COI Messenger funguje s ľubovoľným poskytovateľom e-mailových schránok, "
+"ale najlepšie funguje s poskytovateľmi, ktorí sú kompatibilní s COI. Ak už "
+"máte založenú e-mailovú schránku, prosím, prihláste sa. V opačnom prípade si "
+"najskôr zaregistrujte nový účet."
+
+msgid "Off"
+msgstr "Vypnuté"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Často stačí zadať vašu e-mailovú adresu, heslo a adresy serverov. Zvyšné "
+"hodnoty budú zistené automaticky. V niektorých prípadoch je potrebné zapnúť "
+"IMAP vo webovom rozhraní. Informujte sa u svojho poskytovateľa e-mailovej "
+"schránky."
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Only show messages of known contacts"
+msgstr "Zobraziť iba správy od známych kontaktov"
+
+msgid "Open chat"
+msgstr "Otvoriť konverzáciu"
+
+msgid "Other mail provider"
+msgstr "Iný poskytovateľ poštových schránok"
+
+msgid "Outbox"
+msgstr "Pošta na odoslanie"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Účastník"
+msgstr[1] "Účastníci"
+msgstr[2] "Účastníkov"
+
+msgid "Password"
+msgstr "Heslo"
+
+msgid "Performing key export"
+msgstr "Prebieha export kľúčov"
+
+msgid "Performing key import"
+msgstr "Prebieha import kľúčov"
+
+msgid "Performing key transfer"
+msgstr "Prebieha prenos kľúčov"
+
+msgid "Please check your username and password"
+msgstr "Skontrolujte správnosť zadaného používateľského mena a hesla"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Zvoľte, aký druh správ by ste chceli vidieť."
+
+msgid "Please enter a valid email address"
+msgstr "Zadajte platnú e-mailovú adresu"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Zadajte platný port (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Zadajte svoje heslo"
+
+msgid "Please select your email provider to sign in"
+msgstr "Vyberte poskytovateľa e-mailu, kam sa chcete prihlásiť"
+
+msgid "Please specify your email server settings."
+msgstr "Zadajte nastavenia vášho e-mailového servera."
+
+msgid "Please wait a moment."
+msgstr "Prosím, chvíľu počkajte."
+
+msgid "Privacy and Mobbing Protection"
+msgstr "Ochrana súkromia a ochrana pred mobbingom"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Profile QR"
+msgstr "QR kód profilu"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "Opätovný import vašich kontaktov nevytvorí duplikáty."
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "Potvrdenie o prečítaní"
+msgstr[1] "Potvrdenia o prečítaní"
+msgstr[2] "Potvrdení o prečítaní"
+
+msgid "Register"
+msgstr "Zaregistrovať sa"
+
+msgid "Remove current image"
+msgstr "Odstrániť aktuálny obrázok"
+
+msgid "Remove participant"
+msgstr "Odstrániť účastníka"
+
+msgid "Rename group"
+msgstr "Premenovať skupinu"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Odpoveď od % s: %s\n"
+"\n"
+"Niektorí poskytovatelia do vašej schránky vkladajú ďalšie informácie. Tie si "
+"môžete prečítať napr. vo webovom rozhraní. Ak narazíte na problém, "
+"informujte sa u svojho poskytovateľa."
+
+msgid "SMTP Security"
+msgstr "Zabezpečenie SMTP"
+
+msgid "SMTP login name"
+msgstr "Prihlasovacie meno SMTP"
+
+msgid "SMTP password"
+msgstr "Heslo SMTP"
+
+msgid "SMTP port"
+msgstr "Port SMTP"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "Server SMTP (napr. imap.coi.me)"
+
+msgid "Save"
+msgstr "Uložiť"
+
+msgid "Scan QR"
+msgstr "Naskenovať kód QR"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr ""
+"Naskenujte tento kód QR ak chcete vytvoriť nový kontakt alebo overiť kontakt "
+"pomocou %s."
+
+msgid "Search contacts"
+msgstr "Hľadať v kontaktoch"
+
+msgid "Security"
+msgstr "Zabezpečenie"
+
+msgid "Sent with OX COI Messenger"
+msgstr "Odoslané cez OX COI Messenger"
+
+msgid "Server addresses"
+msgstr "Adresa servera"
+
+msgid "Set a group name"
+msgstr "Zadajte meno skupiny"
+
+msgid "Set a name"
+msgstr "Zadajte meno"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Nastavenie"
+msgstr[1] "Nastavenia"
+msgstr[2] "Nastavenia"
+
+msgid "Setup message created"
+msgstr "Nastavovacia správa vytvorená"
+
+msgid "Share"
+msgstr "Zdieľať"
+
+msgid "Show QR"
+msgstr "Zobraziť kód QR"
+
+msgid "Show both chat and email messages from all senders"
+msgstr "Zobraziť četové aj e-mailové správy od všetkých odosielateľov"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "Zobraziť četové aj e-mailové správy od mojich kontaktov"
+
+msgid "Show messages from unknown contacts"
+msgstr "Zobraziť správy od neznámych kontaktov"
+
+msgid "Show only chat messages "
+msgstr "Zobraziť iba četové správy "
+
+msgid "Sign in"
+msgstr "Prihlásiť sa"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "Prihlásiť sa pomocou %s"
+
+msgid "Signature"
+msgstr "Podpis"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Jednoducho ho pridajte ťuknutím na kontakt."
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "Spustiť rozhovor s %s?"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "Príslušný nastavovací kód začína: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "Kód je možné zadať so znamienkom mínus alebo bez neho"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "Momentálne neexistujú žiadne správy od neznámych kontaktov"
+
+msgid "There was an error or the progress was canceled."
+msgstr "Vyskytla sa chyba alebo bola operácia zrušená."
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr ""
+"Túto operáciu je možné vykonať aj neskôr pomocou tlačidla importovať na "
+"vrchnom paneli s operáciami."
+
+msgid "This field can not be empty"
+msgstr "Toto pole nemôže byť prázdne"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "Je to nová konverzácia. Poslaním správy sa spojíte."
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"Toto je potvrdenie o prečítaní.\n"
+"\n"
+"To znamená, že správa bola zobrazená na zariadení príjemcu, nie nevyhnutne, "
+"že si príjemca jej obsah prečítal."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"Toto je nastavovacie hlásenie programu Autocrypt, ktorý sa používa na end-to-"
+"end prenos nastavení medzi klientmi.\n"
+"\n"
+"Ak chcete dešifrovať a použiť vaše nastavenia, otvorte správu v klientovi s "
+"podporou Autocrypt a zadajte kód nastavenia prezentované na výrobných "
+"zariadení."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr ""
+"Tieto kľúče umožňujú využívať vaše aktuálne nastavenie šifrovania aj na inom "
+"zariadení. Kľúče sú uložené na vašom lokálnom úložisku."
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"Túto správu nemožno dešifrovať.\n"
+"\n"
+"Mohlo by pomôcť odpovedať na túto správu a požiadať odosielateľa, aby správu "
+"odoslal znova.\n"
+"\n"
+"V prípade, že ste reinštalovali OX COI Messenger alebo iný e-mailový program "
+"na tomto alebo inom zariadení, možno budete chcieť z daného zariadenia od "
+"preniesť Nastavenia hlásení Autocrypt."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"Táto správa je hlásením inštalátora Autocrypt. Ťuknutím spustíte import. "
+"Prevedieme vás celým procesom."
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"Import nastavovacieho hlásenia Autocrypt dokončíte uvedením bezpečnostného "
+"kódu zobrazeného na zdrojovom zariadení. Po zadaní nižšie uvedeného kódu sa "
+"nastavenie Autocrypt použije na vaše aktuálne nastavenie šifrovania."
+
+msgid "Today"
+msgstr "Dnes"
+
+msgid "Type something..."
+msgstr "Niečo napíšte..."
+
+msgid "Unblock"
+msgstr "Odblokovať"
+
+msgid "Unblock contact"
+msgstr "Odblokovať kontakt"
+
+msgid "Username"
+msgstr "Používateľské meno"
+
+msgid "Verification finished."
+msgstr "Overenie dokončené."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Prebieha overenie. Prosím, chvíľu počkajte."
+
+msgid "Video"
+msgstr "Video"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr ""
+"Nahrávanie videa zlyhalo. Prosím udeľte aplikácii oprávnenie na záznam videa "
+"v nastaveniach aplikácie vo vašom zariadení."
+
+msgid "Voice message"
+msgstr "Hlasová správa"
+
+msgid "We could not determine all settings automatically."
+msgstr "Nepodarilo sa zistiť všetky nastavenia automaticky."
+
+msgid "Welcome to OX COI Messenger"
+msgstr "Víta vás OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Víta vás OX COI Messenger!\n"
+"Prosím, spustite novú konverzáciu klepnutím na ikonu konverzačnej bubliny."
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "Chcete importovať kontakty z tohto zariadenia?"
+
+msgid "Yes"
+msgstr "Áno"
+
+msgid "Yesterday"
+msgstr "Včera"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Nastavenie Autocrypt bola odoslané na vašu e-mailovú adresu. Vezmite si "
+"druhé zariadenie a otvorte nastavovacie hlásenie. Ste mali byť vyzvaní na "
+"nastavenie kódu. Do riadka zadajte nasledujúce čísla:\n"
+"%s\n"
+"Až budete hotoví, Ostatné zariadenie bude pripravené na použitie Autocrypt."
+
+msgid "Your favorite messages"
+msgstr "Obľúbené správy"
+
+msgid "and"
+msgstr "a"
+
+msgid "code"
+msgstr "kód"
+
+msgid "more messages"
+msgstr "ďalšie správy"
+
+msgid "privacy declaration"
+msgstr "vyhlásenie o ochrane osobných údajov"
+
+msgid "terms & conditions"
+msgstr "používateľské podmienky"

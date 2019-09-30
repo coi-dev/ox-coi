@@ -1,0 +1,889 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-09-09 11:33+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
+"X-Generator: Poedit 2.1.1\n"
+"Last-Translator: \n"
+"Language: lv_LV\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s no %s"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "%s no manis"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "%s nokopēts starpliktuvē"
+
+#, c-format
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "%d kontakts"
+msgstr[1] "%d kontakti"
+msgstr[2] "%d kontakti"
+
+#, c-format
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "%i dalībnieks"
+msgstr[1] "%i dalībnieki"
+msgstr[2] "%i dalībnieki"
+
+#, c-format
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "%i dalībnieks"
+msgstr[1] "%i dalībnieki"
+msgstr[2] "%i dalībnieki"
+
+#, c-format
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "%i sistēmas kontakts importēts"
+msgstr[1] "%i sistēmas kontakti importēti"
+msgstr[2] "%i sistēmas kontakti importēti"
+
+msgid "About"
+msgstr "Informācija"
+
+msgid "Account settings"
+msgstr "Konta iestatījumi"
+
+msgid "Account settings successfully changed"
+msgstr "Konta iestatījumi ir veiksmīgi izmainīti"
+
+msgid "Add contact"
+msgstr "Pievienot kontaktu"
+
+msgid "Add participants"
+msgstr "Pievienot dalībniekus"
+
+msgid "Advanced"
+msgstr "Paplašināti"
+
+msgid "Advanced IMAP Settings"
+msgstr "Papildus IMAP iestatījumi"
+
+msgid "Advanced SMTP Settings"
+msgstr "Papildus SMTP iestatījumi"
+
+msgid "All your contacts are in this chat."
+msgstr "Visi jūsu kontakti ir šajā sarunā."
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr ""
+"Autocrypt iestatījumu ziņojums droši koplieto jūsu šifrēšanas iestatījumus "
+"ar citām Autocrypt savietojamām aplikācijām. Iestatījumi tiek aizsargāti ar "
+"šeit norādīto kodu, kurš ir jāievada citā ierīcē."
+
+msgid "App name"
+msgstr "Aplikācijas vārds"
+
+msgid "App version"
+msgstr "Aplikācijas versija"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Jauno iestatījumu piemērošana, tas var prasīt zināmu laiku"
+
+msgid "Archived chats"
+msgstr "Arhivētās sarunas"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr ""
+"Kļūda veicot audio ierakstu. Lūdzu piešķiriet aplikācijai tiesības veikt "
+"audio ierakstus jūsu ierīcē."
+
+msgid "Autocrypt Setup Message"
+msgstr "Autocrypt iestatīšanas ziņojums"
+
+msgid "Autocrypt setup code"
+msgstr "Autocrypt iestatīšanas kods"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr "Kļūda pie Autocrypt iestatīšanas. Lūdzu pārbaudiet iestatīšanas kodu."
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Autocrypt iestatījumi ir veiksmīgi izmainīti"
+
+msgid "Automatic"
+msgstr "Automātisks"
+
+msgid "Base Settings"
+msgstr "Pamata iestatījumi"
+
+msgid "Block"
+msgstr "Bloķēt"
+
+msgid "Block contact"
+msgstr "Bloķēt kontaktu"
+
+msgid "Blocked contacts"
+msgstr "Bloķēt kontaktus"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "Izmantojot OX COI Messenger jūs piekrītat mūsu"
+
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Cancel"
+msgstr "Atcelt"
+
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
+msgstr ""
+"Kļūda pieslēdzoties. Lūdzu pārbaudiet e-pasta adreses un paroles pareizību."
+
+msgid "Cannot verify contact"
+msgstr "Nevar pārbaudīt kontaktu"
+
+msgid "Changed encryption setup for this contact"
+msgstr "Šim kontaktam ir izmainīti šifrēšanas iestatījumi"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "Saruna"
+msgstr[1] "Sarunas"
+msgstr[2] "Sarunas"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr ""
+"Lai izveidotu jaunu kontu, izvēlieties nodrošinātāju no zemāk norādītā "
+"saraksta"
+
+msgid "Configuration change aborted"
+msgstr "Konfigurācijas izmaiņas ir atceltas"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakts"
+msgstr[1] "Kontakti"
+msgstr[2] "Kontakti"
+
+msgid "Contact import running, please wait"
+msgstr "Notiek kontaktu imports. Lūdzu uzgaidiet"
+
+msgid "Contact request"
+msgstr "Kontakta pieprasījums"
+
+msgid "Contact successfully added"
+msgstr "Kontakts ir veiksmīgi pievienots"
+
+msgid "Contact successfully blocked"
+msgstr "Kontakts ir veiksmīgi bloķēts"
+
+msgid "Contact successfully deleted"
+msgstr "Kontakts ir veiksmīgi izdzēsts"
+
+msgid "Contact successfully edited"
+msgstr "Kontakts ir veiksmīgi rediģēts"
+
+msgid "Contact verified"
+msgstr "Kontakts ir pārbaudīts"
+
+msgid "Copied to clipboard"
+msgstr "Nokopēts starpliktuvē"
+
+msgid "Copy code"
+msgstr "Kopēt kodu"
+
+msgid "Could not delete contact."
+msgstr "Kontaktu nevar izdzēst."
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr ""
+"Kontaktu nevar izdzēst. Atrastas aktīvas sarunas ar šo kontaktu. Lūdzu "
+"vispirms noņemiet šīs sarunas."
+
+msgid "Create chat"
+msgstr "Izveidot sarunu"
+
+msgid "Create group"
+msgstr "Izveidot grupu"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr ""
+"Izveidot Autocrypt ziņojumu, kuru jūs varat ielādēt citās ierīcēs, lai "
+"piemērotu jūsu pašreizējos šifrēšanas iestatījumus."
+
+msgid "Debug"
+msgstr "Atkļūdošana"
+
+msgid "Delete"
+msgstr "Dzēst"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "Dzēst sarunu"
+msgstr[1] "Dzēst sarunas"
+msgstr[2] "Dzēst sarunas"
+
+msgid "Delete contact"
+msgstr "Dzēst kontaktu"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "Vai tiešām vēlaties bloķēt %s (%s)?"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Vai tiešām vēlaties dzēst %s (%s)?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Vai tiešām vēlaties iziet no šīs grupas?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Vai vēlaties sarunāties ar šo jauno kontaktu?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Vi vēties izdzēst šo sarunu?"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr ""
+"Vai vēlaties importēt savas atslēgas no \"%s\"? Ja mapē nav atslēgu, "
+"operācija neizdosies."
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Vai vēlaties saglabāt savas atslēgas iekš \"%s\"?"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "Vai vēlaties atbloķēt %s?"
+
+msgid "Draft"
+msgstr "Melnraksts"
+
+msgid "Edit contact"
+msgstr "Rediģēt kontaktu"
+
+msgid "Edit profile"
+msgstr "Rediģēt profilu"
+
+msgid "Email"
+msgstr "E-pasts"
+
+msgid "Email address"
+msgstr "E-pasta adrese"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Iespējot lasīšanas paziņojumu sūtīšanu un pieprasīšanu."
+
+msgid "Enter the contact name"
+msgstr "Ievadiet kontakta vārdu"
+
+msgid "Error"
+msgstr "Kļūda"
+
+msgid "Expert: Export keys"
+msgstr "Eksperts: Eksportēt atslēgas"
+
+msgid "Expert: Import keys"
+msgstr "Eksperts: Importēt atslēgas"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "FCM žetons"
+
+msgid "Feedback"
+msgstr "Atsauksmes"
+
+msgid "File"
+msgstr "Fails"
+
+msgid "Flagged"
+msgstr "Iezīmēts"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"Atpazītiem e-pasta nodrošinātājiem papildus iestatījumi tiek iestatīti "
+"automātiski.\n"
+"Dažreiz IMAP ir jāiespējo tīmekļa lietotnē. Pēc palīdzības griezieties pie "
+"sava e-pasta nodrošinātāja."
+
+msgid "Forward"
+msgstr "Pārsūtīt"
+
+msgid "Gallery"
+msgstr "Galerija"
+
+msgid "Group image changed"
+msgstr "Grupas attēls ir izmainīts"
+
+msgid "Group image deleted"
+msgstr "Grupas attēls ir izdzēsts"
+
+msgid "Group left"
+msgstr "Grupa ir atstāta"
+
+msgid "Group name"
+msgstr "Grupas vārds"
+
+msgid "Group name changed"
+msgstr "Grupas vārds ir izmainīts"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Sveicināti, es esmu tikko kā mums izveidojis šo grupu"
+
+msgid "IMAP Security"
+msgstr "IMAP drošība"
+
+msgid "IMAP login name"
+msgstr "IMAP pieslēguma vārds"
+
+msgid "IMAP password"
+msgstr "IMAP parole"
+
+msgid "IMAP port"
+msgstr "IMAP ports"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "IMAP serveris (kā imap.coi.me)"
+
+msgid "Image"
+msgstr "Attēls"
+
+msgid "Import"
+msgstr "Importēt"
+
+msgid "Import Autocrypt setup message"
+msgstr "Importēt Autocrypt iestatījumu paziņojumu"
+
+msgid "Import device contacts"
+msgstr "Importēt ierīces kontaktus"
+
+msgid "Import failed, missing permissions"
+msgstr "Kļūda pie importēšanas. Nepietiekama piekļuve"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr ""
+"Importēt atslēgas no lokālās glabātuves, lai izmainītu pašreizējos "
+"šifrēšanas iestatījumus"
+
+msgid "Inbox"
+msgstr "Iesūtne"
+
+msgid "Initiate key transfer"
+msgstr "Iniciē atslēgu pārvietošanu"
+
+msgid "Invites"
+msgstr "Uzaicinājumi"
+
+msgid "Key action failed"
+msgstr "Atslēgu darbība nesekmīga"
+
+msgid "Key action failed, missing permissions"
+msgstr "Atslēgu darbība nesekmīga. Nepietiekama piekļuve"
+
+msgid "Key action successfully done"
+msgstr "Atslēgu darbība veiksmīgi pabeigta"
+
+msgid "Leave group"
+msgstr "Aiziet no grupas"
+
+msgid "Location"
+msgstr "Vieta"
+
+msgid "Log in to OX COI Messenger"
+msgstr "Pieslēgties pie OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "Notiek pieslēgšanās. Tas var prasīt zināmu laiku"
+
+msgid "Login failed"
+msgstr "Pieslēgšanās nesekmēga"
+
+msgid "Manual Settings"
+msgstr "Manuāli iestatījumi"
+
+msgid "Me"
+msgstr "Es"
+
+msgid "Member added"
+msgstr "Dalībnieks ir pievienots"
+
+msgid "Member removed"
+msgstr "Dalībnieks ir noņemts"
+
+msgid "Message syncing"
+msgstr "Ziņojumu sinhronizēšana"
+
+msgid "Messages I sent to myself"
+msgstr "Ziņojumi, kuri ir nosūtīti sev"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr ""
+"Ziņojumi no neatpazītiem kontaktiem vairs netiek uzrādīti sarunās. Tā vietā "
+"jūs variet piekļūt šādiem ziņojumiem šeit:"
+
+msgid "Name"
+msgstr "Vārds"
+
+msgid "New contact"
+msgstr "Jauns kontakts"
+
+msgid "No"
+msgstr "Nē"
+
+msgid "No blocked contacts"
+msgstr "Nav bloķētu kontaktu"
+
+msgid "No flagged messages"
+msgstr "Nav iezīmētu ziņojumu"
+
+msgid "No messages"
+msgstr "Nav ziņojumu"
+
+msgid "No participants selected. Please select at least one person."
+msgstr ""
+"Neviens dalībnieks nav izvēlēts. Lūdzu izvēlieties vismaz vienu personu."
+
+msgid "No results found"
+msgstr "Rezultāti nav atrasti"
+
+msgid "No signature set"
+msgstr "Paraksti nav iestatīti"
+
+msgid "No username set"
+msgstr "Lietotāja vārds nav iestatīts"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr ""
+"OX COI Messenger darbojas ar jebkuru e-pasta nodrošinātāju, bet vislabāk ar "
+"COI-savietojamiem pakalpojumiem. Ja jums ir esošs e-pasta konts, lūdzu "
+"pieslēdzieties, citādi vispirms reģistrējiet jaunu kontu."
+
+msgid "Off"
+msgstr "Izslēgts"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Parasti jums ir jānorāda tikai e-pasta adrese, parole un serveru adreses. "
+"Pārējie iestatījumi tiek atrasti un iestatīti automātiski. Dažreiz IMAP ir "
+"jāiespējo, izmantojot e-pasta tīmekļa vietni. Pāc palīdzības lūdzu "
+"griezieties pie sava e-pasta nodrošinātāja."
+
+msgid "Ok"
+msgstr "Labi"
+
+msgid "Only show messages of known contacts"
+msgstr "Rādīt ziņojumus tikai no atpazītiem kontaktiem"
+
+msgid "Open chat"
+msgstr "Atvērt sarunu"
+
+msgid "Other mail provider"
+msgstr "Cits e-pasta nodrošinātājs"
+
+msgid "Outbox"
+msgstr "Nosūtne"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Dalībnieks"
+msgstr[1] "Dalībnieki"
+msgstr[2] "Dalībnieki"
+
+msgid "Password"
+msgstr "Parole"
+
+msgid "Performing key export"
+msgstr "Notiek atslēgu eksports"
+
+msgid "Performing key import"
+msgstr "Notiek atslēgu imports"
+
+msgid "Performing key transfer"
+msgstr "Notiek atslēgu pārvietošana"
+
+msgid "Please check your username and password"
+msgstr "Lūdzu pārbaudiet savu lietotāja vārdu un paroli"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Lūdzu izvēlieties kādu ziņojuma tipu jūs vēlaties redzēt."
+
+msgid "Please enter a valid email address"
+msgstr "Lūdzu ievadiet derīgu e-pasta adresi"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Lūdzu norādiet derīgu portu (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Lūdzu ievadiet paroli"
+
+msgid "Please select your email provider to sign in"
+msgstr "Lūdzu izvēlieties e-pasta nodrošinātāju pieslēgumam"
+
+msgid "Please specify your email server settings."
+msgstr "Lūdzu norādiet sava e-pasta servera iestatījumus"
+
+msgid "Please wait a moment."
+msgstr "Lūdzu nedaudz uzgaidiet."
+
+msgid "Privacy and Mobbing Protection"
+msgstr "Privātums un aizsardzība"
+
+msgid "Profile"
+msgstr "Profils"
+
+msgid "Profile QR"
+msgstr "Profila QR"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "Atkārtota kontaktu importēšana neradīs dublikātus."
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "Lasīšanas apstiprinājums"
+msgstr[1] "Lasīšanas apstiprinājumi"
+msgstr[2] "Lasīšanas apstiprinājumi"
+
+msgid "Register"
+msgstr "Reģistrēties"
+
+msgid "Remove current image"
+msgstr "Noņemt pašreizējo attēlu"
+
+msgid "Remove participant"
+msgstr "Noņemt dalībnieku"
+
+msgid "Rename group"
+msgstr "Pārdēvēt grupu"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Atbilde no %s: %s\n"
+"\n"
+"Daži e-pasta nodrošinātāji ievieto papildus informāciju iesūtnē; jūs to "
+"varat pārbaudīt atbilstošajā tīmekļa vietnē. Problēmu gadījumā sazinieties "
+"ar savu e-pasta nodrošinātāju."
+
+msgid "SMTP Security"
+msgstr "SMTP drošība"
+
+msgid "SMTP login name"
+msgstr "SMTP pieslēguma vārds"
+
+msgid "SMTP password"
+msgstr "SMTP parole"
+
+msgid "SMTP port"
+msgstr "SMTP ports"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "SMTP serveris (kā smtp.coi.me)"
+
+msgid "Save"
+msgstr "Saglabāt"
+
+msgid "Scan QR"
+msgstr "Skenēt QR"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr ""
+"Ieskenējiet šo QR kodu lai izveidotu jaunu kontaktu vai pārbaudītu to ar %s."
+
+msgid "Search contacts"
+msgstr "Meklēt kontaktus"
+
+msgid "Security"
+msgstr "Drošība"
+
+msgid "Sent with OX COI Messenger"
+msgstr "Nosūtīts izmantojot OX COI Messenger"
+
+msgid "Server addresses"
+msgstr "Serveru adreses"
+
+msgid "Set a group name"
+msgstr "Iestatīt grupas vārdu"
+
+msgid "Set a name"
+msgstr "Iestatīt vārdu"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Iestatījums"
+msgstr[1] "Iestatījumi"
+msgstr[2] "Iestatījumi"
+
+msgid "Setup message created"
+msgstr "Iestatīšanas ziņojums ir izveidots"
+
+msgid "Share"
+msgstr "Koplietot"
+
+msgid "Show QR"
+msgstr "Rādīt QR"
+
+msgid "Show both chat and email messages from all senders"
+msgstr "Rādīt visus sarunu un e-pasta ziņojumus no visiem nosūtītājiem"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "Rādīt visus sarunu un e-pasta ziņojumus no saviem kontaktiem"
+
+msgid "Show messages from unknown contacts"
+msgstr "Rādīt ziņojumus no neatpazītiem kontaktiem"
+
+msgid "Show only chat messages "
+msgstr "Rādīt tikai sarunu ziņojumus"
+
+msgid "Sign in"
+msgstr "Pieslēgšanās"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "Pieslēgties ar %s"
+
+msgid "Signature"
+msgstr "Paraksts"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Vienkārši pievienojiet, noklikšķinot uz kontakta."
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "Vai sākt sarunu ar %s?"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "Saistītais iestatīšanas kods sākas ar: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "Kods var tikt ievadīts ar vai bez mīnusa zīmēm"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "Pašlaik nav ziņojumu no neatpazītiem kontaktiem"
+
+msgid "There was an error or the progress was canceled."
+msgstr "Reģistrēta kļūda vai arī apstrāde ir atcelta."
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr ""
+"Šī darbība var tikt izpildīta arī vēlāk, izmantojot importa taustiņu augšējā "
+"rīkjoslā."
+
+msgid "This field can not be empty"
+msgstr "Šis lauks nevar būt tukšs"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "Šī ir jauna saruna. Lai pieslēgtos, nosūtiet ziņojumu."
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"Šis ir lasīšanas apstiprinājums.\n"
+"\n"
+"Tas nozīmē, ka ziņojums ir parādīts saņēmēja ierīcē, bet nenodrošina to, ka "
+"tā saturs ir izlasīts."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"Šis ir Autocrypt iestatīšanas ziņojums, kurš tiek izmantots iestatījumu "
+"pārsūtīšanai starp dažādām ierīcēm.\n"
+"\n"
+"Lai atšifrētu un piemērotu iestatījumus, atveriet ziņojumu ar Autocrypt-"
+"saderīgu klienta aplikāciju un ievadiet iestatīšanas kodu, kurš ir norādīts "
+"nosūtošajā ierīcē."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr ""
+"Šīs atslēgas ļauj citām ierīcēm izmantot jūsu pašreizējos šifrēšanas "
+"iestatījumus. Atslēgas tiek uzglabātas jūsu lokālajā krātuvē."
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"Šo ziņojumu nevar atšifrēt.\n"
+"\n"
+"Jūs variet atbildēt uz šo ziņojumu un lūgt nosūtītāju to vēlreiz atkārtot.\n"
+"\n"
+"Gadījumā, ja ir veikta OX COI Messenger vai citas e-pasta aplikācijas "
+"pārinstalēšana šajā vai citā ierīcē, jūs variet nosūtīt Autocrypt "
+"iestatīšanas ziņojumu no šejienes."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"Šis ziņojums ir Autocrypt iestatīšanas ziņojums. Noklikšķiniet, lai sāktu "
+"importēšanu un sekojiet vednim lai pabeigtu procesu."
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"Lai pabeigtu Autocrypt iestatīšanas ziņojuma importēšanu, lūdzu ievadiet "
+"pirmavota ierīcē uzrādīto drošības kodu. Pēc koda ievadīšanas Autocrypt "
+"iestatījumi tiks piemēroti jūsu pašreizējiem šifrēšanas iestatījumiem."
+
+msgid "Today"
+msgstr "Šodien"
+
+msgid "Type something..."
+msgstr "Iedrukājiet kaut ko..."
+
+msgid "Unblock"
+msgstr "Atbloķēt"
+
+msgid "Unblock contact"
+msgstr "Atbloķēt kontaktu"
+
+msgid "Username"
+msgstr "Lietotāja vārds"
+
+msgid "Verification finished."
+msgstr "Pārbaude ir pabeigta."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Notiek pārbaude. Lūdzu uzgaidiet."
+
+msgid "Video"
+msgstr "Video"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr ""
+"Kļūda veicot video ierakstu. Lūdzu piešķiriet aplikācijai tiesības veikt "
+"video ierakstus jūsu ierīcē."
+
+msgid "Voice message"
+msgstr "Balss ziņojums"
+
+msgid "We could not determine all settings automatically."
+msgstr "Visi iestatījumi nevar tikt automātiski noteikti."
+
+msgid "Welcome to OX COI Messenger"
+msgstr "Esiet sveicināti OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Esiet sveicināti OX COI Messenger!\n"
+"Lūdzu sāciet jaunu sarunu, noklikšķinot uz sarunas ikonas."
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "Vai vēlaties importēt kontaktus no šīs ierīces?"
+
+msgid "Yes"
+msgstr "Jā"
+
+msgid "Yesterday"
+msgstr "Vakar"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Jūsu Autocrypt iestatījumi ir nosūtīti jums pašam. Pārejiet uz citu ierīci "
+"un atveriet iestatīšanas ziņojumu. Jums tiks pavaicāts iestatīšanas kods. "
+"Vaicājuma logā ievadiet sekojošus ciparus:\n"
+"%s\n"
+"Kad iestatīšana būs pabeigta, jūsu cita ierīce būs gatava Autocrypt "
+"izmantošanai."
+
+msgid "Your favorite messages"
+msgstr "Jūsu iemīļotie ziņojumi"
+
+msgid "and"
+msgstr "un"
+
+msgid "code"
+msgstr "kods"
+
+msgid "more messages"
+msgstr "vairāk ziņojumu"
+
+msgid "privacy declaration"
+msgstr "privātuma deklarācija"
+
+msgid "terms & conditions"
+msgstr "nosacījumi"

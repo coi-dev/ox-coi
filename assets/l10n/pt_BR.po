@@ -1,0 +1,879 @@
+# Aracele Torres <aracele@workshop-chapina.com >, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: Open-Xchange 6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"PO-Revision-Date: 2019-08-26 19:14-0300\n"
+"Last-Translator: Aracele Torres <aracele@workshop-chapina.com >\n"
+"Language-Team: Portuguese <>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 19.08.0\n"
+
+#. Action X performed by user Y (e.g. Login by alice)
+#, c-format
+msgid "%s by %s"
+msgstr "%s por %s"
+
+#. Action X performed by the current user (e.g. Login by me)
+#, c-format
+msgid "%s by me"
+msgstr "%s por mim"
+
+#. Content X copied to clipboard (e.g. Text copied to clipboard)
+#, c-format
+msgid "%s copied to clipboard"
+msgstr "%s copiado para a área de transferência"
+
+#, c-format
+msgid "1 contact"
+msgid_plural "%d contacts"
+msgstr[0] "1 contato"
+msgstr[1] "%d contatos"
+
+#, c-format
+msgid "1 member"
+msgid_plural "%i members"
+msgstr[0] "1 membro"
+msgstr[1] "%i membros"
+
+#, c-format
+msgid "1 participant"
+msgid_plural "%i participants"
+msgstr[0] "1 participante"
+msgstr[1] "%i participante"
+
+#, c-format
+msgid "1 system contact imported"
+msgid_plural "%i system contacts imported"
+msgstr[0] "1 contato do sistema importado"
+msgstr[1] "%i contatos do sistema importados"
+
+msgid "About"
+msgstr "Sobre"
+
+msgid "Account settings"
+msgstr "Configurações da conta"
+
+msgid "Account settings successfully changed"
+msgstr "Configurações da conta alteradas com sucesso"
+
+msgid "Add contact"
+msgstr "Adicionar contato"
+
+msgid "Add participants"
+msgstr "Adicionar participantes"
+
+msgid "Advanced"
+msgstr "Avançado"
+
+msgid "Advanced IMAP Settings"
+msgstr "Configurações avançadas IMAP"
+
+msgid "Advanced SMTP Settings"
+msgstr "Configurações avançadas de SMTP"
+
+msgid "All your contacts are in this chat."
+msgstr "Todos os seus contatos estão neste bate-papo."
+
+msgid ""
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr ""
+"Uma mensagem de configuração Autocrypt compartilha com segurança sua"
+" configuração de criptografia com outros aplicativos compatíveis com"
+" Autocrypt. A configuração será protegida por um código de configuração que é"
+" exibido aqui e deve ser inserido no outro dispositivo."
+
+msgid "App name"
+msgstr "Nome do aplicativo"
+
+msgid "App version"
+msgstr "Versão do aplicativo"
+
+msgid "Applying new settings, this may take a moment"
+msgstr "Aplicando novas configurações, isso pode demorar um pouco"
+
+msgid "Archived chats"
+msgstr "Bate-papos arquivados"
+
+msgid "Audio"
+msgstr "Áudio"
+
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
+msgstr ""
+"Falha na gravação de áudio, conceda as permissões para gravar áudio nas"
+" configurações do aplicativo no seu dispositivo."
+
+msgid "Autocrypt Setup Message"
+msgstr "Mensagem de configuração do Autocrypt"
+
+msgid "Autocrypt setup code"
+msgstr "Código de configuração do Autocrypt"
+
+msgid "Autocrypt setup failed. Please check your setup code."
+msgstr ""
+"Falha na configuração do Autocrypt. Verifique o seu código de configuração."
+
+msgid "Autocrypt setup successfully changed"
+msgstr "Configuração do Autocrypt alterada com sucesso"
+
+msgid "Automatic"
+msgstr "Automático"
+
+msgid "Base Settings"
+msgstr "Configurações de base"
+
+msgid "Block"
+msgstr "Bloquear"
+
+msgid "Block contact"
+msgstr "Bloquear contato"
+
+msgid "Blocked contacts"
+msgstr "Contatos bloqueados"
+
+msgid "By using OX COI Messenger you agree to our"
+msgstr "Ao usar o OX COI Messenger, você concorda com nossos"
+
+msgid "Camera"
+msgstr "Câmera"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
+msgstr ""
+"Não foi possível acessar. Verifique se o endereço de email e a senha estão"
+" corretos."
+
+msgid "Cannot verify contact"
+msgstr "Não foi possível verificar o contato"
+
+msgid "Changed encryption setup for this contact"
+msgstr "Configuração de criptografia alterada para este contato"
+
+msgid "Chat"
+msgid_plural "Chats"
+msgstr[0] "Bate-papo"
+msgstr[1] "Bate-papos"
+
+msgid "Choose a provider from the list below to create a new account"
+msgstr "Escolha um provedor na lista abaixo para criar uma nova conta"
+
+msgid "Configuration change aborted"
+msgstr "Alteração de configuração abortada"
+
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Contato"
+msgstr[1] "Contatos"
+
+msgid "Contact import running, please wait"
+msgstr "Importação de contato em execução, aguarde"
+
+msgid "Contact request"
+msgstr "Requisição de contato"
+
+msgid "Contact successfully added"
+msgstr "Contato adicionado com sucesso"
+
+msgid "Contact successfully blocked"
+msgstr "Contato bloqueado com sucesso"
+
+msgid "Contact successfully deleted"
+msgstr "Contato excluído com sucesso"
+
+msgid "Contact successfully edited"
+msgstr "Contato editado com sucesso"
+
+msgid "Contact verified"
+msgstr "Contato verificado"
+
+msgid "Copied to clipboard"
+msgstr "Copiado para a área de transferência"
+
+msgid "Copy code"
+msgstr "Copiar código"
+
+msgid "Could not delete contact."
+msgstr "Não foi possível excluir o contato."
+
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
+msgstr ""
+"Não foi possível excluir o contato. Há bate-papos ativos com contato"
+" encontrados, remova primeiro esses bate-papos."
+
+msgid "Create chat"
+msgstr "Criar bate-papo"
+
+msgid "Create group"
+msgstr "Criar grupo"
+
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
+msgstr ""
+"Cria uma mensagem de configuração Autocrypt, que você pode carregar em outros"
+" dispositivos para usar sua configuração atual de criptografia."
+
+msgid "Debug"
+msgstr "Depurar"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Delete chat"
+msgid_plural "Delete chats"
+msgstr[0] "Excluir bate-papo"
+msgstr[1] "Excluir bate-papos"
+
+msgid "Delete contact"
+msgstr "Excluir contato"
+
+#. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to block %s (%s)?"
+msgstr "Deseja realmente bloquear %s (%s)?"
+
+#. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
+#, c-format
+msgid "Do you really want to delete %s (%s)?"
+msgstr "Deseja realmente excluir %s (%s)?"
+
+msgid "Do you really want to leave the group?"
+msgstr "Deseja realmente sair do grupo?"
+
+msgid "Do you want to chat with this new contact?"
+msgstr "Deseja conversar com esse novo contato?"
+
+msgid "Do you want to delete this chat?"
+msgstr "Deseja excluir este bate-papo?"
+
+#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+#, c-format
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
+msgstr ""
+"Deseja importar suas chaves de \"%s\"? Se não houver chaves nessa pasta, a"
+" operação falhará."
+
+#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
+#, c-format
+msgid "Do you want to save your keys in \"%s\"?"
+msgstr "Deseja salvar suas chaves em \"%s\"?"
+
+#. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
+#, c-format
+msgid "Do you want to unblock %s?"
+msgstr "Deseja desbloquear %s?"
+
+msgid "Draft"
+msgstr "Rascunho"
+
+msgid "Edit contact"
+msgstr "Editar contato"
+
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Email address"
+msgstr "Endereço de e-mail"
+
+msgid "Enable sending and requesting of read receipts."
+msgstr "Ativar o envio e a solicitação de confirmações de leitura."
+
+msgid "Enter the contact name"
+msgstr "Insira o nome do contato"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Expert: Export keys"
+msgstr "Especialista: exportar chaves"
+
+msgid "Expert: Import keys"
+msgstr "Especialista: importar chaves"
+
+#. Security token of the FCM service. FCM is a abbreviation and mustn't be translated
+msgid "FCM token"
+msgstr "Token do FCM "
+
+msgid "Feedback"
+msgstr "Comentário"
+
+msgid "File"
+msgstr "Arquivo"
+
+msgid "Flagged"
+msgstr "Marcado"
+
+msgid ""
+"For known email providers additional settings are set up automatically.\n"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr ""
+"Para provedores de e-mail conhecidos, configurações adicionais são"
+" configuradas automaticamente.\n Às vezes, o IMAP precisa estar ativado na"
+" interface web. Consulte seu provedor de e-mail ou amigos para obter ajuda."
+
+msgid "Forward"
+msgstr "Encaminhar"
+
+msgid "Gallery"
+msgstr "Galeria"
+
+msgid "Group image changed"
+msgstr "Imagem do grupo alterada"
+
+msgid "Group image deleted"
+msgstr "Imagem do grupo excluída"
+
+msgid "Group left"
+msgstr "Grupo abandonado"
+
+msgid "Group name"
+msgstr "Nome do grupo"
+
+msgid "Group name changed"
+msgstr "Nome do grupo alterado"
+
+msgid "Hello, I have just created this group for us"
+msgstr "Olá, acabei de criar este grupo para nós"
+
+msgid "IMAP Security"
+msgstr "Segurança IMAP"
+
+msgid "IMAP login name"
+msgstr "Nome de usuário IMAP"
+
+msgid "IMAP password"
+msgstr "Senha IMAP"
+
+msgid "IMAP port"
+msgstr "Porta IMAP"
+
+msgid "IMAP server (e.g. imap.coi.me)"
+msgstr "Servidor IMAP (por exemplo, imap.coi.me)"
+
+msgid "Image"
+msgstr "Imagem"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Import Autocrypt setup message"
+msgstr "Importar mensagem de configuração do Autocrypt"
+
+msgid "Import device contacts"
+msgstr "Importar contatos do dispositivo"
+
+msgid "Import failed, missing permissions"
+msgstr "Falha na importação, faltando permissões"
+
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr ""
+"Importar chaves do seu armazenamento local para alterar sua configuração"
+" atual de criptografia"
+
+msgid "Inbox"
+msgstr "Caixa de entrada"
+
+msgid "Initiate key transfer"
+msgstr "Iniciar transferência de chave"
+
+msgid "Invites"
+msgstr "Convites"
+
+msgid "Key action failed"
+msgstr "Falha na ação da chave"
+
+msgid "Key action failed, missing permissions"
+msgstr "Falha na ação da chave, faltando permissões"
+
+msgid "Key action successfully done"
+msgstr "Ação da chave realizada com sucesso"
+
+msgid "Leave group"
+msgstr "Deixar grupo"
+
+msgid "Location"
+msgstr "Localização"
+
+msgid "Log in to OX COI Messenger"
+msgstr "Entrar no OX COI Messenger"
+
+msgid "Logging in, this may take a moment"
+msgstr "Entrando, isso pode demorar um pouco"
+
+msgid "Login failed"
+msgstr "Falha no login"
+
+msgid "Manual Settings"
+msgstr "Configurações manuais"
+
+msgid "Me"
+msgstr "Eu"
+
+msgid "Member added"
+msgstr "Membro adicionado"
+
+msgid "Member removed"
+msgstr "Membro removido"
+
+msgid "Message syncing"
+msgstr "Sincronização de mensagens"
+
+msgid "Messages I sent to myself"
+msgstr "Mensagens que enviei para mim"
+
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
+msgstr ""
+"Mensagens de contatos desconhecidos não aparecem mais em bate-papos. Em vez"
+" disso, você pode acessar essas mensagens aqui:"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "New contact"
+msgstr "Novo contato"
+
+msgid "No"
+msgstr "Nenhum"
+
+msgid "No blocked contacts"
+msgstr "Sem contatos bloqueados"
+
+msgid "No flagged messages"
+msgstr "Nenhuma mensagem sinalizada"
+
+msgid "No messages"
+msgstr "Sem mensagens"
+
+msgid "No participants selected. Please select at least one person."
+msgstr "Nenhum participante selecionado. Selecione pelo menos uma pessoa."
+
+msgid "No results found"
+msgstr "Nenhum resultado encontrado"
+
+msgid "No signature set"
+msgstr "Nenhuma assinatura definida"
+
+msgid "No username set"
+msgstr "Nenhum nome de usuário definido"
+
+msgid ""
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr ""
+"O OX COI Messenger funciona com qualquer provedor de e-mail, mas mellhor com"
+" provedores compatíveis com COI. Se você tiver uma conta de e-mail existente,"
+" faça login, caso contrário"
+"registre uma nova conta primeiro."
+
+msgid "Off"
+msgstr "Desligado"
+
+msgid ""
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr ""
+"Muitas vezes você só precisa fornecer seu endereço de e-mail, senha e"
+" endereços de servidor. Os valores restantes são determinados"
+" automaticamente. Às vezes, o IMAP precisa estar habilitado em seu site de"
+" e-mail. Consulte seu provedor de e-mail ou amigos para obter ajuda."
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Only show messages of known contacts"
+msgstr "Mostrar somente mensagens de contatos conhecidos"
+
+msgid "Open chat"
+msgstr "Abrir bate-papo"
+
+msgid "Other mail provider"
+msgstr "Outro provedor de e-mail"
+
+msgid "Outbox"
+msgstr "Caixa de saída"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Participante"
+msgstr[1] "Participantes"
+
+msgid "Password"
+msgstr "Senha"
+
+msgid "Performing key export"
+msgstr "Executando exportação de chave"
+
+msgid "Performing key import"
+msgstr "Executando importação de chave"
+
+msgid "Performing key transfer"
+msgstr "Executando transferência de chave"
+
+msgid "Please check your username and password"
+msgstr "Verifique seu nome de usuário e senha"
+
+msgid "Please choose what kind of messages you would like to see."
+msgstr "Escolha o tipo de mensagens que você gostaria de ver."
+
+msgid "Please enter a valid email address"
+msgstr "Insira um endereço de e-mail válido"
+
+msgid "Please enter a valid port (1-65535)"
+msgstr "Insira uma porta válida (1-65535)"
+
+msgid "Please enter your password"
+msgstr "Insira sua senha"
+
+msgid "Please select your email provider to sign in"
+msgstr "Selecione seu provedor de e-mail para entrar"
+
+msgid "Please specify your email server settings."
+msgstr "Especifique suas configurações do servidor de e-mail."
+
+msgid "Please wait a moment."
+msgstr "Por favor, aguarde."
+
+msgid "Privacy and Mobbing Protection"
+msgstr "Proteção de Privacidade e Mobbing"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Profile QR"
+msgstr "QR do perfil"
+
+msgid "Re-importing your contacts will not create duplicates."
+msgstr "Reimportar seus contatos não criará duplicatas."
+
+msgid "Read receipt"
+msgid_plural "Read receipts"
+msgstr[0] "Confirmação de leitura"
+msgstr[1] "Confirmações de leitura"
+
+msgid "Register"
+msgstr "Registrar"
+
+msgid "Remove current image"
+msgstr "Remover imagem atual"
+
+msgid "Remove participant"
+msgstr "Remover participante"
+
+msgid "Rename group"
+msgstr "Renomear grupo"
+
+#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+#, c-format
+msgid ""
+"Response from %s: %s\n"
+"\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr ""
+"Resposta de %s: %s\n"
+"\n"
+"Alguns provedores colocam informações adicionais na sua caixa de entrada;"
+" você pode verificá-los, por exemplo, na interface web. Consulte o seu"
+" provedor ou amigos se você tiver problemas."
+
+msgid "SMTP Security"
+msgstr "Segurança do SMTP"
+
+msgid "SMTP login name"
+msgstr "Nome de usuário SMTP"
+
+msgid "SMTP password"
+msgstr "Senha SMTP"
+
+msgid "SMTP port"
+msgstr "Porta SMTP"
+
+msgid "SMTP server (e.g. smtp.coi.me)"
+msgstr "Servidor SMTP (por exemplo, smtp.coi.me)"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Scan QR"
+msgstr "Escanear QR"
+
+#. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
+#, c-format
+msgid "Scan this QR code to create a new contact or verify a contact with %s."
+msgstr ""
+"Escaneie este código QR para criar um novo contato ou verificar um contato"
+" com %s."
+
+msgid "Search contacts"
+msgstr "Buscar contatos"
+
+msgid "Security"
+msgstr "Segurança"
+
+msgid "Sent with OX COI Messenger"
+msgstr "Enviado com OX COI Messenger"
+
+msgid "Server addresses"
+msgstr "Endereços do servidor"
+
+msgid "Set a group name"
+msgstr "Definir um nome de grupo"
+
+msgid "Set a name"
+msgstr "Definir um nome"
+
+msgid "Setting"
+msgid_plural "Settings"
+msgstr[0] "Configuração"
+msgstr[1] "Configurações"
+
+msgid "Setup message created"
+msgstr "Mensagem de configuração criada"
+
+msgid "Share"
+msgstr "Compartilhar"
+
+msgid "Show QR"
+msgstr "Exibir código QR"
+
+msgid "Show both chat and email messages from all senders"
+msgstr "Mostrar mensagens de bate-papo e e-mail de todos os remetentes"
+
+msgid "Show both chat and email messages from my contacts"
+msgstr "Mostrar mensagens de bate-papo e de e-mail dos meus contatos"
+
+msgid "Show messages from unknown contacts"
+msgstr "Mostrar mensagens de contatos desconhecidos"
+
+msgid "Show only chat messages "
+msgstr "Mostrar apenas mensagens de bate-papo"
+
+msgid "Sign in"
+msgstr "Iniciar sessão"
+
+#. Sign in with provide X (e.g. Sign in with provider.com)
+#, c-format
+msgid "Sign in with %s"
+msgstr "Entrar com %s"
+
+msgid "Signature"
+msgstr "Assinatura"
+
+msgid "Simply add one by tapping on a contact."
+msgstr "Basta adicionar um tocando em um contato."
+
+#. Start a chat with a new user (e.g. Start a chat with alice?)
+#, c-format
+msgid "Start a chat with %s?"
+msgstr "Iniciar um bate-papo com %s?"
+
+#, c-format
+msgid "The associated setup code starts with: %s"
+msgstr "O código de configuração associado começa com: %s"
+
+msgid "The code can be entered with or without minus signs"
+msgstr "O código pode ser inserido com ou sem sinais de menos"
+
+msgid "There are currently no messages from unknown contacts"
+msgstr "Atualmente não há mensagens de contatos desconhecidos"
+
+msgid "There was an error or the progress was canceled."
+msgstr "Houve um erro ou o progresso foi cancelado."
+
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
+msgstr ""
+"Essa ação também pode ser feita posteriormente por meio do botão de"
+" importação na barra de ação superior."
+
+msgid "This field can not be empty"
+msgstr "Este campo não pode ficar vazio"
+
+msgid "This is a new chat. Send a message to connect."
+msgstr "Este é um novo bate-papo. Envie uma mensagem para se conectar."
+
+msgid ""
+"This is a read receipt.\n"
+"\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr ""
+"Esta é uma confirmação de leitura.\n"
+"\n"
+"Significa que a mensagem foi exibida no dispositivo do destinatário, não"
+"necessariamente que o conteúdo foi lido."
+
+msgid ""
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
+"\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr ""
+"Esta é a mensagem de configuração do Autocrypt usada para transferir sua"
+" configuração de ponta-a-ponta entre os clientes.\n"
+"\n"
+"Para descriptografar e usar sua configuração, abra a mensagem em um cliente"
+" compatível com o Autocrypt e insira o código de configuração apresentado no"
+" dispositivo de geração."
+
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
+msgstr ""
+"Essas chaves permitem que outro dispositivo use sua configuração atual de"
+" criptografia. As chaves são salvas no seu armazenamento local."
+
+msgid ""
+"This message cannot be decrypted.\n"
+"\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
+"\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr ""
+"Esta mensagem não pode ser descriptografada.\n"
+"\n"
+"Pode ser útil responder a esta mensagem e solicitar ao remetente que a envie"
+"novamente.\n"
+"\n"
+"Caso você tenha reinstalado o OX COI Messenger ou outro programa de e-mail"
+" nesse ou em outro dispositivo, convém enviar uma mensagem de configuração do"
+" Autocrypt a partir dele."
+
+msgid ""
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr ""
+"Esta mensagem é uma Mensagem de Configuração Autocrypt. Toque para iniciar o"
+" processo de importação. Você será guiado pelo processo."
+
+msgid ""
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr ""
+"Para concluir a importação da mensagem de configuração Autocrypt, forneça o"
+" código de segurança mostrado no dispositivo de origem. Depois de inserir o"
+" código abaixo, as configurações do Autocrypt serão aplicadas à sua"
+" configuração atual de criptografia."
+
+msgid "Today"
+msgstr "Hoje"
+
+msgid "Type something..."
+msgstr "Digite algo..."
+
+msgid "Unblock"
+msgstr "Desbloquear"
+
+msgid "Unblock contact"
+msgstr "Desbloquear contatos"
+
+msgid "Username"
+msgstr "Nome de usuário"
+
+msgid "Verification finished."
+msgstr "Verificação concluída."
+
+msgid "Verifying. Please wait a moment."
+msgstr "Verificando. Espere um momento."
+
+msgid "Video"
+msgstr "Vídeo"
+
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
+msgstr ""
+"A gravação de vídeo falhou, conceda as permissões para gravar vídeo nas"
+" configurações do aplicativo no seu dispositivo."
+
+msgid "Voice message"
+msgstr "Mensagem de voz"
+
+msgid "We could not determine all settings automatically."
+msgstr "Não foi possível determinar todas as configurações automaticamente."
+
+msgid "Welcome to OX COI Messenger"
+msgstr "Bem-vindo ao OX COI Messenger"
+
+msgid ""
+"Welcome to the OX COI Messenger!\n"
+"Please start a new chat by tapping the chat bubble icon."
+msgstr ""
+"Bem-vindo ao OX COI Messenger!\n"
+"Inicie um novo bate-papo tocando no ícone do balão de bate-papo."
+
+msgid "Would you like to import your contacts from this device?"
+msgstr "Gostaria de importar seus contatos deste dispositivo?"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "Yesterday"
+msgstr "Ontem"
+
+#, c-format
+msgid ""
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
+"%s\n"
+"Once you are done, your other device will be ready to use Autocrypt."
+msgstr ""
+"Sua configuração Autocrypt foi enviada para você. Alterne para o outro"
+" dispositivo e abra a mensagem de configuração. Você deve ser solicitado a"
+" fornecer um código de configuração. Digite os seguintes dígitos no prompt:\n"
+"%s\n"
+"Quando estiver pronto, o outro dispositivo estará pronto para usar o"
+" Autocrypt."
+
+msgid "Your favorite messages"
+msgstr "Suas mensagens favoritas"
+
+msgid "and"
+msgstr "e"
+
+msgid "code"
+msgstr "código"
+
+msgid "more messages"
+msgstr "mais mensagens"
+
+msgid "privacy declaration"
+msgstr "declaração de privacidade"
+
+msgid "terms & conditions"
+msgstr "termos & condições"
+
