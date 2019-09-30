@@ -100,7 +100,6 @@ class _EditNameState extends State<EditName> {
           bloc: _chatChangeBloc,
           listener: (context, state) {
             if (state is ChangeNameSuccess) {
-              _chatBloc.dispatch(RequestChat(chatId: widget.chatId));
               _navigation.pop(context);
             }
           },

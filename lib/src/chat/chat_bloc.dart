@@ -51,9 +51,13 @@ import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/ui/color.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
+  var _chatRepository = RepositoryManager.get(RepositoryType.chat);
+  var _contactRepository = RepositoryManager.get(RepositoryType.contact);
+  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   bool _isGroup = false;
 
   bool get isGroup => _isGroup;
@@ -66,6 +70,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (event is RequestChat) {
       yield ChatStateLoading();
       try {
+        _setupChatListener();
         int chatId = event.chatId;
         if (chatId == Chat.typeInvite) {
           _setupInviteChat(event.messageId);
@@ -91,12 +96,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  @override
+  void dispose() {
+    _chatRepository.removeListener(_repositoryStreamHandler);
+    _repositoryStreamHandler?.tearDown();
+    super.dispose();
+  }
+
+  void _setupChatListener() async {
+    if (_repositoryStreamHandler == null) {
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified], _onChatChanged);
+      _chatRepository.addListener(_repositoryStreamHandler);
+    }
+  }
+
+  void _onChatChanged([Event event]) async {
+    _setupChat(event.data1, false);
+  }
+
   void _setupInviteChat(int messageId) async {
     Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     ChatMsg message = messageListRepository.get(messageId);
     int contactId = await message.getFromId();
-    Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
-    Contact contact = contactRepository.get(contactId);
+    Contact contact = _contactRepository.get(contactId);
     String name = await contact.getName();
     String email = await contact.getAddress();
     int colorValue = await contact.getColor();
@@ -118,13 +140,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _setupChat(int chatId, bool isHeadless) async {
-    var chatRepository = RepositoryManager.get(RepositoryType.chat);
-    var contactRepository = RepositoryManager.get(RepositoryType.contact);
     Context context = Context();
-    Chat chat = chatRepository.get(chatId);
+    Chat chat = _chatRepository.get(chatId);
     if (chat == null && isHeadless) {
-      chatRepository.putIfAbsent(id: chatId);
-      chat = chatRepository.get(chatId);
+      _chatRepository.putIfAbsent(id: chatId);
+      chat = _chatRepository.get(chatId);
     }
     String name = await chat.getName();
     String subTitle = await chat.getSubtitle();
@@ -139,7 +159,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     var phoneNumbers;
     if (!_isGroup) {
       var contactId = (await context.getChatContacts(chatId)).first;
-      Contact contact = contactRepository.get(contactId);
+      Contact contact = _contactRepository.get(contactId);
       phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
     }
     dispatch(
