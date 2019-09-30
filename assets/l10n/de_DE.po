@@ -683,7 +683,7 @@ msgstr "Log in"
 #. Sign in with provide X (e.g. Sign in with provider.com)
 #, c-format
 msgid "Sign in with %s"
-msgstr "Bei %$s einloggen"
+msgstr "Bei %s einloggen"
 
 msgid "Signature"
 msgstr "Signatur"
