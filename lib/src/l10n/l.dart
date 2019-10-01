@@ -57,6 +57,7 @@ class L {
   // Action X performed by the current user (e.g. Login by me)
   static final byMeX = _translationKey("%s by me");
   static final about = _translationKey("About");
+  // Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
   static final agreeToXY = _translationKey("By using OX COI Messenger you agree to our %s and %s");
   static final camera = _translationKey("Camera");
   static final cancel = _translationKey("Cancel");
