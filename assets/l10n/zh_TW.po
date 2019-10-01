@@ -21,12 +21,12 @@ msgstr ""
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
 msgid "%s by %s"
-msgstr "由 %2$s %1$s"
+msgstr "由 %s %s"
 
 #. Action X performed by the current user (e.g. Login by me)
 #, c-format
 msgid "%s by me"
-msgstr "由我 %1$s"
+msgstr "由我 %s"
 
 #. Content X copied to clipboard (e.g. Text copied to clipboard)
 #, c-format

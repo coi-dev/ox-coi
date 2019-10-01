@@ -686,7 +686,7 @@ msgstr "Conectarse"
 #. Sign in with provide X (e.g. Sign in with provider.com)
 #, c-format
 msgid "Sign in with %s"
-msgstr "Iniciar sesión con %1$s"
+msgstr "Iniciar sesión con %s"
 
 msgid "Signature"
 msgstr "Firma"
