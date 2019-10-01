@@ -67,6 +67,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   var _notificationManager = NotificationManager();
   var _pushManager = PushManager();
   var _localPushManager = LocalPushManager();
+  var _config = Config();
 
   @override
   MainState get initialState => MainStateInitial();
@@ -120,9 +121,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupDefaultValues() async {
-    Config config = Config();
-    config.setValue(Context.configSelfStatus, defaultStatus);
-    config.setValue(Context.configShowEmails, Context.showEmailsOff);
+    _config.setValue(Context.configSelfStatus, defaultStatus);
+    _config.setValue(Context.configShowEmails, Context.showEmailsOff);
     String version = await getAppVersion();
     await setPreference(preferenceAppVersion, version);
   }
@@ -140,6 +140,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       _logger.info("Setting coi enable to 1");
       await context.setCoiMessageFilter(1, 1);
       _logger.info("Setting coi message filter to 1");
+      _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
+      _logger.info("Setting coi message prefix to 1");
     }
     await setupBackgroundManager(coiSupported);
     ContactListBloc contactListBloc = ContactListBloc();

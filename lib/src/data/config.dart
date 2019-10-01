@@ -62,6 +62,7 @@ class Config {
   int smtpSecurity;
   int showEmails;
   int mdnsEnabled;
+  int rfc724MsgIdPrefix;
 
   int get lastUpdate => _lastUpdate;
 
@@ -93,6 +94,7 @@ class Config {
     smtpSecurity = getSavedSmtpSecurityOption(serverFlags);
     showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
     mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int);
+    rfc724MsgIdPrefix = await _context.getConfigValue(Context.configRfc724MsgIdPrefix, ObjectType.int);
     setLastUpdate();
   }
 
@@ -161,12 +163,15 @@ class Config {
       case Context.configMdnsEnabled:
         mdnsEnabled = value;
         break;
+      case Context.configRfc724MsgIdPrefix:
+        rfc724MsgIdPrefix = value;
+        break;
     }
     await _context.setConfigValue(key, value, type);
     setLastUpdate();
   }
 
-  bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails || key == Context.configMdnsEnabled;
+  bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails || key == Context.configMdnsEnabled || key == Context.configRfc724MsgIdPrefix;
 
   convertEmptyStringToNull(value) {
     if (value == null || (value is String && value.isEmpty)) {
