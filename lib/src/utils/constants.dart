@@ -40,6 +40,12 @@
  * for more details.
  */
 
+// App state
+enum AppState {
+  initialStartDone,
+  initialLoginDone,
+}
+
 // Data base name
 String get dbName => "messenger.db";
 

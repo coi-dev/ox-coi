@@ -109,6 +109,10 @@ class Navigation {
 
   Future push(BuildContext context, MaterialPageRoute route) {
     _logger.info("Push");
+    if (context == null) {
+      logActionAbort();
+      return null;
+    }
     Navigatable savedNavigatable = _navigationStack.last;
     return Navigator.push(context, route).then((value) {
       current = savedNavigatable;
@@ -117,6 +121,10 @@ class Navigation {
 
   void pushNamed(BuildContext context, String routeName, {Object arguments}) {
     _logger.info("Push named");
+    if (context == null) {
+      logActionAbort();
+      return null;
+    }
     Navigatable savedNavigatable = _navigationStack.last;
     Navigator.pushNamed(context, routeName, arguments: arguments).then((value) {
       current = savedNavigatable;
@@ -125,6 +133,10 @@ class Navigation {
 
   void pushAndRemoveUntil(BuildContext context, Route newRoute, RoutePredicate predicate, Navigatable newParent) {
     _logger.info("Push and pop multiple");
+    if (context == null) {
+      logActionAbort();
+      return null;
+    }
     Navigator.pushAndRemoveUntil(context, newRoute, predicate).then((value) {
       current = newParent;
     });
@@ -132,6 +144,10 @@ class Navigation {
 
   void pushReplacement(BuildContext context, Route newRoute) {
     _logger.info("Push and replace");
+    if (context == null) {
+      logActionAbort();
+      return null;
+    }
     var previousIndex = _navigationStack.length - 2;
     Navigatable savedNavigatable = _navigationStack.elementAt(previousIndex);
     Navigator.pushReplacement(context, newRoute).then((value) {
@@ -141,15 +157,27 @@ class Navigation {
 
   void pop(BuildContext context, {Object result}) {
     _logger.info("Pop latest");
+    if (context == null) {
+      logActionAbort();
+      return null;
+    }
     Navigator.pop(context, result);
   }
 
   void popUntil(BuildContext context, RoutePredicate predicate) {
     _logger.info("Pop multiple");
+    if (context == null) {
+      logActionAbort();
+      return null;
+    }
     Navigator.popUntil(context, predicate);
   }
 
   bool hasElements() {
     return _navigationStack.isNotEmpty;
+  }
+
+  void logActionAbort() {
+    _logger.info("No context. Aborting");
   }
 }

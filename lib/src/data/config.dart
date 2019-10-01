@@ -68,7 +68,7 @@ class Config {
 
   factory Config() {
     if (_instance == null) {
-      _instance = new Config._internal();
+      _instance = Config._internal();
     }
     return _instance;
   }
