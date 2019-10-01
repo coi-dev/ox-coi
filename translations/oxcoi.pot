@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,16 +51,10 @@ msgid_plural "%i participants"
 msgstr[0] ""
 msgstr[1] ""
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "About"
 msgstr ""
 
-msgid "Account settings"
+msgid "Account"
 msgstr ""
 
 msgid "Account settings successfully changed"
@@ -137,7 +131,8 @@ msgstr ""
 msgid "Blocked contacts"
 msgstr ""
 
-msgid "By using OX Coi Messenger you agree to our"
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr ""
 
 msgid "Camera"
@@ -232,6 +227,9 @@ msgstr[1] ""
 msgid "Delete contact"
 msgstr ""
 
+msgid "Delete push resource"
+msgstr ""
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -240,6 +238,11 @@ msgstr ""
 #. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
+msgstr ""
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
 msgstr ""
 
 msgid "Do you really want to leave the group?"
@@ -281,6 +284,9 @@ msgid "Email"
 msgstr ""
 
 msgid "Email address"
+msgstr ""
+
+msgid "Enable background updates"
 msgstr ""
 
 msgid "Enable sending and requesting of read receipts."
@@ -356,6 +362,11 @@ msgstr ""
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr ""
 
+msgid ""
+"If enabled this settings allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr ""
+
 msgid "Image"
 msgstr ""
 
@@ -399,7 +410,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Log in to OX Coi Messenger"
+msgid "Log in to OX COI Messenger"
 msgstr ""
 
 msgid "Logging in, this may take a moment"
@@ -452,6 +463,9 @@ msgstr ""
 msgid "No participants selected. Please select at least one person."
 msgstr ""
 
+msgid "No phone number"
+msgstr ""
+
 msgid "No results found"
 msgstr ""
 
@@ -461,8 +475,13 @@ msgstr ""
 msgid "No username set"
 msgstr ""
 
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid ""
-"OX Coi Messenger works with any email provider, but best with COI-compatible "
+"OX COI Messenger works with any email provider, but best with COI-compatible "
 "providers. If you have an existing email account, please sign in, otherwise "
 "register a new account first."
 msgstr ""
@@ -509,7 +528,15 @@ msgstr ""
 msgid "Performing key transfer"
 msgstr ""
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr ""
+
 msgid "Please check your username and password"
+msgstr ""
+
+msgid "Please choose a number"
 msgstr ""
 
 msgid "Please choose what kind of messages you would like to see."
@@ -542,6 +569,12 @@ msgstr ""
 msgid "Profile QR"
 msgstr ""
 
+msgid "Push data"
+msgstr ""
+
+msgid "Push resource (via push service)"
+msgstr ""
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr ""
 
@@ -551,6 +584,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Register"
+msgstr ""
+
+msgid "Register new push resource"
 msgstr ""
 
 msgid "Remove current image"
@@ -604,7 +640,7 @@ msgstr ""
 msgid "Security"
 msgstr ""
 
-msgid "Sent with OX Coi Messenger"
+msgid "Sent with OX COI Messenger"
 msgstr ""
 
 msgid "Server addresses"
@@ -661,6 +697,9 @@ msgstr ""
 msgid "Start a chat with %s?"
 msgstr ""
 
+msgid "System contacts imported successfully"
+msgstr ""
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr ""
@@ -677,6 +716,11 @@ msgstr ""
 msgid ""
 "This action can also be done later via the import button in the top action "
 "bar."
+msgstr ""
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
 msgstr ""
 
 msgid "This field can not be empty"
@@ -711,7 +755,7 @@ msgid ""
 "It might help to reply to this message and ask the sender to send the "
 "message again.\n"
 "\n"
-"In case you re-installed the OX Coi Messenger or another email program on "
+"In case you re-installed the OX COI Messenger or another email program on "
 "this or another device you may want to send an Autocrypt setup message from "
 "there."
 msgstr ""
@@ -762,7 +806,7 @@ msgstr ""
 msgid "We could not determine all settings automatically."
 msgstr ""
 
-msgid "Welcome to OX Coi Messenger"
+msgid "Welcome to OX COI Messenger"
 msgstr ""
 
 msgid ""
@@ -791,7 +835,7 @@ msgstr ""
 msgid "Your favorite messages"
 msgstr ""
 
-msgid "and"
+msgid "Your messages are encrypted from now on."
 msgstr ""
 
 msgid "code"
