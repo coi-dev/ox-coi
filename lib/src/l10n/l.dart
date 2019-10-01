@@ -47,7 +47,6 @@ class L {
   static final _logger = Logger("l");
 
   static final appName = _translationKey("App name");
-  static final and = _translationKey("and");
   static final appVersion = _translationKey("App version");
   static final advanced = _translationKey("Advanced");
   static final audio = _translationKey("Audio");
@@ -58,7 +57,7 @@ class L {
   // Action X performed by the current user (e.g. Login by me)
   static final byMeX = _translationKey("%s by me");
   static final about = _translationKey("About");
-  static final agreeTo = _translationKey("By using OX Coi Messenger you agree to our");
+  static final agreeToXY = _translationKey("By using OX COI Messenger you agree to our %s and %s");
   static final camera = _translationKey("Camera");
   static final cancel = _translationKey("Cancel");
   static final debug = _translationKey("Debug");
@@ -97,7 +96,7 @@ class L {
   static final typeSomething = _translationKey("Type something...");
   static final username = _translationKey("Username");
   static final video = _translationKey("Video");
-  static final welcome = _translationKey("Welcome to OX Coi Messenger");
+  static final welcome = _translationKey("Welcome to OX COI Messenger");
   static final yes = _translationKey("Yes");
   static final yesterday = _translationKey("Yesterday");
   static final textFieldEmptyHint = _translationKey("This field can not be empty");
@@ -201,7 +200,7 @@ class L {
   static final debugPushResourceRegister = _translationKey("Register new push resource");
   static final debugPushResourceDelete = _translationKey("Delete push resource");
 
-  static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might help to reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX Coi Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
+  static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might help to reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX COI Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
   static final errorProgressCanceled = _translationKey("There was an error or the progress was canceled.");
 
   static final groupAddContactsAlreadyIn = _translationKey("All your contacts are in this chat.");
@@ -223,8 +222,8 @@ class L {
 
   static final loginRunning = _translationKey("Logging in, this may take a moment");
   static final loginFailed = _translationKey("Login failed");
-  static final login = _translationKey("Log in to OX Coi Messenger");
-  static final loginWelcome = _translationKey("OX Coi Messenger works with any email provider, but best with COI-compatible providers. If you have an existing email account, please sign in, otherwise register a new account first.");
+  static final login = _translationKey("Log in to OX COI Messenger");
+  static final loginWelcome = _translationKey("OX COI Messenger works with any email provider, but best with COI-compatible providers. If you have an existing email account, please sign in, otherwise register a new account first.");
   static final loginWelcomeManual = _translationKey("Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.");
   static final loginCheckUsernamePassword = _translationKey("Please check your username and password");
   static final loginCheckMail = _translationKey("Please enter a valid email address");
@@ -250,7 +249,7 @@ class L {
   static final profileNoSignature = _translationKey("No signature set");
   static final profileNoUsername = _translationKey("No username set");
   static final profile = _translationKey("Profile");
-  static final profileDefaultStatus = _translationKey("Sent with OX Coi Messenger");
+  static final profileDefaultStatus = _translationKey("Sent with OX COI Messenger");
 
   static final providerRegisterChoose = _translationKey("Choose a provider from the list below to create a new account");
   static final providerAutocompleteText = _translationKey("For known email providers additional settings are set up automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");

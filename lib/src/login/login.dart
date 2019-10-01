@@ -154,13 +154,12 @@ class _LoginState extends State<Login> {
                 }),
           ),
           RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(style: Theme.of(context).textTheme.caption.apply(color: onBackground), text: L10n.get(L.agreeTo), children: [
-                TextSpan(text: " "),
-                UrlTextSpan(url: null, text: L10n.get(L.termsConditions)),
-                TextSpan(text: " ${L10n.get(L.and)} "),
-                UrlTextSpan(url: null, text: L10n.get(L.privacyDeclaration))
-              ])),
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: Theme.of(context).textTheme.caption.apply(color: onBackground),
+              children: getAgreeTo(),
+            ),
+          ),
         ],
       ),
     );
@@ -169,11 +168,36 @@ class _LoginState extends State<Login> {
   void _goToProviderList(ProviderListType type) {
     var navigation = Navigation();
     navigation.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProviderList(
-                  type: type,
-                  success: widget.success,
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProviderList(
+          type: type,
+          success: widget.success,
+        ),
+      ),
+    );
+  }
+
+  List<TextSpan> getAgreeTo() {
+    int spanBoundary = 0;
+    var termsAndConditions = L10n.get(L.termsConditions);
+    var privacyPolicy = L10n.get(L.privacyDeclaration);
+    var formattedAgreeString = L10n.getFormatted(L.agreeToXY, [termsAndConditions, privacyPolicy]);
+    var termsConditionsStartIndex = formattedAgreeString.indexOf(termsAndConditions, spanBoundary);
+    var termsConditionsEndIndex = termsConditionsStartIndex + termsAndConditions.length;
+    var privacyPolicyStartIndex = formattedAgreeString.indexOf(privacyPolicy, spanBoundary);
+    var privacyPolicyEndIndex = privacyPolicyStartIndex + privacyPolicy.length;
+
+    List<TextSpan> textParts = [];
+    textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, termsConditionsStartIndex)));
+    spanBoundary = termsConditionsStartIndex;
+    textParts.add(UrlTextSpan(url: null, text: termsAndConditions));
+    spanBoundary = termsConditionsEndIndex;
+    textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, privacyPolicyStartIndex)));
+    spanBoundary = privacyPolicyStartIndex;
+    textParts.add(UrlTextSpan(url: null, text: privacyPolicy));
+    spanBoundary = privacyPolicyEndIndex;
+    textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary)));
+    return textParts;
   }
 }
