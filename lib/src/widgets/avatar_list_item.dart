@@ -59,7 +59,6 @@ class AvatarListItem extends StatelessWidget {
   final int timestamp;
   final bool isVerified;
   final bool isInvite;
-  final bool isGroupListItem;
   final PopupMenuButton moreButton;
 
   AvatarListItem(
@@ -75,7 +74,6 @@ class AvatarListItem extends StatelessWidget {
       this.timestamp = 0,
       this.isVerified = false,
       this.isInvite = false,
-      this.isGroupListItem = false,
       this.moreButton});
 
   @override
@@ -83,16 +81,15 @@ class AvatarListItem extends StatelessWidget {
     return InkWell(
       onTap: () => onTap(title, subTitle),
       child: Container(
-        padding: const EdgeInsets.only(
-          left: listItemPadding,
-          right: listItemPadding,
-          top: listItemPaddingSmall,
-        ),
+        color: background,
+        height: listItemHeight,
+        padding: const EdgeInsets.all(listItemPadding),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             avatarIcon == null
                 ? Avatar(
+                    size: listAvatarDiameter,
                     imagePath: imagePath,
                     textPrimary: title,
                     textSecondary: subTitle,
@@ -104,76 +101,83 @@ class AvatarListItem extends StatelessWidget {
                     child: Icon(avatarIcon),
                   ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: iconTextPadding),
-                        child: titleIcon != null ? titleIcon : Container(),
-                      ),
-                      Expanded(child: getTitle(context)),
-                      Visibility(
-                          visible: timestamp != null && timestamp != 0,
-                          child: Text(
-                            getChatListTime(timestamp),
-                            style: TextStyle(
-                                color: shouldHighlight() ? Colors.black : Colors.grey,
-                                fontWeight: shouldHighlight() ? FontWeight.bold : FontWeight.normal,
-                                fontSize: 14.0),
-                          )),
-                    ],
-                  ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                    vertical: listItemPaddingSmall,
-                  )),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: iconTextPadding),
-                        child: subTitleIcon != null ? subTitleIcon : Container(),
-                      ),
-                      Visibility(
-                        visible: isVerified,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: iconTextPadding),
-                          child: Icon(
-                            Icons.verified_user,
-                            size: iconSize,
+              child: Padding(
+                padding: const EdgeInsets.only(left: listAvatarTextPadding),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        titleIcon != null
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: iconTextPadding),
+                                child: titleIcon,
+                              )
+                            : Container(),
+                        Expanded(child: shouldHighlight() ? getHighlightedTitle(context) : getTitle(context)),
+                        Visibility(
+                            visible: timestamp != null && timestamp != 0,
+                            child: Text(
+                              getChatListTime(timestamp),
+                              style: shouldHighlight()
+                                  ? Theme.of(context).textTheme.caption.copyWith(color: onBackground, fontWeight: FontWeight.bold)
+                                  : Theme.of(context).textTheme.caption.copyWith(color: onBackground),
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Visibility(
+                          visible: subTitleIcon != null,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: iconTextPadding),
+                            child: subTitleIcon,
                           ),
                         ),
-                      ),
-                      Expanded(child: getSubTitle(context)),
-                      Visibility(
-                        visible: isInvite,
-                        child: Container(
-                          width: 23.0,
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                          decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(16)),
-                          child: Text(
-                            "!",
-                            style: TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
+                        Visibility(
+                          visible: isVerified,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: iconTextPadding),
+                            child: Icon(
+                              Icons.verified_user,
+                              size: iconSize,
+                            ),
                           ),
                         ),
-                      ),
-                      Visibility(
-                        visible: hasNewMessages(),
-                        child: Container(
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-                          decoration: BoxDecoration(color: primary, borderRadius: BorderRadius.circular(16)),
-                          child: Text(
-                            freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                            style: TextStyle(color: Colors.white, fontSize: 12.0),
+                        Expanded(child: getSubTitle(context)),
+                        Visibility(
+                          visible: isInvite,
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: iconSize,
+                            height: iconSize,
+                            decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                            child: Text(
+                              "!",
+                              style: TextStyle(color: Colors.white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  !isGroupListItem ? Padding(padding: EdgeInsets.all(8.0)) : Divider(),
-                ],
+                        Visibility(
+                          visible: hasNewMessages(),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: iconSize,
+                            height: iconSize,
+                            decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                            child: Text(
+                              freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                              style: TextStyle(color: onAccent, fontSize: listInviteUnreadIndicatorFontSize),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             Visibility(
@@ -197,7 +201,18 @@ class AvatarListItem extends StatelessWidget {
           title != null ? title : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.subhead.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.body2.copyWith(color: onBackground),
+        ));
+  }
+
+  StatelessWidget getHighlightedTitle(BuildContext context) {
+    return Visibility(
+        visible: title != null,
+        child: Text(
+          title != null ? title : "",
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.body2.copyWith(color: onBackground, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -208,7 +223,7 @@ class AvatarListItem extends StatelessWidget {
           subTitle != null ? subTitle : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.body1.apply(color: onBackground.withOpacity(fade)),
+          style: Theme.of(context).textTheme.body1.copyWith(color: onBackground.withOpacity(half)),
         ));
   }
 }

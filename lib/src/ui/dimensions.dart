@@ -44,20 +44,25 @@ import 'dart:core';
 
 // Global
 const zero = 0.0;
-const dividerHeight = 0.0;
+const dividerHeight = 1.0;
 
 // Progress
 const verticalPaddingSmall = 8.0;
 const verticalPadding = 16.0;
 
 // List
+const listItemHeight = 72.0;
 const listItemPaddingBig = 16.0;
-const listItemPadding = 12.0;
+const listItemPadding = 16.0;
 const listItemPaddingSmall = 4.0;
-const listAvatarRadius = 24.0;
+const listAvatarRadius = 20.0;
 const listAvatarDiameter = listAvatarRadius * 2;
+const listAvatarTextPadding = 16.0;
 const listStateInfoHorizontalPadding = 24.0;
 const listStateInfoVerticalPadding = 16.0;
+
+const listInviteUnreadIndicatorFontSize = 12.0;
+const listInviteUnreadIndicatorBorderRadius = 16.0;
 
 // AppBar
 const appBarAvatarTextPadding = 16.0;

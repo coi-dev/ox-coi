@@ -61,10 +61,10 @@ import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum ChatListItemType {
@@ -199,13 +199,15 @@ class _ChatListState extends State<ChatList> {
 
   ListView buildListItems(ChatListStateSuccess state) {
     var chatListItemWrapper = state.chatListItemWrapper;
-    return ListView.builder(
-      padding: EdgeInsets.only(top: listItemPadding),
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+        height: dividerHeight,
+        color: onBackground.withOpacity(barely),
+      ),
       itemCount: chatListItemWrapper.ids.length,
       itemBuilder: (BuildContext context, int index) {
         var id = chatListItemWrapper.ids[index];
-        var key =
-            createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
+        var key = createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
         if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
           return ChatListItem(
             chatId: id,
@@ -254,8 +256,7 @@ class _ChatListState extends State<ChatList> {
   }
 
   Widget onBuildResultOrSuggestion(String query) {
-    _chatListSearchBloc
-        .dispatch(SearchChatList(query: query, showInvites: false));
+    _chatListSearchBloc.dispatch(SearchChatList(query: query, showInvites: false));
     return buildSearchResults();
   }
 

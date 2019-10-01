@@ -120,7 +120,7 @@ class _ChatListItemState extends State<ChatListItem> {
                     Icons.group,
                     size: iconSize,
                   )
-                : Container(),
+                : null,
             onTap: chatItemTapped,
           ),
         );
