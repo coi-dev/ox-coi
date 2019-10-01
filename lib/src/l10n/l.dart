@@ -313,7 +313,7 @@ class L {
   static final settingSecurityExportText = _translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
   static final settingNotificationP = _translationKey("Notification", "Notifications");
   static final settingNotificationPull = _translationKey("Enable background updates");
-  static final settingNotificationPullText = _translationKey("If enabled this settings allows the app to perform periodic background tasks to get new messages");
+  static final settingNotificationPullText = _translationKey("If enabled, this setting allows the app to perform periodic background tasks to get new messages");
 
 
   static List<String> _translationKey(String key, [String pluralKey]) {
