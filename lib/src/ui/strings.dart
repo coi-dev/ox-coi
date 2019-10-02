@@ -49,6 +49,8 @@ String get startTLS => "StartTLS";
 
 String get repositoryUrl => "https://github.com/open-xchange/ox-coi";
 
+String get issueUrl  => "https://github.com/open-xchange/ox-coi/issues";
+
 String get featureRequestUrl => "https://openxchange.userecho.com/communities/4-ox-coi-messenger";
 
 String get defaultStatus => "${L10n.get(L.profileDefaultStatus)} - $repositoryUrl";

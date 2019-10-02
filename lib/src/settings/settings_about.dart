@@ -114,7 +114,7 @@ class _SettingsAboutState extends State<SettingsAbout> {
                 title: Text(L10n.get(L.settingAboutBugReports)),
                 subtitle: Text(L10n.get(L.settingAboutBugReportsText)),
                 onTap: () {
-                  launch(repositoryUrl, forceSafariVC: false);
+                  launch(issueUrl, forceSafariVC: false);
                 },
               ),
             ]).toList(),

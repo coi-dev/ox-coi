@@ -136,7 +136,7 @@ class L {
   static final chatNewPlaceholder = _translationKey("This is a new chat. Send a message to connect.");
   // Start a chat with a new user (e.g. Start a chat with alice?)
   static final chatStartWithTextX = _translationKey("Start a chat with %s?");
-  static final chatListPlaceholder = _translationKey("Welcome to the OX Coi Messenger!\nPlease start a new chat by tapping the chat bubble icon.");
+  static final chatListPlaceholder = _translationKey("Welcome to the OX COI Messenger!\nPlease start a new chat by tapping the chat bubble icon.");
   static final chatAudioRecordingFailed = _translationKey("Audio recording failed, please grant the permissions to record audio in the app settings on your device.");
   static final chatVideoRecordingFailed = _translationKey("Video recording failed, please grant the permissions to record video in the app settings on your device.");
   static final chatFavoriteMessages = _translationKey("Your favorite messages");
