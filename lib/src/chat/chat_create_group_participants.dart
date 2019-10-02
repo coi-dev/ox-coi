@@ -55,6 +55,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
@@ -144,7 +145,11 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   ListView buildListItems(ContactListStateSuccess state) {
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+        height: dividerHeight,
+        color: onBackground.withOpacity(barely),
+      ),
       padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.contactIds.length,
       itemBuilder: (BuildContext context, int index) {

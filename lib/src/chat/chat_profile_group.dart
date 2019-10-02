@@ -203,7 +203,11 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   }
 
   ListView _buildGroupMemberList(ContactListStateSuccess state) {
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          height: dividerHeight,
+          color: onBackground.withOpacity(barely),
+        ),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: state.contactIds.length,
