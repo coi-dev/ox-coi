@@ -97,7 +97,7 @@ class _ScanQrState extends State<ScanQr> {
             requestQrCamera();
           });
         }
-        _progressOverlayEntry.remove();
+        _progressOverlayEntry?.remove();
       }
     });
   }

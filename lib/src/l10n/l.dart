@@ -267,6 +267,7 @@ class L {
   static final qrCameraNotAllowed = _translationKey("Camera not ready");
   static final qrCameraNotAllowedText = _translationKey("No camera permission granted.");
   static final qrNoValidCode = _translationKey("No valid QR code");
+  static final qrValidationFailed = _translationKey("Contact validation failed");
 
   static final settingP = _translationKey("Setting", "Settings");
   static final settingBase = _translationKey("Base Settings");

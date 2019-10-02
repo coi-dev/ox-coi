@@ -83,6 +83,8 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       yield QrStateSuccess(qrText: event.qrText);
     } else if (event is JoinDone) {
       yield QrStateSuccess(chatId: event.chatId);
+    } else if (event is JoinFailed) {
+      yield QrStateFailure(error: L10n.get(L.qrValidationFailed));
     } else if (event is CheckQr) {
       yield QrStateLoading(progress: 0);
       checkQr(event.qrText);
