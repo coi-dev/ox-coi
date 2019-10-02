@@ -160,13 +160,36 @@ class MessageStatus extends StatelessWidget {
 class MessageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return isImage(context) ? MessagePartImageAttachment() : MessagePartGenericAttachment();
+    if (isImage(context)) {
+      return MessagePartImageAttachment();
+    } else if (isAudio(context)) {
+      return MessagePartAudioAttachment();
+    } else {
+      return MessagePartGenericAttachment();
+    }
   }
 }
 
 bool isImage(BuildContext context) {
   final attachment = MessageData.of(context).attachment;
   return attachment != null && attachment.type == ChatMsg.typeImage;
+}
+
+bool isAudio(BuildContext context) {
+  final attachment = MessageData.of(context).attachment;
+  return attachment != null && attachment.type == ChatMsg.typeAudio || attachment.type == ChatMsg.typeVoice;
+}
+
+class MessagePartAudioAttachment extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: getNamePaddingForGroups(context),
+        child: Image.asset(
+          "assets/images/img_audio_waves.png",
+          width: audioFileImageWidth,
+        ));
+  }
 }
 
 class MessagePartImageAttachment extends StatefulWidget {

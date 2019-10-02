@@ -87,6 +87,7 @@ const previewDefaultIconSize = 100.0;
 const previewCloseIconBorderRadius = 20.0;
 const previewCloseIconSize = 30.0;
 const previewFileNamePadding = 4.0;
+const audioFileImageWidth = 176.0;
 
 // Forms
 const formHorizontalPadding = 16.0;
