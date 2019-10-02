@@ -249,7 +249,11 @@ class _ContactListState extends State<ContactList> {
   }
 
   Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          height: dividerHeight,
+          color: onBackground.withOpacity(barely),
+        ),
         padding: EdgeInsets.only(top: listItemPadding),
         itemCount: contactIds.length,
         itemBuilder: (BuildContext context, int index) {

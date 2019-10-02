@@ -129,7 +129,11 @@ class _ChatCreateState extends State<ChatCreate> {
   }
 
   ListView buildListItems(bool showNewContactAndAddGroup, ContactListStateSuccess state, int offset) {
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+          height: dividerHeight,
+          color: onBackground.withOpacity(barely),
+        ),
         padding: showNewContactAndAddGroup ? null : EdgeInsets.only(top: listItemPadding),
         itemCount: state.contactIds.length + offset,
         itemBuilder: (BuildContext context, int index) {
