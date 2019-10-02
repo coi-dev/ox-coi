@@ -171,7 +171,7 @@ msgid "Choose a provider from the list below to create a new account"
 msgstr "Wähle einen Anbieter aus der Liste um einen neues Konto zu erstellen"
 
 msgid "Configuration change aborted"
-msgstr "Änderung der Einstellungen abbgebrochen"
+msgstr "Änderung der Einstellungen abgebrochen"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -206,7 +206,7 @@ msgid "Copy code"
 msgstr "Code kopieren"
 
 msgid "Could not delete contact."
-msgstr "Der Kontekt konnte nicht entfernt werden."
+msgstr "Der Kontakt konnte nicht entfernt werden."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "

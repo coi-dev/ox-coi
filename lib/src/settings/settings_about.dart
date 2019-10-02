@@ -48,10 +48,12 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_about_bloc.dart';
 import 'package:ox_coi/src/settings/settings_about_event_state.dart';
-import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:ox_coi/src/widgets/url_text_span.dart';
+
+
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsAbout extends StatefulWidget {
   @override
@@ -94,25 +96,27 @@ class _SettingsAboutState extends State<SettingsAbout> {
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                 title: Text(L10n.get(L.appName)),
                 subtitle: Text(state.name),
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                 title: Text(L10n.get(L.appVersion)),
                 subtitle: Text(state.version),
               ),
               ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-                  title: Text(L10n.get(L.feedback)),
-                  subtitle: RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        UrlTextSpan(url: feedbackUrl),
-                      ],
-                    ),
-                  )),
+                title: Text(L10n.get(L.settingAboutFeatureRequests)),
+                subtitle: Text(L10n.get(L.settingAboutFeatureRequestsText)),
+                onTap: () {
+                  launch(featureRequestUrl, forceSafariVC: false);
+                },
+              ),
+              ListTile(
+                title: Text(L10n.get(L.settingAboutBugReports)),
+                subtitle: Text(L10n.get(L.settingAboutBugReportsText)),
+                onTap: () {
+                  launch(repositoryUrl, forceSafariVC: false);
+                },
+              ),
             ]).toList(),
           );
         } else {
