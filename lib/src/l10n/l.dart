@@ -107,6 +107,7 @@ class L {
   static final privacyDeclaration = _translationKey("privacy declaration");
   static final termsConditions = _translationKey("terms & conditions");
   static final code = _translationKey("code");
+  static final retry = _translationKey("Retry");
 
   static final autocryptSetupMessage = _translationKey("Autocrypt Setup Message");
   static final autocryptSetupCode = _translationKey("Autocrypt setup code");
@@ -263,6 +264,9 @@ class L {
   // Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
   static final qrScanTextX = _translationKey("Scan this QR code to create a new contact or verify a contact with %s.");
   static final qrShow = _translationKey("Show QR");
+  static final qrCameraNotAllowed = _translationKey("Camera not ready");
+  static final qrCameraNotAllowedText = _translationKey("No camera permission granted.");
+  static final qrNoValidCode = _translationKey("No valid QR code");
 
   static final settingP = _translationKey("Setting", "Settings");
   static final settingBase = _translationKey("Base Settings");

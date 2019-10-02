@@ -160,7 +160,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (!_isGroup) {
       var contactId = (await context.getChatContacts(chatId)).first;
       Contact contact = _contactRepository.get(contactId);
-      phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
+      phoneNumbers = contact?.get(ContactExtension.contactPhoneNumber);
     }
     dispatch(
       ChatLoaded(

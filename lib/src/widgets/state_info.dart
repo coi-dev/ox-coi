@@ -74,7 +74,7 @@ class StateInfo extends StatelessWidget {
                   padding: buildEdgeInsets(),
                   child: Text(
                     title,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -83,7 +83,7 @@ class StateInfo extends StatelessWidget {
                   padding: buildEdgeInsets(),
                   child: Text(
                     subTitle,
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.body1,
                     textAlign: TextAlign.center,
                   ),
                 ),

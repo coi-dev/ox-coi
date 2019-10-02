@@ -137,11 +137,13 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     var context = Context();
     bool coiSupported = await isCoiSupported(context);
     String appState = await getPreference(preferenceAppState);
-    if (coiSupported && appState == AppState.initialStartDone.toString()) {
-      await context.setCoiEnabled(1, 1);
-      _logger.info("Setting coi enable to 1");
-      await context.setCoiMessageFilter(1, 1);
-      _logger.info("Setting coi message filter to 1");
+    if (appState == AppState.initialStartDone.toString()) {
+      if (coiSupported) {
+        await context.setCoiEnabled(1, 1);
+        _logger.info("Setting coi enable to 1");
+        await context.setCoiMessageFilter(1, 1);
+        _logger.info("Setting coi message filter to 1");
+      }
       await _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
       _logger.info("Setting coi message prefix to 1");
       await setPreference(preferenceAppState, AppState.initialLoginDone.toString());

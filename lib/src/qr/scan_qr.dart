@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -48,8 +49,10 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -68,12 +71,12 @@ class _ScanQrState extends State<ScanQr> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.scanQr);
+    requestQrCamera();
     final qrObservable = new Observable<QrState>(_qrBloc.state);
     qrObservable.listen((state) {
       if (state is QrStateSuccess) {
         _qrCodeDetected = false;
         if (state.chatId != 0) {
-          _progressOverlayEntry.remove();
           _navigation.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Chat(chatId: state.chatId)),
@@ -81,43 +84,77 @@ class _ScanQrState extends State<ScanQr> {
             Navigatable(Type.chat),
           );
         } else {
-          _progressOverlayEntry.remove();
           showToast(L10n.get(L.errorProgressCanceled));
         }
+        _progressOverlayEntry.remove();
+      } else if (state is QrStateFailure) {
+        _qrCodeDetected = false;
+
+        var error = state.error;
+        if (!isNullOrEmpty(error)) {
+          showToast(error);
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            requestQrCamera();
+          });
+        }
+        _progressOverlayEntry.remove();
       }
     });
   }
 
+  void requestQrCamera() {
+    _qrBloc.dispatch(RequestQrCamera());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: QrCamera(
-          qrCodeCallback: (code) {
-            setState(() {
-              if (!_qrCodeDetected) {
-                String qrString = code;
-                if (qrString.isNotEmpty) {
-                  _qrCodeDetected = true;
-                  checkAndJoinQr(qrString);
-                }
-              }
-            });
-          },
-        ),
-      ),
+    return BlocBuilder(
+      bloc: _qrBloc,
+      builder: (context, state) {
+        if (state is QrStateCameraRequested) {
+          if (state.successfullyLoaded) {
+            return Center(
+              child: QrCamera(
+                qrCodeCallback: (code) {
+                  setState(() {
+                    if (!_qrCodeDetected) {
+                      String qrString = code;
+                      if (qrString.isNotEmpty) {
+                        _qrCodeDetected = true;
+                        checkAndJoinQr(qrString);
+                      }
+                    }
+                  });
+                },
+              ),
+            );
+          } else {
+            return StateInfo(
+              title: L10n.get(L.qrCameraNotAllowed),
+              subTitle: L10n.get(L.qrCameraNotAllowedText),
+              actionTitle: L10n.get(L.retry),
+              action: requestQrCamera,
+            );
+          }
+        } else if (state is QrStateLoading) {
+          return Container();
+        } else {
+          return StateInfo(showLoading: true);
+        }
+      },
     );
   }
 
   void checkAndJoinQr(String qrString) {
     _progressOverlayEntry = OverlayEntry(
-      builder: (context) => FullscreenProgress(
-        bloc: _qrBloc,
-        text: L10n.get(L.pleaseWait),
-        showProgressValues: false,
-        showCancelButton: true,
-        cancelPressed: _cancelPressed,
-      ),
+      builder: (context) =>
+          FullscreenProgress(
+            bloc: _qrBloc,
+            text: L10n.get(L.pleaseWait),
+            showProgressValues: false,
+            showCancelButton: true,
+            cancelPressed: _cancelPressed,
+          ),
     );
     Overlay.of(context).insert(_progressOverlayEntry);
     _qrBloc.dispatch(CheckQr(qrText: qrString));

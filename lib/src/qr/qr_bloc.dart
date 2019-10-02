@@ -44,8 +44,12 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
 import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/security.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
 class QrBloc extends Bloc<QrEvent, QrState> {
@@ -72,6 +76,9 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       } catch (error) {
         yield QrStateFailure(error: error.toString());
       }
+    } else if (event is RequestQrCamera) {
+      bool hasCameraPermission = await hasPermission(PermissionGroup.camera);
+      yield QrStateCameraRequested(successfullyLoaded: hasCameraPermission);
     } else if (event is QrTextLoaded) {
       yield QrStateSuccess(qrText: event.qrText);
     } else if (event is JoinDone) {
@@ -80,7 +87,11 @@ class QrBloc extends Bloc<QrEvent, QrState> {
       yield QrStateLoading(progress: 0);
       checkQr(event.qrText);
     } else if (event is CheckQrDone) {
-      joinSecurejoin(event.qrText);
+      if (event.qrText == null) {
+        yield QrStateFailure(error: L10n.get(L.qrNoValidCode));
+      } else {
+        joinSecurejoin(event.qrText);
+      }
     } else if (event is QrJoinInviteProgress) {
       if (_joinInviteSuccess(event.progress)) {
         yield QrStateVerificationFinished();
@@ -142,6 +153,8 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     QrCodeResult qrResult = QrCodeResult.fromMethodChannel(result);
     if (qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup) {
       dispatch(CheckQrDone(qrText: qrText));
+    } else {
+      dispatch(CheckQrDone(qrText: null));
     }
   }
 
@@ -169,5 +182,6 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   void cancelQrProcess() async {
     Context context = Context();
     await context.stopOngoingProcess();
+    dispatch(RequestQrCamera());
   }
 }

@@ -51,6 +51,8 @@ class RequestQrText extends QrEvent {
   RequestQrText({@required this.chatId});
 }
 
+class RequestQrCamera extends QrEvent {}
+
 class QrTextLoaded extends QrEvent {
   final String qrText;
   final int chatId;
@@ -92,6 +94,12 @@ abstract class QrState extends ProgressState {
 }
 
 class QrStateInitial extends QrState {}
+
+class QrStateCameraRequested extends QrState {
+  final bool successfullyLoaded;
+
+  QrStateCameraRequested({@required this.successfullyLoaded});
+}
 
 class QrStateLoading extends QrState {
   QrStateLoading({@required progress}) : super(progress: progress);
