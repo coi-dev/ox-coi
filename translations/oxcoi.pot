@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 15:19+0200\n"
+"POT-Creation-Date: 2019-10-02 16:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,12 +131,18 @@ msgstr ""
 msgid "Blocked contacts"
 msgstr ""
 
+msgid "Bug reports"
+msgstr ""
+
 #. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr ""
 
 msgid "Camera"
+msgstr ""
+
+msgid "Camera not ready"
 msgstr ""
 
 msgid "Cancel"
@@ -184,6 +190,9 @@ msgid "Contact successfully deleted"
 msgstr ""
 
 msgid "Contact successfully edited"
+msgstr ""
+
+msgid "Contact validation failed"
 msgstr ""
 
 msgid "Contact verified"
@@ -309,7 +318,7 @@ msgstr ""
 msgid "FCM token"
 msgstr ""
 
-msgid "Feedback"
+msgid "Feature requests"
 msgstr ""
 
 msgid "File"
@@ -455,6 +464,9 @@ msgstr ""
 msgid "No blocked contacts"
 msgstr ""
 
+msgid "No camera permission granted."
+msgstr ""
+
 msgid "No flagged messages"
 msgstr ""
 
@@ -474,6 +486,9 @@ msgid "No signature set"
 msgstr ""
 
 msgid "No username set"
+msgstr ""
+
+msgid "No valid QR code"
 msgstr ""
 
 msgid "Notification"
@@ -552,10 +567,18 @@ msgstr ""
 msgid "Please enter your password"
 msgstr ""
 
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr ""
+
 msgid "Please select your email provider to sign in"
 msgstr ""
 
 msgid "Please specify your email server settings."
+msgstr ""
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
 msgstr ""
 
 msgid "Please wait a moment."
@@ -607,6 +630,9 @@ msgid ""
 "Some providers place additional information in your inbox; you can check "
 "them eg. in the web frontend. Consult your provider or friends if you run "
 "into problems."
+msgstr ""
+
+msgid "Retry"
 msgstr ""
 
 msgid "SMTP Security"
@@ -811,7 +837,7 @@ msgid "Welcome to OX COI Messenger"
 msgstr ""
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
 
