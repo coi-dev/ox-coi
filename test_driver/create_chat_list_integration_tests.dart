@@ -76,11 +76,11 @@ void main() {
         find.byValueKey(keyProviderSignInPasswordTextField);
     final finderSIGNIN = find.text(singIn);
     final finderCreateChat =
-        find.byValueKey(keyChat_listChatFloatingActionButton);
-    final keyChatListSearchIconButton =
-        find.byValueKey(keyChat_list_SearchIconButton);
-    final keyChatListSearchEmptyIconButton =
-        find.byValueKey(keyChat_list_SearchEmptyIconButton);
+        find.byValueKey(keyChatListChatFloatingActionButton);
+    final finderChatListSearchIconButton =
+        find.byValueKey(keyChatListSearchIconButton);
+    final finderChatListSearchEmptyIconButton =
+        find.byValueKey(keyChatListSearchEmptyIconButton);
     final finderChatWelcome = find.text(chatWelcomeMessage);
 
     // Connect to a running Flutter application instance.
@@ -157,8 +157,8 @@ void main() {
       await chatTest(
           driver, newTestName01, typeSomethingComposePlaceholder, helloWord);
       //  Search contact.
-      await chatSearch(driver, newTestName01,searchString, keyChatListSearchIconButton,
-          keyChatListSearchEmptyIconButton);
+      await chatSearch(driver, newTestName01,searchString, finderChatListSearchIconButton,
+          finderChatListSearchEmptyIconButton);
     });
   });
 }
@@ -178,14 +178,14 @@ Future getAuthentication(
 String fakeEmail,
     SerializableFinder password,
     String realPassword,
-    SerializableFinder SIGNIN) async {
+    SerializableFinder signInCaps) async {
   await driver.tap(email);
   await driver.enterText(fakeEmail);
   await driver.waitFor(email);
   await driver.tap(password);
   await driver.enterText(realPassword);
   Invoker.current.heartbeat();
-  await driver.tap(SIGNIN);
+  await driver.tap(signInCaps);
   Invoker.current.heartbeat();
   await catchScreenshot(driver, 'screenshots/entered.png');
   Invoker.current.heartbeat();
@@ -220,14 +220,14 @@ Future createNewChat(FlutterDriver driver, SerializableFinder finderCreateChat,
     await driver.waitFor(find.text(name));
     await driver.waitFor(find.text(emailAddress));
     await driver
-        .tap(find.byValueKey(keyContact_changeNameValidatableTextFormField));
+        .tap(find.byValueKey(keyContactChangeNameValidatableTextFormField));
     await driver.waitFor(find.text(enterContactName));
     await driver.enterText(chatName);
     await driver
-        .tap(find.byValueKey(keyContact_changeEmailValidatableTextFormField));
+        .tap(find.byValueKey(keyContactChangeEmailValidatableTextFormField));
     await driver.waitFor(find.text(emailAddress));
     await driver.enterText(chatEmail);
-    await driver.tap(find.byValueKey(keyContact_changeCheckIconButton));
+    await driver.tap(find.byValueKey(keyContactChangeCheckIconButton));
     await driver.waitFor(find.text(emptyChat));
     await driver.tap(find.pageBack());
     await catchScreenshot(driver, 'screenshots/chatListeAfterCreated.png');
@@ -240,14 +240,14 @@ Future chatTest(FlutterDriver driver, String chatName,
   await driver.tap(find.text(chatName));
   await driver.tap(find.byValueKey(typeSomethingComposePlaceholder));
   await driver.enterText(helloWord);
-  await driver.tap(find.byValueKey(KeyChat_Composer_MixinOnSendTextIcon));
+  await driver.tap(find.byValueKey(KeyChatComposerMixinOnSendTextIcon));
   await driver.waitFor(find.text(helloWord));
   // Enter audio now.
   await driver
-      .tap(find.byValueKey(KeyChat_Composer_MixinOnRecordAudioPressedIcon));
+      .tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioPressedIcon));
   sleep(Duration(seconds: 3));
   await driver
-      .tap(find.byValueKey(KeyChat_Momposer_MixinOnRecordAudioSendIcon));
+      .tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioSendIcon));
   await driver.tap(find.pageBack());
   await catchScreenshot(driver, 'screenshots/chatListe2.png');
 }
@@ -260,7 +260,7 @@ Future chatSearch(
     SerializableFinder keyChatListSearchEmptyIconButton) async {
   Invoker.current.heartbeat();
   final searchReturnIconButton = find.byValueKey(keySearchReturnIconButton);
-  await driver.tap(find.byValueKey(keyChat_list_SearchIconButton));
+  await driver.tap(find.byValueKey(keyChatListSearchIconButton));
   await catchScreenshot(driver, 'screenshots/searchList1.png');
   await driver.enterText(searchString);
   await catchScreenshot(driver, 'screenshots/searchList.png');

@@ -50,8 +50,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/utils/security.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {

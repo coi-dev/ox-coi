@@ -48,11 +48,8 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_about_bloc.dart';
 import 'package:ox_coi/src/settings/settings_about_event_state.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-
-
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsAbout extends StatefulWidget {
