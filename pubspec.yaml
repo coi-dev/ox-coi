@@ -32,6 +32,7 @@ dependencies:
   image_cropper: ^1.0.2
   image_picker: ^0.6.0+17
   logging: ^0.11.3+2
+  mime: 0.9.6+3
   open_file: ^2.0.3
   package_info: ^0.4.0+5
   path_provider: ^1.1.2

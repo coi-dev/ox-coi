@@ -587,6 +587,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
     _closePreview();
     setState(() {
+      _knownType = null;
       _isComposingText = false;
     });
   }

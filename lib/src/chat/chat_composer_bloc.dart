@@ -97,7 +97,7 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
   }
 
   Future<void> startAudioRecorder() async {
-    String name = Platform.isIOS ? 'ios.m4a' : 'android.mp4';
+    String name = Platform.isIOS ? 'ios.m4a' : 'android.mp3';
     _audioPath = await _flutterSound.startRecorder("$name", bitRate: 64000, numChannels: 1);
     _recorderSubscription = _flutterSound.onRecorderStateChanged.listen((e) {
       String timer = getTimerFromTimestamp(e.currentPosition.toInt());

@@ -45,6 +45,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:mime/mime.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
@@ -191,9 +192,10 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   void _submitAttachmentMessage(String path, int fileType, bool isShared, [String text]) async {
     Context _context = Context();
+    String mimeType = lookupMimeType(path);
     if (isShared) {
       _cacheFilePath = path;
     }
-    await _context.createChatAttachmentMessage(_chatId, path, fileType, text);
+    await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, text);
   }
 }
