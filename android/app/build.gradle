@@ -78,6 +78,12 @@ android {
     packagingOptions {
         exclude 'build-data.properties'
     }
+
+    configurations {
+        all {
+            exclude group: 'org.json', module: 'json'
+        }
+    }
 }
 
 flutter {
