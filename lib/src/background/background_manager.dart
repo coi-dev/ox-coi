@@ -69,7 +69,7 @@ class BackgroundManager {
 
   static BackgroundManager _instance;
 
-  bool _running;
+  bool _running = false;
 
   factory BackgroundManager() => _instance ??= BackgroundManager._internal();
 
