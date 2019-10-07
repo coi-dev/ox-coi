@@ -41,9 +41,9 @@
  */
 
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:ox_coi/test_setup/global_consts.dart';
-import 'package:ox_coi/test_setup/helper_methods.dart';
-import 'package:ox_coi/test_setup/main_test_setup.dart';
+import 'setup/global_consts.dart';
+import 'setup/helper_methods.dart';
+import 'setup/main_test_setup.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';

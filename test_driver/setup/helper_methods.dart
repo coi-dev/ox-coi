@@ -147,7 +147,7 @@ Future chatTest(
   Invoker.current.heartbeat();
   await driver.tap(find.text(chatName));
   await writeChatFromChat(driver, helloWord);
-  await catchScreenshot(driver, 'screenshots/ $chatName.png');
+  await catchScreenshot(driver, 'screenshots/$chatName.png');
 }
 
 Future writeChatFromChat(FlutterDriver driver, String helloWord) async {
@@ -164,5 +164,4 @@ Future writeChatFromChat(FlutterDriver driver, String helloWord) async {
   await catchScreenshot(driver, 'screenshots/callTest.png');
   await driver.tap(find.text("Ok"));
   await driver.tap(find.pageBack());
-  await catchScreenshot(driver, 'screenshots/ $chatName.png');
 }
