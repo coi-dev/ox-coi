@@ -223,28 +223,59 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: buildTitle(),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.phone),
-              key: Key(keyChatIconButtonIconPhone),
-              onPressed: onPhonePressed,
-              color: onPrimary,
-            ),
-          ],
-        ),
-        body: new Column(children: <Widget>[
-          new Flexible(child: buildListView()),
-          if (isInviteChat(widget.chatId)) buildInviteChoice(),
-          if (_filePath.isNotEmpty) buildPreview(),
-          Divider(height: dividerHeight),
-          new Container(
-            decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-            child: _buildTextComposer(),
+    return BlocBuilder(
+      bloc: _chatBloc,
+      builder: (context, state) {
+        String name;
+        String subTitle;
+        Color color;
+        bool isVerified = false;
+        String imagePath = "";
+        bool isGroup = false;
+        if (state is ChatStateSuccess) {
+          name = state.name;
+          subTitle = state.subTitle;
+          color = state.color;
+          isVerified = state.isVerified;
+          imagePath = state.avatarPath;
+          isGroup = state.isGroupChat;
+        } else {
+          name = "";
+          subTitle = "";
+        }
+        return Scaffold(
+          appBar: new AppBar(
+            title: isInviteChat(widget.chatId)
+                ? buildRow(imagePath, name, subTitle, color, context, isVerified)
+                : InkWell(
+                    onTap: () => _chatTitleTapped(),
+                    child: buildRow(imagePath, name, subTitle, color, context, isVerified),
+                  ),
+            actions: <Widget>[
+              if (!isGroup)
+                IconButton(
+                  icon: Icon(Icons.phone),
+                  key: Key(keyChatIconButtonIconPhone),
+                  onPressed: onPhonePressed,
+                  color: onPrimary,
+                ),
+            ],
           ),
-        ]));
+          body: new Column(
+            children: <Widget>[
+              new Flexible(child: buildListView()),
+              if (isInviteChat(widget.chatId)) buildInviteChoice(),
+              if (_filePath.isNotEmpty) buildPreview(),
+              Divider(height: dividerHeight),
+              new Container(
+                decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+                child: _buildTextComposer(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget buildInviteChoice() {
@@ -347,37 +378,6 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           child: Text(_fileName),
         )
       ],
-    );
-  }
-
-  Widget buildTitle() {
-    return BlocBuilder(
-      bloc: _chatBloc,
-      builder: (context, state) {
-        String name;
-        String subTitle;
-        Color color;
-        bool isVerified = false;
-        String imagePath = "";
-        if (state is ChatStateSuccess) {
-          name = state.name;
-          subTitle = state.subTitle;
-          color = state.color;
-          isVerified = state.isVerified;
-          imagePath = state.avatarPath;
-        } else {
-          name = "";
-          subTitle = "";
-        }
-        if (isInviteChat(widget.chatId)) {
-          return buildRow(imagePath, name, subTitle, color, context, isVerified);
-        } else {
-          return InkWell(
-            onTap: () => _chatTitleTapped(),
-            child: buildRow(imagePath, name, subTitle, color, context, isVerified),
-          );
-        }
-      },
     );
   }
 
