@@ -197,50 +197,44 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   OverlayEntry _createErrorOverlayEntry() {
-    RenderBox renderBox = context.findRenderObject();
-    var size = renderBox.size;
-
     return OverlayEntry(
         builder: (context) => Positioned(
               left: 0,
+              right: 0,
               top: 24,
-              width: size.width,
+              height: loginErrorOverlayHeight,
               child: Material(
                 elevation: 4.0,
-                child: Container(
-                  color: error,
-                  height: loginErrorOverlayHeight,
-                  child: Row(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
-                          ),
-                          Icon(
-                            Icons.report_problem,
-                            size: iconSize,
-                            color: onError,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
-                          ),
-                          Text(
-                            L10n.get(L.loginCheckUsernamePassword),
-                            style: Theme.of(context).textTheme.body1.apply(color: onError),
-                          ),
-                        ],
+                color: error,
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
+                    ),
+                    Icon(
+                      Icons.report_problem,
+                      size: iconSize,
+                      color: onError,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
+                    ),
+                    Container(
+                      child: Expanded(
+                        child: Text(
+                          L10n.get(L.loginCheckUsernamePassword),
+                          style: Theme.of(context).textTheme.body1.apply(color: onError),
+                        ),
                       ),
-                      Spacer(),
-                      IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            size: loginErrorOverlayIconSize,
-                            color: onError,
-                          ),
-                          onPressed: _closeError),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                        icon: Icon(
+                          Icons.clear,
+                          size: loginErrorOverlayIconSize,
+                          color: onError,
+                        ),
+                        onPressed: _closeError),
+                  ],
                 ),
               ),
             ));
@@ -250,6 +244,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     if (_overlayEntry != null) {
       _overlayEntry.remove();
     }
+
     FocusScope.of(context).requestFocus(FocusNode());
     bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
     var email = emailField.controller.text;
