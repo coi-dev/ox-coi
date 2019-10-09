@@ -58,7 +58,7 @@ void backgroundHeadlessTask() async {
 
 Future<void> getMessages() async {
   var context = Context();
-  await context.performImap();
+  await context.interruptIdleForIncomingMessages();
   var localPushManager = LocalPushManager();
   await localPushManager.setup();
   await localPushManager.triggerLocalPush();

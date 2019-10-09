@@ -140,18 +140,13 @@ class NotificationManager {
     var backgroundBloc;
     if (_buildContext != null) {
       backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);
-      if (backgroundBloc.currentBackgroundState != AppLifecycleState.resumed.toString()) {
-        return;
-      }
-    } else {
-      return;
-    }
-    var navigation = Navigation();
-    if (navigation.hasElements() && backgroundBloc?.currentBackgroundState == AppLifecycleState.resumed.toString()) {
-      var isChatNavigatable = navigation.current.equal(Navigatable(Type.chat, params: [chatId]));
-      var isChatListNavigatable = navigation.current.equal(Navigatable(Type.chatList));
-      if (isChatNavigatable || isChatListNavigatable) {
-        return;
+      var navigation = Navigation();
+      if (navigation.hasElements() && backgroundBloc?.currentBackgroundState == AppLifecycleState.resumed.toString()) {
+        var isChatNavigatable = navigation.current.equal(Navigatable(Type.chat, params: [chatId]));
+        var isChatListNavigatable = navigation.current.equal(Navigatable(Type.chatList));
+        if (isChatNavigatable || isChatListNavigatable) {
+          return;
+        }
       }
     }
     await _flutterLocalNotificationsPlugin.show(chatId, title, body, platformChannelSpecifics, payload: payload);
