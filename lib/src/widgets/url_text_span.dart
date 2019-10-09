@@ -41,20 +41,25 @@
  */
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlTextSpan extends TextSpan {
-  UrlTextSpan({
-    @required String url,
-    String text,
-  }) : super(
+  UrlTextSpan({String asset, String url, String text, Function onAssetTapped})
+      : super(
           style: TextStyle(color: accent, fontWeight: FontWeight.bold),
           text: text ?? url,
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              launch(url, forceSafariVC: false);
+              if (url != null && url.isNotEmpty) {
+                launch(url, forceSafariVC: false);
+              } else if (asset != null && asset.isNotEmpty) {
+                onAssetTapped(asset);
+              }else{
+                throw Exception("Asset or URL not set.");
+              }
             },
         );
 }

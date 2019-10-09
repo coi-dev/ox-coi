@@ -40,87 +40,30 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
+import 'package:ox_coi/src/web/web_asset_event_state.dart';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
-}
+class WebAssetBloc extends Bloc<WebAssetEvent, WebAssetState> {
+  @override
+  WebAssetState get initialState => WebAssetStateInitial();
 
-class Navigatable {
-  final Type type;
-
-  List params;
-
-  String get tag => describeEnum(type);
-
-  Navigatable(this.type, {this.params});
-
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
+  @override
+  Stream<WebAssetState> mapEventToState(WebAssetEvent event) async* {
+    if (event is LoadAsset) {
+      yield WebAssetStateLoading();
+      try {
+        _loadAsset(event.asset);
+      } catch (error) {
+        yield WebAssetStateFailure();
+      }
+    }else if(event is AssetLoaded){
+      yield WebAssetStateSuccess(loadedAsset: event.asset);
     }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
   }
 
-  bool equalType(Navigatable other) => type == other.type;
-
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
-
-  static String getSubTag(String subTag) => subTag ?? "";
+  void _loadAsset(String asset) async{
+    String loadedAsset = await rootBundle.loadString(asset);
+    dispatch(AssetLoaded(asset: loadedAsset));
+  }
 }

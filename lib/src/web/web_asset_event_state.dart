@@ -40,87 +40,32 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
+abstract class WebAssetEvent {}
+
+class LoadAsset extends WebAssetEvent {
+  final String asset;
+
+  LoadAsset({@required this.asset});
 }
 
-class Navigatable {
-  final Type type;
+class AssetLoaded extends WebAssetEvent {
+  final String asset;
 
-  List params;
-
-  String get tag => describeEnum(type);
-
-  Navigatable(this.type, {this.params});
-
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
-  }
-
-  bool equalType(Navigatable other) => type == other.type;
-
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
-
-  static String getSubTag(String subTag) => subTag ?? "";
+  AssetLoaded({@required this.asset});
 }
+
+abstract class WebAssetState {}
+
+class WebAssetStateInitial extends WebAssetState {}
+
+class WebAssetStateLoading extends WebAssetState {}
+
+class WebAssetStateSuccess extends WebAssetState {
+  final String loadedAsset;
+
+  WebAssetStateSuccess({@required this.loadedAsset});
+}
+
+class WebAssetStateFailure extends WebAssetState {}

@@ -40,87 +40,55 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/web/web_asset_bloc.dart';
+import 'package:ox_coi/src/web/web_asset_event_state.dart';
+import 'package:ox_coi/src/widgets/state_info.dart';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
+class WebAsset extends StatefulWidget {
+  final String asset;
+
+  WebAsset({@required this.asset});
+
+  @override
+  _WebAssetState createState() => _WebAssetState();
 }
 
-class Navigatable {
-  final Type type;
+class _WebAssetState extends State<WebAsset> {
+  WebAssetBloc _webAssetBloc = WebAssetBloc();
 
-  List params;
-
-  String get tag => describeEnum(type);
-
-  Navigatable(this.type, {this.params});
-
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
+  @override
+  void initState() {
+    super.initState();
+    Navigation navigation = Navigation();
+    navigation.current = Navigatable(Type.webAsset);
+    _webAssetBloc.dispatch(LoadAsset(asset: widget.asset));
   }
 
-  bool equalType(Navigatable other) => type == other.type;
-
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
-
-  static String getSubTag(String subTag) => subTag ?? "";
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: BlocBuilder(
+        bloc: _webAssetBloc,
+          builder: (context, state){
+            if(state is WebAssetStateSuccess){
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(20.0),
+                child: Html(data: state.loadedAsset),
+              );
+            }else if(state is WebAssetStateLoading){
+             return StateInfo(showLoading: true,);
+            }else{
+              return Container();
+            }
+          }
+      )
+    );
+  }
 }

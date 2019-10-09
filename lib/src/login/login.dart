@@ -40,7 +40,9 @@
  * for more details.
  */
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
@@ -51,6 +53,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/web/web_asset.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -67,14 +70,14 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final LoginBloc _loginBloc = LoginBloc();
+  Navigation _navigation = Navigation();
   bool _showedErrorDialog = false;
   OverlayEntry _progressOverlayEntry;
 
   @override
   void initState() {
     super.initState();
-    var navigation = Navigation();
-    navigation.current = Navigatable(Type.login);
+    _navigation.current = Navigatable(Type.login);
     _loginBloc.dispatch(RequestProviders(type: ProviderListType.login));
     final loginObservable = new Observable<LoginState>(_loginBloc.state);
     loginObservable.listen((state) => handleLoginStateChange(state));
@@ -166,8 +169,7 @@ class _LoginState extends State<Login> {
   }
 
   void _goToProviderList(ProviderListType type) {
-    var navigation = Navigation();
-    navigation.push(
+    _navigation.push(
       context,
       MaterialPageRoute(
         builder: (context) => ProviderList(
@@ -191,13 +193,23 @@ class _LoginState extends State<Login> {
     List<TextSpan> textParts = [];
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, termsConditionsStartIndex)));
     spanBoundary = termsConditionsStartIndex;
-    textParts.add(UrlTextSpan(url: null, text: termsAndConditions));
+    textParts.add(UrlTextSpan(asset: "assets/html/terms.html", text: termsAndConditions, onAssetTapped: _onAssetTapped));
     spanBoundary = termsConditionsEndIndex;
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, privacyPolicyStartIndex)));
     spanBoundary = privacyPolicyStartIndex;
-    textParts.add(UrlTextSpan(url: null, text: privacyPolicy));
+    textParts.add(UrlTextSpan(asset: "assets/html/privacypolicy.html", text: privacyPolicy, onAssetTapped: _onAssetTapped));
     spanBoundary = privacyPolicyEndIndex;
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary)));
     return textParts;
+  }
+
+  _onAssetTapped(String asset){
+    _navigation.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WebAsset(
+            asset: asset,
+          ),
+        ));
   }
 }
