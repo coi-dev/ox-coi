@@ -122,27 +122,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   void _setupInviteChat(int messageId) async {
     Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     ChatMsg message = messageListRepository.get(messageId);
-    int contactId = await message.getFromId();
-    Contact contact = _contactRepository.get(contactId);
-    String name = await contact.getName();
-    String email = await contact.getAddress();
-    int colorValue = await contact.getColor();
-    Color color = rgbColorFromInt(colorValue);
-    dispatch(
-      ChatLoaded(
-        name: name,
-        subTitle: email,
-        color: color,
-        freshMessageCount: 0,
-        isSelfTalk: false,
-        isGroupChat: false,
-        preview: null,
-        timestamp: null,
-        isVerified: false,
-        isRemoved: false,
-        avatarPath: null,
-      ),
-    );
+    if(message != null) {
+      int contactId = await message.getFromId();
+      Contact contact = _contactRepository.get(contactId);
+      String name = await contact.getName();
+      String email = await contact.getAddress();
+      int colorValue = await contact.getColor();
+      Color color = rgbColorFromInt(colorValue);
+      dispatch(
+        ChatLoaded(
+          name: name,
+          subTitle: email,
+          color: color,
+          freshMessageCount: 0,
+          isSelfTalk: false,
+          isGroupChat: false,
+          preview: null,
+          timestamp: null,
+          isVerified: false,
+          isRemoved: false,
+          avatarPath: null,
+        ),
+      );
+    }
   }
 
   void _setupChat(bool isHeadless) async {

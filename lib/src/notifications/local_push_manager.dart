@@ -91,7 +91,7 @@ class LocalPushManager {
     Future.forEach(freshMessages, (int messageId) async {
       ChatMsg message = _temporaryMessageRepository.get(messageId);
       int chatId = await message.getChatId();
-      if (!createdNotifications.contains(chatId)) {
+      if (!createdNotifications.contains(chatId) && chatId > Chat.typeLastSpecial) {
         Chat chat = _chatRepository.get(chatId);
         if (chat == null) {
           _chatRepository.putIfAbsent(id: chatId);

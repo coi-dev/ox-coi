@@ -116,20 +116,21 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
         _setProfileImage(chatId, imagePath);
       }
     }
-
     _chatRepository.putIfAbsent(id: chatId);
     dispatch(ChatCreated(chatId: chatId));
   }
 
   void _deleteChat(int chatId) async {
     Context context = Context();
+    if(_messageListRepository != null) {
+      _messageListRepository.clear();
+    }
     _chatRepository.remove(id: chatId);
     await context.deleteChat(chatId);
   }
 
   void _deleteChats(List<int> chatIds) async {
     Context context = Context();
-
     for (int chatId in chatIds) {
       _chatRepository.remove(id: chatId);
       _leaveGroupChat(chatId);

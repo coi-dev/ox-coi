@@ -131,6 +131,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       messageListObservable.listen((state) async {
         if (state is MessagesStateSuccess) {
           var uniqueInviteMap = LinkedHashMap<int, int>();
+          Context context = Context();
+          List<int> contacts = await context.getContacts(2, null);
           await Future.forEach(state.messageIds, (messageId) async {
             ChatMsg message = _messageListRepository.get(messageId);
             var contactId = await message.getFromId();
@@ -138,6 +140,18 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
               uniqueInviteMap.putIfAbsent(contactId, () => messageId);
             }
           });
+          List<int> removedContacts = List<int>();
+          await Future.forEach(uniqueInviteMap.keys, (contactId) async{
+            if(contacts.contains(contactId)){
+              int newChatId = await context.createChatByMessageId(uniqueInviteMap[contactId]);
+              _messageListRepository.clear();
+              _chatRepository.putIfAbsent(id: newChatId);
+              removedContacts.add(contactId);
+            }
+          });
+          for(int contactId in removedContacts){
+            uniqueInviteMap.remove(contactId);
+          }
           dispatch(InvitesPrepared(messageIds: uniqueInviteMap.values.toList(growable: false)));
         }
       });
@@ -207,11 +221,11 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   ChatMsg getMessage(List<int> inviteMessageIds, int nextInvite) => _messageListRepository.get(inviteMessageIds[nextInvite]);
 
   int addChatToResult(List ids, Chat chat, List types, List lastUpdateValues, int nextChat) {
-    ids.add(chat.id);
-    types.add(ChatListWidget.ChatListItemType.chat);
-    lastUpdateValues.add(chat.lastUpdate);
-    nextChat++;
-    return nextChat;
+      ids.add(chat.id);
+      types.add(ChatListWidget.ChatListItemType.chat);
+      lastUpdateValues.add(chat.lastUpdate);
+      nextChat++;
+      return nextChat;
   }
 
   int addInviteMessageToResult(List ids, ChatMsg message, List types, List lastUpdateValues, int nextInvite) {

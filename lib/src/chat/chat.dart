@@ -244,7 +244,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           subTitle = "";
         }
         return Scaffold(
-          appBar: new AppBar(
+          appBar: AppBar(
             title: isInviteChat(widget.chatId)
                 ? buildRow(imagePath, name, subTitle, color, context, isVerified)
                 : InkWell(
