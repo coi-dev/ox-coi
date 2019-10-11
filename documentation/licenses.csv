@@ -1,30 +1,40 @@
 background_fetch,MIT,https://pub.dev/packages/background_fetch
 bloc,MIT,https://pub.dev/packages/bloc
 contacts_service,MIT,https://pub.dev/packages/contacts_service
+crypto_keys,BSD,https://pub.dev/packages/crypto_keys
 cupertino_icons,MIT,https://pub.dev/packages/cupertino_icons
 date_format,BSD,https://pub.dev/packages/date_format
+device_info,BSD,https://pub.dev/packages/device_info
 downloads_path_provider,BSD,https://pub.dev/packages/downloads_path_provider
+esys_flutter_share,Apache 2.0,https://pub.dev/packages/esys_flutter_share
 firebase_messaging,BSD,https://pub.dev/packages/firebase_messaging
 file_picker,MIT,https://pub.dev/packages/file_picker
 flutter_bloc,MIT,https://pub.dev/packages/flutter_bloc
+flutter_html,MIT,https://pub.dev/packages/flutter_html
 flutter_local_notifications,BSD,https://pub.dev/packages/flutter_local_notifications
 flutter_sound,MIT,https://pub.dev/packages/flutter_sound
 fluttertoast,MIT,https://pub.dev/packages/fluttertoast
 gettext,MIT,https://pub.dev/packages/gettext
 gettext_parser,MIT,https://pub.dev/packages/gettext_parser
+http,BSD,https://pub.dev/packages/http
 image_cropper,BSD,https://pub.dev/packages/image_cropper
 image_picker,Apache 2.0,https://pub.dev/packages/image_picker
 logging,BSD,https://pub.dev/packages/logging
+mime,BSD,https://pub.dev/packages/mime
 open_file,BSD,https://pub.dev/packages/open_file
 package_info,BSD,https://pub.dev/packages/package_info
 path_provider,BSD,https://pub.dev/packages/path_provider
 permission_handler,MIT,https://pub.dev/packages/permission_handler
+pointycastle,MPL 3.0,https://pub.dev/packages/pointycastle
 rxdart,Apache 2.0,https://pub.dev/packages/rxdart
 shared_preferences,BSD,https://pub.dev/packages/shared_preferences
+sprintf,BSD,https://pub.dev/packages/sprintf
+sqflite,MIT,https://pub.dev/packages/sqflite
 superellipse_shape,MIT,https://pub.dev/packages/superellipse_shape
 transparent_image,MIT,https://pub.dev/packages/transparent_image
 url_launcher,BSD,https://pub.dev/packages/url_launcher
 video_player,BSD,https://pub.dev/packages/video_player
 qr_flutter,BSD,https://pub.dev/packages/qr_flutter
 qr_mobile_vision,MIT,https://pub.dev/packages/qr_mobile_vision
+uuid,MIT,https://pub.dev/packages/uuid
 delta_chat_core,MPL 2.0,https://github.com/deltachat/deltachat-core
