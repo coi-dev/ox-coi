@@ -267,10 +267,11 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               if (isInviteChat(widget.chatId)) buildInviteChoice(),
               if (_filePath.isNotEmpty) buildPreview(),
               Divider(height: dividerHeight),
-              new Container(
-                decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-                child: _buildTextComposer(),
-              ),
+              if (state is ChatStateSuccess && !state.isRemoved)
+                new Container(
+                  decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+                  child: _buildTextComposer(),
+                ),
             ],
           ),
         );

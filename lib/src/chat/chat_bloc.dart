@@ -93,6 +93,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           timestamp: event.timestamp,
           isVerified: event.isVerified,
           avatarPath: event.avatarPath,
+          isRemoved: event.isRemoved,
           phoneNumbers: event.phoneNumbers);
     }
   }
@@ -138,6 +139,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         preview: null,
         timestamp: null,
         isVerified: false,
+        isRemoved: false,
         avatarPath: null,
       ),
     );
@@ -161,10 +163,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     String avatarPath = await chat.getProfileImage();
     var chatSummary = chat.get(ChatExtension.chatSummary);
     var phoneNumbers;
+    var chatContacts = await context.getChatContacts(_chatId);
+    var isRemoved = false;
     if (!_isGroup) {
-      var contactId = (await context.getChatContacts(_chatId)).first;
+      var contactId = chatContacts.first;
       Contact contact = _contactRepository.get(contactId);
       phoneNumbers = contact?.get(ContactExtension.contactPhoneNumber);
+    } else {
+      isRemoved = !chatContacts.contains(Contact.idSelf);
     }
     dispatch(
       ChatLoaded(
@@ -178,6 +184,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         timestamp: chatSummary?.timestamp,
         isVerified: isVerified,
         avatarPath: avatarPath,
+        isRemoved: isRemoved,
         phoneNumbers: phoneNumbers,
       ),
     );
