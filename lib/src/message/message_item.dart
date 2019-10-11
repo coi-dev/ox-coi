@@ -66,9 +66,16 @@ class ChatMessageItem extends StatefulWidget {
   final int nextMessageId;
   final bool isGroupChat;
   final bool hasDateMarker;
+  final bool flaggedView;
 
   ChatMessageItem(
-      {@required this.chatId, @required this.messageId, @required this.nextMessageId, @required this.isGroupChat, @required this.hasDateMarker, key})
+      {@required this.chatId,
+      @required this.messageId,
+      @required this.nextMessageId,
+      @required this.isGroupChat,
+      @required this.hasDateMarker,
+      this.flaggedView = false,
+      key})
       : super(key: key);
 
   @override
@@ -160,7 +167,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                     showTime: state.showTime,
                   ),
                 ),
-              if (state.encryptionStatusChanged)
+              if (!widget.flaggedView && state.encryptionStatusChanged)
                 Padding(
                   padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                   child: MessageSpecial(type: MessageSpecialType.encryptionStatusChanged),
