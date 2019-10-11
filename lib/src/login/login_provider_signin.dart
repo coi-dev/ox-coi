@@ -241,10 +241,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void _signIn() {
-    if (_overlayEntry != null) {
-      _overlayEntry.remove();
-    }
-
+    _closeError();
     FocusScope.of(context).requestFocus(FocusNode());
     bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
     var email = emailField.controller.text;
@@ -265,8 +262,10 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void _closeError() {
-    _overlayEntry.remove();
-    _overlayEntry = null;
+    if (_overlayEntry != null) {
+      _overlayEntry.remove();
+      _overlayEntry = null;
+    }
   }
 
   void _showManualSettings() {

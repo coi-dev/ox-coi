@@ -113,7 +113,20 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       List<int> ids = List.from(await context.getContacts(2, null));
       await updateContactExtensions(ids, phoneNumbers);
     }
+    final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
+    await Future.forEach(_contactRepository.getAll(), (contact) async {
+      await reloadChatName(context, chatRepository, contact.id);
+    });
+    _contactRepository.clear();
     dispatch(ImportPerformed());
+  }
+
+  Future<void> reloadChatName(Context context, Repository<Chat> chatRepository, int contactId) async {
+    int chatId = await context.getChatByContactId(contactId);
+    if (chatId != 0) {
+      Chat chat = chatRepository.get(chatId);
+      chat.reloadValue(Chat.methodChatGetName);
+    }
   }
 
   String getFormattedContactData(SystemContacts.Contact contact, SystemContacts.Item email) {
