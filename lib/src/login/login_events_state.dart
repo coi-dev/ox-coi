@@ -99,6 +99,12 @@ class LoginButtonPressed extends LoginEvent {
       @required this.smtpSecurity});
 }
 
+class LoginWithNewPassword extends LoginEvent {
+  final String password;
+
+  LoginWithNewPassword({@required this.password});
+}
+
 class EditButtonPressed extends LoginEvent {}
 
 class LoginProgress extends LoginEvent {

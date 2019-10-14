@@ -47,8 +47,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/background/background_bloc.dart';
-import 'package:ox_coi/src/background/background_event_state.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list.dart';
 import 'package:ox_coi/src/contact/contact_list.dart';
@@ -57,6 +55,8 @@ import 'package:ox_coi/src/invite/invite_bloc.dart';
 import 'package:ox_coi/src/invite/invite_event_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -92,9 +92,9 @@ class _RootState extends State<Root> {
       body: WillPopScope(
         child: MultiBlocListener(
           listeners: [
-            BlocListener<BackgroundBloc, BackgroundState>(
+            BlocListener<LifecycleBloc, LifecycleState>(
               listener: (context, state) {
-                if (state is BackgroundStateSuccess) {
+                if (state is LifecycleStateSuccess) {
                   if (state.state == AppLifecycleState.resumed.toString()) {
                     _inviteBloc.add(HandleSharedInviteLink());
                   }

@@ -47,6 +47,8 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
+import 'package:ox_coi/src/error/error_event_state.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
@@ -58,6 +60,7 @@ import 'package:rxdart/rxdart.dart';
 import 'login_provider_list.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final ErrorBloc errorBloc;
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
   bool _listenersRegistered = false;
@@ -65,6 +68,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   // ignore: close_sinks
   BehaviorSubject<Event> _errorSubject = new BehaviorSubject();
+
+  LoginBloc(this.errorBloc);
 
   LoginState get initialState => LoginStateInitial();
 
@@ -81,7 +86,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         await _setupConfigWithProvider(event);
         _registerListeners();
-        _context.configure();
+        performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
       }
@@ -90,7 +95,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         await _setupConfig(event);
         _registerListeners();
-        _context.configure();
+        performLogin();
+      } catch (error) {
+        yield LoginStateFailure(error: error.toString());
+      }
+    } else if (event is LoginWithNewPassword) {
+      yield LoginStateLoading(progress: 0);
+      try {
+        await _setNewPassword(event.password);
+        _registerListeners();
+        performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
       }
@@ -98,12 +112,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginStateLoading(progress: 0);
       try {
         _registerListeners();
-        _context.configure();
+        performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
       }
     } else if (event is LoginProgress) {
       if (_loginSuccess(event.progress)) {
+        errorBloc.add(UpdateHandleErrors(delegateAndHandleErrors: true));
         _updateConfig();
         yield LoginStateSuccess();
       } else if (_loginFailed(event.progress)) {
@@ -118,6 +133,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is ProvidersLoaded) {
       yield LoginStateProvidersLoaded(providers: event.providers);
     }
+  }
+
+  void performLogin() {
+    errorBloc.add(UpdateHandleErrors(delegateAndHandleErrors: false));
+    _context.configure();
   }
 
   @override
@@ -213,5 +233,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     await config.setValue(Context.configServerFlags, serverFlags);
     await setPreference(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
     await setPreference(preferenceInviteServiceUrl, provider.inviteServiceUrl);
+  }
+
+  Future<void> _setNewPassword(String password) async {
+    Config config = Config();
+    await config.setValue(Context.configMailPassword, password);
   }
 }

@@ -40,41 +40,40 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 
-abstract class MainEvent {}
-
-class PrepareApp extends MainEvent {
-  BuildContext context;
-
-  PrepareApp({@required this.context});
+enum UserVisibleError {
+  authenticationFailed,
 }
 
-class LoadApp extends MainEvent {}
+abstract class ErrorEvent {}
 
-class AppLoaded extends MainEvent {}
+class SetupListeners extends ErrorEvent {}
 
-class UserVisibleErrorEncountered extends MainEvent {
+class UpdateHandleErrors extends ErrorEvent {
+  final bool delegateAndHandleErrors;
+
+  UpdateHandleErrors({@required this.delegateAndHandleErrors});
+}
+
+class DelegateUserVisibleError extends ErrorEvent {
   final userVisibleError;
 
-  UserVisibleErrorEncountered({@required this.userVisibleError});
+  DelegateUserVisibleError({@required this.userVisibleError});
 }
 
-abstract class MainState {}
+abstract class ErrorState {}
 
-class MainStateInitial extends MainState {}
+class ErrorStateInitial extends ErrorState {}
 
-class MainStateLoading extends MainState {}
+class ErrorStateSetupDone extends ErrorState {}
 
-class MainStateSuccess extends MainState {
-  bool configured;
-  bool hasAuthenticationError;
+class ErrorStateHandleErrorsUpdated extends ErrorState {}
 
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError});
+class ErrorStateUserVisibleError extends ErrorState {
+  final userVisibleError;
+
+  ErrorStateUserVisibleError({@required this.userVisibleError});
 }
 
-class MainStateFailure extends MainState {
-  String error;
-
-  MainStateFailure({@required error});
-}
+class ErrorStateFailure extends ErrorState {}

@@ -289,7 +289,6 @@ class PushBloc extends Bloc<PushEvent, PushState> {
 
   void _metadataSuccessCallback(Event event) {
     var data1 = event.data1;
-    _logger.info("Received event ${event.eventId} with payload 1: $data1 and payload 2: ${event.data2}");
     if (data1 == _subscribeListenerId) {
       _setNotificationPushStatus(PushSetupState.metadataSubscribed);
     } else if (data1 == _validateListenerId) {

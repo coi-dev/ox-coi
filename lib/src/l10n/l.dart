@@ -246,6 +246,11 @@ class L {
   static final loginServerAddresses = _translationKey("Server addresses");
   static final loginManualSetupRequired = _translationKey("We could not determine all settings automatically.");
 
+  static final passwordChangedTitle = _translationKey("Password changed");
+  static final passwordChangedInfoText = _translationKey("Your password has changed.\nPlease enter your new one to access your messages.");
+  static final passwordChangedButtonText = _translationKey("Login");
+  static final passwordChangedCheckPassword = _translationKey("Cannot login. Please check your password.");
+
   static final memberXP = _translationKey("1 member","%i members");
   static final memberAdded = _translationKey("Member added");
   static final memberRemoved = _translationKey("Member removed");

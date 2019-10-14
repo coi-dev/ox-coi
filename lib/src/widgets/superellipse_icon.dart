@@ -40,41 +40,33 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/image.dart';
 
-abstract class MainEvent {}
+class SuperellipseIcon extends StatelessWidget {
+  final IconSource icon;
+  final double size;
+  final Color color;
+  final Color iconColor;
 
-class PrepareApp extends MainEvent {
-  BuildContext context;
+  SuperellipseIcon({@required this.icon, @required this.size, @required this.color, @required this.iconColor});
 
-  PrepareApp({@required this.context});
-}
-
-class LoadApp extends MainEvent {}
-
-class AppLoaded extends MainEvent {}
-
-class UserVisibleErrorEncountered extends MainEvent {
-  final userVisibleError;
-
-  UserVisibleErrorEncountered({@required this.userVisibleError});
-}
-
-abstract class MainState {}
-
-class MainStateInitial extends MainState {}
-
-class MainStateLoading extends MainState {}
-
-class MainStateSuccess extends MainState {
-  bool configured;
-  bool hasAuthenticationError;
-
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError});
-}
-
-class MainStateFailure extends MainState {
-  String error;
-
-  MainStateFailure({@required error});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      decoration: ShapeDecoration(
+        shape: getSuperEllipseShape(size),
+        color: color,
+      ),
+      child: AdaptiveIcon(
+        icon: icon,
+        size: (size - superellipseIconMinimizeFactor),
+        color: iconColor,
+      ),
+    );
+  }
 }

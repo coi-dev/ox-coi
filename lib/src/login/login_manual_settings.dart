@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -74,13 +75,14 @@ class LoginManualSettings extends StatefulWidget {
 class _LoginManualSettingsState extends State<LoginManualSettings> {
   OverlayEntry _progressOverlayEntry;
   FullscreenProgress _progress;
-  LoginBloc _loginBloc = LoginBloc();
+  LoginBloc _loginBloc;
 
   @override
   void initState() {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginManualSettings);
+    _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }

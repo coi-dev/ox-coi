@@ -40,41 +40,75 @@
  * for more details.
  */
 
-import 'dart:async';
-import 'dart:ui';
+import 'package:background_fetch/background_fetch.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/notifications/local_push_manager.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:flutter/services.dart';
+void backgroundHeadlessTask() async {
+  var core = DeltaChatCore();
+  var init = await core.init(dbName);
+  if (init) {
+    await getMessages();
+    await core.stop();
+  }
+  BackgroundFetch.finish();
+}
 
-import 'background_event_state.dart';
+Future<void> getMessages() async {
+  var context = Context();
+  await context.interruptIdleForIncomingMessages();
+  var localPushManager = LocalPushManager();
+  await localPushManager.setup();
+  await localPushManager.triggerLocalPush();
+}
 
-class BackgroundBloc extends Bloc<BackgroundEvent, BackgroundState> {
-  String _currentBackgroundState;
+class BackgroundRefreshManager {
+  final Logger _logger = Logger("background_refresh_manager");
 
-  String get currentBackgroundState => _currentBackgroundState;
+  static BackgroundRefreshManager _instance;
 
-  @override
-  BackgroundState get initialState => BackgroundStateInitial();
+  bool _running = false;
 
-  @override
-  Stream<BackgroundState> mapEventToState(BackgroundEvent event) async* {
-    if (event is BackgroundListenerSetup) {
-      try {
-        setup();
-      } catch (error) {
-        yield BackgroundStateFailure();
-      }
-    } else if (event is BackgroundStateChange) {
-      _currentBackgroundState = event.state;
-      yield BackgroundStateSuccess(state: _currentBackgroundState);
-    }
+  factory BackgroundRefreshManager() => _instance ??= BackgroundRefreshManager._internal();
+
+  BackgroundRefreshManager._internal();
+
+  setupAndStart() {
+    BackgroundFetch.registerHeadlessTask(backgroundHeadlessTask);
+    BackgroundFetch.configure(
+        BackgroundFetchConfig(
+          minimumFetchInterval: 15,
+          stopOnTerminate: false,
+          enableHeadless: true,
+          startOnBoot: true,
+        ),
+        _callback);
+    _running = true;
+    _logger.info("Configured and started background fetch");
   }
 
-  void setup() {
-    SystemChannels.lifecycle.setMessageHandler((state) async {
-      add(BackgroundStateChange(state: state));
-      return state;
-    });
-    add(BackgroundStateChange(state: AppLifecycleState.resumed.toString()));
+  Future<void> _callback() async {
+    await getMessages();
+    BackgroundFetch.finish();
+  }
+
+  void start() async {
+    if (_running) {
+      return;
+    }
+    await BackgroundFetch.start();
+    _logger.info("Started background fetch");
+    _running = true;
+  }
+
+  void stop() {
+    if (!_running) {
+      return;
+    }
+    BackgroundFetch.stop();
+    _logger.info("Stopped background fetch");
+    _running = false;
   }
 }

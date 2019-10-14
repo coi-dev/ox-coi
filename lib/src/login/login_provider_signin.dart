@@ -41,6 +41,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
@@ -48,9 +51,9 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
@@ -59,11 +62,8 @@ import 'login_bloc.dart';
 import 'login_events_state.dart';
 import 'login_manual_settings.dart';
 
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-
 class ProviderSignIn extends StatefulWidget {
+
   final Provider provider;
   final Function success;
 
@@ -74,12 +74,11 @@ class ProviderSignIn extends StatefulWidget {
 }
 
 class _ProviderSignInState extends State<ProviderSignIn> {
-  static final keyEmail = Key("keyEmail");
-  static final keyPassword = Key("keyPassword");
+  static const providerOther = 'other';
   final _simpleLoginKey = GlobalKey<FormState>();
 
   OverlayEntry _progressOverlayEntry;
-  LoginBloc _loginBloc = LoginBloc();
+  LoginBloc _loginBloc;
   OverlayEntry _overlayEntry;
   var _navigation = Navigation();
 
@@ -107,6 +106,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.loginProviderSignIn);
+    _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }
@@ -124,7 +124,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     if (state is LoginStateSuccess) {
       widget.success();
     } else if (state is LoginStateFailure) {
-      if (widget.provider.id != other) {
+      if (widget.provider.id != providerOther) {
         setState(() {
           this._overlayEntry = this._createErrorOverlayEntry();
           Overlay.of(context).insert(this._overlayEntry);
@@ -177,14 +177,13 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                 )),
             Padding(padding: EdgeInsets.all(loginVerticalPadding24dp)),
             AdaptiveRaisedButton(
-              child: Text(L10n.get(L.loginSignIn).toUpperCase()),
-              onPressed: _signIn,
-              buttonWidth: loginButtonWidth,
-              color: accent,
-              textColor: onAccent
-            ),
+                child: Text(L10n.get(L.loginSignIn).toUpperCase()),
+                onPressed: _signIn,
+                buttonWidth: loginButtonWidth,
+                color: accent,
+                textColor: onAccent),
             Visibility(
-              visible: widget.provider.id == other,
+              visible: widget.provider.id == providerOther,
               child: FlatButton(
                   onPressed: _showManualSettings,
                   child: Text(
@@ -198,45 +197,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   OverlayEntry _createErrorOverlayEntry() {
     return OverlayEntry(
-        builder: (context) => Positioned(
-              left: 0,
-              right: 0,
-              top: 24,
-              height: loginErrorOverlayHeight,
-              child: Material(
-                elevation: 4.0,
-                color: error,
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
-                    ),
-                    AdaptiveIcon(
-                      icon: IconSource.reportProblem,
-                      size: iconSize,
-                      color: onError,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
-                    ),
-                    Container(
-                      child: Expanded(
-                        child: Text(
-                          L10n.get(L.loginCheckUsernamePassword),
-                          style: Theme.of(context).textTheme.body1.apply(color: onError),
-                        ),
-                      ),
-                    ),
-                    AdaptiveIconButton(
-                        icon: AdaptiveIcon(
-                          icon: IconSource.clear,
-                          size: loginErrorOverlayIconSize,
-                          color: onError,
-                        ),
-                        onPressed: _closeError),
-                  ],
-                ),
-              ),
+        builder: (context) => ErrorBanner(
+              message: L10n.get(L.loginCheckUsernamePassword),
+              closePressed: _closeError,
             ));
   }
 

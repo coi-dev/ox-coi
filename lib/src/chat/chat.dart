@@ -51,8 +51,6 @@ import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
-import 'package:ox_coi/src/background/background_bloc.dart';
-import 'package:ox_coi/src/background/background_event_state.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
@@ -67,6 +65,8 @@ import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
 import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
@@ -109,7 +109,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   MessageListBloc _messageListBloc = MessageListBloc();
   ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
-  BackgroundBloc _backgroundBloc;
+  // Ignoring false positive https://github.com/felangel/bloc/issues/587
+  // ignore: close_sinks
+  LifecycleBloc _lifecycleBloc;
 
   final TextEditingController _textController = new TextEditingController();
   bool _isComposingText = false;
@@ -146,7 +148,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     final messagesObservable = new Observable<MessageListState>(_messageListBloc);
     messagesObservable.listen((state) {
       if (state is MessagesStateSuccess) {
-        if (_backgroundBloc.currentBackgroundState == AppLifecycleState.paused.toString()) {
+        if (_lifecycleBloc.currentBackgroundState == AppLifecycleState.paused.toString()) {
           return;
         }
         _chatChangeBloc.add(ChatMarkMessagesSeen(messageIds: state.messageIds));
@@ -239,11 +241,11 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   @override
   Widget build(BuildContext context) {
-    _backgroundBloc = BlocProvider.of<BackgroundBloc>(context);
+    _lifecycleBloc = BlocProvider.of<LifecycleBloc>(context);
     return BlocListener(
-      bloc: _backgroundBloc,
+      bloc: _lifecycleBloc,
       listener: (context, state){
-        if(state is BackgroundStateSuccess){
+        if(state is LifecycleStateSuccess){
           if(state.state == AppLifecycleState.resumed.toString()){
             _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
           }

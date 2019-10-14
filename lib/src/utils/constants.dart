@@ -40,27 +40,22 @@
  * for more details.
  */
 
-// App state
+// App
 enum AppState {
   initialStartDone,
   initialLoginDone,
 }
 
-// Data base name
-String get dbName => "messenger.db";
+// Delta Chat Core
+const dbName = "messenger.db";
 
-// Push service fallback
-String get defaultCoiPushServiceUrl => "https://push.coi.me/push/resource/";
+// External services
+const defaultCoiPushServiceUrl = "https://push.coi.me/push/resource/";
+const defaultCoiInviteServiceUrl = "https://invite.coi.me/invite/";
 
-// Invite service fallback
-String get defaultCoiInviteServiceUrl => "https://invite.coi.me/invite/";
+// Paths, filenames, extensions
+const appLogoPath = 'assets/images/app_logo.png';
+const thumbnailFileExtension = '.jpg';
 
-// Image paths
-String get appLogoPath => 'assets/images/app_logo.png';
-
-// Other provider identifier
-String get other => 'other';
-
-// File extension for video thumbnails
-String get thumbnailFileExtension => '.jpg';
-
+// IMAP https://tools.ietf.org/html/rfc5530
+const imapErrorAuthenticationFailed = '[AUTHENTICATIONFAILED]';

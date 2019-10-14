@@ -115,7 +115,7 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
   String _validate(String value) {
     var valid = true;
     if (widget.needValidation) {
-      if (widget.textFormType == TextFormType.normal) {
+      if (widget.textFormType == TextFormType.normal || widget.textFormType == TextFormType.password) {
         valid = value.isNotEmpty;
       } else if (widget.textFormType == TextFormType.email) {
         valid = isEmail(value);

@@ -41,7 +41,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
@@ -68,7 +70,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final LoginBloc _loginBloc = LoginBloc();
+  LoginBloc _loginBloc;
   Navigation _navigation = Navigation();
   bool _showedErrorDialog = false;
   OverlayEntry _progressOverlayEntry;
@@ -77,6 +79,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.login);
+    _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.add(RequestProviders(type: ProviderListType.login));
     final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((state) => handleLoginStateChange(state));

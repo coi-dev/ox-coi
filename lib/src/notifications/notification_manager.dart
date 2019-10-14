@@ -44,7 +44,7 @@ import 'package:delta_chat_core/delta_chat_core.dart' as DeltaChatCore;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:ox_coi/src/background/background_bloc.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
@@ -118,8 +118,8 @@ class NotificationManager {
     if (_buildContext != null) {
       // Ignoring false positive https://github.com/felangel/bloc/issues/587
       // ignore: close_sinks
-      var backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);
-      if (backgroundBloc.currentBackgroundState == AppLifecycleState.resumed.toString()) {
+      var lifecycleBloc = BlocProvider.of<LifecycleBloc>(_buildContext);
+      if (lifecycleBloc.currentBackgroundState == AppLifecycleState.resumed.toString()) {
         return;
       }
     }
@@ -139,11 +139,11 @@ class NotificationManager {
   }
 
   Future<void> showNotificationFromLocal(int chatId, String title, String body, {String payload}) async {
-    var backgroundBloc;
+    var lifecycleBloc;
     if (_buildContext != null) {
-      backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);
+      lifecycleBloc = BlocProvider.of<LifecycleBloc>(_buildContext);
       var navigation = Navigation();
-      if (navigation.hasElements() && backgroundBloc?.currentBackgroundState == AppLifecycleState.resumed.toString()) {
+      if (navigation.hasElements() && lifecycleBloc?.currentBackgroundState == AppLifecycleState.resumed.toString()) {
         var isChatNavigatable = navigation.current.equal(Navigatable(Type.chat, params: [chatId]));
         var isChatListNavigatable = navigation.current.equal(Navigatable(Type.chatList));
         if (isChatNavigatable || isChatListNavigatable) {

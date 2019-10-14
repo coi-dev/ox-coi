@@ -44,8 +44,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/image.dart';
 import 'package:ox_coi/src/utils/text.dart';
-import 'package:superellipse_shape/superellipse_shape.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Avatar extends StatelessWidget {
@@ -72,9 +72,7 @@ class Avatar extends StatelessWidget {
       alignment: Alignment.center,
       constraints: BoxConstraints.expand(width: size, height: size),
       decoration: ShapeDecoration(
-        shape: SuperellipseShape(
-          borderRadius: BorderRadius.circular(size * 0.67),
-        ),
+        shape: getSuperEllipseShape(size),
         color: color,
         image: DecorationImage(
           fit: BoxFit.cover,

@@ -47,11 +47,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/background/background_bloc.dart';
-import 'package:ox_coi/src/background/background_event_state.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
 import 'package:ox_coi/src/log/log_manager.dart';
 import 'package:ox_coi/src/login/login.dart';
+import 'package:ox_coi/src/login/password_changed.dart';
 import 'package:ox_coi/src/main/main_bloc.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
@@ -59,7 +61,6 @@ import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
-import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
@@ -69,15 +70,18 @@ void main() {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<BackgroundBloc>(
+        BlocProvider<LifecycleBloc>(
           builder: (BuildContext context) {
-            var backgroundBloc = BackgroundBloc();
-            backgroundBloc.add(BackgroundListenerSetup());
-            return backgroundBloc;
+            var lifecycleBloc = LifecycleBloc();
+            lifecycleBloc.add(ListenerSetup());
+            return lifecycleBloc;
           },
         ),
         BlocProvider<PushBloc>(
           builder: (BuildContext context) => PushBloc(),
+        ),
+        BlocProvider<ErrorBloc>(
+          builder: (BuildContext context) => ErrorBloc(),
         )
       ],
       child: OxCoiApp(),
@@ -111,7 +115,8 @@ class OxCoiApp extends StatelessWidget {
           accentColor: accent,
         ),
         localizationsDelegates: getLocalizationsDelegates(),
-        supportedLocales: L10n.supportedLocales,localeResolutionCallback: (deviceLocale, supportedLocales) {
+        supportedLocales: L10n.supportedLocales,
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
           getLocaleResolutionCallback(deviceLocale);
           return deviceLocale;
         },
@@ -123,10 +128,10 @@ class OxCoiApp extends StatelessWidget {
 
   List<LocalizationsDelegate> getLocalizationsDelegates() {
     return [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ];
   }
 
   void getLocaleResolutionCallback(Locale deviceLocale) {
@@ -141,14 +146,13 @@ class OxCoi extends StatefulWidget {
 }
 
 class _OxCoiState extends State<OxCoi> {
-  MainBloc _mainBloc = MainBloc();
-  // Ignoring false positive https://github.com/felangel/bloc/issues/587
-  // ignore: close_sinks
-  ShareBloc shareBloc = ShareBloc();
+  MainBloc _mainBloc;
+  Navigation _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
+    _mainBloc = MainBloc(BlocProvider.of<ErrorBloc>(context));
     _mainBloc.add(PrepareApp(context: context));
   }
 
@@ -159,8 +163,10 @@ class _OxCoiState extends State<OxCoi> {
       builder: (context, state) {
         Widget child;
         if (state is MainStateSuccess) {
-          if (state.configured) {
+          if (state.configured && !state.hasAuthenticationError) {
             child = Root();
+          } else if (state.configured && state.hasAuthenticationError) {
+            child = PasswordChanged(passwordChangedCallback: () => _loginSuccess(isRelogin: true));
           } else {
             child = Login(success: _loginSuccess);
           }
@@ -172,10 +178,11 @@ class _OxCoiState extends State<OxCoi> {
     );
   }
 
-  _loginSuccess() {
-    BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
-    Navigation navigation = Navigation();
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
-    _mainBloc.add(AppLoaded(configured: true));
+  _loginSuccess({bool isRelogin = false}) {
+    if (!isRelogin) {
+      BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
+    }
+    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _mainBloc.add(AppLoaded());
   }
 }

@@ -42,39 +42,25 @@
 
 import 'package:flutter/widgets.dart';
 
-abstract class MainEvent {}
+abstract class LifecycleEvent {}
 
-class PrepareApp extends MainEvent {
-  BuildContext context;
+class ListenerSetup extends LifecycleEvent {}
 
-  PrepareApp({@required this.context});
+class StateChange extends LifecycleEvent {
+  final String state;
+
+  StateChange({@required this.state});
 }
 
-class LoadApp extends MainEvent {}
+abstract class LifecycleState {}
 
-class AppLoaded extends MainEvent {}
+class LifecycleStateInitial extends LifecycleState {}
 
-class UserVisibleErrorEncountered extends MainEvent {
-  final userVisibleError;
+class LifecycleStateFailure extends LifecycleState {}
 
-  UserVisibleErrorEncountered({@required this.userVisibleError});
+class LifecycleStateSuccess extends LifecycleState {
+  final String state;
+
+  LifecycleStateSuccess({@required this.state});
 }
 
-abstract class MainState {}
-
-class MainStateInitial extends MainState {}
-
-class MainStateLoading extends MainState {}
-
-class MainStateSuccess extends MainState {
-  bool configured;
-  bool hasAuthenticationError;
-
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError});
-}
-
-class MainStateFailure extends MainState {
-  String error;
-
-  MainStateFailure({@required error});
-}

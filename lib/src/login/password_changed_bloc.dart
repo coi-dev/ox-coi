@@ -40,27 +40,31 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+import 'package:bloc/bloc.dart';
+import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/login/password_changed_event_state.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 
-abstract class BackgroundEvent {}
+class PasswordChangedBloc extends Bloc<PasswordChangedEvent, PasswordChangedState> {
+  @override
+  PasswordChangedState get initialState => PasswordChangedStateInitial();
 
-class BackgroundListenerSetup extends BackgroundEvent {}
+  @override
+  Stream<PasswordChangedState> mapEventToState(PasswordChangedEvent event) async* {
+    if (event is LoadData) {
+      try {
+        yield* loadData();
+      } catch (error) {
+        yield PasswordChangedStateFailure();
+      }
+    } else if (event is ResetAuthenticationError) {
+      await setPreference(preferenceHasAuthenticationError, false);
+    }
+  }
 
-class BackgroundStateChange extends BackgroundEvent {
-  final String state;
-
-  BackgroundStateChange({@required this.state});
+  Stream<PasswordChangedState> loadData() async* {
+    Config config = Config();
+    await config.reload();
+    yield PasswordChangedDataLoaded(email: config.email);
+  }
 }
-
-abstract class BackgroundState {}
-
-class BackgroundStateInitial extends BackgroundState {}
-
-class BackgroundStateFailure extends BackgroundState {}
-
-class BackgroundStateSuccess extends BackgroundState {
-  final String state;
-
-  BackgroundStateSuccess({@required this.state});
-}
-

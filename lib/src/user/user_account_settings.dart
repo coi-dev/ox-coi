@@ -43,6 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
@@ -73,8 +74,8 @@ class UserAccountSettings extends StatefulWidget {
 
 class _UserAccountSettingsState extends State<UserAccountSettings> {
   UserChangeBloc _userChangeBloc = UserChangeBloc();
-  LoginBloc _loginBloc = LoginBloc();
-  Navigation navigation = Navigation();
+  LoginBloc _loginBloc;
+  Navigation _navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
   FullscreenProgress _progress;
   bool _showedErrorDialog = false;
@@ -82,7 +83,8 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.settingsAccount);
+    _navigation.current = Navigatable(Type.settingsAccount);
+    _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _userChangeBloc.add(RequestUser());
     final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc);
     userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
@@ -109,7 +111,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
     }
     if (state is LoginStateSuccess) {
       showToast(L10n.get(L.settingAccountChanged));
-      navigation.pop(context);
+      _navigation.pop(context);
     } else if (state is LoginStateFailure) {
       if (!_showedErrorDialog) {
         _showedErrorDialog = true;
@@ -167,7 +169,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
               icon: new AdaptiveIcon(
                 icon: IconSource.close,
               ),
-              onPressed: () => navigation.pop(context),
+              onPressed: () => _navigation.pop(context),
             ),
             title: Text(L10n.get(L.settingAccount)),
             actions: <Widget>[

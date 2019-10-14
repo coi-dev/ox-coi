@@ -39,76 +39,60 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
+ 
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
-import 'package:background_fetch/background_fetch.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:logging/logging.dart';
-import 'package:ox_coi/src/notifications/local_push_manager.dart';
-import 'package:ox_coi/src/utils/constants.dart';
+class ErrorBanner extends StatelessWidget {
+  final Function closePressed;
+  final String message;
 
-void backgroundHeadlessTask() async {
-  var core = DeltaChatCore();
-  var init = await core.init(dbName);
-  if (init) {
-    await getMessages();
-    await core.stop();
-  }
-  BackgroundFetch.finish();
-}
+  ErrorBanner({@required this.closePressed, @required this.message});
 
-Future<void> getMessages() async {
-  var context = Context();
-  await context.interruptIdleForIncomingMessages();
-  var localPushManager = LocalPushManager();
-  await localPushManager.setup();
-  await localPushManager.triggerLocalPush();
-}
-
-class BackgroundManager {
-  final Logger _logger = Logger("background_manager");
-
-  static BackgroundManager _instance;
-
-  bool _running = false;
-
-  factory BackgroundManager() => _instance ??= BackgroundManager._internal();
-
-  BackgroundManager._internal();
-
-  setupAndStart() {
-    BackgroundFetch.registerHeadlessTask(backgroundHeadlessTask);
-    BackgroundFetch.configure(
-        BackgroundFetchConfig(
-          minimumFetchInterval: 15,
-          stopOnTerminate: false,
-          enableHeadless: true,
-          startOnBoot: true,
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: errorBannerPositionLeft,
+      right: errorBannerPositionRight,
+      top: errorBannerPositionTop,
+      height: loginErrorOverlayHeight,
+      child: Material(
+        elevation: errorBannerElevation,
+        color: error,
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
+            ),
+            AdaptiveIcon(
+              icon: IconSource.reportProblem,
+              size: iconSize,
+              color: onError,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
+            ),
+            Container(
+              child: Expanded(
+                child: Text(
+                  message,
+                  style: Theme.of(context).textTheme.body1.apply(color: onError),
+                ),
+              ),
+            ),
+            AdaptiveIconButton(
+                icon: AdaptiveIcon(
+                  icon: IconSource.clear,
+                  size: loginErrorOverlayIconSize,
+                  color: onError,
+                ),
+                onPressed: closePressed),
+          ],
         ),
-        _callback);
-    _running = true;
-    _logger.info("Configured and started background fetch");
-  }
-
-  Future<void> _callback() async {
-    await getMessages();
-    BackgroundFetch.finish();
-  }
-
-  void start() async {
-    if (_running) {
-      return;
-    }
-    await BackgroundFetch.start();
-    _logger.info("Started background fetch");
-    _running = true;
-  }
-
-  void stop() {
-    if (!_running) {
-      return;
-    }
-    BackgroundFetch.stop();
-    _logger.info("Stopped background fetch");
-    _running = false;
+      ),
+    );
   }
 }

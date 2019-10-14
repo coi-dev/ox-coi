@@ -82,6 +82,7 @@ const iconTextPadding = 4.0;
 const iconFormPadding = 8.0;
 const iconSize = 18.0;
 const iconMessagePlaySize = 24.0;
+const superellipseIconMinimizeFactor = 8.0;
 const iconSelectedSize = 24.0;
 
 // Chat
@@ -170,3 +171,15 @@ const loginSignInButtonHeight = 40.0;
 const loginButtonPadding = 24.0;
 const loginRichTextButtonPadding = 64.0;
 const loginRichTextBottomPadding = 32.0;
+
+//Password changed
+const passwordChangedTitleInfoPadding = 8.0;
+const passwordChangedInfoFormPadding = 24.0;
+const passwordChangedFormButtonPadding = 28.0;
+const passwordChangedFormFieldPadding = 12.0;
+
+//Error banner
+const errorBannerPositionLeft = 0.0;
+const errorBannerPositionRight = 0.0;
+const errorBannerPositionTop = 24.0;
+const errorBannerElevation = 4.0;

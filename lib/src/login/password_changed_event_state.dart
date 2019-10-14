@@ -40,41 +40,22 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+abstract class PasswordChangedEvent {}
 
-abstract class MainEvent {}
+class LoadData extends PasswordChangedEvent {}
 
-class PrepareApp extends MainEvent {
-  BuildContext context;
+class ResetAuthenticationError extends PasswordChangedEvent {}
 
-  PrepareApp({@required this.context});
+abstract class PasswordChangedState {}
+
+class PasswordChangedStateInitial extends PasswordChangedState {}
+
+class PasswordChangedStateSuccess extends PasswordChangedState {}
+
+class PasswordChangedDataLoaded extends PasswordChangedState {
+  final String email;
+
+  PasswordChangedDataLoaded({this.email});
 }
 
-class LoadApp extends MainEvent {}
-
-class AppLoaded extends MainEvent {}
-
-class UserVisibleErrorEncountered extends MainEvent {
-  final userVisibleError;
-
-  UserVisibleErrorEncountered({@required this.userVisibleError});
-}
-
-abstract class MainState {}
-
-class MainStateInitial extends MainState {}
-
-class MainStateLoading extends MainState {}
-
-class MainStateSuccess extends MainState {
-  bool configured;
-  bool hasAuthenticationError;
-
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError});
-}
-
-class MainStateFailure extends MainState {
-  String error;
-
-  MainStateFailure({@required error});
-}
+class PasswordChangedStateFailure extends PasswordChangedState {}

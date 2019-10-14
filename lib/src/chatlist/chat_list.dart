@@ -47,8 +47,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/background/background_bloc.dart';
-import 'package:ox_coi/src/background/background_event_state.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
@@ -170,9 +170,9 @@ class _ChatListState extends State<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BackgroundBloc, BackgroundState>(
+    return BlocListener<LifecycleBloc, LifecycleState>(
       listener: (context, state) {
-        if (state is BackgroundStateSuccess) {
+        if (state is LifecycleStateSuccess) {
           if (state.state == AppLifecycleState.resumed.toString()) {
             shareBloc.add(LoadSharedData());
           }

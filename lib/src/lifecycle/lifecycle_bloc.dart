@@ -40,41 +40,41 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:ui';
 
-abstract class MainEvent {}
+import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 
-class PrepareApp extends MainEvent {
-  BuildContext context;
+import 'lifecycle_event_state.dart';
 
-  PrepareApp({@required this.context});
-}
+class LifecycleBloc extends Bloc<LifecycleEvent, LifecycleState> {
+  String _currentBackgroundState;
 
-class LoadApp extends MainEvent {}
+  String get currentBackgroundState => _currentBackgroundState;
 
-class AppLoaded extends MainEvent {}
+  @override
+  LifecycleState get initialState => LifecycleStateInitial();
 
-class UserVisibleErrorEncountered extends MainEvent {
-  final userVisibleError;
+  @override
+  Stream<LifecycleState> mapEventToState(LifecycleEvent event) async* {
+    if (event is ListenerSetup) {
+      try {
+        setup();
+      } catch (error) {
+        yield LifecycleStateFailure();
+      }
+    } else if (event is StateChange) {
+      _currentBackgroundState = event.state;
+      yield LifecycleStateSuccess(state: _currentBackgroundState);
+    }
+  }
 
-  UserVisibleErrorEncountered({@required this.userVisibleError});
-}
-
-abstract class MainState {}
-
-class MainStateInitial extends MainState {}
-
-class MainStateLoading extends MainState {}
-
-class MainStateSuccess extends MainState {
-  bool configured;
-  bool hasAuthenticationError;
-
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError});
-}
-
-class MainStateFailure extends MainState {
-  String error;
-
-  MainStateFailure({@required error});
+  void setup() {
+    SystemChannels.lifecycle.setMessageHandler((state) async {
+      add(StateChange(state: state));
+      return state;
+    });
+    add(StateChange(state: AppLifecycleState.resumed.toString()));
+  }
 }

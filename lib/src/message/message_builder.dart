@@ -55,10 +55,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
 import 'package:ox_coi/src/utils/date.dart';
-import 'package:ox_coi/src/utils/video.dart';
-import 'package:path/path.dart' as path;
 import 'package:transparent_image/transparent_image.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 import 'message_item_event_state.dart';
 

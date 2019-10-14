@@ -42,7 +42,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_coi/src/background/background_manager.dart';
+import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'settings_notifications_event_state.dart';
 
@@ -82,11 +82,11 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
     bool pullPreference = await getPreference(preferenceNotificationsPull);
     bool newPullPreference = pullPreference == null ? true : !pullPreference;
     await setPreference(preferenceNotificationsPull, newPullPreference);
-    var backgroundManager = BackgroundManager();
+    var backgroundRefreshManager = BackgroundRefreshManager();
     if (newPullPreference) {
-      backgroundManager.start();
+      backgroundRefreshManager.start();
     } else {
-      backgroundManager.stop();
+      backgroundRefreshManager.stop();
     }
     add(ActionSuccess(pullActive: newPullPreference));
   }

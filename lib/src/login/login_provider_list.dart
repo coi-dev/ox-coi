@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
@@ -76,7 +77,7 @@ class ProviderList extends StatefulWidget {
 }
 
 class _ProviderListState extends State<ProviderList> {
-  final LoginBloc _loginBloc = LoginBloc();
+  LoginBloc _loginBloc;
   String title;
   String text;
   Provider otherProvider;
@@ -86,6 +87,7 @@ class _ProviderListState extends State<ProviderList> {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginProviderList);
+    _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.add(RequestProviders(type: widget.type));
   }
 

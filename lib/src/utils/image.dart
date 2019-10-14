@@ -43,8 +43,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:superellipse_shape/superellipse_shape.dart';
 
 removeImageFromCache(File file) {
   FileImage fileImage = FileImage(file);
   fileImage.evict();
+}
+
+SuperellipseShape getSuperEllipseShape(double size) {
+  return SuperellipseShape(
+    borderRadius: BorderRadius.circular(size * 0.67),
+  );
 }
