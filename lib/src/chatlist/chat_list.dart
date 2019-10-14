@@ -177,14 +177,9 @@ class _ChatListState extends State<ChatList> {
             if (state.chatListItemWrapper.ids.length > 0) {
               return buildListItems(state);
             } else {
-              return Padding(
-                padding: const EdgeInsets.all(listItemPaddingBig),
-                child: Center(
-                  child: Text(
-                    L10n.get(L.chatListPlaceholder),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              return EmptyListInfo(
+                infoText: L10n.get(L.chatListPlaceholder),
+                imagePath: "assets/images/empty_chatlist.png",
               );
             }
           } else if (state is! ChatListStateFailure) {

@@ -110,3 +110,29 @@ class StateInfo extends StatelessWidget {
   EdgeInsets buildEdgeInsets() =>
       EdgeInsets.only(top: listStateInfoVerticalPadding, left: listStateInfoHorizontalPadding, right: listStateInfoHorizontalPadding);
 }
+
+class EmptyListInfo extends StatelessWidget {
+  final String infoText;
+  final String imagePath;
+
+  EmptyListInfo({this.infoText, this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: listEmptyTopPadding, left: listEmptyHorizontalPadding, right: listEmptyHorizontalPadding),
+      child: Column(
+        children: <Widget>[
+          Image.asset(imagePath),
+          Padding(
+            padding: EdgeInsets.only(top: listEmptyVerticalPadding),
+            child: Text(
+              infoText,
+              textAlign: TextAlign.center,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

@@ -93,8 +93,9 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
           if (state.contactIds.length > 0) {
             return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
           } else {
-            return Center(
-              child: Text(L10n.get(L.contactNoBlocked)),
+            return EmptyListInfo(
+              infoText: L10n.get(L.contactNoBlocked),
+              imagePath: "assets/images/empty_blocked_list.png",
             );
           }
         } else if (state is! ContactListStateFailure) {

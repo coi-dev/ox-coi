@@ -60,6 +60,9 @@ const listAvatarDiameter = listAvatarRadius * 2;
 const listAvatarTextPadding = 16.0;
 const listStateInfoHorizontalPadding = 24.0;
 const listStateInfoVerticalPadding = 16.0;
+const listEmptyVerticalPadding = 16.0;
+const listEmptyTopPadding = 24.0;
+const listEmptyHorizontalPadding = 40.0;
 
 const listInviteUnreadIndicatorFontSize = 12.0;
 const listInviteUnreadIndicatorBorderRadius = 16.0;
