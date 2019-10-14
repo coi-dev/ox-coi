@@ -47,7 +47,7 @@ String byteToPrintableSize(int size) {
   String unit;
   double result;
   if (size < _kilobyte) {
-    result = size as double;
+    result = size.toDouble();
     unit = "Byte";
   } else if (size < _megabyte) {
     result = size / _kilobyte;
