@@ -126,7 +126,7 @@ const keyChatAddGroupParticipantsCheckIcon =
 const keyChatAddGroupParticipantsCloseIcon =
     "keyChatAddGroupParticipantsCloseIcon";
 
-const keyChatProfileGroupGroupmember = "keyChatProfileGroupGroupmember";
+const keyChatProfileGroupGroupMember = "keyChatProfileGroupGroupmember";
 
 const KeyChatComposerMixinOnRecordAudioSendIcon =
     "KeyChat_composer_mixinOnRecordAudioPressedSendIcon";
@@ -138,3 +138,5 @@ const KeyChatComposerMixinOnRecordAudioPressedIcon =
 const keyChatProfileGroupDelete = "keyChatProfileGroupDelete";
 const keyChatIconButtonIconPhone = "keyChatIconButtonIconPhone";
 const keyChatNameText = "keyChatNameText";
+
+const keyDialogBuilderAlertDialogOkFlatButton ="keyDialogBuilderAlertDialogOkFlatButton";

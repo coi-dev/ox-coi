@@ -90,7 +90,7 @@ const newMe = 'newMe';
 const mailCom = 'Mail.com';
 
 const profileUserStatus =
-    "Sent with OX Coi Messenger - https://github.com/open-xchange/ox-coi";
+    'Sent with OX COI Messenger - https://github.com/open-xchange/ox-coi';
 
 const searchString = "Douglas0";
 
@@ -143,3 +143,5 @@ final keyContactChangeEmailFinder =
 
 final keyContactChangeCheckFinder =
     find.byValueKey(keyContactChangeCheckIconButton);
+
+final keyDialogBuilderAlertDialogOkFlatButtonFinder =find.byValueKey(keyDialogBuilderAlertDialogOkFlatButton);

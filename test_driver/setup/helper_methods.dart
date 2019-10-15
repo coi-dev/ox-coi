@@ -160,8 +160,11 @@ Future writeChatFromChat(FlutterDriver driver, String helloWord) async {
       .tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioPressedIcon));
   sleep(Duration(seconds: 3));
   await driver.tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioSendIcon));
+}
+
+Future callTest(FlutterDriver driver) async {
   await driver.tap(find.byValueKey(keyChatIconButtonIconPhone));
   await catchScreenshot(driver, 'screenshots/callTest.png');
-  await driver.tap(find.text("Ok"));
+  await driver.tap(keyDialogBuilderAlertDialogOkFlatButtonFinder);
   await driver.tap(find.pageBack());
 }

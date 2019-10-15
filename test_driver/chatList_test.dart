@@ -77,6 +77,7 @@ void main() {
       //  Type something and get it.
       await chatTest(setup.driver, newTestName01,
           typeSomethingComposePlaceholderFinder, helloWord);
+      await callTest(setup.driver);
       //  Search contact.
       await chatSearch(
           setup.driver,

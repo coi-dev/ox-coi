@@ -129,6 +129,7 @@ showInformationDialog(
       actions: <Widget>[
         new FlatButton(
           child: new Text(L10n.get(L.ok)),
+          key: Key(keyDialogBuilderAlertDialogOkFlatButton),
           onPressed: () {
             navigation.pop(context);
           },

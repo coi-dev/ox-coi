@@ -144,6 +144,7 @@ void main() {
       await setup.driver.tap(find.pageBack());
       await chatTest(setup.driver, newNameTestGroup,
           typeSomethingComposePlaceholderFinder, helloWord);
+      await setup.driver.tap(find.pageBack());
       await catchScreenshot(setup.driver, 'screenshots/NewNameTestGroup2.png');
 
       //  Add new Participants in the group and test.
@@ -176,6 +177,7 @@ void main() {
       await setup.driver.tap(find.byValueKey(keyMoreButton10));
       await setup.driver.tap(find.text(popupItemSendMessage));
       await writeChatFromChat(setup.driver, helloWord);
+      await setup.driver.tap(find.pageBack());
 
       //  Leave group.
       await setup.driver.tap(find.text(newNameTestGroup));
