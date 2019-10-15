@@ -46,6 +46,7 @@ import 'package:ox_coi/src/utils/text.dart';
 class L {
   static final _logger = Logger("l");
 
+  static final oxCoiName = _translationKey("OX COI Messenger");
   static final appName = _translationKey("App name");
   static final appVersion = _translationKey("App version");
   static final advanced = _translationKey("Advanced");
@@ -96,7 +97,7 @@ class L {
   static final typeSomething = _translationKey("Type something...");
   static final username = _translationKey("Username");
   static final video = _translationKey("Video");
-  static final welcome = _translationKey("Welcome to OX COI Messenger");
+  static final welcome = _translationKey("Welcome to %s");
   static final yes = _translationKey("Yes");
   static final yesterday = _translationKey("Yesterday");
   static final textFieldEmptyHint = _translationKey("This field can not be empty");
