@@ -254,7 +254,6 @@ class _ContactListState extends State<ContactList> {
           height: dividerHeight,
           color: onBackground.withOpacity(barely),
         ),
-        padding: EdgeInsets.only(top: listItemPadding),
         itemCount: contactIds.length,
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];

@@ -77,7 +77,6 @@ class ChatRepository extends Repository<Chat> {
         if (chatSummary != null) {
           updatedChat.set(ChatExtension.chatSummary, chatSummary);
         }
-        updatedChat.reloadValue(Chat.methodChatGetSubtitle);
         updatedChat.reloadValue(Chat.methodChatGetName);
         updatedChat.reloadValue(Chat.methodChatGetProfileImage);
         updatedChat.setLastUpdate();

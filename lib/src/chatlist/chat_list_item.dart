@@ -110,7 +110,7 @@ class _ChatListItemState extends State<ChatListItem> {
           child: AvatarListItem(
             avatarIcon: _isSelected && widget.isMultiSelect ? Icons.check : null,
             title: name,
-            subTitle: _chatBloc.isGroup ? subTitle : preview,
+            subTitle: preview,
             color: color,
             imagePath: imagePath,
             freshMessageCount: freshMessageCount,
