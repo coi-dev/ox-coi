@@ -44,6 +44,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test_api/src/backend/invoker.dart';
 import 'dart:io';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'global_consts.dart';
 
 FlutterDriver driver;
@@ -167,4 +168,22 @@ Future callTest(FlutterDriver driver) async {
   await catchScreenshot(driver, 'screenshots/callTest.png');
   await driver.tap(keyDialogBuilderAlertDialogOkFlatButtonFinder);
   await driver.tap(find.pageBack());
+}
+
+Future blockOneContact(FlutterDriver driver, String contactNameToBlock) async {
+  await driver.tap(find.text(contactNameToBlock));
+  await driver
+      .tap(find.byValueKey(keyContactDetailBlockContactProfileActionIcon));
+  await driver.tap(find.text(blockContact));
+  await catchScreenshot(driver, 'screenshots/contactListAfterBlock.png');
+  await driver.waitForAbsent(find.text(contactNameToBlock));
+  await driver.tap(find.byValueKey(keyContactListBlockIconButton));
+  await driver.waitFor(find.text(contactNameToBlock));
+  await catchScreenshot(driver, 'screenshots/blockedList.png');
+  await driver.tap(find.text(contactNameToBlock));
+  await driver.tap(find.text(unblock));
+  await catchScreenshot(driver, 'screenshots/blockedListNew.png');
+  await driver.waitFor(find.text(L.getKey(L.contactNoBlocked)));
+  await driver.tap(find.byValueKey(keyContactBlockedListCloseIconButton));
+  await driver.waitFor(find.text(contactNameToBlock));
 }
