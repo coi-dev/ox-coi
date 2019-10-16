@@ -57,7 +57,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   int _messageId;
   int _nextMessageId;
   int _contactId;
-  bool _addContact;
+  bool _showContact;
 
   @override
   MessageItemState get initialState => MessageItemStateInitial();
@@ -70,8 +70,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
         _messageId = event.messageId;
         _nextMessageId = event.nextMessageId;
-        _addContact = event.isGroupChat || isInvite(chatId);
-        if (_addContact) {
+        _showContact = event.isGroupChat || isInvite(chatId);
+        if (_showContact) {
           await _setupContact();
         }
         if (_hasNextMessage()) {
@@ -108,7 +108,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       }
 
       ContactWrapper contactWrapper;
-      if (_addContact) {
+      if (_showContact) {
         Contact contact = _getContact();
         int contactId = contact.id;
         String contactName = await contact.getName();
@@ -147,9 +147,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   Future<void> _setupContact() async {
     ChatMsg message = _getMessage();
     _contactId = await message.getFromId();
-    if (isInvite(await message.getChatId())) {
-      _contactRepository.putIfAbsent(id: _contactId);
-    }
+    _contactRepository.putIfAbsent(id: _contactId);
     await _getContact().loadValues(keys: [
       Contact.methodContactGetName,
       Contact.methodContactGetAddress,
