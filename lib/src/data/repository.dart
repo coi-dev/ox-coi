@@ -75,7 +75,8 @@ abstract class Repository<T extends Base> {
   List<int> getLastUpdateValuesForIds(List<int> ids) {
     var lastUpdateValues = List<int>();
     ids.forEach((id) {
-      lastUpdateValues.add(_items[id].lastUpdate);
+      var item = _items[id];
+      lastUpdateValues.add(item != null ? item.lastUpdate : 0);
     });
     return lastUpdateValues;
   }
