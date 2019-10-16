@@ -150,6 +150,9 @@ String getProviderIconPath(BuildContext context, String id) {
     case "mail_com":
       path = mailcomLogoUrl;
       break;
+    case "godaddy":
+      path = godaddyLogoUrl;
+      break;
     case "other":
       path = otherProviderLogoUrl;
       break;

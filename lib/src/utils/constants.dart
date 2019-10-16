@@ -62,6 +62,8 @@ String get mailboxLogoUrl => 'assets/images/mailbox_icon.png';
 
 String get mailcomLogoUrl => 'assets/images/mailcom_icon.png';
 
+String get godaddyLogoUrl => 'assets/images/godaddy_icon.png';
+
 String get otherProviderLogoUrl => 'assets/images/mail_icon.png';
 
 // Other provider identifier

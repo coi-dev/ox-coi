@@ -75,6 +75,19 @@
       }
     },
     {
+      "id": "godaddy",
+      "name": "GoDaddy",
+      "preset": {
+        "incoming_security": "",
+        "incoming_server": "",
+        "incoming_protocol": "",
+        "incoming_port": 0,
+        "outgoing_security": "",
+        "outgoing_server": "",
+        "outgoing_port": 0
+      }
+    },
+    {
       "id": "other",
       "name": "other",
       "preset": {
@@ -88,8 +101,8 @@
       }
     },
     {
-      "id": "coi",
-      "name": "Coi debug",
+      "id": "coi-debug-mobile-qa",
+      "name": "Debug (mobile-qa)",
       "preset": {
         "incoming_security": "starttls",
         "incoming_server": "mobile-coi.open-xchange.com",
@@ -101,8 +114,22 @@
       }
     },
     {
+      "id": "coi-debug-olpe-qa",
+      "name": "Debug (olpe-qa)",
+      "push_service_url": "https://cps.qa.open-xchange.com",
+      "preset": {
+        "incoming_security": "starttls",
+        "incoming_server": "dovecot.qa.open-xchange.com",
+        "incoming_protocol": "",
+        "incoming_port": 143,
+        "outgoing_security": "plain",
+        "outgoing_server": "dovecot.qa.open-xchange.com",
+        "outgoing_port": 25
+      }
+    },
+    {
       "id": "coi-integration",
-      "name": "Integration Tests",
+      "name": "Integration Test Environment",
       "push_service_url": "https://devcoi-cps1.dev.coi.me/push/resource/",
       "preset": {
         "incoming_security": "starttls",
@@ -116,7 +143,7 @@
     },
     {
       "id": "coi-beta",
-      "name": "Beta",
+      "name": "Demo / Beta Environment",
       "push_service_url": "https://betacoi-cps1.beta.coi.me/push/resource/",
       "preset": {
         "incoming_security": "starttls",
@@ -130,7 +157,7 @@
     },
     {
       "id": "coi-dovecot",
-      "name": "Dovecot Testing",
+      "name": "Dovecot Testing Environment",
       "push_service_url": "https://10.50.0.26:443/push/resource/",
       "preset": {
         "incoming_security": "",
