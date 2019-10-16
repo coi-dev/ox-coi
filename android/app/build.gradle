@@ -59,17 +59,10 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
+
     buildTypes {
-        debug {
-            ndk {
-                abiFilters 'armeabi-v7a' ,'x86', 'arm64-v8a'
-            }
-        }
         release {
             signingConfig signingConfigs.release
-            ndk{
-                abiFilters 'armeabi-v7a' ,'x86', 'arm64-v8a'
-            }
         }
     }
 
@@ -86,7 +79,7 @@ android {
             resValue "string", "app_name", "OX COI Messenger Dev"
         }
     }
-    
+
     packagingOptions {
         exclude 'build-data.properties'
     }
@@ -96,6 +89,17 @@ android {
             exclude group: 'org.json', module: 'json'
         }
     }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include "armeabi-v7a", "arm64-v8a", "x86"
+            universalApk false
+        }
+    }
+
+
 }
 
 flutter {
