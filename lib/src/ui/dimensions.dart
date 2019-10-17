@@ -134,6 +134,7 @@ const loginLogoSize = 136.0;
 const loginHorizontalPadding16dp = 16.0;
 const loginHorizontalPadding = 40.0;
 const loginVerticalPadding = 28.0;
+const loginVerticalPaddingBig = 56.0;
 const loginTopPadding = 80.0;
 const loginButtonWidth = 200.0;
 const loginVerticalPadding8dp = 8.0;

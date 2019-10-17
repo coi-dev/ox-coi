@@ -118,30 +118,28 @@ class _LoginState extends State<Login> {
             child: IntrinsicHeight(
               child: Column(
                 children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      color: primary,
-                      width: viewportConstraints.maxWidth,
-                      padding: EdgeInsets.symmetric(horizontal: loginHorizontalPadding),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Image(
-                            image: AssetImage(appLogoUrl),
-                            height: loginLogoSize,
-                            width: loginLogoSize,
+                  Container(
+                    color: primary,
+                    width: viewportConstraints.maxWidth,
+                    padding: EdgeInsets.only(top: loginVerticalPaddingBig, right: loginHorizontalPadding, left: loginHorizontalPadding),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage(appLogoUrl),
+                          height: loginLogoSize,
+                          width: loginLogoSize,
+                        ),
+                        Padding(padding: EdgeInsets.only(top: loginLogoTextPadding)),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: Theme.of(context).textTheme.caption.apply(color: onAccent),
+                            children: getWelcome(),
                           ),
-                          Padding(padding: EdgeInsets.only(top: loginLogoTextPadding)),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: Theme.of(context).textTheme.caption.apply(color: onAccent),
-                              children: getWelcome(),
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
-                        ],
-                      ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
+                      ],
                     ),
                   ),
                   Image.asset(
@@ -229,9 +227,11 @@ class _LoginState extends State<Login> {
     var oxCoiNameEndIndex = oxCoiNameStartIndex + oxCoiName.length;
 
     List<TextSpan> textParts = [];
-    textParts.add(TextSpan(text: formattedWelcomeString.substring(spanBoundary, oxCoiNameStartIndex), style: Theme.of(context).textTheme.headline.copyWith(color: onAccent)));
+    textParts.add(TextSpan(
+        text: formattedWelcomeString.substring(spanBoundary, oxCoiNameStartIndex),
+        style: Theme.of(context).textTheme.headline.copyWith(color: onAccent)));
     spanBoundary = oxCoiNameStartIndex;
-    if(spanBoundary > 0){
+    if (spanBoundary > 0) {
       textParts.add(TextSpan(text: "\n"));
     }
     textParts.add(TextSpan(text: oxCoiName, style: Theme.of(context).textTheme.title.copyWith(color: onAccent, fontSize: 28.0)));
