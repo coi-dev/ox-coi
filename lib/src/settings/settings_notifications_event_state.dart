@@ -48,8 +48,9 @@ class RequestSetting extends SettingsNotificationsEvent {}
 
 class SettingLoaded extends SettingsNotificationsEvent {
   final bool pullActive;
+  final bool isCoiSupported;
 
-  SettingLoaded({@required this.pullActive});
+  SettingLoaded({@required this.pullActive, @required this.isCoiSupported});
 }
 
 class ChangeSetting extends SettingsNotificationsEvent {}
@@ -66,8 +67,9 @@ class SettingsNotificationsStateInitial extends SettingsNotificationsState {}
 
 class SettingsNotificationsStateSuccess extends SettingsNotificationsState {
   final bool pullActive;
+  final bool coiSupported;
 
-  SettingsNotificationsStateSuccess({@required this.pullActive});
+  SettingsNotificationsStateSuccess({@required this.pullActive, @required this.coiSupported});
 }
 
 class SettingsNotificationsStateFailure extends SettingsNotificationsState {}

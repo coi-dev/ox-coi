@@ -319,6 +319,8 @@ class L {
   static final settingNotificationP = _translationKey("Notification", "Notifications");
   static final settingNotificationPull = _translationKey("Enable background updates");
   static final settingNotificationPullText = _translationKey("If enabled, this setting allows the app to perform periodic background tasks to get new messages");
+  static final settingNotificationPush = _translationKey("Change Push Settings");
+  static final settingNotificationPushText = _translationKey("Change the push settings in your app settings.");
   static final settingAboutBugReports = _translationKey("Bug reports");
   // "GitHub" is an own name. Please don't translate it
   static final settingAboutBugReportsText = _translationKey("Please report bugs on GitHub.");

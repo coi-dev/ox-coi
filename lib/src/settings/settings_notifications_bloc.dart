@@ -59,9 +59,9 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
         yield SettingsNotificationsStateFailure();
       }
     } else if (event is SettingLoaded) {
-      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive);
+      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive, coiSupported: event.isCoiSupported);
     } else if (event is ActionSuccess) {
-      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive);
+      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive, coiSupported: false);
     } else if (event is ChangeSetting) {
       changeSettings();
     }
@@ -69,12 +69,13 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
 
   void loadSettings() async {
     bool pullPreference = await getPreference(preferenceNotificationsPull);
+    bool isSupportedCoi = await isCoiSupported();
     if (pullPreference == null) {
-      bool defaultPullPreference = !(await isCoiSupported());
+      bool defaultPullPreference = !isSupportedCoi;
       await setPreference(preferenceNotificationsPull, defaultPullPreference);
       pullPreference = defaultPullPreference;
     }
-    dispatch(SettingLoaded(pullActive: pullPreference));
+    dispatch(SettingLoaded(pullActive: pullPreference, isCoiSupported: isSupportedCoi));
   }
 
   void changeSettings() async {
