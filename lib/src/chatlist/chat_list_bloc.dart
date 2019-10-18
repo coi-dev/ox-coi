@@ -159,7 +159,6 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   Future<void> _onChatListChanged(event) async {
-    await _updateSummaries();
     if (_showInvites) {
       setupInvites();
     } else {
@@ -255,7 +254,10 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       await chatList.tearDown();
       _chatRepository.putIfAbsent(ids: chatIds);
       chatSummaries.forEach((id, chatSummary) {
-        _chatRepository.get(id).set(ChatExtension.chatSummary, chatSummary);
+        var summary = _chatRepository.get(id).get(ChatExtension.chatSummary);
+        if(summary != chatSummary) {
+          _chatRepository.get(id).set(ChatExtension.chatSummary, chatSummary);
+        }
       });
     }
     if (isNullOrEmpty(_currentSearch)) {
@@ -281,18 +283,5 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       chatListItemWrapper = await mergeInvitesAndChats(ids, inviteMessageIds);
     }
     dispatch(ChatListModified(chatListItemWrapper: chatListItemWrapper));
-  }
-
-  Future<void> _updateSummaries() async {
-    var chatList = ChatList();
-    await chatList.setup();
-    int chatCount = await chatList.getChatCnt();
-    for (int i = 0; i < chatCount; i++) {
-      int chatId = await chatList.getChat(i);
-      var summaryData = await chatList.getChatSummary(i);
-      var chatSummary = ChatSummary.fromMethodChannel(summaryData);
-      _chatRepository.get(chatId).set(ChatExtension.chatSummary, chatSummary);
-    }
-    await chatList.tearDown();
   }
 }
