@@ -43,18 +43,18 @@
 // Imports the Flutter Driver API.
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:test/test.dart';
+import 'package:test_api/src/backend/invoker.dart';
+
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
-import 'package:test/test.dart';
-import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
   group(
       'Create contact list integration tests: After login, Me contact is checked first, '
       'then two contacts are created. The contacts made can then be found in the contact list.'
-      'After that one of the contacts will be delete from the contact list',
-      () {
+      'After that one of the contacts will be delete from the contact list', () {
     //  Define the driver.
     FlutterDriver driver;
     Setup setup = new Setup(driver);
@@ -63,13 +63,14 @@ void main() {
     test('Test create profile integration tests.', () async {
       //  Check real authentication and get chat.
       await getAuthentication(
-          setup.driver,
-          signInFinder,
-          coiDebugProviderFinder,
-          providerEmailFinder,
-          realEmail,
-          providerPasswordFinder,
-          realPassword);
+        setup.driver,
+        signInFinder,
+        coiDebugProviderFinder,
+        providerEmailFinder,
+        realEmail,
+        providerPasswordFinder,
+        realPassword,
+      );
 
       Invoker.current.heartbeat();
       await setup.driver.waitFor(chatWelcomeFinder);
@@ -81,31 +82,28 @@ void main() {
 
       // Add two new contacts in the contact list.
       await addNewContact(
-          setup.driver,
-          personAddFinder,
-          keyContactChangeNameFinder,
-          newTestName01,
-          keyContactChangeEmailFinder,
-          newTestContact01,
-          keyContactChangeCheckFinder);
+        setup.driver,
+        personAddFinder,
+        keyContactChangeNameFinder,
+        newTestName01,
+        keyContactChangeEmailFinder,
+        newTestContact01,
+        keyContactChangeCheckFinder,
+      );
 
       await addNewContact(
-          setup.driver,
-          personAddFinder,
-          keyContactChangeNameFinder,
-          newTestName02,
-          keyContactChangeEmailFinder,
-          newTestContact02,
-          keyContactChangeCheckFinder);
+        setup.driver,
+        personAddFinder,
+        keyContactChangeNameFinder,
+        newTestName02,
+        keyContactChangeEmailFinder,
+        newTestContact02,
+        keyContactChangeCheckFinder,
+      );
 
       // Manage new contact
       await manageContact(
-          setup.driver,
-          newTestName01,
-          keyContactChangeNameFinder,
-          newMe,
-          keyContactChangeCheckFinder,
-          keyContactDetailEditContactProfileActionIcon);
+          setup.driver, newTestName01, keyContactChangeNameFinder, newMe, keyContactChangeCheckFinder, keyContactDetailEditContactProfileActionIcon);
       await catchScreenshot(setup.driver, 'screenshots/persone_add02.png');
       print('\nContacts');
       // Delete one contact
@@ -116,20 +114,14 @@ void main() {
   });
 }
 
-Future manageContact(
-    FlutterDriver driver,
-    String newTestName,
-    SerializableFinder keyContactChangeNameFinder,
-    String newMe,
-    SerializableFinder keyContactChangeCheckFinder,
-    String keyContactDetailEditContactProfileActionIcon) async {
+Future manageContact(FlutterDriver driver, String newTestName, SerializableFinder keyContactChangeNameFinder, String newMe,
+    SerializableFinder keyContactChangeCheckFinder, String keyContactDetailEditContactProfileActionIcon) async {
   await driver.tap(find.text(newTestName));
   Invoker.current.heartbeat();
   await driver.waitFor(find.text(newTestName));
-  await driver
-      .tap(find.byValueKey(keyContactDetailEditContactProfileActionIcon));
+  await driver.tap(find.byValueKey(keyContactDetailEditContactProfileActionIcon));
   await driver.tap(keyContactChangeNameFinder);
   await driver.enterText(newMe);
   await driver.tap(keyContactChangeCheckFinder);
-  await driver.tap(find.pageBack());
+  await driver.tap(pageBack);
 }

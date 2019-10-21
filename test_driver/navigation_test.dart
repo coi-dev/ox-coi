@@ -47,9 +47,10 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
+
+import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
-import 'setup/global_consts.dart';
 
 void main() {
   group('Create chat list integration tests.', () {
@@ -57,21 +58,20 @@ void main() {
     Setup setup = new Setup(driver);
     setup.main(timeout);
 
-    SerializableFinder searchReturnIconButton =
-        find.byValueKey(keySearchReturnIconButton);
-    SerializableFinder settingsUserSettingsUsernameLabelFinder =
-        find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
+    SerializableFinder searchReturnIconButton = find.byValueKey(keySearchReturnIconButton);
+    SerializableFinder settingsUserSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
 
     test('Test Create chat list integration tests.', () async {
       //  Check real authentication and get chat.
       await getAuthentication(
-          setup.driver,
-          signInFinder,
-          coiDebugProviderFinder,
-          providerEmailFinder,
-          realEmail,
-          providerPasswordFinder,
-          realPassword);
+        setup.driver,
+        signInFinder,
+        coiDebugProviderFinder,
+        providerEmailFinder,
+        realEmail,
+        providerPasswordFinder,
+        realPassword,
+      );
 
       await setup.driver.tap(profileFinder);
       await setup.driver.tap(contactsFinder);
@@ -93,13 +93,14 @@ void main() {
 
       //  Test profile navigation.
       await checkProfile(
-          setup.driver,
-          profileFinder,
-          userProfileEditRaisedButtonFinder,
-          settingsUserSettingsUsernameLabelFinder,
-          userSettingsCheckIconButtonFinder,
-          contactsFinder,
-          cancelFinder);
+        setup.driver,
+        profileFinder,
+        userProfileEditRaisedButtonFinder,
+        settingsUserSettingsUsernameLabelFinder,
+        userSettingsCheckIconButtonFinder,
+        contactsFinder,
+        cancelFinder,
+      );
     });
   });
 }
@@ -134,13 +135,13 @@ Future checkChat(
 
   //  Check flaggedButton.
   await driver.tap(find.byValueKey(keyChatListGetFlaggedActionIconButton));
-  await driver.tap(find.pageBack());
+  await driver.tap(pageBack);
   await catchScreenshot(driver, 'screenshots/afterFlaged.png');
   Invoker.current.heartbeat();
   await driver.tap(finderCreateChat);
   await driver.waitFor(find.text(chatCreate));
   //  Check newContact.
-  await driver.tap(find.pageBack());
+  await driver.tap(pageBack);
   //  Check searchChat
   Invoker.current.heartbeat();
   await driver.tap(find.byValueKey(keyChatListSearchIconButton));

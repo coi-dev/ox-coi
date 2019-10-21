@@ -43,11 +43,12 @@
 // Imports the Flutter Driver API.
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:test/test.dart';
+import 'package:test_api/src/backend/invoker.dart';
+
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
-import 'package:test/test.dart';
-import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
   group('Ox coi test.', () {
@@ -55,24 +56,21 @@ void main() {
     Setup setup = new Setup(driver);
     setup.main(timeout);
 
-    SerializableFinder userSettingsUsernameLabelFinder =
-        find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
-    SerializableFinder userProfileUserNameTextFinder =
-        find.text(testUserNameUserProfile);
-    SerializableFinder userProfileEmailTextFinder =
-        find.byValueKey(keyUserProfileEmailText);
-    SerializableFinder userProfileStatusTextFinder =
-        find.text(profileUserStatus);
+    SerializableFinder userSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
+    SerializableFinder userProfileUserNameTextFinder = find.text(testUserNameUserProfile);
+    SerializableFinder userProfileEmailTextFinder = find.byValueKey(keyUserProfileEmailText);
+    SerializableFinder userProfileStatusTextFinder = find.text(profileUserStatus);
 
     test('Test create profile integration tests.', () async {
       await getAuthentication(
-          setup.driver,
-          signInFinder,
-          coiDebugProviderFinder,
-          providerEmailFinder,
-          realEmail,
-          providerPasswordFinder,
-          realPassword);
+        setup.driver,
+        signInFinder,
+        coiDebugProviderFinder,
+        providerEmailFinder,
+        realEmail,
+        providerPasswordFinder,
+        realPassword,
+      );
 
       await catchScreenshot(setup.driver, 'screenshots/signInDone.png');
       await setup.driver.waitFor(chatWelcomeFinder);
