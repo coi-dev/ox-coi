@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: oxappsuite\n"
+"Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-05-08 01:07-0700\n"
-"Last-Translator: jolanta <kontekst@kontekst.biz>\n"
-"Language-Team: Polish <>\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-09 08:52+0200\n"
+"Last-Translator: Jolanta Kasprzak-Śliwinska <kontekst@kontekst.biz>\n"
+"Language-Team: Polish <pl@workshop-chapina.com>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -25,43 +25,36 @@ msgid "%s by me"
 msgstr "%s, przeze mnie"
 
 #. Content X copied to clipboard (e.g. Text copied to clipboard)
-#,  c-format
+#, c-format
 msgid "%s copied to clipboard"
 msgstr "%s: skopiowano do schowka"
 
-#,  c-format
+#, c-format
 msgid "1 contact"
 msgid_plural "%d contacts"
 msgstr[0] "1 kontakt"
 msgstr[1] "%d kontakty"
 msgstr[2] "%d kontaktów"
 
-#,  c-format
+#, c-format
 msgid "1 member"
 msgid_plural "%i members"
 msgstr[0] "1 członek"
 msgstr[1] "%i członków"
 msgstr[2] "%i członków"
 
-#,  c-format
+#, c-format
 msgid "1 participant"
 msgid_plural "%i participants"
 msgstr[0] "1 uczestnik"
 msgstr[1] "%i uczestników"
 msgstr[2] "%i uczestników"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "Zaimportowano 1 kontakt systemowy"
-msgstr[1] "Zaimportowano %i kontakty systemowe"
-msgstr[2] "Zaimportowano %i kontaktów systemowych"
-
 msgid "About"
 msgstr "O programie"
 
-msgid "Account settings"
-msgstr "Ustawienia konta"
+msgid "Account"
+msgstr "Konto"
 
 msgid "Account settings successfully changed"
 msgstr "Zmieniono ustawienia konta"
@@ -137,8 +130,10 @@ msgstr "Blokuj kontakt"
 msgid "Blocked contacts"
 msgstr "Zablokowane kontakty"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "Korzystając z Komunikatora OX Coi, zgadzasz się na warunki, które zawiera"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "Korzystając z Komunikatora OX Coi, zgadzasz się na treść dokumentów %s i %s"
 
 msgid "Camera"
 msgstr "Kamera"
@@ -235,15 +230,23 @@ msgstr[2] "Usuń czaty"
 msgid "Delete contact"
 msgstr "Usuń kontakt"
 
+msgid "Delete push resource"
+msgstr "Usuń zasób push"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
-#,  c-format
+#, c-format
 msgid "Do you really want to block %s (%s)?"
 msgstr "Czy na pewno chcesz zablokować %s (%s)?"
 
 #. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
-#,  c-format
+#, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "Czy na pewno chcesz usunąć %s (%s)"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Czy na pewno chcesz usunąć %s?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Czy na pewno chcesz opuścić tę grupę?"
@@ -262,12 +265,12 @@ msgid ""
 msgstr "Czy chcesz zaimportować klucze z folderu %s? Jeśli w tym folderze nie ma kluczy, operacja się nie powiedzie."
 
 #. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#,  c-format
+#, c-format
 msgid "Do you want to save your keys in \"%s\"?"
 msgstr "Czy chcesz zapisać swoje klucze w %s?"
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
-#,  c-format
+#, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Czy chcesz odblokować %s?"
 
@@ -285,6 +288,9 @@ msgstr "E-mail"
 
 msgid "Email address"
 msgstr "Adres e-mail"
+
+msgid "Enable background updates"
+msgstr "Włącz aktualizacje w tle"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Włącz wysyłanie i żądanie potwierdzeń odczytu."
@@ -358,6 +364,11 @@ msgstr "Port IMAP"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "Serwer IMAP (np. imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr "Włączenie tej opcji pozwoli aplikacji na wykonywanie okresowych zadań w tle w celu pobrania nowych wiadomości"
 
 msgid "Image"
 msgstr "Obraz"
@@ -455,6 +466,9 @@ msgstr "Brak wiadomości"
 msgid "No participants selected. Please select at least one person."
 msgstr "Nie wybrano uczestników. Wybierz przynajmniej jedną osobę."
 
+msgid "No phone number"
+msgstr "Brak numeru telefonu"
+
 msgid "No results found"
 msgstr "Nie znaleziono wyników"
 
@@ -463,6 +477,12 @@ msgstr "Nie ustawiono podpisu"
 
 msgid "No username set"
 msgstr "Nie ustawiono nazwy użytkownika"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Powiadomienie"
+msgstr[1] "Powiadomienia"
+msgstr[2] "Powiadomienia"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -513,8 +533,16 @@ msgstr "Wykonywanie importu klucza"
 msgid "Performing key transfer"
 msgstr "Wykonywanie przeniesienia klucza"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr "Numery telefonów można dodawać lub edytować za pomocą lokalnej książki adresowej, a następnie importować."
+
 msgid "Please check your username and password"
 msgstr "Sprawdź nazwę użytkownika i hasło"
+
+msgid "Please choose a number"
+msgstr "Wybierz numer"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Wybierz rodzaj wiadomości, które mają być wyświetlane."
@@ -546,6 +574,12 @@ msgstr "Profil"
 msgid "Profile QR"
 msgstr "Kod QR profilu"
 
+msgid "Push data"
+msgstr "Dane push"
+
+msgid "Push resource (via push service)"
+msgstr "Zasób push (via usługa push)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "Ponowne zaimportowanie kontaktów nie spowoduje utworzenia duplikatów."
 
@@ -557,6 +591,9 @@ msgstr[2] "Potwierdzenia przeczytania"
 
 msgid "Register"
 msgstr "Zarejestruj"
+
+msgid "Register new push resource"
+msgstr "Zarejestruj nowy zasób push"
 
 msgid "Remove current image"
 msgstr "Usuń bieżący obraz"
@@ -652,7 +689,7 @@ msgid "Sign in"
 msgstr "Zaloguj"
 
 #. Sign in with provide X (e.g. Sign in with provider.com)
-#,  c-format
+#, c-format
 msgid "Sign in with %s"
 msgstr "Zaloguj się z %s"
 
@@ -663,9 +700,12 @@ msgid "Simply add one by tapping on a contact."
 msgstr "Po prostu dodaj, stukając kontakt."
 
 #. Start a chat with a new user (e.g. Start a chat with alice?)
-#,  c-format
+#, c-format
 msgid "Start a chat with %s?"
 msgstr "Rozpocząć czat z: %s?"
+
+msgid "System contacts imported successfully"
+msgstr "Kontakty systemowe zostały pomyślnie zaimportowane"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -684,6 +724,11 @@ msgid ""
 "This action can also be done later via the import button in the top action "
 "bar."
 msgstr "To działanie można również wykonać później za pomocą przycisku importu na górnym pasku działania."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr "Ten kontakt nie ma numeru telefonu. Wyedytuj kontakt w książce adresowej urządzenia i dodaj tam numer telefonu."
 
 msgid "This field can not be empty"
 msgstr "To pole może nie może być puste"
@@ -772,7 +817,7 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Witamy w Komunikatorze OX Coi"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr "Witamy w Komunikatorze OX Coi!\nRozpocznij nowy czat, stukając ikonę z dymkiem czatu."
 
@@ -797,8 +842,8 @@ msgstr "Konfiguracja Autocrypt została do Ciebie wysłana. Otwórz wiadomość 
 msgid "Your favorite messages"
 msgstr "Twoje ulubione wiadomości"
 
-msgid "and"
-msgstr "i"
+msgid "Your messages are encrypted from now on."
+msgstr "Twoje wiadomości będą teraz szyfrowane."
 
 msgid "code"
 msgstr "kod"
@@ -811,3 +856,26 @@ msgstr "zasady ochrony prywatności"
 
 msgid "terms & conditions"
 msgstr "warunki"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "Zaimportowano 1 kontakt systemowy"
+#~ msgstr[1] "Zaimportowano %i kontakty systemowe"
+#~ msgstr[2] "Zaimportowano %i kontaktów systemowych"
+
+#~ msgid "Account settings"
+#~ msgstr "Ustawienia konta"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr ""
+#~ "Korzystając z Komunikatora OX Coi, zgadzasz się na warunki, które zawiera"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Witamy w Komunikatorze OX Coi!\n"
+#~ "Rozpocznij nowy czat, stukając ikonę z dymkiem czatu."
+
+#~ msgid "and"
+#~ msgstr "i"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-08-31 20:42+0900\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-10 19:50+0900\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -50,18 +50,11 @@ msgstr[0] "Un participant"
 msgstr[1] "%i participanți"
 msgstr[2] "%i de participanți"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "Un contact de sistem importat"
-msgstr[1] "%i contacte de sistem importat"
-msgstr[2] "%i de contacte de sistem importat"
-
 msgid "About"
 msgstr "Despre"
 
-msgid "Account settings"
-msgstr "Setări cont"
+msgid "Account"
+msgstr "Cont"
 
 msgid "Account settings successfully changed"
 msgstr "Setările contului s-au modificat cu succes"
@@ -145,8 +138,10 @@ msgstr "Blochează contact"
 msgid "Blocked contacts"
 msgstr "Contacte blocate"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "Prin utilizarea OX COI Messenger sunteți de acord cu"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "Prin utilizarea OX COI Messenger sunteți de acord cu %s și %s"
 
 msgid "Camera"
 msgstr "Cameră"
@@ -251,6 +246,9 @@ msgstr[2] "Șterge conversațiile"
 msgid "Delete contact"
 msgstr "Șterge contactul"
 
+msgid "Delete push resource"
+msgstr "Ștergere resursă push"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -260,6 +258,11 @@ msgstr "Sigur doriți să blocați %s (%s)?"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "Sigur doriți să ștergeți %s (%s)?"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Sigur doriți să ștergeți %s?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Sigur doriți să părăsiți grupul?"
@@ -303,6 +306,9 @@ msgstr "E-mail"
 
 msgid "Email address"
 msgstr "Adresă de e-mail"
+
+msgid "Enable background updates"
+msgstr "Activați actualizările de fundal"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Activați trimiterea și solicitarea confirmărilor de citire."
@@ -380,6 +386,13 @@ msgstr "Port IMAP"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "Server IMAP (de ex. imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr ""
+"Dacă este activată, această setare permite aplicației să efectueze "
+"activități de fundal periodice pentru a obține mesaje noi"
 
 msgid "Image"
 msgstr "Imagine"
@@ -482,6 +495,9 @@ msgid "No participants selected. Please select at least one person."
 msgstr ""
 "Nici un participant selectat. Vă rugăm să selectați cel puțin o persoană."
 
+msgid "No phone number"
+msgstr "Lipsă număr de telefon"
+
 msgid "No results found"
 msgstr "Niciun rezultat găsit"
 
@@ -490,6 +506,12 @@ msgstr "Nicio semnătură stabilită"
 
 msgid "No username set"
 msgstr "Niciun nume de utilizator stabilit"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Notificare"
+msgstr[1] "Notificări"
+msgstr[2] "Notificări"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -547,8 +569,18 @@ msgstr "Se efectuează importul cheii"
 msgid "Performing key transfer"
 msgstr "Se efectuează transferul cheii"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr ""
+"Numerele de telefon pot fi adăugate sau editate prin agenda locală și "
+"importate ulterior."
+
 msgid "Please check your username and password"
 msgstr "Vă rugăm să verificați numele de utilizator și parola"
+
+msgid "Please choose a number"
+msgstr "Vă rugăm să alegeți un număr"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Vă rugăm să alegeți ce fel de mesaje ați dori să vedeți."
@@ -580,6 +612,12 @@ msgstr "Profil"
 msgid "Profile QR"
 msgstr "Profil QR"
 
+msgid "Push data"
+msgstr "Date push"
+
+msgid "Push resource (via push service)"
+msgstr "Resurse push (prin intermediul serviciului push)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "Reimportul contactelor nu va crea duplicate."
 
@@ -591,6 +629,9 @@ msgstr[2] "Confirmări de citire"
 
 msgid "Register"
 msgstr "Înregistrare"
+
+msgid "Register new push resource"
+msgstr "Înregistrați noi resurse push"
 
 msgid "Remove current image"
 msgstr "Elimină imagine curentă"
@@ -708,6 +749,9 @@ msgstr "Adăugați atingând un contact."
 msgid "Start a chat with %s?"
 msgstr "Începeți o conversație cu %s?"
 
+msgid "System contacts imported successfully"
+msgstr "Contactele de sistem importate cu succes"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr "Codul de instalare asociat începe cu: %s"
@@ -727,6 +771,13 @@ msgid ""
 msgstr ""
 "Această acțiune poate fi efectuată mai târziu prin intermediul butonului de "
 "import din bara de acțiuni de mai sus."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr ""
+"Acest contact nu are un număr de telefon. Vă rugăm să editați acest contact "
+"în agenda dispozitivului și să adăugați numărul de telefon acolo."
 
 msgid "This field can not be empty"
 msgstr "Acest câmp nu poate fi gol"
@@ -843,10 +894,10 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Bun venit la OX COI Messenger"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Bine ați venit în OX COI Messenger!\n"
+"Bine ați venit în OX Coi Messenger!\n"
 "Vă rugăm să începeți o nouă conversație atingând pictograma bulă de "
 "conversație."
 
@@ -876,8 +927,8 @@ msgstr ""
 msgid "Your favorite messages"
 msgstr "Mesajele dvs. favorite"
 
-msgid "and"
-msgstr "și"
+msgid "Your messages are encrypted from now on."
+msgstr "Mesajele dvs. vor fi criptate de acum încolo."
 
 msgid "code"
 msgstr "cod"
@@ -890,3 +941,26 @@ msgstr "declarație de confidențialitate"
 
 msgid "terms & conditions"
 msgstr "termeni și condiții"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "Un contact de sistem importat"
+#~ msgstr[1] "%i contacte de sistem importat"
+#~ msgstr[2] "%i de contacte de sistem importat"
+
+#~ msgid "Account settings"
+#~ msgstr "Setări cont"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "Prin utilizarea OX COI Messenger sunteți de acord cu"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Bine ați venit în OX COI Messenger!\n"
+#~ "Vă rugăm să începeți o nouă conversație atingând pictograma bulă de "
+#~ "conversație."
+
+#~ msgid "and"
+#~ msgstr "și"

@@ -1,9 +1,10 @@
+# Kálmán Kéménczy <kalman@workshop-chapina.com>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: oxappsuite\n"
+"Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-05-02 14:17+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-06 07:56+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -24,39 +25,33 @@ msgid "%s by me"
 msgstr "%s, magamtól"
 
 #. Content X copied to clipboard (e.g. Text copied to clipboard)
-#,  c-format
+#, c-format
 msgid "%s copied to clipboard"
 msgstr "%s a vágólapra másolva"
 
-#,  c-format
+#, c-format
 msgid "1 contact"
 msgid_plural "%d contacts"
 msgstr[0] "1 névjegy"
 msgstr[1] "%d névjegy"
 
-#,  c-format
+#, c-format
 msgid "1 member"
 msgid_plural "%i members"
 msgstr[0] "1 tag"
 msgstr[1] "%i tag"
 
-#,  c-format
+#, c-format
 msgid "1 participant"
 msgid_plural "%i participants"
 msgstr[0] "1 résztvevő"
 msgstr[1] "%i résztvevő"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "1 rendszerkapcsolat importáltva"
-msgstr[1] "%i rendszerkapcsolat importáltva"
-
 msgid "About"
 msgstr "Névjegy"
 
-msgid "Account settings"
-msgstr "Fiók beállításai"
+msgid "Account"
+msgstr "Felhasználói fiók"
 
 msgid "Account settings successfully changed"
 msgstr "Az Autocrypt beállítása sikeresen megváltozott"
@@ -132,8 +127,10 @@ msgstr "Névjegy blokkolása"
 msgid "Blocked contacts"
 msgstr "Blokkolt névjegyek"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "Az OX COI Messenger használatával elfogadja a következőt:"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "Az OX Coi Messenger használatával elfogadja a következőket: %s és %s"
 
 msgid "Camera"
 msgstr "Kamera"
@@ -227,15 +224,23 @@ msgstr[1] "Beszélgetések törlése"
 msgid "Delete contact"
 msgstr "Névjegy törlése"
 
+msgid "Delete push resource"
+msgstr "Push erőforrás törlése"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
-#,  c-format
+#, c-format
 msgid "Do you really want to block %s (%s)?"
-msgstr "Biztosan blokkolni szeretné %s (%s) személyt?"
+msgstr "Biztosan blokkolni szeretné: %s (%s)?"
 
 #. Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
-#,  c-format
+#, c-format
 msgid "Do you really want to delete %s (%s)?"
-msgstr "Biztosan törölni szeretné %s (%s) személyt?"
+msgstr "Biztosan törölni szeretné: %s (%s)?"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Biztosan törölni szeretné: %s személyt?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Biztosan el akarja hagyni a csoportot?"
@@ -254,12 +259,12 @@ msgid ""
 msgstr "Importálni szeretné a kulcsait a(z) \"%s\" mappából? Ha a mappában nincs kulcs, a művelet sikertelen lesz."
 
 #. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#,  c-format
+#, c-format
 msgid "Do you want to save your keys in \"%s\"?"
 msgstr "Szeretné a kulcsait elmenteni a(z) \"%s\" mappába?"
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
-#,  c-format
+#, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Feloldja a(z) %s blokkolását?"
 
@@ -277,6 +282,9 @@ msgstr "E-mail"
 
 msgid "Email address"
 msgstr "E-mail cím"
+
+msgid "Enable background updates"
+msgstr "Háttérfrissítések engedélyezése"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Engedélyezi a tértivevény küldését és kérését."
@@ -351,6 +359,11 @@ msgstr "IMAP port"
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP kiszolgáló (pl. imap.coi.me)"
 
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr "Ha engedélyezve van, ez a beállítás lehetővé teszi az alkalmazás számára, hogy időszakos háttérfeladatokat hajtson végre új üzenetek fogadására"
+
 msgid "Image"
 msgstr "Kép"
 
@@ -395,7 +408,7 @@ msgid "Location"
 msgstr "Hely"
 
 msgid "Log in to OX COI Messenger"
-msgstr "Jelentkezzen be az OX COI Messengerbe"
+msgstr "Belépés az OX Coi Messengerbe"
 
 msgid "Logging in, this may take a moment"
 msgstr "Bejelentkezés, ez eltarthat egy ideig"
@@ -447,6 +460,9 @@ msgstr "Nincsenek üzenetek"
 msgid "No participants selected. Please select at least one person."
 msgstr "Nem választottak ki résztvevőket. Kérjük, válasszon legalább egy embert."
 
+msgid "No phone number"
+msgstr "Nincs telefonszám"
+
 msgid "No results found"
 msgstr "Nincs találat"
 
@@ -455,6 +471,11 @@ msgstr "Nincs aláírás megadva"
 
 msgid "No username set"
 msgstr "Nincs felhasználó megadva"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Értesítés"
+msgstr[1] "Értesítések"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -504,8 +525,16 @@ msgstr "Kulcsimportálás"
 msgid "Performing key transfer"
 msgstr "Kulcsátadás"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr "A telefonszámokat hozzá lehet adni vagy szerkeszteni a helyi címjegyzékben, majd ezt követően importálni."
+
 msgid "Please check your username and password"
 msgstr "Kérjük, ellenőrizze felhasználónevét és jelszavát"
+
+msgid "Please choose a number"
+msgstr "Kérjük, válasszon egy számot"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Válassza ki, milyen üzeneteket szeretne látni."
@@ -537,6 +566,12 @@ msgstr "Profil"
 msgid "Profile QR"
 msgstr "Profil QR"
 
+msgid "Push data"
+msgstr "Push adatok"
+
+msgid "Push resource (via push service)"
+msgstr "Push erőforrás (push szolgáltatáson keresztül)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "A névjegyek újraimportálása nem hoz létre duplikált névjegyeket."
 
@@ -547,6 +582,9 @@ msgstr[1] "Tértivevény olvasása"
 
 msgid "Register"
 msgstr "Regisztráció"
+
+msgid "Register new push resource"
+msgstr "Új push erőforrás regisztrálása"
 
 msgid "Remove current image"
 msgstr "Jelenlegi kép eltávolítása"
@@ -577,7 +615,7 @@ msgid "SMTP password"
 msgstr "SMTP jelszó"
 
 msgid "SMTP port"
-msgstr " SMTP port"
+msgstr "  SMTP port"
 
 msgid "SMTP server (e.g. smtp.coi.me)"
 msgstr "SMTP kiszolgáló (pl. smtp.coi.me)"
@@ -641,7 +679,7 @@ msgid "Sign in"
 msgstr "Bejelentkezés"
 
 #. Sign in with provide X (e.g. Sign in with provider.com)
-#,  c-format
+#, c-format
 msgid "Sign in with %s"
 msgstr "Bejelentkezve %s felhasználóként"
 
@@ -652,9 +690,12 @@ msgid "Simply add one by tapping on a contact."
 msgstr "Egyszerűen adjon hozzá egyet egy névjegy megérintésével."
 
 #. Start a chat with a new user (e.g. Start a chat with alice?)
-#,  c-format
+#, c-format
 msgid "Start a chat with %s?"
 msgstr "Beszélgetést indít %s személlyel?"
+
+msgid "System contacts imported successfully"
+msgstr "A rendszerkapcsolatok importálása sikeres"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -673,6 +714,11 @@ msgid ""
 "This action can also be done later via the import button in the top action "
 "bar."
 msgstr "Ez a művelet később is elvégezhető a felső műveleti sáv Importálás gombjával."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr "Ennek a kapcsolattartónak nincs telefonszáma. Kérjük, módosítsa ezt a kapcsolatot a készülék címjegyzékében, és adja hozzá a telefonszámot."
 
 msgid "This field can not be empty"
 msgstr "Ez a mező nem lehet üres"
@@ -761,9 +807,9 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Üdvözöljük az OX COI Messengerben"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
-msgstr "Üdvözöljük az OX COI Messenger alkalmazásban!\nKezdjen el beszélgetni a buborék ikon megérintésével."
+msgstr "Üdvözöljük az OX Coi Messenger alkalmazásban!\nKezdjen el beszélgetni a buborék ikon megérintésével."
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Szeretné a névjegyeit beimportálni erről az eszközről?"
@@ -786,8 +832,8 @@ msgstr "Az Autocrypt beállítást elküldte magának. Váltáson át a másik e
 msgid "Your favorite messages"
 msgstr "Kedvenc üzenetei"
 
-msgid "and"
-msgstr "és"
+msgid "Your messages are encrypted from now on."
+msgstr "Az üzeneteit mostantól titkosítottak."
 
 msgid "code"
 msgstr "kód"
@@ -800,3 +846,24 @@ msgstr "adatvédelmi nyilatkozat"
 
 msgid "terms & conditions"
 msgstr "felhasználási feltételek"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "1 rendszerkapcsolat importáltva"
+#~ msgstr[1] "%i rendszerkapcsolat importáltva"
+
+#~ msgid "Account settings"
+#~ msgstr "Fiók beállításai"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "Az OX COI Messenger használatával elfogadja a következőt:"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Üdvözöljük az OX COI Messenger alkalmazásban!\n"
+#~ "Kezdjen el beszélgetni a buborék ikon megérintésével."
+
+#~ msgid "and"
+#~ msgstr "és"

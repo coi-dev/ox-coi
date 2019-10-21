@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Open-Xchange 7\n"
+"Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-09-01 20:55+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-07 16:43+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -46,17 +46,11 @@ msgid_plural "%i participants"
 msgstr[0] "1 deltager"
 msgstr[1] "%i deltagere"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "1 kontakt fra systemet importeret"
-msgstr[1] "%i kontakter fra systemet importeret"
-
 msgid "About"
 msgstr "Om"
 
-msgid "Account settings"
-msgstr "Kontoindstillinger"
+msgid "Account"
+msgstr "Konto"
 
 msgid "Account settings successfully changed"
 msgstr "Kontoen blev ændret med succes"
@@ -89,7 +83,7 @@ msgstr ""
 "vises her, og som så skal indtastes på den anden enhed."
 
 msgid "App name"
-msgstr "Appnavn"
+msgstr "App-navn"
 
 msgid "App version"
 msgstr "App-version"
@@ -137,8 +131,10 @@ msgstr "Blokér kontakt"
 msgid "Blocked contacts"
 msgstr "Blokerede kontakter"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "Ved at bruge OX COI Messenger accepterer du vores"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "Ved at bruge OX COI Messenger accepterer du vores %s og %s"
 
 msgid "Camera"
 msgstr "Kamera"
@@ -238,6 +234,9 @@ msgstr[1] "Slet chats"
 msgid "Delete contact"
 msgstr "Slet kontakt"
 
+msgid "Delete push resource"
+msgstr "Slet skub-resource"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -247,6 +246,11 @@ msgstr "Vil du blokere %s (%s)?"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "Vil du slette %s (%s)?"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Er du sikker på at du vil slette %s?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Vil du forlade gruppen?"
@@ -290,6 +294,9 @@ msgstr "E-mail"
 
 msgid "Email address"
 msgstr "E-mail-adresse"
+
+msgid "Enable background updates"
+msgstr "Aktivér opdateringer i baggrunden"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Aktivér afsendelse af læsekvitteringer."
@@ -367,6 +374,13 @@ msgstr "IMAP-port"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP-server (fx imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr ""
+"Hvis slået til, giver det app'en mulighed for, at tjekke om der er nye "
+"beskeder i baggrunden"
 
 msgid "Image"
 msgstr "Billede"
@@ -468,6 +482,9 @@ msgstr "Ingen beskeder"
 msgid "No participants selected. Please select at least one person."
 msgstr "Ingen deltagere valgt. Vælg venligst mindst én anden person."
 
+msgid "No phone number"
+msgstr "Intet telefonnummer"
+
 msgid "No results found"
 msgstr "Ingen resultater fundet"
 
@@ -476,6 +493,11 @@ msgstr "Ingen signatur sat"
 
 msgid "No username set"
 msgstr "Intet brugernavn sat"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Notifikation"
+msgstr[1] "Notifikationer"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -531,8 +553,18 @@ msgstr "Laver import af nøgle"
 msgid "Performing key transfer"
 msgstr "Overfører nøgle"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr ""
+"Telefonnumre kan tilføjes og ændres fra den lokale telefonbog, og så "
+"importeres bagefter."
+
 msgid "Please check your username and password"
 msgstr "Tjek venligst dit brugernavn og din adgangskode"
+
+msgid "Please choose a number"
+msgstr "Vælg venligst et nummer"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Vælg venligst hvilken slags beskeder du gerne vil se."
@@ -564,6 +596,12 @@ msgstr "Profil"
 msgid "Profile QR"
 msgstr "QR af profil"
 
+msgid "Push data"
+msgstr "Skub-data"
+
+msgid "Push resource (via push service)"
+msgstr "Skub-resource (via en skub-service)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "Importerer du dine kontakter igen, bliver der ikke lavet dupletter."
 
@@ -574,6 +612,9 @@ msgstr[1] "Læs-kvitteringer"
 
 msgid "Register"
 msgstr "Registrér"
+
+msgid "Register new push resource"
+msgstr "Registrér ny skub-resource"
 
 msgid "Remove current image"
 msgstr "Fjern nuværende billede"
@@ -690,6 +731,9 @@ msgstr "Tilføj en nemt ved at trykke på en kontakt."
 msgid "Start a chat with %s?"
 msgstr "Start en chat med %s?"
 
+msgid "System contacts imported successfully"
+msgstr "Systemets kontakter blev importeret med succes"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr "Den tilknyttede kode starter med: %s"
@@ -709,6 +753,13 @@ msgid ""
 msgstr ""
 "Denne handling kan også udføres senere fra import-knappen i toppen af "
 "handlingsbarren."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr ""
+"Denne kontakt har ikke et telefonnummer. Redigér venligst denne kontakt i "
+"din enheds telefonbog, og tilføj nummeret dér."
 
 msgid "This field can not be empty"
 msgstr "Dette felt må ikke være tomt"
@@ -823,11 +874,11 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Velkommen til OX COI Messenger"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Velkommen til OX COI Messenger!\n"
-"Du kan starte en ny chat ved at trykke på bobbel-ikonet."
+"Velkommen til OX Coi Messenger!\n"
+"Start venligst en ny chat ved at trykke på chattens boble-ikon."
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Vil du importere dine kontakter fra denne enhed?"
@@ -855,8 +906,8 @@ msgstr ""
 msgid "Your favorite messages"
 msgstr "Dine ynglings-beskeder"
 
-msgid "and"
-msgstr "og"
+msgid "Your messages are encrypted from now on."
+msgstr "Dine beskeder er krypteret fremover."
 
 msgid "code"
 msgstr "kode"
@@ -869,3 +920,24 @@ msgstr "Erklæring om privatliv"
 
 msgid "terms & conditions"
 msgstr "Vilkår og betingelser"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "1 kontakt fra systemet importeret"
+#~ msgstr[1] "%i kontakter fra systemet importeret"
+
+#~ msgid "Account settings"
+#~ msgstr "Kontoindstillinger"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "Ved at bruge OX COI Messenger accepterer du vores"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Velkommen til OX COI Messenger!\n"
+#~ "Du kan starte en ny chat ved at trykke på bobbel-ikonet."
+
+#~ msgid "and"
+#~ msgstr "og"

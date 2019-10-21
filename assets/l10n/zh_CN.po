@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-08-28 11:48+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-04 23:16+1000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.3\n"
-"Last-Translator: \n"
-"Language: zh_CN\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -48,16 +48,11 @@ msgid "1 participant"
 msgid_plural "%i participants"
 msgstr[0] "%i 位参与者"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "已导入 %i 位系统联系人"
-
 msgid "About"
 msgstr "关于"
 
-msgid "Account settings"
-msgstr "户口设定"
+msgid "Account"
+msgstr "户口"
 
 msgid "Account settings successfully changed"
 msgstr "已成功更改户口设定"
@@ -135,8 +130,10 @@ msgstr "屏蔽联系人"
 msgid "Blocked contacts"
 msgstr "已屏蔽联系人"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "使用 OX COI Messenger 代表您同意我们的"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "使用 OX COI Messenger 即表示您同意我们的 %s 和 %s"
 
 msgid "Camera"
 msgstr "相机"
@@ -228,6 +225,9 @@ msgstr[0] "删除聊天"
 msgid "Delete contact"
 msgstr "删除联系人"
 
+msgid "Delete push resource"
+msgstr "删除推送资源"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -237,6 +237,11 @@ msgstr "您真的要屏蔽 %s （%s）？"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "您真的要删除 %s （%s）？"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "您是否真的要删除 %s?"
 
 msgid "Do you really want to leave the group?"
 msgstr "你真的要离开这个小组吗？"
@@ -252,7 +257,7 @@ msgstr "您要删除此聊天吗？"
 msgid ""
 "Do you want to import your keys from \"%s\"? If no keys are in that folder, "
 "the operation will fail."
-msgstr "您要从 \"%s\" 导入您的钥码？"
+msgstr "您要从 \"%s\" 导入您的钥吗？如果钥不在那个文件夹里，操作将会失败。"
 
 #. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
 #, c-format
@@ -278,6 +283,9 @@ msgstr "电子邮件"
 
 msgid "Email address"
 msgstr "电子邮件地址"
+
+msgid "Enable background updates"
+msgstr "启用后台更新"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "启用已读回执的发送和请求。"
@@ -353,6 +361,11 @@ msgstr "IMAP 端口"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP 服务器（例如：imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr "如果启用，此设置允许应用程序执行定期后台任务以获取新消息"
 
 msgid "Image"
 msgstr "图像"
@@ -450,6 +463,9 @@ msgstr "没有消息"
 msgid "No participants selected. Please select at least one person."
 msgstr "没有选择参与者。请选择最少一位。"
 
+msgid "No phone number"
+msgstr "没有电话号码"
+
 msgid "No results found"
 msgstr "没有找到结果"
 
@@ -458,6 +474,10 @@ msgstr "没有设置签名"
 
 msgid "No username set"
 msgstr "没有设置用户名称"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "通知"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -510,8 +530,16 @@ msgstr "进行钥导入中"
 msgid "Performing key transfer"
 msgstr "进行钥转移"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr "电话号码可以通过本地地址簿添加或编辑，然后导入。"
+
 msgid "Please check your username and password"
 msgstr "请检查您的用户名称和密码"
+
+msgid "Please choose a number"
+msgstr "请选择一个号码"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "请选择您希望查看的消息类型。"
@@ -543,6 +571,12 @@ msgstr "个人档案"
 msgid "Profile QR"
 msgstr "个人档案 QR"
 
+msgid "Push data"
+msgstr "推送数据"
+
+msgid "Push resource (via push service)"
+msgstr "推送资源（通过推送服务）"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "重新导入联系人将不会创建重复项。"
 
@@ -552,6 +586,9 @@ msgstr[0] "读取收据"
 
 msgid "Register"
 msgstr "注册"
+
+msgid "Register new push resource"
+msgstr "注册新的推送资源"
 
 msgid "Remove current image"
 msgstr "删除当前图像"
@@ -664,6 +701,9 @@ msgstr "只需点击联系人即可添加一个。"
 msgid "Start a chat with %s?"
 msgstr "开始与 %s 聊天？"
 
+msgid "System contacts imported successfully"
+msgstr "已成功导入系统联系人"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr "关联的设置代码以此开头：%s"
@@ -681,6 +721,13 @@ msgid ""
 "This action can also be done later via the import button in the top action "
 "bar."
 msgstr "此动作也可以稍后通过顶部动作栏中的导入按钮完成。"
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr ""
+"此联系人没有电话号码。请在您的设备地址簿中编辑此联系人，并在此处添加电话号"
+"码。"
 
 msgid "This field can not be empty"
 msgstr "此字段不能为空白"
@@ -785,10 +832,10 @@ msgid "Welcome to OX COI Messenger"
 msgstr "欢迎来到 OX COI Messenger"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"欢迎来到OX COI Messenger！\n"
+"欢迎来到OX Coi Messenger！\n"
 "请轻点聊天气泡图标以开始新的聊天。"
 
 msgid "Would you like to import your contacts from this device?"
@@ -816,8 +863,8 @@ msgstr ""
 msgid "Your favorite messages"
 msgstr "您最喜爱的消息"
 
-msgid "and"
-msgstr "和"
+msgid "Your messages are encrypted from now on."
+msgstr "从现在起，您的邮件将被加密。"
 
 msgid "code"
 msgstr "代码"
@@ -830,3 +877,23 @@ msgstr "隐私声明"
 
 msgid "terms & conditions"
 msgstr "项目及条款"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "已导入 %i 位系统联系人"
+
+#~ msgid "Account settings"
+#~ msgstr "户口设定"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "使用 OX COI Messenger 代表您同意我们的"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "欢迎来到OX COI Messenger！\n"
+#~ "请轻点聊天气泡图标以开始新的聊天。"
+
+#~ msgid "and"
+#~ msgstr "和"

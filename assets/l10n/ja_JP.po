@@ -4,19 +4,18 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
+msgstr "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-08-30 12:56+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-01 14:47+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.3\n"
-"Last-Translator: \n"
-"Language: ja_JP\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -48,16 +47,11 @@ msgid "1 participant"
 msgid_plural "%i participants"
 msgstr[0] "参加者%i名"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "システムコンタクトを%iつインポート済み"
-
 msgid "About"
 msgstr "バージョン情報"
 
-msgid "Account settings"
-msgstr "アカウント設定"
+msgid "Account"
+msgstr "アカウント"
 
 msgid "Account settings successfully changed"
 msgstr "アカウント設定の変更に成功しました"
@@ -81,11 +75,10 @@ msgid "All your contacts are in this chat."
 msgstr "すべての連絡先がこのチャットにあります。"
 
 msgid ""
-"An Autocrypt setup message securely shares your encryption setup with other Autocrypt-compliant apps. The setup will be "
-"secured by a setup code which is displayed here and must be entered on the other device."
-msgstr ""
-"Autocrypt設定メッセージは、他のAutocrypt対応アプリケーションとご利用の暗号化設定を安全に共有します。設定はここに表示され、"
-"他のデバイスに入力しなければならない設定コードでセキュリティ保護されます。"
+"An Autocrypt setup message securely shares your encryption setup with other "
+"Autocrypt-compliant apps. The setup will be secured by a setup code which is "
+"displayed here and must be entered on the other device."
+msgstr "Autocrypt設定メッセージは、他のAutocrypt対応アプリケーションとご利用の暗号化設定を安全に共有します。設定はここに表示され、他のデバイスに入力しなければならない設定コードでセキュリティ保護されます。"
 
 msgid "App name"
 msgstr "アプリケーション名"
@@ -94,7 +87,7 @@ msgid "App version"
 msgstr "アプリケーションバージョン"
 
 msgid "Applying new settings, this may take a moment"
-msgstr "新設定を適用中。しばらくお待ちください"
+msgstr "新設定を適用中。しばらくお待ちください。"
 
 msgid "Archived chats"
 msgstr "アーカイブされたチャット"
@@ -102,7 +95,9 @@ msgstr "アーカイブされたチャット"
 msgid "Audio"
 msgstr "オーディオ"
 
-msgid "Audio recording failed, please grant the permissions to record audio in the app settings on your device."
+msgid ""
+"Audio recording failed, please grant the permissions to record audio in the "
+"app settings on your device."
 msgstr "オーディオ録音に失敗しました。ご利用のデバイスのアプリケーション設定でオーディオの録音を許可してください。"
 
 msgid "Autocrypt Setup Message"
@@ -132,8 +127,10 @@ msgstr "ブロック連絡先"
 msgid "Blocked contacts"
 msgstr "ブロックされた連絡先"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "OX COI Messenger メッセンジャーを使用することで、に同意したことになります"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "OX COIメッセンジャーを使用することで、%sと%sに同意したことになります。"
 
 msgid "Camera"
 msgstr "カメラ"
@@ -141,7 +138,8 @@ msgstr "カメラ"
 msgid "Cancel"
 msgstr "キャンセル"
 
-msgid "Cannot login. Please check if the email-address and the password are correct."
+msgid ""
+"Cannot login. Please check if the email-address and the password are correct."
 msgstr "ログインができません。メールアドレスとパスワードが正しいかどうか確認してください。"
 
 msgid "Cannot verify contact"
@@ -155,17 +153,17 @@ msgid_plural "Chats"
 msgstr[0] "チャット"
 
 msgid "Choose a provider from the list below to create a new account"
-msgstr "下記リストからプロバイダを選択して、新規アカウントを作成します"
+msgstr "下記リストからプロバイダを選択して、新規アカウントを作成します。"
 
 msgid "Configuration change aborted"
-msgstr "構成の変更を中止しました"
+msgstr "構成の変更を中止しました。"
 
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "連絡先"
 
 msgid "Contact import running, please wait"
-msgstr "連絡先をインポート中です。お待ちください"
+msgstr "連絡先をインポート中です。お待ちください。"
 
 msgid "Contact request"
 msgstr "連絡先リクエスト"
@@ -194,7 +192,9 @@ msgstr "コードをコピー"
 msgid "Could not delete contact."
 msgstr "連絡先を削除できませんでした。"
 
-msgid "Could not delete contact. Active chats with contact found, please remove those chats first."
+msgid ""
+"Could not delete contact. Active chats with contact found, please remove "
+"those chats first."
 msgstr "連絡先を削除できませんでした。連絡先のあるアクティブなチャットが見つかりました。まずこのチャットを削除してください。"
 
 msgid "Create chat"
@@ -203,7 +203,9 @@ msgstr "チャットを作成"
 msgid "Create group"
 msgstr "グループを作成"
 
-msgid "Creates an Autocrypt setup message, which you can load on other devices to use your current encryption setup."
+msgid ""
+"Creates an Autocrypt setup message, which you can load on other devices to "
+"use your current encryption setup."
 msgstr "Autocrypt設定メッセージを作成します。他のデバイスに読み込んで、現在の暗号化設定をすることができます。"
 
 msgid "Debug"
@@ -219,6 +221,9 @@ msgstr[0] "チャットを削除"
 msgid "Delete contact"
 msgstr "連絡先を削除"
 
+msgid "Delete push resource"
+msgstr "プッシュリソースを削除"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -228,6 +233,11 @@ msgstr "%s（%s）をブロックしますか？"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "%s（%s）を削除しますか？"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "%sを削除しますか？"
 
 msgid "Do you really want to leave the group?"
 msgstr "グループから離れますか？"
@@ -240,7 +250,9 @@ msgstr "このチャットを削除しますか？"
 
 #. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
 #, c-format
-msgid "Do you want to import your keys from \"%s\"? If no keys are in that folder, the operation will fail."
+msgid ""
+"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
+"the operation will fail."
 msgstr "\"%s\"から鍵をインポートしますか？鍵がそのフォルダーになければ、操作は失敗します。"
 
 #. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
@@ -268,8 +280,11 @@ msgstr "メール"
 msgid "Email address"
 msgstr "メールアドレス"
 
+msgid "Enable background updates"
+msgstr "バックグラウンドの更新を有効化"
+
 msgid "Enable sending and requesting of read receipts."
-msgstr "開封確認メッセージの送信および要求を有効化。"
+msgstr "開封確認メッセージの送信および要求を有効化"
 
 msgid "Enter the contact name"
 msgstr "連絡先名を入力"
@@ -298,10 +313,9 @@ msgstr "フラグ"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
-"Sometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help."
-msgstr ""
-"既知のメールプロバイダの場合、追加設定は自動で設定されます。ウェブフロントエンドでIMAPを有効にする必要がある場合があります"
-"ので、メールプロバイダまたはお友達にお問い合わせください。"
+"Sometimes IMAP needs to be enabled in the web frontend. Consult your email "
+"provider or friends for help."
+msgstr "既知のメールプロバイダの場合、追加設定は自動で設定されます。ウェブフロントエンドでIMAPを有効にする必要がある場合がありますので、メールプロバイダまたはお友達にお問い合わせください。"
 
 msgid "Forward"
 msgstr "転送"
@@ -325,7 +339,7 @@ msgid "Group name changed"
 msgstr "グループ名が変更されました"
 
 msgid "Hello, I have just created this group for us"
-msgstr "こんにちは。わたしたちのためにこのグループを作成したところです"
+msgstr "こんにちは。わたしたちのためにこのグループを作成したところです。"
 
 msgid "IMAP Security"
 msgstr "IMAPセキュリティ"
@@ -342,6 +356,11 @@ msgstr "IMAP ポート"
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAPサーバー（例 imap.coi.me）"
 
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr "この設定が有効化されると、アプリケーションは定期的にバックグラウンドタスクを実行して新規メッセージを取得できます。"
+
 msgid "Image"
 msgstr "画像"
 
@@ -355,10 +374,11 @@ msgid "Import device contacts"
 msgstr "デバイスの連絡先をインポート"
 
 msgid "Import failed, missing permissions"
-msgstr "インポートに失敗しました。許可がありません"
+msgstr "インポートに失敗しました。許可がありません。"
 
-msgid "Import keys from your local storage to change your current encryption setup"
-msgstr "ローカルストレージから鍵をインポートして、現在の暗号化設定を変更します"
+msgid ""
+"Import keys from your local storage to change your current encryption setup"
+msgstr "ローカルストレージから鍵をインポートして、現在の暗号化設定を変更します。"
 
 msgid "Inbox"
 msgstr "受信トレイ"
@@ -373,7 +393,7 @@ msgid "Key action failed"
 msgstr "鍵のアクションが失敗しました"
 
 msgid "Key action failed, missing permissions"
-msgstr "鍵のアクションが失敗しました。許可がありません"
+msgstr "鍵のアクションが失敗しました。許可がありません。"
 
 msgid "Key action successfully done"
 msgstr "鍵のアクションに成功しました"
@@ -388,10 +408,10 @@ msgid "Log in to OX COI Messenger"
 msgstr "OX COI Messenger メッセンジャーにログインします"
 
 msgid "Logging in, this may take a moment"
-msgstr "ログイン中。しばらくお待ちください"
+msgstr "ログイン中。しばらくお待ちください。"
 
 msgid "Login failed"
-msgstr "ログインに失敗しました"
+msgstr "ログインに失敗しました。"
 
 msgid "Manual Settings"
 msgstr "手動設定"
@@ -411,7 +431,9 @@ msgstr "メッセージ同期中"
 msgid "Messages I sent to myself"
 msgstr "自分自身に送信したメッセージ"
 
-msgid "Messages from unknown contacts do not appear in chats anymore. Instead, you can access such messages here:"
+msgid ""
+"Messages from unknown contacts do not appear in chats anymore. Instead, you "
+"can access such messages here:"
 msgstr "不明な連絡先からのメッセージはチャットに表示されません。代わりに、ここからそのようなメッセージにアクセスできます："
 
 msgid "Name"
@@ -435,6 +457,9 @@ msgstr "メッセージがありません"
 msgid "No participants selected. Please select at least one person."
 msgstr "参加者が選択されていません。参加者を最低１名選択してください。"
 
+msgid "No phone number"
+msgstr "電話番号がありません"
+
 msgid "No results found"
 msgstr "結果が見つかりません"
 
@@ -444,22 +469,25 @@ msgstr "署名が設定されていません"
 msgid "No username set"
 msgstr "ユーザー名が設定されていません"
 
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "通知"
+
 msgid ""
-"OX COI Messenger works with any email provider, but best with COI-compatible providers. If you have an existing email "
-"account, please sign in, otherwise register a new account first."
-msgstr ""
-"OX COI Messenger メッセンジャーはどのメールプロバイダでも使用できますが、COI対応プロバイダが最適です。すでにメールアカウントをお持ち"
-"の場合はサインインしてください。お持ちでない場合は、まず新規アカウントを登録してください。"
+"OX COI Messenger works with any email provider, but best with COI-compatible "
+"providers. If you have an existing email account, please sign in, otherwise "
+"register a new account first."
+msgstr "OX COI Messenger メッセンジャーはどのメールプロバイダでも使用できますが、COI対応プロバイダが最適です。すでにメールアカウントをお持ちの場合はサインインしてください。お持ちでない場合は、まず新規アカウントを登録してください。"
 
 msgid "Off"
 msgstr "オフ"
 
 msgid ""
-"Often you only need to provide your email address, password and server addresses. The remaining values are determined "
-"automatically. Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help."
-msgstr ""
-"たいていメールアドレス、パスワード、サーバアドレスを入力すれば大丈夫です。後の値は自動で決定されます。場合によっては、ご利"
-"用のメールウェブサイトでIMAPを有効にする必要があります。メールプロバイダまたはお友達にお問い合わせください。"
+"Often you only need to provide your email address, password and server "
+"addresses. The remaining values are determined automatically. Sometimes IMAP "
+"needs to be enabled in your email website. Consult your email provider or "
+"friends for help."
+msgstr "たいていメールアドレス、パスワード、サーバアドレスを入力すれば大丈夫です。後の値は自動で決定されます。場合によっては、ご利用のメールウェブサイトでIMAPを有効にする必要があります。メールプロバイダまたはお友達にお問い合わせください。"
 
 msgid "Ok"
 msgstr "OK"
@@ -492,8 +520,16 @@ msgstr "鍵をインポート中"
 msgid "Performing key transfer"
 msgstr "鍵を転送中"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr "電話番号はローカルアドレス帳から追加または編集でき、その後インポートできます。"
+
 msgid "Please check your username and password"
-msgstr "ユーザー名とパスワードを確認してください"
+msgstr "ユーザー名とパスワードを確認してください。"
+
+msgid "Please choose a number"
+msgstr "番号を選択してください。"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "どのようなメッセージを見たいかを選択してください。"
@@ -508,7 +544,7 @@ msgid "Please enter your password"
 msgstr "パスワードを入力してください"
 
 msgid "Please select your email provider to sign in"
-msgstr "ご利用のメールプロバイダを選択してサインインしてください"
+msgstr "ご利用のメールプロバイダを選択してサインインしてください。"
 
 msgid "Please specify your email server settings."
 msgstr "ご利用のメールサーバー設定を指定してください。"
@@ -525,6 +561,12 @@ msgstr "プロファイル"
 msgid "Profile QR"
 msgstr "プロファイルQR"
 
+msgid "Push data"
+msgstr "プッシュデータ"
+
+msgid "Push resource (via push service)"
+msgstr "プッシュリソース（プッシュサービス経由）"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "連絡先の再インポートによって複製は作成されません。"
 
@@ -534,6 +576,9 @@ msgstr[0] "開封通知"
 
 msgid "Register"
 msgstr "登録"
+
+msgid "Register new push resource"
+msgstr "新規プッシュリソースを登録"
 
 msgid "Remove current image"
 msgstr "現在の画像を削除"
@@ -549,13 +594,12 @@ msgstr "グループを削除"
 msgid ""
 "Response from %s: %s\n"
 "\n"
-"Some providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your "
-"provider or friends if you run into problems."
-msgstr ""
-"%sからの応答: %s\n"
+"Some providers place additional information in your inbox; you can check "
+"them eg. in the web frontend. Consult your provider or friends if you run "
+"into problems."
+msgstr "%sからの応答: %s\n"
 "\n"
-"受信トレイに追加情報を入れたプロバイダがあります；例えば、ウェブフロントで情報を確認できます。問題が発生した場合はご利用の"
-"プロバイダまたはお友達にお問い合わせください。"
+"受信トレイに追加情報を入れたプロバイダがあります；例えば、ウェブフロントで情報を確認できます。問題が発生した場合はご利用のプロバイダまたはお友達にお問い合わせください。"
 
 msgid "SMTP Security"
 msgstr "SMTPセキュリティ"
@@ -638,28 +682,38 @@ msgid "Signature"
 msgstr "署名"
 
 msgid "Simply add one by tapping on a contact."
-msgstr "連絡先をタップして１つ追加。"
+msgstr "連絡先をタップして１つ追加"
 
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "%sでチャットを開始しますか？"
 
+msgid "System contacts imported successfully"
+msgstr "システムコンタクトが正しくインポートされました。"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
-msgstr "関連設定コードは%sで始まります"
+msgstr "関連設定コードは%sで始まります。"
 
 msgid "The code can be entered with or without minus signs"
-msgstr "コードはマイナス記号ありでもなしでも入力できます"
+msgstr "コードはマイナス記号ありでもなしでも入力できます。"
 
 msgid "There are currently no messages from unknown contacts"
-msgstr "現在不明の連絡先からのメッセージはありません"
+msgstr "現在不明の連絡先からのメッセージはありません。"
 
 msgid "There was an error or the progress was canceled."
 msgstr "エラーがあり、作業がキャンセルされました。"
 
-msgid "This action can also be done later via the import button in the top action bar."
+msgid ""
+"This action can also be done later via the import button in the top action "
+"bar."
 msgstr "このアクションは、後で上部アクションバーのインポートボタンから行うこともできます。"
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr "この連絡先には電話番号がありません。お使いのデバイスアドレス帳でこの連絡先を編集し、電話番号を追加してください。"
 
 msgid "This field can not be empty"
 msgstr "このフィールドは空にできません"
@@ -670,52 +724,52 @@ msgstr "これは新規チャットです。メッセージを送信して接続
 msgid ""
 "This is a read receipt.\n"
 "\n"
-"It means the message was displayed on the recipient's device, not necessarily that the content was read."
-msgstr ""
-"これは開封通知です。\n"
+"It means the message was displayed on the recipient's device, not "
+"necessarily that the content was read."
+msgstr "これは開封通知です。\n"
 "\n"
 "開封通知は、メッセージが受取人のデバイスに表示されたことを意味しますが、内容が既読であるという意味ではありません。"
 
 msgid ""
-"This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n"
+"This is the Autocrypt Setup Message used to transfer your end-to-end setup "
+"between clients.\n"
 "\n"
-"To decrypt and use your setup, open the message in an Autocrypt-compliant client and enter the setup code presented on the "
-"generating device."
-msgstr ""
-"これはクライアント間でエンド・ツー・エンド設定を送信するために使用されるAutocrypt設定メッセージです。\n"
+"To decrypt and use your setup, open the message in an Autocrypt-compliant "
+"client and enter the setup code presented on the generating device."
+msgstr "これはクライアント間でエンド・ツー・エンド設定を送信するために使用されるAutocrypt設定メッセージです。\n"
 "\n"
-"設定を復号化して使用するには、Autocrypt対応クライアントでメッセージを開封し、発生デバイスに表示された設定コードを入力してく"
-"ださい。"
+"設定を復号化して使用するには、Autocrypt対応クライアントでメッセージを開封し、発生デバイスに表示された設定コードを入力してください。"
 
-msgid "This keys enable another device to use your current encryption setup. Keys are saved on your local storage."
+msgid ""
+"This keys enable another device to use your current encryption setup. Keys "
+"are saved on your local storage."
 msgstr "この鍵は別のデバイスがご利用の現在の暗号化設定を使用できるようにします。鍵はローカルストレージに保存されます。"
 
 msgid ""
 "This message cannot be decrypted.\n"
 "\n"
-"It might help to reply to this message and ask the sender to send the message again.\n"
+"It might help to reply to this message and ask the sender to send the "
+"message again.\n"
 "\n"
-"In case you re-installed the OX COI Messenger or another email program on this or another device you may want to send an "
-"Autocrypt setup message from there."
-msgstr ""
-"このメッセージは復号化できません\n"
+"In case you re-installed the OX COI Messenger or another email program on "
+"this or another device you may want to send an Autocrypt setup message from "
+"there."
+msgstr "このメッセージは復号化できません\n"
 "\n"
 "このメッセージに返信し、メッセージを再送信するように差出人にお願いしてください。\n"
 "\n"
-"このデバイスまたは別のデバイスに OX COI Messenger メッセンジャーまたは別のメールプログラムを再インストールする場合は、そこから"
-"Autocrypt設定メッセージを送信してください。"
+"このデバイスまたは別のデバイスに OX COI Messenger メッセンジャーまたは別のメールプログラムを再インストールする場合は、そこからAutocrypt設定メッセージを送信してください。"
 
 msgid ""
-"This message is an Autocrypt Setup Message. Tap it to start the import process. You will be guided through the process."
-msgstr ""
-"このメッセージはAutocrypt設定メッセージです。タップしてインポートプロセスを開始してください。プロセス中はガイドがあります。"
+"This message is an Autocrypt Setup Message. Tap it to start the import "
+"process. You will be guided through the process."
+msgstr "このメッセージはAutocrypt設定メッセージです。タップしてインポートプロセスを開始してください。プロセス中はガイドがあります。"
 
 msgid ""
-"To complete the import of the Autocrypt setup message please provide the security code shown on the originating device. "
-"After entering the code below the Autocrypt settings will be applied to your current encryption setup."
-msgstr ""
-"Autocrypt設定メッセージのインポートを完了するには、元のデバイスに表示されるセキュリティコードを入力してください。下記コード"
-"を入力後、Autocrypt設定が現在の暗号化設定に適用されます。"
+"To complete the import of the Autocrypt setup message please provide the "
+"security code shown on the originating device. After entering the code below "
+"the Autocrypt settings will be applied to your current encryption setup."
+msgstr "Autocrypt設定メッセージのインポートを完了するには、元のデバイスに表示されるセキュリティコードを入力してください。下記コードを入力後、Autocrypt設定が現在の暗号化設定に適用されます。"
 
 msgid "Today"
 msgstr "今日"
@@ -741,7 +795,9 @@ msgstr "確認中：お待ちください。"
 msgid "Video"
 msgstr "動画"
 
-msgid "Video recording failed, please grant the permissions to record video in the app settings on your device."
+msgid ""
+"Video recording failed, please grant the permissions to record video in the "
+"app settings on your device."
 msgstr "動画録画に失敗しました。ご利用のデバイスのアプリケーション設定で動画録画を許可してください。"
 
 msgid "Voice message"
@@ -754,10 +810,9 @@ msgid "Welcome to OX COI Messenger"
 msgstr "OX COI Messenger メッセンジャーにようこそ"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
-msgstr ""
-"OX COI Messenger へようこそ！\n"
+msgstr "OX Coi Messengerへようこそ！\n"
 "チャットバブルアイコンをタップして、新規チャットを開始してください。"
 
 msgid "Would you like to import your contacts from this device?"
@@ -771,21 +826,20 @@ msgstr "昨日"
 
 #, c-format
 msgid ""
-"Your Autocrypt setup has been sent to yourself. Switch to the other device and open the setup message. You should be "
-"prompted for a setup code. Type the following digits into the prompt:\n"
+"Your Autocrypt setup has been sent to yourself. Switch to the other device "
+"and open the setup message. You should be prompted for a setup code. Type "
+"the following digits into the prompt:\n"
 "%s\n"
 "Once you are done, your other device will be ready to use Autocrypt."
-msgstr ""
-"お使いのAutocrypt設定が送信されました。他のデバイスに変更して、設定メッセージを開いてください。設定コードのプロンプトが表示"
-"されます。プロンプトに次の数字を入力してください：\n"
+msgstr "お使いのAutocrypt設定が送信されました。他のデバイスに変更して、設定メッセージを開いてください。設定コードのプロンプトが表示されます。プロンプトに次の数字を入力してください：\n"
 "%s\n"
 "入力が終了すると、他のデバイスはAutocryptが使用できる状態になります。"
 
 msgid "Your favorite messages"
 msgstr "お気に入りのメッセージ"
 
-msgid "and"
-msgstr "と"
+msgid "Your messages are encrypted from now on."
+msgstr "今後メッセージは暗号化されます。"
 
 msgid "code"
 msgstr "コード"
@@ -798,3 +852,24 @@ msgstr "個人情報保護宣言"
 
 msgid "terms & conditions"
 msgstr "利用規約"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "システムコンタクトを%iつインポート済み"
+
+#~ msgid "Account settings"
+#~ msgstr "アカウント設定"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr ""
+#~ "OX COI Messenger メッセンジャーを使用することで、に同意したことになります"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "OX COI Messenger へようこそ！\n"
+#~ "チャットバブルアイコンをタップして、新規チャットを開始してください。"
+
+#~ msgid "and"
+#~ msgstr "と"

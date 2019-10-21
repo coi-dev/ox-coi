@@ -1,10 +1,10 @@
-# timothy <timothy@workshop-chapina.com>, 2019.
+# Timothy Friesen <timothy@workshop-chapina.com>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: Open-Xchange 7\n"
+"Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-08-21 19:00-0600\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-10 12:58+0200\n"
 "Last-Translator: timothy <timothy@workshop-chapina.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.04.2\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -47,17 +47,11 @@ msgid_plural "%i participants"
 msgstr[0] "1 participant"
 msgstr[1] "%i participants"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "1 system contact imported"
-msgstr[1] "%i system contacts imported"
-
 msgid "About"
 msgstr "About"
 
-msgid "Account settings"
-msgstr "Account settings"
+msgid "Account"
+msgstr "Account"
 
 msgid "Account settings successfully changed"
 msgstr "Account settings successfully changed"
@@ -108,8 +102,8 @@ msgid ""
 "Audio recording failed, please grant the permissions to record audio in the "
 "app settings on your device."
 msgstr ""
-"Audio recording failed, please grant permission to record audio in the "
-"app settings on your device."
+"Audio recording failed, please grant permission to record audio in the app "
+"settings on your device."
 
 msgid "Autocrypt Setup Message"
 msgstr "Autocrypt Setup Message"
@@ -138,8 +132,10 @@ msgstr "Block contact"
 msgid "Blocked contacts"
 msgstr "Blocked contacts"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "By using OX COI Messenger you agree to our"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "By using OX COI Messenger you agree to our %s and %s"
 
 msgid "Camera"
 msgstr "Camera"
@@ -150,7 +146,8 @@ msgstr "Cancel"
 msgid ""
 "Cannot login. Please check if the email-address and the password are correct."
 msgstr ""
-"Cannot login. Please check if the e-mail address and the password are correct."
+"Cannot login. Please check if the e-mail address and the password are "
+"correct."
 
 msgid "Cannot verify contact"
 msgstr "Cannot verify contact"
@@ -238,6 +235,9 @@ msgstr[1] "Delete chats"
 msgid "Delete contact"
 msgstr "Delete contact"
 
+msgid "Delete push resource"
+msgstr "Delete push resource"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -247,6 +247,11 @@ msgstr "Do you really want to block %s (%s)?"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "Do you really want to delete %s (%s)?"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Do you really want to delete %s?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Do you really want to leave the group?"
@@ -290,6 +295,9 @@ msgstr "Email"
 
 msgid "Email address"
 msgstr "E-mail address"
+
+msgid "Enable background updates"
+msgstr "Enable background updates"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Enable sending and requesting of read receipts."
@@ -366,6 +374,13 @@ msgstr "IMAP port"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP server (e.g. imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
 
 msgid "Image"
 msgstr "Image"
@@ -466,6 +481,9 @@ msgstr "No messages"
 msgid "No participants selected. Please select at least one person."
 msgstr "No participants selected. Please select at least one person."
 
+msgid "No phone number"
+msgstr "No phone number"
+
 msgid "No results found"
 msgstr "No results found"
 
@@ -475,14 +493,19 @@ msgstr "No signature set"
 msgid "No username set"
 msgstr "No username set"
 
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Notification"
+msgstr[1] "Notifications"
+
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
 "providers. If you have an existing email account, please sign in, otherwise "
 "register a new account first."
 msgstr ""
-"OX COI Messenger works with any e-mail provider, but best with COI-compatible "
-"providers. If you have an existing e-mail account, please sign in, otherwise "
-"register a new account first."
+"OX COI Messenger works with any e-mail provider, but best with COI-"
+"compatible providers. If you have an existing e-mail account, please sign "
+"in, otherwise register a new account first."
 
 msgid "Off"
 msgstr "Off"
@@ -530,8 +553,18 @@ msgstr "Performing key import"
 msgid "Performing key transfer"
 msgstr "Performing key transfer"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+
 msgid "Please check your username and password"
 msgstr "Please check your username and password"
+
+msgid "Please choose a number"
+msgstr "Please choose a number"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Please choose what kind of messages you would like to see."
@@ -563,6 +596,12 @@ msgstr "Profile"
 msgid "Profile QR"
 msgstr "Profile QR"
 
+msgid "Push data"
+msgstr "Push data"
+
+msgid "Push resource (via push service)"
+msgstr "Push resource (via push service)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "Re-importing your contacts will not create duplicates."
 
@@ -573,6 +612,9 @@ msgstr[1] "Read receipts"
 
 msgid "Register"
 msgstr "Register"
+
+msgid "Register new push resource"
+msgstr "Register new push resource"
 
 msgid "Remove current image"
 msgstr "Remove current image"
@@ -687,6 +729,9 @@ msgstr "Simply add one by tapping on a contact."
 msgid "Start a chat with %s?"
 msgstr "Start a chat with %s?"
 
+msgid "System contacts imported successfully"
+msgstr "System contacts imported successfully"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr "The associated setup code starts with: %s"
@@ -706,6 +751,13 @@ msgid ""
 msgstr ""
 "This action can also be done later via the import button in the top action "
 "bar."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
 
 msgid "This field can not be empty"
 msgstr "This field cannot be empty"
@@ -807,8 +859,8 @@ msgid ""
 "Video recording failed, please grant the permissions to record video in the "
 "app settings on your device."
 msgstr ""
-"Video recording failed, please grant permission to record video in the "
-"app settings on your device."
+"Video recording failed, please grant permission to record video in the app "
+"settings on your device."
 
 msgid "Voice message"
 msgstr "Voice message"
@@ -820,7 +872,7 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Welcome to OX COI Messenger"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
 "Welcome to the OX COI Messenger!\n"
@@ -843,17 +895,17 @@ msgid ""
 "%s\n"
 "Once you are done, your other device will be ready to use Autocrypt."
 msgstr ""
-"Your Autocrypt setup has been sent to you. Switch to the other device "
-"and open the setup message. You should be prompted for a setup code. Type "
-"the following digits into the prompt:\n"
+"Your Autocrypt setup has been sent to you. Switch to the other device and "
+"open the setup message. You should be prompted for a setup code. Type the "
+"following digits into the prompt:\n"
 "%s\n"
 "Once you are done, your other device will be ready to use Autocrypt."
 
 msgid "Your favorite messages"
 msgstr "Your favourite messages"
 
-msgid "and"
-msgstr "and"
+msgid "Your messages are encrypted from now on."
+msgstr "Your messages are encrypted from now on."
 
 msgid "code"
 msgstr "code"
@@ -867,3 +919,23 @@ msgstr "privacy declaration"
 msgid "terms & conditions"
 msgstr "terms & conditions"
 
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "1 system contact imported"
+#~ msgstr[1] "%i system contacts imported"
+
+#~ msgid "Account settings"
+#~ msgstr "Account settings"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "By using OX COI Messenger you agree to our"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+
+#~ msgid "and"
+#~ msgstr "and"

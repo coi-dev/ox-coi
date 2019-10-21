@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-09-09 11:33+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-09 11:36+0300\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: lv_LV\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.1.1\n"
-"Last-Translator: \n"
-"Language: lv_LV\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -54,18 +54,11 @@ msgstr[0] "%i dalībnieks"
 msgstr[1] "%i dalībnieki"
 msgstr[2] "%i dalībnieki"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "%i sistēmas kontakts importēts"
-msgstr[1] "%i sistēmas kontakti importēti"
-msgstr[2] "%i sistēmas kontakti importēti"
-
 msgid "About"
 msgstr "Informācija"
 
-msgid "Account settings"
-msgstr "Konta iestatījumi"
+msgid "Account"
+msgstr "Konts"
 
 msgid "Account settings successfully changed"
 msgstr "Konta iestatījumi ir veiksmīgi izmainīti"
@@ -146,8 +139,10 @@ msgstr "Bloķēt kontaktu"
 msgid "Blocked contacts"
 msgstr "Bloķēt kontaktus"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "Izmantojot OX COI Messenger jūs piekrītat mūsu"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "Izmantojot OX COI Messenger, jūs piekrītat mūsu %s un %s"
 
 msgid "Camera"
 msgstr "Kamera"
@@ -251,6 +246,9 @@ msgstr[2] "Dzēst sarunas"
 msgid "Delete contact"
 msgstr "Dzēst kontaktu"
 
+msgid "Delete push resource"
+msgstr "Dzēst resursu"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -260,6 +258,11 @@ msgstr "Vai tiešām vēlaties bloķēt %s (%s)?"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "Vai tiešām vēlaties dzēst %s (%s)?"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Vai tiešām vēlaties dzēst %s?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Vai tiešām vēlaties iziet no šīs grupas?"
@@ -303,6 +306,9 @@ msgstr "E-pasts"
 
 msgid "Email address"
 msgstr "E-pasta adrese"
+
+msgid "Enable background updates"
+msgstr "Iespējot fona atjauninājumus"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Iespējot lasīšanas paziņojumu sūtīšanu un pieprasīšanu."
@@ -380,6 +386,13 @@ msgstr "IMAP ports"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP serveris (kā imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr ""
+"Ja iespējots, šis iestatījums ļauj lietojumprogrammai veikt periodiskas fona "
+"darbības, lai iegūtu jaunus ziņojumus"
 
 msgid "Image"
 msgstr "Attēls"
@@ -482,6 +495,9 @@ msgid "No participants selected. Please select at least one person."
 msgstr ""
 "Neviens dalībnieks nav izvēlēts. Lūdzu izvēlieties vismaz vienu personu."
 
+msgid "No phone number"
+msgstr "Nav tālruņa numura"
+
 msgid "No results found"
 msgstr "Rezultāti nav atrasti"
 
@@ -490,6 +506,12 @@ msgstr "Paraksti nav iestatīti"
 
 msgid "No username set"
 msgstr "Lietotāja vārds nav iestatīts"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Paziņojums"
+msgstr[1] "Paziņojumi"
+msgstr[2] "Paziņojumi"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -547,8 +569,18 @@ msgstr "Notiek atslēgu imports"
 msgid "Performing key transfer"
 msgstr "Notiek atslēgu pārvietošana"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr ""
+"Telefona numuri var tikt pievienoti vai rediģēti lokālajā adrešu grāmatā un "
+"pēc tam importēti."
+
 msgid "Please check your username and password"
 msgstr "Lūdzu pārbaudiet savu lietotāja vārdu un paroli"
+
+msgid "Please choose a number"
+msgstr "Lūdzu izvēlieties numuru"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Lūdzu izvēlieties kādu ziņojuma tipu jūs vēlaties redzēt."
@@ -566,7 +598,7 @@ msgid "Please select your email provider to sign in"
 msgstr "Lūdzu izvēlieties e-pasta nodrošinātāju pieslēgumam"
 
 msgid "Please specify your email server settings."
-msgstr "Lūdzu norādiet sava e-pasta servera iestatījumus"
+msgstr "Lūdzu norādiet sava e-pasta servera iestatījumus."
 
 msgid "Please wait a moment."
 msgstr "Lūdzu nedaudz uzgaidiet."
@@ -580,6 +612,12 @@ msgstr "Profils"
 msgid "Profile QR"
 msgstr "Profila QR"
 
+msgid "Push data"
+msgstr "Nosūtīt datus"
+
+msgid "Push resource (via push service)"
+msgstr "Nosūtīt resursu (ar \"push\" servisu)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr "Atkārtota kontaktu importēšana neradīs dublikātus."
 
@@ -591,6 +629,9 @@ msgstr[2] "Lasīšanas apstiprinājumi"
 
 msgid "Register"
 msgstr "Reģistrēties"
+
+msgid "Register new push resource"
+msgstr "Reģistrēt jaunu \"push\" resursu"
 
 msgid "Remove current image"
 msgstr "Noņemt pašreizējo attēlu"
@@ -686,7 +727,7 @@ msgid "Show messages from unknown contacts"
 msgstr "Rādīt ziņojumus no neatpazītiem kontaktiem"
 
 msgid "Show only chat messages "
-msgstr "Rādīt tikai sarunu ziņojumus"
+msgstr "Rādīt tikai sarunu ziņojumus "
 
 msgid "Sign in"
 msgstr "Pieslēgšanās"
@@ -707,6 +748,9 @@ msgstr "Vienkārši pievienojiet, noklikšķinot uz kontakta."
 msgid "Start a chat with %s?"
 msgstr "Vai sākt sarunu ar %s?"
 
+msgid "System contacts imported successfully"
+msgstr "Sistēmas kontakti ir veiksmīgi importēti"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr "Saistītais iestatīšanas kods sākas ar: %s"
@@ -726,6 +770,13 @@ msgid ""
 msgstr ""
 "Šī darbība var tikt izpildīta arī vēlāk, izmantojot importa taustiņu augšējā "
 "rīkjoslā."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr ""
+"Šim kontaktam nav telefona numura. Lūdzu rediģējiet šo kontaktu jūsu ierīces "
+"adrešu grāmatā un pievienojiet tam telefona numuru."
 
 msgid "This field can not be empty"
 msgstr "Šis lauks nevar būt tukšs"
@@ -840,10 +891,10 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Esiet sveicināti OX COI Messenger"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Esiet sveicināti OX COI Messenger!\n"
+"Esiet sveicināti OX Coi Messenger!\n"
 "Lūdzu sāciet jaunu sarunu, noklikšķinot uz sarunas ikonas."
 
 msgid "Would you like to import your contacts from this device?"
@@ -873,8 +924,8 @@ msgstr ""
 msgid "Your favorite messages"
 msgstr "Jūsu iemīļotie ziņojumi"
 
-msgid "and"
-msgstr "un"
+msgid "Your messages are encrypted from now on."
+msgstr "Sākot no šī brīža jūsu ziņojumi tiek šifrēti."
 
 msgid "code"
 msgstr "kods"
@@ -887,3 +938,25 @@ msgstr "privātuma deklarācija"
 
 msgid "terms & conditions"
 msgstr "nosacījumi"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "%i sistēmas kontakts importēts"
+#~ msgstr[1] "%i sistēmas kontakti importēti"
+#~ msgstr[2] "%i sistēmas kontakti importēti"
+
+#~ msgid "Account settings"
+#~ msgstr "Konta iestatījumi"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "Izmantojot OX COI Messenger jūs piekrītat mūsu"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Esiet sveicināti OX COI Messenger!\n"
+#~ "Lūdzu sāciet jaunu sarunu, noklikšķinot uz sarunas ikonas."
+
+#~ msgid "and"
+#~ msgstr "un"
