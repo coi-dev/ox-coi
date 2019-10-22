@@ -48,7 +48,7 @@
       }
     },
     {
-      "id": "mailbox",
+      "id": "mailbox_org",
       "name": "Mailbox.org",
       "register_link": "https://register.mailbox.org/",
       "preset": {
@@ -101,7 +101,7 @@
       }
     },
     {
-      "id": "coi-debug-mobile-qa",
+      "id": "coi_debug_mobile_qa",
       "name": "Debug (mobile-qa)",
       "preset": {
         "incoming_security": "starttls",
@@ -114,7 +114,7 @@
       }
     },
     {
-      "id": "coi-debug-olpe-qa",
+      "id": "coi_debug_olpe_qa",
       "name": "Debug (olpe-qa)",
       "push_service_url": "https://cps.qa.open-xchange.com",
       "preset": {
@@ -128,7 +128,7 @@
       }
     },
     {
-      "id": "coi-integration",
+      "id": "coi_debug_integration",
       "name": "Integration Test Environment",
       "push_service_url": "https://devcoi-cps1.dev.coi.me/push/resource/",
       "preset": {
@@ -142,9 +142,9 @@
       }
     },
     {
-      "id": "coi-beta",
+      "id": "coi_debug_beta",
       "name": "Demo / Beta Environment",
-      "push_service_url": "https://betacoi-cps1.beta.coi.me/push/resource/",
+      "push_service_url": "https://push.coi.me",
       "preset": {
         "incoming_security": "starttls",
         "incoming_server": "imap.beta.coi.me",
@@ -156,7 +156,7 @@
       }
     },
     {
-      "id": "coi-dovecot",
+      "id": "coi_debug_dovecot",
       "name": "Dovecot Testing Environment",
       "push_service_url": "https://10.50.0.26:443/push/resource/",
       "preset": {

@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Image(
-                          image: AssetImage(appLogoUrl),
+                          image: AssetImage(appLogoPath),
                           height: loginLogoSize,
                           width: loginLogoSize,
                         ),

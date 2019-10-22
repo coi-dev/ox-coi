@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/utils/constants.dart';
 
 class Providers {
   List<Provider> providerList;
@@ -133,32 +132,15 @@ int getSecurityId(String securityString) {
 }
 
 String getProviderIconPath(BuildContext context, String id) {
-  String path = "";
-  switch (id) {
-    case "outlook":
-      path = outlookLogoUrl;
-      break;
-    case "yahoo":
-      path = yahooLogoUrl;
-      break;
-    case "gmx":
-      path = gmxLogoUrl;
-      break;
-    case "mailbox":
-      path = mailboxLogoUrl;
-      break;
-    case "mail_com":
-      path = mailcomLogoUrl;
-      break;
-    case "godaddy":
-      path = godaddyLogoUrl;
-      break;
-    case "other":
-      path = otherProviderLogoUrl;
-      break;
-    default:
-      path = appLogoUrl;
-      break;
+  if (isCoiDebugProvider(id)) {
+    id = "coi_debug";
   }
-  return path;
+  var iconsBasePath = 'assets/images/';
+  var logoPrefix = 'logo_';
+  var fileType = '.png';
+  return "$iconsBasePath$logoPrefix$id$fileType";
+}
+
+bool isCoiDebugProvider(String id) {
+  return id.startsWith("coi_debug");
 }

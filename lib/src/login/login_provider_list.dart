@@ -165,7 +165,7 @@ class _ProviderListState extends State<ProviderList> {
   }
 
   Widget createProviderItem(Provider provider) {
-    if (provider.id.startsWith("coi-debug") && isRelease()) {
+    if (isCoiDebugProvider(provider.id) && isRelease()) {
       return Container();
     }
     if (provider.id == "other") {

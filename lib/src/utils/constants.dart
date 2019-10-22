@@ -49,22 +49,11 @@ enum AppState {
 // Data base name
 String get dbName => "messenger.db";
 
+// Push service fallback
+String get defaultCoiPushServiceUrl => "https://push.coi.me";
+
 // Image paths
-String get appLogoUrl => 'assets/images/app_logo.png';
-
-String get outlookLogoUrl => 'assets/images/outlook_icon.png';
-
-String get yahooLogoUrl => 'assets/images/yahoo_icon.png';
-
-String get gmxLogoUrl => 'assets/images/gmx_icon.png';
-
-String get mailboxLogoUrl => 'assets/images/mailbox_icon.png';
-
-String get mailcomLogoUrl => 'assets/images/mailcom_icon.png';
-
-String get godaddyLogoUrl => 'assets/images/godaddy_icon.png';
-
-String get otherProviderLogoUrl => 'assets/images/mail_icon.png';
+String get appLogoPath => 'assets/images/app_logo.png';
 
 // Other provider identifier
 String get other => 'other';
