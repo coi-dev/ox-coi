@@ -177,6 +177,9 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     } else {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.putIfAbsent(id: chatId);
+      var contactRepository = RepositoryManager.get(RepositoryType.contact);
+      var contacts = await context.getChatContacts(chatId);
+      contactRepository.putIfAbsent(ids: contacts);
       dispatch(JoinDone(chatId: chatId));
     }
   }
