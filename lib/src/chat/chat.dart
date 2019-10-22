@@ -156,6 +156,12 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         });
       } else {
         setFileData();
+        if(widget.sharedData.text.isNotEmpty){
+          _textController.text = widget.sharedData.text;
+          setState(() {
+            _isComposingText = true;
+          });
+        }
       }
     }
   }

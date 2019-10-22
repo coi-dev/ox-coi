@@ -47,6 +47,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 
+import androidx.core.content.FileProvider;
+
+import java.io.File;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +86,8 @@ public class MainActivity extends FlutterActivity {
                     if (call.method.contentEquals("getSharedData")) {
                         result.success(sharedData);
                         sharedData.clear();
+                    }else if (call.method.contentEquals("sendSharedData")) {
+                        shareFile(call.arguments);
                     }
                 });
     }
@@ -137,12 +142,37 @@ public class MainActivity extends FlutterActivity {
                 sharedData.put(SHARED_TEXT, text);
             } else if (type.startsWith("application/") || type.startsWith("audio/") || type.startsWith("image/") || type.startsWith("video/")) {
                 Uri uri = (Uri) Objects.requireNonNull(getIntent().getExtras()).get(Intent.EXTRA_STREAM);
+                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 ShareHelper shareHelper = new ShareHelper();
                 String uriPath = shareHelper.getFilePathForUri(this, uri);
+                if(!text.isEmpty()){
+                    sharedData.put(SHARED_TEXT, text);
+                }
                 sharedData.put(SHARED_MIME_TYPE, type);
                 sharedData.put(SHARED_PATH, uriPath);
                 sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
             }
         }
     }
+
+    private void shareFile(Object arguments) {
+        @SuppressWarnings("unchecked")
+        HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
+        String title = argsMap.get("title");
+        String path = argsMap.get("path");
+        String mimeType = argsMap.get("mimeType");
+        String text = argsMap.get("text");
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType(mimeType);
+        File fileToShare = new File(path);
+        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName() + ".fileProvider", fileToShare);
+        if(!path.isEmpty()){
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        }
+        // add optional text
+        if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        this.startActivity(Intent.createChooser(shareIntent, title));
+    }
+
 }

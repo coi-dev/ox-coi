@@ -41,18 +41,19 @@
  */
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
+import 'package:ox_coi/src/share/shared_data.dart';
 
 class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
   Repository<ChatMsg> _messageListRepository;
+  static const platform = const MethodChannel(SharedData.sharingChannelName);
 
   @override
   MessageAttachmentState get initialState => MessageAttachmentStateInitial();
@@ -68,7 +69,8 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       } catch (error) {
         yield MessageAttachmentStateFailure(error: error.toString());
       }
-    } if (event is ShareAttachment) {
+    }
+    if (event is ShareAttachment) {
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
       yield MessageAttachmentStateLoading();
       try {
@@ -89,12 +91,12 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
 
   void _shareFile(int messageId) async {
     ChatMsg message = _getMessage(messageId);
-    var fileName = await message.getFileName();
     var text = await message.getText();
     var filePath = await message.getFile();
-    List<int> bytes = await File(filePath).readAsBytes();
-    var mime = await message.getFileMime();
-    await Share.file(text, fileName, bytes, mime, text: text);
+    var mime = filePath.isNotEmpty ? await message.getFileMime() : "text/*";
+
+    Map argsMap = <String, String>{'title': '$text', 'path': '$filePath', 'mimeType': '$mime', 'text': '$text'};
+    await platform.invokeMethod('sendSharedData', argsMap);
   }
 
   ChatMsg _getMessage(int messageId) {

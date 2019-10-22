@@ -88,6 +88,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     const MessageAction(title: 'Copy', icon: Icons.content_copy, messageActionTag: MessageActionTag.copy),
     const MessageAction(title: 'Delete locally', icon: Icons.delete, messageActionTag: MessageActionTag.delete),
     const MessageAction(title: 'Flag/Unflag', icon: Icons.star, messageActionTag: MessageActionTag.flag),
+    const MessageAction(title: 'Share', icon: Icons.share, messageActionTag: MessageActionTag.share),
   ];
 
   final List<MessageAction> _messageAttachmentActions = const <MessageAction>[
