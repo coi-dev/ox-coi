@@ -107,7 +107,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
 
   @override
   Widget build(BuildContext context) {
-    return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: goToProfile, moreButton: getMoreButton());
+    return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: goToProfile, moreButton: widget.showMoreButton ? getMoreButton() : null);
   }
 
   goToProfile(String title, String subtitle) {
