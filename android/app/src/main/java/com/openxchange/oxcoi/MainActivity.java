@@ -145,7 +145,7 @@ public class MainActivity extends FlutterActivity {
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 ShareHelper shareHelper = new ShareHelper();
                 String uriPath = shareHelper.getFilePathForUri(this, uri);
-                if(!text.isEmpty()){
+                if(text != null && !text.isEmpty()){
                     sharedData.put(SHARED_TEXT, text);
                 }
                 sharedData.put(SHARED_MIME_TYPE, type);
