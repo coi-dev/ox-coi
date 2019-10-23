@@ -55,8 +55,7 @@ class Setup {
 
   main(Duration timeout) {
     setUpAll(() async {
-      final String adbPath =
-          '/Users/openxchange/Library/Android/sdk/platform-tools/adb';
+      final String adbPath = 'adb';
       await Process.run(adbPath, [
         'shell',
         'pm',

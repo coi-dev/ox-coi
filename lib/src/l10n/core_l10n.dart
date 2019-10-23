@@ -59,7 +59,7 @@ Map<int, String> getStringMap(BuildContext context) {
     10: L10n.get(L.video),
     11: L10n.get(L.audio),
     12: L10n.get(L.file),
-    13: "${L10n.get(L.profileDefaultStatus)}: $repositoryUrl",
+    13: "${L10n.get(L.profileDefaultStatus)}: $projectUrl",
     14: L10n.get(L.groupNewDraft),
     15: L10n.get(L.groupNameChanged),
     16: L10n.get(L.groupImageChanged),
