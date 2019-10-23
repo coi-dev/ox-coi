@@ -41,11 +41,14 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog_action.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'keyMapping.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog.dart';
 
 showNavigatableDialog(
     {@required BuildContext context,
@@ -81,11 +84,11 @@ showConfirmationDialog(
     context: context,
     navigatable: navigatable,
     previousNavigatable: previousNavigatable,
-    dialog: AlertDialog(
+    dialog: AdaptiveDialog(
       title: Text(title),
       content: new Text(content),
       actions: <Widget>[
-        new FlatButton(
+        new AdaptiveDialogAction(
           child: new Text(negativeButton != null && negativeButton.isNotEmpty
               ? negativeButton
               : L10n.get(L.cancel)),
@@ -97,7 +100,7 @@ showConfirmationDialog(
             navigation.pop(context);
           },
         ),
-        new FlatButton(
+        new AdaptiveDialogAction(
           child: new Text(positiveButton),
           key: Key(keyDialogBuilderPositiveFlatButton),
           onPressed: () {
@@ -123,18 +126,17 @@ showInformationDialog(
     context: context,
     navigatable: navigatable,
     previousNavigatable: previousNavigatable,
-    dialog: AlertDialog(
-      title: Text(title),
-      content: new Text(content),
-      actions: <Widget>[
-        new FlatButton(
-          child: new Text(L10n.get(L.ok)),
-          key: Key(keyDialogBuilderAlertDialogOkFlatButton),
-          onPressed: () {
-            navigation.pop(context);
-          },
-        ),
-      ],
-    ),
+    dialog: AdaptiveDialog(
+        title: Text(title),
+        content: new Text(content),
+        actions: <Widget>[
+          new AdaptiveDialogAction(
+            child: new Text(L10n.get(L.ok)),
+            onPressed: () {
+              navigation.pop(context);
+            },
+          ),
+        ],
+    )
   );
 }

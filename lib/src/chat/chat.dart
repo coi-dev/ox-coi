@@ -82,6 +82,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'chat_create_mixin.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
+
 class Chat extends StatefulWidget {
   final int chatId;
   final int messageId;
@@ -244,17 +249,20 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           subTitle = "";
         }
         return Scaffold(
-          appBar: AppBar(
+          appBar: AdaptiveAppBar(
             title: isInviteChat(widget.chatId)
                 ? buildRow(imagePath, name, subTitle, color, context, isVerified)
-                : InkWell(
+                : AdaptiveInkWell(
                     onTap: () => _chatTitleTapped(),
                     child: buildRow(imagePath, name, subTitle, color, context, isVerified),
                   ),
             actions: <Widget>[
               if (!isGroup)
-                IconButton(
-                  icon: Icon(Icons.phone),
+                AdaptiveIconButton(
+                  icon: AdaptiveIcon(
+                      androidIcon: Icons.phone,
+                      iosIcon: CupertinoIcons.phone_solid
+                  ),
                   key: Key(keyChatIconButtonIconPhone),
                   onPressed: onPhonePressed,
                   color: onPrimary,

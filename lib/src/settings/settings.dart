@@ -41,12 +41,15 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/ui/color.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
 enum SettingsType {
   account,
@@ -68,7 +71,8 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+
+        appBar: new AdaptiveAppBar(
           title: Text(L10n.get(L.settingP, count: L10n.plural)),
         ),
         body: buildPreferenceList(context));

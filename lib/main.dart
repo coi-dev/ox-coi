@@ -40,6 +40,9 @@
  * for more details.
  */
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -87,24 +90,47 @@ class OxCoiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: primary,
-        accentColor: accent,
-      ),
-      localizationsDelegates: [
+    if (Platform.isIOS) {
+      return CupertinoApp(
+        theme: CupertinoThemeData(
+          primaryColor: primary,
+          barBackgroundColor: primary,
+        ),
+        localizationsDelegates: getLocalizationsDelegates(),
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          getLocaleResolutionCallback(deviceLocale);
+          return deviceLocale;
+        },
+        initialRoute: Navigation.root,
+        routes: navigation.routesMapping,
+      );
+    } else {
+      return MaterialApp(
+        theme: ThemeData(
+          primaryColor: primary,
+          accentColor: accent,
+        ),
+        localizationsDelegates: getLocalizationsDelegates(),
+        supportedLocales: L10n.supportedLocales,localeResolutionCallback: (deviceLocale, supportedLocales) {
+          getLocaleResolutionCallback(deviceLocale);
+          return deviceLocale;
+        },
+        initialRoute: Navigation.root,
+        routes: navigation.routesMapping,
+      );
+    }
+  }
+
+  List<LocalizationsDelegate> getLocalizationsDelegates() {
+    return [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: L10n.supportedLocales,
-      localeResolutionCallback: (deviceLocale, supportedLocales) {
-        L10n.loadTranslation(deviceLocale);
-        L10n.setLanguage(deviceLocale);
-        return deviceLocale;
-      },
-      initialRoute: Navigation.root,
-      routes: navigation.routesMapping,
-    );
+      ];
+  }
+
+  void getLocaleResolutionCallback(Locale deviceLocale) {
+    L10n.loadTranslation(deviceLocale);
+    L10n.setLanguage(deviceLocale);
   }
 }
 

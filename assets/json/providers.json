@@ -166,7 +166,7 @@
         "incoming_port": 0,
         "outgoing_security": "",
         "outgoing_server": "",
-        "outgoing_port": 0
+        "outgoing_port": 25
       }
     }
   ]

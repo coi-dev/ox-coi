@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -52,6 +53,8 @@ import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+
 class SettingsChat extends StatefulWidget {
   @override
   _SettingsChatState createState() => _SettingsChatState();
@@ -60,18 +63,19 @@ class SettingsChat extends StatefulWidget {
 class _SettingsChatState extends State<SettingsChat> {
   SettingsChatBloc _settingsChatBloc = SettingsChatBloc();
 
+  final Navigation _navigation = Navigation();
+
   @override
   void initState() {
     super.initState();
-    Navigation navigation = Navigation();
-    navigation.current = Navigatable(Type.settingsChat);
+    _navigation.current = Navigatable(Type.settingsChat);
     _settingsChatBloc.dispatch(RequestValues());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: AdaptiveAppBar(
           title: Text(L10n.get(L.chatP)),
         ),
         body: _buildPreferenceList(context));
@@ -88,7 +92,7 @@ class _SettingsChatState extends State<SettingsChat> {
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                 title: Text(L10n.get(L.settingReadReceiptP, count: L10n.plural)),
                 subtitle: Text(L10n.get(L.settingReadReceiptText)),
-                trailing: Switch(value: state.readReceiptsEnabled, onChanged: (value) => _changeReadReceipts()),
+                trailing: Switch.adaptive(value: state.readReceiptsEnabled, onChanged: (value) => _changeReadReceipts()),
               ),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),

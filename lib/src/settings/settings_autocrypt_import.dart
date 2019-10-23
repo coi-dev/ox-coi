@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -53,6 +54,10 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class SettingsAutocryptImport extends StatefulWidget {
   final int chatId;
@@ -102,15 +107,21 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.close),
+      appBar: AdaptiveAppBar(
+        leadingIcon: new AdaptiveIconButton(
+          icon: new AdaptiveIcon(
+              androidIcon: Icons.arrow_back,
+              iosIcon: CupertinoIcons.back
+          ),
           onPressed: () => navigation.pop(context),
         ),
         title: Text(L10n.get(L.autocryptImport)),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
+          AdaptiveIconButton(
+            icon: AdaptiveIcon(
+                androidIcon: Icons.check,
+                iosIcon: CupertinoIcons.check_mark
+            ),
             onPressed: () => onSubmit(),
           )
         ],

@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
@@ -62,6 +63,9 @@ import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ContactList extends RootChild {
   final Navigation navigation = Navigation();
@@ -179,16 +183,22 @@ class _ContactListState extends State<ContactList> {
   }
 
   Widget getImportAction() {
-    return IconButton(
-      icon: Icon(Icons.import_contacts),
+    return AdaptiveIconButton(
+      icon: AdaptiveIcon(
+          androidIcon: Icons.import_contacts,
+          iosIcon: CupertinoIcons.person_add_solid
+      ),
       key: Key(keyContactListImportContactIconButton),
       onPressed: () => _showImportDialog(false, context),
     );
   }
 
   Widget getBlockedUsersAction() {
-    return IconButton(
-      icon: Icon(Icons.block),
+    return AdaptiveIconButton(
+      icon: AdaptiveIcon(
+          androidIcon: Icons.block,
+          iosIcon: CupertinoIcons.padlock_solid
+      ),
       key: Key(keyContactListBlockIconButton),
       onPressed: () => _showBlockedUserList(context),
     );
@@ -200,8 +210,11 @@ class _ContactListState extends State<ContactList> {
       onBuildSuggestion: onBuildResultOrSuggestion,
       onClose: onSearchClose,
     );
-    return IconButton(
-      icon: Icon(Icons.search),
+    return AdaptiveIconButton(
+      icon: AdaptiveIcon(
+          androidIcon: Icons.search,
+          iosIcon: CupertinoIcons.search
+      ),
       key: Key(keyContactListSearchIconButton),
       onPressed: () => search.show(context),
     );
@@ -237,8 +250,8 @@ class _ContactListState extends State<ContactList> {
           builder: (context) => FullscreenProgress(
             bloc: _contactListBloc,
             text: L10n.get(L.contactImportRunning),
-            showProgressValues: false,
-            showCancelButton: false,
+            showProgressValues: true,
+            showCancelButton: true,
           ),
         );
         Overlay.of(context).insert(_progressOverlayEntry);

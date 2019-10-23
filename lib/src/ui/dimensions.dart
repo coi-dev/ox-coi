@@ -42,6 +42,9 @@
 
 import 'dart:core';
 
+// Flutter defaults
+const buttonThemeMinWidth = 88.0; // https://api.flutter.dev/flutter/material/ButtonTheme/ButtonTheme.html
+
 // Global
 const zero = 0.0;
 const dividerHeight = 1.0;

@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_create_group_settings.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
@@ -62,6 +63,10 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
   @override
@@ -84,18 +89,24 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.close),
+      appBar: AdaptiveAppBar(
+        leadingIcon: AdaptiveIconButton(
           key: Key(keyChatCreateGroupParticipantsCloseIconButton),
+          icon: AdaptiveIcon(
+              androidIcon: Icons.close,
+              iosIcon: CupertinoIcons.clear_thick,
+          ),
           onPressed: () => navigation.pop(context),
         ),
         title: Text(L10n.get(L.groupCreate)),
         actions: <Widget>[
           getSearchAction(),
-          IconButton(
-            icon: Icon(Icons.arrow_forward),
+          AdaptiveIconButton(
             key: Key(keyChatCreateGroupParticipantsSummitIconButton),
+            icon: AdaptiveIcon(
+                androidIcon: Icons.arrow_forward,
+                iosIcon: CupertinoIcons.forward
+            ),
             onPressed: () => _onSubmit(),
           )
         ],
@@ -110,8 +121,11 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
       onBuildSuggestion: onBuildResultOrSuggestion,
       onClose: onSearchClose,
     );
-    return IconButton(
-      icon: Icon(Icons.search),
+    return AdaptiveIconButton(
+      icon: AdaptiveIcon(
+          androidIcon: Icons.search,
+          iosIcon: CupertinoIcons.search
+      ),
       onPressed: () => search.show(context),
     );
   }

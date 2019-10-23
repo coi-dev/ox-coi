@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
@@ -59,6 +60,10 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum ContactAction {
   add,
@@ -149,17 +154,23 @@ class _ContactChangeState extends State<ContactChange> {
       changeToast = L10n.get(L.contactEditedSuccess);
     }
     return Scaffold(
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.close),
+        appBar: AdaptiveAppBar(
+          leadingIcon: new AdaptiveIconButton(
+            icon: new AdaptiveIcon(
+                androidIcon: Icons.close,
+                iosIcon: CupertinoIcons.clear_thick,
+            ),
             key: Key(keyContactChangeCloseIconButton),
             onPressed: () => navigation.pop(context),
           ),
           title: Text(title),
           actions: <Widget>[
-            IconButton(
+            AdaptiveIconButton(
               key: Key(keyContactChangeCheckIconButton),
-              icon: Icon(Icons.check),
+              icon: AdaptiveIcon(
+                  androidIcon: Icons.check,
+                  iosIcon: CupertinoIcons.check_mark
+              ),
               onPressed: () => _onSubmit(),
             )
           ],

@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -52,6 +53,8 @@ import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+
 class SettingsAbout extends StatefulWidget {
   @override
   _SettingsAboutState createState() => _SettingsAboutState();
@@ -59,11 +62,11 @@ class SettingsAbout extends StatefulWidget {
 
 class _SettingsAboutState extends State<SettingsAbout> {
   SettingsAboutBloc _settingsAboutBloc = SettingsAboutBloc();
+  Navigation navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
-    Navigation navigation = Navigation();
     navigation.current = Navigatable(Type.settingsAbout);
     _settingsAboutBloc.dispatch(RequestAbout());
   }
@@ -77,7 +80,7 @@ class _SettingsAboutState extends State<SettingsAbout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: AdaptiveAppBar(
           title: Text(L10n.get(L.about)),
         ),
         body: _buildPreferenceList(context));

@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
@@ -61,6 +62,8 @@ import 'package:rxdart/rxdart.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
 class ContactDetails extends StatefulWidget {
   final int contactId;
@@ -108,7 +111,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(key: Key("back"),
+      appBar: AdaptiveAppBar(
         title: Text(L10n.get(L.profile)),
       ),
       body: SingleChildScrollView(

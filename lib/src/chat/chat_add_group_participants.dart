@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
 import 'package:ox_coi/src/contact/contact_item_selectable.dart';
@@ -60,6 +61,10 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatAddGroupParticipants extends StatefulWidget {
   final int chatId;
@@ -86,18 +91,24 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.close),
+      appBar: AdaptiveAppBar(
+        leadingIcon: AdaptiveIconButton(
           key: Key(keyChatAddGroupParticipantsCloseIcon),
+          icon: AdaptiveIcon(
+              androidIcon: Icons.close,
+              iosIcon: CupertinoIcons.clear_thick,
+          ),
           onPressed: () => navigation.pop(context),
         ),
         title: Text(L10n.get(L.participantAdd)),
         actions: <Widget>[
           getSearchAction(),
-          IconButton(
-            icon: Icon(Icons.check),
+          AdaptiveIconButton(
             key: Key(keyChatAddGroupParticipantsCheckIcon),
+            icon: AdaptiveIcon(
+                androidIcon: Icons.check,
+                iosIcon: CupertinoIcons.check_mark
+            ),
             onPressed: () => _onSubmit(),
           )
         ],

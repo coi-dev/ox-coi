@@ -40,14 +40,18 @@
  * for more details.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
@@ -86,14 +90,25 @@ class _EditNameState extends State<EditName> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.close),
-            key: Key(keyEditNameCloseIcon),
+        appBar: AdaptiveAppBar(
+          leadingIcon: new AdaptiveIconButton(
+            icon: new AdaptiveIcon(
+              key: Key(keyEditNameCloseIcon),
+              androidIcon: Icons.close,
+              iosIcon: CupertinoIcons.clear_thick,
+            ),
             onPressed: () => _navigation.pop(context),
           ),
           title: Text(widget.title),
-          actions: <Widget>[IconButton(icon: Icon(Icons.check),key: Key(keyEditNameCheckIcon), onPressed: saveNewName)],
+          actions: <Widget>[
+            AdaptiveIconButton(
+                key: Key(keyEditNameCheckIcon),
+                icon: AdaptiveIcon(
+                  androidIcon: Icons.check,
+                  iosIcon: CupertinoIcons.check_mark,
+                ),
+                onPressed: saveNewName)
+          ],
         ),
         body: BlocListener(
           bloc: _chatChangeBloc,

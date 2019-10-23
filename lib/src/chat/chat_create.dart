@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_create_group_participants.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
@@ -58,6 +59,10 @@ import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatCreate extends StatefulWidget {
   @override
@@ -84,7 +89,7 @@ class _ChatCreateState extends State<ChatCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: AdaptiveAppBar(
           title: Text(L10n.get(L.chatCreate)),
           actions: <Widget>[getSearchAction()],
         ),
@@ -97,8 +102,11 @@ class _ChatCreateState extends State<ChatCreate> {
       onBuildSuggestion: onBuildResultOrSuggestion,
       onClose: onSearchClose,
     );
-    return IconButton(
-      icon: Icon(Icons.search),
+    return AdaptiveIconButton(
+      icon: AdaptiveIcon(
+          androidIcon: Icons.search,
+          iosIcon: CupertinoIcons.search
+      ),
       onPressed: () => search.show(context), key: Key(keyChatCreateSearchIcon),
     );
   }

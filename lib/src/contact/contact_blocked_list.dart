@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
@@ -54,6 +55,10 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ContactBlockedList extends StatefulWidget {
   @override
@@ -74,13 +79,17 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: new IconButton(
-            icon: new Icon(Icons.close),
+        appBar: AdaptiveAppBar(
+          leadingIcon: new AdaptiveIconButton(
+            icon: new AdaptiveIcon(
+                androidIcon: Icons.close,
+                iosIcon: CupertinoIcons.clear_thick,
+            ),
             key: Key(keyContactBlockedListCloseIconButton),
             onPressed: () => navigation.pop(context),
           ),
           title: Text(L10n.get(L.contactBlocked)),
+
         ),
         body: buildForm());
   }

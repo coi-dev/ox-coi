@@ -41,12 +41,16 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum ComposerModeType {
   compose,
@@ -57,24 +61,33 @@ enum ComposerModeType {
 mixin ChatComposer {
   Widget buildLeftComposerPart(
       {@required ComposerModeType type, @required Function onShowAttachmentChooser, @required Function onAudioRecordingAbort}) {
-    IconData icon;
+    AdaptiveIcon icon;
     Function onPressed;
     switch (type) {
       case ComposerModeType.compose:
-        icon = Icons.add;
+        icon = AdaptiveIcon(
+            androidIcon: Icons.add,
+            iosIcon: CupertinoIcons.add
+        );
         onPressed = onShowAttachmentChooser;
         break;
       case ComposerModeType.isComposing:
-        icon = Icons.add;
+        icon = AdaptiveIcon(
+            androidIcon: Icons.add,
+            iosIcon: CupertinoIcons.add
+        );
         onPressed = null;
         break;
       case ComposerModeType.isVoiceRecording:
-        icon = Icons.delete;
+        icon = AdaptiveIcon(
+            androidIcon: Icons.delete,
+            iosIcon: CupertinoIcons.delete
+        );
         onPressed = onAudioRecordingAbort;
         break;
     }
-    return IconButton(
-      icon: Icon(icon),
+    return AdaptiveIconButton(
+      icon: icon,
       onPressed: onPressed,
     );
   }
@@ -125,29 +138,44 @@ mixin ChatComposer {
     List<Widget> widgets = List();
     switch (type) {
       case ComposerModeType.compose:
-        widgets.add(new IconButton(
-          icon: new Icon(Icons.mic),
+        widgets.add(new AdaptiveIconButton(
+          icon: new AdaptiveIcon(
+              androidIcon: Icons.mic,
+              iosIcon: CupertinoIcons.mic
+          ),
           onPressed: onRecordAudioPressed,
           key: Key(KeyChatComposerMixinOnRecordAudioPressedIcon),
         ));
-        widgets.add(new IconButton(
-          icon: new Icon(Icons.camera_alt),
+        widgets.add(new AdaptiveIconButton(
+          icon: new AdaptiveIcon(
+              androidIcon: Icons.camera_alt,
+              iosIcon: CupertinoIcons.photo_camera
+          ),
           onPressed: onCaptureImagePressed,
         ));
-        widgets.add(new IconButton(
-          icon: new Icon(Icons.videocam),
+        widgets.add(new AdaptiveIconButton(
+          icon: new AdaptiveIcon(
+              androidIcon: Icons.videocam,
+              iosIcon: CupertinoIcons.video_camera
+          ),
           onPressed: onRecordVideoPressed,
         ));
         break;
       case ComposerModeType.isComposing:
-        widgets.add(new IconButton(
-          icon: new Icon(Icons.send),
+        widgets.add(new AdaptiveIconButton(
+          icon: new AdaptiveIcon(
+              androidIcon: Icons.send,
+              iosIcon: CupertinoIcons.forward
+          ),
           onPressed: onSendText,key: Key(KeyChatComposerMixinOnSendTextIcon),
         ));
         break;
       case ComposerModeType.isVoiceRecording:
-        widgets.add(new IconButton(
-          icon: new Icon(Icons.send),
+        widgets.add(new AdaptiveIconButton(
+          icon: new AdaptiveIcon(
+              androidIcon: Icons.send,
+              iosIcon: CupertinoIcons.forward
+          ),
           onPressed: onRecordAudioPressed,key: Key(KeyChatComposerMixinOnRecordAudioSendIcon),
         ));
         break;

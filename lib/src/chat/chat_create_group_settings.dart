@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
@@ -60,6 +61,10 @@ import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
   final List<int> selectedContacts;
@@ -95,12 +100,15 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AdaptiveAppBar(
         title: Text(L10n.get(L.groupCreate)),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
+          AdaptiveIconButton(
             key: Key(keyChatCreateGroupSettingCheckIconButton),
+            icon: AdaptiveIcon(
+                androidIcon: Icons.check,
+                iosIcon: CupertinoIcons.check_mark
+            ),
             onPressed: () => _onSubmit(),
           )
         ],

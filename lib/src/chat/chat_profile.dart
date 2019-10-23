@@ -42,6 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
@@ -55,6 +56,8 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
+
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
 class ChatProfile extends StatefulWidget {
   final int chatId;
@@ -95,8 +98,9 @@ class _ChatProfileState extends State<ChatProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: AdaptiveAppBar(
           title: Text(L10n.get(L.profile)),
+
         ),
         body: SingleChildScrollView(
           child: BlocBuilder(

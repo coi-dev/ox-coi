@@ -41,6 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
@@ -155,21 +156,22 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
-                          RaisedButton(
+                          AdaptiveRaisedButton(
                               color: accent,
                               textColor: onAccent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
                               ),
                               child: SizedBox(
-                                  width: loginButtonWidth,
-                                  height: loginSignInButtonHeight,
-                                  child: Center(
-                                    child: Text(
-                                      L10n.get(L.loginSignIn).toUpperCase(),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )),
+                                width: loginButtonWidth,
+                                height: loginSignInButtonHeight,
+                                child: Center(
+                                  child: Text(
+                                    L10n.get(L.loginSignIn).toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
                               onPressed: () {
                                 _goToProviderList(ProviderListType.login);
                               }),
