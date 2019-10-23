@@ -14,7 +14,7 @@ dependencies:
   app_settings: 1.0.6+2
   background_fetch: ^0.2.0
   bloc: ^0.14.4
-  contacts_service: ^0.2.8
+  contacts_service: ^0.3.5
   crypto_keys: ^0.1.0
   cupertino_icons: ^0.1.2
   date_format: ^1.0.6
