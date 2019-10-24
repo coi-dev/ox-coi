@@ -69,7 +69,7 @@ class _SettingsChatState extends State<SettingsChat> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.settingsChat);
-    _settingsChatBloc.dispatch(RequestValues());
+    _settingsChatBloc.add(RequestValues());
   }
 
   @override
@@ -116,7 +116,7 @@ class _SettingsChatState extends State<SettingsChat> {
   }
 
   void _changeReadReceipts() {
-    _settingsChatBloc.dispatch(ChangeReadReceipts());
+    _settingsChatBloc.add(ChangeReadReceipts());
   }
 
   Future<void> _buildMessageSyncChooserDialog(int inviteSetting) async {
@@ -148,7 +148,7 @@ class _SettingsChatState extends State<SettingsChat> {
           );
         });
     if (selectedInviteSetting != null) {
-      _settingsChatBloc.dispatch((ChangeInviteSetting(newInviteSetting: selectedInviteSetting)));
+      _settingsChatBloc.add((ChangeInviteSetting(newInviteSetting: selectedInviteSetting)));
     }
   }
 

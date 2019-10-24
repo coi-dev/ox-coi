@@ -88,7 +88,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     if (hasContactPermission) {
       return await SystemContacts.ContactsService.getContacts();
     } else {
-      dispatch(ImportAborted());
+      add(ImportAborted());
       return null;
     }
   }
@@ -118,7 +118,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       await reloadChatName(context, chatRepository, contact.id);
     });
     _contactRepository.clear();
-    dispatch(ImportPerformed());
+    add(ImportPerformed());
   }
 
   Future<void> reloadChatName(Context context, Repository<Chat> chatRepository, int contactId) async {

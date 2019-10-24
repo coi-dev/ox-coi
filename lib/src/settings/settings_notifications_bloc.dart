@@ -75,7 +75,7 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
       await setPreference(preferenceNotificationsPull, defaultPullPreference);
       pullPreference = defaultPullPreference;
     }
-    dispatch(SettingLoaded(pullActive: pullPreference, isCoiSupported: isSupportedCoi));
+    add(SettingLoaded(pullActive: pullPreference, isCoiSupported: isSupportedCoi));
   }
 
   void changeSettings() async {
@@ -88,7 +88,7 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
     } else {
       backgroundManager.stop();
     }
-    dispatch(ActionSuccess(pullActive: newPullPreference));
+    add(ActionSuccess(pullActive: newPullPreference));
   }
 
   Future<bool> isCoiSupported() async {

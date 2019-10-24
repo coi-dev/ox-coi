@@ -81,14 +81,14 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     } else {
       typeOrChatId = validContacts;
     }
-    _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: typeOrChatId));
+    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: typeOrChatId));
   }
 
   bool isInvite() => widget.chatId == Chat.typeInvite;
 
   @override
   void dispose() {
-    _contactItemBloc.dispose();
+    _contactItemBloc.close();
     super.dispose();
   }
 
@@ -164,14 +164,18 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
   }
 
   _blockContact() {
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
+    contactChangeBloc.add(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
     _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 
   _deleteChat() {
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
-    chatChangeBloc.dispatch(DeleteChat(chatId: widget.chatId));
+    chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
     _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 }

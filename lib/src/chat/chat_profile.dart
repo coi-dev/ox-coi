@@ -78,20 +78,20 @@ class _ChatProfileState extends State<ChatProfile> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chatProfile);
-    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
+    _chatBloc.add(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
     int typeOrChatId;
     if (widget.chatId == Chat.typeInvite) {
       typeOrChatId = inviteContacts;
     } else {
       typeOrChatId = widget.chatId;
     }
-    _contactListBloc.dispatch(RequestContacts(typeOrChatId: typeOrChatId));
+    _contactListBloc.add(RequestContacts(typeOrChatId: typeOrChatId));
   }
 
   @override
   void dispose() {
-    _chatBloc.dispose();
-    _contactListBloc.dispose();
+    _chatBloc.close();
+    _contactListBloc.close();
     super.dispose();
   }
 

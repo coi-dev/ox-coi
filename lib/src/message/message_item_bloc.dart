@@ -78,7 +78,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           await _setupNextMessage();
         }
         await _setupMessage();
-        dispatch(MessageLoaded());
+        add(MessageLoaded());
       } catch (error) {
         yield MessageItemStateFailure(error: error.toString());
       }

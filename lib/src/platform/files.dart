@@ -42,7 +42,7 @@
 
 import 'dart:io';
 
-import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<void> writeToFile(File file, String content) async {
   var sink = file.openWrite(mode: FileMode.append);
@@ -56,6 +56,11 @@ Future<String> readFile(File file) async {
 }
 
 Future<String> getExportImportPath() async {
-  Directory downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
-  return downloadsDirectory.path;
+  var directory;
+  if (Platform.isIOS) {
+    directory = await getApplicationDocumentsDirectory();
+  } else {
+    directory = await getExternalStorageDirectory();
+  }
+  return directory.path;
 }

@@ -69,7 +69,7 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.settingsNotifications);
-    _settingsNotificationsBloc.dispatch(RequestSetting());
+    _settingsNotificationsBloc.add(RequestSetting());
   }
 
   @override
@@ -121,6 +121,6 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
   }
 
   _changeNotificationsSetting() {
-    _settingsNotificationsBloc.dispatch(ChangeSetting());
+    _settingsNotificationsBloc.add(ChangeSetting());
   }
 }

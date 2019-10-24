@@ -85,7 +85,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatAddGroupParticipants);
-    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
   }
 
   @override
@@ -131,7 +131,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   }
 
   Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.dispatch(SearchContacts(query: query));
+    _contactListBloc.add(SearchContacts(query: query));
     return buildList();
   }
 
@@ -225,16 +225,16 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   }
 
   void onSearchClose() {
-    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
   }
 
   _itemTapped(int id) {
-    _contactListBloc.dispatch(ContactsSelectionChanged(id: id));
+    _contactListBloc.add(ContactsSelectionChanged(id: id));
   }
 
   _onSubmit() async {
     if (_contactListBloc.contactsSelectedCount > 0) {
-      _chatChangeBloc.dispatch(ChatAddParticipants(chatId: widget.chatId, contactIds: _contactListBloc.contactsSelected));
+      _chatChangeBloc.add(ChatAddParticipants(chatId: widget.chatId, contactIds: _contactListBloc.contactsSelected));
       navigation.pop(context);
     } else {
       showToast(L10n.get(L.groupAddNoParticipants));

@@ -129,14 +129,14 @@ class _ContactListState extends State<ContactList> {
     setupContactImport();
   }
 
-  void requestValidContacts() => _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+  void requestValidContacts() => _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
 
   setupContactImport() async {
     if (await _contactImportBloc.isInitialContactsOpening()) {
-      _contactImportBloc.dispatch(MarkContactsAsInitiallyLoaded());
+      _contactImportBloc.add(MarkContactsAsInitiallyLoaded());
       _showImportDialog(true, context);
     }
-    final contactImportObservable = new Observable<ContactImportState>(_contactImportBloc.state);
+    final contactImportObservable = new Observable<ContactImportState>(_contactImportBloc);
     contactImportObservable.listen((state) => handleContactImport(state));
   }
 
@@ -157,8 +157,8 @@ class _ContactListState extends State<ContactList> {
 
   @override
   void dispose() {
-    _contactImportBloc.dispose();
-    _contactListBloc.dispose();
+    _contactImportBloc.close();
+    _contactListBloc.close();
     super.dispose();
   }
 
@@ -221,7 +221,7 @@ class _ContactListState extends State<ContactList> {
   }
 
   Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.dispatch(SearchContacts(query: query));
+    _contactListBloc.add(SearchContacts(query: query));
     return buildList();
   }
 
@@ -255,7 +255,7 @@ class _ContactListState extends State<ContactList> {
           ),
         );
         Overlay.of(context).insert(_progressOverlayEntry);
-        _contactImportBloc.dispatch(PerformImport());
+        _contactImportBloc.add(PerformImport());
       },
       navigatable: Navigatable(Type.contactImportDialog),
     );

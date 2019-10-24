@@ -78,9 +78,9 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _messageListRepository?.removeListener(repositoryStreamHandler);
-    super.dispose();
+    super.close();
   }
 
   void _setupMessagesListener() async {
@@ -90,7 +90,7 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
     }
   }
 
-  void _updateMessages(Event event) => dispatch(UpdateMessages());
+  void _updateMessages(Event event) => add(UpdateMessages());
 
   void _loadFlaggedMessages() async {
     List<int> dateMakerIds = List();
@@ -111,7 +111,7 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
       }
     });
 
-    dispatch(
+    add(
       FlaggedMessagesLoaded(
           messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
           messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),

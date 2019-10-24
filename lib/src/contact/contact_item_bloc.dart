@@ -91,7 +91,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     String imagePath = await contact.getProfileImage();
     String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
     Color color = rgbColorFromInt(colorValue);
-    dispatch(ContactLoaded(
+    add(ContactLoaded(
       name: name,
       email: email,
       color: color,

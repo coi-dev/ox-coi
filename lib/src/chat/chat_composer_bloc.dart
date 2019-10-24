@@ -101,7 +101,7 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     _audioPath = await _flutterSound.startRecorder("$name", bitRate: 64000, numChannels: 1);
     _recorderSubscription = _flutterSound.onRecorderStateChanged.listen((e) {
       String timer = getTimerFromTimestamp(e.currentPosition.toInt());
-      dispatch(UpdateAudioRecording(timer: timer));
+      add(UpdateAudioRecording(timer: timer));
     });
   }
 
@@ -116,7 +116,7 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     } catch (err) {
       print('stopRecorder error: $err');
     }
-    dispatch(AudioRecordingStopped(audioPath: _audioPath, shouldSend: shouldSend));
+    add(AudioRecordingStopped(audioPath: _audioPath, shouldSend: shouldSend));
   }
 
   Future<void> startImageOrVideoRecorder(bool pickImage) async {
@@ -130,9 +130,9 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
       type = ChatMsg.typeVideo;
     }
     if (file != null) {
-      dispatch(StopImageOrVideoRecording(filePath: file.path, type: type));
+      add(StopImageOrVideoRecording(filePath: file.path, type: type));
     } else {
-      dispatch(StopImageOrVideoRecording(filePath: null, type: 0));
+      add(StopImageOrVideoRecording(filePath: null, type: 0));
     }
   }
 

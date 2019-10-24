@@ -67,7 +67,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsAntiMobbing);
-    _settingsAntiMobbingBloc.dispatch(RequestSettings());
+    _settingsAntiMobbingBloc.add(RequestSettings());
   }
 
   @override
@@ -115,7 +115,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
   }
 
   _changeAntiMobbingSetting() {
-    _settingsAntiMobbingBloc.dispatch(ChangeSettings());
+    _settingsAntiMobbingBloc.add(ChangeSettings());
   }
 
   void _showAntiMobbingList() {

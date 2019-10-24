@@ -72,7 +72,7 @@ class _FlaggedState extends State<Flagged> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.flagged);
-    _flaggedBloc.dispatch(RequestFlaggedMessages());
+    _flaggedBloc.add(RequestFlaggedMessages());
   }
 
   @override

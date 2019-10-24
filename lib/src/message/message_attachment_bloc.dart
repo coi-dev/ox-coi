@@ -65,7 +65,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       yield MessageAttachmentStateLoading();
       try {
         _openFile(event.messageId);
-        dispatch(AttachmentLoaded());
+        add(AttachmentLoaded());
       } catch (error) {
         yield MessageAttachmentStateFailure(error: error.toString());
       }
@@ -75,7 +75,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       yield MessageAttachmentStateLoading();
       try {
         _shareFile(event.messageId);
-        dispatch(AttachmentLoaded());
+        add(AttachmentLoaded());
       } catch (error) {
         yield MessageAttachmentStateFailure(error: error.toString());
       }

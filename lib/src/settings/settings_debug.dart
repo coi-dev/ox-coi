@@ -78,19 +78,19 @@ class _SettingsDebugState extends State<SettingsDebug> {
     var type = Type.settingsDebug;
     navigation.current = Navigatable(type);
     _logger = Logger(Navigatable.getTag(type));
-    _settingsDebugBloc.dispatch(RequestDebug());
+    _settingsDebugBloc.add(RequestDebug());
     _pushBloc = BlocProvider.of<PushBloc>(context);
-    final pushStateObservable = Observable<PushState>(_pushBloc.state);
+    final pushStateObservable = Observable<PushState>(_pushBloc);
     pushStateObservable.listen((state) {
       if (state is PushStateSuccess) {
-        _settingsDebugBloc.dispatch(RequestDebug());
+        _settingsDebugBloc.add(RequestDebug());
       }
     });
   }
 
   @override
   void dispose() {
-    _settingsDebugBloc.dispose();
+    _settingsDebugBloc.close();
     super.dispose();
   }
 
@@ -144,14 +144,14 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                   title: Text(L10n.get(L.debugPushResourceRegister)),
                   onTap: () {
-                    _pushBloc.dispatch(RegisterPushResource());
+                    _pushBloc.add(RegisterPushResource());
                   },
                 ),
                 ListTile(
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                   title: Text(L10n.get(L.debugPushResourceDelete)),
                   onTap: () {
-                    _pushBloc.dispatch(DeletePushResource());
+                    _pushBloc.add(DeletePushResource());
                   },
                 ),
                 ListTile(
@@ -162,7 +162,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
                     onSubmitted: (text) async {
                       await setPreference(preferenceNotificationsPushServiceUrl, text);
                       showToast("$text was set as push service URL");
-                      _settingsDebugBloc.dispatch(RequestDebug());
+                      _settingsDebugBloc.add(RequestDebug());
                     },
                   ),
                 ),

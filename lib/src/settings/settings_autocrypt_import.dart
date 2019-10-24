@@ -79,9 +79,9 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
   @override
   void initState() {
     super.initState();
-    final contactImportObservable = new Observable<SettingsAutocryptState>(_settingsAutocryptBloc.state);
+    final contactImportObservable = new Observable<SettingsAutocryptState>(_settingsAutocryptBloc);
     contactImportObservable.listen((state) => handleAutocryptImport(state));
-    _settingsAutocryptBloc.dispatch(PrepareKeyTransfer(chatId: widget.chatId, messageId: widget.messageId));
+    _settingsAutocryptBloc.add(PrepareKeyTransfer(chatId: widget.chatId, messageId: widget.messageId));
     navigation.current = Navigatable(Type.settingsAutocryptImport);
   }
 
@@ -141,7 +141,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
 
   onSubmit() {
     if (_formKey.currentState.validate()) {
-      _settingsAutocryptBloc.dispatch(ContinueKeyTransfer(messageId: widget.messageId, setupCode: _setupCodeField.controller.text));
+      _settingsAutocryptBloc.add(ContinueKeyTransfer(messageId: widget.messageId, setupCode: _setupCodeField.controller.text));
     }
   }
 

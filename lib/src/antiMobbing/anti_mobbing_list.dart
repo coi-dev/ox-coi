@@ -69,12 +69,12 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.antiMobbingList);
-    _antiMobbingListBloc.dispatch(RequestMessages());
+    _antiMobbingListBloc.add(RequestMessages());
   }
 
   @override
   void dispose() {
-    _antiMobbingListBloc.dispose();
+    _antiMobbingListBloc.close();
     super.dispose();
   }
 

@@ -82,7 +82,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatCreateGroupParticipants);
-    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
 
@@ -131,12 +131,12 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.dispatch(SearchContacts(query: query));
+    _contactListBloc.add(SearchContacts(query: query));
     return buildList();
   }
 
   void onSearchClose() {
-    _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
   }
 
   Widget buildList() {
@@ -228,7 +228,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   _itemTapped(int id) {
-    _contactListBloc.dispatch(ContactsSelectionChanged(id: id));
+    _contactListBloc.add(ContactsSelectionChanged(id: id));
   }
 
   _onSubmit() async {

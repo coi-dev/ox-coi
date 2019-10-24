@@ -74,13 +74,13 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsSecurity);
-    final settingsSecurityObservable = new Observable<SettingsSecurityState>(_settingsSecurityBloc.state);
+    final settingsSecurityObservable = new Observable<SettingsSecurityState>(_settingsSecurityBloc);
     settingsSecurityObservable.listen((state) => _settingsSecurityStateChange(state));
   }
 
   @override
   void dispose() {
-    _settingsSecurityBloc.dispose();
+    _settingsSecurityBloc.close();
     super.dispose();
   }
 
@@ -231,9 +231,9 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
 
   void _exportImport(SettingsSecurityType type) {
     if (type == SettingsSecurityType.exportKeys) {
-      _settingsSecurityBloc.dispatch(ExportKeys());
+      _settingsSecurityBloc.add(ExportKeys());
     } else if (type == SettingsSecurityType.importKeys) {
-      _settingsSecurityBloc.dispatch(ImportKeys());
+      _settingsSecurityBloc.add(ImportKeys());
     }
   }
 
@@ -249,6 +249,6 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   }
 
   void _keyTransfer() {
-    _settingsSecurityBloc.dispatch(InitiateKeyTransfer());
+    _settingsSecurityBloc.add(InitiateKeyTransfer());
   }
 }

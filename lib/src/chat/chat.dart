@@ -124,27 +124,27 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
-    _chatBloc.dispatch(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
-    final chatObservable = new Observable<ChatState>(_chatBloc.state);
+    _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
+    final chatObservable = new Observable<ChatState>(_chatBloc);
     chatObservable.listen((state) {
       if (state is ChatStateSuccess) {
         _phoneNumbers = state.phoneNumbers;
-        _messageListBloc.dispatch(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
+        _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
         if (widget.newMessage != null || widget.newPath != null) {
           if (widget.newPath.isEmpty) {
-            _messageListBloc.dispatch(SendMessage(text: widget.newMessage));
+            _messageListBloc.add(SendMessage(text: widget.newMessage));
           } else {
-            _messageListBloc.dispatch(SendMessage(path: widget.newPath, fileType: widget.newFileType, text: widget.newMessage));
+            _messageListBloc.add(SendMessage(path: widget.newPath, fileType: widget.newFileType, text: widget.newMessage));
           }
         }
       }
     });
-    final chatComposerObservable = new Observable<ChatComposerState>(_chatComposerBloc.state);
+    final chatComposerObservable = new Observable<ChatComposerState>(_chatComposerBloc);
     chatComposerObservable.listen((state) => handleChatComposer(state));
-    final messagesObservable = new Observable<MessageListState>(_messageListBloc.state);
+    final messagesObservable = new Observable<MessageListState>(_messageListBloc);
     messagesObservable.listen((state) {
       if (state is MessagesStateSuccess) {
-        _chatChangeBloc.dispatch(ChatMarkMessagesSeen(messageIds: state.messageIds));
+        _chatChangeBloc.add(ChatMarkMessagesSeen(messageIds: state.messageIds));
       }
     });
 
@@ -225,10 +225,10 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   @override
   void dispose() {
-    _chatBloc.dispose();
-    _messageListBloc.dispose();
-    _chatComposerBloc.dispose();
-    _chatChangeBloc.dispose();
+    _chatBloc.close();
+    _messageListBloc.close();
+    _chatComposerBloc.close();
+    _chatChangeBloc.close();
     super.dispose();
   }
 
@@ -339,14 +339,16 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   _blockContact() {
-    _messageListBloc.dispose();
+    _messageListBloc.close();
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(BlockContact(messageId: widget.messageId, chatId: widget.chatId));
+    contactChangeBloc.add(BlockContact(messageId: widget.messageId, chatId: widget.chatId));
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 
   _createChat() {
-    _messageListBloc.dispose();
+    _messageListBloc.close();
     createChatFromMessage(context, widget.messageId, widget.chatId);
   }
 
@@ -567,7 +569,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       _scrollController.jumpTo(0.0);
     }
     if (isInviteChat(widget.chatId)) {
-      _messageListBloc.dispose();
+      _messageListBloc.close();
       createChatFromMessage(context, widget.messageId, widget.chatId, _handleCreateChatSuccess);
     } else {
       _onMessageSend();
@@ -594,10 +596,10 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     String text = _textController.text;
     _textController.clear();
     if (_filePath.isEmpty) {
-      _messageListBloc.dispatch(SendMessage(text: text));
+      _messageListBloc.add(SendMessage(text: text));
     } else {
       int type = getType();
-      _messageListBloc.dispatch(SendMessage(path: _filePath, fileType: type, text: text, isShared: widget.sharedData != null));
+      _messageListBloc.add(SendMessage(path: _filePath, fileType: type, text: text, isShared: widget.sharedData != null));
     }
 
     _closePreview();
@@ -639,22 +641,22 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   _onRecordAudioPressed() async {
     if (ComposerModeType.isVoiceRecording != _getComposerType()) {
-      _chatComposerBloc.dispatch(StartAudioRecording());
+      _chatComposerBloc.add(StartAudioRecording());
     } else {
-      _chatComposerBloc.dispatch(StopAudioRecording(shouldSend: true));
+      _chatComposerBloc.add(StopAudioRecording(shouldSend: true));
     }
   }
 
   _onAudioRecordingAbort() {
-    _chatComposerBloc.dispatch(StopAudioRecording(shouldSend: false));
+    _chatComposerBloc.add(StopAudioRecording(shouldSend: false));
   }
 
   _onCaptureImagePressed() {
-    _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: true));
+    _chatComposerBloc.add(StartImageOrVideoRecording(pickImage: true));
   }
 
   _onRecordVideoPressed() {
-    _chatComposerBloc.dispatch(StartImageOrVideoRecording(pickImage: false));
+    _chatComposerBloc.add(StartImageOrVideoRecording(pickImage: false));
   }
 
   void _showAttachmentChooser() {
@@ -713,7 +715,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   void _closePreview() {
     setState(() {
       if (widget.sharedData != null) {
-        _messageListBloc.dispatch(DeleteCacheFile(path: _filePath));
+        _messageListBloc.add(DeleteCacheFile(path: _filePath));
       }
       _filePath = "";
       _selectedExtension = "";

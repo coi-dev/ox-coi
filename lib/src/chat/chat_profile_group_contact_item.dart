@@ -91,7 +91,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   @override
   void initState() {
     super.initState();
-    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+    _contactBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     if (widget.contactId != Core.Contact.idSelf) {
       choices = participantChoices;
     } else {
@@ -101,7 +101,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
 
   @override
   void dispose() {
-    _contactBloc.dispose();
+    _contactBloc.close();
     super.dispose();
   }
 
@@ -139,7 +139,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
 
   void _removeParticipant() {
     if (widget.contactId != Core.Contact.idSelf) {
-      _chatChangeBloc.dispatch(ChatRemoveParticipant(chatId: widget.chatId, contactId: widget.contactId));
+      _chatChangeBloc.add(ChatRemoveParticipant(chatId: widget.chatId, contactId: widget.contactId));
     }
   }
 

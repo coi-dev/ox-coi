@@ -78,10 +78,10 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
   }
 
   @override
-  void dispose() {
+  void close() {
     _messageListRepository?.removeListener(_repositoryStreamHandler);
     _repositoryStreamHandler?.tearDown();
-    super.dispose();
+    super.close();
   }
 
   void _setupMessagesListener() async {
@@ -95,7 +95,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
     }
   }
 
-  void _onMessagesChanged(event) => dispatch(UpdateMessages());
+  void _onMessagesChanged(event) => add(UpdateMessages());
 
   void loadMessages() async {
     List<int> dateMakerIds = List();
@@ -121,7 +121,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
       }
     });
 
-    dispatch(MessagesLoaded(
+    add(MessagesLoaded(
         messageIds: uniqueInviteMap.values.toList(growable: false),
         messageLastUpdateValues: lastUpdateValues.toList(growable: false),
         dateMarkerIds: dateMakerIds));

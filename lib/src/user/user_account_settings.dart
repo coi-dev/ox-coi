@@ -82,18 +82,18 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsAccount);
-    _userChangeBloc.dispatch(RequestUser());
-    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc.state);
+    _userChangeBloc.add(RequestUser());
+    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc);
     userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
 
-    final loginObservable = new Observable<LoginState>(_loginBloc.state);
+    final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((event) => handleLoginStateChange(event));
   }
 
   _handleUserChangeStateChange(UserChangeState state) {
     if (state is UserChangeStateApplied) {
       _showedErrorDialog = false;
-      _loginBloc.dispatch(EditButtonPressed());
+      _loginBloc.add(EditButtonPressed());
     } else if (state is UserChangeStateFailure) {
       showToast(state.error);
     }
@@ -127,7 +127,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
     return BlocProvider(
       builder: (context) {
         var settingsManualFormBloc = SettingsManualFormBloc();
-        settingsManualFormBloc.dispatch(SetupSettings(
+        settingsManualFormBloc.add(SetupSettings(
           shouldLoadConfig: true,
         ));
         return settingsManualFormBloc;
@@ -144,7 +144,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
             _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
             OverlayState overlayState = Overlay.of(context);
             overlayState.insert(_progressOverlayEntry);
-            _userChangeBloc.dispatch(
+            _userChangeBloc.add(
               UserAccountDataChanged(
                 imapLogin: state.imapLogin,
                 imapPassword: state.password,
@@ -202,6 +202,6 @@ class SaveDataButton extends StatelessWidget {
 
   _saveData(BuildContext context) {
     unFocus(context);
-    BlocProvider.of<SettingsManualFormBloc>(context).dispatch(RequestValidateSettings());
+    BlocProvider.of<SettingsManualFormBloc>(context).add(RequestValidateSettings());
   }
 }

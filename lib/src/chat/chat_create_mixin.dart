@@ -50,25 +50,31 @@ import 'package:rxdart/rxdart.dart';
 
 mixin ChatCreateMixin {
   void createChatFromContact(BuildContext context, int contactId, [Function onSuccess]) {
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ChatChangeBloc createChatBloc = _getChatChangeBloc(context, onSuccess);
-    createChatBloc.dispatch(CreateChat(contactId: contactId));
+    createChatBloc.add(CreateChat(contactId: contactId));
   }
 
   ChatChangeBloc _getChatChangeBloc(BuildContext context, Function onSuccess) {
     ChatChangeBloc createChatBloc = ChatChangeBloc();
-    final createChatStatesObservable = new Observable<ChatChangeState>(createChatBloc.state);
+    final createChatStatesObservable = new Observable<ChatChangeState>(createChatBloc);
     createChatStatesObservable.listen((state) => _handleCreateChatStateChange(context, state, onSuccess));
     return createChatBloc;
   }
 
   void createChatFromGroup(BuildContext context, bool verified, String name, List<int> contacts, String imagePath, [Function onSuccess]) {
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ChatChangeBloc chatChangeBloc = _getChatChangeBloc(context, onSuccess);
-    chatChangeBloc.dispatch(CreateChat(verified: verified, name: name, contacts: contacts, imagePath: imagePath));
+    chatChangeBloc.add(CreateChat(verified: verified, name: name, contacts: contacts, imagePath: imagePath));
   }
 
   void createChatFromMessage(BuildContext context, int messageId, int chatId, [Function onSuccess]) {
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ChatChangeBloc chatChangeBloc = _getChatChangeBloc(context, onSuccess);
-    chatChangeBloc.dispatch(CreateChat(messageId: messageId, chatId: chatId));
+    chatChangeBloc.add(CreateChat(messageId: messageId, chatId: chatId));
   }
 
   _handleCreateChatStateChange(BuildContext context, ChatChangeState state, Function onSuccess) {

@@ -107,7 +107,7 @@ class _ProfileState extends State<UserProfile> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.profile);
-    _userBloc.dispatch(RequestUser());
+    _userBloc.add(RequestUser());
   }
 
   @override

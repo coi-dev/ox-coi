@@ -75,12 +75,12 @@ class _ShareState extends State<Share> {
   @override
   void initState() {
     super.initState();
-    _shareBloc.dispatch(RequestChatsAndContacts());
+    _shareBloc.add(RequestChatsAndContacts());
   }
 
   @override
   void dispose() {
-    _shareBloc.dispose();
+    _shareBloc.close();
     super.dispose();
   }
 
@@ -156,7 +156,7 @@ class _ShareState extends State<Share> {
   chatItemTapped(int chatId) {
     Navigation navigation = Navigation();
     if(widget.messageActionTag == MessageActionTag.forward) {
-      _shareBloc.dispatch(ForwardMessages(destinationChatId: chatId, messageIds: widget.msgIds));
+      _shareBloc.add(ForwardMessages(destinationChatId: chatId, messageIds: widget.msgIds));
     }
 
     navigation.pushAndRemoveUntil(

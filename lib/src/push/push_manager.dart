@@ -80,7 +80,7 @@ class PushManager {
           String decryptedContent = await decrypt(notificationData.content);
           if (_isValidationPush(decryptedContent)) {
             var validation = _getPushValidation(decryptedContent).validation;
-            _pushBloc.dispatch(ValidateMetadata(validation: validation));
+            _pushBloc.add(ValidateMetadata(validation: validation));
           } else {
             var pushChatMessage = _getPushChatMessage(decryptedContent);
             String fromEmail = pushChatMessage.fromEmail;
@@ -104,7 +104,7 @@ class PushManager {
     _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.getToken().then((token) {
       //TODO Use in production
-      //_pushBloc.dispatch(PatchPushResource(pushToken: token));
+      //_pushBloc.add(PatchPushResource(pushToken: token));
     });
   }
 

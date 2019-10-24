@@ -109,7 +109,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
             pushSetupState: PushSetupState.resourceRegistered,
           );
           _setNotificationPushStatus(PushSetupState.resourceRegistered);
-          dispatch(SubscribeMetadata(pushResource: pushResource));
+          add(SubscribeMetadata(pushResource: pushResource));
         }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
@@ -143,7 +143,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
           );
           _setNotificationPushStatus(PushSetupState.resourceRegistered);
           // TODO is requesting a new metadata subscription actually needed? Does the push resource ID or endpoint changes?
-          dispatch(SubscribeMetadata(pushResource: pushResource));
+          add(SubscribeMetadata(pushResource: pushResource));
         }
       } catch (error) {
         yield PushStateFailure(error: error.toString());
@@ -182,9 +182,9 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _unregisterListeners();
-    super.dispose();
+    super.close();
   }
 
   Future<RequestPushRegistration> _createRegistrationRequest() async {

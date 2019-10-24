@@ -120,9 +120,9 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _unregisterListeners();
-    super.dispose();
+    super.close();
   }
 
   void _registerListeners() async {
@@ -146,7 +146,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   void getQrText(int chatId) async {
     Context context = Context();
     String qrText = await context.getSecureJoinQr(chatId);
-    dispatch(QrTextLoaded(qrText: qrText));
+    add(QrTextLoaded(qrText: qrText));
   }
 
   void checkQr(String qrText) async {
@@ -154,39 +154,39 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     var result = await context.checkQr(qrText);
     QrCodeResult qrResult = QrCodeResult.fromMethodChannel(result);
     if (qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup) {
-      dispatch(CheckQrDone(qrText: qrText));
+      add(CheckQrDone(qrText: qrText));
     } else {
-      dispatch(CheckQrDone(qrText: null));
+      add(CheckQrDone(qrText: null));
     }
   }
 
   void _successCallback(Event event) {
     int progress = event.data2 as int;
-    dispatch(QrJoinInviteProgress(progress: progress));
+    add(QrJoinInviteProgress(progress: progress));
   }
 
   void _errorCallback(error) async {
-    dispatch(QrJoinInviteProgress(progress: 0, error: error));
+    add(QrJoinInviteProgress(progress: 0, error: error));
   }
 
   void joinSecurejoin(String qrText) async {
     Context context = Context();
     int chatId = await context.joinSecurejoinQr(qrText);
     if (chatId == 0) {
-      dispatch(JoinFailed());
+      add(JoinFailed());
     } else {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.putIfAbsent(id: chatId);
       var contactRepository = RepositoryManager.get(RepositoryType.contact);
       var contacts = await context.getChatContacts(chatId);
       contactRepository.putIfAbsent(ids: contacts);
-      dispatch(JoinDone(chatId: chatId));
+      add(JoinDone(chatId: chatId));
     }
   }
 
   void cancelQrProcess() async {
     Context context = Context();
     await context.stopOngoingProcess();
-    dispatch(RequestQrCamera());
+    add(RequestQrCamera());
   }
 }

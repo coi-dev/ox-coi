@@ -79,8 +79,8 @@ class _UserSettingsState extends State<UserSettings> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsUser);
-    _userChangeBloc.dispatch(RequestUser());
-    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc.state);
+    _userChangeBloc.add(RequestUser());
+    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc);
     userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
   }
 
@@ -185,6 +185,6 @@ class _UserSettingsState extends State<UserSettings> {
 
   void _saveChanges() async {
     String avatarPath = !isNullOrEmpty(_avatar) ? _avatar : null;
-    _userChangeBloc.dispatch(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
+    _userChangeBloc.add(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
   }
 }

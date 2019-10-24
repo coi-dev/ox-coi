@@ -122,9 +122,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _unregisterListeners();
-    super.dispose();
+    super.close();
   }
 
   Future<void> _setupConfig(LoginButtonPressed event) async {
@@ -175,11 +175,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _successCallback(Event event) {
     int progress = event.data1 as int;
-    dispatch(LoginProgress(progress: progress));
+    add(LoginProgress(progress: progress));
   }
 
   void _errorCallback(error) async {
-    dispatch(LoginProgress(progress: 0, error: error));
+    add(LoginProgress(progress: 0, error: error));
   }
 
   void _loadProviders(ProviderListType type) async {
@@ -189,7 +189,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (type == ProviderListType.register) {
       providers.providerList.removeWhere((provider) => isNullOrEmpty(provider.registerLink));
     }
-    dispatch(ProvidersLoaded(providers: providers.providerList));
+    add(ProvidersLoaded(providers: providers.providerList));
   }
 
   _setupConfigWithProvider(ProviderLoginButtonPressed event) async {

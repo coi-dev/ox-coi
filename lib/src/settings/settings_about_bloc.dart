@@ -66,6 +66,6 @@ class SettingsAboutBloc extends Bloc<SettingsAboutEvent, SettingsAboutState> {
   void loadAbout() async {
     String name = await getFullName();
     String version = await getAppVersion();
-    dispatch(AboutLoaded(name: name, version: version));
+    add(AboutLoaded(name: name, version: version));
   }
 }

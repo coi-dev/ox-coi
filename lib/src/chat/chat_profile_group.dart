@@ -78,26 +78,28 @@ class ChatProfileGroup extends StatefulWidget {
 class _ChatProfileGroupState extends State<ChatProfileGroup> {
   ContactListBloc _contactListBloc = ContactListBloc();
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
-  ChatBloc chatBloc;
+  // Ignoring false positive https://github.com/felangel/bloc/issues/587
+  // ignore: close_sinks
+  ChatBloc _chatBloc;
   Navigation _navigation = Navigation();
-  String chatName;
+  String _chatName;
 
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chatGroupProfile);
-    _contactListBloc.dispatch(RequestContacts(typeOrChatId: widget.chatId));
+    _contactListBloc.add(RequestContacts(typeOrChatId: widget.chatId));
   }
 
   @override
   void dispose() {
-    _contactListBloc.dispose();
+    _contactListBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    chatBloc = BlocProvider.of<ChatBloc>(context);
+    _chatBloc = BlocProvider.of<ChatBloc>(context);
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
@@ -106,10 +108,10 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               BlocBuilder(
-                bloc: chatBloc,
+                bloc: _chatBloc,
                 builder: (context, state) {
                   if (state is ChatStateSuccess) {
-                    chatName = state.name;
+                    _chatName = state.name;
                     return ProfileData(
                         color: widget.chatColor,
                         text: state.name,
@@ -205,7 +207,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   }
 
   _editPhotoCallback(String avatarPath) {
-    _chatChangeBloc.dispatch(SetImagePath(chatId: widget.chatId, newPath: avatarPath));
+    _chatChangeBloc.add(SetImagePath(chatId: widget.chatId, newPath: avatarPath));
   }
 
   ListView _buildGroupMemberList(ContactListStateSuccess state) {
@@ -225,8 +227,8 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   }
 
   _leaveGroup() async {
-    _chatChangeBloc.dispatch(LeaveGroupChat(chatId: widget.chatId));
-    _chatChangeBloc.dispatch(DeleteChat(chatId: widget.chatId));
+    _chatChangeBloc.add(LeaveGroupChat(chatId: widget.chatId));
+    _chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
     _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
   }
 
@@ -236,10 +238,10 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
       MaterialPageRoute<EditName>(
         builder: (context) {
           return BlocProvider.value(
-            value: chatBloc,
+            value: _chatBloc,
             child: EditName(
               chatId: widget.chatId,
-              actualName: chatName,
+              actualName: _chatName,
               title: L10n.get(L.groupRename),
             ),
           );

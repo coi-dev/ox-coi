@@ -77,8 +77,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.login);
-    _loginBloc.dispatch(RequestProviders(type: ProviderListType.login));
-    final loginObservable = new Observable<LoginState>(_loginBloc.state);
+    _loginBloc.add(RequestProviders(type: ProviderListType.login));
+    final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }
 

@@ -75,15 +75,15 @@ class _DebugViewerState extends State<DebugViewer> {
     super.initState();
     navigation.current = Navigatable(Type.debugViewer);
     if (isNullOrEmpty(widget.input)) {
-      _debugViewerBloc.dispatch(RequestLog());
+      _debugViewerBloc.add(RequestLog());
     } else {
-      _debugViewerBloc.dispatch(InputLoaded(input: widget.input));
+      _debugViewerBloc.add(InputLoaded(input: widget.input));
     }
   }
 
   @override
   void dispose() {
-    _debugViewerBloc.dispose();
+    _debugViewerBloc.close();
     super.dispose();
   }
 

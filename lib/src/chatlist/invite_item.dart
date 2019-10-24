@@ -67,7 +67,7 @@ class _InviteItemState extends State<InviteItem> with ChatCreateMixin {
   @override
   void initState() {
     super.initState();
-    _messageItemBloc.dispatch(RequestMessage(chatId: widget.chatId, messageId: widget.messageId, isGroupChat: false));
+    _messageItemBloc.add(RequestMessage(chatId: widget.chatId, messageId: widget.messageId, isGroupChat: false));
   }
 
   @override
@@ -115,7 +115,7 @@ class _InviteItemState extends State<InviteItem> with ChatCreateMixin {
 
   @override
   void dispose() {
-    _messageItemBloc.dispose();
+    _messageItemBloc.close();
     super.dispose();
   }
 }

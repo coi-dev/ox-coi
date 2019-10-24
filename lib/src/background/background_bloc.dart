@@ -72,9 +72,9 @@ class BackgroundBloc extends Bloc<BackgroundEvent, BackgroundState> {
 
   void setup() {
     SystemChannels.lifecycle.setMessageHandler((state) async {
-      dispatch(BackgroundStateChange(state: state));
+      add(BackgroundStateChange(state: state));
       return state;
     });
-    dispatch(BackgroundStateChange(state: AppLifecycleState.resumed.toString()));
+    add(BackgroundStateChange(state: AppLifecycleState.resumed.toString()));
   }
 }

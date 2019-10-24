@@ -104,8 +104,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   @override
-  Stream<ChatListState> transform(Stream<ChatListEvent> events, Stream<ChatListState> Function(ChatListEvent event) next) {
-    return super.transform(
+  Stream<ChatListState> transformEvents(Stream<ChatListEvent> events, Stream<ChatListState> Function(ChatListEvent event) next) {
+    return super.transformEvents(
       (events as Observable<ChatListEvent>).debounceTime(
         Duration(milliseconds: 300),
       ),
@@ -114,11 +114,11 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _chatRepository.removeListener(_repositoryStreamHandler);
     _repositoryStreamHandler?.tearDown();
-    _messageListBloc.dispose();
-    super.dispose();
+    _messageListBloc.close();
+    super.close();
   }
 
   void setupChatListListener() {
@@ -127,7 +127,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
           RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
 
-      final messageListObservable = Observable<MessageListState>(_messageListBloc.state);
+      final messageListObservable = Observable<MessageListState>(_messageListBloc);
       messageListObservable.listen((state) async {
         if (state is MessagesStateSuccess) {
           var uniqueInviteMap = LinkedHashMap<int, int>();
@@ -152,7 +152,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
           for(int contactId in removedContacts){
             uniqueInviteMap.remove(contactId);
           }
-          dispatch(InvitesPrepared(messageIds: uniqueInviteMap.values.toList(growable: false)));
+          add(InvitesPrepared(messageIds: uniqueInviteMap.values.toList(growable: false)));
         }
       });
     }
@@ -162,14 +162,14 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     if (_showInvites) {
       setupInvites();
     } else {
-      dispatch(ChatListModified(
+      add(ChatListModified(
         chatListItemWrapper: createChatListItemWrapper(_chatRepository.getAllIds(), _chatRepository.getAllLastUpdateValues()),
       ));
     }
   }
 
   Future setupInvites() async {
-    _messageListBloc.dispatch(RequestMessages(chatId: Chat.typeInvite));
+    _messageListBloc.add(RequestMessages(chatId: Chat.typeInvite));
   }
 
   ChatListItemWrapper createChatListItemWrapper(List<int> ids, List<int> lastUpdateValues, [List<int> types]) {
@@ -282,6 +282,6 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     } else {
       chatListItemWrapper = await mergeInvitesAndChats(ids, inviteMessageIds);
     }
-    dispatch(ChatListModified(chatListItemWrapper: chatListItemWrapper));
+    add(ChatListModified(chatListItemWrapper: chatListItemWrapper));
   }
 }

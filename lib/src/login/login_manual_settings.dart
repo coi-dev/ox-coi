@@ -81,7 +81,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginManualSettings);
-    final loginObservable = new Observable<LoginState>(_loginBloc.state);
+    final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }
 
@@ -111,7 +111,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
     return BlocProvider(
       builder: (context) {
         var settingsManualFormBloc = SettingsManualFormBloc();
-        settingsManualFormBloc.dispatch(SetupSettings(
+        settingsManualFormBloc.add(SetupSettings(
           shouldLoadConfig: false,
           email: widget.email,
           password: widget.password,
@@ -130,7 +130,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
             _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
             OverlayState overlayState = Overlay.of(context);
             overlayState.insert(_progressOverlayEntry);
-            _loginBloc.dispatch(LoginButtonPressed(
+            _loginBloc.add(LoginButtonPressed(
               email: state.email,
               password: state.password,
               imapLogin: state.imapLogin,
@@ -225,6 +225,6 @@ class LoginButton extends StatelessWidget {
 
   void _performLogin(BuildContext context) {
     unFocus(context);
-    BlocProvider.of<SettingsManualFormBloc>(context).dispatch(RequestValidateSettings());
+    BlocProvider.of<SettingsManualFormBloc>(context).add(RequestValidateSettings());
   }
 }

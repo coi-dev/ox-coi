@@ -89,14 +89,14 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     List<int> _chatIds;
     List<int> _completeList = List();
 
-    final contactListObservable = Observable<ContactListState>(_contactListBloc.state);
+    final contactListObservable = Observable<ContactListState>(_contactListBloc);
     contactListObservable.listen((state) {
       if (state is ContactListStateSuccess) {
         int index = _chatIds.length;
         if (state.contactIds != null) {
           _completeList.insertAll(index, state.contactIds);
         }
-        dispatch(ChatsAndContactsLoaded(
+        add(ChatsAndContactsLoaded(
           chatAndContactList: _completeList,
           chatListLength: _chatIds.length,
           contactListLength: state.contactIds.length,
@@ -104,7 +104,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
       }
     });
 
-    final chatListObservable = Observable<ChatListState>(_chatListBloc.state);
+    final chatListObservable = Observable<ChatListState>(_chatListBloc);
     chatListObservable.listen((state) {
       if (state is ChatListStateSuccess) {
         _completeList.clear();
@@ -112,10 +112,10 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
         if (_chatIds != null) {
           _completeList.insertAll(0, _chatIds);
         }
-        _contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+        _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
       }
     });
-    _chatListBloc.dispatch(RequestChatList(showInvites: false));
+    _chatListBloc.add(RequestChatList(showInvites: false));
   }
 
   void forwardMessages(int destinationChatId, List<int> messageIds) async {
@@ -130,7 +130,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     if(data.length > 0){
       sharedData = SharedData(data);
     }
-    dispatch(SharedDataLoaded(sharedData: sharedData));
+    add(SharedDataLoaded(sharedData: sharedData));
   }
 
   Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');

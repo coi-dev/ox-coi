@@ -95,15 +95,15 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   }
 
   @override
-  void dispose() {
+  void close() {
     _unregisterListeners();
-    super.dispose();
+    super.close();
   }
 
   Future<bool> _checkPermissions() async {
     bool hasFilesPermission = await hasPermission(PermissionGroup.storage);
     if (!hasFilesPermission) {
-      dispatch(ActionFailed(error: SettingsSecurityStateError.missingStoragePermission));
+      add(ActionFailed(error: SettingsSecurityStateError.missingStoragePermission));
     }
     return hasFilesPermission;
   }
@@ -124,7 +124,7 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   void _initiateKeyTransfer() async {
     var context = Context();
     String setupCode = await context.initiateKeyTransfer();
-    dispatch(ActionSuccess(setupCode: setupCode));
+    add(ActionSuccess(setupCode: setupCode));
   }
 
   Future<void> _registerListeners() async {
@@ -139,14 +139,14 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
 
   _successCallback(Event event) {
     if (_actionSuccess(event.data1)) {
-      dispatch(ActionSuccess());
+      add(ActionSuccess());
     } else if (_actionFailed(event.data1)) {
-      dispatch(ActionFailed(error: null));
+      add(ActionFailed(error: null));
     }
   }
 
   _errorCallback(error) {
-    dispatch(ActionFailed(error: error));
+    add(ActionFailed(error: error));
   }
 
   bool _actionSuccess(int progress) {

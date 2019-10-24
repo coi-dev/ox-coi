@@ -66,7 +66,7 @@ class _WebAssetState extends State<WebAsset> {
     super.initState();
     Navigation navigation = Navigation();
     navigation.current = Navigatable(Type.webAsset);
-    _webAssetBloc.dispatch(LoadAsset(asset: widget.asset));
+    _webAssetBloc.add(LoadAsset(asset: widget.asset));
   }
 
   @override

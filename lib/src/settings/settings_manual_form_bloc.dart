@@ -98,7 +98,7 @@ class SettingsManualFormBloc extends Bloc<SettingsManualFormEvent, SettingsManua
       var config = Config();
       var imapPort = config.imapPort;
       var smtpPort = config.smtpPort;
-      dispatch(SettingsPrefilled(
+      add(SettingsPrefilled(
         containsConfig: true,
         email: config.email,
         imapLogin: config.imapLogin,
@@ -111,7 +111,7 @@ class SettingsManualFormBloc extends Bloc<SettingsManualFormEvent, SettingsManua
         smtpSecurity: config.smtpSecurity,
       ));
     } else {
-      dispatch(SettingsPrefilled(containsConfig: false, email: email, password: password));
+      add(SettingsPrefilled(containsConfig: false, email: email, password: password));
     }
   }
 }

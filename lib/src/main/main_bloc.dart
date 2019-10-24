@@ -130,7 +130,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> _checkLogin() async {
     bool configured = await _context.isConfigured();
-    dispatch(AppLoaded(configured: configured));
+    add(AppLoaded(configured: configured));
   }
 
   Future<void> _setupLoggedInAppState() async {
@@ -149,8 +149,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
     }
     await setupBackgroundManager(coiSupported);
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ContactListBloc contactListBloc = ContactListBloc();
-    contactListBloc.dispatch(RequestContacts(typeOrChatId: validContacts));
+    contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
   }
 
   Future<bool> isCoiSupported(Context context) async {

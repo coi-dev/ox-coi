@@ -83,12 +83,12 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
     } else {
       listType = validContacts;
     }
-    _contactBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: listType));
+    _contactBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: listType));
   }
 
   @override
   void dispose() {
-    _contactBloc.dispose();
+    _contactBloc.close();
     super.dispose();
   }
 
@@ -152,7 +152,9 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
   }
 
   void unblockContact() {
+    // Ignoring false positive https://github.com/felangel/bloc/issues/587
+    // ignore: close_sinks
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.dispatch(UnblockContact(id: widget.contactId));
+    contactChangeBloc.add(UnblockContact(id: widget.contactId));
   }
 }

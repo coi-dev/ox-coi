@@ -116,6 +116,8 @@ class NotificationManager {
 
   Future<void> showNotificationFromPush(String fromEmail, String body) async {
     if (_buildContext != null) {
+      // Ignoring false positive https://github.com/felangel/bloc/issues/587
+      // ignore: close_sinks
       var backgroundBloc = BlocProvider.of<BackgroundBloc>(_buildContext);
       if (backgroundBloc.currentBackgroundState == AppLifecycleState.resumed.toString()) {
         return;

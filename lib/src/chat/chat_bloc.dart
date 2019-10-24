@@ -101,10 +101,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   @override
-  void dispose() {
+  void close() {
     _chatRepository.removeListener(_repositoryStreamHandler);
     _repositoryStreamHandler?.tearDown();
-    super.dispose();
+    super.close();
   }
 
   void _setupChatListener() async {
@@ -131,7 +131,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       String email = await contact.getAddress();
       int colorValue = await contact.getColor();
       Color color = rgbColorFromInt(colorValue);
-      dispatch(
+      add(
         ChatLoaded(
           name: name,
           subTitle: email,
@@ -186,7 +186,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         subTitle = await contact.getAddress();
       }
     }
-    dispatch(
+    add(
       ChatLoaded(
         name: name,
         subTitle: subTitle,

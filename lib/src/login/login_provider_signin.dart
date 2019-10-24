@@ -105,7 +105,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.loginProviderSignIn);
-    final loginObservable = new Observable<LoginState>(_loginBloc.state);
+    final loginObservable = new Observable<LoginState>(_loginBloc);
     loginObservable.listen((state) => handleLoginStateChange(state));
   }
 
@@ -255,7 +255,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
         ),
       );
       Overlay.of(context).insert(_progressOverlayEntry);
-      _loginBloc.dispatch(ProviderLoginButtonPressed(email: email, password: password, provider: widget.provider));
+      _loginBloc.add(ProviderLoginButtonPressed(email: email, password: password, provider: widget.provider));
     }
   }
 

@@ -123,13 +123,13 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       case MessageActionTag.delete:
         List<int> messageList = List();
         messageList.add(widget.messageId);
-        _messageBloc.dispatch(DeleteMessages(messageIds: messageList));
+        _messageBloc.add(DeleteMessages(messageIds: messageList));
         break;
       case MessageActionTag.flag:
-        _messageChangeBloc.dispatch(FlagMessages(chatId: widget.chatId, messageIds: msgIds, star: _isStarred));
+        _messageChangeBloc.add(FlagMessages(chatId: widget.chatId, messageIds: msgIds, star: _isStarred));
         break;
       case MessageActionTag.share:
-        _attachmentBloc.dispatch(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
+        _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
         break;
     }
   }
@@ -137,7 +137,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    _messageBloc.dispatch(
+    _messageBloc.add(
         RequestMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
   }
 
@@ -243,7 +243,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   }
 
   void _openTapAttachment() {
-    _attachmentBloc.dispatch(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
+    _attachmentBloc.add(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
   }
 
   _onLongPress(bool hasFile, bool isSetupMessage) {

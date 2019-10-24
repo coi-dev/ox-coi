@@ -118,7 +118,7 @@ class _ContactChangeState extends State<ContactChange> {
     } else {
       _nameField.controller.text = widget.name != null ? widget.name : "";
     }
-    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
+    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc);
     contactAddedObservable.listen((state) => handleContactChanged(state));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
@@ -180,7 +180,7 @@ class _ContactChangeState extends State<ContactChange> {
 
   _onSubmit() {
     if (_formKey.currentState.validate()) {
-      _contactChangeBloc.dispatch(ChangeContact(
+      _contactChangeBloc.add(ChangeContact(
         name: _getName(),
         email: _getEmail(),
         contactAction: widget.contactAction,

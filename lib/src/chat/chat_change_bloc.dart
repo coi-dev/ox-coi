@@ -117,7 +117,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       }
     }
     _chatRepository.putIfAbsent(id: chatId);
-    dispatch(ChatCreated(chatId: chatId));
+    add(ChatCreated(chatId: chatId));
   }
 
   void _deleteChat(int chatId) async {
@@ -173,7 +173,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     Context context = Context();
     await context.setChatName(chatId, newName);
     RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetName, newName);
-    dispatch(SetNameCompleted());
+    add(SetNameCompleted());
   }
 
   void _setProfileImage(int chatId, String newPath) async {

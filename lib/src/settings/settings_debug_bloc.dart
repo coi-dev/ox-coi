@@ -77,7 +77,7 @@ class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
     String endpoint = await getPreference(preferenceNotificationsEndpoint);
     String pushServiceUrl = await getPreference(preferenceNotificationsPushServiceUrl);
     String pushState = await getPreference(preferenceNotificationsPushStatus);
-    dispatch(DebugLoaded(
+    add(DebugLoaded(
       token: token,
       pushResource: pushResource ?? "Not set",
       endpoint: endpoint,

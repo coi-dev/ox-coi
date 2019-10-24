@@ -72,7 +72,7 @@ class _ScanQrState extends State<ScanQr> {
     super.initState();
     _navigation.current = Navigatable(Type.scanQr);
     requestQrCamera();
-    final qrObservable = new Observable<QrState>(_qrBloc.state);
+    final qrObservable = new Observable<QrState>(_qrBloc);
     qrObservable.listen((state) {
       if (state is QrStateSuccess) {
         _qrCodeDetected = false;
@@ -103,7 +103,7 @@ class _ScanQrState extends State<ScanQr> {
   }
 
   void requestQrCamera() {
-    _qrBloc.dispatch(RequestQrCamera());
+    _qrBloc.add(RequestQrCamera());
   }
 
   @override
@@ -157,12 +157,12 @@ class _ScanQrState extends State<ScanQr> {
           ),
     );
     Overlay.of(context).insert(_progressOverlayEntry);
-    _qrBloc.dispatch(CheckQr(qrText: qrString));
+    _qrBloc.add(CheckQr(qrText: qrString));
   }
 
   void _cancelPressed() {
     _progressOverlayEntry.remove();
     _qrCodeDetected = false;
-    _qrBloc.dispatch(CancelQrProcess());
+    _qrBloc.add(CancelQrProcess());
   }
 }

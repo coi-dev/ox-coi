@@ -100,7 +100,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     Context context = Context();
     int id = await context.createContact(name, address);
     if (contactAction == ContactAction.add) {
-      dispatch(ContactAdded(id: id));
+      add(ContactAdded(id: id));
     } else {
       Contact contact = contactRepository.get(id);
       contact.set(Contact.methodContactGetName, name);
@@ -108,7 +108,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
       if (chatId != 0) {
         renameChat(chatId, name);
       }
-      dispatch(ContactEdited());
+      add(ContactEdited());
     }
   }
 
@@ -122,11 +122,11 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     bool deleted = await context.deleteContact(id);
     if (deleted) {
       contactRepository.remove(id: id);
-      dispatch(ContactDeleted());
+      add(ContactDeleted());
     } else {
       int chatId = await context.getChatByContactId(id);
       String error = chatId != 0 ? contactDeleteChatExists : contactDeleteGeneric;
-      dispatch(ContactDeleteFailed(error: error));
+      add(ContactDeleteFailed(error: error));
     }
   }
 
@@ -144,7 +144,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
       messageListRepository.clear();
     }
     adjustChatListOnBlockUnblock(chatId, block: true);
-    dispatch(ContactBlocked());
+    add(ContactBlocked());
   }
 
   void adjustChatListOnBlockUnblock(int chatId, {bool block}) {
@@ -164,6 +164,6 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     await context.unblockContact(id);
     var chatId = await context.getChatByContactId(id);
     adjustChatListOnBlockUnblock(chatId, block: false);
-    dispatch(ContactUnblocked());
+    add(ContactUnblocked());
   }
 }

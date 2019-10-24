@@ -83,8 +83,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
-    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc.state);
+    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc);
     contactAddedObservable.listen((state) => _handleContactChanged(context, state));
   }
 
@@ -213,18 +213,18 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
         ),
       ),
     ).then((value) {
-      _contactItemBloc.dispatch(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+      _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     });
   }
 
   _deleteContact() {
     _navigation.pop(context);
-    _contactChangeBloc.dispatch(DeleteContact(id: widget.contactId));
+    _contactChangeBloc.add(DeleteContact(id: widget.contactId));
   }
 
   _blockContact() {
     _navigation.pop(context);
-    _contactChangeBloc.dispatch(BlockContact(contactId: widget.contactId));
+    _contactChangeBloc.add(BlockContact(contactId: widget.contactId));
   }
 
   String _getDeleteMessage(BuildContext context) {

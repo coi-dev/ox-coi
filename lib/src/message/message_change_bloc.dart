@@ -79,7 +79,7 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
     if (deleteInCore) {
       //TODO Delete messages from core
     }
-    dispatch(MessageDeleted());
+    add(MessageDeleted());
   }
 
   void _flagMessages(int chatId, List<int> messageIds, bool star) async {
@@ -103,6 +103,6 @@ class MessageChangeBloc extends Bloc<MessageChangeEvent, MessageChangeState> {
       starInt = Context.starMessage;
     }
     await context.starMessages(messageIds, starInt);
-    dispatch(MessageFlagged());
+    add(MessageFlagged());
   }
 }

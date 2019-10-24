@@ -103,10 +103,10 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   }
 
   @override
-  void dispose() {
+  void close() {
     _contactRepository.removeListener(_repositoryStreamHandler);
     _repositoryStreamHandler?.tearDown();
-    super.dispose();
+    super.close();
   }
 
   void _setupContactListener() async {
@@ -119,7 +119,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   void _onContactsChanged([event]) async {
     List<int> ids = await getIds(_typeOrChatId);
     List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(ids);
-    dispatch(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
+    add(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
   }
 
   Future _setupContacts() async {
@@ -134,7 +134,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     });
 
-    dispatch(ContactsChanged(ids: contactIs, lastUpdates: lastUpdates));
+    add(ContactsChanged(ids: contactIs, lastUpdates: lastUpdates));
   }
 
   void _searchContacts() async {
@@ -144,7 +144,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     contactIds.forEach((contactId) {
       lastUpdates.add(_contactRepository.get(contactId).lastUpdate);
     });
-    dispatch(ContactsSearched(ids: contactIds, lastUpdates: lastUpdates));
+    add(ContactsSearched(ids: contactIds, lastUpdates: lastUpdates));
   }
 
   void _selectionChanged(int id) {

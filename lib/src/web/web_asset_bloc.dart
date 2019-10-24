@@ -64,6 +64,6 @@ class WebAssetBloc extends Bloc<WebAssetEvent, WebAssetState> {
 
   void _loadAsset(String asset) async{
     String loadedAsset = await rootBundle.loadString(asset);
-    dispatch(AssetLoaded(asset: loadedAsset));
+    add(AssetLoaded(asset: loadedAsset));
   }
 }

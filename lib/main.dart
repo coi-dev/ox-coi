@@ -72,7 +72,7 @@ void main() {
         BlocProvider<BackgroundBloc>(
           builder: (BuildContext context) {
             var backgroundBloc = BackgroundBloc();
-            backgroundBloc.dispatch(BackgroundListenerSetup());
+            backgroundBloc.add(BackgroundListenerSetup());
             return backgroundBloc;
           },
         ),
@@ -141,12 +141,14 @@ class OxCoi extends StatefulWidget {
 
 class _OxCoiState extends State<OxCoi> {
   MainBloc _mainBloc = MainBloc();
+  // Ignoring false positive https://github.com/felangel/bloc/issues/587
+  // ignore: close_sinks
   ShareBloc shareBloc = ShareBloc();
 
   @override
   void initState() {
     super.initState();
-    _mainBloc.dispatch(PrepareApp(context: context));
+    _mainBloc.add(PrepareApp(context: context));
   }
 
   @override
@@ -170,9 +172,9 @@ class _OxCoiState extends State<OxCoi> {
   }
 
   _loginSuccess() {
-    BlocProvider.of<PushBloc>(context).dispatch(RegisterPushResource());
+    BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
     Navigation navigation = Navigation();
     navigation.popUntil(context, ModalRoute.withName(Navigation.root));
-    _mainBloc.dispatch(AppLoaded(configured: true));
+    _mainBloc.add(AppLoaded(configured: true));
   }
 }

@@ -83,7 +83,7 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
   void _setupUser() async {
     Config config = Config();
     await config.load();
-    dispatch(UserLoaded(config: config));
+    add(UserLoaded(config: config));
   }
 
   void _saveUserPersonalData(UserPersonalDataChanged event) async {
@@ -92,7 +92,7 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
     await config.setValue(Context.configSelfStatus, event.status);
     var avatarPath = event.avatarPath;
     await config.setValue(Context.configSelfAvatar, avatarPath);
-    dispatch(ChangesApplied());
+    add(ChangesApplied());
   }
 
   void _saveUserAccountData(UserAccountDataChanged event) async {
@@ -110,6 +110,6 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
     int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
 
     await config.setValue(Context.configServerFlags, serverFlags);
-    dispatch(ChangesApplied());
+    add(ChangesApplied());
   }
 }

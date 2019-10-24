@@ -134,10 +134,10 @@ class _ChatListState extends State<ChatList> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chatList);
-    _chatListBloc.dispatch(RequestChatList(showInvites: true));
-    final shareObservable = Observable<ShareState>(shareBloc.state);
+    _chatListBloc.add(RequestChatList(showInvites: true));
+    final shareObservable = Observable<ShareState>(shareBloc);
     shareObservable.listen((state) => handleStateChange(state));
-    shareBloc.dispatch(LoadSharedData());
+    shareBloc.add(LoadSharedData());
   }
 
   handleStateChange(ShareState state) {
@@ -159,8 +159,8 @@ class _ChatListState extends State<ChatList> {
 
   @override
   void dispose() {
-    _chatListBloc.dispose();
-    _chatListSearchBloc.dispose();
+    _chatListBloc.close();
+    _chatListSearchBloc.close();
     super.dispose();
   }
 
@@ -170,7 +170,7 @@ class _ChatListState extends State<ChatList> {
       listener: (context, state) {
         if (state is BackgroundStateSuccess) {
           if (state.state == AppLifecycleState.resumed.toString()) {
-            shareBloc.dispatch(LoadSharedData());
+            shareBloc.add(LoadSharedData());
           }
         }
       },
@@ -261,7 +261,7 @@ class _ChatListState extends State<ChatList> {
   }
 
   Widget onBuildResultOrSuggestion(String query) {
-    _chatListSearchBloc.dispatch(SearchChatList(query: query, showInvites: false));
+    _chatListSearchBloc.add(SearchChatList(query: query, showInvites: false));
     return buildSearchResults();
   }
 

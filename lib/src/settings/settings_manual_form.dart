@@ -137,7 +137,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
         } else if (state is SettingsManualFormStateValidation) {
           var success = formKey.currentState.validate();
           if (success) {
-            BlocProvider.of<SettingsManualFormBloc>(context).dispatch(ValidationDone(
+            BlocProvider.of<SettingsManualFormBloc>(context).add(ValidationDone(
               success: success,
               email: emailField.controller.text,
               password: passwordField.controller.text,

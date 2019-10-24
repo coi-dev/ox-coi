@@ -73,12 +73,12 @@ class SettingsAntiMobbingBloc extends Bloc<SettingsAntiMobbingEvent, SettingsAnt
       antiMobbingPreference = false;
     }
 
-    dispatch(SettingsLoaded(antiMobbingActive: antiMobbingPreference));
+    add(SettingsLoaded(antiMobbingActive: antiMobbingPreference));
   }
 
   void changeSettings() async {
     bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
     await setPreference(preferenceAntiMobbing, !antiMobbingPreference);
-    dispatch(ActionSuccess(antiMobbingActive: !antiMobbingPreference));
+    add(ActionSuccess(antiMobbingActive: !antiMobbingPreference));
   }
 }

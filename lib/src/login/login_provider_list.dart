@@ -85,7 +85,7 @@ class _ProviderListState extends State<ProviderList> {
     super.initState();
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginProviderList);
-    _loginBloc.dispatch(RequestProviders(type: widget.type));
+    _loginBloc.add(RequestProviders(type: widget.type));
   }
 
   @override

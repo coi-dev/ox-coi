@@ -128,7 +128,7 @@ class _EditNameState extends State<EditName> {
 
   void saveNewName() {
     if (_formKey.currentState.validate()) {
-      _chatChangeBloc.dispatch(SetName(chatId: widget.chatId, newName: _nameField.controller.text));
+      _chatChangeBloc.add(SetName(chatId: widget.chatId, newName: _nameField.controller.text));
     }
   }
 }

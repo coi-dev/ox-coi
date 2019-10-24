@@ -79,7 +79,7 @@ class _ChatListItemState extends State<ChatListItem> {
   @override
   void initState() {
     super.initState();
-    _chatBloc.dispatch(RequestChat(chatId: widget.chatId));
+    _chatBloc.add(RequestChat(chatId: widget.chatId));
     _isSelected = false;
   }
 

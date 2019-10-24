@@ -102,10 +102,10 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   }
 
   @override
-  void dispose() {
+  void close() {
     _messageListRepository?.removeListener(_repositoryStreamHandler);
     _repositoryStreamHandler?.tearDown();
-    super.dispose();
+    super.close();
   }
 
   void _setupMessagesListener() async {
@@ -123,7 +123,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   void _updateMessages(event) {
     _deleteCacheFile(_cacheFilePath);
-    dispatch(UpdateMessages());
+    add(UpdateMessages());
   }
 
   void _deleteCacheFile(String path) {
@@ -165,12 +165,12 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
           lastUpdateValues.add(message.lastUpdate);
         }
       });
-      dispatch(MessagesLoaded(
+      add(MessagesLoaded(
           messageIds: messageIds.reversed.toList(growable: false),
           messageLastUpdateValues: lastUpdateValues.reversed.toList(growable: false),
           dateMarkerIds: dateMakerIds));
     } else {
-      dispatch(
+      add(
         MessagesLoaded(
             messageIds: _messageListRepository
                 .getAllIds()

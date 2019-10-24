@@ -68,12 +68,12 @@ class _SettingsAboutState extends State<SettingsAbout> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsAbout);
-    _settingsAboutBloc.dispatch(RequestAbout());
+    _settingsAboutBloc.add(RequestAbout());
   }
 
   @override
   void dispose() {
-    _settingsAboutBloc.dispose();
+    _settingsAboutBloc.close();
     super.dispose();
   }
 

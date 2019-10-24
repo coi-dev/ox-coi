@@ -67,6 +67,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   void _setupUser() async {
     Config config = Config();
     await config.load();
-    dispatch(UserLoaded(config: config));
+    add(UserLoaded(config: config));
   }
 }
