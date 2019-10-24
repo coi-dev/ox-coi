@@ -6,8 +6,6 @@
 #import <background_fetch/BackgroundFetchPlugin.h>
 #import <contacts_service/ContactsServicePlugin.h>
 #import <delta_chat_core/DeltaChatCorePlugin.h>
-#import <downloads_path_provider/DownloadsPathProviderPlugin.h>
-#import <esys_flutter_share/EsysFlutterSharePlugin.h>
 #import <file_picker/FilePickerPlugin.h>
 #import <firebase_messaging/FirebaseMessagingPlugin.h>
 #import <flutter_local_notifications/FlutterLocalNotificationsPlugin.h>
@@ -32,8 +30,6 @@
   [BackgroundFetchPlugin registerWithRegistrar:[registry registrarForPlugin:@"BackgroundFetchPlugin"]];
   [ContactsServicePlugin registerWithRegistrar:[registry registrarForPlugin:@"ContactsServicePlugin"]];
   [DeltaChatCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"DeltaChatCorePlugin"]];
-  [DownloadsPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"DownloadsPathProviderPlugin"]];
-  [EsysFlutterSharePlugin registerWithRegistrar:[registry registrarForPlugin:@"EsysFlutterSharePlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
   [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
