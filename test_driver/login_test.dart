@@ -45,11 +45,12 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:test/test.dart';
+import 'package:test_api/src/backend/invoker.dart';
+
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
-import 'package:test/test.dart';
-import 'package:test_api/src/backend/invoker.dart';
 
 void main() {
   group('Ox coi test:', () {
@@ -66,7 +67,7 @@ void main() {
     final outlook = find.text('Outlook');
     final yahoo = find.text('Yahoo');
     final mailbox = find.text('Mailbox.org');
-    final loginProviderSignInText = 'Sign in with Coi debug';
+    final loginProviderSignInText = 'Sign in with Debug (mobile-qa)';
 
     //  SerializableFinder for Coi Debug dialog Windows.
     final signInCoiDebug = find.text(loginProviderSignInText);
@@ -79,21 +80,20 @@ void main() {
     test('Test login.', () async {
       //  Test Ox.coi welcome screen and tap on SIGN In to get the provider list, and test if all provider are contained in the list.
       await checkOxCoiWelcomeAndProviderList(
-          setup.driver,
-          welcomeMessage,
-          welcomeDescription,
-          signInCaps,
-          register,
-          outlook,
-          yahoo,
-          signIn,
-          find.text(coiDebug),
-          other,
-          mailbox);
-      await setup.driver
-          .scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
-      await selectAndTapProvider(
-          setup.driver, find.text(coiDebug), signInCoiDebug, email, password);
+        setup.driver,
+        welcomeMessage,
+        welcomeDescription,
+        signInCaps,
+        register,
+        outlook,
+        yahoo,
+        signIn,
+        find.text(coiDebug),
+        other,
+        mailbox,
+      );
+      await setup.driver.scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
+      await selectAndTapProvider(setup.driver, find.text(coiDebug), signInCoiDebug, email, password);
       await catchScreenshot(setup.driver, 'screenshots/CoiDebug.png');
 
       //  Try to sign in without email an password.
@@ -103,26 +103,21 @@ void main() {
 
       //  Try fake authentication.
       print('SIGN IN without email and password.');
-      await getAuthentication(
-          setup.driver, email, ' ', password, ' ', signInCaps);
+      await getAuthentication(setup.driver, email, ' ', password, ' ', signInCaps);
       await setup.driver.waitFor(errorMessage);
-      await catchScreenshot(
-          setup.driver, 'screenshots/withoutEmailandPassword.png');
+      await catchScreenshot(setup.driver, 'screenshots/withoutEmailandPassword.png');
       print('SIGN IN without email.');
-      await getAuthentication(
-          setup.driver, email, ' ', password, fakePassword, signInCaps);
+      await getAuthentication(setup.driver, email, ' ', password, fakePassword, signInCaps);
       await setup.driver.waitFor(errorMessage);
       await catchScreenshot(setup.driver, 'screenshots/withoutEmail.png');
       print('SIGN IN without password.');
-      await getAuthentication(
-          setup.driver, email, fakeEmail, password, ' ', signInCaps);
+      await getAuthentication(setup.driver, email, fakeEmail, password, ' ', signInCaps);
       await setup.driver.waitFor(errorMessage);
       await catchScreenshot(setup.driver, 'screenshots/withoutPassword.png');
 
       //  Check real authentication and get chat.
       print('Real authentication.');
-      await getAuthentication(
-          setup.driver, email, realEmail, password, realPassword, signInCaps);
+      await getAuthentication(setup.driver, email, realEmail, password, realPassword, signInCaps);
       await catchScreenshot(setup.driver, 'screenshots/entered.png');
       Invoker.current.heartbeat();
       print('SIGN IN ist done. Wait for chat.');
@@ -135,19 +130,20 @@ void main() {
 }
 
 Future checkOxCoiWelcomeAndProviderList(
-    FlutterDriver driver,
-    SerializableFinder welcomeMessage,
-    SerializableFinder welcomeDescription,
-    SerializableFinder signInCaps,
-    SerializableFinder register,
-    SerializableFinder outlook,
-    SerializableFinder yahoo,
-    SerializableFinder signIn,
-    SerializableFinder coiDebug,
-    SerializableFinder other,
-    SerializableFinder mailbox) async {
-  await driver.waitFor(welcomeMessage);
-  await driver.waitFor(welcomeDescription);
+  FlutterDriver driver,
+  SerializableFinder welcomeMessage,
+  SerializableFinder welcomeDescription,
+  SerializableFinder signInCaps,
+  SerializableFinder register,
+  SerializableFinder outlook,
+  SerializableFinder yahoo,
+  SerializableFinder signIn,
+  SerializableFinder coiDebug,
+  SerializableFinder other,
+  SerializableFinder mailbox,
+) async {
+  //await driver.waitFor(welcomeMessage);
+  //await driver.waitFor(welcomeDescription);
   await driver.waitFor(signInCaps);
   await driver.waitFor(register);
   await driver.tap(signInCaps);
@@ -162,11 +158,12 @@ Future checkOxCoiWelcomeAndProviderList(
 }
 
 Future selectAndTapProvider(
-    FlutterDriver driver,
-    SerializableFinder coiDebug,
-    SerializableFinder signInCoiDebug,
-    SerializableFinder email,
-    SerializableFinder password) async {
+  FlutterDriver driver,
+  SerializableFinder coiDebug,
+  SerializableFinder signInCoiDebug,
+  SerializableFinder email,
+  SerializableFinder password,
+) async {
   await driver.tap(coiDebug);
   await driver.waitFor(signInCoiDebug);
   await driver.waitFor(email);
@@ -174,12 +171,13 @@ Future selectAndTapProvider(
 }
 
 Future getAuthentication(
-    FlutterDriver driver,
-    SerializableFinder email,
-    String fakeEmail,
-    SerializableFinder password,
-    String realPassword,
-    SerializableFinder signInCaps) async {
+  FlutterDriver driver,
+  SerializableFinder email,
+  String fakeEmail,
+  SerializableFinder password,
+  String realPassword,
+  SerializableFinder signInCaps,
+) async {
   await driver.tap(email);
   await driver.enterText(fakeEmail);
   await driver.waitFor(email);
