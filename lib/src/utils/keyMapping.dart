@@ -56,8 +56,10 @@ const keyUserSettingsCheckIconButton = "keyUserSettingsCheckIconButton";
 const keyUserSettingsUserSettingsUsernameLabel =
     "key_UserSettingsUserSettingsUsernameLabel";
 
-const keyDialogBuilderPositiveFlatButton = "keyDialogBuilderImportFlatButton";
-const keyDialogBuilderCancelFlatButton = "keyDialogBuilderCancelFlatButton";
+const keyInformationDialogPositiveButton = "keyDialogBuilderImportFlatButton";
+
+const keyConfirmationDialogPositiveButton = "keyDialogBuilderImportFlatButton";
+const keyConfirmationDialogCancelButton = "keyDialogBuilderCancelFlatButton";
 
 const keyContactListPersonAddFloatingActionButton =
     "key_ContactListPersonAddFloatingActionButton";

@@ -89,10 +89,10 @@ showConfirmationDialog(
       content: new Text(content),
       actions: <Widget>[
         new AdaptiveDialogAction(
+          key: Key(keyConfirmationDialogCancelButton),
           child: new Text(negativeButton != null && negativeButton.isNotEmpty
               ? negativeButton
               : L10n.get(L.cancel)),
-          key: Key(keyDialogBuilderCancelFlatButton),
           onPressed: () {
             if (negativeAction != null) {
               negativeAction();
@@ -101,8 +101,8 @@ showConfirmationDialog(
           },
         ),
         new AdaptiveDialogAction(
+          key: Key(keyConfirmationDialogPositiveButton),
           child: new Text(positiveButton),
-          key: Key(keyDialogBuilderPositiveFlatButton),
           onPressed: () {
             positiveAction();
             if (selfClose) {
@@ -131,6 +131,7 @@ showInformationDialog(
         content: new Text(content),
         actions: <Widget>[
           new AdaptiveDialogAction(
+            key: Key(keyInformationDialogPositiveButton),
             child: new Text(L10n.get(L.ok)),
             onPressed: () {
               navigation.pop(context);

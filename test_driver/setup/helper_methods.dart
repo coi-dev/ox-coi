@@ -203,7 +203,7 @@ Future unFlaggedMessage(
 ) async {
   await driver.tap(find.byValueKey(keyChatListGetFlaggedActionIconButton));
   await driver.waitFor(messageToUnFlaggedFinder);
-  await driver.scroll(messageToUnFlaggedFinder, 0, 0, Duration(milliseconds: 5000));
+  await driver.scroll(messageToUnFlaggedFinder, 0, 0, Duration(milliseconds: 1000));
   await driver.tap(find.text(flagUnFlag));
 }
 
@@ -212,20 +212,20 @@ Future flaggedMessage(
   String flagUnFlag,
   SerializableFinder messageToFlaggedFinder,
 ) async {
-  await driver.scroll(messageToFlaggedFinder, 0, 0, Duration(milliseconds: 5000));
+  await driver.scroll(messageToFlaggedFinder, 0, 0, Duration(milliseconds: 1000));
   await driver.tap(find.text(flagUnFlag));
 }
 
 Future deleteMessage(SerializableFinder textToDeleteFinder, FlutterDriver driver) async {
-  await driver.scroll(textToDeleteFinder, 0, 0, Duration(milliseconds: 5000));
+  await driver.scroll(textToDeleteFinder, 0, 0, Duration(milliseconds: 1000));
   await driver.tap(find.text('Delete locally'));
   await catchScreenshot(driver, 'screenshots/chatAfterdDelete.png');
 }
 
 Future copyAndPasteMessage(FlutterDriver driver, String copy, String paste) async {
-  await driver.scroll(helloWorldFinder, 0, 0, Duration(milliseconds: 5000));
+  await driver.scroll(helloWorldFinder, 0, 0, Duration(milliseconds: 1000));
   await driver.tap(find.text(copy));
-  await driver.scroll(typeSomethingComposePlaceholderFinder, 0, 0, Duration(milliseconds: 5000));
+  await driver.scroll(typeSomethingComposePlaceholderFinder, 0, 0, Duration(milliseconds: 1000));
   await driver.tap(find.text(paste));
   await driver.tap(find.byValueKey(KeyChatComposerMixinOnSendTextIcon));
   if (helloWorldFinder.serialize().length <= 2) {
@@ -235,7 +235,7 @@ Future copyAndPasteMessage(FlutterDriver driver, String copy, String paste) asyn
 }
 
 Future forwardMessageTo(FlutterDriver driver, String contactToForward, String forward) async {
-  await driver.scroll(helloWorldFinder, 0, 0, Duration(milliseconds: 5000));
+  await driver.scroll(helloWorldFinder, 0, 0, Duration(milliseconds: 1000));
   await driver.tap(find.text(forward));
   await driver.tap(find.text(contactToForward));
 }

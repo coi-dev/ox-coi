@@ -184,7 +184,7 @@ void main() {
       await setup.driver.tap(find.text(newNameTestGroup));
       await setup.driver.tap(find.byValueKey(keyChatNameText));
       await setup.driver.tap(find.byValueKey(keyChatProfileGroupDelete));
-      await setup.driver.tap(find.byValueKey(keyDialogBuilderPositiveFlatButton));
+      await setup.driver.tap(find.byValueKey(keyConfirmationDialogPositiveButton));
       await catchScreenshot(setup.driver, 'screenshots/leave.png');
       await setup.driver.waitForAbsent(find.text(newNameTestGroup));
     });

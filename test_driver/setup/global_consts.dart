@@ -93,13 +93,13 @@ const newMe = 'newMe';
 
 const mailCom = 'Mail.com';
 
-const profileUserStatus = 'Sent with OX COI Messenger - https://github.com/open-xchange/ox-coi';
+const profileUserStatus = 'Sent with OX COI Messenger - https://coi.me';
 
 const searchString = 'Douglas0';
 
-const typeSomethingComposePlaceholder = 'Type something...';
+final typeSomethingComposePlaceholder = L.getKey(L.typeSomething);
 
-const helloWorld = 'Hello word';
+const helloWorld = 'Hello world';
 
 final typeSomethingComposePlaceholderFinder = find.byValueKey(typeSomethingComposePlaceholder);
 
@@ -125,7 +125,7 @@ final providerEmailFinder = find.byValueKey(keyProviderSignInEmailTextField);
 
 final providerPasswordFinder = find.byValueKey(keyProviderSignInPasswordTextField);
 
-final cancelFinder = find.byValueKey(keyDialogBuilderCancelFlatButton);
+final cancelFinder = find.byValueKey(keyConfirmationDialogCancelButton);
 
 final createChatFinder = find.byValueKey(keyChatListChatFloatingActionButton);
 
@@ -135,7 +135,7 @@ final userProfileEditRaisedButtonFinder = find.byValueKey(keyUserProfileEditProf
 
 final userSettingsCheckIconButtonFinder = find.byValueKey(keyUserSettingsCheckIconButton);
 
-final positiveFinder = find.byValueKey(keyDialogBuilderPositiveFlatButton);
+final positiveFinder = find.byValueKey(keyConfirmationDialogPositiveButton);
 
 final keyContactChangeNameFinder = find.byValueKey(keyContactChangeNameValidatableTextFormField);
 
@@ -143,4 +143,4 @@ final keyContactChangeEmailFinder = find.byValueKey(keyContactChangeEmailValidat
 
 final keyContactChangeCheckFinder = find.byValueKey(keyContactChangeCheckIconButton);
 
-final keyDialogBuilderAlertDialogOkFlatButtonFinder = find.byValueKey(keyDialogBuilderAlertDialogOkFlatButton);
+final keyDialogBuilderAlertDialogOkFlatButtonFinder = find.byValueKey(keyInformationDialogPositiveButton);

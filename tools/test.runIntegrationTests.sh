@@ -17,13 +17,13 @@ touch ${LOG_FILE}
 for test in test_driver/*
 do
     if [[ -f "$test" ]]; then
-        echo "Running test: $test"
+        echo "### Running test: $test"
         flutter drive --target=test_driver/setup/app.dart --driver=${test} --flavor development >> ${LOG_FILE} 2>&1
         if [[ $? -eq 0 ]]; then
-            echo "$test successfully finished"
+            echo "  [OK] $test"
             ((success++))
         else
-            echo "$test failed - See more information in test_driver/log.txt"
+            echo "  [FAIL] $test - See (test_driver/log.txt)"
             ((failed++))
         fi
     fi
@@ -31,7 +31,7 @@ done
 
 echo
 testCount=$((success + failed))
-echo "Test suite finished"
-echo "All tests: $testCount"
-echo "Successful: $success"
-echo "Failed: $failed"
+echo "### Test suite finished"
+echo "  [All]: $testCount"
+echo "  [OK]: $success successfully finished"
+echo "  [FAIL]: $failed errors occurred"

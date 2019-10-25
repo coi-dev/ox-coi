@@ -250,8 +250,6 @@ class _ContactListState extends State<ContactList> {
           builder: (context) => FullscreenProgress(
             bloc: _contactListBloc,
             text: L10n.get(L.contactImportRunning),
-            showProgressValues: true,
-            showCancelButton: true,
           ),
         );
         Overlay.of(context).insert(_progressOverlayEntry);
