@@ -14,12 +14,12 @@ class AdaptiveIconButton extends AdaptiveWidget<CupertinoButton, IconButton> {
     this.icon,
     this.onPressed,
     this.color,
-  }) : super(key: key);
+  }) : super(childKey: key);
 
   @override
   IconButton buildMaterialWidget(BuildContext context) {
     return IconButton(
-      key: key,
+      key: childKey,
       icon: icon,
       onPressed: onPressed,
     );
@@ -28,7 +28,7 @@ class AdaptiveIconButton extends AdaptiveWidget<CupertinoButton, IconButton> {
   @override
   CupertinoButton buildCupertinoWidget(BuildContext context) {
     return CupertinoButton(
-      key: key,
+      key: childKey,
       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: icon,
       onPressed: onPressed,

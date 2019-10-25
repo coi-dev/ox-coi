@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 abstract class AdaptiveWidget<C extends Widget, M extends Widget> extends StatelessWidget {
-  final Key key;
+  final Key childKey;
 
-  AdaptiveWidget({this.key});
+  AdaptiveWidget({@required this.childKey});
 
   C buildCupertinoWidget(BuildContext context);
 

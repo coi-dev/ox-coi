@@ -20,13 +20,14 @@ class AdaptiveRaisedButton extends AdaptiveWidget<CupertinoButton, ButtonTheme> 
     this.textColor,
     this.shape,
     this.child,
-  }) : super(key: key);
+  }) : super(childKey: key);
 
   @override
   ButtonTheme buildMaterialWidget(BuildContext context) {
     return ButtonTheme(
       minWidth: buttonWidth ?? buttonThemeMinWidth,
       child: RaisedButton(
+        key: childKey,
         color: color,
         textColor: textColor,
         child: child,
@@ -39,6 +40,7 @@ class AdaptiveRaisedButton extends AdaptiveWidget<CupertinoButton, ButtonTheme> 
   @override
   CupertinoButton buildCupertinoWidget(BuildContext context) {
     return CupertinoButton(
+      key: childKey,
       padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
       color: color,
       child: child,

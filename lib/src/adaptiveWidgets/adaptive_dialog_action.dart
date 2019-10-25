@@ -11,12 +11,12 @@ class AdaptiveDialogAction extends AdaptiveWidget<CupertinoDialogAction, FlatBut
     Key key,
     this.child,
     this.onPressed,
-  }) : super(key: key);
+  }) : super(childKey: key);
 
   @override
   FlatButton buildMaterialWidget(BuildContext context) {
     return FlatButton(
-      key: key,
+      key: childKey,
       child: child,
       onPressed: onPressed,
     );

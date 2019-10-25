@@ -11,12 +11,12 @@ class AdaptiveInkWell extends AdaptiveWidget<GestureDetector, InkWell> {
     Key key,
     this.onTap,
     this.child,
-  }) : super(key: key);
+  }) : super(childKey: key);
 
   @override
   InkWell buildMaterialWidget(BuildContext context) {
     return InkWell(
-      key: key,
+      key: childKey,
       onTap: onTap,
       child: child,
     );
@@ -25,7 +25,7 @@ class AdaptiveInkWell extends AdaptiveWidget<GestureDetector, InkWell> {
   @override
   GestureDetector buildCupertinoWidget(BuildContext context) {
     return GestureDetector(
-      key: key,
+      key: childKey,
       onTap: onTap,
       child: child,
     );

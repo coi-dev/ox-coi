@@ -20,12 +20,12 @@ class AdaptiveAppBar extends AdaptiveWidget<CupertinoTheme, AppBar> with Preferr
     this.actions,
     this.elevation,
     this.leadingIcon,
-  }) : super(key: key);
+  }) : super(childKey: key);
 
   @override
   AppBar buildMaterialWidget(BuildContext context) {
     return AppBar(
-      key: key,
+      key: childKey,
       leading: leadingIcon,
       title: title,
       actions: actions,
@@ -41,7 +41,7 @@ class AdaptiveAppBar extends AdaptiveWidget<CupertinoTheme, AppBar> with Preferr
         barBackgroundColor: primary,
         ),
         child: CupertinoNavigationBar(
-        key: key,
+        key: childKey,
         leading: leadingIcon,
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
         middle: Padding(

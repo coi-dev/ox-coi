@@ -13,12 +13,12 @@ class AdaptiveDialog extends AdaptiveWidget<CupertinoAlertDialog, AlertDialog> {
     this.title,
     this.content,
     this.actions,
-  }) : super(key: key);
+  }) : super(childKey: key);
 
   @override
   AlertDialog buildMaterialWidget(BuildContext context) {
     return AlertDialog(
-      key: key,
+      key: childKey,
       title: title,
       content: content,
       actions: actions,
@@ -28,7 +28,7 @@ class AdaptiveDialog extends AdaptiveWidget<CupertinoAlertDialog, AlertDialog> {
   @override
   CupertinoAlertDialog buildCupertinoWidget(BuildContext context) {
     return CupertinoAlertDialog(
-      key: key,
+      key: childKey,
       title: title,
       content: content,
       actions: actions,
