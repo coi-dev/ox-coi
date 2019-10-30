@@ -56,7 +56,13 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
   final bool showCancelButton;
   final Function cancelPressed;
 
-  FullscreenProgress({@required this.bloc, @required this.text, this.showProgressValues, this.showCancelButton, this.cancelPressed});
+  FullscreenProgress({
+    @required this.bloc,
+    @required this.text,
+    this.showProgressValues = false,
+    this.showCancelButton = false,
+    this.cancelPressed,
+  });
 
   @override
   Widget build(BuildContext context) {

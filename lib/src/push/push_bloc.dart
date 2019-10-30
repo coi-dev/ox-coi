@@ -76,9 +76,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   var pushService = PushService();
   var _core = DeltaChatCore();
   var _context = Context();
-  int _metadataListenerId;
-  int _webPushSubscriptionListenerId;
-  int _errorListenerId;
+  bool _listenersRegistered = false;
   static const _subscribeListenerId = 1001;
   static const _validateListenerId = 1002;
 
@@ -274,21 +272,20 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   void _registerListeners() async {
-    if (_metadataListenerId == null) {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       pushSubject.listen(_metadataSuccessCallback, onError: _errorCallback);
-      _metadataListenerId = await _core.listen(Event.setMetaDataDone, pushSubject);
-      _webPushSubscriptionListenerId = await _core.listen(Event.webPushSubscription, pushSubject);
-      _errorListenerId = await _core.listen(Event.error, pushSubject);
+      await _core.listen(Event.setMetaDataDone, pushSubject);
+      await _core.listen(Event.webPushSubscription, pushSubject);
+      await _core.listen(Event.error, pushSubject);
     }
   }
 
   void _unregisterListeners() {
-    _core.removeListener(Event.setMetaDataDone, _metadataListenerId);
-    _core.removeListener(Event.webPushSubscription, _webPushSubscriptionListenerId);
-    _core.removeListener(Event.error, _errorListenerId);
-    _metadataListenerId = null;
-    _webPushSubscriptionListenerId = null;
-    _errorListenerId = null;
+    _core.removeListener(Event.setMetaDataDone, pushSubject);
+    _core.removeListener(Event.webPushSubscription, pushSubject);
+    _core.removeListener(Event.error, pushSubject);
+    _listenersRegistered = false;
   }
 
   void _metadataSuccessCallback(Event event) {

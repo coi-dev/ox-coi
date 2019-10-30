@@ -80,7 +80,6 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
   @override
   void close() {
     _messageListRepository?.removeListener(_repositoryStreamHandler);
-    _repositoryStreamHandler?.tearDown();
     super.close();
   }
 

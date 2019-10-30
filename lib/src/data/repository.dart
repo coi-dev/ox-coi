@@ -162,26 +162,21 @@ abstract class Repository<T extends Base> {
   }
 
   Future _setupCoreListener(BaseRepositoryEventStreamHandler streamHandler, int eventId) async {
-    int listenerId = await _core.listen(eventId, streamHandler.streamController);
-    if (streamHandler is RepositoryEventStreamHandler) {
-      streamHandler.listenerId = listenerId;
-    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
-      streamHandler.listenerIds.add(listenerId);
-    }
+    await _core.listen(eventId, streamHandler.streamController);
   }
 
   void removeListener(BaseRepositoryEventStreamHandler streamHandler) {
     if (streamHandler is RepositoryEventStreamHandler) {
-      tearDownCoreListener(streamHandler.eventId, streamHandler.listenerId);
+      tearDownCoreListener(streamHandler.eventId, streamHandler);
     } else if (streamHandler is RepositoryMultiEventStreamHandler) {
-      for (int index = 0; index < streamHandler.listenerIds.length; index++) {
-        tearDownCoreListener(streamHandler.eventIds[index], streamHandler.listenerIds[index]);
+      for (int index = 0; index < streamHandler.eventIds.length; index++) {
+        tearDownCoreListener(streamHandler.eventIds[index], streamHandler);
       }
     }
   }
 
-  void tearDownCoreListener(int eventId, int listenerId) {
-    _core.removeListener(eventId, listenerId);
+  void tearDownCoreListener(int eventId, BaseRepositoryEventStreamHandler streamHandler) {
+    _core.removeListener(eventId, streamHandler.streamController);
   }
 
   void transferTo(Repository<T> repository, int id) {

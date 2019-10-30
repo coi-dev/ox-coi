@@ -59,7 +59,7 @@ enum SettingsSecurityType {
 class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityState> {
   PublishSubject<Event> _keyActionSubject = new PublishSubject();
   DeltaChatCore _core = DeltaChatCore();
-  int _listenerId;
+  bool _listenersRegistered = false;
 
   @override
   SettingsSecurityState get initialState => SettingsSecurityStateInitial();
@@ -109,7 +109,8 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   }
 
   void _exportImportKeys(SettingsSecurityType type) async {
-    if (_listenerId == null) {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       await _registerListeners();
     }
     var context = Context();
@@ -129,12 +130,12 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
 
   Future<void> _registerListeners() async {
     _keyActionSubject.listen(_successCallback, onError: _errorCallback);
-    _listenerId = await _core.listen(Event.imexProgress, _keyActionSubject);
+   await _core.listen(Event.imexProgress, _keyActionSubject);
   }
 
   void _unregisterListeners() {
-    _core.removeListener(Event.imexProgress, _listenerId);
-    _listenerId = null;
+    _core.removeListener(Event.imexProgress, _keyActionSubject);
+    _listenersRegistered = false;
   }
 
   _successCallback(Event event) {

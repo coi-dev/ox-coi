@@ -105,7 +105,6 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   @override
   void close() {
     _contactRepository.removeListener(_repositoryStreamHandler);
-    _repositoryStreamHandler?.tearDown();
     super.close();
   }
 

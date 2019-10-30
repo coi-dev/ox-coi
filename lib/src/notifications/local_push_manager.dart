@@ -60,23 +60,24 @@ class LocalPushManager {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
   NotificationManager _notificationManager;
-  int _listenerId;
+  bool _listenersRegistered = false;
 
   factory LocalPushManager() => _instance ??= LocalPushManager._internal();
 
   LocalPushManager._internal();
 
   Future<void> setup() async {
-    if (_listenerId == null) {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       _notificationManager = NotificationManager();
       _messageSubject.listen(_successCallback);
-      _listenerId = await _core.listen(Event.incomingMsg, _messageSubject);
+      await _core.listen(Event.incomingMsg, _messageSubject);
     }
   }
 
   Future<void> tearDown() async {
-    await _core.removeListener(Event.incomingMsg, _listenerId);
-    _listenerId = null;
+    _core.removeListener(Event.incomingMsg, _messageSubject);
+    _listenersRegistered = false;
   }
 
   void _successCallback(Event event) {

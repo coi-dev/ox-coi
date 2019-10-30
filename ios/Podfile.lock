@@ -252,7 +252,7 @@ SPEC CHECKSUMS:
   app_settings: 27651d311385d34d91afa163c0e4539cfd0c4c5d
   background_fetch: 385552e57d3bde2c7a3abd6b1edc76b87823b6c4
   contacts_service: d212985196c101372bb55c42f41dae7be59ab811
-  delta_chat_core: 4fe0634febea3fe0054e69f480b449346788d7d0
+  delta_chat_core: b783a6cae2cb336834c873e98b7c8c31e2dcd847
   device_info: cbf09d2ec12aa7110e0b09fabe54b5bd6c8efe74
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Firebase: bc9cfc7a96c73268656d5aaab453ff1b4b530e0e

@@ -103,7 +103,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   void close() {
     _chatRepository.removeListener(_repositoryStreamHandler);
-    _repositoryStreamHandler?.tearDown();
     super.close();
   }
 
@@ -155,6 +154,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (chat == null && isHeadless) {
       _chatRepository.putIfAbsent(id: _chatId);
       chat = _chatRepository.get(_chatId);
+    }
+    if (chat == null) {
+      return;
     }
     _isGroup = await chat.isGroup();
     String name = await chat.getName();

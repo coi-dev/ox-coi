@@ -60,8 +60,7 @@ import 'login_provider_list.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   DeltaChatCore _core = DeltaChatCore();
   Context _context = Context();
-  int _loginListenerId;
-  int _errorListenerId;
+  bool _listenersRegistered = false;
   PublishSubject<Event> _loginSubject = new PublishSubject();
 
   // ignore: close_sinks
@@ -151,18 +150,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _registerListeners() async {
-    if (_loginListenerId == null) {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       _loginSubject.listen(_successCallback, onError: _errorCallback);
-      _loginListenerId = await _core.listen(Event.configureProgress, _loginSubject);
-      _errorListenerId = await _core.listen(Event.error, _errorSubject);
+      await _core.listen(Event.configureProgress, _loginSubject);
+      await _core.listen(Event.error, _errorSubject);
     }
   }
 
   void _unregisterListeners() {
-    _core.removeListener(Event.configureProgress, _loginListenerId);
-    _core.removeListener(Event.error, _errorListenerId);
-    _loginListenerId = null;
-    _errorListenerId = null;
+    _core.removeListener(Event.configureProgress, _loginSubject);
+    _core.removeListener(Event.error, _errorSubject);
+    _listenersRegistered = false;
   }
 
   bool _loginSuccess(int progress) {

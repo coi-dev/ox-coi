@@ -104,7 +104,6 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   @override
   void close() {
     _messageListRepository?.removeListener(_repositoryStreamHandler);
-    _repositoryStreamHandler?.tearDown();
     super.close();
   }
 

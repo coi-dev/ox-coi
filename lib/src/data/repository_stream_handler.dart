@@ -80,23 +80,12 @@ abstract class BaseRepositoryEventStreamHandler {
 class RepositoryEventStreamHandler extends BaseRepositoryEventStreamHandler {
   final int eventId;
 
-  int listenerId;
-
   RepositoryEventStreamHandler(Type type, this.eventId, onData, [onError]) : super(type, onData, onError);
 
-  void tearDown() {
-    listenerId = null;
-  }
 }
 
 class RepositoryMultiEventStreamHandler extends BaseRepositoryEventStreamHandler {
   final List<int> eventIds;
 
-  List<int> listenerIds = List();
-
   RepositoryMultiEventStreamHandler(Type type, this.eventIds, onData, [onError]) : super(type, onData, onError);
-
-  void tearDown() {
-    listenerIds.clear();
-  }
 }
