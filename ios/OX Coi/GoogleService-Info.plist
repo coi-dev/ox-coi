@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>106809038230-eirh2puc7d8ms6ajdk9goc4sk6uvd9ce.apps.googleusercontent.com</string>
+	<string>106809038230-hpn6gf38qeedd6i2q99g6vblmcgjsbco.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.106809038230-eirh2puc7d8ms6ajdk9goc4sk6uvd9ce</string>
+	<string>com.googleusercontent.apps.106809038230-hpn6gf38qeedd6i2q99g6vblmcgjsbco</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBl6Jsu-yY3L6fTI5WCVxkCmp9jCE6G7QU</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.openxchange.oxCoi</string>
+	<string>com.openxchange.oxcoi.dev</string>
 	<key>PROJECT_ID</key>
 	<string>ox-talk-testproject</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:106809038230:ios:75ef4ad9030bf57c9ff9b7</string>
+	<string>1:106809038230:ios:2320d781ab289345</string>
 	<key>DATABASE_URL</key>
 	<string>https://ox-talk-testproject.firebaseio.com</string>
 </dict>
