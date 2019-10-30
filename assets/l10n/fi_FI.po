@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-19 14:14+0200\n"
-"PO-Revision-Date: 2019-08-29 13:49+0200\n"
+"POT-Creation-Date: 2019-10-01 09:23+0200\n"
+"PO-Revision-Date: 2019-10-11 14:47+0300\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: fi_FI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.1.1\n"
-"Last-Translator: \n"
-"Language: fi_FI\n"
+"X-Generator: Poedit 2.0.5\n"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -51,17 +51,11 @@ msgid_plural "%i participants"
 msgstr[0] "1 osallistuja"
 msgstr[1] "%i osallistujaa"
 
-#, c-format
-msgid "1 system contact imported"
-msgid_plural "%i system contacts imported"
-msgstr[0] "1 järjestelmäyhteystieto tuotu"
-msgstr[1] "%i järjestelmäyhteystietoa tuotu"
-
 msgid "About"
 msgstr "Tiedot"
 
-msgid "Account settings"
-msgstr "Tilin asetukset"
+msgid "Account"
+msgstr "Tili"
 
 msgid "Account settings successfully changed"
 msgstr "Tilin asetusten vaihtaminen onnistui"
@@ -142,8 +136,10 @@ msgstr "Estä yhteystieto"
 msgid "Blocked contacts"
 msgstr "Estetyt yhteystiedot"
 
-msgid "By using OX COI Messenger you agree to our"
-msgstr "Käyttämällä OX COI Messengeriä hyväksyt meidän"
+#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+#, c-format
+msgid "By using OX COI Messenger you agree to our %s and %s"
+msgstr "Käyttämällä OX Coi Messengeriä hyväksyt meidän %s ja %s"
 
 msgid "Camera"
 msgstr "Kamera"
@@ -154,8 +150,7 @@ msgstr "Peruuta"
 msgid ""
 "Cannot login. Please check if the email-address and the password are correct."
 msgstr ""
-"Sisäänkirjautuminen ei onnistu. Tarkista, että sähköpostiosoite ja salasana "
-"ovat oikein."
+"Sisäänkirjautuminen ei onnistu. Tarkista, että sähköpostiosoite ja salasana ovat oikein."
 
 msgid "Cannot verify contact"
 msgstr "Yhteystietoa ei voida varmentaa"
@@ -243,6 +238,9 @@ msgstr[1] "Poista keskustelut"
 msgid "Delete contact"
 msgstr "Poista yhteystieto"
 
+msgid "Delete push resource"
+msgstr "Poista tarjontaresurssi"
+
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
 msgid "Do you really want to block %s (%s)?"
@@ -252,6 +250,11 @@ msgstr "Haluatko varmasti estää käyttäjän %s (%s)?"
 #, c-format
 msgid "Do you really want to delete %s (%s)?"
 msgstr "Haluatko varmasti poistaa käyttäjän%s (%s)?"
+
+#. Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
+#, c-format
+msgid "Do you really want to delete %s?"
+msgstr "Haluatko varmasti poistaa käyttäjän \"%s\"?"
 
 msgid "Do you really want to leave the group?"
 msgstr "Haluatko varmasti jättää ryhmän?"
@@ -295,6 +298,9 @@ msgstr "Sähköposti"
 
 msgid "Email address"
 msgstr "Sähköpostiosoite"
+
+msgid "Enable background updates"
+msgstr "Kytke päälle taustalla tapahtuvat päivitykset"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Kytke päälle lukuvahvistuskuittien lähettäminen ja pyyntö."
@@ -372,6 +378,13 @@ msgstr "IMAP -portti"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP -palvelin (esim. imap.coi.me)"
+
+msgid ""
+"If enabled, this setting allows the app to perform periodic background tasks "
+"to get new messages"
+msgstr ""
+"Jos toiminto on kytketty päälle, tämä asetus sallii sovelluksen suorittaa "
+"ajoittain tehtäviä taustalla uusien viestien hakemiseksi"
 
 msgid "Image"
 msgstr "Kuva"
@@ -473,6 +486,9 @@ msgstr "Ei viestejä"
 msgid "No participants selected. Please select at least one person."
 msgstr "Ei osallistujia valittuna. Valitse vähintään yksi osallistuja."
 
+msgid "No phone number"
+msgstr "Ei puhelinnumeroa"
+
 msgid "No results found"
 msgstr "Tuloksia ei löytynyt"
 
@@ -481,6 +497,11 @@ msgstr "Ei allekirjoitusta"
 
 msgid "No username set"
 msgstr "Käyttäjätunnusta ei ole asetettu"
+
+msgid "Notification"
+msgid_plural "Notifications"
+msgstr[0] "Ilmoitus"
+msgstr[1] "Ilmoitukset"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -537,8 +558,18 @@ msgstr "Tuodaan avainta"
 msgid "Performing key transfer"
 msgstr "Siirretään avainta"
 
+msgid ""
+"Phone numbers can be added or edited via the local address book and imported "
+"afterwards."
+msgstr ""
+"Puhelinnumeroita voidaan lisätä tai muokata paikallisen osoitekirjan kautta "
+"ja tuoda myöhemmin."
+
 msgid "Please check your username and password"
 msgstr "Tarkista käyttäjätunnuksesi ja salasanasi"
+
+msgid "Please choose a number"
+msgstr "Valitse numero"
 
 msgid "Please choose what kind of messages you would like to see."
 msgstr "Valitse minkälaisia viestejä haluat nähdä."
@@ -570,6 +601,12 @@ msgstr "Profiili"
 msgid "Profile QR"
 msgstr "Profiilin QR-koodi"
 
+msgid "Push data"
+msgstr "Tarjontatiedot"
+
+msgid "Push resource (via push service)"
+msgstr "Tarjontaresurssi (tarjontapavelun kautta)"
+
 msgid "Re-importing your contacts will not create duplicates."
 msgstr ""
 "Kaksoiskappaleita ei muodostu jos tuot yhteystietosi laitteellesi uudelleen."
@@ -581,6 +618,9 @@ msgstr[1] "Lue kuitit"
 
 msgid "Register"
 msgstr "Rekisteri"
+
+msgid "Register new push resource"
+msgstr "Rekisteröi uusi tarjontaresurssi"
 
 msgid "Remove current image"
 msgstr "Poista nykyinen kuva"
@@ -698,6 +738,9 @@ msgstr "Lisää yksi napauttamalla yhteystietoa."
 msgid "Start a chat with %s?"
 msgstr "Aloita keskustelu käyttäjän %s kanssa?"
 
+msgid "System contacts imported successfully"
+msgstr "Järjestelmän yhteystietojen tuonti onnistui"
+
 #, c-format
 msgid "The associated setup code starts with: %s"
 msgstr "Asetuskoodi alkaa seuraavasti: %s"
@@ -718,6 +761,13 @@ msgid ""
 msgstr ""
 "Tämä toiminto voidaan suorittaa myöhemmin yläreunan toimintopalkin "
 "tuontinapista."
+
+msgid ""
+"This contact has no phone number. Please edit this contact in your device "
+"address book and add the phone number there."
+msgstr ""
+"Yhteystiedolle ei ole puhelinnumeroa. Muokkaa yhteystietoa laitteesi "
+"osoitekirjassa ja lisää puhelinnumero."
 
 msgid "This field can not be empty"
 msgstr "Tätä kenttää ei voi jättää tyhjäksi"
@@ -831,10 +881,10 @@ msgid "Welcome to OX COI Messenger"
 msgstr "Terveuloa OX COI Messengeriin"
 
 msgid ""
-"Welcome to the OX COI Messenger!\n"
+"Welcome to the OX Coi Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Tervetuloa OX COI Messengeriin!\n"
+"Tervetuloa OX Coi Messengeriin!\n"
 "Aloita uusi keskustelu napauttamalla puhekuplaikonia."
 
 msgid "Would you like to import your contacts from this device?"
@@ -863,8 +913,8 @@ msgstr ""
 msgid "Your favorite messages"
 msgstr "Suosikkiviestisi"
 
-msgid "and"
-msgstr "ja"
+msgid "Your messages are encrypted from now on."
+msgstr "Viestisi salataan tästä lähtien."
 
 msgid "code"
 msgstr "koodi"
@@ -877,3 +927,24 @@ msgstr "tietosuojatiedote"
 
 msgid "terms & conditions"
 msgstr "ehdot"
+
+#~ msgid "1 system contact imported"
+#~ msgid_plural "%i system contacts imported"
+#~ msgstr[0] "1 järjestelmäyhteystieto tuotu"
+#~ msgstr[1] "%i järjestelmäyhteystietoa tuotu"
+
+#~ msgid "Account settings"
+#~ msgstr "Tilin asetukset"
+
+#~ msgid "By using OX COI Messenger you agree to our"
+#~ msgstr "Käyttämällä OX COI Messengeriä hyväksyt meidän"
+
+#~ msgid ""
+#~ "Welcome to the OX COI Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Tervetuloa OX COI Messengeriin!\n"
+#~ "Aloita uusi keskustelu napauttamalla puhekuplaikonia."
+
+#~ msgid "and"
+#~ msgstr "ja"
