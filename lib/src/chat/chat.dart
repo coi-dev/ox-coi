@@ -284,7 +284,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               if (state is ChatStateSuccess && !state.isRemoved)
                 new Container(
                   decoration: new BoxDecoration(color: Theme.of(context).cardColor),
-                  child: _buildTextComposer(),
+                  child: SafeArea(child: _buildTextComposer()),
                 ),
             ],
           ),
