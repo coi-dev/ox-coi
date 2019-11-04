@@ -167,11 +167,11 @@ class _ProfileState extends State<UserProfile> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 AdaptiveRaisedButton(
-                    child: Text(L10n.get(L.profileEdit)),
-                    onPressed: editUserSettings,
-                    color: accent,
-                    textColor: onAccent,
-                    key: Key(keyUserProfileEditProfileRaisedButton),
+                  child: Text(L10n.get(L.profileEdit)),
+                  onPressed: editUserSettings,
+                  color: accent,
+                  textColor: onAccent,
+                  key: Key(keyUserProfileEditProfileRaisedButton),
                 ),
                 Padding(padding: EdgeInsets.all(chatProfileButtonPadding)),
                 AdaptiveRaisedButton(
@@ -200,10 +200,11 @@ class _ProfileState extends State<UserProfile> {
   Widget getSettings() {
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.settings,
-          iosIcon: CupertinoIcons.gear_solid
+        androidIcon: Icons.settings,
+        iosIcon: CupertinoIcons.gear_solid,
       ),
       onPressed: () => _settings(context),
+      key: Key(keyUserProfileSettingsAdaptiveIcon),
     );
   }
 

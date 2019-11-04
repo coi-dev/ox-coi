@@ -58,8 +58,6 @@ void main() {
 
     SerializableFinder userSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
     SerializableFinder userProfileUserNameTextFinder = find.text(testUserNameUserProfile);
-    SerializableFinder userProfileEmailTextFinder = find.byValueKey(keyUserProfileEmailText);
-    SerializableFinder userProfileStatusTextFinder = find.text(profileUserStatus);
 
     test('Test create profile integration tests.', () async {
       await getAuthentication(

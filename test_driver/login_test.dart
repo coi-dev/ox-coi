@@ -142,8 +142,6 @@ Future checkOxCoiWelcomeAndProviderList(
   SerializableFinder other,
   SerializableFinder mailbox,
 ) async {
-  //await driver.waitFor(welcomeMessage);
-  //await driver.waitFor(welcomeDescription);
   await driver.waitFor(signInCaps);
   await driver.waitFor(register);
   await driver.tap(signInCaps);

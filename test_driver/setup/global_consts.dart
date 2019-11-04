@@ -144,3 +144,7 @@ final keyContactChangeEmailFinder = find.byValueKey(keyContactChangeEmailValidat
 final keyContactChangeCheckFinder = find.byValueKey(keyContactChangeCheckIconButton);
 
 final keyDialogBuilderAlertDialogOkFlatButtonFinder = find.byValueKey(keyInformationDialogPositiveButton);
+
+final userProfileEmailTextFinder = find.byValueKey(keyUserProfileEmailText);
+
+final userProfileStatusTextFinder = find.text(profileUserStatus);

@@ -47,6 +47,7 @@ const keyUserProfileEditProfileRaisedButton =
     "keyUserProfileEditProfilRaisedButton";
 const keyUserProfileShowQrRaisedButton = "keyUserProfileShowQrRaisedButton";
 const keyUserProfileEmailText = "keyUserProfileEmailText";
+const keyUserProfileSettingsAdaptiveIcon= "keyUserProfileSettingsAdaptiveIcon";
 
 const keyRootIconChatTitleText = "Chat";
 const keyRootIconContactsTitleText = "Contacts";
