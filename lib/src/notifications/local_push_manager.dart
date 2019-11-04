@@ -76,8 +76,10 @@ class LocalPushManager {
   }
 
   Future<void> tearDown() async {
-    _core.removeListener(Event.incomingMsg, _messageSubject);
-    _listenersRegistered = false;
+    if (_listenersRegistered) {
+      _core.removeListener(Event.incomingMsg, _messageSubject);
+      _listenersRegistered = false;
+    }
   }
 
   void _successCallback(Event event) {

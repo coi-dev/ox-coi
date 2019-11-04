@@ -134,8 +134,10 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   }
 
   void _unregisterListeners() {
-    _core.removeListener(Event.imexProgress, _keyActionSubject);
-    _listenersRegistered = false;
+    if (_listenersRegistered) {
+      _core.removeListener(Event.imexProgress, _keyActionSubject);
+      _listenersRegistered = false;
+    }
   }
 
   _successCallback(Event event) {

@@ -134,10 +134,12 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   }
 
   void _unregisterListeners() {
-    _core.removeListener(Event.secureJoinInviterProgress, _qrSubject);
-    _core.removeListener(Event.secureJoinJoinerProgress, _qrSubject);
-    _core.removeListener(Event.error, _errorSubject);
-    _listenersRegistered = false;
+    if (_listenersRegistered) {
+      _core.removeListener(Event.secureJoinInviterProgress, _qrSubject);
+      _core.removeListener(Event.secureJoinJoinerProgress, _qrSubject);
+      _core.removeListener(Event.error, _errorSubject);
+      _listenersRegistered = false;
+    }
   }
 
   void getQrText(int chatId) async {

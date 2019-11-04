@@ -282,10 +282,12 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   void _unregisterListeners() {
-    _core.removeListener(Event.setMetaDataDone, pushSubject);
-    _core.removeListener(Event.webPushSubscription, pushSubject);
-    _core.removeListener(Event.error, pushSubject);
-    _listenersRegistered = false;
+    if (_listenersRegistered) {
+      _core.removeListener(Event.setMetaDataDone, pushSubject);
+      _core.removeListener(Event.webPushSubscription, pushSubject);
+      _core.removeListener(Event.error, pushSubject);
+      _listenersRegistered = false;
+    }
   }
 
   void _metadataSuccessCallback(Event event) {
