@@ -45,6 +45,14 @@ import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
+const String adbPath = 'adb';
+
+const permissionAudio = 'android.permission.RECORD_AUDIO';
+const permissionReadStorage = 'android.permission.READ_EXTERNAL_STORAGE';
+const permissionWriteStorage = 'android.permission.WRITE_EXTERNAL_STORAGE';
+const permissionReadContacts = 'android.permission.READ_CONTACTS';
+const permissionWriteContacts = 'android.permission.WRITE_CONTACTS';
+
 class Setup {
   FlutterDriver _drivers;
 
@@ -56,67 +64,11 @@ class Setup {
 
   main(Duration timeout) {
     setUpAll(() async {
-      final String adbPath = 'adb';
-      await Process.run(
-        adbPath,
-        [
-          'shell',
-          'pm',
-          'grant',
-          'com.openxchange.oxcoi.dev',
-          'android.permission.RECORD_AUDIO',
-        ],
-      );
-      await Process.run(
-        adbPath,
-        [
-          'shell',
-          'pm',
-          'grant',
-          'com.openxchange.oxcoi.dev',
-          'android.permission.READ_EXTERNAL_STORAGE',
-        ],
-      );
-      await Process.run(
-        adbPath,
-        [
-          'shell',
-          'pm',
-          'grant',
-          'com.openxchange.oxcoi.dev',
-          'android.permission.WRITE_EXTERNAL_STORAGE',
-        ],
-      );
-      await Process.run(
-        adbPath,
-        [
-          'shell',
-          'pm',
-          'grant',
-          'com.openxchange.oxcoi.dev',
-          'android.permission.WRITE_CONTACTS',
-        ],
-      );
-      await Process.run(
-        adbPath,
-        [
-          'shell',
-          'pm',
-          'grant',
-          'com.openxchange.oxcoi.dev',
-          'android.permission.READ_CONTACTS',
-        ],
-      );
-      await Process.run(
-        adbPath,
-        [
-          'shell',
-          'pm',
-          'grant',
-          'com.openxchange.oxcoi.dev',
-          'android.permission.RECORD_AUDIO',
-        ],
-      );
+      await grantPermission(adbPath, permissionAudio);
+      await grantPermission(adbPath, permissionReadStorage);
+      await grantPermission(adbPath, permissionWriteStorage);
+      await grantPermission(adbPath, permissionReadContacts);
+      await grantPermission(adbPath, permissionWriteContacts);
 
       this._drivers = await FlutterDriver.connect();
       this._drivers.setSemantics(true, timeout: timeout);
@@ -127,5 +79,22 @@ class Setup {
         this._drivers.close();
       }
     });
+  }
+
+  Future grantPermission(String adbPath, String permission) async {
+    String deviceId = Platform.environment["FLUTTER_TEST_DEVICE_ID"];
+    String appId = Platform.environment["FLUTTER_TEST_APP_ID"];
+    await Process.run(
+      adbPath,
+      [
+        '-s',
+        deviceId,
+        'shell',
+        'pm',
+        'grant',
+        appId,
+        permission,
+      ],
+    );
   }
 }

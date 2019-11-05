@@ -54,8 +54,8 @@
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:test_api/src/backend/invoker.dart';
 import 'package:test/test.dart';
+import 'package:test_api/src/backend/invoker.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
@@ -66,7 +66,6 @@ void main() {
     // Setup for the test.
     Setup setup = new Setup(driver);
     setup.main(timeout);
-
 
     final ok = 'Ok';
     final security = 'Security';
@@ -96,13 +95,13 @@ void main() {
       Invoker.current.heartbeat();
       await setup.driver.tap(find.text(security));
 
-      await setup.driver.tap(find.text(expertImportKeys ));
+      await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
 
       await setup.driver.tap(find.text(expertExportKeys));
-      await setup.driver.tap(find.text( ok));
+      await setup.driver.tap(find.text(ok));
 
-      await setup.driver.tap(find.text(expertExportKeys));
+      await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
 
       await setup.driver.tap(pageBack);
