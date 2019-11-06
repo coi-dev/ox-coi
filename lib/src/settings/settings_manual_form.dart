@@ -51,6 +51,7 @@ import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class SettingsManualForm extends StatefulWidget {
   final bool isLogin;
@@ -65,13 +66,17 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   ValidatableTextFormField emailField;
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => L10n.get(L.password),
+    key: Key(keySettingsManuelFormValidatableTextFormFieldPasswordField),
     textFormType: TextFormType.password,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
   );
-  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField((context) => L10n.get(L.settingIMAPName));
+  ValidatableTextFormField imapLoginNameField = ValidatableTextFormField(
+    (context) => L10n.get(L.settingIMAPName),
+  );
   ValidatableTextFormField imapServerField = ValidatableTextFormField(
     (context) => L10n.get(L.settingIMAPServer),
+    key: Key(keySettingsManuelFormValidatableTextFormFieldImapServerField),
     inputType: TextInputType.url,
   );
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
@@ -90,6 +95,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   );
   ValidatableTextFormField smtpServerField = ValidatableTextFormField(
     (context) => L10n.get(L.settingSMTPServer),
+    key: Key(keySettingsManuelFormValidatableTextFormFieldSMTPServerField),
     inputType: TextInputType.url,
   );
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(

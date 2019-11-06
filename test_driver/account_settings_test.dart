@@ -52,6 +52,8 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
@@ -61,17 +63,17 @@ import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Security test.', () {
-    // Setup for the test.
+  group('Add account settings test.', () {
+    //  Define the driver.
+    FlutterDriver driver;
     Setup setup = new Setup(driver);
     setup.main(timeout);
+    final account = 'Account';
+    final fakeIMAPCoiServer = 'mobile-coi.open-xchange.comm';
+    final fakeSMTPCoiServer = 'mobile-coi.open-xchange.comm';
+    final realServer = 'mobile-coi.open-xchange.com';
 
-
-    final security = 'Security';
-    final expertImportKeys = 'Expert: Import keys';
-    final expertExportKeys = 'Expert: Export keys';
-
-    test('Test Create chat list integration tests.', () async {
+    test('Test create profile integration tests.', () async {
       //  Check real authentication and get chat.
       await getAuthentication(
         setup.driver,
@@ -83,27 +85,49 @@ void main() {
         realPassword,
       );
 
-      //To do
-      //Catch test Export success toast message with the driver.
-      //Catch test failed  toast message with the driver.
-      await catchScreenshot(setup.driver, 'screenshots/signInDone.png');
-      await setup.driver.waitFor(chatWelcomeFinder);
+      Invoker.current.heartbeat();
       await setup.driver.tap(profileFinder);
       await setup.driver.tap(userProfileSettingsAdaptiveIconFinder);
+
+      await setup.driver.tap(find.text(account));
+      await setup.driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
       Invoker.current.heartbeat();
-      await setup.driver.tap(find.text(security));
-
-      await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
 
-      await setup.driver.tap(find.text(expertExportKeys));
+      // Case realPassword and fake IMAP server.
+      Invoker.current.heartbeat();
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
+      await setup.driver.enterText(realPassword);
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
+      Invoker.current.heartbeat();
+      await setup.driver.enterText(fakeIMAPCoiServer);
+      await setup.driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
+      Invoker.current.heartbeat();
       await setup.driver.tap(find.text(ok));
 
-      await setup.driver.tap(find.text(expertImportKeys));
+      // Case realPassword and fakeIMAPServer and fakeSMTPServer.
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
+      await setup.driver.enterText(fakeSMTPCoiServer);
+      await setup.driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
+      Invoker.current.heartbeat();
       await setup.driver.tap(find.text(ok));
 
-      await setup.driver.tap(pageBack);
-      await setup.driver.tap(pageBack);
+      // Case FakePassword and fakeIMAPServer and fakeSMTPServer.
+      Invoker.current.heartbeat();
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
+      await setup.driver.enterText(helloWorld);
+      await setup.driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
+      await setup.driver.tap(find.text(ok));
+
+      // Case realPassword and realIMAPServer and realSMTPServer.
+      Invoker.current.heartbeat();
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
+      await setup.driver.enterText(realPassword);
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
+      await setup.driver.enterText(realServer);
+      await setup.driver.tap(settingsManuelFormValidatableTextFormFieldSMTPServerField);
+      await setup.driver.enterText(realServer);
+      await setup.driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
     });
   });
 }

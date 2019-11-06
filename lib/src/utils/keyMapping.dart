@@ -143,3 +143,9 @@ const keyChatIconButtonIconPhone = "keyChatIconButtonIconPhone";
 const keyChatNameText = "keyChatNameText";
 
 const keyDialogBuilderAlertDialogOkFlatButton ="keyDialogBuilderAlertDialogOkFlatButton";
+
+const keyUserAccountAdaptiveIconButtonIconCheck = "keyUserAccoutAdaptiveIconButtonIconCheck";
+
+const keySettingsManuelFormValidatableTextFormFieldPasswordField= "keySettingsManuelFormValidatableTextFormFieldPasswordField";
+const keySettingsManuelFormValidatableTextFormFieldImapServerField ="keySettingsManuelFormValidatableTextFormFieldImapServerField";
+const keySettingsManuelFormValidatableTextFormFieldSMTPServerField= "keySettingsManuelFormValidatableTextFormFieldSMTPServerField";

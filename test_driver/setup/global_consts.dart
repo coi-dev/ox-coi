@@ -59,6 +59,8 @@ const coiDebug = 'Debug (mobile-qa)';
 
 const meContact = 'Me';
 
+final ok = 'Ok';
+
 const emailAddress = 'Email address';
 
 const newContact = 'New contact';
@@ -148,3 +150,15 @@ final keyDialogBuilderAlertDialogOkFlatButtonFinder = find.byValueKey(keyInforma
 final userProfileEmailTextFinder = find.byValueKey(keyUserProfileEmailText);
 
 final userProfileStatusTextFinder = find.text(profileUserStatus);
+
+final userProfileSettingsAdaptiveIconFinder = find.byValueKey(keyUserProfileSettingsAdaptiveIcon);
+
+final userAccountAdaptiveIconButtonIconCheckFinder = find.byValueKey(keyUserAccountAdaptiveIconButtonIconCheck);
+
+final settingsManuelFormValidatableTextFormFieldPasswordFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldPasswordField);
+
+final settingsManuelFormValidatableTextFormFieldImapServerFieldFinder =find.byValueKey(keySettingsManuelFormValidatableTextFormFieldImapServerField);
+
+final settingsManuelFormValidatableTextFormFieldSMTPServerField = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldSMTPServerField);
+
+

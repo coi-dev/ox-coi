@@ -64,6 +64,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class UserAccountSettings extends StatefulWidget {
   @override
@@ -191,6 +192,7 @@ class SaveDataButton extends StatelessWidget {
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
         icon: IconSource.check,
+        key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
       ),
       onPressed: () {
         _saveData(context);
