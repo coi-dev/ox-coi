@@ -45,7 +45,7 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 
 const timeout = Duration(seconds: 120);
 
-const realEmail = 'enyakam3@ox.com';
+const realEmail = 'enyakam@ox.com';
 
 const fakeEmail = 'enyakam3@ox.com3';
 
@@ -79,9 +79,9 @@ const blockContact = 'Block contact';
 
 const unblock = 'Unblock';
 
-const newTestContact01 = 'enyakam1@ox.com';
-
 const newTestContact02 = 'enyakam2@ox.com';
+
+const newTestContact03 = 'enyakam3@ox.com';
 
 const newTestContact04 = 'enyakam4@ox.com';
 

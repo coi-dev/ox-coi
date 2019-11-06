@@ -105,7 +105,7 @@ void main() {
         keyContactChangeNameFinder,
         newTestName01,
         keyContactChangeEmailFinder,
-        newTestContact01,
+        newTestContact04,
         keyContactChangeCheckFinder,
       );
 

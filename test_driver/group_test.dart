@@ -88,7 +88,7 @@ void main() {
         keyContactChangeNameFinder,
         newTestName01,
         keyContactChangeEmailFinder,
-        newTestContact01,
+        newTestContact04,
         keyContactChangeCheckFinder,
       );
       await addNewContact(
@@ -106,7 +106,7 @@ void main() {
         keyContactChangeNameFinder,
         newMe,
         keyContactChangeEmailFinder,
-        newTestContact04,
+        newTestContact03,
         keyContactChangeCheckFinder,
       );
       await catchScreenshot(setup.driver, 'screenshots/group1.png');

@@ -93,7 +93,7 @@ void main() {
       await createNewChat(
         setup.driver,
         createChatFinder,
-        newTestContact01,
+        newTestContact04,
         newTestName01,
         newContact,
         name,
