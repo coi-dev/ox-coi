@@ -45,6 +45,7 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/material.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
@@ -88,7 +89,12 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     String email = await contact.getAddress();
     int colorValue = await contact.getColor();
     bool isVerified = await contact.isVerified();
-    String imagePath = await contact.getProfileImage();
+    String imagePath;
+    if(_contactId == Contact.idSelf){
+      imagePath = await contact.getProfileImage();
+    }else {
+      imagePath = contact.get(ContactExtension.contactAvatar);
+    }
     String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
     Color color = rgbColorFromInt(colorValue);
     add(ContactLoaded(

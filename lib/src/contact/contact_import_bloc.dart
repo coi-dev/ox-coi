@@ -41,10 +41,12 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:contacts_service/contacts_service.dart' as SystemContacts;
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
@@ -52,6 +54,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/security.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
@@ -113,8 +116,10 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       List<int> ids = List.from(await context.getContacts(2, null));
       await updateContactExtensions(ids, phoneNumbers);
     }
+
     final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     await Future.forEach(_contactRepository.getAll(), (contact) async {
+      await updateAvatar(systemContacts, contact);
       await reloadChatName(context, chatRepository, contact.id);
     });
     _contactRepository.clear();
@@ -143,6 +148,37 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
         phoneNumbers[email.value] += "${phoneNumber.value}\n";
       });
     }
+  }
+
+  Future<void> updateAvatar(Iterable<SystemContacts.Contact> systemContacts, Contact contact) async {
+    String contactEmail = await contact.getAddress();
+    var directory = await getApplicationDocumentsDirectory();
+    var contactExtensionProvider = ContactExtensionProvider();
+    int contactId = contact.id;
+
+    systemContacts.forEach((systemContact) {
+      systemContact.emails.forEach((email) async {
+        if (isEmail(email.value) && contactEmail == email.value) {
+          String filePath = "";
+          if (systemContact.avatar.length > 0) {
+            _contactRepository.update(id: contactId);
+            filePath = "${directory.path}/${email.value}_avatar.png";
+            File file = File(filePath);
+            FileImage image = FileImage(file);
+            image.evict();
+            await file.writeAsBytes(systemContact.avatar);
+          }
+          var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+          if (contactExtension == null) {
+            contactExtension = ContactExtension(contactId, avatar: filePath);
+            contactExtensionProvider.insert(contactExtension);
+          } else {
+            contactExtension.avatar = filePath;
+            contactExtensionProvider.update(contactExtension);
+          }
+        }
+      });
+    });
   }
 
   Future<int> updateContacts(String coreContacts, Context context) async {

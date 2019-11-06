@@ -180,6 +180,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       var chatContactId = chatContacts.first;
       Contact contact = _contactRepository.get(chatContactId);
       phoneNumbers = contact?.get(ContactExtension.contactPhoneNumber);
+      avatarPath = contact?.get(ContactExtension.contactAvatar);
       var isSelfTalk = await chat.isSelfTalk();
       if (isSelfTalk) {
         subTitle = L10n.get(L.chatMessagesSelf);

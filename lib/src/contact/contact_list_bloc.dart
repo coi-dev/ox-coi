@@ -130,6 +130,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
       if (contactExtension != null) {
         _contactRepository.get(contactId).set(ContactExtension.contactPhoneNumber, contactExtension.phoneNumbers);
+        _contactRepository.get(contactId).set(ContactExtension.contactAvatar, contactExtension.avatar);
       }
     });
 
