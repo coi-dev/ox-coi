@@ -28,6 +28,12 @@ def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    def userHome = System.properties['user.home']
+    keystoreProperties['keyAlias'] = ''
+    keystoreProperties['keyPassword'] = ''
+    keystoreProperties['storeFile'] = userHome + ".android/debug.keystore"
+    keystoreProperties['storePassword'] = ""
 }
 
 android {
@@ -92,7 +98,7 @@ android {
 
     splits {
         abi {
-            enable gradle.startParameter.taskNames.any { it.contains("Release")}
+            enable gradle.startParameter.taskNames.any { it.contains("Release") }
             reset()
             include "armeabi-v7a", "arm64-v8a", "x86"
             universalApk false
