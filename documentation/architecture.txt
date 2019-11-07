@@ -1,10 +1,10 @@
 digraph G {
-	node [	
-		shape = polygon,
-		sides = 4,
-		style = filled,
-		fontname = "Helvetica-Outline" 
-		];
+	node [
+            shape = box,
+            style = filled,
+            fontname=Arial,
+            fontsize=14
+    ];
 	"UI / Widget" -> "BloC"
 	"BloC" -> "UI / Widget"
 

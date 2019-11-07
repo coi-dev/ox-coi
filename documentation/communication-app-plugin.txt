@@ -1,13 +1,13 @@
 digraph G {
-	node [	
-		shape = polygon,
-		sides = 4,
-		style = filled,
-		fontname = "Helvetica-Outline" 
-		];
-	"OX COI Messenger App (Flutter)" -> "Delta Chat Core Plugin API (Dart)"
-	"Delta Chat Core Plugin API (Dart)" -> "Delta Chat Core Plugin Native Android API (Java/Kotlin)"
-	"Delta Chat Core Plugin API (Dart)" -> "Delta Chat Core Plugin Native iOS API (ObjC/Swift)"
-	"Delta Chat Core Plugin Native Android API (Java/Kotlin)" -> "Delta Chat Core IMAP/SMTP logic (C)"
-	"Delta Chat Core Plugin Native iOS API (ObjC/Swift)" -> "Delta Chat Core IMAP/SMTP logic (C)"
+    node [
+            shape = box,
+            style = filled,
+            fontname=Arial,
+            fontsize=14
+    ];
+    "OX COI Messenger App (Dart)" -> "DCC Plugin API (Dart)" [dir=both];
+    "DCC Plugin API (Dart)" -> "DCC Plugin Native Android API (Java/Kotlin)" [dir=both];
+    "DCC Plugin API (Dart)" -> "DCC Plugin Native iOS API (ObjC/Swift)" [dir=both];
+    "DCC Plugin Native Android API (Java/Kotlin)" -> "DCC IMAP/SMTP logic (C)" [dir=both];
+    "DCC Plugin Native iOS API (ObjC/Swift)" -> "DCC IMAP/SMTP logic (C)" [dir=both];
 }
