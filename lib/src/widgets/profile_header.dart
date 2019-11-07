@@ -45,6 +45,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -52,9 +53,9 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:superellipse_shape/superellipse_shape.dart';
 import 'package:transparent_image/transparent_image.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 
 class ProfileData extends InheritedWidget {
   final Color color;
@@ -152,29 +153,23 @@ class ProfileAvatar extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Padding(
-            padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: ProfileData.of(context).color,
-                borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: avatarImage,
-                ),
-              ),
-              height: avatarSize,
-              width: avatarSize,
-            )),
+          padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
+          child: Avatar(
+            imagePath: imagePath,
+            color: ProfileData.of(context).color,
+            size: avatarSize,
+          ),
+        ),
         Visibility(
           visible: ProfileData.of(context).imageActionCallback != null,
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
               child: Container(
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: ProfileData.of(context).color,
-                    borderRadius: BorderRadius.circular(profileAvatarBorderRadius),
+                decoration: ShapeDecoration(
+                    shape: SuperellipseShape(
+                      borderRadius: BorderRadius.circular(avatarSize * avatarBorderRadiusMultiplier),
+                    ),
                     gradient: LinearGradient(begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter, colors: [
                       Colors.black.withOpacity(0.0),
                       Colors.black.withOpacity(0.5),

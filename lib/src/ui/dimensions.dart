@@ -48,6 +48,7 @@ const buttonThemeMinWidth = 88.0; // https://api.flutter.dev/flutter/material/Bu
 // Global
 const zero = 0.0;
 const dividerHeight = 1.0;
+const avatarBorderRadiusMultiplier = 0.67;
 
 // Progress
 const verticalPaddingSmall = 8.0;
@@ -124,7 +125,7 @@ const profileAvatarMaxRadius = 64.0;
 const profileAvatarSize = 128.0;
 const profileAvatarBorderRadius = 20.0;
 
-const profileEditPhotoButtonRightPosition = 8.0;
+const profileEditPhotoButtonRightPosition = 12.0;
 const profileEditPhotoButtonBottomPosition = 24.0;
 
 const editUserAvatarVerticalPadding = 24.0;
