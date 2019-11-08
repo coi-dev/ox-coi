@@ -5,13 +5,9 @@ digraph G {
             fontname=Arial,
             fontsize=14
     ];
-	"UI / Widget" -> "BloC"
-	"BloC" -> "UI / Widget"
-
-	"BloC" -> "Plugin"
-	"BloC" -> "Repository / Data Object"
-	"Repository / Data Object" -> "BloC"
-
-	"Repository / Data Object" -> "Plugin"
-	"Plugin" -> "Repository / Data Object"
+	"UI / Widget" -> "BloC"  [dir=both];
+	"BloC" -> "Repository / Data Object"  [dir=both];
+	"BloC" -> "Event listener"  [dir=both];
+	"Event listener" -> "Plugin"  [dir=both];
+	"Repository / Data Object" -> "Plugin"  [dir=both];
 }
