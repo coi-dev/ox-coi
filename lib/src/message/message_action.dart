@@ -40,13 +40,13 @@
  * for more details.
  */
 
-import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum MessageActionTag { forward, copy, delete, flag, share }
 
 class MessageAction {
   final String title;
-  final IconData icon;
+  final IconSource icon;
   final MessageActionTag messageActionTag;
 
   const MessageAction({this.title, this.icon, this.messageActionTag});

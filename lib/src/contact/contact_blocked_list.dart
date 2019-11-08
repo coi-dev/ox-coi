@@ -82,8 +82,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
         appBar: AdaptiveAppBar(
           leadingIcon: new AdaptiveIconButton(
             icon: new AdaptiveIcon(
-                androidIcon: Icons.close,
-                iosIcon: CupertinoIcons.clear_thick,
+              icon: IconSource.close,
             ),
             key: Key(keyContactBlockedListCloseIconButton),
             onPressed: () => navigation.pop(context),
@@ -110,7 +109,9 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return Icon(Icons.error);
+          return AdaptiveIcon(
+              icon: IconSource.error
+          );
         }
       },
     );

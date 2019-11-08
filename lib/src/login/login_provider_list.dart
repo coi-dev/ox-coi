@@ -58,6 +58,7 @@ import 'login_events_state.dart';
 import 'login_provider_signin.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum ProviderListType {
   login,
@@ -128,7 +129,9 @@ class _ProviderListState extends State<ProviderList> {
                   } else if (state is! LoginStateFailure) {
                     return StateInfo(showLoading: true);
                   } else {
-                    return Icon(Icons.error);
+                    return AdaptiveIcon(
+                        icon: IconSource.error
+                    );
                   }
                 },
               ),

@@ -54,6 +54,7 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class SettingsAbout extends StatefulWidget {
   @override
@@ -121,7 +122,9 @@ class _SettingsAboutState extends State<SettingsAbout> {
           );
         } else {
           return Center(
-            child: Icon(Icons.error),
+            child: AdaptiveIcon(
+                icon: IconSource.error
+            ),
           );
         }
       },

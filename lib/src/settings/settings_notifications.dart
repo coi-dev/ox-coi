@@ -55,6 +55,7 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'settings_notifications_bloc.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class SettingsNotifications extends StatefulWidget {
   @override
@@ -105,7 +106,9 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                   contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
                   title: Text(L10n.get(L.settingNotificationPush)),
                   subtitle: Text(L10n.get(L.settingNotificationPushText)),
-                  trailing: Icon(Icons.arrow_forward),
+                  trailing: AdaptiveIcon(
+                      icon: IconSource.arrowForward
+                  ),
                   onTap: ()=> {AppSettings.openAppSettings()},
                 ),
               )
@@ -113,7 +116,9 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
           );
         } else {
           return Center(
-            child: Icon(Icons.error),
+            child: AdaptiveIcon(
+                icon: IconSource.error
+            ),
           );
         }
       },

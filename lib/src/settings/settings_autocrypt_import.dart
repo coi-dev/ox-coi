@@ -110,8 +110,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
       appBar: AdaptiveAppBar(
         leadingIcon: new AdaptiveIconButton(
           icon: new AdaptiveIcon(
-              androidIcon: Icons.arrow_back,
-              iosIcon: CupertinoIcons.back
+            icon: IconSource.back,
           ),
           onPressed: () => navigation.pop(context),
         ),
@@ -119,8 +118,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
         actions: <Widget>[
           AdaptiveIconButton(
             icon: AdaptiveIcon(
-                androidIcon: Icons.check,
-                iosIcon: CupertinoIcons.check_mark
+              icon: IconSource.check,
             ),
             onPressed: () => onSubmit(),
           )

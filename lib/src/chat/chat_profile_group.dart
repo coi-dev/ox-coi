@@ -63,6 +63,8 @@ import 'chat_bloc.dart';
 import 'chat_event_state.dart';
 import 'edit_name.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class ChatProfileGroup extends StatefulWidget {
   final int chatId;
   final Color chatColor;
@@ -134,7 +136,9 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                                   radius: listAvatarRadius,
                                   backgroundColor: accent,
                                   foregroundColor: onAccent,
-                                  child: Icon(Icons.group_add),
+                                  child: AdaptiveIcon(
+                                      icon: IconSource.groupAdd
+                                  ),
                                   key: Key(keyChatProfileGroupAddParticipant),
                                 ),
                                 Padding(
@@ -158,7 +162,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         height: dividerHeight,
                       ),
                       ProfileAction(
-                        iconData: Icons.delete,
+                        iconData: IconSource.delete,
                         key: Key(keyChatProfileGroupDelete),
                         text: L10n.get(L.groupLeave),
                         onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
@@ -182,7 +186,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         color: widget.chatColor,
         text: state.name,
         textStyle: Theme.of(context).textTheme.title,
-        iconData: state.isVerified ? Icons.verified_user : null,
+        iconData: state.isVerified ? IconSource.verifiedUser : null,
         imageActionCallback: state.isRemoved ? null : _editPhotoCallback,
         child: Column(
           children: <Widget>[
@@ -201,8 +205,8 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                   Visibility(
                       visible: !state.isRemoved,
                       child: IconButton(
-                        icon: Icon(
-                          Icons.edit,
+                        icon: AdaptiveIcon(
+                          icon: IconSource.edit,
                           key: Key(keyChatProfileGroupEditIcon),
                           color: accent,
                         ),

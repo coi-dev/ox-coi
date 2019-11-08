@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum TextFormType {
   normal,
@@ -99,14 +100,14 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
       return InputDecoration(
         labelText: widget.labelText(context),
         hintText: widget.hintText != null ? widget.hintText(context) : "",
-        prefixIcon: widget.showIcon ? Icon(Icons.lock) : null,
-        suffixIcon: IconButton(icon: Icon(_showReadablePassword ? Icons.visibility : Icons.visibility_off), onPressed: _togglePasswordVisibility),
+        prefixIcon: widget.showIcon ? AdaptiveIcon(icon: IconSource.lock) : null,
+        suffixIcon: IconButton(icon: AdaptiveIcon(icon: _showReadablePassword ?  IconSource.visibility : IconSource.visibilityOff), onPressed: _togglePasswordVisibility),
       );
     } else {
       return InputDecoration(
         labelText: widget.labelText(context),
         hintText: widget.hintText != null ? widget.hintText(context) : "",
-        prefixIcon: widget.textFormType == TextFormType.email && widget.showIcon ? Icon(Icons.person) : null,
+        prefixIcon: widget.textFormType == TextFormType.email && widget.showIcon ? AdaptiveIcon(icon: IconSource.person) : null,
       );
     }
   }

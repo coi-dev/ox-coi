@@ -45,6 +45,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -60,7 +61,7 @@ import 'package:transparent_image/transparent_image.dart';
 class ProfileData extends InheritedWidget {
   final Color color;
   final String text;
-  final IconData iconData;
+  final IconSource iconData;
   final TextStyle textStyle;
   final Function imageActionCallback;
 
@@ -131,17 +132,23 @@ class ProfileAvatar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.photo),
+                  leading: AdaptiveIcon(
+                      icon: IconSource.photo
+                  ),
                   title: Text(L10n.get(L.gallery)),
                   onTap: () => _getNewAvatarPath(ImageSource.gallery),
                 ),
                 ListTile(
-                  leading: Icon(Icons.camera_alt),
+                  leading: AdaptiveIcon(
+                      icon: IconSource.cameraAlt
+                  ),
                   title: Text(L10n.get(L.camera)),
                   onTap: () => _getNewAvatarPath(ImageSource.camera),
                 ),
                 ListTile(
-                  leading: Icon(Icons.delete),
+                  leading: AdaptiveIcon(
+                      icon: IconSource.delete
+                  ),
                   title: Text(L10n.get(L.groupRemoveImage)),
                   onTap: () => _removeAvatar(),
                 )
@@ -187,8 +194,8 @@ class ProfileAvatar extends StatelessWidget {
                 bottom: profileEditPhotoButtonBottomPosition,
                 right: profileEditPhotoButtonRightPosition,
                 child: AdaptiveInkWell(
-                  child: Icon(
-                    Icons.add_a_photo,
+                  child: AdaptiveIcon(
+                    icon: IconSource.addAPhoto,
                     color: onPrimary,
                   ),
                   onTap: _editPhoto,
@@ -215,7 +222,7 @@ class ProfileHeaderText extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(ProfileData.of(context).iconData),
+                  AdaptiveIcon(icon: ProfileData.of(context).iconData),
                   Padding(
                     padding: const EdgeInsets.only(left: iconTextPadding),
                     child: content,
@@ -255,7 +262,9 @@ class ProfileCopyableHeaderText extends StatelessWidget {
         children: <Widget>[
           ProfileHeaderText(),
           Padding(padding: EdgeInsets.all(iconTextPadding)),
-          Icon(Icons.content_copy),
+          AdaptiveIcon(
+              icon: IconSource.contentCopy
+          ),
         ],
       ),
     );

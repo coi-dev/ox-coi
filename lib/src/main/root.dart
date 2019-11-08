@@ -48,6 +48,7 @@ import 'package:ox_coi/src/user/user_profile.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -103,8 +104,8 @@ class _RootState extends State<Root> {
   List<BottomNavigationBarItem> getBottomBarItems() {
     var bottomBarItems = List<BottomNavigationBarItem>();
     childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
-      icon: Icon(
-        item.getNavigationIcon(),
+      icon: AdaptiveIcon(
+        icon: item.getNavigationIcon(),
         key: Key(item.getNavigationText(context)),
       ),
       title: Text(item.getNavigationText(context)),

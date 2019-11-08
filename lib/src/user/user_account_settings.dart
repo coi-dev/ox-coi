@@ -164,8 +164,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
           appBar: AdaptiveAppBar(
             leadingIcon: new AdaptiveIconButton(
               icon: new AdaptiveIcon(
-                  androidIcon: Icons.close,
-                  iosIcon: CupertinoIcons.clear_thick,
+                icon: IconSource.close,
               ),
               onPressed: () => navigation.pop(context),
             ),
@@ -191,8 +190,7 @@ class SaveDataButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.check,
-          iosIcon: CupertinoIcons.check_mark
+        icon: IconSource.check,
       ),
       onPressed: () {
         _saveData(context);

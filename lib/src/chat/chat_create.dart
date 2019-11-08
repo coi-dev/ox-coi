@@ -104,8 +104,7 @@ class _ChatCreateState extends State<ChatCreate> {
     );
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.search,
-          iosIcon: CupertinoIcons.search
+          icon: IconSource.search,
       ),
       onPressed: () => search.show(context), key: Key(keyChatCreateSearchIcon),
     );
@@ -130,7 +129,9 @@ class _ChatCreateState extends State<ChatCreate> {
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return Icon(Icons.error);
+          return AdaptiveIcon(
+              icon: IconSource.error
+          );
         }
       },
     );
@@ -161,9 +162,10 @@ class _ChatCreateState extends State<ChatCreate> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
-          leading: Icon(
-            Icons.person_add,
-            color: accent,key: Key(keyChatCreatePersonAddIcon),
+          leading: AdaptiveIcon(
+            icon: IconSource.personAdd,
+            color: accent,
+            key: Key(keyChatCreatePersonAddIcon),
           ),
           title: Text(
             L10n.get(L.contactNew),
@@ -178,9 +180,10 @@ class _ChatCreateState extends State<ChatCreate> {
             ),
           ),
           child: ListTile(
-            leading: Icon(
-              Icons.group_add,
-              color: accent,key: Key(keyChatCreateGroupAddIcon),
+            leading: AdaptiveIcon(
+              icon: IconSource.groupAdd,
+              color: accent,
+              key: Key(keyChatCreateGroupAddIcon),
             ),
             title: Text(
               L10n.get(L.groupCreate),

@@ -47,6 +47,8 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class ProfileActionList extends StatelessWidget {
   final List<Widget> tiles;
 
@@ -62,7 +64,7 @@ class ProfileActionList extends StatelessWidget {
 }
 
 class ProfileAction extends StatelessWidget {
-  final IconData iconData;
+  final IconSource iconData;
   final String text;
   final Function onTap;
   final Color color;
@@ -72,8 +74,8 @@ class ProfileAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(
-        iconData,
+      leading: AdaptiveIcon(
+        icon: iconData,
         color: color,
       ),
       title: Text(

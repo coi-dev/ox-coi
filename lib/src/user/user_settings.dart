@@ -104,8 +104,7 @@ class _UserSettingsState extends State<UserSettings> {
         appBar: AdaptiveAppBar(
             leadingIcon: new AdaptiveIconButton(
               icon: new AdaptiveIcon(
-                  androidIcon: Icons.close,
-                  iosIcon: CupertinoIcons.clear_thick,
+                icon: IconSource.close,
               ),
               onPressed: () => navigation.pop(context),
             ),
@@ -113,8 +112,7 @@ class _UserSettingsState extends State<UserSettings> {
             actions: <Widget>[
               AdaptiveIconButton(
                   icon: AdaptiveIcon(
-                      androidIcon: Icons.check,
-                      iosIcon: CupertinoIcons.check_mark
+                    icon: IconSource.check,
                   ),
                   key: Key(keyUserSettingsCheckIconButton),
                   onPressed: _saveChanges

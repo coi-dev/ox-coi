@@ -93,8 +93,7 @@ class _DebugViewerState extends State<DebugViewer> {
         appBar: AdaptiveAppBar(
           leadingIcon: new AdaptiveIconButton(
             icon: new AdaptiveIcon(
-                androidIcon: Icons.arrow_back,
-                iosIcon: CupertinoIcons.back
+              icon: IconSource.back,
             ),
             onPressed: () => navigation.pop(context),
           ),
@@ -102,8 +101,7 @@ class _DebugViewerState extends State<DebugViewer> {
           actions: <Widget>[
             AdaptiveIconButton(
               icon: AdaptiveIcon(
-                  androidIcon: Icons.content_copy,
-                  iosIcon: CupertinoIcons.collections
+                icon: IconSource.contentCopy,
               ),
               onPressed: () => _onCopy(),
             )
@@ -128,7 +126,9 @@ class _DebugViewerState extends State<DebugViewer> {
           );
         } else {
           return Center(
-            child: Icon(Icons.error),
+            child: AdaptiveIcon(
+                icon: IconSource.error
+            ),
           );
         }
       },

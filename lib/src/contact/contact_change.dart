@@ -157,8 +157,7 @@ class _ContactChangeState extends State<ContactChange> {
         appBar: AdaptiveAppBar(
           leadingIcon: new AdaptiveIconButton(
             icon: new AdaptiveIcon(
-                androidIcon: Icons.close,
-                iosIcon: CupertinoIcons.clear_thick,
+              icon: IconSource.close,
             ),
             key: Key(keyContactChangeCloseIconButton),
             onPressed: () => navigation.pop(context),
@@ -168,8 +167,7 @@ class _ContactChangeState extends State<ContactChange> {
             AdaptiveIconButton(
               key: Key(keyContactChangeCheckIconButton),
               icon: AdaptiveIcon(
-                  androidIcon: Icons.check,
-                  iosIcon: CupertinoIcons.check_mark
+                icon: IconSource.check,
               ),
               onPressed: () => _onSubmit(),
             )
@@ -204,7 +202,9 @@ class _ContactChangeState extends State<ContactChange> {
                       padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
                       child: Row(
                         children: <Widget>[
-                          Icon(Icons.mail),
+                          AdaptiveIcon(
+                              icon: IconSource.mail
+                          ),
                           Padding(
                             padding: EdgeInsets.only(right: iconFormPadding),
                           ),
@@ -218,7 +218,9 @@ class _ContactChangeState extends State<ContactChange> {
                 ),
                 Row(
                   children: <Widget>[
-                    Icon(Icons.person),
+                    AdaptiveIcon(
+                        icon: IconSource.person
+                    ),
                     Padding(
                       padding: EdgeInsets.only(right: iconFormPadding),
                     ),
@@ -229,7 +231,9 @@ class _ContactChangeState extends State<ContactChange> {
                   visible: widget.contactAction == ContactAction.add,
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.mail),
+                      AdaptiveIcon(
+                          icon: IconSource.mail
+                      ),
                       Padding(
                         padding: EdgeInsets.only(right: iconFormPadding),
                       ),
@@ -246,7 +250,9 @@ class _ContactChangeState extends State<ContactChange> {
                           padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
                           child: Row(
                             children: <Widget>[
-                              Icon(Icons.phone),
+                              AdaptiveIcon(
+                                  icon: IconSource.phone
+                              ),
                               Padding(
                                 padding: EdgeInsets.only(right: iconFormPadding),
                               ),

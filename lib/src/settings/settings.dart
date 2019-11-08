@@ -50,6 +50,7 @@ import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/ui/color.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum SettingsType {
   account,
@@ -82,48 +83,48 @@ class Settings extends StatelessWidget {
     return ListView(
       children: ListTile.divideTiles(context: context, tiles: [
         ListTile(
-          leading: Icon(
-            Icons.account_circle,
+          leading: AdaptiveIcon(
+            icon: IconSource.accountCircle,
             color: accent,
           ),
           title: Text(L10n.get(L.settingAccount)),
           onTap: () => _onPressed(context, SettingsType.account),
         ),
         ListTile(
-          leading: Icon(
-            Icons.chat,
+          leading: AdaptiveIcon(
+            icon: IconSource.chat,
             color: accent,
           ),
           title: Text(L10n.get(L.chatP)),
           onTap: () => _onPressed(context, SettingsType.chat),
         ),
         ListTile(
-          leading: Icon(
-            Icons.notifications,
+          leading: AdaptiveIcon(
+            icon: IconSource.notifications,
             color: accent,
           ),
           title: Text(L10n.get(L.settingNotificationP, count: L10n.plural)),
           onTap: () => _onPressed(context, SettingsType.notifications),
         ),
         ListTile(
-          leading: Icon(
-            Icons.https,
+          leading: AdaptiveIcon(
+            icon: IconSource.https,
             color: accent,
           ),
           title: Text(L10n.get(L.settingAntiMobbing)),
           onTap: () => _onPressed(context, SettingsType.antiMobbing),
         ),
         ListTile(
-          leading: Icon(
-            Icons.security,
+          leading: AdaptiveIcon(
+            icon: IconSource.security,
             color: accent,
           ),
           title: Text(L10n.get(L.security)),
           onTap: () => _onPressed(context, SettingsType.security),
         ),
         ListTile(
-          leading: Icon(
-            Icons.info,
+          leading: AdaptiveIcon(
+            icon: IconSource.info,
             color: accent,
           ),
           title: Text(L10n.get(L.about)),
@@ -131,8 +132,8 @@ class Settings extends StatelessWidget {
         ),
         if (!isRelease())
           ListTile(
-            leading: Icon(
-              Icons.bug_report,
+            leading: AdaptiveIcon(
+              icon: IconSource.bugReport,
               color: accent,
             ),
             title: Text(L10n.get(L.debug)),

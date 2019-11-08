@@ -53,6 +53,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class SettingsAntiMobbing extends StatefulWidget {
   @override
@@ -107,7 +108,9 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
           );
         } else {
           return Center(
-            child: Icon(Icons.error),
+            child: AdaptiveIcon(
+                icon: IconSource.error
+            ),
           );
         }
       },

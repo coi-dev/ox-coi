@@ -88,7 +88,9 @@ class ContactList extends RootChild {
   FloatingActionButton getFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       key: Key(keyContactListPersonAddFloatingActionButton),
-      child: new Icon(Icons.person_add),
+      child: new AdaptiveIcon(
+          icon: IconSource.personAdd
+      ),
       onPressed: () {
         _showAddContactView(context);
       },
@@ -110,8 +112,8 @@ class ContactList extends RootChild {
   }
 
   @override
-  IconData getNavigationIcon() {
-    return Icons.contacts;
+  IconSource getNavigationIcon() {
+    return IconSource.contacts;
   }
 }
 
@@ -176,7 +178,9 @@ class _ContactListState extends State<ContactList> {
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return Icon(Icons.error);
+          return AdaptiveIcon(
+              icon: IconSource.error
+          );
         }
       },
     );
@@ -185,8 +189,7 @@ class _ContactListState extends State<ContactList> {
   Widget getImportAction() {
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.import_contacts,
-          iosIcon: CupertinoIcons.person_add_solid
+        icon: IconSource.importContacts,
       ),
       key: Key(keyContactListImportContactIconButton),
       onPressed: () => _showImportDialog(false, context),
@@ -196,8 +199,7 @@ class _ContactListState extends State<ContactList> {
   Widget getBlockedUsersAction() {
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.block,
-          iosIcon: CupertinoIcons.padlock_solid
+        icon: IconSource.block,
       ),
       key: Key(keyContactListBlockIconButton),
       onPressed: () => _showBlockedUserList(context),
@@ -212,8 +214,7 @@ class _ContactListState extends State<ContactList> {
     );
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.search,
-          iosIcon: CupertinoIcons.search
+        icon: IconSource.search,
       ),
       key: Key(keyContactListSearchIconButton),
       onPressed: () => search.show(context),

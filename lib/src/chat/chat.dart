@@ -266,8 +266,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               if (!isGroup)
                 AdaptiveIconButton(
                   icon: AdaptiveIcon(
-                      androidIcon: Icons.phone,
-                      iosIcon: CupertinoIcons.phone_solid
+                      icon: IconSource.phone,
                   ),
                   key: Key(keyChatIconButtonIconPhone),
                   onPressed: onPhonePressed,
@@ -367,8 +366,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                       File(_filePath),
                     )
                   : Center(
-                      child: Icon(
-                        Icons.insert_drive_file,
+                      child: AdaptiveIcon(
+                        icon: IconSource.insertDriveFile,
                         size: previewDefaultIconSize,
                         color: Colors.grey,
                       ),
@@ -379,8 +378,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   onTap: () => _closePreview(),
                   child: Container(
                     decoration: BoxDecoration(color: Colors.black38, borderRadius: BorderRadiusDirectional.circular(previewCloseIconBorderRadius)),
-                    child: Icon(
-                      Icons.close,
+                    child: AdaptiveIcon(
+                      icon: IconSource.close,
                       size: previewCloseIconSize,
                       color: Colors.white,
                     ),
@@ -426,8 +425,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     visible: _chatBloc.isGroup,
                     child: Padding(
                         padding: const EdgeInsets.only(right: iconTextPadding),
-                        child: Icon(
-                          Icons.group,
+                        child: AdaptiveIcon(
+                          icon: IconSource.group,
                           size: iconSize,
                         )),
                   ),
@@ -435,8 +434,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     visible: isVerified,
                     child: Padding(
                         padding: const EdgeInsets.only(right: iconTextPadding),
-                        child: Icon(
-                          Icons.verified_user,
+                        child: AdaptiveIcon(
+                          icon: IconSource.verifiedUser,
                           size: iconSize,
                         )),
                   ),
@@ -667,27 +666,37 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.image),
+                leading: AdaptiveIcon(
+                    icon: IconSource.image
+                ),
                 title: Text(L10n.get(L.image)),
                 onTap: () => _getFilePath(FileType.IMAGE),
               ),
               ListTile(
-                leading: Icon(Icons.video_library),
+                leading: AdaptiveIcon(
+                    icon: IconSource.videoLibrary
+                ),
                 title: Text(L10n.get(L.video)),
                 onTap: () => _getFilePath(FileType.VIDEO),
               ),
               ListTile(
-                leading: Icon(Icons.picture_as_pdf),
+                leading: AdaptiveIcon(
+                    icon: IconSource.pictureAsPdf
+                ),
                 title: Text(pdf),
                 onTap: () => _getFilePath(FileType.CUSTOM, "pdf"),
               ),
               ListTile(
-                leading: Icon(Icons.gif),
+                leading: AdaptiveIcon(
+                    icon: IconSource.gif
+                ),
                 title: Text(gif),
                 onTap: () => _getFilePath(FileType.CUSTOM, "gif"),
               ),
               ListTile(
-                leading: Icon(Icons.insert_drive_file),
+                leading: AdaptiveIcon(
+                    icon: IconSource.insertDriveFile
+                ),
                 title: Text(L10n.get(L.file)),
                 onTap: () => _getFilePath(FileType.ANY),
               ),

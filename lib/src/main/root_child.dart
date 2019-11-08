@@ -43,6 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 abstract class RootChild extends StatefulWidget {
   final State state;
 
@@ -67,7 +69,7 @@ abstract class RootChild extends StatefulWidget {
 
   String getNavigationText(BuildContext context);
 
-  IconData getNavigationIcon();
+  IconSource getNavigationIcon();
 
   Color getColor();
 

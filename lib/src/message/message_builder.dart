@@ -52,6 +52,7 @@ import 'package:ox_coi/src/utils/date.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'message_item_event_state.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class MessageData extends InheritedWidget {
   final Color backgroundColor;
@@ -60,7 +61,7 @@ class MessageData extends InheritedWidget {
   final String time;
   final int state;
   final String text;
-  final Icon icon;
+  final AdaptiveIcon icon;
   final AttachmentWrapper attachment;
   final BorderRadius borderRadius;
   final bool isFlagged;
@@ -126,7 +127,7 @@ class MessageText extends StatelessWidget {
 class MessageStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Icon icon = MessageData.of(context).icon;
+    AdaptiveIcon icon = MessageData.of(context).icon;
     if (icon != null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
@@ -275,8 +276,8 @@ class MessagePartGenericAttachment extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: iconTextPadding),
-                child: Icon(
-                  Icons.attach_file,
+                child: AdaptiveIcon(
+                  icon: IconSource.attachFile,
                   size: messagesFileIconSize,
                   color: MessageData.of(context).textColor,
                 ),
@@ -355,8 +356,8 @@ class MessagePartState extends StatelessWidget {
       case ChatMsg.messageStateDelivered:
         return Padding(
           padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
-          child: Icon(
-            Icons.done,
+          child: AdaptiveIcon(
+            icon: IconSource.done,
             size: 16.0,
             color: MessageData.of(context).secondaryTextColor,
           ),
@@ -365,8 +366,8 @@ class MessagePartState extends StatelessWidget {
       case ChatMsg.messageStateReceived:
         return Padding(
           padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
-          child: Icon(
-            Icons.done_all,
+          child: AdaptiveIcon(
+            icon: IconSource.doneAll,
             size: 16.0,
             color: MessageData.of(context).secondaryTextColor,
           ),
@@ -387,8 +388,8 @@ class MessagePartFlag extends StatelessWidget {
       visible: MessageData.of(context).isFlagged,
       child: Padding(
         padding: EdgeInsets.only(top: 8.0, right: 4.0, left: 4.0),
-        child: Icon(
-          Icons.star,
+        child: AdaptiveIcon(
+          icon: IconSource.flag,
           color: Colors.yellow,
         ),
       ),

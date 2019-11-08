@@ -57,6 +57,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class Share extends StatefulWidget {
   final List<int> msgIds;
@@ -110,7 +111,9 @@ class _ShareState extends State<Share> {
         } else if (state is ShareStateLoading) {
           return StateInfo(showLoading: true);
         } else {
-          return Icon(Icons.error);
+          return AdaptiveIcon(
+              icon: IconSource.error
+          );
         }
       },
     );

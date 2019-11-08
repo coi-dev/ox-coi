@@ -106,8 +106,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           AdaptiveIconButton(
             key: Key(keyChatCreateGroupSettingCheckIconButton),
             icon: AdaptiveIcon(
-                androidIcon: Icons.check,
-                iosIcon: CupertinoIcons.check_mark
+              icon: IconSource.check,
             ),
             onPressed: () => _onSubmit(),
           )
@@ -126,7 +125,9 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return Icon(Icons.error);
+          return AdaptiveIcon(
+              icon: IconSource.error
+          );
         }
       },
     );

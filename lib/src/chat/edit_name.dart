@@ -94,8 +94,7 @@ class _EditNameState extends State<EditName> {
           leadingIcon: new AdaptiveIconButton(
             icon: new AdaptiveIcon(
               key: Key(keyEditNameCloseIcon),
-              androidIcon: Icons.close,
-              iosIcon: CupertinoIcons.clear_thick,
+              icon: IconSource.close,
             ),
             onPressed: () => _navigation.pop(context),
           ),
@@ -104,8 +103,7 @@ class _EditNameState extends State<EditName> {
             AdaptiveIconButton(
                 key: Key(keyEditNameCheckIcon),
                 icon: AdaptiveIcon(
-                  androidIcon: Icons.check,
-                  iosIcon: CupertinoIcons.check_mark,
+                  icon: IconSource.check,
                 ),
                 onPressed: saveNewName)
           ],

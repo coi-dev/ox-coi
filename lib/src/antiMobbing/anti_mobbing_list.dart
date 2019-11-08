@@ -56,6 +56,8 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'anti_mobbing_list_bloc.dart';
 import 'anti_mobbing_list_event_state.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class AntiMobbingList extends StatefulWidget {
   @override
   _AntiMobbingListState createState() => _AntiMobbingListState();
@@ -104,7 +106,9 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
           } else if (state is! MessagesLoaded) {
             return StateInfo(showLoading: true);
           } else {
-            return Icon(Icons.error);
+            return AdaptiveIcon(
+                icon: IconSource.error,
+            );
           }
         },
       ),

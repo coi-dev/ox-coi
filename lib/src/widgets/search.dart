@@ -45,6 +45,8 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class Search extends SearchDelegate {
   final Function onBuildResults;
   final Function onBuildSuggestion;
@@ -58,7 +60,10 @@ class Search extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),key: Key(keySearchClearIconButton),
+        icon: AdaptiveIcon(
+            icon: IconSource.clear
+        ),
+        key: Key(keySearchClearIconButton),
         onPressed: () {
           query = "";
         },
@@ -69,7 +74,9 @@ class Search extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: AdaptiveIcon(
+          icon: IconSource.arrowBack
+      ),
       key: Key(keySearchReturnIconButton),
       onPressed: () {
         close(context, query);

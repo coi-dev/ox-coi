@@ -45,6 +45,8 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class Search extends StatelessWidget {
   final TextEditingController controller;
 
@@ -57,9 +59,14 @@ class Search extends StatelessWidget {
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           labelText: L10n.get(L.contactSearch),
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: AdaptiveIcon(
+              icon: IconSource.search
+          ),
           suffixIcon: GestureDetector(
-            child: Icon(Icons.close),key: Key(keySearchFieldCloseIcon),
+            child: AdaptiveIcon(
+                icon: IconSource.close
+            ),
+            key: Key(keySearchFieldCloseIcon),
             onTap: () => _exitSearch(context),
           ),
         ),

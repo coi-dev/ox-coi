@@ -49,6 +49,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/date.dart';
 
 import 'message_builder.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum MessageSpecialType { setup, encryptionStatusChanged, info }
 
@@ -66,7 +67,9 @@ class MessageSpecial extends StatelessWidget {
     } else if (type == MessageSpecialType.encryptionStatusChanged) {
       return MessageInfo(
         messageText: L10n.get(L.chatEncryptionStatusChanged),
-        icon: Icon(Icons.lock),
+        icon: AdaptiveIcon(
+            icon: IconSource.lock
+        ),
       );
     } else if (type == MessageSpecialType.info) {
       return MessageInfo(messageText: messageText);
@@ -108,7 +111,7 @@ class MessageSetup extends StatelessWidget {
 
 class MessageInfo extends StatelessWidget {
   final String messageText;
-  final Icon icon;
+  final AdaptiveIcon icon;
 
   const MessageInfo({Key key, this.messageText, this.icon}) : super(key: key);
 

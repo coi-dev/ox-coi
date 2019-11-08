@@ -47,6 +47,7 @@ import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class AvatarListItem extends StatelessWidget {
   final String title;
@@ -57,7 +58,7 @@ class AvatarListItem extends StatelessWidget {
   final Function onTap;
   final Widget titleIcon;
   final Widget subTitleIcon;
-  final IconData avatarIcon;
+  final IconSource avatarIcon;
   final int timestamp;
   final bool isVerified;
   final bool isInvite;
@@ -100,7 +101,7 @@ class AvatarListItem extends StatelessWidget {
                 : CircleAvatar(
                     radius: listAvatarRadius,
                     foregroundColor: primary,
-                    child: Icon(avatarIcon),
+                    child: AdaptiveIcon(icon: avatarIcon),
                   ),
             Expanded(
               child: Padding(
@@ -141,8 +142,8 @@ class AvatarListItem extends StatelessWidget {
                           visible: isVerified,
                           child: Padding(
                             padding: const EdgeInsets.only(right: iconTextPadding),
-                            child: Icon(
-                              Icons.verified_user,
+                            child: AdaptiveIcon(
+                              icon: IconSource.verifiedUser,
                               size: iconSize,
                             ),
                           ),

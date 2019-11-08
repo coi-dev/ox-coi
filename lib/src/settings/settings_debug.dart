@@ -60,6 +60,7 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class SettingsDebug extends StatefulWidget {
   @override
@@ -170,7 +171,9 @@ class _SettingsDebugState extends State<SettingsDebug> {
             );
           } else {
             return Center(
-              child: Icon(Icons.error),
+              child: AdaptiveIcon(
+                  icon: IconSource.error
+              ),
             );
           }
         },

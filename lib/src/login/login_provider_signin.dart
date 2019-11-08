@@ -60,6 +60,8 @@ import 'login_events_state.dart';
 import 'login_manual_settings.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ProviderSignIn extends StatefulWidget {
   final Provider provider;
@@ -209,8 +211,8 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                     Padding(
                       padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
                     ),
-                    Icon(
-                      Icons.report_problem,
+                    AdaptiveIcon(
+                      icon: IconSource.reportProblem,
                       size: iconSize,
                       color: onError,
                     ),
@@ -225,9 +227,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                         ),
                       ),
                     ),
-                    IconButton(
-                        icon: Icon(
-                          Icons.clear,
+                    AdaptiveIconButton(
+                        icon: AdaptiveIcon(
+                          icon: IconSource.clear,
                           size: loginErrorOverlayIconSize,
                           color: onError,
                         ),

@@ -50,6 +50,7 @@ import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 import 'contact_item_event_state.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 mixin ContactItemBuilder {
   BlocBuilder getChipBlocBuilder(ContactItemBloc bloc, Function onContactTapped) {
@@ -82,7 +83,7 @@ mixin ContactItemBuilder {
               title: state.name,
               subTitle: state.email,
               color: state.color,
-              avatarIcon: isSelected ? Icons.check : null,
+              avatarIcon: isSelected ? IconSource.check : null,
               onTap: onContactTapped,
               isVerified: state.isVerified != null ? state.isVerified : false,
               imagePath: state.imagePath,

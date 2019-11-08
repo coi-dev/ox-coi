@@ -60,6 +60,8 @@ import 'message_received.dart';
 import 'message_sent.dart';
 import 'message_special.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class ChatMessageItem extends StatefulWidget {
   final int chatId;
   final int messageId;
@@ -84,18 +86,18 @@ class ChatMessageItem extends StatefulWidget {
 
 class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAliveClientMixin<ChatMessageItem> {
   final List<MessageAction> _messageActions = const <MessageAction>[
-    const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
-    const MessageAction(title: 'Copy', icon: Icons.content_copy, messageActionTag: MessageActionTag.copy),
-    const MessageAction(title: 'Delete locally', icon: Icons.delete, messageActionTag: MessageActionTag.delete),
-    const MessageAction(title: 'Flag/Unflag', icon: Icons.star, messageActionTag: MessageActionTag.flag),
-    const MessageAction(title: 'Share', icon: Icons.share, messageActionTag: MessageActionTag.share),
+    const MessageAction(title: 'Forward', icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
+    const MessageAction(title: 'Copy', icon: IconSource.contentCopy, messageActionTag: MessageActionTag.copy),
+    const MessageAction(title: 'Delete locally', icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
+    const MessageAction(title: 'Flag/Unflag', icon: IconSource.flag, messageActionTag: MessageActionTag.flag),
+    const MessageAction(title: 'Share', icon: IconSource.share, messageActionTag: MessageActionTag.share),
   ];
 
   final List<MessageAction> _messageAttachmentActions = const <MessageAction>[
-    const MessageAction(title: 'Forward', icon: Icons.forward, messageActionTag: MessageActionTag.forward),
-    const MessageAction(title: 'Delete locally', icon: Icons.delete, messageActionTag: MessageActionTag.delete),
-    const MessageAction(title: 'Flag/Unflag', icon: Icons.star, messageActionTag: MessageActionTag.flag),
-    const MessageAction(title: 'Share', icon: Icons.share, messageActionTag: MessageActionTag.share),
+    const MessageAction(title: 'Forward', icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
+    const MessageAction(title: 'Delete locally', icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
+    const MessageAction(title: 'Flag/Unflag', icon: IconSource.flag, messageActionTag: MessageActionTag.flag),
+    const MessageAction(title: 'Share', icon: IconSource.share, messageActionTag: MessageActionTag.share),
   ];
 
   MessageItemBloc _messageBloc = MessageItemBloc();
@@ -262,7 +264,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                 value: choice,
                 child: Row(
                   children: <Widget>[
-                    Icon(choice.icon),
+                    AdaptiveIcon(icon: choice.icon),
                     Padding(padding: EdgeInsets.only(right: iconTextPadding)),
                     Text(choice.title),
                   ],

@@ -57,6 +57,8 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
 class ChatProfileOneToOne extends StatefulWidget {
   final int chatId;
   final int contactId;
@@ -129,7 +131,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               child: ProfileData(
                 text: email,
                 textStyle: Theme.of(context).textTheme.subtitle,
-                iconData: isVerified ? Icons.verified_user : null,
+                iconData: isVerified ? IconSource.verifiedUser : null,
                 child: ProfileCopyableHeaderText(
                   toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.emailAddress).toLowerCase()]),
                 ),
@@ -137,7 +139,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
           ProfileActionList(tiles: [
             if (!widget.isSelfTalk)
               ProfileAction(
-                iconData: Icons.block,
+                iconData: IconSource.block,
                 text: L10n.get(L.contactBlock),
                 color: accent,
                 onTap: () => showActionDialog(
@@ -152,7 +154,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               ),
             if (!isInvite())
               ProfileAction(
-                iconData: Icons.delete,
+                iconData: IconSource.delete,
                 color: error,
                 text: L10n.get(L.chatDeleteP),
                 onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),

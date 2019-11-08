@@ -50,6 +50,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatListItem extends StatefulWidget {
   final int chatId;
@@ -107,7 +108,7 @@ class _ChatListItemState extends State<ChatListItem> {
         return AdaptiveInkWell(
           //onLongPress: () => chatItemLongPress(),
           child: AvatarListItem(
-            avatarIcon: _isSelected && widget.isMultiSelect ? Icons.check : null,
+            avatarIcon: _isSelected && widget.isMultiSelect ? IconSource.check : null,
             title: name,
             subTitle: preview,
             color: color,
@@ -115,8 +116,8 @@ class _ChatListItemState extends State<ChatListItem> {
             freshMessageCount: freshMessageCount,
             timestamp: timestamp,
             subTitleIcon: _chatBloc.isGroup
-                ? Icon(
-                    Icons.group,
+                ? AdaptiveIcon(
+                    icon: IconSource.group,
                     size: iconSize,
                   )
                 : null,

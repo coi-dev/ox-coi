@@ -93,8 +93,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         leadingIcon: AdaptiveIconButton(
           key: Key(keyChatCreateGroupParticipantsCloseIconButton),
           icon: AdaptiveIcon(
-              androidIcon: Icons.close,
-              iosIcon: CupertinoIcons.clear_thick,
+            icon: IconSource.close,
           ),
           onPressed: () => navigation.pop(context),
         ),
@@ -104,8 +103,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
           AdaptiveIconButton(
             key: Key(keyChatCreateGroupParticipantsSummitIconButton),
             icon: AdaptiveIcon(
-                androidIcon: Icons.arrow_forward,
-                iosIcon: CupertinoIcons.forward
+              icon: IconSource.arrowForward,
             ),
             onPressed: () => _onSubmit(),
           )
@@ -123,8 +121,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
     );
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          androidIcon: Icons.search,
-          iosIcon: CupertinoIcons.search
+        icon: IconSource.search,
       ),
       onPressed: () => search.show(context),
     );
@@ -155,7 +152,9 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return Icon(Icons.error);
+          return AdaptiveIcon(
+              icon: IconSource.error
+          );
         }
       },
     );
