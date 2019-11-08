@@ -132,7 +132,7 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - permission_handler (3.3.0):
+  - permission_handler (4.0.0):
     - Flutter
   - Protobuf (3.10.0)
   - qr_mobile_vision (0.0.1):
@@ -176,7 +176,7 @@ DEPENDENCIES:
   - video_player (from `.symlinks/plugins/video_player/ios`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Firebase
     - FirebaseAnalytics
     - FirebaseAnalyticsInterop
@@ -252,7 +252,7 @@ SPEC CHECKSUMS:
   app_settings: 27651d311385d34d91afa163c0e4539cfd0c4c5d
   background_fetch: 385552e57d3bde2c7a3abd6b1edc76b87823b6c4
   contacts_service: d212985196c101372bb55c42f41dae7be59ab811
-  delta_chat_core: b783a6cae2cb336834c873e98b7c8c31e2dcd847
+  delta_chat_core: 8cc97f5f2f6d6cc67a232240db10c6d0b661b260
   device_info: cbf09d2ec12aa7110e0b09fabe54b5bd6c8efe74
   file_picker: 408623be2125b79a4539cf703be3d4b3abe5e245
   Firebase: bc9cfc7a96c73268656d5aaab453ff1b4b530e0e
@@ -285,7 +285,7 @@ SPEC CHECKSUMS:
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
-  permission_handler: 67637977b227d62d46bfbf524f335f8568de5a73
+  permission_handler: 0fb88b8a3c23e31e5de45b8f1bb8b7de28cf8941
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
   qr_mobile_vision: be1c3c9f00796683610e8bab9bbab2920dd4ffca
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
@@ -297,4 +297,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c1e498d7d72f3797843f7aa78f471fe09a55f161
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

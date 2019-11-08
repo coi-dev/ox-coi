@@ -36,7 +36,7 @@ dependencies:
   open_file: ^2.0.3
   package_info: ^0.4.0+9
   path_provider: ^1.4.0
-  permission_handler: ^3.3.0
+  permission_handler: ^4.0.0
   pointycastle: ^1.0.1
   rxdart: ^0.22.4
   shared_preferences: ^0.5.4
