@@ -225,9 +225,12 @@ class _ChatListState extends State<ChatList> {
                   builder: (context, index, animation, renderingMode) {
                     // for more than one slide action we need take care of `index`
                     return IconSlideAction(
-                      caption: 'Delete',
+                      caption: L10n.get(L.delete),
                       color: error,
-                      icon: Icons.delete,
+                      iconWidget: AdaptiveIcon(
+                        icon: IconSource.delete,
+                        color: onError,
+                      ),
                       onTap: () {
                         var state = Slidable.of(context);
                         state.dismiss();
