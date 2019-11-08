@@ -49,6 +49,7 @@ dependencies:
   qr_flutter: ^3.0.1
   qr_mobile_vision: ^0.2.2
   uuid: ^2.0.2
+  flutter_slidable: "^0.5.4"
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 
