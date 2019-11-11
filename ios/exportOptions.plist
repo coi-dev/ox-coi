@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.openxchange.oxcoi.dev</key>
+		<string>OX COI Messenger Dev</string>
+	</dict>
+	<key>method</key>
+	<string>enterprise</string>
+	<key>teamID</key>
+	<string>528HQ38877</string>
+	<key>compileBitcode</key>
+	<false/>
+	<key>destination</key>
+	<string>export</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>thinning</key>
+	<string>&lt;none&gt;</string>
+</dict>
+</plist>
