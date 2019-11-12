@@ -68,21 +68,21 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     // No star icon in CupertinoIcons
     IconSource.flag : [Icons.star, Icons.star],
     IconSource.phone : [CupertinoIcons.phone_solid, Icons.phone],
-    IconSource.check : [CupertinoIcons.check_mark, Icons.check],
+    IconSource.check : [IconData(0xf383, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.check],
     IconSource.close : [CupertinoIcons.clear_thick, Icons.clear],
-    IconSource.add : [CupertinoIcons.add, Icons.add],
-    IconSource.delete : [CupertinoIcons.delete, Icons.delete],
-    IconSource.mic : [CupertinoIcons.mic, Icons.mic],
-    IconSource.camera : [CupertinoIcons.photo_camera, Icons.camera_alt],
-    IconSource.videocam : [CupertinoIcons.video_camera, Icons.videocam],
+    IconSource.add : [IconData(0xf2C7, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.add],
+    IconSource.delete : [CupertinoIcons.delete_solid, Icons.delete],
+    IconSource.mic : [IconData(0xf2EC, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.mic],
+    IconSource.camera : [IconData(0xf2D3, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.camera_alt],
+    IconSource.videocam : [CupertinoIcons.video_camera_solid, Icons.videocam],
     IconSource.send : [CupertinoIcons.forward, Icons.send],
-    IconSource.search : [CupertinoIcons.search, Icons.search],
+    IconSource.search : [IconData(0xf4A4, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.search],
     IconSource.arrowForward : [CupertinoIcons.forward, Icons.arrow_forward],
     IconSource.importContacts : [CupertinoIcons.person_add_solid, Icons.import_contacts],
-    IconSource.block : [CupertinoIcons.padlock_solid, Icons.block],
+    IconSource.block : [IconData(0xf2E3, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.block],
     IconSource.back : [CupertinoIcons.back, Icons.arrow_back],
     IconSource.contentCopy : [CupertinoIcons.collections, Icons.content_copy],
-    IconSource.settings : [CupertinoIcons.gear_solid, Icons.settings],
+    IconSource.settings : [IconData(0xf4C3, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.settings],
     // No error icon in CupertinoIcons
     IconSource.error : [Icons.error, Icons.error],
     // No image icon in CupertinoIcons
@@ -96,8 +96,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     // No file icon in CupertinoIcons
     IconSource.insertDriveFile : [Icons.insert_drive_file, Icons.insert_drive_file],
     IconSource.groupAdd : [CupertinoIcons.group_solid, Icons.group_add],
-    // No chat icon in CupertinoIcons
-    IconSource.chat : [Icons.chat, Icons.chat],
+    IconSource.chat : [IconData(0xf3FC, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.chat],
     IconSource.mail : [CupertinoIcons.mail_solid, Icons.mail],
     IconSource.person : [CupertinoIcons.person_solid, Icons.person],
     IconSource.personAdd : [CupertinoIcons.person_add_solid, Icons.person_add],
@@ -110,8 +109,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.group : [CupertinoIcons.group_solid, Icons.group],
     // No verified user icon in CupertinoIcons
     IconSource.verifiedUser : [Icons.verified_user, Icons.verified_user],
-    // No edit icon in CupertinoIcons
-    IconSource.edit : [Icons.edit, Icons.edit],
+    IconSource.edit : [CupertinoIcons.pen, Icons.edit],
     // No report problem icon in CupertinoIcons
     IconSource.reportProblem : [Icons.report_problem, Icons.report_problem],
     // No attach file icon in CupertinoIcons
@@ -137,8 +135,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.visibility : [Icons.visibility, Icons.visibility],
     // No visibility off icon in CupertinoIcons
     IconSource.visibilityOff : [Icons.visibility_off, Icons.visibility_off],
-    // No contacts icon in CupertinoIcons
-    IconSource.contacts : [Icons.contacts, Icons.contacts],
+    IconSource.contacts : [IconData(0xf2D9, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.contacts],
     IconSource.forward : [CupertinoIcons.forward, Icons.forward],
     IconSource.share : [CupertinoIcons.share, Icons.share],
   };
