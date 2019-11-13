@@ -107,13 +107,24 @@ void main() {
       await setup.driver.waitFor(errorMessage);
       await catchScreenshot(setup.driver, 'screenshots/withoutEmailandPassword.png');
       print('SIGN IN without email.');
+
       await getAuthentication(setup.driver, email, ' ', password, fakePassword, signInCaps);
       await setup.driver.waitFor(errorMessage);
       await catchScreenshot(setup.driver, 'screenshots/withoutEmail.png');
+
       print('SIGN IN without password.');
       await getAuthentication(setup.driver, email, fakeEmail, password, ' ', signInCaps);
       await setup.driver.waitFor(errorMessage);
       await catchScreenshot(setup.driver, 'screenshots/withoutPassword.png');
+
+      print('SIGN IN with fakeEmail and fakePassword.');
+      Invoker.current.heartbeat();
+      await getAuthentication(setup.driver, email, fakeEmail, password, fakePassword, signInCaps);
+
+      print('SIGN IN with realEmail and fakePassword.');
+      Invoker.current.heartbeat();
+      await getAuthentication(setup.driver, email, realEmail, password, fakePassword, signInCaps);
+      await setup.driver.tap(find.text(ok));
 
       //  Check real authentication and get chat.
       print('Real authentication.');
