@@ -176,10 +176,18 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     } else {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.putIfAbsent(id: chatId);
-      var contactRepository = RepositoryManager.get(RepositoryType.contact);
-      var contacts = await context.getChatContacts(chatId);
-      contactRepository.putIfAbsent(ids: contacts);
+      await createOrUpdateContact(context, chatId);
       add(JoinDone(chatId: chatId));
+    }
+  }
+
+  Future createOrUpdateContact(Context context, int chatId) async {
+    var contactRepository = RepositoryManager.get(RepositoryType.contact);
+    var contactIdList = await context.getChatContacts(chatId);
+    var contactId = contactIdList?.first;
+    if (contactId != null) {
+      contactRepository.putIfAbsent(id: contactId);
+      contactRepository.get(contactId).reloadValue(Contact.methodContactIsVerified);
     }
   }
 
