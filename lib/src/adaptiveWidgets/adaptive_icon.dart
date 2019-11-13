@@ -126,7 +126,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.https : [Icons.https, Icons.https],
     // No security icon in CupertinoIcons
     IconSource.security : [Icons.security, Icons.security],
-    IconSource.info : [CupertinoIcons.info, Icons.info],
+    IconSource.info : [IconData(0xf44d, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.info],
     // No bug report icon in CupertinoIcons
     IconSource.bugReport : [Icons.bug_report, Icons.bug_report],
     // No add a photo icon in CupertinoIcons

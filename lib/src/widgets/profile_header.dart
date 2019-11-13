@@ -165,6 +165,7 @@ class ProfileAvatar extends StatelessWidget {
             imagePath: imagePath,
             color: ProfileData.of(context).color,
             size: avatarSize,
+            textPrimary: ProfileData.of(context).text,
           ),
         ),
         Visibility(
