@@ -219,7 +219,7 @@ class _ChatListState extends State<ChatList> {
           return Slidable.builder(
               key: Key(key),
               actionPane: SlidableBehindActionPane(),
-              actionExtentRatio: 0.25,
+              actionExtentRatio: 0.2,
               secondaryActionDelegate: SlideActionBuilderDelegate(
                   actionCount: 1,
                   builder: (context, index, animation, renderingMode) {
@@ -331,4 +331,5 @@ class _ChatListState extends State<ChatList> {
     chatChangeBloc.add(DeleteChat(chatId: chatId));
     chatChangeBloc.close();
   }
+
 }

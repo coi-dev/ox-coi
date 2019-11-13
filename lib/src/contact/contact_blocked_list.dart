@@ -43,6 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
@@ -59,6 +61,8 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+
+import 'contact_change_bloc.dart';
 
 class ContactBlockedList extends StatefulWidget {
   @override
@@ -127,11 +131,49 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];
           var key = "$contactId-${contactLastUpdateValues[index]}";
-          return ContactItem(
-            contactId: contactId,
-            contactItemType: ContactItemType.blocked,
-            key: key,
+          return Slidable.builder(
+            key: Key(key),
+            actionPane: SlidableBehindActionPane(),
+            actionExtentRatio: 0.2,
+            actionDelegate: SlideActionBuilderDelegate(
+              actionCount: 1, 
+              builder: (context, index, animation, step) {
+                return IconSlideAction(
+                  caption: L10n.get(L.unblock),
+                  color: warning,
+                  foregroundColor: onWarning,
+                  iconWidget: AdaptiveIcon(
+                    icon: IconSource.block,
+                    color: onWarning,
+                  ),
+                  onTap: () {
+                    var state = Slidable.of(context);
+                    state.dismiss();
+                  },
+                );
+              }
+            ),
+            dismissal: SlidableDismissal(
+              child: SlidableDrawerDismissal(),
+              onDismissed: (actionType) {
+                _unblockContactSlideAction(contactId: contactId);
+              },
+            ),
+            child: ContactItem(
+              contactId: contactId,
+              contactItemType: ContactItemType.blocked,
+              key: key,
+            ),
           );
         });
   }
+
+  // Slide Actions
+
+  _unblockContactSlideAction({@required int contactId}) {
+    ContactChangeBloc bloc = ContactChangeBloc();
+    bloc.add(UnblockContact(id: contactId));
+    bloc.close();
+  }
+
 }

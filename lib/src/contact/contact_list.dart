@@ -43,6 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
@@ -67,6 +69,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
+import 'contact_change_event_state.dart';
+
 class ContactList extends RootChild {
   final Navigation navigation = Navigation();
 
@@ -75,7 +79,11 @@ class ContactList extends RootChild {
   @override
   _ContactListState createState() {
     final state = _ContactListState();
-    setActions([state.getImportAction(), state.getBlockedUsersAction(), state.getSearchAction()]);
+    setActions([
+      state.getImportAction(),
+      state.getBlockedUsersAction(),
+      state.getSearchAction()
+    ]);
     return state;
   }
 
@@ -88,9 +96,7 @@ class ContactList extends RootChild {
   FloatingActionButton getFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       key: Key(keyContactListPersonAddFloatingActionButton),
-      child: new AdaptiveIcon(
-          icon: IconSource.personAdd
-      ),
+      child: new AdaptiveIcon(icon: IconSource.personAdd),
       onPressed: () {
         _showAddContactView(context);
       },
@@ -178,9 +184,7 @@ class _ContactListState extends State<ContactList> {
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );
@@ -260,17 +264,85 @@ class _ContactListState extends State<ContactList> {
     );
   }
 
-  Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
+  Widget buildListViewItems(
+      List<int> contactIds, List<int> contactLastUpdateValues) {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
-          height: dividerHeight,
-          color: onBackground.withOpacity(barely),
-        ),
+              height: dividerHeight,
+              color: onBackground.withOpacity(barely),
+            ),
         itemCount: contactIds.length,
         itemBuilder: (BuildContext context, int index) {
           var contactId = contactIds[index];
           var key = "$contactId-${contactLastUpdateValues[index]}";
-          return ContactItem(contactId: contactId, contactItemType: ContactItemType.edit, key: key);
+          return Slidable.builder(
+              key: Key(key),
+              actionPane: SlidableBehindActionPane(),
+              actionExtentRatio: 0.2,
+              actionDelegate: SlideActionBuilderDelegate(
+                  actionCount: 1,
+                  builder: (context, index, animation, renderingMode) {
+                    return IconSlideAction(
+                      caption: L10n.get(L.block),
+                      color: warning,
+                      foregroundColor: onWarning,
+                      iconWidget: AdaptiveIcon(
+                        icon: IconSource.block,
+                        color: onWarning,
+                      ),
+                      onTap: () {
+                        var state = Slidable.of(context);
+                        state.dismiss();
+                      },
+                    );
+                  }),
+              secondaryActionDelegate: SlideActionBuilderDelegate(
+                  actionCount: 1,
+                  builder: (context, index, animation, renderingMode) {
+                    // for more than one slide action we need take care of `index`
+                    return IconSlideAction(
+                      caption: L10n.get(L.delete),
+                      color: error,
+                      foregroundColor: onError,
+                      iconWidget: AdaptiveIcon(
+                        icon: IconSource.delete,
+                        color: onError,
+                      ),
+                      onTap: () {
+                        var state = Slidable.of(context);
+                        state.dismiss();
+                      },
+                    );
+                  }),
+              dismissal: SlidableDismissal(
+                child: SlidableDrawerDismissal(),
+                onDismissed: (actionType) {
+                  if (actionType == SlideActionType.primary) {
+                    _blockContactSlideAction(contactId: contactId);
+                  } else {
+                    _deleteContactSlideAction(contactId: contactId);
+                  }
+                },
+              ),
+              child: ContactItem(
+                  contactId: contactId,
+                  contactItemType: ContactItemType.edit,
+                  key: key));
         });
   }
+
+  // Slide Actions
+
+  _blockContactSlideAction({@required int contactId}) {
+    ContactChangeBloc bloc = ContactChangeBloc();
+    bloc.add(BlockContact(contactId: contactId));
+    bloc.close();
+  }
+
+  _deleteContactSlideAction({@required int contactId}) {
+    ContactChangeBloc bloc = ContactChangeBloc();
+    bloc.add(DeleteContact(id: contactId));
+    bloc.close();
+  }
+
 }
