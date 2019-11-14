@@ -318,9 +318,9 @@ class _ContactListState extends State<ContactList> {
                 child: SlidableDrawerDismissal(),
                 onDismissed: (actionType) {
                   if (actionType == SlideActionType.primary) {
-                    _blockContactSlideAction(contactId: contactId);
+                    _blockContact(contactId: contactId);
                   } else {
-                    _deleteContactSlideAction(contactId: contactId);
+                    _deleteContact(contactId: contactId);
                   }
                 },
               ),
@@ -333,13 +333,13 @@ class _ContactListState extends State<ContactList> {
 
   // Slide Actions
 
-  _blockContactSlideAction({@required int contactId}) {
+  _blockContact({@required int contactId}) {
     ContactChangeBloc bloc = ContactChangeBloc();
     bloc.add(BlockContact(contactId: contactId));
     bloc.close();
   }
 
-  _deleteContactSlideAction({@required int contactId}) {
+  _deleteContact({@required int contactId}) {
     ContactChangeBloc bloc = ContactChangeBloc();
     bloc.add(DeleteContact(id: contactId));
     bloc.close();

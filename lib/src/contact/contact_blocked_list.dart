@@ -156,7 +156,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
             dismissal: SlidableDismissal(
               child: SlidableDrawerDismissal(),
               onDismissed: (actionType) {
-                _unblockContactSlideAction(contactId: contactId);
+                _unblockContact(contactId: contactId);
               },
             ),
             child: ContactItem(
@@ -170,7 +170,7 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
 
   // Slide Actions
 
-  _unblockContactSlideAction({@required int contactId}) {
+  _unblockContact({@required int contactId}) {
     ContactChangeBloc bloc = ContactChangeBloc();
     bloc.add(UnblockContact(id: contactId));
     bloc.close();

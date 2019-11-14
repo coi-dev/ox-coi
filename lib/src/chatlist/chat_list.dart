@@ -240,7 +240,7 @@ class _ChatListState extends State<ChatList> {
               dismissal: SlidableDismissal(
                 child: SlidableDrawerDismissal(),
                 onDismissed: (actionType) {
-                  _deleteSlideAction(chatId: id);
+                  _deleteChat(chatId: id);
                 },
               ),
               child: ChatListItem(
@@ -326,7 +326,7 @@ class _ChatListState extends State<ChatList> {
 
   // Slide Actions
 
-  _deleteSlideAction({@required int chatId}) {
+  _deleteChat({@required int chatId}) {
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.add(DeleteChat(chatId: chatId));
     chatChangeBloc.close();
