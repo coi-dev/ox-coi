@@ -84,8 +84,8 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
       }
     } else if (event is HandleSharedInviteLink) {
       yield* handleSharedInviteLink();
-    } else if (event is CreateChatWithInvite) {
-      yield* createChatWithInvite(event.inviteServiceResponse, event.base64Image);
+    } else if (event is AcceptInvite) {
+      yield* acceptInvite(event.inviteServiceResponse, event.base64Image);
     }
   }
 
@@ -136,7 +136,7 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
     }
   }
 
-  Stream<InviteState> createChatWithInvite(InviteServiceResponse inviteServiceResponse, String image) async* {
+  Stream<InviteState> acceptInvite(InviteServiceResponse inviteServiceResponse, String image) async* {
     Context context = Context();
     String email = inviteServiceResponse.sender.email;
     int contactId = await context.createContact(inviteServiceResponse.sender.name, email);
@@ -160,6 +160,7 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
       }
     }
 
+    await inviteService.deleteInvite(inviteServiceResponse.id);
     yield CreateInviteChatSuccess(chatId: chatId);
   }
 

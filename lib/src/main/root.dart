@@ -147,7 +147,7 @@ class _RootState extends State<Root> {
                             child: Text(L10n.get(L.chatStart)),
                             onPressed: () {
                               _navigation.pop(context);
-                              _inviteBloc.add(CreateChatWithInvite(inviteServiceResponse: inviteServiceResponse));
+                              _inviteBloc.add(AcceptInvite(inviteServiceResponse: inviteServiceResponse));
                             },
                           ),
                         ],

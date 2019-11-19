@@ -52,11 +52,11 @@ class CreateInviteUrl extends InviteEvent {
 
 class HandleSharedInviteLink extends InviteEvent {}
 
-class CreateChatWithInvite extends InviteEvent {
+class AcceptInvite extends InviteEvent {
   InviteServiceResponse inviteServiceResponse;
   String base64Image;
 
-  CreateChatWithInvite({this.inviteServiceResponse, this.base64Image});
+  AcceptInvite({this.inviteServiceResponse, this.base64Image});
 }
 
 abstract class InviteState {}
