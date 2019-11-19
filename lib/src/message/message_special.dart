@@ -42,46 +42,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/l10n/l.dart';
-import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/date.dart';
 
 import 'message_builder.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
-enum MessageSpecialType { setup, encryptionStatusChanged, info }
-
-class MessageSpecial extends StatelessWidget {
-  final MessageSpecialType type;
-  final String messageText;
-  final int timestamp;
-
-  const MessageSpecial({Key key, this.type, this.messageText, this.timestamp}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (type == MessageSpecialType.setup) {
-      return MessageSetup(timestamp: timestamp);
-    } else if (type == MessageSpecialType.encryptionStatusChanged) {
-      return MessageInfo(
-        messageText: L10n.get(L.chatEncryptionStatusChanged),
-        icon: AdaptiveIcon(
-            icon: IconSource.lock
-        ),
-      );
-    } else if (type == MessageSpecialType.info) {
-      return MessageInfo(messageText: messageText);
-    }
-    throw ArgumentError("Type is not supported, please choose a valid MessageSpecialType");
-  }
-}
-
 class MessageSetup extends StatelessWidget {
-  final int timestamp;
+  final MessageStateData messageStateData;
 
-  const MessageSetup({Key key, this.timestamp}) : super(key: key);
+  const MessageSetup({Key key, @required this.messageStateData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +64,12 @@ class MessageSetup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           MessageData(
+            messageStateData: messageStateData,
             backgroundColor: secondary,
             textColor: onSecondary,
             secondaryTextColor: onSecondary.withOpacity(fade),
             borderRadius: buildInfoBorderRadius(),
-            time: getTimeFormTimestamp(timestamp),
-            text: L10n.get(L.autocryptChatMessagePlaceholder),
+            useInformationText: true,
             child: MessageMaterial(
               child: MessageText(),
             ),
@@ -110,10 +81,11 @@ class MessageSetup extends StatelessWidget {
 }
 
 class MessageInfo extends StatelessWidget {
-  final String messageText;
+  final MessageStateData messageStateData;
   final AdaptiveIcon icon;
+  final bool useInformationText;
 
-  const MessageInfo({Key key, this.messageText, this.icon}) : super(key: key);
+  const MessageInfo({Key key, @required this.messageStateData, @required this.useInformationText, this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,11 +94,12 @@ class MessageInfo extends StatelessWidget {
         widthFactor: 0.8,
         child: Center(
           child: MessageData(
+            messageStateData: messageStateData,
             backgroundColor: info,
             textColor: onInfo,
             borderRadius: buildInfoBorderRadius(),
-            text: messageText,
             icon: icon,
+            useInformationText: useInformationText,
             child: MessageMaterial(
               elevation: zero,
               child: MessageStatus(),

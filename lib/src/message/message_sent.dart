@@ -45,38 +45,25 @@ import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/date.dart';
 
 import 'message_item_event_state.dart';
 
 class MessageSent extends StatelessWidget {
-  final String text;
-  final int timestamp;
-  final bool hasFile;
-  final int msgState;
-  final bool isFlagged;
-  final AttachmentWrapper attachmentWrapper;
+  final MessageStateData messageStateData;
 
-  const MessageSent({Key key, this.text, this.timestamp, this.hasFile, this.msgState, this.isFlagged, this.attachmentWrapper})
-      : super(key: key);
+  const MessageSent({Key key, this.messageStateData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String time = getTimeFormTimestamp(timestamp);
     return FractionallySizedBox(
       alignment: Alignment.topRight,
       widthFactor: 0.8,
       child: MessageData(
+        messageStateData: messageStateData,
         backgroundColor: secondary,
         textColor: onSecondary,
         secondaryTextColor: accent,
         borderRadius: buildBorderRadius(),
-        time: time,
-        text: text,
-        attachment: attachmentWrapper,
-        state: msgState,
-        isFlagged: isFlagged,
-        isSent: true,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -85,7 +72,7 @@ class MessageSent extends StatelessWidget {
             MessagePartFlag(),
             Flexible(
               child: MessageMaterial(
-                child: hasFile ? MessageAttachment() : MessageText(),
+                child: messageStateData.hasFile ? MessageAttachment() : MessageText(),
               ),
             ),
             MessagePartState(),

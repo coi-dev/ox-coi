@@ -19,6 +19,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   date_format: ^1.0.6
   device_info: ^0.4.1
+  equatable: ^0.6.1
   firebase_messaging: ^5.1.6
   file_picker: ^1.4.2
   flutter_bloc: ^1.0.0

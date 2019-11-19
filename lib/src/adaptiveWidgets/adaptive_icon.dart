@@ -117,7 +117,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     // No done icon in CupertinoIcons
     IconSource.done : [Icons.done, Icons.done],
     // No done all icon in CupertinoIcons
-    IconSource.done : [Icons.done_all, Icons.done_all],
+    IconSource.doneAll : [Icons.done_all, Icons.done_all],
     // No account circle icon in CupertinoIcons
     IconSource.accountCircle : [Icons.account_circle, Icons.account_circle],
     // No notifications icon in CupertinoIcons

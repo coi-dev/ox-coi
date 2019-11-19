@@ -111,7 +111,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     if (_repositoryStreamHandler == null) {
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
-        [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead],
+        [Event.incomingMsg, Event.msgsChanged],
         _onMessagesChanged,
       );
       _messageListRepository.addListener(_repositoryStreamHandler);
@@ -120,7 +120,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   void _onMessagesChanged(event) => _updateMessages(event);
 
-  void _updateMessages(event) {
+  void _updateMessages(Event event) {
     _deleteCacheFile(_cacheFilePath);
     add(UpdateMessages());
   }
@@ -147,12 +147,6 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     }
     messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
     _messageListRepository.putIfAbsent(ids: messageIds);
-    await Future.forEach(messageIds, (id) async {
-      ChatMsg message = _messageListRepository.get(id);
-      if (await message.isOutgoing() && await message.getState() != ChatMsg.messageStateReceived) {
-        await message.reloadValue(ChatMsg.methodMessageGetState);
-      }
-    });
     if (isInvite(_chatId, _messageId)) {
       var messageIds = List<int>();
       var lastUpdateValues = List<int>();
@@ -171,14 +165,8 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     } else {
       add(
         MessagesLoaded(
-            messageIds: _messageListRepository
-                .getAllIds()
-                .reversed
-                .toList(growable: false),
-            messageLastUpdateValues: _messageListRepository
-                .getAllLastUpdateValues()
-                .reversed
-                .toList(growable: false),
+            messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
+            messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
             dateMarkerIds: dateMakerIds),
       );
     }

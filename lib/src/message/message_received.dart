@@ -45,54 +45,39 @@ import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
 import 'message_item_event_state.dart';
 
 class MessageReceived extends StatelessWidget {
-  final String name;
-  final String email;
-  final Color color;
-  final String text;
-  final int timestamp;
-  final bool hasFile;
-  final bool isGroupChat;
-  final bool isFlagged;
-  final AttachmentWrapper attachmentWrapper;
+  final MessageStateData messageStateData;
 
-  const MessageReceived(
-      {Key key, this.name, this.email, this.color, this.text, this.timestamp, this.hasFile, this.isGroupChat, this.isFlagged, this.attachmentWrapper})
-      : super(key: key);
+  const MessageReceived({Key key, this.messageStateData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String time = getTimeFormTimestamp(timestamp);
+    var contactStateData = messageStateData.contactStateData;
+    var isGroup = messageStateData.isGroup;
     return FractionallySizedBox(
       alignment: Alignment.topLeft,
       widthFactor: 0.8,
       child: MessageData(
+        messageStateData: messageStateData,
         backgroundColor: surface,
         textColor: onSurface,
         secondaryTextColor: onSurface.withOpacity(fade),
         borderRadius: buildBorderRadius(),
-        time: time,
-        text: text,
-        attachment: attachmentWrapper,
-        isFlagged: isFlagged,
-        isGroup: isGroupChat,
-        isSent: false,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Visibility(
-              visible: isGroupChat,
+              visible: isGroup,
               child: Padding(
                 padding: const EdgeInsets.only(right: messagesHorizontalPadding),
                 child: Avatar(
-                  textPrimary: name,
-                  textSecondary: email,
-                  color: color,
+                  textPrimary: contactStateData?.name,
+                  textSecondary: contactStateData?.address,
+                  color: contactStateData?.color,
                   size: 34.0,
                 ),
               ),
@@ -103,7 +88,7 @@ class MessageReceived extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    isGroupChat
+                    isGroup
                         ? Padding(
                             padding: EdgeInsets.only(
                                 top: messagesVerticalPadding,
@@ -111,12 +96,12 @@ class MessageReceived extends StatelessWidget {
                                 left: messagesHorizontalInnerPadding,
                                 right: messagesHorizontalInnerPadding),
                             child: Text(
-                              name.isNotEmpty ? name : email,
-                              style: TextStyle(color: color),
+                              contactStateData.name.isNotEmpty ? contactStateData.name : contactStateData.address,
+                              style: TextStyle(color: contactStateData.color),
                             ),
                           )
                         : Container(constraints: BoxConstraints(maxWidth: zero)),
-                    hasFile ? MessageAttachment() : MessageText(),
+                    messageStateData.hasFile ? MessageAttachment() : MessageText(),
                   ],
                 ),
               ),

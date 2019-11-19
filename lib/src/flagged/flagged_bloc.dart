@@ -104,12 +104,6 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
     }
     messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
     _messageListRepository.putIfAbsent(ids: messageIds);
-    await Future.forEach(messageIds, (id) async {
-      ChatMsg message = _messageListRepository.get(id);
-      if (await message.isOutgoing()) {
-        await message.reloadValue(ChatMsg.methodMessageGetState);
-      }
-    });
 
     add(
       FlaggedMessagesLoaded(

@@ -45,6 +45,8 @@ import 'dart:io';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
@@ -57,31 +59,21 @@ import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 class MessageData extends InheritedWidget {
   final Color backgroundColor;
   final Color textColor;
-  final Color secondaryTextColor;
-  final String time;
-  final int state;
-  final String text;
   final AdaptiveIcon icon;
-  final AttachmentWrapper attachment;
   final BorderRadius borderRadius;
-  final bool isFlagged;
-  final bool isGroup;
-  final bool isSent;
+  final MessageStateData messageStateData;
+  final Color secondaryTextColor;
+  final bool useInformationText;
 
   MessageData({
     Key key,
     @required this.backgroundColor,
     @required this.textColor,
     @required this.borderRadius,
-    this.secondaryTextColor,
-    this.time,
-    this.state,
-    this.text,
+    @required this.messageStateData,
     this.icon,
-    this.attachment,
-    this.isFlagged = false,
-    this.isGroup = false,
-    this.isSent,
+    this.secondaryTextColor,
+    this.useInformationText = false,
     @required Widget child,
   }) : super(key: key, child: child);
 
@@ -117,12 +109,18 @@ class MessageText extends StatelessWidget {
     return Padding(
       padding: getNamePaddingForGroups(context),
       child: Text(
-        MessageData.of(context).text,
+        _getText(context),
         style: Theme.of(context).textTheme.subhead.apply(color: MessageData.of(context).textColor),
       ),
     );
   }
 }
+
+String _getText(BuildContext context) {
+  return MessageData.of(context).useInformationText ? _getMessageStateData(context).informationText : _getMessageStateData(context).text;
+}
+
+MessageStateData _getMessageStateData(BuildContext context) => MessageData.of(context).messageStateData;
 
 class MessageStatus extends StatelessWidget {
   @override
@@ -139,7 +137,7 @@ class MessageStatus extends StatelessWidget {
             ),
             Flexible(
               child: Text(
-                MessageData.of(context).text,
+                _getText(context),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -150,7 +148,7 @@ class MessageStatus extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),
         child: Text(
-          MessageData.of(context).text,
+          _getMessageStateData(context).text,
           textAlign: TextAlign.center,
         ),
       );
@@ -172,12 +170,12 @@ class MessageAttachment extends StatelessWidget {
 }
 
 bool isImage(BuildContext context) {
-  final attachment = MessageData.of(context).attachment;
+  final attachment = _getMessageStateData(context).attachmentStateData;
   return attachment != null && attachment.type == ChatMsg.typeImage;
 }
 
 bool isAudio(BuildContext context) {
-  final attachment = MessageData.of(context).attachment;
+  final attachment = _getMessageStateData(context).attachmentStateData;
   return attachment != null && attachment.type == ChatMsg.typeAudio || attachment.type == ChatMsg.typeVoice;
 }
 
@@ -204,7 +202,8 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    File file = File(MessageData.of(context).attachment.path);
+    var path = _getMessageStateData(context).attachmentStateData.path;
+    File file = File(path);
     imageProvider = FileImage(file);
     precacheImage(imageProvider, context, onError: (error, stacktrace) {
       setState(() {
@@ -215,7 +214,7 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
 
   @override
   Widget build(BuildContext context) {
-    var text = MessageData.of(context).text;
+    var text = _getMessageStateData(context).text;
     BorderRadius imageBorderRadius = getImageBorderRadius(context, text);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -250,9 +249,10 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
 
   BorderRadius getImageBorderRadius(BuildContext context, String text) {
     var messageBorderRadius = MessageData.of(context).borderRadius;
-    if (MessageData.of(context).isGroup && !MessageData.of(context).isSent && text.isNotEmpty) {
+    var messageStateData = _getMessageStateData(context);
+    if (messageStateData.isGroup && !messageStateData.isOutgoing && text.isNotEmpty) {
       messageBorderRadius = BorderRadius.zero;
-    } else if (MessageData.of(context).isGroup && !MessageData.of(context).isSent && text.isEmpty) {
+    } else if (messageStateData.isGroup && !messageStateData.isOutgoing && text.isEmpty) {
       messageBorderRadius = BorderRadius.only(bottomLeft: messageBorderRadius.bottomLeft, bottomRight: messageBorderRadius.bottomRight);
     } else if (text.isNotEmpty) {
       messageBorderRadius = BorderRadius.only(topLeft: messageBorderRadius.topLeft, topRight: messageBorderRadius.topRight);
@@ -264,8 +264,8 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
 class MessagePartGenericAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var text = MessageData.of(context).text;
-    AttachmentWrapper attachment = MessageData.of(context).attachment;
+    var text = _getMessageStateData(context).text;
+    AttachmentStateData attachment = _getMessageStateData(context).attachmentStateData;
     return Padding(
       padding: getNamePaddingForGroups(context),
       child: Column(
@@ -342,8 +342,9 @@ class MessageDateTime extends StatelessWidget {
 class MessagePartTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String time = getTimeFormTimestamp(_getMessageStateData(context).timestamp);
     return Text(
-      MessageData.of(context).time,
+      time,
       style: TextStyle(color: MessageData.of(context).secondaryTextColor),
     );
   }
@@ -352,53 +353,51 @@ class MessagePartTime extends StatelessWidget {
 class MessagePartState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    switch (MessageData.of(context).state) {
-      case ChatMsg.messageStateDelivered:
-        return Padding(
-          padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
-          child: AdaptiveIcon(
-            icon: IconSource.done,
-            size: 16.0,
-            color: MessageData.of(context).secondaryTextColor,
-          ),
-        );
-        break;
-      case ChatMsg.messageStateReceived:
-        return Padding(
-          padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
-          child: AdaptiveIcon(
-            icon: IconSource.doneAll,
-            size: 16.0,
-            color: MessageData.of(context).secondaryTextColor,
-          ),
-        );
-        break;
-      default:
-        return Container(
-          width: 20.0,
-        );
-    }
+    return BlocBuilder<MessageItemBloc, MessageItemState>(
+      builder: (context, state) {
+        if (state is MessageItemStateSuccess) {
+          var messageState = state.messageStateData.state;
+          if (messageState == ChatMsg.messageStateDelivered || messageState == ChatMsg.messageStateReceived) {
+            IconSource icon = messageState == ChatMsg.messageStateDelivered ? IconSource.done : IconSource.doneAll;
+            return Padding(
+              padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
+              child: AdaptiveIcon(
+                icon: icon,
+                size: 16.0,
+                color: MessageData.of(context).secondaryTextColor,
+              ),
+            );
+          }
+        }
+        return Container(width: 20.0);
+      },
+    );
   }
 }
 
 class MessagePartFlag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: MessageData.of(context).isFlagged,
-      child: Padding(
-        padding: EdgeInsets.only(top: 8.0, right: 4.0, left: 4.0),
-        child: AdaptiveIcon(
-          icon: IconSource.flag,
-          color: Colors.yellow,
-        ),
-      ),
+    return BlocBuilder<MessageItemBloc, MessageItemState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: state is MessageItemStateSuccess && state.messageStateData.isFlagged,
+          child: Padding(
+            padding: EdgeInsets.only(top: 8.0, right: 4.0, left: 4.0),
+            child: AdaptiveIcon(
+              icon: IconSource.flag,
+              color: Colors.yellow,
+            ),
+          ),
+        );
+      },
     );
   }
 }
 
 EdgeInsetsGeometry getNamePaddingForGroups(BuildContext context) {
-  if (MessageData.of(context).isGroup) {
+  var messageStateData = _getMessageStateData(context);
+  if (messageStateData.isGroup && !messageStateData.isOutgoing) {
     return EdgeInsets.only(
       top: 2.0,
       bottom: messagesVerticalInnerPadding,

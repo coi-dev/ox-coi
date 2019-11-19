@@ -42,99 +42,226 @@
 
 import 'dart:ui';
 
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-abstract class MessageItemEvent {}
+abstract class MessageItemEvent extends Equatable {}
 
-class RequestMessage extends MessageItemEvent {
+class LoadMessage extends MessageItemEvent {
   final int chatId;
   final int messageId;
   final int nextMessageId;
   final bool isGroupChat;
 
-  RequestMessage({@required this.chatId, @required this.messageId, this.nextMessageId, @required this.isGroupChat});
+  LoadMessage({@required this.chatId, @required this.messageId, this.nextMessageId, @required this.isGroupChat});
+
+  @override
+  List<Object> get props => [chatId, messageId, nextMessageId, isGroupChat];
 }
 
-class MessageLoaded extends MessageItemEvent {}
+class DeleteMessage extends MessageItemEvent {
+  final int id;
 
-class DeleteMessages extends MessageItemEvent {
-  final List<int> messageIds;
+  DeleteMessage({@required this.id});
 
-  DeleteMessages({@required this.messageIds});
+  @override
+  List<Object> get props => [id];
 }
 
-abstract class MessageItemState {}
+class FlagUnflagMessage extends MessageItemEvent {
+  final int id;
 
-class MessageItemStateInitial extends MessageItemState {}
+  FlagUnflagMessage({@required this.id});
 
-class MessageItemStateLoading extends MessageItemState {}
+  @override
+  List<Object> get props => [id];
+}
+
+class MessageUpdated extends MessageItemEvent {
+  final MessageStateData messageStateData;
+
+  MessageUpdated({@required this.messageStateData});
+
+  @override
+  List<Object> get props => [messageStateData];
+}
+
+abstract class MessageItemState extends Equatable {}
+
+class MessageItemStateInitial extends MessageItemState {
+  @override
+  List<Object> get props => null;
+}
+
+class MessageItemStateLoading extends MessageItemState {
+  @override
+  List<Object> get props => null;
+}
 
 class MessageItemStateSuccess extends MessageItemState {
-  final String messageText;
-  final int messageTimestamp;
-  final bool messageIsOutgoing;
-  final bool hasFile;
-  final int state;
-  final bool isSetupMessage;
-  final bool isInfo;
-  final int showPadlock;
-  final ContactWrapper contactWrapper;
-  final AttachmentWrapper attachmentWrapper;
-  final String preview;
-  final bool isStarred;
-  final bool showTime;
-  final bool encryptionStatusChanged;
+  final MessageStateData messageStateData;
 
-  MessageItemStateSuccess({
-    @required this.messageText,
-    @required this.messageIsOutgoing,
-    @required this.messageTimestamp,
-    @required this.hasFile,
-    @required this.state,
-    @required this.isSetupMessage,
-    @required this.isInfo,
-    @required this.showPadlock,
-    @required this.attachmentWrapper,
-    @required this.contactWrapper,
-    @required this.preview,
-    @required this.isStarred,
-    @required this.showTime,
-    @required this.encryptionStatusChanged,
-  });
+  MessageItemStateSuccess({@required this.messageStateData});
+
+  @override
+  List<Object> get props => [messageStateData];
 }
 
 class MessageItemStateFailure extends MessageItemState {
   final String error;
 
   MessageItemStateFailure({@required this.error});
+
+  @override
+  List<Object> get props => [error];
 }
 
-class ContactWrapper {
-  final int contactId;
-  final String contactName;
-  final String contactAddress;
-  final Color contactColor;
+class MessageStateData extends Equatable {
+  final String text;
+  final String informationText;
+  final int timestamp;
+  final bool isOutgoing;
+  final bool hasFile;
+  final int state;
+  final bool isSetupMessage;
+  final bool isInfo;
+  final int showPadlock;
+  final ContactStateData contactStateData;
+  final AttachmentStateData attachmentStateData;
+  final String preview;
+  final bool isFlagged;
+  final bool showTime;
+  final bool encryptionStatusChanged;
+  final bool isGroup;
 
-  ContactWrapper({
-    @required this.contactId,
-    @required this.contactName,
-    @required this.contactAddress,
-    @required this.contactColor,
+  MessageStateData({
+    @required this.text,
+    @required this.informationText,
+    @required this.isOutgoing,
+    @required this.timestamp,
+    @required this.hasFile,
+    @required this.state,
+    @required this.isSetupMessage,
+    @required this.isInfo,
+    @required this.showPadlock,
+    @required this.attachmentStateData,
+    @required this.contactStateData,
+    @required this.preview,
+    @required this.isFlagged,
+    @required this.showTime,
+    @required this.encryptionStatusChanged,
+    @required this.isGroup,
   });
+
+  MessageStateData copyWith(
+      {text,
+      informationText,
+      isOutgoing,
+      timestamp,
+      hasFile,
+      state,
+      isSetupMessage,
+      isInfo,
+      showPadlock,
+      attachmentStateData,
+      contactStateData,
+      preview,
+      isFlagged,
+      showTime,
+      encryptionStatusChanged,
+      isGroup}) {
+    return MessageStateData(
+      text: text ?? this.text,
+      informationText: informationText ?? this.informationText,
+      isOutgoing: isOutgoing ?? this.isOutgoing,
+      timestamp: timestamp ?? this.timestamp,
+      hasFile: hasFile ?? this.hasFile,
+      state: state ?? this.state,
+      isSetupMessage: isSetupMessage ?? this.isSetupMessage,
+      isInfo: isInfo ?? this.isInfo,
+      showPadlock: showPadlock ?? this.showPadlock,
+      attachmentStateData: attachmentStateData ?? this.attachmentStateData,
+      contactStateData: contactStateData ?? this.contactStateData,
+      preview: preview ?? this.preview,
+      isFlagged: isFlagged ?? this.isFlagged,
+      showTime: showTime ?? this.showTime,
+      encryptionStatusChanged: encryptionStatusChanged ?? this.encryptionStatusChanged,
+      isGroup: isGroup ?? this.isGroup,
+    );
+  }
+
+  @override
+  List<Object> get props => [
+        text,
+        informationText,
+        isOutgoing,
+        timestamp,
+        hasFile,
+        state,
+        isSetupMessage,
+        isInfo,
+        showPadlock,
+        attachmentStateData,
+        contactStateData,
+        preview,
+        isFlagged,
+        showTime,
+        encryptionStatusChanged,
+        isGroup,
+      ];
 }
 
-class AttachmentWrapper {
+class ContactStateData extends Equatable {
+  final int id;
+  final String name;
+  final String address;
+  final Color color;
+
+  ContactStateData({
+    @required this.id,
+    @required this.name,
+    @required this.address,
+    @required this.color,
+  });
+
+  ContactStateData copyWith({id, name, address, color}) {
+    return ContactStateData(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  List<Object> get props => [id, name, address, color];
+}
+
+class AttachmentStateData extends Equatable {
   final String filename;
   final String path;
   final String mimeType;
   final int size;
   final int type;
 
-  AttachmentWrapper({
+  AttachmentStateData({
     @required this.filename,
     @required this.path,
     @required this.mimeType,
     @required this.size,
     @required this.type,
   });
+
+  AttachmentStateData copyWith({filename, path, mimeType, size, type}) {
+    return AttachmentStateData(
+      filename: filename ?? this.filename,
+      path: path ?? this.path,
+      mimeType: mimeType ?? this.mimeType,
+      size: size ?? this.size,
+      type: type ?? this.type,
+    );
+  }
+
+  @override
+  List<Object> get props => [filename, path, mimeType, size, type];
 }

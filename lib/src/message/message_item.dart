@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
@@ -54,13 +55,9 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 
 import 'message_action.dart';
-import 'message_change_bloc.dart';
-import 'message_change_event_state.dart';
 import 'message_received.dart';
 import 'message_sent.dart';
 import 'message_special.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatMessageItem extends StatefulWidget {
   final int chatId;
@@ -68,7 +65,7 @@ class ChatMessageItem extends StatefulWidget {
   final int nextMessageId;
   final bool isGroupChat;
   final bool hasDateMarker;
-  final bool flaggedView;
+  final bool isFlaggedView;
 
   ChatMessageItem(
       {@required this.chatId,
@@ -76,7 +73,7 @@ class ChatMessageItem extends StatefulWidget {
       @required this.nextMessageId,
       @required this.isGroupChat,
       @required this.hasDateMarker,
-      this.flaggedView = false,
+      this.isFlaggedView = false,
       key})
       : super(key: key);
 
@@ -102,12 +99,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
 
   MessageItemBloc _messageBloc = MessageItemBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
-  MessageChangeBloc _messageChangeBloc = MessageChangeBloc();
   Navigation _navigation = Navigation();
   String _message = "";
   Offset tapDownPosition;
-  bool _hasFile;
-  bool _isStarred = false;
 
   void _selectMessageAction(MessageAction messageAction) {
     if (messageAction == null) {
@@ -125,10 +119,10 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
       case MessageActionTag.delete:
         List<int> messageList = List();
         messageList.add(widget.messageId);
-        _messageBloc.add(DeleteMessages(messageIds: messageList));
+        _messageBloc.add(DeleteMessage(id: widget.messageId));
         break;
       case MessageActionTag.flag:
-        _messageChangeBloc.add(FlagMessages(chatId: widget.chatId, messageIds: msgIds, star: _isStarred));
+        _messageBloc.add(FlagUnflagMessage(id: widget.messageId));
         break;
       case MessageActionTag.share:
         _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
@@ -139,8 +133,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    _messageBloc.add(
-        RequestMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
+    _messageBloc
+        .add(LoadMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
   }
 
   @override
@@ -148,94 +142,68 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
 
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocBuilder(
-      bloc: _messageBloc,
-      builder: (context, state) {
-        if (state is MessageItemStateSuccess) {
-          _hasFile = state.hasFile;
-          _message = state.messageText;
-          _isStarred = state.isStarred;
-          String name = state.contactWrapper?.contactName;
-          String email = state.contactWrapper?.contactAddress;
-          Color color = state.contactWrapper?.contactColor;
-          return Column(
-            crossAxisAlignment: state.messageIsOutgoing ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            children: [
-              if (widget.hasDateMarker || state.showTime)
-                Padding(
-                  padding: EdgeInsets.only(bottom: messagesVerticalPadding),
-                  child: MessageDateTime(
-                    timestamp: state.messageTimestamp,
-                    hasDateMarker: widget.hasDateMarker,
-                    showTime: state.showTime,
+    return BlocProvider.value(
+      value: _messageBloc,
+      child: BlocBuilder<MessageItemBloc, MessageItemState>(
+        bloc: _messageBloc,
+        builder: (context, state) {
+          if (state is MessageItemStateSuccess) {
+            var messageStateData = state.messageStateData;
+            Widget message;
+            if (messageStateData.isInfo) {
+              message = MessageInfo(messageStateData: messageStateData, useInformationText: false);
+            } else if (messageStateData.isSetupMessage) {
+              message = MessageSetup(messageStateData: messageStateData);
+            } else if (messageStateData.isOutgoing) {
+              message = MessageSent(messageStateData: messageStateData);
+            } else {
+              message = MessageReceived(messageStateData: messageStateData);
+            }
+            return Column(
+              crossAxisAlignment: messageStateData.isOutgoing ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                if (widget.hasDateMarker || messageStateData.showTime)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: messagesVerticalPadding),
+                    child: MessageDateTime(
+                      timestamp: messageStateData.timestamp,
+                      hasDateMarker: widget.hasDateMarker,
+                      showTime: messageStateData.showTime,
+                    ),
+                  ),
+                if (!widget.isFlaggedView && messageStateData.encryptionStatusChanged)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
+                    child: MessageInfo(
+                        messageStateData: messageStateData,
+                        useInformationText: true,
+                        icon: AdaptiveIcon(
+                          icon: IconSource.lock,
+                        )),
+                  ),
+                GestureDetector(
+                  onTap: () => _onTap(messageStateData.isSetupMessage),
+                  onTapDown: _onTapDown,
+                  onLongPress: () => _onLongPress(messageStateData.hasFile, messageStateData.isSetupMessage),
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
+                    child: message,
                   ),
                 ),
-              if (!widget.flaggedView && state.encryptionStatusChanged)
-                Padding(
-                  padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
-                  child: MessageSpecial(type: MessageSpecialType.encryptionStatusChanged),
-                ),
-              GestureDetector(
-                onTap: () => _onTap(state.hasFile, state.isSetupMessage),
-                onTapDown: _onTapDown,
-                onLongPress: () => _onLongPress(state.hasFile, state.isSetupMessage),
-                child: Container(
-                  padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
-                  child: buildMessage(state, name, email, color),
-                ),
-              ),
-            ],
-          );
-        } else {
-          return Container();
-        }
-      },
+              ],
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 
-  Widget buildMessage(MessageItemStateSuccess state, String name, String email, Color color) {
-    Widget message;
-    bool isFlagged = state.isStarred;
-    if (state.isInfo) {
-      message = MessageSpecial(
-        type: MessageSpecialType.info,
-        messageText: state.messageText,
-        timestamp: state.messageTimestamp,
-      );
-    } else if (state.isSetupMessage) {
-      message = MessageSpecial(
-        type: MessageSpecialType.setup,
-        timestamp: state.messageTimestamp,
-      );
-    } else if (state.messageIsOutgoing) {
-      message = MessageSent(
-        text: state.messageText,
-        timestamp: state.messageTimestamp,
-        hasFile: state.hasFile,
-        msgState: state.state,
-        attachmentWrapper: state.attachmentWrapper,
-        isFlagged: isFlagged,
-      );
-    } else {
-      message = MessageReceived(
-        text: state.messageText,
-        timestamp: state.messageTimestamp,
-        hasFile: state.hasFile,
-        attachmentWrapper: state.attachmentWrapper,
-        name: name,
-        email: email,
-        color: color,
-        isGroupChat: widget.isGroupChat,
-        isFlagged: isFlagged,
-      );
-    }
-    return message;
-  }
-
-  _onTap(bool hasFile, bool isSetupMessage) {
+  _onTap(bool isSetupMessage) {
     if (isSetupMessage) {
       _showAutocryptSetup();
-    } else if (hasFile) {
+    } else {
       _openTapAttachment();
     }
   }
@@ -250,12 +218,12 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
 
   _onLongPress(bool hasFile, bool isSetupMessage) {
     if (!isSetupMessage) {
-      _showMenu();
+      _showMenu(hasFile);
     }
   }
 
-  void _showMenu() {
-    List<MessageAction> actions = _hasFile ? _messageAttachmentActions : _messageActions;
+  void _showMenu(bool hasFile) {
+    List<MessageAction> actions = hasFile ? _messageAttachmentActions : _messageActions;
     showMenu(
             context: context,
             position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
