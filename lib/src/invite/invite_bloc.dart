@@ -118,8 +118,11 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
       if (valid) {
         InviteServiceResponse responseInviteService = _getInviteResponse(response);
         String imageString = responseInviteService.sender.image;
-        int imageStartIndex = getIndexAfterLastOf(imageString, ',');
-        String base64Image = imageString.substring(imageStartIndex);
+        String base64Image;
+        if (!isNullOrEmpty(imageString)) {
+          int imageStartIndex = getIndexAfterLastOf(imageString, ',');
+          base64Image = imageString.substring(imageStartIndex);
+        }
         yield InviteStateSuccess(inviteServiceResponse: responseInviteService, base64Image: base64Image);
       } else {
         String errorMessage;
