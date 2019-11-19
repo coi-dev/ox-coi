@@ -70,3 +70,7 @@ String encodeBase64(String text) {
   var base64 = base64Url.encode(bytes);
   return base64;
 }
+
+int getIndexAfterLastOf(String text, Pattern pattern) {
+  return text.lastIndexOf(pattern) + 1;
+}

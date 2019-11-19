@@ -52,6 +52,7 @@ const preferenceNotificationsPushServiceUrl = "preferenceNotificationsPushServic
 const preferenceNotificationsEndpoint = "preferenceNotificationsEndpoint";
 const preferenceNotificationsPushStatus = "preferenceNotificationsPushStatus";
 const preferenceAppState = "preferenceAppState";
+const preferenceInviteServiceUrl = "preferenceInviteServiceUrl";
 
 const preferenceNotificationsAuth = "preferenceNotificationsAuth"; // Unused
 const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic"; // Unused

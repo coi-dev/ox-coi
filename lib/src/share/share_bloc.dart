@@ -78,9 +78,9 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     } else if (event is ForwardMessages) {
       yield ShareStateLoading();
       forwardMessages(event.destinationChatId, event.messageIds);
-    } else if (event is LoadSharedData){
+    } else if (event is LoadSharedData) {
       loadSharedData();
-    } else if (event is SharedDataLoaded){
+    } else if (event is SharedDataLoaded) {
       yield ShareStateSuccess(sharedData: event.sharedData);
     }
   }
@@ -123,11 +123,11 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     await context.forwardMessages(destinationChatId, messageIds);
   }
 
-  void loadSharedData() async{
+  void loadSharedData() async {
     Map<dynamic, dynamic> data = {};
     data = await _getSharedData();
     SharedData sharedData;
-    if(data.length > 0){
+    if (data.length > 0) {
       sharedData = SharedData(data);
     }
     add(SharedDataLoaded(sharedData: sharedData));

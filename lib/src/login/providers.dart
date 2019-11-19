@@ -28,6 +28,7 @@ class Provider {
   String name;
   String registerLink;
   String pushServiceUrl;
+  String inviteServiceUrl;
   Oauth oauth;
   Preset preset;
 
@@ -38,6 +39,7 @@ class Provider {
     name = json['name'];
     registerLink = json['register_link'];
     pushServiceUrl = json['push_service_url'];
+    inviteServiceUrl = json['invite_service_url'];
     oauth = json['oauth'] != null ? new Oauth.fromJson(json['oauth']) : null;
     preset = json['preset'] != null ? new Preset.fromJson(json['preset']) : null;
   }
@@ -48,6 +50,7 @@ class Provider {
     data['name'] = this.name;
     data['register_link'] = this.registerLink;
     data['push_service_url'] = pushServiceUrl;
+    data['invite_service_url'] = inviteServiceUrl;
     if (this.oauth != null) {
       data['oauth'] = this.oauth.toJson();
     }

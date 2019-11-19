@@ -40,89 +40,45 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:ox_coi/src/data/invite_service_resource.dart';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatListInviteDialog,
-  chatListInviteErrorDialog,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
+abstract class InviteEvent {}
+
+class CreateInviteUrl extends InviteEvent {
+  String message;
+
+  CreateInviteUrl({this.message});
 }
 
-class Navigatable {
-  final Type type;
+class HandleSharedInviteLink extends InviteEvent {}
 
-  List params;
+class CreateChatWithInvite extends InviteEvent {
+  InviteServiceResponse inviteServiceResponse;
+  String base64Image;
 
-  String get tag => describeEnum(type);
+  CreateChatWithInvite({this.inviteServiceResponse, this.base64Image});
+}
 
-  Navigatable(this.type, {this.params});
+abstract class InviteState {}
 
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
-  }
+class InviteStateInitial extends InviteState {}
 
-  bool equalType(Navigatable other) => type == other.type;
+class InviteStateSuccess extends InviteState {
+  String createdInviteUrl;
+  InviteServiceResponse inviteServiceResponse;
+  String base64Image;
 
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
+  InviteStateSuccess({this.createdInviteUrl, this.inviteServiceResponse, this.base64Image});
+}
 
-  static String getSubTag(String subTag) => subTag ?? "";
+class CreateInviteChatSuccess extends InviteState {
+  int chatId;
+
+  CreateInviteChatSuccess({this.chatId});
+}
+
+class InviteStateFailure extends InviteState {
+  String errorMessage;
+
+  InviteStateFailure({this.errorMessage});
 }

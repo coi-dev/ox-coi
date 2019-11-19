@@ -144,6 +144,9 @@ class L {
   static final chatFlagged = _translationKey("Flagged");
   static final chatEncryptionStatusChanged = _translationKey("Your messages are encrypted from now on.");
   static final chatChooseCallNumber = _translationKey("Please choose a number");
+  static final chatStart = _translationKey("Start chat");
+  static final chatListInviteDialogXY = _translationKey("%s/%s has invited you to chat.");
+  static final chatListInviteDialogX = _translationKey("%s has invited you to chat.");
 
   static final clipboardCopied = _translationKey("Copied to clipboard");
   // Content X copied to clipboard (e.g. Text copied to clipboard)
@@ -252,6 +255,11 @@ class L {
   static final profileNoUsername = _translationKey("No username set");
   static final profile = _translationKey("Profile");
   static final profileDefaultStatus = _translationKey("Sent with OX COI Messenger");
+  static final profileShareInviteUrl = _translationKey("Share invite link");
+
+  static final inviteShareText = _translationKey("Check out OX COI Messenger - chat via email!");
+  static final inviteGetText404Error = _translationKey("The invite was already deleted. Please ask the sender to resend it.");
+  static final inviteGetTextGeneralErrorX = _translationKey("Something went wrong and we could not load the invite: %s");
 
   static final providerRegisterChoose = _translationKey("Choose a provider from the list below to create a new account");
   static final providerAutocompleteText = _translationKey("For known email providers additional settings are set up automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");

@@ -71,7 +71,7 @@ class ForwardMessages extends ShareEvent {
 
 class LoadSharedData extends ShareEvent {}
 
-class SharedDataLoaded extends ShareEvent{
+class SharedDataLoaded extends ShareEvent {
   final SharedData sharedData;
 
   SharedDataLoaded({@required this.sharedData});
@@ -93,7 +93,7 @@ class ShareStateSuccess extends ShareState {
     this.chatAndContactIds,
     this.chatIdCount,
     this.contactIdCount,
-    this.sharedData
+    this.sharedData,
   });
 }
 

@@ -40,89 +40,54 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatListInviteDialog,
-  chatListInviteErrorDialog,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
-}
+import 'package:http/http.dart';
+import 'package:http/io_client.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/data/invite_service_resource.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/utils/constants.dart';
+import 'package:ox_coi/src/utils/http.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
-class Navigatable {
-  final Type type;
+class InviteService {
+  static InviteService _instance;
 
-  List params;
+  var _logger = Logger("invite_service");
+  var headers = {"Content-type": "application/json"};
 
-  String get tag => describeEnum(type);
+  factory InviteService() => _instance ??= InviteService._internal();
 
-  Navigatable(this.type, {this.params});
+  InviteService._internal();
 
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
+  Future<Response> createInviteUrl(InviteServiceRequest requestInviteService) async {
+    IOClient ioClient = createIOClient();
+    String encodedBody = json.encode(requestInviteService);
+    var url = await getUrl();
+    _logger.info("Create ($url): $encodedBody");
+    return await ioClient.put(url, headers: headers, body: encodedBody);
   }
 
-  bool equalType(Navigatable other) => type == other.type;
+  Future<Response> getInvite(String id) async {
+    IOClient ioClient = createIOClient();
+    var url = await getUrl();
+    _logger.info("Get ($url): $id");
+    return await ioClient.get("$url$id", headers: headers);
+  }
 
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
+  Future<Response> deleteInvite(String id) async {
+    IOClient ioClient = createIOClient();
+    var url = await getUrl();
+    _logger.info("Delete ($url): $id");
+    return await ioClient.delete("$url$id", headers: headers);
+  }
 
-  static String getSubTag(String subTag) => subTag ?? "";
+  Future<String> getUrl() async {
+    var url = await getPreference(preferenceInviteServiceUrl);
+    if (isNullOrEmpty(url)) {
+      url = defaultCoiInviteServiceUrl;
+    }
+    return url;
+  }
 }

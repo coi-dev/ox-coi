@@ -52,6 +52,9 @@ String get dbName => "messenger.db";
 // Push service fallback
 String get defaultCoiPushServiceUrl => "https://push.coi.me";
 
+// Invite service fallback
+String get defaultCoiInviteServiceUrl => "https://invite.coi.me";
+
 // Image paths
 String get appLogoPath => 'assets/images/app_logo.png';
 

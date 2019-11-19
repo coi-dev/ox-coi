@@ -41,7 +41,6 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
@@ -49,6 +48,7 @@ import 'package:logging/logging.dart';
 import 'package:ox_coi/src/data/push_resource.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/constants.dart';
+import 'package:ox_coi/src/utils/http.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
 class PushService {
@@ -67,11 +67,6 @@ class PushService {
     _logger.info("Register ($url): $encodedBody");
     IOClient ioClient = createIOClient();
     return await ioClient.put(url, headers: headers, body: encodedBody);
-  }
-
-  IOClient createIOClient() {
-    HttpClient httpClient = HttpClient()..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-    return IOClient(httpClient);
   }
 
   Future<Response> getPush(String id) async {

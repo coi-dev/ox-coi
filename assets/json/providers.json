@@ -103,6 +103,7 @@
     {
       "id": "coi_debug_mobile_qa",
       "name": "Debug (mobile-qa)",
+      "invite_service_url": "https://invite.coi.me/invite/",
       "preset": {
         "incoming_security": "starttls",
         "incoming_server": "mobile-coi.open-xchange.com",
@@ -117,6 +118,7 @@
       "id": "coi_debug_olpe_qa",
       "name": "Debug (olpe-qa)",
       "push_service_url": "https://cps.qa.open-xchange.com",
+      "invite_service_url": "https://invite.coi.me/invite/",
       "preset": {
         "incoming_security": "starttls",
         "incoming_server": "dovecot.qa.open-xchange.com",
@@ -131,6 +133,7 @@
       "id": "coi_debug_integration",
       "name": "Integration Test Environment",
       "push_service_url": "https://devcoi-cps1.dev.coi.me/push/resource/",
+      "invite_service_url": "https://invite.coi.me/invite/",
       "preset": {
         "incoming_security": "starttls",
         "incoming_server": "devcoi-proxy1.dev.coi.me",
@@ -145,6 +148,7 @@
       "id": "coi_debug_beta",
       "name": "Demo / Beta Environment",
       "push_service_url": "https://push.coi.me",
+      "invite_service_url": "https://invite.coi.me/invite/",
       "preset": {
         "incoming_security": "starttls",
         "incoming_server": "imap.beta.coi.me",
@@ -159,6 +163,7 @@
       "id": "coi_debug_dovecot",
       "name": "Dovecot Testing Environment",
       "push_service_url": "https://10.50.0.26:443/push/resource/",
+      "invite_service_url": "https://invite.coi.me/invite/",
       "preset": {
         "incoming_security": "",
         "incoming_server": "",

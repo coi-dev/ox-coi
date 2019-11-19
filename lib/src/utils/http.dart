@@ -40,89 +40,16 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatListInviteDialog,
-  chatListInviteErrorDialog,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
+import 'package:http/http.dart';
+import 'package:http/io_client.dart';
+
+bool validateHttpResponse(Response response) {
+  return response.statusCode == 200 || response.statusCode == 201;
 }
 
-class Navigatable {
-  final Type type;
-
-  List params;
-
-  String get tag => describeEnum(type);
-
-  Navigatable(this.type, {this.params});
-
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
-  }
-
-  bool equalType(Navigatable other) => type == other.type;
-
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
-
-  static String getSubTag(String subTag) => subTag ?? "";
+IOClient createIOClient() {
+  HttpClient httpClient = HttpClient()..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+  return IOClient(httpClient);
 }

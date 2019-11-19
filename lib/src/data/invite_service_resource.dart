@@ -40,89 +40,64 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatListInviteDialog,
-  chatListInviteErrorDialog,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editName,
-  flagged,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  profile,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
+class InviteServiceRequest {
+  String message;
+  InviteServiceSender sender;
+
+  InviteServiceRequest({@required this.message, @required this.sender});
+
+  InviteServiceRequest.fromJson(Map<String, dynamic> json)
+      : message = json['message'],
+        sender = InviteServiceSender.fromJson(json['sender']);
+
+  Map<String, dynamic> toJson() => {
+        'message': message,
+        'sender': this.sender.toJson(),
+      };
 }
 
-class Navigatable {
-  final Type type;
+class InviteServiceResponse {
+  String message;
+  String endpoint;
+  String id;
+  InviteServiceSender sender;
 
-  List params;
+  InviteServiceResponse({@required this.message, @required this.endpoint, @required this.id, @required this.sender});
 
-  String get tag => describeEnum(type);
+  InviteServiceResponse.fromJson(Map<String, dynamic> json)
+      : message = json['message'],
+        endpoint = json['endpoint'],
+        id = json['id'],
+        sender = InviteServiceSender.fromJson(json['sender']);
 
-  Navigatable(this.type, {this.params});
+  Map<String, dynamic> toJson() => {
+        'message': message,
+        'endpoint': endpoint,
+        'id': id,
+        'sender': this.sender.toJson(),
+      };
+}
 
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
-  }
+class InviteServiceSender {
+  String email;
+  String name;
+  String image;
+  String publicKey; //PGP PublicKey
 
-  bool equalType(Navigatable other) => type == other.type;
+  InviteServiceSender({@required this.email, @required this.name, @required this.image, @required this.publicKey});
 
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
+  InviteServiceSender.fromJson(Map<String, dynamic> json)
+      : email = json['email'],
+        name = json['name'],
+        image = json['image'],
+        publicKey = json['publicKey'];
 
-  static String getSubTag(String subTag) => subTag ?? "";
+  Map<String, dynamic> toJson() => {
+        'email': email,
+        'name': name,
+        'image': image,
+        'publicKey': publicKey,
+      };
 }

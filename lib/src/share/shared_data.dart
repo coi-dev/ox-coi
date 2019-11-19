@@ -45,7 +45,7 @@ class SharedData{
   static const String sharedText = "shared_text";
   static const String sharedPath = "shared_path";
   static const String sharedFileName = "shared_file_name";
-  static const String sharingChannelName = "oxcoi.sharing";
+  static const String sharingChannelName = "oxcoi.intent";
 
   String mimeType;
   String text;

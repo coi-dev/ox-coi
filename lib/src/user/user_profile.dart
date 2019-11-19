@@ -40,10 +40,15 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
 import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/invite/invite_bloc.dart';
+import 'package:ox_coi/src/invite/invite_event_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
@@ -56,12 +61,9 @@ import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class UserProfile extends RootChild {
   UserProfile({State<StatefulWidget> state}) : super(state: state);
@@ -102,6 +104,8 @@ class UserProfile extends RootChild {
 class _ProfileState extends State<UserProfile> {
   UserBloc _userBloc = UserBloc();
   Navigation navigation = Navigation();
+  InviteBloc _inviteBloc = InviteBloc();
+  OverlayEntry _fullScreenOverlayEntry;
 
   @override
   void initState() {
@@ -112,17 +116,23 @@ class _ProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-        bloc: _userBloc,
-        builder: (context, state) {
-          if (state is UserStateSuccess) {
-            return buildProfileView(state.config);
-          } else if (state is UserStateFailure) {
-            return new Text(state.error);
-          } else {
-            return new Container();
-          }
-        });
+    return BlocListener(
+      bloc: _inviteBloc,
+      listener: (context, state) {
+        _fullScreenOverlayEntry.remove();
+      },
+      child: BlocBuilder(
+          bloc: _userBloc,
+          builder: (context, state) {
+            if (state is UserStateSuccess) {
+              return buildProfileView(state.config);
+            } else if (state is UserStateFailure) {
+              return new Text(state.error);
+            } else {
+              return new Container();
+            }
+          }),
+    );
   }
 
   Widget buildProfileView(Config config) {
@@ -182,7 +192,14 @@ class _ProfileState extends State<UserProfile> {
                   key: Key(keyUserProfileShowQrRaisedButton),
                 ),
               ],
-            )
+            ),
+            AdaptiveRaisedButton(
+              child: Text(L10n.get(L.profileShareInviteUrl)),
+              onPressed: createInviteUrl,
+              color: accent,
+              textColor: onAccent,
+              key: Key(""),
+            ),
           ],
         ),
       ),
@@ -223,5 +240,16 @@ class _ProfileState extends State<UserProfile> {
       context,
       MaterialPageRoute(builder: (context) => QrCode(chatId: 0)),
     );
+  }
+
+  createInviteUrl() {
+    _fullScreenOverlayEntry = OverlayEntry(
+      builder: (context) => FullscreenProgress(
+        bloc: _inviteBloc,
+        text: L10n.get(L.pleaseWait),
+      ),
+    );
+    Overlay.of(context).insert(_fullScreenOverlayEntry);
+    _inviteBloc.add(CreateInviteUrl());
   }
 }

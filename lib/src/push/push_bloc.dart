@@ -56,6 +56,7 @@ import 'package:ox_coi/src/platform/system_information.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/push/push_manager.dart';
 import 'package:ox_coi/src/secure/generator.dart';
+import 'package:ox_coi/src/utils/http.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'push_service.dart';
@@ -98,7 +99,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       try {
         RequestPushRegistration requestPushRegistration = await _createRegistrationRequest();
         var response = await pushService.registerPush(requestPushRegistration);
-        var valid = _validatePushServiceResponse(response);
+        var valid = validateHttpResponse(response);
         if (valid) {
           ResponsePushResource pushResource = _getPushResource(response);
           await _persistPushResource(pushResource);
@@ -116,7 +117,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       try {
         String id = await _getId();
         var response = await pushService.getPush(id);
-        var valid = _validatePushServiceResponse(response);
+        var valid = validateHttpResponse(response);
         if (valid) {
           yield PushStateSuccess(
             pushAvailable: true,
@@ -131,7 +132,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
         String id = await _getId();
         RequestPushPatch requestPushPatch = _createPatchRequest(event.pushToken);
         var response = await pushService.patchPush(id, requestPushPatch);
-        var valid = _validatePushServiceResponse(response);
+        var valid = validateHttpResponse(response);
         if (valid) {
           ResponsePushResource pushResource = _getPushResource(response);
           await _persistPushResource(pushResource);
@@ -150,7 +151,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
       try {
         String id = await _getId();
         var response = await pushService.deletePush(id);
-        var valid = _validatePushServiceResponse(response);
+        var valid = validateHttpResponse(response);
         if (valid) {
           _removePushResource();
           yield PushStateSuccess(
@@ -204,10 +205,6 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     var pushResourceJsonMap = jsonDecode(pushResourceJsonString);
     var pushResource = ResponsePushResource.fromJson(pushResourceJsonMap);
     return pushResource.id;
-  }
-
-  bool _validatePushServiceResponse(Response response) {
-    return response.statusCode == 200 || response.statusCode == 201;
   }
 
   ResponsePushResource _getPushResource(Response response) {

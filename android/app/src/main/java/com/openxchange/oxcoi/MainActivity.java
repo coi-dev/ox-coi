@@ -61,12 +61,13 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
     private Map<String, String> sharedData = new HashMap<>();
+    private String startString = "";
     private static final String SHARED_MIME_TYPE = "shared_mime_type";
     private static final String SHARED_TEXT = "shared_text";
     private static final String SHARED_PATH = "shared_path";
     private static final String SHARED_FILE_NAME = "shared_file_name";
     // TODO create constants for channel methods
-    private static final String SHARING_CHANNEL_NAME = "oxcoi.sharing";
+    private static final String INTENT_CHANNEL_NAME = "oxcoi.intent";
     // TODO create constants for channel methods
     private static final String SECURITY_CHANNEL_NAME = "oxcoi.security";
 
@@ -74,20 +75,29 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
+
+        handleIntent(getIntent());
         SecurityHelper securityHelper = new SecurityHelper(this);
-        handleSendIntent(getIntent());
         setupSharingMethodChannel();
         setupSecurityMethodChannel(securityHelper);
     }
 
     private void setupSharingMethodChannel() {
-        new MethodChannel(getFlutterView(), SHARING_CHANNEL_NAME).setMethodCallHandler(
+        new MethodChannel(getFlutterView(), INTENT_CHANNEL_NAME).setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.contentEquals("getSharedData")) {
                         result.success(sharedData);
                         sharedData.clear();
+                    }else if (call.method.contentEquals("getInitialLink")) {
+                        if (startString != null || !startString.isEmpty()) {
+                            result.success(startString);
+                            startString = "";
+                        }else{
+                            result.success(null);
+                        }
                     }else if (call.method.contentEquals("sendSharedData")) {
                         shareFile(call.arguments);
+                        result.success(null);
                     }
                 });
     }
@@ -128,12 +138,13 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        handleSendIntent(intent);
+        handleIntent(intent);
     }
 
-    private void handleSendIntent(Intent intent) {
+    private void handleIntent(Intent intent) {
         String action = intent.getAction();
         String type = intent.getType();
+        Uri data = intent.getData();
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("text/")) {
@@ -152,6 +163,8 @@ public class MainActivity extends FlutterActivity {
                 sharedData.put(SHARED_PATH, uriPath);
                 sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
             }
+        }else if(Intent.ACTION_VIEW.equals(action) && data != null){
+            startString = data.toString();
         }
     }
 

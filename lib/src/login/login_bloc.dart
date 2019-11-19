@@ -212,5 +212,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
     await config.setValue(Context.configServerFlags, serverFlags);
     await setPreference(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
+    await setPreference(preferenceInviteServiceUrl, provider.inviteServiceUrl);
   }
 }
