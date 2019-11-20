@@ -61,7 +61,7 @@ import 'chat_list.dart' as ChatListWidget;
 
 class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
-  final Repository<ChatMsg> _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+  final Repository<ChatMsg> _inviteMessageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
   final _messageListBloc = MessageListBloc();
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   String _currentSearch;
@@ -125,35 +125,41 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       _repositoryStreamHandler =
           RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
-
       final messageListObservable = Observable<MessageListState>(_messageListBloc);
       messageListObservable.listen((state) async {
         if (state is MessagesStateSuccess) {
-          var uniqueInviteMap = LinkedHashMap<int, int>();
           Context context = Context();
-          List<int> contacts = await context.getContacts(2, null);
-          await Future.forEach(state.messageIds, (messageId) async {
-            ChatMsg message = _messageListRepository.get(messageId);
-            var contactId = await message.getFromId();
-            if (!uniqueInviteMap.containsKey(contactId)) {
-              uniqueInviteMap.putIfAbsent(contactId, () => messageId);
-            }
-          });
-          List<int> removedContacts = List<int>();
-          await Future.forEach(uniqueInviteMap.keys, (contactId) async{
-            if(contacts.contains(contactId)){
-              int newChatId = await context.createChatByMessageId(uniqueInviteMap[contactId]);
-              _messageListRepository.clear();
-              _chatRepository.putIfAbsent(id: newChatId);
-              removedContacts.add(contactId);
-            }
-          });
-          for(int contactId in removedContacts){
-            uniqueInviteMap.remove(contactId);
-          }
-          add(InvitesPrepared(messageIds: uniqueInviteMap.values.toList(growable: false)));
+          var inviteContactList = await getInviteContactList(state);
+          await createChatsFromKnownContactsInvites(context, inviteContactList);
+          add(InvitesPrepared(messageIds: inviteContactList.values.toList(growable: false)));
         }
       });
+    }
+  }
+
+  Future<LinkedHashMap<int, int>> getInviteContactList(MessagesStateSuccess state) async {
+    var contactList = LinkedHashMap<int, int>();
+    await Future.forEach(state.messageIds, (messageId) async {
+      ChatMsg message = _inviteMessageListRepository.get(messageId);
+      var contactId = await message.getFromId();
+      contactList.putIfAbsent(contactId, () => messageId);
+    });
+    return contactList;
+  }
+
+  Future<void> createChatsFromKnownContactsInvites(Context context, LinkedHashMap<int, int> inviteContactList) async {
+    List<int> contacts = await context.getContacts(2, null);
+    List<int> toRemoveContacts = List<int>();
+    await Future.forEach(inviteContactList.keys, (contactId) async {
+      if (contacts.contains(contactId)) {
+        int newChatId = await context.createChatByMessageId(inviteContactList[contactId]);
+        _inviteMessageListRepository.clear();
+        _chatRepository.putIfAbsent(id: newChatId);
+        toRemoveContacts.add(contactId);
+      }
+    });
+    for (int contactId in toRemoveContacts) {
+      inviteContactList.remove(contactId);
     }
   }
 
@@ -216,14 +222,14 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   Chat getChat(List<int> chatIds, int nextChat) => _chatRepository.get(chatIds[nextChat]);
 
-  ChatMsg getMessage(List<int> inviteMessageIds, int nextInvite) => _messageListRepository.get(inviteMessageIds[nextInvite]);
+  ChatMsg getMessage(List<int> inviteMessageIds, int nextInvite) => _inviteMessageListRepository.get(inviteMessageIds[nextInvite]);
 
   int addChatToResult(List ids, Chat chat, List types, List lastUpdateValues, int nextChat) {
-      ids.add(chat.id);
-      types.add(ChatListWidget.ChatListItemType.chat);
-      lastUpdateValues.add(chat.lastUpdate);
-      nextChat++;
-      return nextChat;
+    ids.add(chat.id);
+    types.add(ChatListWidget.ChatListItemType.chat);
+    lastUpdateValues.add(chat.lastUpdate);
+    nextChat++;
+    return nextChat;
   }
 
   int addInviteMessageToResult(List ids, ChatMsg message, List types, List lastUpdateValues, int nextInvite) {
@@ -254,7 +260,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       _chatRepository.update(ids: chatIds);
       chatSummaries.forEach((id, chatSummary) {
         var summary = _chatRepository.get(id).get(ChatExtension.chatSummary);
-        if(summary != chatSummary) {
+        if (summary != chatSummary) {
           _chatRepository.get(id).set(ChatExtension.chatSummary, chatSummary);
         }
       });

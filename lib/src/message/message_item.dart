@@ -100,35 +100,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   MessageItemBloc _messageBloc = MessageItemBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
   Navigation _navigation = Navigation();
-  String _message = "";
   Offset tapDownPosition;
-
-  void _selectMessageAction(MessageAction messageAction) {
-    if (messageAction == null) {
-      return;
-    }
-    List<int> msgIds = List();
-    msgIds.add(widget.messageId);
-    switch (messageAction.messageActionTag) {
-      case MessageActionTag.forward:
-        _navigation.push(context, MaterialPageRoute(builder: (context) => Share(msgIds: msgIds, messageActionTag: messageAction.messageActionTag)));
-        break;
-      case MessageActionTag.copy:
-        copyToClipboardWithToast(text: _message, toastText: getDefaultCopyToastText(context));
-        break;
-      case MessageActionTag.delete:
-        List<int> messageList = List();
-        messageList.add(widget.messageId);
-        _messageBloc.add(DeleteMessage(id: widget.messageId));
-        break;
-      case MessageActionTag.flag:
-        _messageBloc.add(FlagUnflagMessage(id: widget.messageId));
-        break;
-      case MessageActionTag.share:
-        _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
-        break;
-    }
-  }
 
   @override
   void initState() {
@@ -182,9 +154,13 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                         )),
                   ),
                 GestureDetector(
-                  onTap: () => _onTap(messageStateData.isSetupMessage),
+                  onTap: () => messageStateData.hasFile ? _onTap(messageStateData.isSetupMessage) : null,
                   onTapDown: _onTapDown,
-                  onLongPress: () => _onLongPress(messageStateData.hasFile, messageStateData.isSetupMessage),
+                  onLongPress: () => _onLongPress(
+                    hasFile: messageStateData.hasFile,
+                    showLongPressMenu: !messageStateData.isSetupMessage,
+                    text: messageStateData.text,
+                  ),
                   child: Container(
                     padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                     child: message,
@@ -216,13 +192,14 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     _attachmentBloc.add(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
   }
 
-  _onLongPress(bool hasFile, bool isSetupMessage) {
-    if (!isSetupMessage) {
-      _showMenu(hasFile);
+  _onLongPress({bool hasFile, bool showLongPressMenu, String text}) {
+    if (!showLongPressMenu) {
+      return;
     }
+    _showMenu(hasFile, text);
   }
 
-  void _showMenu(bool hasFile) {
+  void _showMenu(bool hasFile, String text) {
     List<MessageAction> actions = hasFile ? _messageAttachmentActions : _messageActions;
     showMenu(
             context: context,
@@ -240,7 +217,32 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
               );
             }).toList())
         .then((action) {
-      _selectMessageAction(action);
+      if (action == null) {
+        return;
+      }
+      switch (action.messageActionTag) {
+        case MessageActionTag.forward:
+          _navigation.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Share(msgIds: [widget.messageId], messageActionTag: action.messageActionTag),
+              ));
+          break;
+        case MessageActionTag.copy:
+          copyToClipboardWithToast(text: text, toastText: getDefaultCopyToastText(context));
+          break;
+        case MessageActionTag.delete:
+          List<int> messageList = List();
+          messageList.add(widget.messageId);
+          _messageBloc.add(DeleteMessage(id: widget.messageId));
+          break;
+        case MessageActionTag.flag:
+          _messageBloc.add(FlagUnflagMessage(id: widget.messageId));
+          break;
+        case MessageActionTag.share:
+          _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
+          break;
+      }
     });
   }
 

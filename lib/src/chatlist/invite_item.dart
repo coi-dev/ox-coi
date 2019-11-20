@@ -75,12 +75,12 @@ class _InviteItemState extends State<InviteItem> with ChatCreateMixin {
     return BlocBuilder(
       bloc: _messageItemBloc,
       builder: (context, state) {
-        MessageStateData messageStateData = state.messageStateData;
         String name;
         String preview;
         Color color;
         int timestamp = 0;
         if (state is MessageItemStateSuccess) {
+          MessageStateData messageStateData = state.messageStateData;
           name = messageStateData.contactStateData.address;
           preview = messageStateData.preview;
           timestamp = messageStateData.timestamp;

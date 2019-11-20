@@ -217,8 +217,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   void _onMessageStateChanged(Event event) {
-    var evenMessageId = event.data2;
-    if (_messageId == evenMessageId && (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead))) {
+    var eventMessageId = event.data2;
+    if (_messageId == eventMessageId && (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead))) {
       if (state is MessageItemStateSuccess) {
         int eventMessageState = event.hasType(Event.msgDelivered) ? ChatMsg.messageStateDelivered : ChatMsg.messageStateReceived;
         var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState);
@@ -273,21 +273,24 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     if (nextMessageId == null) {
       return true;
     }
-    ChatMsg _nextChatMsg = _getMessage(messageId: nextMessageId);
-    int nextTimestamp = await _nextChatMsg.getTimestamp();
-    ChatMsg _chatMsg = _getMessage(messageId: _messageId);
-    int timestamp = await _chatMsg.getTimestamp();
+    ChatMsg nextChatMsg = _getMessage(messageId: nextMessageId);
+    int nextTimestamp = await nextChatMsg.getTimestamp();
+    ChatMsg chatMsg = _getMessage(messageId: _messageId);
+    int timestamp = await chatMsg.getTimestamp();
     return getDateAndTimeFromTimestamp(nextTimestamp) != getDateAndTimeFromTimestamp(timestamp);
   }
 
   Future<bool> _hasEncryptionStatusChanged(int nextMessageId) async {
-    ChatMsg _chatMsg = _getMessage(messageId: _messageId);
+    ChatMsg chatMsg = _getMessage(messageId: _messageId);
     if (nextMessageId == null) {
-      return await _chatMsg.showPadlock() == 1;
+      return await chatMsg.showPadlock() == 1;
     }
-    ChatMsg _nextChatMsg = _getMessage(messageId: nextMessageId);
-    int nextPadlock = await _nextChatMsg.showPadlock();
-    int padlock = await _chatMsg.showPadlock();
+    ChatMsg nextChatMsg = _getMessage(messageId: nextMessageId);
+    int nextPadlock = await nextChatMsg.showPadlock();
+    int padlock = await chatMsg.showPadlock();
+    if (await chatMsg.isSetupMessage() || await nextChatMsg.isSetupMessage()) {
+      return false;
+    }
     return nextPadlock != padlock;
   }
 }
