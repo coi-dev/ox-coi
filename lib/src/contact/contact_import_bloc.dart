@@ -196,13 +196,18 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       var contact = _contactRepository.get(contactId);
       var mail = await contact.getAddress();
       var contactPhoneNumbers = phoneNumbers[mail];
+      var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
       if (contactPhoneNumbers != null && contactPhoneNumbers.isNotEmpty) {
-        var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
         if (contactExtension == null) {
           contactExtension = ContactExtension(contactId, phoneNumbers: contactPhoneNumbers);
           contactExtensionProvider.insert(contactExtension);
         } else {
           contactExtension.phoneNumbers = contactPhoneNumbers;
+          contactExtensionProvider.update(contactExtension);
+        }
+      } else {
+        if(contactExtension != null){
+          contactExtension.phoneNumbers = "";
           contactExtensionProvider.update(contactExtension);
         }
       }
