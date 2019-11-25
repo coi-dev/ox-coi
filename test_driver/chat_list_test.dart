@@ -44,7 +44,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
-import 'package:test_api/src/backend/invoker.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
@@ -100,10 +99,12 @@ void main() {
         enterContactName,
         emptyChat,
       );
+
       //  Type something and get it.
       await chatTest(setup.driver, newTestName01, typeSomethingComposePlaceholderFinder, helloWorld);
       await callTest(setup.driver);
       await setup.driver.tap(pageBack);
+
       //  Search contact.
       await chatSearch(
         setup.driver,
@@ -116,30 +117,3 @@ void main() {
   });
 }
 
-Future createNewChat(FlutterDriver driver, SerializableFinder finderCreateChat, String chatEmail, String chatName, String newContact, String name,
-    String enterContactName, String emptyChat) async {
-  final finderMe = find.text(meContact);
-  final finderNewContact = find.text(newContact);
-  Invoker.current.heartbeat();
-  await driver.tap(finderCreateChat);
-  if (chatName == meContact) {
-    await driver.tap(finderMe);
-    await driver.tap(pageBack);
-    await driver.waitFor(finderMe);
-  } else {
-    Invoker.current.heartbeat();
-    await driver.tap(finderNewContact);
-    await driver.waitFor(find.text(name));
-    await driver.waitFor(find.text(emailAddress));
-    await driver.tap(find.byValueKey(keyContactChangeNameValidatableTextFormField));
-    await driver.waitFor(find.text(enterContactName));
-    await driver.enterText(chatName);
-    await driver.tap(find.byValueKey(keyContactChangeEmailValidatableTextFormField));
-    await driver.waitFor(find.text(emailAddress));
-    await driver.enterText(chatEmail);
-    await driver.tap(find.byValueKey(keyContactChangeCheckIconButton));
-    await driver.waitFor(find.text(emptyChat));
-    await driver.tap(pageBack);
-    await catchScreenshot(driver, 'screenshots/chatListeAfterCreated.png');
-  }
-}

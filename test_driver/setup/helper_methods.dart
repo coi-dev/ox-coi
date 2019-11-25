@@ -239,3 +239,30 @@ Future forwardMessageTo(FlutterDriver driver, String contactToForward, String fo
   await driver.tap(find.text(forward));
   await driver.tap(find.text(contactToForward));
 }
+Future createNewChat(FlutterDriver driver, SerializableFinder finderCreateChat, String chatEmail, String chatName, String newContact, String name,
+    String enterContactName, String emptyChat) async {
+  final finderMe = find.text(meContact);
+  final finderNewContact = find.text(newContact);
+  Invoker.current.heartbeat();
+  await driver.tap(finderCreateChat);
+  if (chatName == meContact) {
+    await driver.tap(finderMe);
+    await driver.tap(pageBack);
+    await driver.waitFor(finderMe);
+  } else {
+    Invoker.current.heartbeat();
+    await driver.tap(finderNewContact);
+    await driver.waitFor(find.text(name));
+    await driver.waitFor(find.text(emailAddress));
+    await driver.tap(find.byValueKey(keyContactChangeNameValidatableTextFormField));
+    await driver.waitFor(find.text(enterContactName));
+    await driver.enterText(chatName);
+    await driver.tap(find.byValueKey(keyContactChangeEmailValidatableTextFormField));
+    await driver.waitFor(find.text(emailAddress));
+    await driver.enterText(chatEmail);
+    await driver.tap(find.byValueKey(keyContactChangeCheckIconButton));
+    await driver.waitFor(find.text(emptyChat));
+    await driver.tap(pageBack);
+    await catchScreenshot(driver, 'screenshots/chatListeAfterCreated.png');
+  }
+}

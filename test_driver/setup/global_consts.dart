@@ -101,6 +101,8 @@ final typeSomethingComposePlaceholder = L.getKey(L.typeSomething);
 
 const helloWorld = 'Hello world';
 
+final delete = "Delete";
+
 final typeSomethingComposePlaceholderFinder = find.byValueKey(typeSomethingComposePlaceholder);
 
 final chatWelcomeMessage = L.getKey(L.chatListPlaceholder);
