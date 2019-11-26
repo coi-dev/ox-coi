@@ -54,7 +54,7 @@ void main() {
     //  Define the driver.
     FlutterDriver driver;
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     final testNameGroup = "TestGroup";
     final newNameTestGroup = "NewNameTestGroup";

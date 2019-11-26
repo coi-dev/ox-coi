@@ -65,7 +65,7 @@ void main() {
     //  Define the driver.
     FlutterDriver driver;
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     final openChat = 'Open chat';
     final flagUnFlag = 'Flag/Unflag';

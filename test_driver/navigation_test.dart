@@ -56,7 +56,7 @@ void main() {
   group('Create chat list integration tests.', () {
     // Setup for the test.
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     SerializableFinder searchReturnIconButton = find.byValueKey(keySearchReturnIconButton);
     SerializableFinder settingsUserSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);

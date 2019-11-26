@@ -43,8 +43,6 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
-const timeout = Duration(seconds: 120);
-
 const realEmail = 'enyakam@ox.com';
 
 const fakeEmail = 'enyakam3@ox.com3';

@@ -54,7 +54,7 @@ void main() {
     //  Define the driver.
     FlutterDriver driver;
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     test('Test block / unblock functionality.', () async {
       //  Check real authentication and get chat.

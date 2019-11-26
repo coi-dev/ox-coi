@@ -53,6 +53,7 @@
  */
 
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
@@ -64,8 +65,7 @@ void main() {
   group('Security test.', () {
     // Setup for the test.
     Setup setup = new Setup(driver);
-    setup.main(timeout);
-
+    setup.main();
 
     final security = 'Security';
     final expertImportKeys = 'Expert: Import keys';
@@ -96,9 +96,11 @@ void main() {
       await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
 
+      await setup.driver.waitForAbsent(find.text(L.getKey(L.settingKeyImportRunning)));
       await setup.driver.tap(find.text(expertExportKeys));
       await setup.driver.tap(find.text(ok));
 
+      await setup.driver.waitForAbsent(find.text(L.getKey(L.settingKeyExportRunning)));
       await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
 

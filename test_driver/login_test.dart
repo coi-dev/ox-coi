@@ -56,7 +56,7 @@ void main() {
   group('Ox coi test:', () {
     // Setup for the test.
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     //  SerializableFinder for the Ox coi welcome and provider page.
     final welcomeMessage = find.text(L.getKey(L.welcome));
@@ -136,8 +136,10 @@ void main() {
       Invoker.current.heartbeat();
       await catchScreenshot(setup.driver, 'screenshots/chat.png');
       print('Get chat.');
-    });
+    }, timeout: Timeout(Duration(seconds: 60)));
   });
+
+
 }
 
 Future checkOxCoiWelcomeAndProviderList(

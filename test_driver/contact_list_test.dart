@@ -58,7 +58,7 @@ void main() {
     //  Define the driver.
     FlutterDriver driver;
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     test('Test create profile integration tests.', () async {
       //  Check real authentication and get chat.

@@ -54,7 +54,7 @@ void main() {
   group('Create chat list integration tests.', () {
     // Setup for the test.
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     test('Test Create chat list integration tests.', () async {
       await getAuthentication(

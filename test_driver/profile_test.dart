@@ -54,7 +54,7 @@ void main() {
   group('Ox coi test.', () {
     // Setup for the test.
     Setup setup = new Setup(driver);
-    setup.main(timeout);
+    setup.main();
 
     SerializableFinder userSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
     SerializableFinder userProfileUserNameTextFinder = find.text(testUserNameUserProfile);

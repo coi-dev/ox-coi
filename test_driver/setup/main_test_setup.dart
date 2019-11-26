@@ -62,7 +62,7 @@ class Setup {
 
   FlutterDriver get driver => this._drivers;
 
-  main(Duration timeout) {
+  main() {
     setUpAll(() async {
       await grantPermission(adbPath, permissionAudio);
       await grantPermission(adbPath, permissionReadStorage);
@@ -71,7 +71,6 @@ class Setup {
       await grantPermission(adbPath, permissionWriteContacts);
 
       this._drivers = await FlutterDriver.connect();
-      this._drivers.setSemantics(true, timeout: timeout);
     });
 
     tearDownAll(() async {
