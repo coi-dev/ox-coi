@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>invite:coi.me/invite</string>
+		<string>applinks:*.coi.me</string>
 	</array>
 </dict>
 </plist>

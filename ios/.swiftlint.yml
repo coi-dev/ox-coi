@@ -9,6 +9,7 @@ disabled_rules:
   - implicitly_unwrapped_optional
   - large_tuple
   - line_length
+  - no_grouping_extension
   - override_in_extension
   - sorted_imports
   - todo # next to enable again

@@ -2,21 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleTypeRole</key>
-                <string>Editor</string>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>coime</string>
-                </array>
-            </dict>
-    </array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>me.coi.bgtask.fetch</string>
+		<string>me.coi.bgtask.remote-notification</string>
+		<string>me.coi.bgtask.processing</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>$(FLUTTER_BUNDLE_DISPLAY_NAME)</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,8 +26,19 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>coime</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -40,14 +46,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Access to your Camera is required in order to take photos.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>This app requires contacts access to TODO</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app uses the microphone to record your speech to TODO.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Access to the Photo Gallery is required in order to add attachments.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -73,5 +71,30 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+    <!-- Permission Handling -->
+	<key>NSCameraUsageDescription</key>
+	<string>Access to your Camera is required in order to take photos.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Access to your system addressbook is required in order to import contacts to the app addressbook.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access to your Microphone is required in order to take audio messages.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to the Photo Gallery is required in order to add attachments.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Access to your Calendar is required in order to read apointments. (Not in use ATM)</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Access to your Media Library is required in order to share music files with your friends.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Access to the Location Sensor is required in order to track your movements permanently. (Not in use ATM)</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Access to the Location Sensor is required in order to track your movements when the app is being used. (Not in use ATM)</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Access to the Motion Sensor is required in order to I don't know. (Not in use ATM)</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Access to the Photo Gallery is required in order to add attachments.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Access to Speech-Recognition is required in order to send data to Apple services. (Not in use ATM)</string>
+
 </dict>
 </plist>

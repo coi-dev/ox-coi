@@ -1,4 +1,4 @@
-platform :ios, '12.4'
+platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -6,7 +6,6 @@ ENV['SWIFT_VERSION'] = '5'
 
 project 'Runner', {
   'Debug' => :debug,
-  'Profile' => :release,
   'Release' => :release,
 }
 
@@ -34,6 +33,8 @@ end
 
 target 'Runner' do
   use_frameworks!
+  
+  pod 'SwiftyBeaver'
   
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
@@ -69,7 +70,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['ENABLE_BITCODE'] = 'NO'
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
       if target.name == 'GoogleDataTransport' then
           config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.4'
       end

@@ -4,7 +4,7 @@
 <dict>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>com.openxchange.oxcoi</key>
+		<key>com.openxchange.oxcoi.stable Appstore</key>
 		<string>OX COI Messenger</string>
 		<key>com.openxchange.oxcoi.dev</key>
 		<string>OX COI Messenger Dev</string>

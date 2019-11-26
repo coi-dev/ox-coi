@@ -1,4 +1,4 @@
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release-stable.xcconfig"
 #include "Generated.xcconfig"
 FLUTTER_BUNDLE_DISPLAY_NAME=OX COI Messenger
-BUNDLE_ID=com.openxchange.oxcoi
+BUNDLE_ID=com.openxchange.oxcoi.stable
