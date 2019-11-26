@@ -183,6 +183,6 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     if (isShared) {
       _cacheFilePath = path;
     }
-    await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, text);
+    await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, 0, text);
   }
 }
