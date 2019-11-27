@@ -124,6 +124,7 @@ class OxCoiApp extends StatelessWidget {
   List<LocalizationsDelegate> getLocalizationsDelegates() {
     return [
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ];
   }
