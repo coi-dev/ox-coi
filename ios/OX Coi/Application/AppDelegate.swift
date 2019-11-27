@@ -48,12 +48,14 @@ import UIKit
 class AppDelegate: FlutterAppDelegate {
 
     private let INTENT_CHANNEL_NAME = "oxcoi.intent"
+    private var sharedData: [String: String]?
     var startString: String?
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIApplication.setupLogging()
 
         GeneratedPluginRegistrant.register(with: self)
+        setupSharingMethodChannel()
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
@@ -76,8 +78,37 @@ class AppDelegate: FlutterAppDelegate {
                 } else {
                     result(nil)
                 }
+            } else if call.method.contains(Method.Sharing.SendSharedData) {
+                guard let args = call.arguments as? [String: String] else {
+                    result(nil)
+                    return
+                }
+                self.shareFile(arguments: args)
+                result(nil)
             }
         }
+    }
+    
+    private func shareFile(arguments: [String: String]) {
+        let path = arguments["path"]
+        let text = arguments["text"]
+        var itemTemp: Any?
+        
+        if path != "" {
+            itemTemp = URL(fileURLWithPath: path!)
+        }
+        if text != "" {
+            itemTemp = text
+        }
+        guard let item = itemTemp else {
+            return
+        }
+        guard let controller = window.rootViewController as? FlutterViewController else {
+            return
+        }
+        let ac = UIActivityViewController(activityItems: [item], applicationActivities: nil)
+        controller.present(ac, animated: true, completion: nil)
+        
     }
 
 }
