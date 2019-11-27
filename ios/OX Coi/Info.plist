@@ -46,6 +46,26 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Access to your Media Library is required in order to share music files with your friends.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Access to your Calendar is required in order to read apointments. (Not in use ATM)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Access to your Camera is required in order to take photos.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Access to your system addressbook is required in order to import contacts to the app addressbook.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Access to the Location Sensor is required in order to track your movements permanently. (Not in use ATM)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Access to the Location Sensor is required in order to track your movements when the app is being used. (Not in use ATM)</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access to your Microphone is required in order to take audio messages.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Access to the Motion Sensor is required in order to I don't know. (Not in use ATM)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to the Photo Gallery is required in order to add attachments.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Access to Speech-Recognition is required in order to send data to Apple services. (Not in use ATM)</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -71,30 +91,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-    <!-- Permission Handling -->
-	<key>NSCameraUsageDescription</key>
-	<string>Access to your Camera is required in order to take photos.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Access to your system addressbook is required in order to import contacts to the app addressbook.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Access to your Microphone is required in order to take audio messages.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Access to the Photo Gallery is required in order to add attachments.</string>
-    <key>NSCalendarsUsageDescription</key>
-    <string>Access to your Calendar is required in order to read apointments. (Not in use ATM)</string>
-    <key>NSAppleMusicUsageDescription</key>
-    <string>Access to your Media Library is required in order to share music files with your friends.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Access to the Location Sensor is required in order to track your movements permanently. (Not in use ATM)</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Access to the Location Sensor is required in order to track your movements when the app is being used. (Not in use ATM)</string>
-    <key>NSMotionUsageDescription</key>
-    <string>Access to the Motion Sensor is required in order to I don't know. (Not in use ATM)</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Access to the Photo Gallery is required in order to add attachments.</string>
-    <key>NSSpeechRecognitionUsageDescription</key>
-    <string>Access to Speech-Recognition is required in order to send data to Apple services. (Not in use ATM)</string>
-
 </dict>
 </plist>
