@@ -41,13 +41,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class AvatarListItem extends StatelessWidget {
   final String title;
@@ -83,111 +82,105 @@ class AvatarListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveInkWell(
       onTap: () => onTap(title, subTitle),
-      child: Container(
-        color: background,
-        height: listItemHeight,
-        padding: const EdgeInsets.all(listItemPadding),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            avatarIcon == null
-                ? Avatar(
-                    size: listAvatarDiameter,
-                    imagePath: imagePath,
-                    textPrimary: title,
-                    textSecondary: subTitle,
-                    color: color,
-                  )
-                : CircleAvatar(
-                    radius: listAvatarRadius,
-                    foregroundColor: primary,
-                    child: AdaptiveIcon(icon: avatarIcon),
+      child: IntrinsicHeight(
+        child: Container(
+          color: background,
+          padding: const EdgeInsets.all(listItemPadding),
+          child: Row(
+            children: <Widget>[
+              Avatar(
+                imagePath: imagePath,
+                textPrimary: title,
+                textSecondary: subTitle,
+                color: color,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: listAvatarTextPadding),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          titleIcon != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: iconTextPadding),
+                                  child: titleIcon,
+                                )
+                              : Container(),
+                          Expanded(child: shouldHighlight() ? getHighlightedTitle(context) : getTitle(context)),
+                          Visibility(
+                              visible: timestamp != null && timestamp != 0,
+                              child: Text(
+                                getChatListTime(timestamp),
+                                style: shouldHighlight()
+                                    ? Theme.of(context).textTheme.caption.copyWith(color: onBackground, fontWeight: FontWeight.bold)
+                                    : Theme.of(context).textTheme.caption.copyWith(color: onBackground),
+                              )),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Visibility(
+                            visible: subTitleIcon != null,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: iconTextPadding),
+                              child: subTitleIcon,
+                            ),
+                          ),
+                          Visibility(
+                            visible: isVerified,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: iconTextPadding),
+                              child: AdaptiveIcon(
+                                icon: IconSource.verifiedUser,
+                                size: iconSize,
+                              ),
+                            ),
+                          ),
+                          Expanded(child: getSubTitle(context)),
+                          Visibility(
+                            visible: isInvite,
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: iconSize,
+                              height: iconSize,
+                              decoration: BoxDecoration(
+                                  color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                              child: Text(
+                                "!",
+                                style: TextStyle(color: Colors.white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: hasNewMessages(),
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: iconSize,
+                              height: iconSize,
+                              decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                              child: Text(
+                                freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                                style: TextStyle(color: onAccent, fontSize: listInviteUnreadIndicatorFontSize),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: listAvatarTextPadding),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        titleIcon != null
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: iconTextPadding),
-                                child: titleIcon,
-                              )
-                            : Container(),
-                        Expanded(child: shouldHighlight() ? getHighlightedTitle(context) : getTitle(context)),
-                        Visibility(
-                            visible: timestamp != null && timestamp != 0,
-                            child: Text(
-                              getChatListTime(timestamp),
-                              style: shouldHighlight()
-                                  ? Theme.of(context).textTheme.caption.copyWith(color: onBackground, fontWeight: FontWeight.bold)
-                                  : Theme.of(context).textTheme.caption.copyWith(color: onBackground),
-                            )),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Visibility(
-                          visible: subTitleIcon != null,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: iconTextPadding),
-                            child: subTitleIcon,
-                          ),
-                        ),
-                        Visibility(
-                          visible: isVerified,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: iconTextPadding),
-                            child: AdaptiveIcon(
-                              icon: IconSource.verifiedUser,
-                              size: iconSize,
-                            ),
-                          ),
-                        ),
-                        Expanded(child: getSubTitle(context)),
-                        Visibility(
-                          visible: isInvite,
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: iconSize,
-                            height: iconSize,
-                            decoration: BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
-                            child: Text(
-                              "!",
-                              style: TextStyle(color: Colors.white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: hasNewMessages(),
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: iconSize,
-                            height: iconSize,
-                            decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
-                            child: Text(
-                              freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                              style: TextStyle(color: onAccent, fontSize: listInviteUnreadIndicatorFontSize),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
               ),
-            ),
-            Visibility(
-              visible: moreButton != null,
-              child: Container(child: moreButton),
-            )
-          ],
+              Visibility(
+                visible: moreButton != null,
+                child: Container(child: moreButton),
+              )
+            ],
+          ),
         ),
       ),
     );

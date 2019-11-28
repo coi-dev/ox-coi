@@ -59,7 +59,7 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String initials;
+    String initials = "";
     ImageProvider avatarImage;
     if (isNullOrEmpty(imagePath)) {
       avatarImage = MemoryImage(kTransparentImage);
@@ -70,24 +70,24 @@ class Avatar extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      height: size,
-      width: size,
+      constraints: BoxConstraints.expand(width: size, height: size),
       decoration: ShapeDecoration(
         shape: SuperellipseShape(
           borderRadius: BorderRadius.circular(size * 0.67),
         ),
         color: color,
         image: DecorationImage(
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           image: avatarImage,
         ),
       ),
-      child: isNullOrEmpty(imagePath)
-          ? Text(
-              initials,
-              style: Theme.of(context).textTheme.subhead.apply(color: Colors.white),
-            )
-          : Container(),
+      child: Visibility(
+        visible: isNullOrEmpty(imagePath),
+        child: Text(
+          initials,
+          style: Theme.of(context).textTheme.subhead.apply(color: Colors.white),
+        ),
+      ),
     );
   }
 
