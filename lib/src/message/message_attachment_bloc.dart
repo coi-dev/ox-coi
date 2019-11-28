@@ -41,6 +41,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
@@ -50,6 +51,11 @@ import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
+import 'package:ox_coi/src/utils/constants.dart';
+import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/utils/video.dart';
+import 'package:path/path.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
   Repository<ChatMsg> _messageListRepository;
@@ -81,6 +87,8 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       }
     } else if (event is AttachmentLoaded) {
       yield MessageAttachmentStateSuccess();
+    } else if (event is LoadThumbnailAndDuration) {
+      yield* loadThumbnailAndDuration(event.path, event.duration);
     }
   }
 
@@ -101,5 +109,41 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
 
   ChatMsg _getMessage(int messageId) {
     return _messageListRepository.get(messageId);
+  }
+
+  Stream<MessageAttachmentState> loadThumbnailAndDuration(String videoPath, int duration) async*{
+    String thumbnailPath = await getThumbnailPath(videoPath, duration);
+    String durationString = await getVideoTime(videoPath, duration);
+
+    yield MessageAttachmentStateSuccess(path: thumbnailPath, duration: durationString);
+  }
+
+  Future<String> getThumbnailPath(String videoPath, int duration) async{
+    String thumbnailPath = "";
+    thumbnailPath = "${withoutExtension(videoPath)}$thumbnailFileExtension";
+    File file = File(thumbnailPath);
+    bool fileExists = await file.exists();
+    if (!fileExists) {
+      try {
+        String thumbnailDirectory = dirname(videoPath);
+        thumbnailPath = await VideoThumbnail.thumbnailFile(
+                video: videoPath,
+                thumbnailPath: thumbnailDirectory,
+                imageFormat: ImageFormat.JPEG,
+                quality: 25,
+              );
+      } catch (e) {
+        thumbnailPath = "";
+      }
+    }
+    return thumbnailPath;
+  }
+
+  Future<String> getVideoTime(String path, int duration) async {
+    if (duration == 0) {
+      duration = await getDurationInMilliseconds(path);
+    }
+
+    return getVideoTimeFromTimestamp(duration);
   }
 }

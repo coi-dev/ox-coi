@@ -81,6 +81,7 @@ const iconPadlockSize = 10.0;
 const iconTextPadding = 4.0;
 const iconFormPadding = 8.0;
 const iconSize = 18.0;
+const iconMessagePlaySize = 24.0;
 
 // Chat
 const composerHorizontalPadding = 8.0;
@@ -100,6 +101,13 @@ const previewCloseIconBorderRadius = 20.0;
 const previewCloseIconSize = 30.0;
 const previewFileNamePadding = 4.0;
 const audioFileImageWidth = 176.0;
+const videoPreviewIconBackgroundWidth = 48.0;
+const videoPreviewIconBackgroundHeight = 48.0;
+const videoPreviewTimePositionBottom = 8.0;
+const videoPreviewTimePositionLeft = 12.0;
+const videoPreviewTimeBorderRadius = 24.0;
+const videoPreviewTimePaddingVertical = 2.0;
+const videoPreviewTimePaddingHorizontal = 8.0;
 
 // Forms
 const formHorizontalPadding = 16.0;

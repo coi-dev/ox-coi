@@ -52,8 +52,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';

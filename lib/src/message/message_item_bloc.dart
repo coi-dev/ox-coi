@@ -125,6 +125,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       AttachmentStateData attachmentStateData;
       if (hasFile) {
         attachmentStateData = AttachmentStateData(
+          duration: await message.getDuration(),
           filename: await message.getFileName(),
           path: await message.getFile(),
           mimeType: await message.getFileMime(),

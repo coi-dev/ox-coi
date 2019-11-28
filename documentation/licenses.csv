@@ -23,6 +23,7 @@ logging,BSD,https://pub.dev/packages/logging
 mime,BSD,https://pub.dev/packages/mime
 open_file,BSD,https://pub.dev/packages/open_file
 package_info,BSD,https://pub.dev/packages/package_info
+path,BSD,https://pub.dev/packages/path
 path_provider,BSD,https://pub.dev/packages/path_provider
 permission_handler,MIT,https://pub.dev/packages/permission_handler
 pointycastle,MPL 3.0,https://pub.dev/packages/pointycastle
@@ -34,6 +35,7 @@ superellipse_shape,MIT,https://pub.dev/packages/superellipse_shape
 transparent_image,MIT,https://pub.dev/packages/transparent_image
 url_launcher,BSD,https://pub.dev/packages/url_launcher
 video_player,BSD,https://pub.dev/packages/video_player
+video_thumbnail,MIT,https://pub.dev/packages/video_thumbnail
 qr_flutter,BSD,https://pub.dev/packages/qr_flutter
 qr_mobile_vision,MIT,https://pub.dev/packages/qr_mobile_vision
 uuid,MIT,https://pub.dev/packages/uuid

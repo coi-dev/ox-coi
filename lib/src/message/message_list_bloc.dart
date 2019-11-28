@@ -51,6 +51,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/utils/video.dart';
 
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with InviteMixin {
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
@@ -180,9 +181,15 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   void _submitAttachmentMessage(String path, int fileType, bool isShared, [String text]) async {
     Context _context = Context();
     String mimeType = lookupMimeType(path);
+    int duration = 0;
     if (isShared) {
       _cacheFilePath = path;
     }
-    await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, 0, text);
+
+    if (fileType == ChatMsg.typeVideo) {
+      duration = await getDurationInMilliseconds(path);
+    }
+
+    await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, duration, text);
   }
 }

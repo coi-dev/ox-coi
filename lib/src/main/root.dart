@@ -46,6 +46,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/background/background_bloc.dart';
 import 'package:ox_coi/src/background/background_event_state.dart';
 import 'package:ox_coi/src/chat/chat.dart';
@@ -63,9 +64,6 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_profile.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -214,12 +212,12 @@ class _RootState extends State<Root> {
   List<BottomNavigationBarItem> getBottomBarItems() {
     var bottomBarItems = List<BottomNavigationBarItem>();
     childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
-      icon: AdaptiveIcon(
-        icon: item.getNavigationIcon(),
-        key: Key(item.getNavigationText(context)),
-      ),
-      title: Text(item.getNavigationText(context)),
-    )));
+          icon: AdaptiveIcon(
+            icon: item.getNavigationIcon(),
+            key: Key(item.getNavigationText(context)),
+          ),
+          title: Text(item.getNavigationText(context)),
+        )));
     return bottomBarItems;
   }
 

@@ -42,6 +42,11 @@
 
 import 'package:flutter/material.dart';
 
+// Belongs to no theme
+
+const white = Colors.white;
+const black = Colors.black;
+
 // Light theme
 
 const background = Colors.white;

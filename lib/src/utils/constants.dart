@@ -60,3 +60,7 @@ String get appLogoPath => 'assets/images/app_logo.png';
 
 // Other provider identifier
 String get other => 'other';
+
+// File extension for video thumbnails
+String get thumbnailFileExtension => '.jpg';
+

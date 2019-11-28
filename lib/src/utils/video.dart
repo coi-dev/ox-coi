@@ -40,48 +40,16 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'dart:io';
 
-abstract class MessageAttachmentEvent {}
+import 'package:video_player/video_player.dart';
 
-class RequestAttachment extends MessageAttachmentEvent {
-  final int chatId;
-  final int messageId;
-
-  RequestAttachment({@required this.chatId, @required this.messageId});
-}
-
-class ShareAttachment extends MessageAttachmentEvent {
-  final int chatId;
-  final int messageId;
-
-  ShareAttachment({@required this.chatId, @required this.messageId});
-}
-
-class AttachmentLoaded extends MessageAttachmentEvent {}
-
-class LoadThumbnailAndDuration extends MessageAttachmentEvent {
-  final String path;
-  final int duration;
-
-  LoadThumbnailAndDuration({@required this.path, @required this.duration});
-}
-
-abstract class MessageAttachmentState {}
-
-class MessageAttachmentStateInitial extends MessageAttachmentState {}
-
-class MessageAttachmentStateLoading extends MessageAttachmentState {}
-
-class MessageAttachmentStateSuccess extends MessageAttachmentState {
-  final String path;
-  final String duration;
-
-  MessageAttachmentStateSuccess({this.path, this.duration});
-}
-
-class MessageAttachmentStateFailure extends MessageAttachmentState {
-  final String error;
-
-  MessageAttachmentStateFailure({@required this.error});
+Future<int> getDurationInMilliseconds(String path) async {
+  int duration = 0;
+  VideoPlayerController fileVideoController = VideoPlayerController.file(File(path));
+  await fileVideoController.initialize();
+  if (fileVideoController.value.duration != null) {
+    duration = fileVideoController.value.duration.inMilliseconds;
+  }
+  return duration;
 }

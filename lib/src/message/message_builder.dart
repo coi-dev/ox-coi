@@ -43,18 +43,24 @@
 import 'dart:io';
 
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/message/message_attachment_bloc.dart';
+import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
 import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/utils/video.dart';
+import 'package:path/path.dart' as path;
 import 'package:transparent_image/transparent_image.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import 'message_item_event_state.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class MessageData extends InheritedWidget {
   final Color backgroundColor;
@@ -160,9 +166,13 @@ class MessageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isImage(context)) {
-      return MessagePartImageAttachment();
+      return MessagePartImageVideoAttachment();
     } else if (isAudio(context)) {
       return MessagePartAudioAttachment();
+    } else if (isVideo(context)) {
+      return MessagePartImageVideoAttachment(
+        isVideo: true,
+      );
     } else {
       return MessagePartGenericAttachment();
     }
@@ -179,6 +189,11 @@ bool isAudio(BuildContext context) {
   return attachment != null && attachment.type == ChatMsg.typeAudio || attachment.type == ChatMsg.typeVoice;
 }
 
+bool isVideo(BuildContext context) {
+  final attachment = _getMessageStateData(context).attachmentStateData;
+  return attachment != null && attachment.type == ChatMsg.typeVideo;
+}
+
 class MessagePartAudioAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -191,20 +206,34 @@ class MessagePartAudioAttachment extends StatelessWidget {
   }
 }
 
-class MessagePartImageAttachment extends StatefulWidget {
+class MessagePartImageVideoAttachment extends StatefulWidget {
+  final bool isVideo;
+
+  MessagePartImageVideoAttachment({this.isVideo = false});
+
   @override
-  _MessagePartImageAttachmentState createState() => _MessagePartImageAttachmentState();
+  _MessagePartImageVideoAttachmentState createState() => _MessagePartImageVideoAttachmentState();
 }
 
-class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment> {
+class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoAttachment> {
   ImageProvider imageProvider;
+  String thumbnailPath = "";
+  String durationString = "";
+
+  // ignore: close_sinks
+  MessageAttachmentBloc _messageAttachmentBloc = MessageAttachmentBloc();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    var path = _getMessageStateData(context).attachmentStateData.path;
-    File file = File(path);
-    imageProvider = FileImage(file);
+    if (!widget.isVideo) {
+      File file = File(_getMessageStateData(context).attachmentStateData.path);
+      imageProvider = FileImage(file);
+    } else {
+      imageProvider = MemoryImage(kTransparentImage);
+      _messageAttachmentBloc.add(LoadThumbnailAndDuration(
+          path: _getMessageStateData(context).attachmentStateData.path, duration: _getMessageStateData(context).attachmentStateData.duration));
+    }
     precacheImage(imageProvider, context, onError: (error, stacktrace) {
       setState(() {
         imageProvider = MemoryImage(kTransparentImage);
@@ -216,34 +245,92 @@ class _MessagePartImageAttachmentState extends State<MessagePartImageAttachment>
   Widget build(BuildContext context) {
     var text = _getMessageStateData(context).text;
     BorderRadius imageBorderRadius = getImageBorderRadius(context, text);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        AspectRatio(
-          child: ClipRRect(
-            borderRadius: imageBorderRadius,
-            child: Image(
-              image: imageProvider,
-              fit: BoxFit.cover,
+    return BlocListener(
+      bloc: _messageAttachmentBloc,
+      listener: (context, state){
+        if(state is MessageAttachmentStateSuccess){
+          setState(() {
+            if(state.path.isNotEmpty) {
+              File file = File(state.path);
+              imageProvider = FileImage(file);
+              durationString = state.duration;
+            }
+          });
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              AspectRatio(
+                child: ClipRRect(
+                  borderRadius: imageBorderRadius,
+                  child: Image(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                aspectRatio: 4 / 3,
+              ),
+              Visibility(
+                visible: widget.isVideo,
+                child: Positioned.fill(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: videoPreviewIconBackgroundHeight,
+                        width: videoPreviewIconBackgroundWidth,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: black.withOpacity(fade),
+                        ),
+                        child: AdaptiveIcon(
+                          icon: IconSource.play,
+                          size: iconMessagePlaySize,
+                          color: white,
+                        ),
+                      )),
+                ),
+              ),
+              Visibility(
+                visible: widget.isVideo && durationString.isNotEmpty,
+                child: Positioned(
+                  bottom: videoPreviewTimePositionBottom,
+                  left: videoPreviewTimePositionLeft,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(videoPreviewTimeBorderRadius),
+                      color: black.withOpacity(fade),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: videoPreviewTimePaddingVertical, horizontal: videoPreviewTimePaddingHorizontal),
+                      child: Text(
+                        durationString,
+                        style: Theme.of(context).textTheme.caption.apply(color: white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Visibility(
+            visible: text.isNotEmpty,
+            child: Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: messagesVerticalPadding,
+                    bottom: messagesVerticalInnerPadding,
+                    left: messagesHorizontalInnerPadding,
+                    right: messagesHorizontalInnerPadding),
+                child: Text(text),
+              ),
             ),
           ),
-          aspectRatio: 4 / 3,
-        ),
-        Visibility(
-          visible: text.isNotEmpty,
-          child: Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: messagesVerticalPadding,
-                  bottom: messagesVerticalInnerPadding,
-                  left: messagesHorizontalInnerPadding,
-                  right: messagesHorizontalInnerPadding),
-              child: Text(text),
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

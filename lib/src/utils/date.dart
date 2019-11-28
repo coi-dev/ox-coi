@@ -49,6 +49,7 @@ const formatterTime = [HH, ':', nn];
 const formatterDate = [dd, '.', mm];
 const formatterDateLong = [dd, '. ', MM];
 const formatterTimer = [nn, ':', ss, ':', SSS];
+const formatterVideoTime = [n, ':', ss];
 const formatterDateTimeFile = [yy, '-', mm, '-', dd, '_', HH, '-', nn, '-', ss];
 
 String getTimeFormTimestamp(int timestamp) {
@@ -108,4 +109,8 @@ String getDateTimeFileFormTimestamp([int timestamp]) {
 
 String getDateAndTimeFromTimestamp(int timestamp) {
   return formatDate(_getDateTimeFromTimestamp(timestamp), formatterDateAndTime);
+}
+
+String getVideoTimeFromTimestamp(int timestamp) {
+  return formatDate(_getDateTimeFromTimestamp(timestamp), formatterVideoTime);
 }

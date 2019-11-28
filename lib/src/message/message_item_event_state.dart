@@ -238,6 +238,7 @@ class ContactStateData extends Equatable {
 }
 
 class AttachmentStateData extends Equatable {
+  final int duration;
   final String filename;
   final String path;
   final String mimeType;
@@ -245,6 +246,7 @@ class AttachmentStateData extends Equatable {
   final int type;
 
   AttachmentStateData({
+    @required this.duration,
     @required this.filename,
     @required this.path,
     @required this.mimeType,
@@ -252,8 +254,9 @@ class AttachmentStateData extends Equatable {
     @required this.type,
   });
 
-  AttachmentStateData copyWith({filename, path, mimeType, size, type}) {
+  AttachmentStateData copyWith({duration, filename, path, mimeType, size, type}) {
     return AttachmentStateData(
+      duration: duration ?? this.duration,
       filename: filename ?? this.filename,
       path: path ?? this.path,
       mimeType: mimeType ?? this.mimeType,
@@ -263,5 +266,5 @@ class AttachmentStateData extends Equatable {
   }
 
   @override
-  List<Object> get props => [filename, path, mimeType, size, type];
+  List<Object> get props => [duration, filename, path, mimeType, size, type];
 }

@@ -35,7 +35,10 @@ dependencies:
   logging: ^0.11.3+2
   mime: ^0.9.6+3
   open_file: ^2.0.3
+  package_info: ^0.4.0+9
+  path_provider: ^1.4.0
   package_info: ^0.4.0+11
+  path: ^1.6.4
   path_provider: ^1.4.5
   permission_handler: ^4.0.0
   pointycastle: ^1.0.1
@@ -50,6 +53,7 @@ dependencies:
   qr_flutter: ^3.0.1
   qr_mobile_vision: ^0.2.2
   uuid: ^2.0.2
+  video_thumbnail: ^0.1.6
   flutter_slidable: "^0.5.4"
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
