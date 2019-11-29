@@ -124,13 +124,14 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
   }
 
   void loadSharedData() async {
-    Map<dynamic, dynamic> data = {};
-    data = await _getSharedData();
-    SharedData sharedData;
-    if (data.length > 0) {
-      sharedData = SharedData(data);
+    var data = await _getSharedData();
+    if (data == null) {
+      return;
     }
-    add(SharedDataLoaded(sharedData: sharedData));
+    if (data.length > 0) {
+      var sharedData = SharedData(data);
+      add(SharedDataLoaded(sharedData: sharedData));
+    }
   }
 
   Future<Map> _getSharedData() async => await platform.invokeMethod('getSharedData');

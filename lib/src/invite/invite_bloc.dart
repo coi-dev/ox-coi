@@ -110,6 +110,9 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
 
   Stream<InviteState> handleSharedInviteLink() async* {
     String sharedLink = await _getInitialLink();
+    if (sharedLink == null) {
+      return;
+    }
     int startIndex = getIndexAfterLastOf(sharedLink, '/');
     String id = sharedLink.substring(startIndex);
     if (id.isNotEmpty) {
