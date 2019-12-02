@@ -39,7 +39,7 @@
  *  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  *  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  *  * for more details.
- *  
+ *
  *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -61,23 +61,15 @@ import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Test block / unblock functionality', () {
+  group('Test: Add swipe to delete for contacts test', () {
     //  Define the driver.
     FlutterDriver driver;
     Setup setup = new Setup(driver);
-    setup.main();
+    setup.main(timeout);
 
-    final openChat = 'Open chat';
-    final flagUnFlag = 'Flag/Unflag';
-    final forward = 'Forward';
-    final textToDelete = 'Text to delete';
-    final paste = 'PASTE';
-    final copy = 'Copy';
+    final newTestName1Finder = find.text(newTestName01);
 
-    final meContactFinder = find.text(meContact);
-    final textToDeleteFinder = find.text(textToDelete);
-
-    test('Test block / unblock functionality.', () async {
+    test('Create one contact, swipe and delete created contact.', () async {
       //  Check real authentication and get chat.
       await getAuthentication(
         setup.driver,
@@ -92,13 +84,12 @@ void main() {
       Invoker.current.heartbeat();
       await setup.driver.waitFor(chatWelcomeFinder);
       Invoker.current.heartbeat();
-
       //  Get contacts and add new contacts.
       await setup.driver.tap(contactsFinder);
       await setup.driver.tap(cancelFinder);
-      await setup.driver.waitFor(meContactFinder);
+      await setup.driver.waitFor(find.text(meContact));
 
-      //  Add two new contacts in the contact list.
+      // Add two new contacts in the contact list.
       await addNewContact(
         setup.driver,
         personAddFinder,
@@ -109,44 +100,14 @@ void main() {
         keyContactChangeCheckFinder,
       );
 
-      //  Create chat and write something.
-      await setup.driver.tap(meContactFinder);
-      await setup.driver.tap(find.text(openChat));
-      await writeChatFromChat(setup.driver, helloWorld);
-
-      //  First test action: Flagged messages from  meChat.
-      await flaggedMessage(setup.driver, flagUnFlag, helloWorldFinder);
-
-      await setup.driver.tap(pageBack);
+      //  Swipe and delete created contact.
+      await catchScreenshot(setup.driver, 'screenshots/beforeSwipedConatct.png');
+      await setup.driver.scroll(newTestName1Finder, -100, 0, Duration(milliseconds: 100));
+      await setup.driver.tap(find.text(delete));
+      await catchScreenshot(setup.driver, 'screenshots/afterSwipedConatct.png');
       await navigateTo(setup.driver, chat);
-
-      //  Second test action: UnFlagged messages.
-      await unFlaggedMessage(setup.driver, flagUnFlag, helloWorldFinder);
-      await setup.driver.waitForAbsent(helloWorldFinder);
-
-      //  Return to chatList.
-      await setup.driver.tap(pageBack);
-      await setup.driver.tap(meContactFinder);
-
-      //  Third test action: Forward message.
-      await forwardMessageTo(setup.driver, newTestName01, forward);
-      await setup.driver.waitFor(helloWorldFinder);
-
-      //  Return to chatList.
-      await setup.driver.tap(pageBack);
-      await setup.driver.tap(meContactFinder);
-
-      //  Forth test action: Copy message from meContact and it paste in meContact.
-      await copyAndPasteMessage(setup.driver, copy, paste);
-
-      //  Enter new text to delete.
-      await writeTextInChat(setup.driver, textToDelete);
-      await setup.driver.waitFor(textToDeleteFinder);
-      await catchScreenshot(setup.driver, 'screenshots/addTextToDelete.png');
-
-      //  Fifth test action: Delete message.
-      await deleteMessage(textToDeleteFinder, setup.driver);
-      await setup.driver.waitForAbsent(textToDeleteFinder);
+      await setup.driver.waitForAbsent(newTestName1Finder);
+      await navigateTo(setup.driver, contacts);
     });
   });
 }
