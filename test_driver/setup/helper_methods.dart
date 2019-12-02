@@ -194,6 +194,7 @@ Future blockOneContactFromContacts(FlutterDriver driver, String contactNameToBlo
   await driver.tap(find.byValueKey(keyContactDetailBlockContactProfileActionIcon));
   await driver.tap(find.text(blockContact));
   await catchScreenshot(driver, 'screenshots/contactListAfterBlock.png');
+
 }
 
 Future unFlaggedMessage(
