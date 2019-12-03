@@ -50,7 +50,7 @@ enum AppState {
 String get dbName => "messenger.db";
 
 // Push service fallback
-String get defaultCoiPushServiceUrl => "https://push.coi.me";
+String get defaultCoiPushServiceUrl => "https://push.coi.me/push/resource/";
 
 // Invite service fallback
 String get defaultCoiInviteServiceUrl => "https://invite.coi.me/invite/";

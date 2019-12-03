@@ -147,7 +147,7 @@
     {
       "id": "coi_debug_beta",
       "name": "Demo / Beta Environment",
-      "push_service_url": "https://push.coi.me",
+      "push_service_url": "https://push.coi.me/push/resource/",
       "invite_service_url": "https://invite.coi.me/invite/",
       "preset": {
         "incoming_security": "starttls",
