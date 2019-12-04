@@ -41,9 +41,11 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:crypto/crypto.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
@@ -111,32 +113,35 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
     return _messageListRepository.get(messageId);
   }
 
-  Stream<MessageAttachmentState> loadThumbnailAndDuration(String videoPath, int duration) async*{
+  Stream<MessageAttachmentState> loadThumbnailAndDuration(String videoPath, int duration) async* {
     String thumbnailPath = await getThumbnailPath(videoPath, duration);
     String durationString = await getVideoTime(videoPath, duration);
 
     yield MessageAttachmentStateSuccess(path: thumbnailPath, duration: durationString);
   }
 
-  Future<String> getThumbnailPath(String videoPath, int duration) async{
-    String thumbnailPath = "";
-    thumbnailPath = "${withoutExtension(videoPath)}$thumbnailFileExtension";
+  Future<String> getThumbnailPath(String videoPath, int duration) async {
+    var videoPathBytes = utf8.encode(videoPath);
+    var videoPathSha1 = sha1.convert(videoPathBytes);
+    String thumbnailName = "$videoPathSha1$thumbnailFileExtension";
+    var videoDirectory = dirname(videoPath);
+    String thumbnailPath = "$videoDirectory/$thumbnailName";
     File file = File(thumbnailPath);
     bool fileExists = await file.exists();
+    String result = thumbnailPath;
     if (!fileExists) {
       try {
-        String thumbnailDirectory = dirname(videoPath);
-        thumbnailPath = await VideoThumbnail.thumbnailFile(
-                video: videoPath,
-                thumbnailPath: thumbnailDirectory,
-                imageFormat: ImageFormat.JPEG,
-                quality: 25,
-              );
+        result = await VideoThumbnail.thumbnailFile(
+          video: videoPath,
+          thumbnailPath: thumbnailPath,
+          imageFormat: ImageFormat.JPEG,
+          quality: 25,
+        );
       } catch (e) {
-        thumbnailPath = "";
+        result = "";
       }
     }
-    return thumbnailPath;
+    return result;
   }
 
   Future<String> getVideoTime(String path, int duration) async {
