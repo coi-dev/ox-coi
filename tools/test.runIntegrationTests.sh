@@ -15,6 +15,7 @@ appId=$3
 success=0
 failed=0
 testResult=-1
+startTime=$SECONDS
 
 # Functions
 function error {
@@ -96,7 +97,7 @@ do
             echo "  [OK] $test"
             ((success++))
         else
-            echo "  [FAIL] $test - See (test_driver/log.txt)"
+            echo "  [FAIL] $test - See (${LOG_FILE})"
             ((failed++))
         fi
     fi
@@ -104,8 +105,8 @@ done
 
 echo
 testCount=$((success + failed))
-echo "### Test suite finished"
+runTime=$(($SECONDS - $startTime))
+echo "### Test suite finished in $runTime seconds"
 echo "  [All]: $testCount"
 echo "  [OK]: $success successfully finished"
 echo "  [FAIL]: $failed errors occurred"
-

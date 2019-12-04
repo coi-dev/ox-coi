@@ -58,15 +58,13 @@ import 'package:test/test.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 import 'setup/global_consts.dart';
-import 'setup/global_consts.dart' as prefix0;
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
   group('Test block / unblock functionality', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    Setup setup = new Setup(driver);
+    var setup = Setup();
+    setup.perform();
 
     final block = 'Block';
 

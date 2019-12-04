@@ -62,10 +62,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Test block / unblock functionality', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     final openChat = 'Open chat';
     final flagUnFlag = 'Flag/Unflag';

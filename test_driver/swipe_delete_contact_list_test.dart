@@ -62,10 +62,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Test: Add swipe to delete for contacts test', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     final newTestName1Finder = find.text(newTestName01);
 

@@ -63,9 +63,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Security test.', () {
-    // Setup for the test.
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     final security = 'Security';
     final expertImportKeys = 'Expert: Import keys';
@@ -86,7 +85,6 @@ void main() {
       //To do
       //Catch test Export success toast message with the driver.
       //Catch test failed  toast message with the driver.
-      await catchScreenshot(setup.driver, 'screenshots/signInDone.png');
       await setup.driver.waitFor(chatWelcomeFinder);
       await setup.driver.tap(profileFinder);
       await setup.driver.tap(userProfileSettingsAdaptiveIconFinder);
@@ -95,17 +93,18 @@ void main() {
 
       await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
-
       await setup.driver.waitForAbsent(find.text(L.getKey(L.settingKeyImportRunning)));
+      await catchScreenshot(setup.driver, 'screenshots/importFailed.png');
+
       await setup.driver.tap(find.text(expertExportKeys));
       await setup.driver.tap(find.text(ok));
-
       await setup.driver.waitForAbsent(find.text(L.getKey(L.settingKeyExportRunning)));
+      await catchScreenshot(setup.driver, 'screenshots/exportSuccess.png');
+
       await setup.driver.tap(find.text(expertImportKeys));
       await setup.driver.tap(find.text(ok));
-
-      await setup.driver.tap(pageBack);
-      await setup.driver.tap(pageBack);
+      await setup.driver.waitForAbsent(find.text(L.getKey(L.settingKeyImportRunning)));
+      await catchScreenshot(setup.driver, 'screenshots/importSuccess.png');
     });
   });
 }

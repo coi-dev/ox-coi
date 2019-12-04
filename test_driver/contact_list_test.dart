@@ -55,10 +55,9 @@ void main() {
       'Create contact list integration tests: After login, Me contact is checked first, '
       'then two contacts are created. The contacts made can then be found in the contact list.'
       'After that one of the contacts will be delete from the contact list', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    Setup setup = new Setup(driver);
-    setup.main();
+
+    var setup = Setup();
+    setup.perform();
 
     test('Test create profile integration tests.', () async {
       //  Check real authentication and get chat.

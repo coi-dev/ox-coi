@@ -166,7 +166,6 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         height: dividerHeight,
         color: onBackground.withOpacity(barely),
       ),
-      padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.contactIds.length,
       itemBuilder: (BuildContext context, int index) {
         var contactId = state.contactIds[index];

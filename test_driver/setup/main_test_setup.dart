@@ -53,16 +53,15 @@ const permissionWriteStorage = 'android.permission.WRITE_EXTERNAL_STORAGE';
 const permissionReadContacts = 'android.permission.READ_CONTACTS';
 const permissionWriteContacts = 'android.permission.WRITE_CONTACTS';
 
+const environmentDeviceId = 'FLUTTER_TEST_DEVICE_ID';
+const environmentAppId = 'FLUTTER_TEST_APP_ID';
+
 class Setup {
-  FlutterDriver _drivers;
+  FlutterDriver _driver;
 
-  Setup(FlutterDriver driver) {
-    this._drivers = driver;
-  }
+  FlutterDriver get driver => _driver;
 
-  FlutterDriver get driver => this._drivers;
-
-  main() {
+  perform() {
     setUpAll(() async {
       await grantPermission(adbPath, permissionAudio);
       await grantPermission(adbPath, permissionReadStorage);
@@ -70,19 +69,19 @@ class Setup {
       await grantPermission(adbPath, permissionReadContacts);
       await grantPermission(adbPath, permissionWriteContacts);
 
-      this._drivers = await FlutterDriver.connect();
+      _driver = await FlutterDriver.connect();
     });
 
     tearDownAll(() async {
-      if (this._drivers != null) {
-        this._drivers.close();
+      if (_driver != null) {
+        _driver.close();
       }
     });
   }
 
   Future grantPermission(String adbPath, String permission) async {
-    String deviceId = Platform.environment["FLUTTER_TEST_DEVICE_ID"];
-    String appId = Platform.environment["FLUTTER_TEST_APP_ID"];
+    String deviceId = Platform.environment[environmentDeviceId];
+    String appId = Platform.environment[environmentAppId];
     await Process.run(
       adbPath,
       [

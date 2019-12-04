@@ -51,10 +51,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Test group chat functionality.', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     final testNameGroup = "TestGroup";
     final newNameTestGroup = "NewNameTestGroup";

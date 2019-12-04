@@ -49,8 +49,6 @@ import 'package:test_api/src/backend/invoker.dart';
 
 import 'global_consts.dart';
 
-FlutterDriver driver;
-
 //  Take screenshot
 Future catchScreenshot(FlutterDriver driver, String path) async {
   final List<int> pixels = await driver.screenshot();

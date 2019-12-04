@@ -51,9 +51,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Create chat list integration tests.', () {
-    // Setup for the test.
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     test('Test Create chat list integration tests.', () async {
       await getAuthentication(

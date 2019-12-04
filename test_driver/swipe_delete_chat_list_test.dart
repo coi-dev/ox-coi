@@ -52,8 +52,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -63,9 +61,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Add swipe to delete for chats test.', () {
-    // Setup for the test.
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     test('Create a chat, swipe and delete created chat.', () async {
       await getAuthentication(

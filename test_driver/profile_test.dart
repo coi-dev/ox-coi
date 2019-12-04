@@ -52,9 +52,8 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Ox coi test.', () {
-    // Setup for the test.
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
 
     SerializableFinder userSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
     SerializableFinder userProfileUserNameTextFinder = find.text(testUserNameUserProfile);

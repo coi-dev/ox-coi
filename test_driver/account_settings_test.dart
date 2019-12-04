@@ -62,10 +62,9 @@ import 'setup/main_test_setup.dart';
 
 void main() {
   group('Add account settings test.', () {
-    //  Define the driver.
-    FlutterDriver driver;
-    Setup setup = new Setup(driver);
-    setup.main();
+    var setup = Setup();
+    setup.perform();
+
     final account = 'Account';
     final fakeIMAPCoiServer = 'mobile-coi.open-xchange.comm';
     final fakeSMTPCoiServer = 'mobile-coi.open-xchange.comm';
