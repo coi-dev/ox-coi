@@ -100,6 +100,8 @@ enum IconSource {
   forward,
   share,
   play,
+  pending,
+  retry,
 }
 
 class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
@@ -182,6 +184,8 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.forward : [CupertinoIcons.forward, Icons.forward],
     IconSource.share : [CupertinoIcons.share, Icons.share],
     IconSource.play : [CupertinoIcons.play_arrow_solid, Icons.play_arrow],
+    IconSource.pending : [Icons.hourglass_empty, Icons.hourglass_empty],
+    IconSource.retry : [Icons.autorenew, Icons.autorenew],
   };
 
   AdaptiveIcon({

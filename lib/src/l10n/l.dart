@@ -224,6 +224,9 @@ class L {
   static final groupRename = _translationKey("Rename group");
   static final groupNameLabel = _translationKey("Set a group name");
   static final groupAddContactAdd = _translationKey("Simply add one by tapping on a contact.");
+  static final groupParticipantActionInfo = _translationKey("Info");
+  static final groupParticipantActionSendMessage = _translationKey("Send message");
+  static final groupParticipantActionRemove = _translationKey("Remove from group");
 
   static final loginRunning = _translationKey("Logging in, this may take a moment");
   static final loginFailed = _translationKey("Login failed");
@@ -246,6 +249,15 @@ class L {
   static final memberXP = _translationKey("1 member","%i members");
   static final memberAdded = _translationKey("Member added");
   static final memberRemoved = _translationKey("Member removed");
+
+  static final messageActionForward = _translationKey("Forward");
+  static final messageActionCopy = _translationKey("Copy");
+  static final messageActionDelete = _translationKey("Delete locally");
+  static final messageActionFlagUnflag = _translationKey("Flag/Unflag");
+  static final messageActionShare = _translationKey("Share");
+  static final messageActionInfo = _translationKey("Info");
+  static final messageActionRetry = _translationKey("Send again");
+  static final messageActionDeleteFailedMessage = _translationKey("Discard message");
 
   static final participantXP = _translationKey("1 participant", "%i participants");
   static final participantAdd = _translationKey("Add participants");

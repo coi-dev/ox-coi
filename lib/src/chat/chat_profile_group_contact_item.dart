@@ -48,6 +48,8 @@ import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
@@ -150,14 +152,14 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
 }
 
 List<GroupPopupMenu> participantChoices = <GroupPopupMenu>[
-  GroupPopupMenu(title: 'Info', action: GroupParticipantActions.info),
-  GroupPopupMenu(title: 'Send message', action: GroupParticipantActions.sendMessage),
-  GroupPopupMenu(title: 'Remove from group', action: GroupParticipantActions.remove),
+  GroupPopupMenu(title: L10n.get(L.groupParticipantActionInfo), action: GroupParticipantActions.info),
+  GroupPopupMenu(title: L10n.get(L.groupParticipantActionSendMessage), action: GroupParticipantActions.sendMessage),
+  GroupPopupMenu(title: L10n.get(L.groupParticipantActionRemove), action: GroupParticipantActions.remove),
 ];
 
 List<GroupPopupMenu> meChoices = <GroupPopupMenu>[
-  GroupPopupMenu(title: 'Info', action: GroupParticipantActions.info),
-  GroupPopupMenu(title: 'Send message', action: GroupParticipantActions.sendMessage),
+  GroupPopupMenu(title: L10n.get(L.groupParticipantActionInfo), action: GroupParticipantActions.info),
+  GroupPopupMenu(title: L10n.get(L.groupParticipantActionSendMessage), action: GroupParticipantActions.sendMessage),
 ];
 
 class GroupPopupMenu {

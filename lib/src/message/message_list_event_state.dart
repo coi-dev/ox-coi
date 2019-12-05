@@ -76,6 +76,8 @@ class DeleteCacheFile extends MessageListEvent{
   DeleteCacheFile({this.path});
 }
 
+class RetrySendingPendingMessages extends MessageListEvent{}
+
 abstract class MessageListState {}
 
 class MessagesStateInitial extends MessageListState {}

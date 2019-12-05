@@ -444,14 +444,33 @@ class MessagePartState extends StatelessWidget {
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
           var messageState = state.messageStateData.state;
-          if (messageState == ChatMsg.messageStateDelivered || messageState == ChatMsg.messageStateReceived) {
-            IconSource icon = messageState == ChatMsg.messageStateDelivered ? IconSource.done : IconSource.doneAll;
+          if (messageState == ChatMsg.messageStateDelivered || messageState == ChatMsg.messageStateReceived || messageState == ChatMsg.messageStatePending || messageState == ChatMsg.messageStateFailed) {
+            IconSource icon;
+            Color color;
+            switch(messageState){
+              case ChatMsg.messageStateDelivered:
+                icon = IconSource.done;
+                color = MessageData.of(context).secondaryTextColor;
+                break;
+              case ChatMsg.messageStateReceived:
+                icon = IconSource.doneAll;
+                color = MessageData.of(context).secondaryTextColor;
+                break;
+              case ChatMsg.messageStatePending:
+                icon = IconSource.pending;
+                color = MessageData.of(context).secondaryTextColor;
+                break;
+              case ChatMsg.messageStateFailed:
+                icon = IconSource.error;
+                color = error;
+                break;
+            }
             return Padding(
               padding: EdgeInsets.only(top: 10.0, left: iconTextPadding),
               child: AdaptiveIcon(
                 icon: icon,
                 size: 16.0,
-                color: MessageData.of(context).secondaryTextColor,
+                color: color,
               ),
             );
           }

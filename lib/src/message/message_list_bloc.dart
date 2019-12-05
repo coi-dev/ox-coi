@@ -99,6 +99,8 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       }
     } else if (event is DeleteCacheFile) {
       _deleteCacheFile(event.path);
+    } else if (event is RetrySendingPendingMessages) {
+      _retrySendingPendingMessages();
     }
   }
 
@@ -191,5 +193,10 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     }
 
     await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, duration, text);
+  }
+
+  void _retrySendingPendingMessages() async{
+    Context context = Context();
+    await context.retrySendingPendingMessages();
   }
 }

@@ -42,7 +42,7 @@
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
-enum MessageActionTag { forward, copy, delete, flag, share }
+enum MessageActionTag { forward, copy, delete, flag, share, retry, info }
 
 class MessageAction {
   final String title;

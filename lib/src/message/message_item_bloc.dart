@@ -122,6 +122,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       int showPadlock = await message.showPadlock();
       bool isFlagged = await message.isStarred();
       String teaser = await message.getSummaryText(200);
+      String messageInfo = "";
+      if (state == ChatMsg.messageStateFailed) {
+        Context context = Context();
+        messageInfo = await context.getMessageInfo(_messageId);
+      }
       AttachmentStateData attachmentStateData;
       if (hasFile) {
         attachmentStateData = AttachmentStateData(
@@ -164,6 +169,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         showTime: showTime,
         encryptionStatusChanged: encryptionStatusChanged,
         isGroup: isGroup,
+        messageInfo: messageInfo,
       );
       yield MessageItemStateSuccess(messageStateData: messageStateData);
     } catch (error) {
@@ -205,7 +211,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     if (!_listenersRegistered) {
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
-        [Event.msgDelivered, Event.msgRead],
+        [Event.msgDelivered, Event.msgRead, Event.msgFailed],
         _onMessageStateChanged,
       );
       _messageListRepository.addListener(_repositoryStreamHandler);
@@ -217,7 +223,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     _listenersRegistered = false;
   }
 
-  void _onMessageStateChanged(Event event) {
+  void _onMessageStateChanged(Event event) async{
     var eventMessageId = event.data2;
     if (_messageId == eventMessageId && (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead))) {
       if (state is MessageItemStateSuccess) {
@@ -228,6 +234,13 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           unregisterListeners();
         }
       }
+    }else if (event.hasType(Event.msgFailed) && _messageId == event.data2){
+      int eventMessageState = ChatMsg.messageStateFailed;
+      Context context = Context();
+      String messageInfo = await context.getMessageInfo(_messageId);
+      var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState, messageInfo: messageInfo);
+      unregisterListeners();
+      add(MessageUpdated(messageStateData: messageStateData));
     }
   }
 

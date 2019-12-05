@@ -40,21 +40,28 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
+import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 
 import 'message_action.dart';
+import 'message_list_bloc.dart';
 import 'message_received.dart';
 import 'message_sent.dart';
 import 'message_special.dart';
@@ -82,22 +89,34 @@ class ChatMessageItem extends StatefulWidget {
 }
 
 class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAliveClientMixin<ChatMessageItem> {
-  final List<MessageAction> _messageActions = const <MessageAction>[
-    const MessageAction(title: 'Forward', icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
-    const MessageAction(title: 'Copy', icon: IconSource.contentCopy, messageActionTag: MessageActionTag.copy),
-    const MessageAction(title: 'Delete locally', icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
-    const MessageAction(title: 'Flag/Unflag', icon: IconSource.flag, messageActionTag: MessageActionTag.flag),
-    const MessageAction(title: 'Share', icon: IconSource.share, messageActionTag: MessageActionTag.share),
+  final List<MessageAction> _messageActions = <MessageAction>[
+    MessageAction(title: L10n.get(L.messageActionForward), icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
+    MessageAction(title: L10n.get(L.messageActionCopy), icon: IconSource.contentCopy, messageActionTag: MessageActionTag.copy),
+    MessageAction(title: L10n.get(L.messageActionDelete), icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
+    MessageAction(title: L10n.get(L.messageActionFlagUnflag), icon: IconSource.flag, messageActionTag: MessageActionTag.flag),
+    MessageAction(title: L10n.get(L.messageActionShare), icon: IconSource.share, messageActionTag: MessageActionTag.share),
   ];
 
-  final List<MessageAction> _messageAttachmentActions = const <MessageAction>[
-    const MessageAction(title: 'Forward', icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
-    const MessageAction(title: 'Delete locally', icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
-    const MessageAction(title: 'Flag/Unflag', icon: IconSource.flag, messageActionTag: MessageActionTag.flag),
-    const MessageAction(title: 'Share', icon: IconSource.share, messageActionTag: MessageActionTag.share),
+  final List<MessageAction> _messageAttachmentActions = <MessageAction>[
+    MessageAction(title: L10n.get(L.messageActionForward), icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
+    MessageAction(title: L10n.get(L.messageActionDelete), icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
+    MessageAction(title: L10n.get(L.messageActionFlagUnflag), icon: IconSource.flag, messageActionTag: MessageActionTag.flag),
+    MessageAction(title: L10n.get(L.messageActionShare), icon: IconSource.share, messageActionTag: MessageActionTag.share),
   ];
 
-  MessageItemBloc _messageBloc = MessageItemBloc();
+  final List<MessageAction> _messageErrorActions = <MessageAction>[
+    MessageAction(title: L10n.get(L.messageActionInfo), icon: IconSource.info, messageActionTag: MessageActionTag.info),
+    MessageAction(title: L10n.get(L.messageActionDeleteFailedMessage), icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
+  ];
+
+  final List<MessageAction> _messagePendingActions = <MessageAction>[
+    MessageAction(title: L10n.get(L.messageActionRetry), icon: IconSource.retry, messageActionTag: MessageActionTag.retry),
+    MessageAction(title: L10n.get(L.messageActionDeleteFailedMessage), icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
+  ];
+
+  MessageItemBloc _messageItemBloc = MessageItemBloc();
+  // ignore: close_sinks
+  MessageListBloc _messageListBloc = MessageListBloc();
   MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
   Navigation _navigation = Navigation();
   Offset tapDownPosition;
@@ -105,7 +124,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    _messageBloc
+    _messageItemBloc
         .add(LoadMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
   }
 
@@ -115,9 +134,9 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider.value(
-      value: _messageBloc,
+      value: _messageItemBloc,
       child: BlocBuilder<MessageItemBloc, MessageItemState>(
-        bloc: _messageBloc,
+        bloc: _messageItemBloc,
         builder: (context, state) {
           if (state is MessageItemStateSuccess) {
             var messageStateData = state.messageStateData;
@@ -160,6 +179,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                     hasFile: messageStateData.hasFile,
                     showLongPressMenu: !messageStateData.isSetupMessage,
                     text: messageStateData.text,
+                    messageInfo: messageStateData.messageInfo,
+                    isPending: messageStateData.state == ChatMsg.messageStatePending
                   ),
                   child: Container(
                     padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
@@ -192,15 +213,24 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
     _attachmentBloc.add(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
   }
 
-  _onLongPress({bool hasFile, bool showLongPressMenu, String text}) {
+  _onLongPress({bool hasFile, bool showLongPressMenu, String text, String messageInfo, bool isPending}) {
     if (!showLongPressMenu) {
       return;
     }
-    _showMenu(hasFile, text);
+    _showMenu(hasFile, text, messageInfo, isPending);
   }
 
-  void _showMenu(bool hasFile, String text) {
-    List<MessageAction> actions = hasFile ? _messageAttachmentActions : _messageActions;
+  void _showMenu(bool hasFile, String text, String messageInfo, bool isPending) {
+    List<MessageAction> actions;
+    if(hasFile && !isPending){
+      actions = _messageAttachmentActions;
+    }else if(messageInfo.isNotEmpty){
+      actions = _messageErrorActions;
+    }else if(isPending){
+      actions = _messagePendingActions;
+    }else{
+      actions  = _messageActions;
+    }
     showMenu(
             context: context,
             position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
@@ -234,13 +264,19 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         case MessageActionTag.delete:
           List<int> messageList = List();
           messageList.add(widget.messageId);
-          _messageBloc.add(DeleteMessage(id: widget.messageId));
+          _messageItemBloc.add(DeleteMessage(id: widget.messageId));
           break;
         case MessageActionTag.flag:
-          _messageBloc.add(FlagUnflagMessage(id: widget.messageId));
+          _messageItemBloc.add(FlagUnflagMessage(id: widget.messageId));
           break;
         case MessageActionTag.share:
           _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
+          break;
+        case MessageActionTag.retry:
+            _messageListBloc.add(RetrySendingPendingMessages());
+          break;
+        case MessageActionTag.info:
+          _showErrorDialog(messageInfo);
           break;
       }
     });
@@ -255,6 +291,15 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
           messageId: widget.messageId,
         ),
       ),
+    );
+  }
+
+  void _showErrorDialog(String messageInfo) {
+    showInformationDialog(
+      context: context,
+      title: L10n.get(L.error),
+      content: messageInfo,
+      navigatable: Navigatable(Type.messageInfoDialog),
     );
   }
 }
