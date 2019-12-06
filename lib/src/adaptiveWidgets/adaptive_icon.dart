@@ -102,6 +102,8 @@ enum IconSource {
   play,
   pending,
   retry,
+  checkedCircle,
+  circle,
 }
 
 class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
@@ -186,6 +188,8 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.play : [CupertinoIcons.play_arrow_solid, Icons.play_arrow],
     IconSource.pending : [Icons.hourglass_empty, Icons.hourglass_empty],
     IconSource.retry : [Icons.autorenew, Icons.autorenew],
+    IconSource.checkedCircle : [Icons.check_circle, Icons.check_circle],
+    IconSource.circle : [Icons.radio_button_unchecked, Icons.radio_button_unchecked],
   };
 
   AdaptiveIcon({

@@ -61,7 +61,7 @@ mixin ContactItemBuilder {
           return Padding(
             padding: EdgeInsets.only(left: listItemPadding),
             child: Chip(
-              backgroundColor: Colors.blue[50],
+              backgroundColor: accent.withOpacity(barely),
               label: Text(isNullOrEmpty(state.name) ? state.email : state.name),
               onDeleted: onContactTapped,
               deleteIconColor: accent,
@@ -74,7 +74,7 @@ mixin ContactItemBuilder {
     );
   }
 
-  BlocBuilder getAvatarItemBlocBuilder({ContactItemBloc bloc, Function onContactTapped, bool isSelected = false, PopupMenuButton moreButton}) {
+  BlocBuilder getAvatarItemBlocBuilder({ContactItemBloc bloc, Function onContactTapped, bool isSelectable = false, bool isSelected = false, PopupMenuButton moreButton}) {
     return BlocBuilder(
         bloc: bloc,
         builder: (context, state) {
@@ -83,7 +83,8 @@ mixin ContactItemBuilder {
               title: state.name,
               subTitle: state.email,
               color: state.color,
-              avatarIcon: isSelected ? IconSource.check : null,
+              isSelectable: isSelectable,
+              isSelected: isSelected,
               onTap: onContactTapped,
               isVerified: state.isVerified != null ? state.isVerified : false,
               imagePath: state.imagePath,

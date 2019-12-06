@@ -57,7 +57,8 @@ class AvatarListItem extends StatelessWidget {
   final Function onTap;
   final Widget titleIcon;
   final Widget subTitleIcon;
-  final IconSource avatarIcon;
+  final bool isSelectable;
+  final bool isSelected;
   final int timestamp;
   final bool isVerified;
   final bool isInvite;
@@ -67,7 +68,8 @@ class AvatarListItem extends StatelessWidget {
       {@required this.title,
       @required this.subTitle,
       @required this.onTap,
-      this.avatarIcon,
+      this.isSelectable = false,
+      this.isSelected = false,
       this.imagePath,
       this.color,
       this.freshMessageCount = 0,
@@ -84,7 +86,7 @@ class AvatarListItem extends StatelessWidget {
       onTap: () => onTap(title, subTitle),
       child: IntrinsicHeight(
         child: Container(
-          color: background,
+          color: !isSelected ? background : accent.withOpacity(barely),
           padding: const EdgeInsets.all(listItemPadding),
           child: Row(
             children: <Widget>[
@@ -178,7 +180,15 @@ class AvatarListItem extends StatelessWidget {
               Visibility(
                 visible: moreButton != null,
                 child: Container(child: moreButton),
-              )
+              ),
+              Visibility(
+                visible: isSelectable,
+                child: AdaptiveIcon(
+                  icon: isSelected ? IconSource.checkedCircle : IconSource.circle,
+                  size: iconSelectedSize,
+                  color: isSelected ? accent : onSurface,
+                ),
+              ),
             ],
           ),
         ),

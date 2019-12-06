@@ -108,7 +108,6 @@ class _ChatListItemState extends State<ChatListItem> {
         return AdaptiveInkWell(
           //onLongPress: () => chatItemLongPress(),
           child: AvatarListItem(
-            avatarIcon: _isSelected && widget.isMultiSelect ? IconSource.check : null,
             title: name,
             subTitle: preview,
             color: color,

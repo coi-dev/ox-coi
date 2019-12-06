@@ -82,6 +82,7 @@ const iconTextPadding = 4.0;
 const iconFormPadding = 8.0;
 const iconSize = 18.0;
 const iconMessagePlaySize = 24.0;
+const iconSelectedSize = 24.0;
 
 // Chat
 const composerHorizontalPadding = 8.0;
