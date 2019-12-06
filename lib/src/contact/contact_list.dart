@@ -40,10 +40,12 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
@@ -59,15 +61,13 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:rxdart/rxdart.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 import 'contact_change_event_state.dart';
 
@@ -79,11 +79,7 @@ class ContactList extends RootChild {
   @override
   _ContactListState createState() {
     final state = _ContactListState();
-    setActions([
-      state.getImportAction(),
-      state.getBlockedUsersAction(),
-      state.getSearchAction()
-    ]);
+    setActions([state.getImportAction(), state.getBlockedUsersAction(), state.getSearchAction()]);
     return state;
   }
 
@@ -121,6 +117,11 @@ class ContactList extends RootChild {
   IconSource getNavigationIcon() {
     return IconSource.contacts;
   }
+}
+
+enum SlidableAction {
+  block,
+  delete,
 }
 
 class _ContactListState extends State<ContactList> {
@@ -264,8 +265,7 @@ class _ContactListState extends State<ContactList> {
     );
   }
 
-  Widget buildListViewItems(
-      List<int> contactIds, List<int> contactLastUpdateValues) {
+  Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               height: dividerHeight,
@@ -316,33 +316,53 @@ class _ContactListState extends State<ContactList> {
                   }),
               dismissal: SlidableDismissal(
                 child: SlidableDrawerDismissal(),
-                onDismissed: (actionType) {
-                  if (actionType == SlideActionType.primary) {
-                    _blockContact(contactId: contactId);
-                  } else {
-                    _deleteContact(contactId: contactId);
+                onWillDismiss: (actionType) async {
+                  if (actionType == SlideActionType.secondary) {
+                    await _slidableActionCalled(contactId: contactId, action: SlidableAction.delete);
+                  } else if (actionType == SlideActionType.primary) {
+                    await _slidableActionCalled(contactId: contactId, action: SlidableAction.block);
+                    return true;
                   }
+                  return false;
                 },
               ),
-              child: ContactItem(
-                  contactId: contactId,
-                  contactItemType: ContactItemType.edit,
-                  key: key));
+              child: ContactItem(contactId: contactId, contactItemType: ContactItemType.edit, key: key));
         });
   }
 
-  // Slide Actions
-
-  _blockContact({@required int contactId}) {
+  Future<bool> _slidableActionCalled({@required int contactId, @required SlidableAction action}) async {
     ContactChangeBloc bloc = ContactChangeBloc();
-    bloc.add(BlockContact(contactId: contactId));
-    bloc.close();
-  }
+    switch (action) {
+      case SlidableAction.block:
+        bloc.add(BlockContact(contactId: contactId));
+        break;
+      case SlidableAction.delete:
+        bloc.add(DeleteContact(id: contactId));
+        break;
+    }
 
-  _deleteContact({@required int contactId}) {
-    ContactChangeBloc bloc = ContactChangeBloc();
-    bloc.add(DeleteContact(id: contactId));
-    bloc.close();
+    await for (ContactChangeState state in bloc) {
+      if (state is ContactChangeStateSuccess && state.id == contactId) {
+        if (state.type == ContactChangeType.delete) {
+          showToast(L10n.get(L.contactDeletedSuccess));
+        } else if (state.type == ContactChangeType.block) {
+          showToast(L10n.get(L.contactBlockedSuccess));
+        }
+        bloc.close();
+        return true;
+      } else if (state is ContactChangeStateFailure && state.contactId == contactId) {
+        switch (state.error) {
+          case contactDeleteGeneric:
+            showToast(L10n.get(L.contactDeleteFailed));
+            break;
+          case contactDeleteChatExists:
+            showToast(L10n.get(L.contactDeleteWithActiveChatFailed));
+            break;
+        }
+        bloc.close();
+        return false;
+      }
+    }
+    return false;
   }
-
 }

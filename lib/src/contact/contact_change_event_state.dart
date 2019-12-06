@@ -76,9 +76,10 @@ class ContactEdited extends ContactChangeEvent {}
 class ContactDeleted extends ContactChangeEvent {}
 
 class ContactDeleteFailed extends ContactChangeEvent {
+  final int contactId;
   final String error;
 
-  ContactDeleteFailed({@required this.error});
+  ContactDeleteFailed({@required this.contactId, @required this.error});
 }
 
 class BlockContact extends ContactChangeEvent {
@@ -89,7 +90,11 @@ class BlockContact extends ContactChangeEvent {
   BlockContact({this.chatId, this.contactId, this.messageId});
 }
 
-class ContactBlocked extends ContactChangeEvent {}
+class ContactBlocked extends ContactChangeEvent {
+  final int contactId;
+
+  ContactBlocked({@required this.contactId});
+}
 
 class UnblockContact extends ContactChangeEvent {
   final int id;
@@ -113,7 +118,8 @@ class ContactChangeStateSuccess extends ContactChangeState {
 }
 
 class ContactChangeStateFailure extends ContactChangeState {
+  final int contactId;
   final String error;
 
-  ContactChangeStateFailure({@required this.error});
+  ContactChangeStateFailure({this.contactId, @required this.error});
 }

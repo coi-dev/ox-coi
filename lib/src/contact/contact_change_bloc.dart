@@ -84,11 +84,11 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     } else if (event is ContactDeleted) {
       yield ContactChangeStateSuccess(type: ContactChangeType.delete);
     } else if (event is ContactDeleteFailed) {
-      yield ContactChangeStateFailure(error: event.error);
+      yield ContactChangeStateFailure(contactId: event.contactId, error: event.error);
     } else if (event is BlockContact) {
       _blockContact(event.contactId, event.chatId, event.messageId);
     } else if (event is ContactBlocked) {
-      yield ContactChangeStateSuccess(type: ContactChangeType.block);
+      yield ContactChangeStateSuccess(type: ContactChangeType.block, id: event.contactId);
     } else if (event is UnblockContact) {
       _unblockContact(event.id);
     } else if (event is ContactUnblocked) {
@@ -126,7 +126,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     } else {
       int chatId = await context.getChatByContactId(id);
       String error = chatId != 0 ? contactDeleteChatExists : contactDeleteGeneric;
-      add(ContactDeleteFailed(error: error));
+      add(ContactDeleteFailed(contactId: id, error: error));
     }
   }
 
@@ -144,7 +144,7 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
       messageListRepository.clear();
     }
     adjustChatListOnBlockUnblock(chatId, block: true);
-    add(ContactBlocked());
+    add(ContactBlocked(contactId: contactId));
   }
 
   void adjustChatListOnBlockUnblock(int chatId, {bool block}) {
