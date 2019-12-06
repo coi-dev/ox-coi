@@ -13,6 +13,7 @@ buildNumber=$5
 # Constants
 PLUGIN_FOLDER="flutter-deltachat-core";
 CORE_BUILD_SCRIPT="./build-dcc.sh"
+IOS_BUILD_FOLDER="build/app/outputs/ios/${flavor}"
 
 # Functions
 function isAndroid {
@@ -40,23 +41,27 @@ function isRelease {
 }
 #flutter build apk --build-name=${BUILD_NAME} --build-number=${CI_PIPELINE_ID} --flavor development --debug
 function androidDebugBuild {
-    echo "Android debug build started"
+    echo "Android debug build for ${flavor} started"
     flutter build apk --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor} --debug
 }
 
 function androidReleaseBuild {
-    echo "Android release build started"
+    echo "Android release build for ${flavor} started"
     flutter build apk --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor} --split-per-abi
 }
 
 function iosDebugBuild {
-    echo "iOS debug build started"
-    echo "TODO: iOS debug build is missing"
+    echo "Build mode has to be release to build ipa for export"
 }
 
 function iosReleaseBuild {
-    echo "iOS release build started"
-    echo "TODO: iOS release build is missing"
+    echo "iOS release build for ${flavor} started"
+    rm -rf ../ios/Flutter/Flutter.framework
+    flutter build ios --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor}
+    flutter clean
+
+    xcodebuild -workspace ios/Runner.xcworkspace -scheme ${flavor} -sdk iphoneos -configuration Release-${flavor} archive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -allowProvisioningUpdates
+    xcodebuild -exportArchive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -exportOptionsPlist ios/exportOptions${flavor}.plist -exportPath "${IOS_BUILD_FOLDER}/Runner.ipa" -allowProvisioningUpdates
 }
 
 function getCore {
