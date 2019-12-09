@@ -154,14 +154,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       _listenersRegistered = true;
       _loginSubject.listen(_successCallback, onError: _errorCallback);
       await _core.listen(Event.configureProgress, _loginSubject);
-      await _core.listen(Event.error, _errorSubject);
+      await _core.listen(Event.errorNoNetwork, _errorSubject);
     }
   }
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
       _core.removeListener(Event.configureProgress, _loginSubject);
-      _core.removeListener(Event.error, _errorSubject);
+      _core.removeListener(Event.errorNoNetwork, _errorSubject);
       _listenersRegistered = false;
     }
   }

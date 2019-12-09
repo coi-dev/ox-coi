@@ -54,7 +54,7 @@ int getErrorType(Event event) {
   return -1;
 }
 
-bool _isErrorEvent(Event event) => event?.eventId == Event.error;
+bool _isErrorEvent(Event event) => event?.eventId == Event.error || event?.eventId == Event.errorNoNetwork || event?.eventId == Event.errorNotInGroup;
 
 String getErrorMessage(Event event) {
   if (_isErrorEvent(event)) {
