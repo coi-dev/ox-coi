@@ -264,10 +264,12 @@ packages:
   flutter_sound:
     dependency: "direct main"
     description:
-      name: flutter_sound
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.2"
+      path: "."
+      ref: HEAD
+      resolved-ref: f1d278453c96e066f0fdc5b0e6251c863bd2e407
+      url: "https://github.com/open-xchange/flutter_sound.git"
+    source: git
+    version: "1.6.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
