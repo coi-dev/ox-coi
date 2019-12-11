@@ -42,13 +42,15 @@
 
 import 'dart:convert';
 
+final RegExp matchInvertedNumericAndPlus = RegExp(r'[^0-9+]');
+
+final RegExp matchEmail = RegExp(
+    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
 isNullOrEmpty(String text) => text == null || text.isEmpty;
 
 bool isEmail(String email) {
-  String source =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regExp = new RegExp(source);
-  return regExp.hasMatch(email);
+  return matchEmail.hasMatch(email);
 }
 
 bool isPort(String portString) {
@@ -73,4 +75,9 @@ String encodeBase64(String text) {
 
 int getIndexAfterLastOf(String text, Pattern pattern) {
   return text.lastIndexOf(pattern) + 1;
+}
+
+String getPhoneNumberFromString(String text) {
+  String phoneNumberWithoutOptionals = text.replaceFirst("(0)", '');
+  return phoneNumberWithoutOptionals.replaceAll(matchInvertedNumericAndPlus, '');
 }

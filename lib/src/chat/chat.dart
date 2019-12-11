@@ -79,6 +79,7 @@ import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
@@ -741,7 +742,10 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     }
   }
 
-  Future<bool> callNumber(String phoneNumber) => launch("tel://$phoneNumber");
+  void callNumber(String phoneNumber) {
+    String parsedPhoneNumber = getPhoneNumberFromString(phoneNumber);
+    launch("tel://$parsedPhoneNumber");
+  }
 }
 
 class MessageList extends StatelessWidget {
