@@ -126,18 +126,16 @@ class QrBloc extends Bloc<QrEvent, QrState> {
   void _registerListeners() async {
     if (!_listenersRegistered) {
       _qrSubject.listen(_successCallback, onError: _errorCallback);
-      await _core.listen(Event.secureJoinInviterProgress, _qrSubject);
-      await _core.listen(Event.secureJoinJoinerProgress, _qrSubject);
-      await _core.listen(Event.error, _errorSubject);
+      _core.addListener(eventIdList: [Event.secureJoinInviterProgress, Event.secureJoinJoinerProgress], streamController: _qrSubject);
+      _core.addListener(eventId: Event.error, streamController: _errorSubject);
       _listenersRegistered = true;
     }
   }
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
-      _core.removeListener(Event.secureJoinInviterProgress, _qrSubject);
-      _core.removeListener(Event.secureJoinJoinerProgress, _qrSubject);
-      _core.removeListener(Event.error, _errorSubject);
+      _core.removeListener(_qrSubject);
+      _core.removeListener(_errorSubject);
       _listenersRegistered = false;
     }
   }

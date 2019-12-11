@@ -85,7 +85,7 @@ class RepositoryEventStreamHandler extends BaseRepositoryEventStreamHandler {
 }
 
 class RepositoryMultiEventStreamHandler extends BaseRepositoryEventStreamHandler {
-  final List<int> eventIds;
+  final List<int> eventIdList;
 
-  RepositoryMultiEventStreamHandler(Type type, this.eventIds, onData, [onError]) : super(type, onData, onError);
+  RepositoryMultiEventStreamHandler(Type type, this.eventIdList, onData, [onError]) : super(type, onData, onError);
 }

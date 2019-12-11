@@ -60,7 +60,7 @@ Future<void> getMessages() async {
   var context = Context();
   await context.interruptIdleForIncomingMessages();
   var localPushManager = LocalPushManager();
-  await localPushManager.setup();
+  localPushManager.setup();
   await localPushManager.triggerLocalPush();
 }
 

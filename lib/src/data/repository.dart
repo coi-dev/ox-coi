@@ -144,11 +144,9 @@ abstract class Repository<T extends Base> {
 
   Future<void> addListener(BaseRepositoryEventStreamHandler streamHandler) async {
     if (streamHandler is RepositoryEventStreamHandler) {
-      await _setupCoreListener(streamHandler, streamHandler.eventId);
+      _core.addListener(eventId: streamHandler.eventId, streamController: streamHandler.streamController);
     } else if (streamHandler is RepositoryMultiEventStreamHandler) {
-      for (int eventId in streamHandler.eventIds) {
-        await _setupCoreListener(streamHandler, eventId);
-      }
+      _core.addListener(eventIdList: streamHandler.eventIdList, streamController: streamHandler.streamController);
     }
     streamHandler.streamController.stream.listen((event) async {
       await onData(event);
@@ -161,22 +159,8 @@ abstract class Repository<T extends Base> {
     });
   }
 
-  Future _setupCoreListener(BaseRepositoryEventStreamHandler streamHandler, int eventId) async {
-    await _core.listen(eventId, streamHandler.streamController);
-  }
-
   void removeListener(BaseRepositoryEventStreamHandler streamHandler) {
-    if (streamHandler is RepositoryEventStreamHandler) {
-      tearDownCoreListener(streamHandler.eventId, streamHandler);
-    } else if (streamHandler is RepositoryMultiEventStreamHandler) {
-      for (int index = 0; index < streamHandler.eventIds.length; index++) {
-        tearDownCoreListener(streamHandler.eventIds[index], streamHandler);
-      }
-    }
-  }
-
-  void tearDownCoreListener(int eventId, BaseRepositoryEventStreamHandler streamHandler) {
-    _core.removeListener(eventId, streamHandler.streamController);
+    _core.removeListener(streamHandler.streamController);
   }
 
   void transferTo(Repository<T> repository, int id) {

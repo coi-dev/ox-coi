@@ -81,7 +81,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   static const _subscribeListenerId = 1001;
   static const _validateListenerId = 1002;
 
-  PublishSubject<Event> pushSubject = new PublishSubject();
+  PublishSubject<Event> _pushSubject = new PublishSubject();
   static const securityChannelName = const MethodChannel("oxcoi.security");
 
   @override
@@ -271,18 +271,14 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   void _registerListeners() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      pushSubject.listen(_metadataSuccessCallback, onError: _errorCallback);
-      await _core.listen(Event.setMetaDataDone, pushSubject);
-      await _core.listen(Event.webPushSubscription, pushSubject);
-      await _core.listen(Event.error, pushSubject);
+      _pushSubject.listen(_metadataSuccessCallback, onError: _errorCallback);
+      _core.addListener(eventIdList: [Event.setMetaDataDone, Event.webPushSubscription], streamController: _pushSubject);
     }
   }
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
-      _core.removeListener(Event.setMetaDataDone, pushSubject);
-      _core.removeListener(Event.webPushSubscription, pushSubject);
-      _core.removeListener(Event.error, pushSubject);
+      _core.removeListener(_pushSubject);
       _listenersRegistered = false;
     }
   }

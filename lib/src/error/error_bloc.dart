@@ -86,18 +86,14 @@ class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
   void _registerListeners() async {
     if (!_listenersRegistered) {
       _errorSubject.listen(_errorCallback);
-      await _core.listen(Event.error, _errorSubject);
-      await _core.listen(Event.errorNoNetwork, _errorSubject);
-      await _core.listen(Event.errorNotInGroup, _errorSubject);
+      _core.addListener(eventIdList: Event.allErrorsList, streamController: _errorSubject);
       _listenersRegistered = true;
     }
   }
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
-      _core.removeListener(Event.error, _errorSubject);
-      _core.removeListener(Event.errorNotInGroup, _errorSubject);
-      _core.removeListener(Event.errorNoNetwork, _errorSubject);
+      _core.removeListener(_errorSubject);
       _listenersRegistered = false;
     }
   }

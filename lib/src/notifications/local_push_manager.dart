@@ -66,18 +66,18 @@ class LocalPushManager {
 
   LocalPushManager._internal();
 
-  Future<void> setup() async {
+  void setup() {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       _notificationManager = NotificationManager();
       _messageSubject.listen(_successCallback);
-      await _core.listen(Event.incomingMsg, _messageSubject);
+      _core.addListener(eventId: Event.incomingMsg, streamController: _messageSubject);
     }
   }
 
   Future<void> tearDown() async {
     if (_listenersRegistered) {
-      _core.removeListener(Event.incomingMsg, _messageSubject);
+      _core.removeListener(_messageSubject);
       _listenersRegistered = false;
     }
   }

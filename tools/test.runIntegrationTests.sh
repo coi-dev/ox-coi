@@ -104,9 +104,15 @@ do
 done
 
 echo
+
 testCount=$((success + failed))
 runTime=$(($SECONDS - $startTime))
+warnings="No warnings found"
+if grep -i "Exception" ${LOG_FILE} >/dev/null; then
+   warnings="Exceptions were found in the generated log (${LOG_FILE})"
+fi
 echo "### Test suite finished in $runTime seconds"
 echo "  [All]: $testCount"
 echo "  [OK]: $success successfully finished"
+echo "  [WARN]: $warnings"
 echo "  [FAIL]: $failed errors occurred"

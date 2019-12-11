@@ -130,12 +130,12 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
 
   Future<void> _registerListeners() async {
     _keyActionSubject.listen(_successCallback, onError: _errorCallback);
-   await _core.listen(Event.imexProgress, _keyActionSubject);
+   _core.addListener(eventId: Event.imexProgress, streamController: _keyActionSubject);
   }
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
-      _core.removeListener(Event.imexProgress, _keyActionSubject);
+      _core.removeListener( _keyActionSubject);
       _listenersRegistered = false;
     }
   }
