@@ -122,7 +122,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
                 new FlatButton(
                   child: new Text(L10n.get(L.settingCopyCode)),
                   onPressed: () {
-                    var toastText = L10n.getFormatted(L.clipboardCopiedX, [L.code]);
+                    var toastText = L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.code)]);
                     copyToClipboardWithToast(text: state.setupCode, toastText: toastText);
                     navigation.pop(context);
                   },

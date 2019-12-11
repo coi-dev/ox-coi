@@ -106,7 +106,7 @@ class L {
   static final moreMessages = _translationKey("more messages");
   static final privacyDeclaration = _translationKey("privacy declaration");
   static final termsConditions = _translationKey("terms & conditions");
-  static final code = _translationKey("code");
+  static final code = _translationKey("Code");
   static final retry = _translationKey("Retry");
 
   static final autocryptSetupMessage = _translationKey("Autocrypt Setup Message");
