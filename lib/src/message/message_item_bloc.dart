@@ -209,6 +209,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
   void _registerListeners() {
     if (!_listenersRegistered) {
+      _listenersRegistered = true;
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
         [Event.msgDelivered, Event.msgRead, Event.msgFailed],
@@ -220,8 +221,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
-      _messageListRepository?.removeListener(_repositoryStreamHandler);
       _listenersRegistered = false;
+      _messageListRepository?.removeListener(_repositoryStreamHandler);
     }
   }
 

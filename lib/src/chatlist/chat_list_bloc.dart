@@ -66,6 +66,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   String _currentSearch;
   bool _showInvites;
+  bool _listenersRegistered = false;
 
   @override
   ChatListState get initialState => ChatListStateInitial();
@@ -76,7 +77,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       _currentSearch = null;
       yield ChatListStateLoading();
       try {
-        setupChatListListener();
+        _registerListeners();
         bool antiMobbingActivated = await getPreference(preferenceAntiMobbing);
         _showInvites = antiMobbingActivated == null || !antiMobbingActivated;
         if (_showInvites) {
@@ -115,13 +116,14 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
 
   @override
   void close() {
-    _chatRepository.removeListener(_repositoryStreamHandler);
+    _unregisterListeners();
     _messageListBloc.close();
     super.close();
   }
 
-  void setupChatListListener() {
-    if (_repositoryStreamHandler == null) {
+  void _registerListeners() async {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       _repositoryStreamHandler =
           RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
@@ -134,6 +136,13 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
           add(InvitesPrepared(messageIds: inviteContactList.values.toList(growable: false)));
         }
       });
+    }
+  }
+
+  void _unregisterListeners() {
+    if (_listenersRegistered) {
+      _listenersRegistered = false;
+      _chatRepository.removeListener(_repositoryStreamHandler);
     }
   }
 

@@ -62,6 +62,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   bool _isGroup = false;
   int _chatId;
+  bool _listenersRegistered = false;
 
   bool get isGroup => _isGroup;
 
@@ -74,7 +75,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield ChatStateLoading();
       try {
         _chatId = event.chatId;
-        _setupChatListener();
+        _registerListeners();
         if (_chatId == Chat.typeInvite) {
           _setupInviteChat(event.messageId);
         } else {
@@ -102,14 +103,22 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   @override
   void close() {
-    _chatRepository.removeListener(_repositoryStreamHandler);
+    _unregisterListeners();
     super.close();
   }
 
-  void _setupChatListener() async {
-    if (_repositoryStreamHandler == null) {
+  void _registerListeners() async {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified], _onChatChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
+    }
+  }
+
+  void _unregisterListeners() {
+    if (_listenersRegistered) {
+      _listenersRegistered = false;
+      _chatRepository.removeListener(_repositoryStreamHandler);
     }
   }
 

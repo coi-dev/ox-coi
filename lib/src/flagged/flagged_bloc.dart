@@ -51,6 +51,7 @@ import 'flagged_events_state.dart';
 class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
   RepositoryEventStreamHandler repositoryStreamHandler;
   Repository<ChatMsg> _messageListRepository;
+  bool _listenersRegistered = false;
 
   @override
   FlaggedState get initialState => FlaggedStateInitial();
@@ -61,7 +62,7 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
       yield FlaggedStateLoading();
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
-        _setupMessagesListener();
+        _registerListeners();
         _loadFlaggedMessages();
       } catch (error) {
         yield FlaggedStateFailure(error: error.toString());
@@ -79,15 +80,23 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
 
   @override
   void close() {
-    _messageListRepository?.removeListener(repositoryStreamHandler);
+    _unregisterListeners();
     super.close();
   }
 
-  void _setupMessagesListener() async {
-    if (repositoryStreamHandler == null) {
-      repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.msgsChanged, _updateMessages);
-      _messageListRepository.addListener(repositoryStreamHandler);
-    }
+  void _registerListeners() {
+      if (!_listenersRegistered) {
+        _listenersRegistered = true;
+        repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.msgsChanged, _updateMessages);
+        _messageListRepository.addListener(repositoryStreamHandler);
+      }
+  }
+
+  void _unregisterListeners() {
+      if (_listenersRegistered) {
+        _listenersRegistered = false;
+        _messageListRepository?.removeListener(repositoryStreamHandler);
+      }
   }
 
   void _updateMessages(Event event) => add(UpdateMessages());

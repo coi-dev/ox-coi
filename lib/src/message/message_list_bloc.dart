@@ -60,6 +60,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   int _messageId;
   String who;
   String _cacheFilePath = "";
+  bool _listenersRegistered = false;
 
   @override
   MessageListState get initialState => MessagesStateInitial();
@@ -74,7 +75,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
           _messageId = event.messageId;
         }
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
-        _setupMessagesListener();
+        _registerListeners();
         _setupMessages();
       } catch (error) {
         yield MessagesStateFailure(error: error.toString());
@@ -106,19 +107,28 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   @override
   void close() {
-    _messageListRepository?.removeListener(_repositoryStreamHandler);
+    _unregisterListeners();
     super.close();
   }
 
-  void _setupMessagesListener() async {
-    if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
-        Type.publish,
-        [Event.incomingMsg, Event.msgsChanged],
-        _onMessagesChanged,
-      );
-      _messageListRepository.addListener(_repositoryStreamHandler);
-    }
+  void _registerListeners() {
+      if (!_listenersRegistered) {
+        _listenersRegistered = true;
+        _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
+          Type.publish,
+          [Event.incomingMsg, Event.msgsChanged],
+          _onMessagesChanged,
+        );
+        _messageListRepository.addListener(_repositoryStreamHandler);
+      }
+  }
+
+  void _unregisterListeners() {
+      if (_listenersRegistered) {
+        _listenersRegistered = false;
+        _messageListRepository?.removeListener(_repositoryStreamHandler);
+
+      }
   }
 
   void _onMessagesChanged(event) => _updateMessages(event);

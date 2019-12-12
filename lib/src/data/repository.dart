@@ -160,7 +160,7 @@ abstract class Repository<T extends Base> {
   }
 
   void removeListener(BaseRepositoryEventStreamHandler streamHandler) {
-    _core.removeListener(streamHandler.streamController);
+    _core.removeListener(streamHandler?.streamController);
   }
 
   void transferTo(Repository<T> repository, int id) {

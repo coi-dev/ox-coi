@@ -58,6 +58,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   int _typeOrChatId;
   List<int> _contactsSelected = List();
   String _currentSearch;
+  bool _listenersRegistered = false;
 
   int get contactsSelectedCount => _contactsSelected.length;
 
@@ -73,7 +74,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       try {
         _currentSearch = null;
         _typeOrChatId = event.typeOrChatId;
-        _setupContactListener();
+        _registerListeners();
         _setupContacts();
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
@@ -104,15 +105,23 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
 
   @override
   void close() {
-    _contactRepository.removeListener(_repositoryStreamHandler);
+    _unregisterListeners();
     super.close();
   }
 
-  void _setupContactListener() async {
-    if (_repositoryStreamHandler == null) {
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChanged);
-      _contactRepository.addListener(_repositoryStreamHandler);
-    }
+  void _registerListeners() {
+      if (!_listenersRegistered) {
+        _listenersRegistered = true;
+        _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChanged);
+        _contactRepository.addListener(_repositoryStreamHandler);
+      }
+  }
+
+  void _unregisterListeners() {
+      if (_listenersRegistered) {
+        _listenersRegistered = false;
+        _contactRepository.removeListener(_repositoryStreamHandler);
+      }
   }
 
   void _onContactsChanged([event]) async {

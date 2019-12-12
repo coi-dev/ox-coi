@@ -54,6 +54,7 @@ import 'anti_mobbing_list_event_state.dart';
 class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListState> with InviteMixin {
   Repository<ChatMsg> _messageListRepository;
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
+  bool _listenersRegistered = false;
 
   @override
   AntiMobbingListState get initialState => AntiMobbingListStateInitial();
@@ -63,7 +64,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
     if (event is RequestMessages) {
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-        _setupMessagesListener();
+        _registerListeners();
         loadMessages();
       } catch (error) {
         yield AntiMobbingListStateFailure();
@@ -79,18 +80,27 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
 
   @override
   void close() {
-    _messageListRepository?.removeListener(_repositoryStreamHandler);
+    _unregisterListeners();
     super.close();
   }
 
-  void _setupMessagesListener() async {
-    if (_repositoryStreamHandler == null) {
+  void _registerListeners() async {
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
         [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead],
         _onMessagesChanged,
       );
       _messageListRepository.addListener(_repositoryStreamHandler);
+    }
+  }
+
+  void _unregisterListeners() {
+    if (_listenersRegistered) {
+      _listenersRegistered = false;
+      _messageListRepository?.removeListener(_repositoryStreamHandler);
+
     }
   }
 
