@@ -81,7 +81,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
   @override
   void close() {
-    unregisterListeners();
+    _unregisterListeners();
     super.close();
   }
 
@@ -218,9 +218,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     }
   }
 
-  void unregisterListeners() {
-    _messageListRepository?.removeListener(_repositoryStreamHandler);
-    _listenersRegistered = false;
+  void _unregisterListeners() {
+    if (_listenersRegistered) {
+      _messageListRepository?.removeListener(_repositoryStreamHandler);
+      _listenersRegistered = false;
+    }
   }
 
   void _onMessageStateChanged(Event event) async{
@@ -231,7 +233,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState);
         add(MessageUpdated(messageStateData: messageStateData));
         if (eventMessageState == ChatMsg.messageStateReceived) {
-          unregisterListeners();
+          _unregisterListeners();
         }
       }
     }else if (event.hasType(Event.msgFailed) && _messageId == event.data2){
@@ -239,7 +241,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       Context context = Context();
       String messageInfo = await context.getMessageInfo(_messageId);
       var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState, messageInfo: messageInfo);
-      unregisterListeners();
+      _unregisterListeners();
       add(MessageUpdated(messageStateData: messageStateData));
     }
   }
