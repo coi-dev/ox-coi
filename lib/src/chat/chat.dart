@@ -130,6 +130,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     super.initState();
     navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
     _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
+    _chatBloc.add(ClearNotifications());
     final chatObservable = new Observable<ChatState>(_chatBloc);
     chatObservable.listen((state) {
       if (state is ChatStateSuccess) {

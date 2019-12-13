@@ -54,6 +54,8 @@ class RequestChat extends ChatEvent {
   RequestChat({@required this.chatId, this.isHeadless, this.messageId});
 }
 
+class ClearNotifications extends ChatEvent {}
+
 class ChatLoaded extends ChatEvent {
   final String name;
   final String subTitle;

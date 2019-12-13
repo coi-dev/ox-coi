@@ -54,6 +54,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/ui/color.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
@@ -98,6 +99,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           avatarPath: event.avatarPath,
           isRemoved: event.isRemoved,
           phoneNumbers: event.phoneNumbers);
+    } else if(event is ClearNotifications){
+      _removeNotifications();
     }
   }
 
@@ -216,5 +219,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         phoneNumbers: phoneNumbers,
       ),
     );
+  }
+
+  void _removeNotifications() {
+    var _notificationManager = NotificationManager();
+    _notificationManager.cancelNotification(_chatId);
   }
 }
