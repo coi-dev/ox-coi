@@ -60,6 +60,8 @@ import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_profile.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
@@ -86,9 +88,11 @@ class _RootState extends State<Root> {
 
     return Scaffold(
       appBar: AdaptiveAppBar(
-        title: Text(child.getTitle(context)),
+        title: Text(child.getTitle()),
         actions: child.getActions(context),
+        color: CustomTheme.of(context).surface,
       ),
+      backgroundColor: CustomTheme.of(context).background,
       body: WillPopScope(
         child: MultiBlocListener(
           listeners: [
@@ -205,6 +209,9 @@ class _RootState extends State<Root> {
       type: BottomNavigationBarType.fixed,
       items: getBottomBarItems(),
       currentIndex: _selectedIndex,
+      backgroundColor: CustomTheme.of(context).surface,
+      unselectedIconTheme: IconThemeData(color: CustomTheme.of(context).onSurface.withOpacity(fade)),
+      unselectedItemColor: CustomTheme.of(context).onSurface.withOpacity(fade),
       onTap: _onItemTapped,
     );
   }
@@ -214,9 +221,9 @@ class _RootState extends State<Root> {
     childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
           icon: AdaptiveIcon(
             icon: item.getNavigationIcon(),
-            key: Key(item.getNavigationText(context)),
+            key: Key(item.getNavigationText()),
           ),
-          title: Text(item.getNavigationText(context)),
+          title: Text(item.getNavigationText()),
         )));
     return bottomBarItems;
   }

@@ -42,12 +42,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 import 'message_builder.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class MessageSetup extends StatelessWidget {
   final MessageStateData messageStateData;
@@ -65,9 +66,9 @@ class MessageSetup extends StatelessWidget {
         children: <Widget>[
           MessageData(
             messageStateData: messageStateData,
-            backgroundColor: secondary,
-            textColor: onSecondary,
-            secondaryTextColor: onSecondary.withOpacity(fade),
+            backgroundColor: CustomTheme.of(context).secondary,
+            textColor: CustomTheme.of(context).onSecondary,
+            secondaryTextColor: CustomTheme.of(context).onSecondary.withOpacity(fade),
             borderRadius: buildInfoBorderRadius(),
             useInformationText: true,
             child: MessageMaterial(
@@ -95,8 +96,8 @@ class MessageInfo extends StatelessWidget {
         child: Center(
           child: MessageData(
             messageStateData: messageStateData,
-            backgroundColor: info,
-            textColor: onInfo,
+            backgroundColor: CustomTheme.of(context).info,
+            textColor: CustomTheme.of(context).onInfo,
             borderRadius: buildInfoBorderRadius(),
             icon: icon,
             useInformationText: useInformationText,

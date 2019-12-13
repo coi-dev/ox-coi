@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +59,7 @@ import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 void main() {
@@ -84,7 +82,10 @@ void main() {
           builder: (BuildContext context) => ErrorBloc(),
         )
       ],
-      child: OxCoiApp(),
+      child: CustomTheme(
+        initialThemeKey: ThemeKey.LIGHT,
+        child: OxCoiApp(),
+      ),
     ),
   );
 }
@@ -94,36 +95,29 @@ class OxCoiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return CupertinoApp(
-        theme: CupertinoThemeData(
-          primaryColor: primary,
-          barBackgroundColor: primary,
-        ),
-        localizationsDelegates: getLocalizationsDelegates(),
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          getLocaleResolutionCallback(deviceLocale);
-          return deviceLocale;
-        },
-        initialRoute: Navigation.root,
-        routes: navigation.routesMapping,
-      );
-    } else {
-      return MaterialApp(
-        theme: ThemeData(
-          primaryColor: primary,
-          accentColor: accent,
-        ),
-        localizationsDelegates: getLocalizationsDelegates(),
-        supportedLocales: L10n.supportedLocales,
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          getLocaleResolutionCallback(deviceLocale);
-          return deviceLocale;
-        },
-        initialRoute: Navigation.root,
-        routes: navigation.routesMapping,
-      );
-    }
+    var customTheme = CustomTheme.of(context);
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: customTheme.brightness,
+        backgroundColor: customTheme.background,
+        scaffoldBackgroundColor: customTheme.background,
+        accentColor: customTheme.accent,
+        primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
+              color: customTheme.onSurface,
+            ),
+        primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
+              bodyColor: customTheme.onSurface,
+            ),
+      ),
+      localizationsDelegates: getLocalizationsDelegates(),
+      supportedLocales: L10n.supportedLocales,
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        getLocaleResolutionCallback(deviceLocale);
+        return deviceLocale;
+      },
+      initialRoute: Navigation.root,
+      routes: navigation.routesMapping,
+    );
   }
 
   List<LocalizationsDelegate> getLocalizationsDelegates() {

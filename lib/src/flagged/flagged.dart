@@ -41,23 +41,21 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'flagged_bloc.dart';
 import 'flagged_events_state.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
 class Flagged extends StatefulWidget {
   @override
@@ -79,32 +77,9 @@ class _FlaggedState extends State<Flagged> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AdaptiveAppBar(
-          title: buildTitle(),
+          title: Text(L10n.get(L.chatFlagged)),
         ),
         body: buildListView());
-  }
-
-  buildTitle() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          L10n.get(L.chatFlagged),
-          key: Key(L10n.get(L.chatFlagged)),
-          softWrap: true,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.title.apply(color: onPrimary),
-        ),
-        Text(
-          L10n.get(L.chatFavoriteMessages),
-          key: Key( L10n.get(L.chatFavoriteMessages)),
-          style: Theme.of(context).textTheme.subtitle.apply(color: onPrimary),
-          softWrap: true,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
   }
 
   Widget buildListView() {

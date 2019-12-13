@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
@@ -86,7 +87,7 @@ class AvatarListItem extends StatelessWidget {
       onTap: () => onTap(title, subTitle),
       child: IntrinsicHeight(
         child: Container(
-          color: !isSelected ? background : accent.withOpacity(barely),
+          color: !isSelected ? CustomTheme.of(context).surface : CustomTheme.of(context).accent.withOpacity(barely),
           padding: const EdgeInsets.all(listItemPadding),
           child: Row(
             children: <Widget>[
@@ -117,8 +118,11 @@ class AvatarListItem extends StatelessWidget {
                               child: Text(
                                 getChatListTime(timestamp),
                                 style: shouldHighlight()
-                                    ? Theme.of(context).textTheme.caption.copyWith(color: onBackground, fontWeight: FontWeight.bold)
-                                    : Theme.of(context).textTheme.caption.copyWith(color: onBackground),
+                                    ? Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        .copyWith(color: CustomTheme.of(context).onSurface, fontWeight: FontWeight.bold)
+                                    : Theme.of(context).textTheme.caption.copyWith(color: CustomTheme.of(context).onSurface),
                               )),
                         ],
                       ),
@@ -149,10 +153,10 @@ class AvatarListItem extends StatelessWidget {
                               width: iconSize,
                               height: iconSize,
                               decoration: BoxDecoration(
-                                  color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                                  color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)), // TODO remove Colors.xyz call as soon as possible
                               child: Text(
                                 "!",
-                                style: TextStyle(color: Colors.white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
+                                style: TextStyle(color: CustomTheme.of(context).white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -163,10 +167,11 @@ class AvatarListItem extends StatelessWidget {
                               alignment: Alignment.center,
                               width: iconSize,
                               height: iconSize,
-                              decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                              decoration: BoxDecoration(
+                                  color: CustomTheme.of(context).accent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
                               child: Text(
                                 freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                                style: TextStyle(color: onAccent, fontSize: listInviteUnreadIndicatorFontSize),
+                                style: TextStyle(color: CustomTheme.of(context).onAccent, fontSize: listInviteUnreadIndicatorFontSize),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -186,7 +191,7 @@ class AvatarListItem extends StatelessWidget {
                 child: AdaptiveIcon(
                   icon: isSelected ? IconSource.checkedCircle : IconSource.circle,
                   size: iconSelectedSize,
-                  color: isSelected ? accent : onSurface,
+                  color: isSelected ? CustomTheme.of(context).accent : CustomTheme.of(context).onSurface,
                 ),
               ),
             ],
@@ -207,7 +212,7 @@ class AvatarListItem extends StatelessWidget {
           title != null ? title : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.body2.copyWith(color: onBackground),
+          style: Theme.of(context).textTheme.body2.copyWith(color: CustomTheme.of(context).onSurface),
         ));
   }
 
@@ -218,7 +223,7 @@ class AvatarListItem extends StatelessWidget {
           title != null ? title : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.body2.copyWith(color: onBackground, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.body2.copyWith(color: CustomTheme.of(context).onSurface, fontWeight: FontWeight.bold),
         ));
   }
 
@@ -229,7 +234,7 @@ class AvatarListItem extends StatelessWidget {
           subTitle != null ? subTitle : "",
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.body1.copyWith(color: onBackground.withOpacity(half)),
+          style: Theme.of(context).textTheme.body1.copyWith(color: CustomTheme.of(context).onSurface.withOpacity(half)),
         ));
   }
 }

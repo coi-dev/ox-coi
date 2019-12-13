@@ -40,9 +40,11 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
@@ -52,7 +54,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
@@ -62,9 +64,6 @@ import 'package:rxdart/rxdart.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ContactDetails extends StatefulWidget {
   final int contactId;
@@ -149,21 +148,21 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       key: Key(keyContactDetailOpenChatProfileActionIcon),
                       iconData: IconSource.chat,
                       text: L10n.get(L.chatOpen),
-                      color: accent,
+                      color: CustomTheme.of(context).accent,
                       onTap: () => createChatFromContact(context, widget.contactId),
                     ),
                     ProfileAction(
                       key: Key(keyContactDetailEditContactProfileActionIcon),
                       iconData: IconSource.edit,
                       text: L10n.get(L.contactEdit),
-                      color: accent,
+                      color: CustomTheme.of(context).accent,
                       onTap: () => _editContact(context, state.name, state.email, state.phoneNumbers),
                     ),
                     ProfileAction(
                       key: Key(keyContactDetailBlockContactProfileActionIcon),
                       iconData: IconSource.block,
                       text: L10n.get(L.contactBlock),
-                      color: accent,
+                      color: CustomTheme.of(context).accent,
                       onTap: () => showActionDialog(
                         context,
                         ProfileActionType.block,
@@ -178,7 +177,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                       key: Key(keyContactDetailDeleteContactProfileActionIcon),
                       iconData: IconSource.delete,
                       text: L10n.get(L.contactDelete),
-                      color: error,
+                      color: CustomTheme.of(context).error,
                       onTap: () => showActionDialog(
                         context,
                         ProfileActionType.deleteContact,
@@ -202,7 +201,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   }
 
   void _editContact(BuildContext context, String name, String email, String phoneNumbers) async {
-    return await _navigation.push(
+    return await _navigation
+        .push(
       context,
       MaterialPageRoute(
         builder: (context) => ContactChange(
@@ -213,7 +213,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
           phoneNumbers: phoneNumbers,
         ),
       ),
-    ).then((value) {
+    )
+        .then((value) {
       _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     });
   }

@@ -40,63 +40,46 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/image.dart';
-import 'package:ox_coi/src/utils/text.dart';
-import 'package:transparent_image/transparent_image.dart';
 
-class Avatar extends StatelessWidget {
-  final String imagePath;
-  final String textPrimary;
-  final String textSecondary;
-  final Color color;
-  final double size;
+class BrandedTheme {
+  final Color white = Colors.white;
+  final Color black = Colors.black;
+  final Color accent;
+  final Color onAccent;
+  final Color info;
+  final Color onInfo;
+  final Color warning;
+  final Color onWarning;
+  final Brightness brightness;
+  final Color background;
+  final Color onBackground;
+  final Color surface;
+  final Color onSurface;
+  final Color secondary;
+  final Color onSecondary;
+  final Color error;
+  final Color onError;
+  final Color primary;
+  final Color onPrimary;
 
-  Avatar({this.imagePath, @required this.textPrimary, this.textSecondary, this.color, this.size = listAvatarDiameter});
-
-  @override
-  Widget build(BuildContext context) {
-    String initials = "";
-    ImageProvider avatarImage;
-    if (isNullOrEmpty(imagePath)) {
-      avatarImage = MemoryImage(kTransparentImage);
-      initials = getInitials(textPrimary, textSecondary);
-    } else {
-      avatarImage = FileImage(File(imagePath));
-    }
-
-    return Container(
-      alignment: Alignment.center,
-      constraints: BoxConstraints.expand(width: size, height: size),
-      decoration: ShapeDecoration(
-        shape: getSuperEllipseShape(size),
-        color: color,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: avatarImage,
-        ),
-      ),
-      child: Visibility(
-        visible: isNullOrEmpty(imagePath),
-        child: Text(
-          initials,
-          style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).white),
-        ),
-      ),
-    );
-  }
-
-  static String getInitials(String textPrimary, [String textSecondary]) {
-    if (textPrimary != null && textPrimary.isNotEmpty) {
-      return textPrimary.substring(0, 1);
-    }
-    if (textSecondary != null && textSecondary.isNotEmpty) {
-      return textSecondary.substring(0, 1);
-    }
-    return "";
-  }
+  BrandedTheme({
+    this.accent,
+    this.onAccent,
+    this.info,
+    this.onInfo,
+    this.warning,
+    this.onWarning,
+    this.brightness,
+    this.background,
+    this.onBackground,
+    this.surface,
+    this.onSurface,
+    this.secondary,
+    this.onSecondary,
+    this.error,
+    this.onError,
+    this.primary,
+    this.onPrimary
+  });
 }

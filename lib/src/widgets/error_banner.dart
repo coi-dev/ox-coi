@@ -39,11 +39,11 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 class ErrorBanner extends StatelessWidget {
@@ -61,7 +61,7 @@ class ErrorBanner extends StatelessWidget {
       height: loginErrorOverlayHeight,
       child: Material(
         elevation: errorBannerElevation,
-        color: error,
+        color: CustomTheme.of(context).error,
         child: Row(
           children: <Widget>[
             Padding(
@@ -70,7 +70,7 @@ class ErrorBanner extends StatelessWidget {
             AdaptiveIcon(
               icon: IconSource.reportProblem,
               size: iconSize,
-              color: onError,
+              color: CustomTheme.of(context).onError,
             ),
             Padding(
               padding: EdgeInsets.only(left: loginErrorOverlayLeftPadding),
@@ -79,7 +79,7 @@ class ErrorBanner extends StatelessWidget {
               child: Expanded(
                 child: Text(
                   message,
-                  style: Theme.of(context).textTheme.body1.apply(color: onError),
+                  style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onError),
                 ),
               ),
             ),
@@ -87,7 +87,7 @@ class ErrorBanner extends StatelessWidget {
                 icon: AdaptiveIcon(
                   icon: IconSource.clear,
                   size: loginErrorOverlayIconSize,
-                  color: onError,
+                  color: CustomTheme.of(context).onError,
                 ),
                 onPressed: closePressed),
           ],

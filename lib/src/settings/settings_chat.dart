@@ -41,19 +41,20 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/settings/settings_chat_bloc.dart';
 import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
 class SettingsChat extends StatefulWidget {
   @override
@@ -62,6 +63,7 @@ class SettingsChat extends StatefulWidget {
 
 class _SettingsChatState extends State<SettingsChat> {
   SettingsChatBloc _settingsChatBloc = SettingsChatBloc();
+  ThemeKey actualKey;
 
   final Navigation _navigation = Navigation();
 
@@ -82,6 +84,7 @@ class _SettingsChatState extends State<SettingsChat> {
   }
 
   Widget _buildPreferenceList(BuildContext context) {
+    actualKey = CustomTheme.instanceOf(context).actualThemeKey;
     return BlocBuilder(
       bloc: _settingsChatBloc,
       builder: (context, state) {
@@ -105,7 +108,13 @@ class _SettingsChatState extends State<SettingsChat> {
                 onTap: () {
                   _buildMessageSyncChooserDialog(state.inviteSetting);
                 },
-              )
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                title: Text("Dark/Light mode"),
+                subtitle: Text("Switch between dark and light mode"),
+                trailing: Switch.adaptive(value: actualKey == ThemeKey.DARK ? true : false, onChanged: (value) => _changeTheme()),
+              ),
             ]).toList(),
           );
         } else {
@@ -113,6 +122,12 @@ class _SettingsChatState extends State<SettingsChat> {
         }
       },
     );
+  }
+
+  void _changeTheme() async{
+    var newTheme = actualKey == ThemeKey.DARK ? ThemeKey.LIGHT : ThemeKey.DARK;
+    await setPreference(preferenceAppThemeKey, newTheme.toString());
+    CustomTheme.instanceOf(context).changeTheme(newTheme);
   }
 
   void _changeReadReceipts() {

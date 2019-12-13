@@ -43,6 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
@@ -53,11 +54,9 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatProfileOneToOne extends StatefulWidget {
   final int chatId;
@@ -141,7 +140,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               ProfileAction(
                 iconData: IconSource.block,
                 text: L10n.get(L.contactBlock),
-                color: accent,
+                color: CustomTheme.of(context).accent,
                 onTap: () => showActionDialog(
                   context,
                   ProfileActionType.block,
@@ -155,7 +154,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             if (!isInvite())
               ProfileAction(
                 iconData: IconSource.delete,
-                color: error,
+                color: CustomTheme.of(context).error,
                 text: L10n.get(L.chatDeleteP),
                 onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),
               ),

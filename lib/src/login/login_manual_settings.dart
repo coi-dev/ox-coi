@@ -51,7 +51,7 @@ import 'package:ox_coi/src/platform/system_interaction.dart';
 import 'package:ox_coi/src/settings/settings_manual_form.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
@@ -219,7 +219,7 @@ class LoginButton extends StatelessWidget {
         onPressed: () => _performLogin(context),
         child: Text(
           L10n.get(L.loginSignIn).toUpperCase(),
-          style: Theme.of(context).textTheme.subhead.apply(color: accent),
+          style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).accent),
         ),
       ),
     );

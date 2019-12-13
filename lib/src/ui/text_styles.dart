@@ -41,6 +41,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/ui/color.dart';
 
-const primaryW500 = TextStyle(color: primary, fontWeight: FontWeight.w500);
+import 'custom_theme.dart';
+
+getPrimaryW500TextStyle(BuildContext context){
+    return TextStyle(color: CustomTheme.of(context).primary, fontWeight: FontWeight.w500);
+}

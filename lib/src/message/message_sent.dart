@@ -43,7 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 import 'message_item_event_state.dart';
@@ -60,9 +60,9 @@ class MessageSent extends StatelessWidget {
       widthFactor: 0.8,
       child: MessageData(
         messageStateData: messageStateData,
-        backgroundColor: secondary,
-        textColor: onSecondary,
-        secondaryTextColor: accent,
+        backgroundColor: CustomTheme.of(context).secondary,
+        textColor: CustomTheme.of(context).onSecondary,
+        secondaryTextColor: CustomTheme.of(context).accent,
         borderRadius: buildBorderRadius(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

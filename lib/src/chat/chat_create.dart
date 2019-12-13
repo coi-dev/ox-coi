@@ -40,9 +40,12 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat_create_group_participants.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
@@ -54,15 +57,12 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatCreate extends StatefulWidget {
   @override
@@ -104,9 +104,10 @@ class _ChatCreateState extends State<ChatCreate> {
     );
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
-          icon: IconSource.search,
+        icon: IconSource.search,
       ),
-      onPressed: () => search.show(context), key: Key(keyChatCreateSearchIcon),
+      onPressed: () => search.show(context),
+      key: Key(keyChatCreateSearchIcon),
     );
   }
 
@@ -129,9 +130,7 @@ class _ChatCreateState extends State<ChatCreate> {
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );
@@ -140,9 +139,9 @@ class _ChatCreateState extends State<ChatCreate> {
   ListView buildListItems(bool showNewContactAndAddGroup, ContactListStateSuccess state, int offset) {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
-          height: dividerHeight,
-          color: onBackground.withOpacity(barely),
-        ),
+              height: dividerHeight,
+              color: CustomTheme.of(context).onBackground.withOpacity(barely),
+            ),
         padding: showNewContactAndAddGroup ? null : EdgeInsets.only(top: listItemPadding),
         itemCount: state.contactIds.length + offset,
         itemBuilder: (BuildContext context, int index) {
@@ -164,12 +163,12 @@ class _ChatCreateState extends State<ChatCreate> {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.personAdd,
-            color: accent,
+            color: CustomTheme.of(context).accent,
             key: Key(keyChatCreatePersonAddIcon),
           ),
           title: Text(
             L10n.get(L.contactNew),
-            style: Theme.of(context).textTheme.subhead.merge(primaryW500),
+            style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
           ),
           onTap: newContactTapped,
         ),
@@ -182,12 +181,12 @@ class _ChatCreateState extends State<ChatCreate> {
           child: ListTile(
             leading: AdaptiveIcon(
               icon: IconSource.groupAdd,
-              color: accent,
+              color: CustomTheme.of(context).accent,
               key: Key(keyChatCreateGroupAddIcon),
             ),
             title: Text(
               L10n.get(L.groupCreate),
-              style: Theme.of(context).textTheme.subhead.merge(primaryW500),
+              style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
             ),
             onTap: createGroupTapped,
           ),

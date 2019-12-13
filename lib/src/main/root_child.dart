@@ -65,13 +65,13 @@ abstract class RootChild extends StatefulWidget {
     _actions.addAll(widgets);
   }
 
-  String getTitle(BuildContext context);
+  String getTitle();
 
-  String getNavigationText(BuildContext context);
+  String getNavigationText();
 
   IconSource getNavigationIcon();
 
-  Color getColor();
+  Color getColor(BuildContext context);
 
   FloatingActionButton getFloatingActionButton(BuildContext context);
 }

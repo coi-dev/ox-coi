@@ -105,6 +105,7 @@ enum IconSource {
   retry,
   checkedCircle,
   circle,
+  darkMode,
 }
 
 class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
@@ -190,6 +191,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.retry : [Icons.autorenew, Icons.autorenew],
     IconSource.checkedCircle : [Icons.check_circle, Icons.check_circle],
     IconSource.circle : [Icons.radio_button_unchecked, Icons.radio_button_unchecked],
+    IconSource.darkMode : [Icons.brightness_2, Icons.brightness_2],
   };
 
   AdaptiveIcon({

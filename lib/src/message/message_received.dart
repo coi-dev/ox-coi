@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
@@ -63,9 +64,9 @@ class MessageReceived extends StatelessWidget {
       widthFactor: 0.8,
       child: MessageData(
         messageStateData: messageStateData,
-        backgroundColor: surface,
-        textColor: onSurface,
-        secondaryTextColor: onSurface.withOpacity(fade),
+        backgroundColor: CustomTheme.of(context).surface,
+        textColor: CustomTheme.of(context).onSurface,
+        secondaryTextColor: CustomTheme.of(context).onSurface.withOpacity(fade),
         borderRadius: buildBorderRadius(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

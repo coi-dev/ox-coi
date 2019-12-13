@@ -66,6 +66,7 @@ import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
@@ -91,16 +92,14 @@ class ChatList extends RootChild {
   }
 
   @override
-  Color getColor() {
-    return primary;
+  Color getColor(BuildContext context) {
+    return CustomTheme.of(context).onSurface;
   }
 
   @override
   FloatingActionButton getFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
-      child: new AdaptiveIcon(
-          icon: IconSource.chat
-      ),
+      child: new AdaptiveIcon(icon: IconSource.chat),
       key: Key(keyChatListChatFloatingActionButton),
       onPressed: () {
         _showCreateChatView(context);
@@ -113,12 +112,12 @@ class ChatList extends RootChild {
   }
 
   @override
-  String getTitle(BuildContext context) {
+  String getTitle() {
     return L10n.get(L.chatP, count: L10n.plural);
   }
 
   @override
-  String getNavigationText(BuildContext context) {
+  String getNavigationText() {
     return L10n.get(L.chatP, count: L10n.plural);
   }
 
@@ -193,9 +192,7 @@ class _ChatListState extends State<ChatList> {
           } else if (state is! ChatListStateFailure) {
             return StateInfo(showLoading: true);
           } else {
-            return AdaptiveIcon(
-                icon: IconSource.error
-            );
+            return AdaptiveIcon(icon: IconSource.error);
           }
         },
       ),
@@ -207,13 +204,12 @@ class _ChatListState extends State<ChatList> {
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(
         height: dividerHeight,
-        color: onBackground.withOpacity(barely),
+        color: CustomTheme.of(context).onBackground.withOpacity(barely),
       ),
       itemCount: chatListItemWrapper.ids.length,
       itemBuilder: (BuildContext context, int index) {
         var id = chatListItemWrapper.ids[index];
-        var key =
-            createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
+        var key = createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
         if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
           return Slidable.builder(
               key: Key(key),
@@ -225,10 +221,10 @@ class _ChatListState extends State<ChatList> {
                     // for more than one slide action we need take care of `index`
                     return IconSlideAction(
                       caption: L10n.get(L.delete),
-                      color: error,
+                      color: CustomTheme.of(context).error,
                       iconWidget: AdaptiveIcon(
                         icon: IconSource.delete,
-                        color: onError,
+                        color: CustomTheme.of(context).onError,
                       ),
                       onTap: () {
                         var state = Slidable.of(context);
@@ -282,7 +278,7 @@ class _ChatListState extends State<ChatList> {
   Widget getFlaggedAction() {
     return AdaptiveIconButton(
         icon: AdaptiveIcon(
-            icon: IconSource.flag,
+          icon: IconSource.flag,
         ),
         key: Key(keyChatListGetFlaggedActionIconButton),
         onPressed: () => _navigation.push(
@@ -315,9 +311,7 @@ class _ChatListState extends State<ChatList> {
             child: CircularProgressIndicator(),
           );
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );
@@ -330,5 +324,4 @@ class _ChatListState extends State<ChatList> {
     chatChangeBloc.add(DeleteChat(chatId: chatId));
     chatChangeBloc.close();
   }
-
 }

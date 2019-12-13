@@ -42,43 +42,6 @@
 
 import 'package:flutter/material.dart';
 
-// Belongs to no theme
-
-const white = Colors.white;
-const black = Colors.black;
-
-// Light theme
-
-const background = Colors.white;
-const surface = Colors.white;
-const primary = const Color(0xFF0E7BCC);
-const secondary = const Color(0xFFE3F5FF);
-const accent = const Color(0xFF0076FF);
-const onBackground = const Color(0xFF1F1F1F);
-const onSurface = const Color(0xFF1F1F1F);
-const onPrimary = Colors.white;
-const onSecondary = const Color(0xFF1F1F1F);
-const onAccent = Colors.white;
-const info = const Color(0xFFFFF1DB);
-const onInfo = const Color(0xFF1F1F1F);
-const warning = Colors.yellow;
-const onWarning = Colors.white;
-const error = Colors.red;
-const onError = Colors.white;
-
-// Dark theme
-
-const darkBackground = Colors.black;
-const darkSurface = const Color(0xFF1F1F1F);
-const darkPrimary = const Color(0xFF052D4B);
-const darkSecondary = const Color(0xFF052D4B);
-const darkAccent = const Color(0xFF052D4B);
-const darkOnBackground = const Color(0xFFF3F3F3);
-const darkOnSurface = const Color(0xFFF3F3F3);
-const darkOnPrimary = const Color(0xFFF3F3F3);
-const darkOnSecondary = const Color(0xFFF3F3F3);
-const darkOnAccent = const Color(0xFFF3F3F3);
-
 // Calculated values
 
 final semiTransparent = Colors.black.withOpacity(half);
@@ -90,6 +53,7 @@ const half = 0.5;
 const disabled = 0.3;
 const slightly = 0.3;
 const barely = 0.1;
+const transparent = 0.0;
 
 // Helper methods to generate colors
 

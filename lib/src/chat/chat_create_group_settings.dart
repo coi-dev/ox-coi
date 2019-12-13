@@ -41,9 +41,12 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
@@ -55,16 +58,12 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
   final List<int> selectedContacts;
@@ -125,9 +124,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );
@@ -143,7 +140,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         Align(
             alignment: Alignment.center,
             child: ProfileData(
-              color: accent,
+              color: CustomTheme.of(context).accent,
               imageActionCallback: _setAvatar,
               child: ProfileAvatar(
                 imagePath: _avatar,
@@ -157,7 +154,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           ),
           child: Text(
             L10n.get(L.groupName),
-            style: Theme.of(context).textTheme.body2.apply(color: primary),
+            style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
           ),
         ),
         Padding(
@@ -175,7 +172,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           ),
           child: Text(
             L10n.get(L.participantP, count: L10n.plural),
-            style: Theme.of(context).textTheme.body2.apply(color: primary),
+            style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
           ),
         ),
         Padding(

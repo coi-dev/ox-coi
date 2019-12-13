@@ -50,11 +50,12 @@ import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/web/web_asset.dart';
+import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -123,7 +124,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    color: primary,
+                    color: CustomTheme.of(context).primary,
                     width: viewportConstraints.maxWidth,
                     padding: EdgeInsets.only(top: loginVerticalPaddingBig, right: loginHorizontalPadding, left: loginHorizontalPadding),
                     child: Column(
@@ -138,7 +139,7 @@ class _LoginState extends State<Login> {
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            style: Theme.of(context).textTheme.caption.apply(color: onAccent),
+                            style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onAccent),
                             children: getWelcome(),
                           ),
                         ),
@@ -146,13 +147,16 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  Image.asset(
-                    "assets/images/login_wave.png",
+                  SizedBox(
                     width: viewportConstraints.maxWidth,
+                    height: 50,
+                    child: CustomPaint(
+                      painter: CurvePainter(color: CustomTheme.of(context).primary),
+                    ),
                   ),
                   Expanded(
                     child: Container(
-                      color: background,
+                      color: CustomTheme.of(context).background,
                       width: viewportConstraints.maxWidth,
                       padding: EdgeInsets.symmetric(horizontal: loginHorizontalPadding),
                       child: Column(
@@ -160,8 +164,8 @@ class _LoginState extends State<Login> {
                         children: <Widget>[
                           Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
                           AdaptiveRaisedButton(
-                              color: accent,
-                              textColor: onAccent,
+                              color: CustomTheme.of(context).accent,
+                              textColor: CustomTheme.of(context).onAccent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
                               ),
@@ -184,7 +188,7 @@ class _LoginState extends State<Login> {
                             child: FlatButton(
                                 child: Text(
                                   L10n.get(L.register).toUpperCase(),
-                                  style: TextStyle(color: accent),
+                                  style: TextStyle(color: CustomTheme.of(context).accent),
                                 ),
                                 onPressed: () {
                                   _goToProviderList(ProviderListType.register);
@@ -196,7 +200,7 @@ class _LoginState extends State<Login> {
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                style: Theme.of(context).textTheme.caption.apply(color: onBackground),
+                                style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground),
                                 children: getAgreeTo(),
                               ),
                             ),
@@ -233,13 +237,17 @@ class _LoginState extends State<Login> {
 
     List<TextSpan> textParts = [];
     textParts.add(TextSpan(
-        text: formattedWelcomeString.substring(spanBoundary, oxCoiNameStartIndex),
-        style: Theme.of(context).textTheme.headline.copyWith(color: onAccent)));
+      text: formattedWelcomeString.substring(spanBoundary, oxCoiNameStartIndex),
+      style: Theme.of(context).textTheme.headline.copyWith(color: CustomTheme.of(context).onAccent),
+    ));
     spanBoundary = oxCoiNameStartIndex;
     if (spanBoundary > 0) {
       textParts.add(TextSpan(text: "\n"));
     }
-    textParts.add(TextSpan(text: oxCoiName, style: Theme.of(context).textTheme.title.copyWith(color: onAccent, fontSize: 28.0)));
+    textParts.add(TextSpan(
+      text: oxCoiName,
+      style: Theme.of(context).textTheme.title.copyWith(color: CustomTheme.of(context).onAccent, fontSize: 28.0),
+    ));
     spanBoundary = oxCoiNameEndIndex;
     textParts.add(TextSpan(text: formattedWelcomeString.substring(spanBoundary)));
     return textParts;
@@ -258,11 +266,21 @@ class _LoginState extends State<Login> {
     List<TextSpan> textParts = [];
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, termsConditionsStartIndex)));
     spanBoundary = termsConditionsStartIndex;
-    textParts.add(UrlTextSpan(asset: "assets/html/terms.html", text: termsAndConditions, onAssetTapped: _onAssetTapped));
+    textParts.add(UrlTextSpan(
+      asset: "assets/html/terms.html",
+      text: termsAndConditions,
+      onAssetTapped: _onAssetTapped,
+      color: CustomTheme.of(context).accent,
+    ));
     spanBoundary = termsConditionsEndIndex;
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, privacyPolicyStartIndex)));
     spanBoundary = privacyPolicyStartIndex;
-    textParts.add(UrlTextSpan(asset: "assets/html/privacypolicy.html", text: privacyPolicy, onAssetTapped: _onAssetTapped));
+    textParts.add(UrlTextSpan(
+      asset: "assets/html/privacypolicy.html",
+      text: privacyPolicy,
+      onAssetTapped: _onAssetTapped,
+      color: CustomTheme.of(context).accent,
+    ));
     spanBoundary = privacyPolicyEndIndex;
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary)));
     return textParts;

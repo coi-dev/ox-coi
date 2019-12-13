@@ -52,6 +52,7 @@ import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
 import 'package:ox_coi/src/utils/date.dart';
@@ -199,6 +200,7 @@ class MessagePartAudioAttachment extends StatelessWidget {
         child: Image.asset(
           "assets/images/img_audio_waves.png",
           width: audioFileImageWidth,
+          color: CustomTheme.of(context).onSurface,
         ));
   }
 }
@@ -244,10 +246,10 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
     BorderRadius imageBorderRadius = getImageBorderRadius(context, text);
     return BlocListener(
       bloc: _messageAttachmentBloc,
-      listener: (context, state){
-        if(state is MessageAttachmentStateSuccess){
+      listener: (context, state) {
+        if (state is MessageAttachmentStateSuccess) {
           setState(() {
-            if(state.path.isNotEmpty) {
+            if (state.path.isNotEmpty) {
               File file = File(state.path);
               imageProvider = FileImage(file);
               durationString = state.duration;
@@ -281,12 +283,12 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
                         width: videoPreviewIconBackgroundWidth,
                         decoration: ShapeDecoration(
                           shape: CircleBorder(),
-                          color: black.withOpacity(fade),
+                          color: CustomTheme.of(context).black.withOpacity(fade),
                         ),
                         child: AdaptiveIcon(
                           icon: IconSource.play,
                           size: iconMessagePlaySize,
-                          color: white,
+                          color: CustomTheme.of(context).white,
                         ),
                       )),
                 ),
@@ -299,13 +301,13 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(videoPreviewTimeBorderRadius),
-                      color: black.withOpacity(fade),
+                      color: CustomTheme.of(context).black.withOpacity(fade),
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: videoPreviewTimePaddingVertical, horizontal: videoPreviewTimePaddingHorizontal),
                       child: Text(
                         durationString,
-                        style: Theme.of(context).textTheme.caption.apply(color: white),
+                        style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).white),
                       ),
                     ),
                   ),
@@ -416,7 +418,7 @@ class MessageDateTime extends StatelessWidget {
       child: Text(
         date,
         style: TextStyle(
-          color: onSurface.withOpacity(fade),
+          color: CustomTheme.of(context).onSurface.withOpacity(fade),
         ),
       ),
     );
@@ -441,10 +443,13 @@ class MessagePartState extends StatelessWidget {
       builder: (context, state) {
         if (state is MessageItemStateSuccess) {
           var messageState = state.messageStateData.state;
-          if (messageState == ChatMsg.messageStateDelivered || messageState == ChatMsg.messageStateReceived || messageState == ChatMsg.messageStatePending || messageState == ChatMsg.messageStateFailed) {
+          if (messageState == ChatMsg.messageStateDelivered ||
+              messageState == ChatMsg.messageStateReceived ||
+              messageState == ChatMsg.messageStatePending ||
+              messageState == ChatMsg.messageStateFailed) {
             IconSource icon;
             Color color;
-            switch(messageState){
+            switch (messageState) {
               case ChatMsg.messageStateDelivered:
                 icon = IconSource.done;
                 color = MessageData.of(context).secondaryTextColor;
@@ -459,7 +464,7 @@ class MessagePartState extends StatelessWidget {
                 break;
               case ChatMsg.messageStateFailed:
                 icon = IconSource.error;
-                color = error;
+                color = CustomTheme.of(context).error;
                 break;
             }
             return Padding(
@@ -489,7 +494,7 @@ class MessagePartFlag extends StatelessWidget {
             padding: EdgeInsets.only(top: 8.0, right: 4.0, left: 4.0),
             child: AdaptiveIcon(
               icon: IconSource.flag,
-              color: Colors.yellow,
+              color: Colors.yellow, // TODO remove Colors.xyz call as soon as possible
             ),
           ),
         );

@@ -43,6 +43,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
@@ -50,6 +52,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,9 +60,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'login_bloc.dart';
 import 'login_events_state.dart';
 import 'login_provider_signin.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum ProviderListType {
   login,
@@ -145,11 +145,11 @@ class _ProviderListState extends State<ProviderList> {
                   elevation: 0,
                   onPressed: () => _onItemTap(otherProvider),
                   child: Text(L10n.get(L.providerOtherMailProvider)),
-                  textColor: accent,
-                  color: background,
+                  textColor: CustomTheme.of(context).accent,
+                  color: CustomTheme.of(context).background,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
-                    side: BorderSide(color: accent),
+                    side: BorderSide(color: CustomTheme.of(context).accent),
                   ),
                 ),
               ),
@@ -201,7 +201,7 @@ class _ProviderListState extends State<ProviderList> {
                         ),
                         Text(
                           provider.name,
-                          style: Theme.of(context).textTheme.body1.apply(color: onBackground),
+                          style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onBackground),
                         ),
                       ],
                     ),
@@ -209,7 +209,7 @@ class _ProviderListState extends State<ProviderList> {
                 )),
             Divider(
               height: loginListItemDividerHeight,
-              color: onBackground.withOpacity(barely),
+              color: CustomTheme.of(context).onBackground.withOpacity(barely),
             ),
           ],
         ),

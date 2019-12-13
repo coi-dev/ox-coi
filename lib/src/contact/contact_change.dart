@@ -41,8 +41,11 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
@@ -54,16 +57,12 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum ContactAction {
   add,
@@ -89,7 +88,7 @@ class _ContactChangeState extends State<ContactChange> {
   Navigation navigation = Navigation();
   GlobalKey<FormState> _formKey = GlobalKey();
   ValidatableTextFormField _nameField = ValidatableTextFormField(
-        (context) => L10n.get(L.name),
+    (context) => L10n.get(L.name),
     key: Key(keyContactChangeNameValidatableTextFormField),
     hintText: (context) => L10n.get(L.contactName),
   );
@@ -108,7 +107,7 @@ class _ContactChangeState extends State<ContactChange> {
     navigation.current = Navigatable(Type.contactChange);
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
-            (context) => L10n.get(L.emailAddress),
+        (context) => L10n.get(L.emailAddress),
         key: Key(keyContactChangeEmailValidatableTextFormField),
         textFormType: TextFormType.email,
         inputType: TextInputType.emailAddress,
@@ -199,28 +198,24 @@ class _ContactChangeState extends State<ContactChange> {
                 Visibility(
                   visible: widget.contactAction != ContactAction.add,
                   child: Padding(
-                      padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
-                      child: Row(
-                        children: <Widget>[
-                          AdaptiveIcon(
-                              icon: IconSource.mail
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: iconFormPadding),
-                          ),
-                          Text(
-                            widget.email?? "",
-                            style: Theme.of(context).textTheme.subhead,
-                          ),
-                        ],
-                      ),
+                    padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                    child: Row(
+                      children: <Widget>[
+                        AdaptiveIcon(icon: IconSource.mail),
+                        Padding(
+                          padding: EdgeInsets.only(right: iconFormPadding),
+                        ),
+                        Text(
+                          widget.email ?? "",
+                          style: Theme.of(context).textTheme.subhead,
+                        ),
+                      ],
                     ),
+                  ),
                 ),
                 Row(
                   children: <Widget>[
-                    AdaptiveIcon(
-                        icon: IconSource.person
-                    ),
+                    AdaptiveIcon(icon: IconSource.person),
                     Padding(
                       padding: EdgeInsets.only(right: iconFormPadding),
                     ),
@@ -231,9 +226,7 @@ class _ContactChangeState extends State<ContactChange> {
                   visible: widget.contactAction == ContactAction.add,
                   child: Row(
                     children: <Widget>[
-                      AdaptiveIcon(
-                          icon: IconSource.mail
-                      ),
+                      AdaptiveIcon(icon: IconSource.mail),
                       Padding(
                         padding: EdgeInsets.only(right: iconFormPadding),
                       ),
@@ -250,9 +243,7 @@ class _ContactChangeState extends State<ContactChange> {
                           padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
                           child: Row(
                             children: <Widget>[
-                              AdaptiveIcon(
-                                  icon: IconSource.phone
-                              ),
+                              AdaptiveIcon(icon: IconSource.phone),
                               Padding(
                                 padding: EdgeInsets.only(right: iconFormPadding),
                               ),
@@ -276,8 +267,8 @@ class _ContactChangeState extends State<ContactChange> {
                 Visibility(
                   visible: widget.contactAction == ContactAction.add,
                   child: RaisedButton(
-                    color: accent,
-                    textColor: onAccent,
+                    color: CustomTheme.of(context).accent,
+                    textColor: CustomTheme.of(context).onAccent,
                     child: Text(L10n.get(L.qrScan)),
                     onPressed: scanQr,
                   ),
@@ -299,9 +290,9 @@ class _ContactChangeState extends State<ContactChange> {
       context,
       MaterialPageRoute(
           builder: (context) => QrCode(
-            chatId: 0,
-            initialIndex: 1,
-          )),
+                chatId: 0,
+                initialIndex: 1,
+              )),
     );
   }
 }

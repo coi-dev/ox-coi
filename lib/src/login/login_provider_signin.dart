@@ -49,7 +49,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
@@ -180,15 +180,15 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                 child: Text(L10n.get(L.loginSignIn).toUpperCase()),
                 onPressed: _signIn,
                 buttonWidth: loginButtonWidth,
-                color: accent,
-                textColor: onAccent),
+                color: CustomTheme.of(context).accent,
+                textColor: CustomTheme.of(context).onAccent),
             Visibility(
               visible: widget.provider.id == providerOther,
               child: FlatButton(
                   onPressed: _showManualSettings,
                   child: Text(
                     L10n.get(L.settingManual),
-                    style: TextStyle(color: accent),
+                    style: TextStyle(color: CustomTheme.of(context).accent),
                   )),
             )
           ],

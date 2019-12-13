@@ -56,6 +56,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
@@ -76,8 +77,8 @@ class UserProfile extends RootChild {
   }
 
   @override
-  Color getColor() {
-    return primary;
+  Color getColor(BuildContext context) {
+    return CustomTheme.of(context).onSurface;
   }
 
   @override
@@ -86,12 +87,12 @@ class UserProfile extends RootChild {
   }
 
   @override
-  String getTitle(BuildContext context) {
+  String getTitle() {
     return L10n.get(L.profile);
   }
 
   @override
-  String getNavigationText(BuildContext context) {
+  String getNavigationText() {
     return L10n.get(L.profile);
   }
 
@@ -151,7 +152,7 @@ class _ProfileState extends State<UserProfile> {
               style: Theme.of(context).textTheme.headline,
               align: TextAlign.center,
               placeholderText: L10n.get(L.profileNoUsername),
-              placeholderStyle: Theme.of(context).textTheme.headline.apply(color: onBackground.withOpacity(disabled)),
+              placeholderStyle: Theme.of(context).textTheme.headline.apply(color: CustomTheme.of(context).onBackground.withOpacity(disabled)),
               placeHolderAlign: TextAlign.center,
             ),
             Padding(
@@ -169,7 +170,7 @@ class _ProfileState extends State<UserProfile> {
                 align: TextAlign.center,
                 style: Theme.of(context).textTheme.subhead,
                 placeholderText: L10n.get(L.profileNoSignature),
-                placeholderStyle: Theme.of(context).textTheme.subhead.apply(color: onBackground.withOpacity(disabled)),
+                placeholderStyle: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onBackground.withOpacity(disabled)),
                 placeHolderAlign: TextAlign.center,
               ),
             ),
@@ -179,16 +180,16 @@ class _ProfileState extends State<UserProfile> {
                 AdaptiveRaisedButton(
                   child: Text(L10n.get(L.profileEdit)),
                   onPressed: editUserSettings,
-                  color: accent,
-                  textColor: onAccent,
+                  color: CustomTheme.of(context).accent,
+                  textColor: CustomTheme.of(context).onAccent,
                   key: Key(keyUserProfileEditProfileRaisedButton),
                 ),
                 Padding(padding: EdgeInsets.all(chatProfileButtonPadding)),
                 AdaptiveRaisedButton(
                   child: Text(L10n.get(L.qrProfile)),
                   onPressed: showQr,
-                  color: accent,
-                  textColor: onAccent,
+                  color: CustomTheme.of(context).accent,
+                  textColor: CustomTheme.of(context).onAccent,
                   key: Key(keyUserProfileShowQrRaisedButton),
                 ),
               ],
@@ -197,8 +198,8 @@ class _ProfileState extends State<UserProfile> {
             AdaptiveRaisedButton(
               child: Text(L10n.get(L.profileShareInviteUrl)),
               onPressed: createInviteUrl,
-              color: accent,
-              textColor: onAccent,
+              color: CustomTheme.of(context).accent,
+              textColor: CustomTheme.of(context).onAccent,
               key: Key(""),
             ),
           ],
@@ -209,7 +210,7 @@ class _ProfileState extends State<UserProfile> {
 
   ProfileData buildAvatar(Config config) {
     return ProfileData(
-        color: accent,
+        color: CustomTheme.of(context).accent,
         child: ProfileAvatar(
           imagePath: config.avatarPath,
         ));

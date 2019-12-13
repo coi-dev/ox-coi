@@ -59,6 +59,7 @@ import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/error.dart';
@@ -84,8 +85,8 @@ class ContactList extends RootChild {
   }
 
   @override
-  Color getColor() {
-    return primary;
+  Color getColor(BuildContext context) {
+    return CustomTheme.of(context).onSurface;
   }
 
   @override
@@ -104,12 +105,12 @@ class ContactList extends RootChild {
   }
 
   @override
-  String getTitle(BuildContext context) {
+  String getTitle() {
     return L10n.get(L.contactP, count: L10n.plural);
   }
 
   @override
-  String getNavigationText(BuildContext context) {
+  String getNavigationText() {
     return L10n.get(L.contactP, count: L10n.plural);
   }
 
@@ -269,7 +270,7 @@ class _ContactListState extends State<ContactList> {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               height: dividerHeight,
-              color: onBackground.withOpacity(barely),
+              color: CustomTheme.of(context).onBackground.withOpacity(barely),
             ),
         itemCount: contactIds.length,
         itemBuilder: (BuildContext context, int index) {
@@ -284,11 +285,11 @@ class _ContactListState extends State<ContactList> {
                   builder: (context, index, animation, renderingMode) {
                     return IconSlideAction(
                       caption: L10n.get(L.block),
-                      color: warning,
-                      foregroundColor: onWarning,
+                      color: CustomTheme.of(context).warning,
+                      foregroundColor: CustomTheme.of(context).onWarning,
                       iconWidget: AdaptiveIcon(
                         icon: IconSource.block,
-                        color: onWarning,
+                        color: CustomTheme.of(context).onWarning,
                       ),
                       onTap: () {
                         var state = Slidable.of(context);
@@ -302,11 +303,11 @@ class _ContactListState extends State<ContactList> {
                     // for more than one slide action we need take care of `index`
                     return IconSlideAction(
                       caption: L10n.get(L.delete),
-                      color: error,
-                      foregroundColor: onError,
+                      color: Theme.of(context).errorColor,
+                      foregroundColor: CustomTheme.of(context).onError,
                       iconWidget: AdaptiveIcon(
                         icon: IconSource.delete,
-                        color: onError,
+                        color: CustomTheme.of(context).onError,
                       ),
                       onTap: () {
                         var state = Slidable.of(context);

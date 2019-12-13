@@ -166,7 +166,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.settingBase),
-                style: Theme.of(context).textTheme.subhead.merge(primaryW500),
+                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
               ),
             ),
             emailField,
@@ -176,7 +176,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.loginServerAddresses),
-                style: Theme.of(context).textTheme.subhead.merge(primaryW500),
+                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
               ),
             ),
             imapServerField,
@@ -186,7 +186,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.settingAdvancedImap),
-                style: Theme.of(context).textTheme.subhead.merge(primaryW500),
+                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
               ),
             ),
             imapPortField,
@@ -205,7 +205,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.settingAdvancedSmtp),
-                style: Theme.of(context).textTheme.subhead.merge(primaryW500),
+                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
               ),
             ),
             smtpPortField,

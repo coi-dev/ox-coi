@@ -74,6 +74,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
@@ -110,6 +111,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   MessageListBloc _messageListBloc = MessageListBloc();
   ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
+
   // Ignoring false positive https://github.com/felangel/bloc/issues/587
   // ignore: close_sinks
   LifecycleBloc _lifecycleBloc;
@@ -246,9 +248,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     _lifecycleBloc = BlocProvider.of<LifecycleBloc>(context);
     return BlocListener(
       bloc: _lifecycleBloc,
-      listener: (context, state){
-        if(state is LifecycleStateSuccess){
-          if(state.state == AppLifecycleState.resumed.toString()){
+      listener: (context, state) {
+        if (state is LifecycleStateSuccess) {
+          if (state.state == AppLifecycleState.resumed.toString()) {
             _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
           }
         }
@@ -287,7 +289,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     icon: AdaptiveIcon(icon: IconSource.phone),
                     key: Key(keyChatIconButtonIconPhone),
                     onPressed: onPhonePressed,
-                    color: onPrimary,
+                    color: CustomTheme.of(context).onPrimary,
                   ),
               ],
             ),
@@ -311,7 +313,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                 Divider(height: dividerHeight),
                 if (state is ChatStateSuccess && !state.isRemoved)
                   new Container(
-                    decoration: new BoxDecoration(color: Theme.of(context).cardColor),
+                    decoration: new BoxDecoration(color: CustomTheme.of(context).surface),
                     child: SafeArea(child: _buildTextComposer()),
                   ),
               ],
@@ -339,11 +341,11 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               ButtonTheme(
                 minWidth: 120.0,
                 child: OutlineButton(
-                  highlightedBorderColor: error,
+                  highlightedBorderColor: CustomTheme.of(context).error,
                   onPressed: _blockContact,
                   child: Text(
                     L10n.get(L.block).toUpperCase(),
-                    style: TextStyle(color: error),
+                    style: TextStyle(color: CustomTheme.of(context).error),
                   ),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
                 ),
@@ -351,11 +353,11 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               ButtonTheme(
                 minWidth: 120.0,
                 child: OutlineButton(
-                  highlightedBorderColor: primary,
+                  highlightedBorderColor: CustomTheme.of(context).primary,
                   onPressed: _createChat,
                   child: Text(
                     L10n.get(L.ok).toUpperCase(),
-                    style: TextStyle(color: primary),
+                    style: TextStyle(color: CustomTheme.of(context).primary),
                   ),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
                 ),
@@ -399,7 +401,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                       child: AdaptiveIcon(
                         icon: IconSource.insertDriveFile,
                         size: previewDefaultIconSize,
-                        color: Colors.grey,
+                        color: CustomTheme.of(context).black.withOpacity(slightly),
                       ),
                     ),
               Padding(
@@ -407,11 +409,14 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                 child: GestureDetector(
                   onTap: () => _closePreview(),
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.black38, borderRadius: BorderRadiusDirectional.circular(previewCloseIconBorderRadius)),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.of(context).black.withOpacity(half),
+                      borderRadius: BorderRadiusDirectional.circular(previewCloseIconBorderRadius),
+                    ),
                     child: AdaptiveIcon(
                       icon: IconSource.close,
                       size: previewCloseIconSize,
-                      color: Colors.white,
+                      color: CustomTheme.of(context).white,
                     ),
                   ),
                 ),
@@ -446,7 +451,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                 name,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.title.apply(color: onPrimary),
+                style: Theme.of(context).textTheme.title.apply(color: CustomTheme.of(context).onSurface),
                 key: Key(keyChatNameText),
               ),
               Row(
@@ -472,7 +477,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   Expanded(
                     child: Text(
                       subTitle,
-                      style: Theme.of(context).textTheme.subtitle.apply(color: onPrimary),
+                      style: Theme.of(context).textTheme.subtitle.apply(color: CustomTheme.of(context).onSurface),
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -508,7 +513,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       onSendText: _onPrepareMessageSend,
     ));
     return IconTheme(
-      data: IconThemeData(color: Theme.of(context).accentColor),
+      data: IconThemeData(color: CustomTheme.of(context).accent),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: composerHorizontalPadding),
         child: Row(

@@ -40,17 +40,17 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 enum ComposerModeType {
   compose,
@@ -66,19 +66,19 @@ mixin ChatComposer {
     switch (type) {
       case ComposerModeType.compose:
         icon = AdaptiveIcon(
-            icon: IconSource.add,
+          icon: IconSource.add,
         );
         onPressed = onShowAttachmentChooser;
         break;
       case ComposerModeType.isComposing:
         icon = AdaptiveIcon(
-            icon: IconSource.add,
+          icon: IconSource.add,
         );
         onPressed = null;
         break;
       case ComposerModeType.isVoiceRecording:
         icon = AdaptiveIcon(
-            icon: IconSource.delete,
+          icon: IconSource.delete,
         );
         onPressed = onAudioRecordingAbort;
         break;
@@ -99,7 +99,7 @@ mixin ChatComposer {
         child: Container(
       padding: EdgeInsets.all(composerTextFieldPadding),
       decoration: BoxDecoration(
-        border: Border.all(color: onBackground.withOpacity(barely)),
+        border: Border.all(color: CustomTheme.of(context).onBackground.withOpacity(barely)),
         borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
       ),
       child: ComposerModeType.isVoiceRecording == type ? getText(text) : getInputTextField(textController, onTextChanged, context),
@@ -115,7 +115,8 @@ mixin ChatComposer {
       onChanged: onTextChanged,
       decoration: new InputDecoration.collapsed(
         hintText: L10n.get(L.typeSomething),
-      ),key: Key(L.getKey(L.typeSomething)),
+      ),
+      key: Key(L.getKey(L.typeSomething)),
     );
   }
 
@@ -137,7 +138,7 @@ mixin ChatComposer {
       case ComposerModeType.compose:
         widgets.add(new AdaptiveIconButton(
           icon: new AdaptiveIcon(
-              icon: IconSource.mic,
+            icon: IconSource.mic,
           ),
           onPressed: onRecordAudioPressed,
           key: Key(KeyChatComposerMixinOnRecordAudioPressedIcon),
@@ -160,7 +161,8 @@ mixin ChatComposer {
           icon: new AdaptiveIcon(
             icon: IconSource.send,
           ),
-          onPressed: onSendText,key: Key(KeyChatComposerMixinOnSendTextIcon),
+          onPressed: onSendText,
+          key: Key(KeyChatComposerMixinOnSendTextIcon),
         ));
         break;
       case ComposerModeType.isVoiceRecording:
@@ -168,7 +170,8 @@ mixin ChatComposer {
           icon: new AdaptiveIcon(
             icon: IconSource.send,
           ),
-          onPressed: onRecordAudioPressed,key: Key(KeyChatComposerMixinOnRecordAudioSendIcon),
+          onPressed: onRecordAudioPressed,
+          key: Key(KeyChatComposerMixinOnRecordAudioSendIcon),
         ));
         break;
     }

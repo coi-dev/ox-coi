@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
@@ -53,6 +54,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
@@ -62,8 +64,6 @@ import 'chat_add_group_participants.dart';
 import 'chat_bloc.dart';
 import 'chat_event_state.dart';
 import 'edit_name.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatProfileGroup extends StatefulWidget {
   final int chatId;
@@ -134,11 +134,9 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                               children: <Widget>[
                                 CircleAvatar(
                                   radius: listAvatarRadius,
-                                  backgroundColor: accent,
-                                  foregroundColor: onAccent,
-                                  child: AdaptiveIcon(
-                                      icon: IconSource.groupAdd
-                                  ),
+                                  backgroundColor: CustomTheme.of(context).accent,
+                                  foregroundColor: CustomTheme.of(context).onAccent,
+                                  child: AdaptiveIcon(icon: IconSource.groupAdd),
                                   key: Key(keyChatProfileGroupAddParticipant),
                                 ),
                                 Padding(
@@ -146,7 +144,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                                   child: Text(
                                     L10n.get(L.participantAdd),
                                     textAlign: TextAlign.center,
-                                    style: Theme.of(context).textTheme.subhead.apply(color: accent),
+                                    style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).accent),
                                   ),
                                 )
                               ],
@@ -166,7 +164,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         key: Key(keyChatProfileGroupDelete),
                         text: L10n.get(L.groupLeave),
                         onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
-                        color: error,
+                        color: CustomTheme.of(context).error,
                       ),
                     ],
                   );
@@ -208,7 +206,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         icon: AdaptiveIcon(
                           icon: IconSource.edit,
                           key: Key(keyChatProfileGroupEditIcon),
-                          color: accent,
+                          color: CustomTheme.of(context).accent,
                         ),
                         onPressed: _goToEditName,
                       )),
@@ -227,7 +225,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               height: dividerHeight,
-              color: onBackground.withOpacity(barely),
+              color: CustomTheme.of(context).onBackground.withOpacity(barely),
             ),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

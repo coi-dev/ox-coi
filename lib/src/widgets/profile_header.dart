@@ -51,6 +51,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/text.dart';
@@ -132,23 +133,17 @@ class ProfileAvatar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: AdaptiveIcon(
-                      icon: IconSource.photo
-                  ),
+                  leading: AdaptiveIcon(icon: IconSource.photo),
                   title: Text(L10n.get(L.gallery)),
                   onTap: () => _getNewAvatarPath(ImageSource.gallery),
                 ),
                 ListTile(
-                  leading: AdaptiveIcon(
-                      icon: IconSource.cameraAlt
-                  ),
+                  leading: AdaptiveIcon(icon: IconSource.cameraAlt),
                   title: Text(L10n.get(L.camera)),
                   onTap: () => _getNewAvatarPath(ImageSource.camera),
                 ),
                 ListTile(
-                  leading: AdaptiveIcon(
-                      icon: IconSource.delete
-                  ),
+                  leading: AdaptiveIcon(icon: IconSource.delete),
                   title: Text(L10n.get(L.groupRemoveImage)),
                   onTap: () => _removeAvatar(),
                 )
@@ -179,8 +174,8 @@ class ProfileAvatar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(avatarSize * avatarBorderRadiusMultiplier),
                     ),
                     gradient: LinearGradient(begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter, colors: [
-                      Colors.black.withOpacity(0.0),
-                      Colors.black.withOpacity(0.5),
+                      CustomTheme.of(context).black.withOpacity(transparent),
+                      CustomTheme.of(context).black.withOpacity(half),
                     ], stops: [
                       0.7,
                       1.0
@@ -197,7 +192,7 @@ class ProfileAvatar extends StatelessWidget {
                 child: AdaptiveInkWell(
                   child: AdaptiveIcon(
                     icon: IconSource.addAPhoto,
-                    color: onPrimary,
+                    color: CustomTheme.of(context).onPrimary,
                   ),
                   onTap: _editPhoto,
                 )))
@@ -263,9 +258,7 @@ class ProfileCopyableHeaderText extends StatelessWidget {
         children: <Widget>[
           ProfileHeaderText(),
           Padding(padding: EdgeInsets.all(iconTextPadding)),
-          AdaptiveIcon(
-              icon: IconSource.contentCopy
-          ),
+          AdaptiveIcon(icon: IconSource.contentCopy),
         ],
       ),
     );

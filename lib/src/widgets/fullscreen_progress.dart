@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +49,7 @@ import 'package:ox_coi/src/base/bloc_progress_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 class FullscreenProgress<T extends Bloc> extends StatelessWidget {
@@ -73,44 +76,46 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         if (state is ProgressState && state.progress != null) {
           progress = state.progress;
         }
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          constraints: BoxConstraints.expand(),
-          color: semiTransparent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(onPrimary),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: verticalPadding),
-                child: Center(
-                  child: Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            constraints: BoxConstraints.expand(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(CustomTheme.of(context).onSurface),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: verticalPadding),
+                  child: Center(
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onSurface),
+                    ),
                   ),
                 ),
-              ),
-              if (showProgressValues)
-                Padding(
-                  padding: EdgeInsets.only(top: verticalPaddingSmall),
-                  child: Text(
-                    buildDisplayableProgress(progress),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.subhead.apply(color: onPrimary),
+                if (showProgressValues)
+                  Padding(
+                    padding: EdgeInsets.only(top: verticalPaddingSmall),
+                    child: Text(
+                      buildDisplayableProgress(progress),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onSurface),
+                    ),
                   ),
-                ),
-              if (showCancelButton)
-                Padding(
-                  padding: EdgeInsets.only(top: verticalPaddingSmall),
-                  child: Container(
-                    child: RaisedButton(child: Text(L10n.get(L.cancel)), onPressed: cancelPressed),
-                  ),
-                )
-            ],
+                if (showCancelButton)
+                  Padding(
+                    padding: EdgeInsets.only(top: verticalPaddingSmall),
+                    child: Container(
+                      child: RaisedButton(child: Text(L10n.get(L.cancel)), onPressed: cancelPressed),
+                    ),
+                  )
+              ],
+            ),
           ),
         );
       },

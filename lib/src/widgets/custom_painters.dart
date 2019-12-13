@@ -40,63 +40,30 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/image.dart';
-import 'package:ox_coi/src/utils/text.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:flutter/widgets.dart';
 
-class Avatar extends StatelessWidget {
-  final String imagePath;
-  final String textPrimary;
-  final String textSecondary;
-  final Color color;
-  final double size;
+class CurvePainter extends CustomPainter {
+  final color;
 
-  Avatar({this.imagePath, @required this.textPrimary, this.textSecondary, this.color, this.size = listAvatarDiameter});
+  CurvePainter({@required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    String initials = "";
-    ImageProvider avatarImage;
-    if (isNullOrEmpty(imagePath)) {
-      avatarImage = MemoryImage(kTransparentImage);
-      initials = getInitials(textPrimary, textSecondary);
-    } else {
-      avatarImage = FileImage(File(imagePath));
-    }
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint();
+    paint.color = color;
+    paint.style = PaintingStyle.fill;
 
-    return Container(
-      alignment: Alignment.center,
-      constraints: BoxConstraints.expand(width: size, height: size),
-      decoration: ShapeDecoration(
-        shape: getSuperEllipseShape(size),
-        color: color,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: avatarImage,
-        ),
-      ),
-      child: Visibility(
-        visible: isNullOrEmpty(imagePath),
-        child: Text(
-          initials,
-          style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).white),
-        ),
-      ),
-    );
+    var path = Path();
+    path.lineTo(0, size.height * 0.9);
+    path.cubicTo(size.width * 0.33, size.height * -1, size.width * 0.66, size.height * 2.5, size.width, 0);
+    path.close();
+
+    canvas.drawPath(path, paint);
   }
 
-  static String getInitials(String textPrimary, [String textSecondary]) {
-    if (textPrimary != null && textPrimary.isNotEmpty) {
-      return textPrimary.substring(0, 1);
-    }
-    if (textSecondary != null && textSecondary.isNotEmpty) {
-      return textSecondary.substring(0, 1);
-    }
-    return "";
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }

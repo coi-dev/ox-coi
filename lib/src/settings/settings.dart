@@ -40,17 +40,16 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/ui/color.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 
 enum SettingsType {
   account,
@@ -72,7 +71,6 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         appBar: new AdaptiveAppBar(
           title: Text(L10n.get(L.settingP, count: L10n.plural)),
         ),
@@ -85,7 +83,7 @@ class Settings extends StatelessWidget {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.accountCircle,
-            color: accent,
+            color: CustomTheme.of(context).accent,
           ),
           title: Text(L10n.get(L.settingAccount)),
           onTap: () => _onPressed(context, SettingsType.account),
@@ -93,7 +91,7 @@ class Settings extends StatelessWidget {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.chat,
-            color: accent,
+            color: CustomTheme.of(context).accent,
           ),
           title: Text(L10n.get(L.chatP)),
           onTap: () => _onPressed(context, SettingsType.chat),
@@ -101,7 +99,7 @@ class Settings extends StatelessWidget {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.notifications,
-            color: accent,
+            color: CustomTheme.of(context).accent,
           ),
           title: Text(L10n.get(L.settingNotificationP, count: L10n.plural)),
           onTap: () => _onPressed(context, SettingsType.notifications),
@@ -109,7 +107,7 @@ class Settings extends StatelessWidget {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.https,
-            color: accent,
+            color: CustomTheme.of(context).accent,
           ),
           title: Text(L10n.get(L.settingAntiMobbing)),
           onTap: () => _onPressed(context, SettingsType.antiMobbing),
@@ -117,7 +115,7 @@ class Settings extends StatelessWidget {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.security,
-            color: accent,
+            color: CustomTheme.of(context).accent,
           ),
           title: Text(L10n.get(L.security)),
           onTap: () => _onPressed(context, SettingsType.security),
@@ -125,7 +123,7 @@ class Settings extends StatelessWidget {
         ListTile(
           leading: AdaptiveIcon(
             icon: IconSource.info,
-            color: accent,
+            color: CustomTheme.of(context).accent,
           ),
           title: Text(L10n.get(L.about)),
           onTap: () => _onPressed(context, SettingsType.about),
@@ -134,7 +132,7 @@ class Settings extends StatelessWidget {
           ListTile(
             leading: AdaptiveIcon(
               icon: IconSource.bugReport,
-              color: accent,
+              color: CustomTheme.of(context).accent,
             ),
             title: Text(L10n.get(L.debug)),
             onTap: () => _onPressed(context, SettingsType.debug),

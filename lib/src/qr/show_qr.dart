@@ -48,6 +48,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/utils/toast.dart';
@@ -137,6 +138,7 @@ class _ShowQrState extends State<ShowQr> {
     return QrImage(
       data: qrText,
       size: 250.0,
+      backgroundColor: CustomTheme.of(context).white,
       version: 6,
     );
   }

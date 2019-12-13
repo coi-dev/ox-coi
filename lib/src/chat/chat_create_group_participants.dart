@@ -41,9 +41,12 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat_create_group_settings.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
 import 'package:ox_coi/src/contact/contact_item_selectable.dart';
@@ -57,16 +60,13 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
   @override
@@ -152,9 +152,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );
@@ -164,7 +162,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
     return ListView.separated(
       separatorBuilder: (context, index) => Divider(
         height: dividerHeight,
-        color: onBackground.withOpacity(barely),
+        color: CustomTheme.of(context).onBackground.withOpacity(barely),
       ),
       itemCount: state.contactIds.length,
       itemBuilder: (BuildContext context, int index) {

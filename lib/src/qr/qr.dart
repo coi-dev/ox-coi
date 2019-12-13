@@ -40,17 +40,16 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/scan_qr.dart';
 import 'package:ox_coi/src/qr/show_qr.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/navigation/navigation.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
 class QrCode extends StatefulWidget {
   final int chatId;
@@ -88,7 +87,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
       children: <Widget>[
         PhysicalModel(
           elevation: appBarElevationDefault,
-          color: primary,
+          color: CustomTheme.of(context).primary,
           child: TabBar(
             tabs: <Widget>[
               Tab(

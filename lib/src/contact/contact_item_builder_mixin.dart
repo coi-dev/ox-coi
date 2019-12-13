@@ -45,6 +45,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
@@ -60,10 +61,10 @@ mixin ContactItemBuilder {
           return Padding(
             padding: EdgeInsets.only(left: listItemPadding),
             child: Chip(
-              backgroundColor: accent.withOpacity(barely),
+              backgroundColor: CustomTheme.of(context).accent.withOpacity(barely),
               label: Text(isNullOrEmpty(state.name) ? state.email : state.name),
               onDeleted: onContactTapped,
-              deleteIconColor: accent,
+              deleteIconColor: CustomTheme.of(context).accent,
             ),
           );
         } else {

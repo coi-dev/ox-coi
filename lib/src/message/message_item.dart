@@ -56,6 +56,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
@@ -170,6 +171,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                         useInformationText: true,
                         icon: AdaptiveIcon(
                           icon: IconSource.lock,
+                          color: CustomTheme.of(context).onInfo,
                         )),
                   ),
                 GestureDetector(
