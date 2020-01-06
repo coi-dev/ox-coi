@@ -168,7 +168,7 @@ class _ChatCreateState extends State<ChatCreate> {
           ),
           title: Text(
             L10n.get(L.contactNew),
-            style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
+            style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
           ),
           onTap: newContactTapped,
         ),
@@ -186,7 +186,7 @@ class _ChatCreateState extends State<ChatCreate> {
             ),
             title: Text(
               L10n.get(L.groupCreate),
-              style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
+              style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
             ),
             onTap: createGroupTapped,
           ),

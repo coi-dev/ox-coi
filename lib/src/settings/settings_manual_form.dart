@@ -46,6 +46,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
@@ -166,7 +167,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.settingBase),
-                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
+                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
               ),
             ),
             emailField,
@@ -176,7 +177,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.loginServerAddresses),
-                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
+                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
               ),
             ),
             imapServerField,
@@ -186,7 +187,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.settingAdvancedImap),
-                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
+                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
               ),
             ),
             imapPortField,
@@ -205,7 +206,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               alignment: Alignment.centerLeft,
               child: Text(
                 L10n.get(L.settingAdvancedSmtp),
-                style: Theme.of(context).textTheme.subhead.merge(getPrimaryW500TextStyle(context)),
+                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
               ),
             ),
             smtpPortField,

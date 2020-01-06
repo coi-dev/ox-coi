@@ -93,11 +93,13 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
               Tab(
                 child: Text(
                   L10n.get(L.qrShow),
+                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onPrimary),
                 ),
               ),
               Tab(
                 child: Text(
                   L10n.get(L.qrScan),
+                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onPrimary),
                 ),
               ),
             ],

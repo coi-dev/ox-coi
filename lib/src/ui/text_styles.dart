@@ -44,6 +44,6 @@ import 'package:flutter/material.dart';
 
 import 'custom_theme.dart';
 
-getPrimaryW500TextStyle(BuildContext context){
-    return TextStyle(color: CustomTheme.of(context).primary, fontWeight: FontWeight.w500);
+getAccentW500TextStyle(BuildContext context){
+    return TextStyle(color: CustomTheme.of(context).accent, fontWeight: FontWeight.w500);
 }
