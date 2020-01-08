@@ -1,7 +1,7 @@
 name: ox_coi
 description: OX COI Messenger is a mail based chat app.
 
-version: 0.13.0+413 # x.y.z+build-number
+version: 0.450.0+414 # x.y.z+build-number
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
