@@ -658,11 +658,6 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                 onTap: () => _getFilePath(FileType.CUSTOM, "pdf"),
               ),
               ListTile(
-                leading: AdaptiveIcon(icon: IconSource.gif),
-                title: Text(gif),
-                onTap: () => _getFilePath(FileType.CUSTOM, "gif"),
-              ),
-              ListTile(
                 leading: AdaptiveIcon(icon: IconSource.insertDriveFile),
                 title: Text(L10n.get(L.file)),
                 onTap: () => _getFilePath(FileType.ANY),
