@@ -89,7 +89,6 @@ void main() {
       await setup.driver.tap(find.text(account));
       await setup.driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
       Invoker.current.heartbeat();
-      await setup.driver.tap(find.text(ok));
 
       // Case realPassword and fake IMAP server.
       Invoker.current.heartbeat();
