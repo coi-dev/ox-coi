@@ -176,8 +176,8 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: listItemPaddingSmall),
-          child: Divider(),
+          padding: const EdgeInsets.only(top: listItemPadding),
+          child: Divider(height: 1),
         ),
         Column(
           children: <Widget>[
@@ -189,8 +189,8 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: listItemPaddingSmall),
-          child: Divider(),
+          padding: const EdgeInsets.only(bottom: listItemPaddingSmall),
+          child: Divider(height: 1),
         ),
       ],
     );

@@ -142,7 +142,6 @@ class _ChatCreateState extends State<ChatCreate> {
               height: dividerHeight,
               color: CustomTheme.of(context).onBackground.withOpacity(barely),
             ),
-        padding: showNewContactAndAddGroup ? null : EdgeInsets.only(top: listItemPadding),
         itemCount: state.contactIds.length + offset,
         itemBuilder: (BuildContext context, int index) {
           if (showNewContactAndAddGroup && index == 0) {
@@ -191,9 +190,6 @@ class _ChatCreateState extends State<ChatCreate> {
             onTap: createGroupTapped,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(bottom: listItemPadding),
-        )
       ],
     );
   }
