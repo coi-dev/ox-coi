@@ -160,8 +160,15 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
   }
 
   void _unblockContact(int id) async {
+    var contact = contactRepository.get(id);
     Context context = Context();
     await context.unblockContact(id);
+    var address = await contact.getAddress();
+    var contactId = await context.getContactIdByAddress(address);
+    if (contactId == 0) {
+      var name = await contact.getName();
+      await context.createContact(name, address);
+    }
     var chatId = await context.getChatByContactId(id);
     adjustChatListOnBlockUnblock(chatId, block: false);
     add(ContactUnblocked());
