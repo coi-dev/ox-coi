@@ -101,6 +101,7 @@ class OxCoiApp extends StatelessWidget {
         brightness: customTheme.brightness,
         backgroundColor: customTheme.background,
         scaffoldBackgroundColor: customTheme.background,
+        toggleableActiveColor: customTheme.accent,
         accentColor: customTheme.accent,
         primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
               color: customTheme.onSurface,
