@@ -57,7 +57,6 @@ import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/web/web_asset.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'login_provider_list.dart';
 
@@ -82,8 +81,7 @@ class _LoginState extends State<Login> {
     _navigation.current = Navigatable(Type.login);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.add(RequestProviders(type: ProviderListType.login));
-    final loginObservable = new Observable<LoginState>(_loginBloc);
-    loginObservable.listen((state) => handleLoginStateChange(state));
+    _loginBloc.listen((state) => handleLoginStateChange(state));
   }
 
   void handleLoginStateChange(LoginState state) {

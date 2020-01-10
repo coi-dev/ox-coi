@@ -53,7 +53,6 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
@@ -79,8 +78,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
   @override
   void initState() {
     super.initState();
-    final contactImportObservable = new Observable<SettingsAutocryptState>(_settingsAutocryptBloc);
-    contactImportObservable.listen((state) => handleAutocryptImport(state));
+    _settingsAutocryptBloc.listen((state) => handleAutocryptImport(state));
     _settingsAutocryptBloc.add(PrepareKeyTransfer(chatId: widget.chatId, messageId: widget.messageId));
     navigation.current = Navigatable(Type.settingsAutocryptImport);
   }

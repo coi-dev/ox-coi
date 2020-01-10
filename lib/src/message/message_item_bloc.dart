@@ -80,9 +80,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   Stream<MessageItemState> _loadMessage(LoadMessage event) async* {

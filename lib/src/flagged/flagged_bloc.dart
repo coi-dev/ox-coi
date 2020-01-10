@@ -79,9 +79,9 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   void _registerListeners() {

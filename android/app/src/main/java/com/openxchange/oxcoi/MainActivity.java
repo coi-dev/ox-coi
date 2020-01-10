@@ -48,6 +48,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
@@ -56,9 +57,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.flutter.app.FlutterActivity;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
     private Map<String, String> sharedData = new HashMap<>();
@@ -75,36 +77,40 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GeneratedPluginRegistrant.registerWith(this);
-
         handleIntent(getIntent());
-        SecurityHelper securityHelper = new SecurityHelper(this);
-        setupSharingMethodChannel();
-        setupSecurityMethodChannel(securityHelper);
     }
 
-    private void setupSharingMethodChannel() {
-        new MethodChannel(getFlutterView(), INTENT_CHANNEL_NAME).setMethodCallHandler(
+    @Override
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        super.configureFlutterEngine(flutterEngine);
+        DartExecutor dartExecutor = flutterEngine.getDartExecutor();
+        setupSharingMethodChannel(dartExecutor);
+        SecurityHelper securityHelper = new SecurityHelper(this);
+        setupSecurityMethodChannel(dartExecutor, securityHelper);
+    }
+
+    private void setupSharingMethodChannel(DartExecutor dartExecutor) {
+        new MethodChannel(dartExecutor, INTENT_CHANNEL_NAME).setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.contentEquals("getSharedData")) {
                         result.success(sharedData);
                         sharedData.clear();
-                    }else if (call.method.contentEquals("getInitialLink")) {
-                        if (startString != null || !startString.isEmpty()) {
+                    } else if (call.method.contentEquals("getInitialLink")) {
+                        if (startString != null && !startString.isEmpty()) {
                             result.success(startString);
                             startString = "";
-                        }else{
+                        } else {
                             result.success(null);
                         }
-                    }else if (call.method.contentEquals("sendSharedData")) {
+                    } else if (call.method.contentEquals("sendSharedData")) {
                         shareFile(call.arguments);
                         result.success(null);
                     }
                 });
     }
 
-    private void setupSecurityMethodChannel(SecurityHelper securityHelper) {
-        new MethodChannel(getFlutterView(), SECURITY_CHANNEL_NAME).setMethodCallHandler(
+    private void setupSecurityMethodChannel(DartExecutor dartExecutor, SecurityHelper securityHelper) {
+        new MethodChannel(dartExecutor, SECURITY_CHANNEL_NAME).setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.contentEquals("generateSecrets")) {
                         KeyPair keyPair = securityHelper.generateKey();
@@ -137,7 +143,7 @@ public class MainActivity extends FlutterActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
     }
@@ -154,12 +160,12 @@ public class MainActivity extends FlutterActivity {
                 sharedData.put(SHARED_TEXT, text);
             } else if (type.startsWith("application/") || type.startsWith("audio/") || type.startsWith("image/") || type.startsWith("video/")) {
                 Uri uri = (Uri) Objects.requireNonNull(getIntent().getExtras()).get(Intent.EXTRA_STREAM);
-                if(uri == null){
+                if (uri == null) {
                     ClipData clipData = intent.getClipData();
                     ClipData.Item item = clipData.getItemAt(0);
                     uri = item.getUri();
                 }
-                if(uri != null) {
+                if (uri != null) {
                     String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                     ShareHelper shareHelper = new ShareHelper();
                     String uriPath = shareHelper.getFilePathForUri(this, uri);
@@ -171,7 +177,7 @@ public class MainActivity extends FlutterActivity {
                     sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
                 }
             }
-        }else if(Intent.ACTION_VIEW.equals(action) && data != null){
+        } else if (Intent.ACTION_VIEW.equals(action) && data != null) {
             startString = data.toString();
         }
     }
@@ -186,13 +192,17 @@ public class MainActivity extends FlutterActivity {
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(mimeType);
-        File fileToShare = new File(path);
-        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName() + ".fileProvider", fileToShare);
-        if(!path.isEmpty()){
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        if (path != null) {
+            File fileToShare = new File(path);
+            Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName() + ".fileProvider", fileToShare);
+            if (!path.isEmpty()) {
+                shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            }
         }
         // add optional text
-        if (!text.isEmpty()) shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        if (text != null && !text.isEmpty()) {
+            shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+        }
         this.startActivity(Intent.createChooser(shareIntent, title));
     }
 

@@ -86,9 +86,9 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   MainState get initialState => MainStateInitial();
 
   @override
-  void close() {
+  Future<void> close() {
     errorBlocSubscription.cancel();
-    super.close();
+    return super.close();
   }
 
   @override

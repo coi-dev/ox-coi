@@ -146,9 +146,7 @@ class SecurityHelper {
         try {
             keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
             return (ECPrivateKey) keyFactory.generatePrivate(privateKeySpec);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
         return null;
@@ -167,9 +165,7 @@ class SecurityHelper {
         try {
             keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
             return (ECPublicKey) keyFactory.generatePublic(pubSpec);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
         return null;

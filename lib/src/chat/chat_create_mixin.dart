@@ -46,7 +46,6 @@ import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:rxdart/rxdart.dart';
 
 mixin ChatCreateMixin {
   void createChatFromContact(BuildContext context, int contactId, [Function onSuccess]) {
@@ -58,8 +57,7 @@ mixin ChatCreateMixin {
 
   ChatChangeBloc _getChatChangeBloc(BuildContext context, Function onSuccess) {
     ChatChangeBloc createChatBloc = ChatChangeBloc();
-    final createChatStatesObservable = new Observable<ChatChangeState>(createChatBloc);
-    createChatStatesObservable.listen((state) => _handleCreateChatStateChange(context, state, onSuccess));
+    createChatBloc.listen((state) => _handleCreateChatStateChange(context, state, onSuccess));
     return createChatBloc;
   }
 

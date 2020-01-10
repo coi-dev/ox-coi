@@ -50,7 +50,6 @@ import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ShareBloc extends Bloc<ShareEvent, ShareState> {
   ChatListBloc _chatListBloc = ChatListBloc();
@@ -89,8 +88,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     List<int> _chatIds;
     List<int> _completeList = List();
 
-    final contactListObservable = Observable<ContactListState>(_contactListBloc);
-    contactListObservable.listen((state) {
+    _contactListBloc.listen((state) {
       if (state is ContactListStateSuccess) {
         int index = _chatIds.length;
         if (state.contactIds != null) {
@@ -104,8 +102,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
       }
     });
 
-    final chatListObservable = Observable<ChatListState>(_chatListBloc);
-    chatListObservable.listen((state) {
+    _chatListBloc.listen((state) {
       if (state is ChatListStateSuccess) {
         _completeList.clear();
         _chatIds = state.chatListItemWrapper.ids;

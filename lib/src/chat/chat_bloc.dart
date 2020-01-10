@@ -105,9 +105,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   void _registerListeners() async {

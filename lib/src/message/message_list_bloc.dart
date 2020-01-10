@@ -106,9 +106,9 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   void _registerListeners() {

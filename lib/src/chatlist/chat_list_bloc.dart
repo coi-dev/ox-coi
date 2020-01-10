@@ -107,7 +107,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   @override
   Stream<ChatListState> transformEvents(Stream<ChatListEvent> events, Stream<ChatListState> Function(ChatListEvent event) next) {
     return super.transformEvents(
-      (events as Observable<ChatListEvent>).debounceTime(
+      events.debounceTime(
         Duration(milliseconds: 300),
       ),
       next,
@@ -115,10 +115,10 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
     _messageListBloc.close();
-    super.close();
+    return super.close();
   }
 
   void _registerListeners() async {
@@ -127,8 +127,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       _repositoryStreamHandler =
           RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
-      final messageListObservable = Observable<MessageListState>(_messageListBloc);
-      messageListObservable.listen((state) async {
+      _messageListBloc.listen((state) async {
         if (state is MessagesStateSuccess) {
           Context context = Context();
           var inviteContactList = await getInviteContactList(state);

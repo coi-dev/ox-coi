@@ -54,7 +54,6 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ScanQr extends StatefulWidget {
   @override
@@ -72,8 +71,7 @@ class _ScanQrState extends State<ScanQr> {
     super.initState();
     _navigation.current = Navigatable(Type.scanQr);
     requestQrCamera();
-    final qrObservable = new Observable<QrState>(_qrBloc);
-    qrObservable.listen((state) {
+    _qrBloc.listen((state) {
       if (state is QrStateSuccess) {
         _qrCodeDetected = false;
         if (state.chatId != 0) {

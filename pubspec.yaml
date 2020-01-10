@@ -4,58 +4,61 @@ description: OX COI Messenger is a mail based chat app.
 version: 0.450.0+414 # x.y.z+build-number
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  app_settings: ^2.0.2
-  background_fetch: ^0.3.2
-  bloc: ^1.0.0
-  contacts_service: ^0.3.5
-  crypto: ^2.1.1+1
+  app_settings: ^3.0.0+1
+  background_fetch: ^0.4.0
+  bloc: ^3.0.0
+  contacts_service: ^0.3.10
+  crypto: ^2.1.3
   crypto_keys: ^0.1.0
-  cupertino_icons: ^0.1.2
-  date_format: ^1.0.6
-  device_info: ^0.4.1+2
-  equatable: ^0.6.1
-  firebase_messaging: ^6.0.1
-  file_picker: ^1.4.2
-  flutter_bloc: ^1.0.0
-  flutter_html: ^0.11.0
-  flutter_local_notifications: ^0.8.4
+  cupertino_icons: ^0.1.3
+  date_format: ^1.0.8
+  device_info: ^0.4.1+4
+  equatable: ^1.0.2
+  firebase_messaging: ^6.0.9
+  file_picker:
+    git:
+      url: git://github.com/Boehrsi/plugins_flutter_file_picker
+      ref: 192_embeddingV2
+  flutter_bloc: ^3.1.0
+  flutter_html: ^0.11.1
+  flutter_local_notifications: ^0.9.1+3
   flutter_slidable: ^0.5.4
   flutter_sound:
     git:
-      url:  https://github.com/open-xchange/flutter_sound.git
+      url: https://github.com/open-xchange/flutter_sound
   fluttertoast: ^3.1.3
   gettext: ^1.1.0+2
   gettext_parser: ^0.1.0+1
-  http: ^0.12.0+2
-  image_cropper: ^1.1.0
-  image_picker: ^0.6.1+8
-  logging: ^0.11.3+2
+  http: ^0.12.0+4
+  image_cropper: ^1.2.0
+  image_picker: ^0.6.3+1
+  logging: ^0.11.4
   mime: ^0.9.6+3
-  open_file: ^2.0.3
-  package_info: ^0.4.0+11
+  open_file: ^3.0.0
+  package_info: ^0.4.0+13
   path: ^1.6.4
-  path_provider: ^1.4.5
-  permission_handler: ^4.0.0
-  pointycastle: ^1.0.1
-  rxdart: ^0.22.4
-  shared_preferences: ^0.5.4
+  path_provider: ^1.5.1
+  permission_handler: ^4.2.0+hotfix.2
+  pointycastle: ^1.0.2
+  rxdart: ^0.23.1
+  shared_preferences: ^0.5.6
   sprintf: ^4.0.2
-  sqflite: ^1.1.7+1
+  sqflite: ^1.2.0
   superellipse_shape: ^0.1.5
   transparent_image: ^1.0.0
-  url_launcher: ^5.2.4
-  video_player: ^0.10.2+5
-  qr_flutter: ^3.0.1
-  qr_mobile_vision: ^0.2.2
-  uuid: ^2.0.2
-  video_thumbnail: ^0.1.6
+  url_launcher: ^5.4.1
+  video_player: ^0.10.5+2
+  qr_flutter: ^3.2.0
+  qr_mobile_vision: ^0.3.1
+  uuid: ^2.0.4
+  video_thumbnail: ^0.2.0
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 

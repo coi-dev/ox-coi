@@ -181,9 +181,9 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   Future<RequestPushRegistration> _createRegistrationRequest() async {

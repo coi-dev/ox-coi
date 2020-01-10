@@ -40,23 +40,35 @@
  * for more details.
  */
 
-package com.openxchange.oxcoi;
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/image.dart';
 
-import com.transistorsoft.flutter.backgroundfetch.BackgroundFetchPlugin;
+class AdaptiveSuperellipseIcon extends StatelessWidget {
+  final IconSource icon;
+  final Color color;
+  final Color iconColor;
+  final double size;
 
-import io.flutter.app.FlutterApplication;
-import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugins.GeneratedPluginRegistrant;
+  AdaptiveSuperellipseIcon({@required this.icon, @required this.color, @required this.iconColor, this.size});
 
-public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        BackgroundFetchPlugin.setPluginRegistrant(this);
-    }
-
-    @Override
-    public void registerWith(PluginRegistry registry) {
-        GeneratedPluginRegistrant.registerWith(registry);
-    }
+  @override
+  Widget build(BuildContext context) {
+    var iconSize = size ?? IconTheme.of(context).size;
+    var backgroundSize = iconSize + superellipseIconFactor;
+    return Container(
+      height: backgroundSize,
+      width: backgroundSize,
+      decoration: ShapeDecoration(
+        shape: getSuperEllipseShape(backgroundSize),
+        color: color,
+      ),
+      child: AdaptiveIcon(
+        icon: icon,
+        size: iconSize,
+        color: iconColor,
+      ),
+    );
+  }
 }

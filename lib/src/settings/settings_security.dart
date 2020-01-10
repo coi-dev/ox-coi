@@ -55,7 +55,6 @@ import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 
@@ -74,8 +73,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsSecurity);
-    final settingsSecurityObservable = new Observable<SettingsSecurityState>(_settingsSecurityBloc);
-    settingsSecurityObservable.listen((state) => _settingsSecurityStateChange(state));
+    _settingsSecurityBloc.listen((state) => _settingsSecurityStateChange(state));
   }
 
   @override

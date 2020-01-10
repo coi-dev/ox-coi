@@ -58,7 +58,6 @@ import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
-import 'package:rxdart/rxdart.dart';
 
 class UserSettings extends StatefulWidget {
   @override
@@ -79,8 +78,7 @@ class _UserSettingsState extends State<UserSettings> {
     super.initState();
     navigation.current = Navigatable(Type.settingsUser);
     _userChangeBloc.add(RequestUser());
-    final userStatesObservable = new Observable<UserChangeState>(_userChangeBloc);
-    userStatesObservable.listen((state) => _handleUserChangeStateChange(state));
+    _userChangeBloc.listen((state) => _handleUserChangeStateChange(state));
   }
 
   _handleUserChangeStateChange(UserChangeState state) {

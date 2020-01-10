@@ -40,30 +40,31 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+enum AppBarAction {
+  flaggedChats,
+  searchChats,
+  importContacts,
+  blockedContacts,
+  searchContacts,
+  profileSettings,
+}
 
 abstract class RootChild extends StatefulWidget {
-  final State state;
+  final StreamController appBarActionsStream;
 
-  final List<Widget> _actions = new List();
-
-  RootChild({@required this.state});
+  RootChild({this.appBarActionsStream, Key key}) : super(key: key);
 
   getElevation() {
     return appBarElevationDefault;
   }
 
-  List<Widget> getActions(BuildContext context) {
-    return _actions;
-  }
-
-  setActions(List<Widget> widgets) {
-    _actions.clear();
-    _actions.addAll(widgets);
-  }
+  List<Widget> getActions(BuildContext context) ;
 
   String getTitle();
 

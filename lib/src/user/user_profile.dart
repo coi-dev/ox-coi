@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,14 +69,10 @@ import 'package:ox_coi/src/widgets/placeholder_text.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
 class UserProfile extends RootChild {
-  UserProfile({State<StatefulWidget> state}) : super(state: state);
+  UserProfile({appBarActionsStream, Key key}) : super(appBarActionsStream: appBarActionsStream, key: key);
 
   @override
-  _ProfileState createState() {
-    final state = _ProfileState();
-    setActions([state.getSettings()]);
-    return state;
-  }
+  _ProfileState createState() => _ProfileState();
 
   @override
   Color getColor(BuildContext context) {
@@ -100,6 +98,19 @@ class UserProfile extends RootChild {
   IconSource getNavigationIcon() {
     return IconSource.accountCircle;
   }
+
+  @override
+  List<Widget> getActions(BuildContext context) {
+    return [
+      AdaptiveIconButton(
+        icon: AdaptiveIcon(
+          icon: IconSource.settings,
+        ),
+        onPressed: () => appBarActionsStream.add(AppBarAction.profileSettings),
+        key: Key(keyUserProfileSettingsAdaptiveIcon),
+      ),
+    ];
+  }
 }
 
 class _ProfileState extends State<UserProfile> {
@@ -107,12 +118,25 @@ class _ProfileState extends State<UserProfile> {
   Navigation navigation = Navigation();
   InviteBloc _inviteBloc = InviteBloc();
   OverlayEntry _fullScreenOverlayEntry;
+  StreamSubscription appBarActionsSubscription;
 
   @override
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.profile);
     _userBloc.add(RequestUser());
+    appBarActionsSubscription = widget.appBarActionsStream.stream.listen((data) {
+      var action = data as AppBarAction;
+      if (action == AppBarAction.profileSettings) {
+        _actionSettings();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    appBarActionsSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -216,17 +240,7 @@ class _ProfileState extends State<UserProfile> {
         ));
   }
 
-  Widget getSettings() {
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.settings,
-      ),
-      onPressed: () => _settings(context),
-      key: Key(keyUserProfileSettingsAdaptiveIcon),
-    );
-  }
-
-  _settings(BuildContext context) {
+  _actionSettings() {
     navigation.pushNamed(context, Navigation.settings);
   }
 

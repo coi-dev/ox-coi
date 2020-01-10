@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'adaptive_icon.dart';
 import 'adaptive_widget.dart';
 
 class AdaptiveIconButton extends AdaptiveWidget<CupertinoButton, IconButton> {
-  final AdaptiveIcon icon;
+  final Widget icon;
   final Function onPressed;
   final Color color;
 

@@ -73,9 +73,9 @@ class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   Stream<ErrorState> setupListeners() async* {

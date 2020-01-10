@@ -48,7 +48,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/base/bloc_progress_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 

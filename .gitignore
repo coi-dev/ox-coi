@@ -28,6 +28,7 @@
 build/
 coverage/
 .flutter-plugins-dependencies
+ios/Flutter/Flutter.podspec
 
 # Tests
 screenshots/

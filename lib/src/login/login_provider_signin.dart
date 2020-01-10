@@ -56,7 +56,6 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'login_bloc.dart';
 import 'login_events_state.dart';
@@ -107,8 +106,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     super.initState();
     _navigation.current = Navigatable(Type.loginProviderSignIn);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
-    final loginObservable = new Observable<LoginState>(_loginBloc);
-    loginObservable.listen((state) => handleLoginStateChange(state));
+    _loginBloc.listen((state) => handleLoginStateChange(state));
   }
 
   void handleLoginStateChange(LoginState state) {

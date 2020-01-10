@@ -65,7 +65,6 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/group_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
-import 'package:rxdart/rxdart.dart';
 
 enum ContactAction {
   add,
@@ -120,8 +119,7 @@ class _ContactChangeState extends State<ContactChange> {
     } else {
       _nameField.controller.text = widget.name != null ? widget.name : "";
     }
-    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc);
-    contactAddedObservable.listen((state) => handleContactChanged(state));
+    _contactChangeBloc.listen((state) => handleContactChanged(state));
     chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
 

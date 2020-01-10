@@ -51,6 +51,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 
 enum ComposerModeType {
   compose,
@@ -59,26 +60,36 @@ enum ComposerModeType {
 }
 
 mixin ChatComposer {
-  Widget buildLeftComposerPart(
-      {@required ComposerModeType type, @required Function onShowAttachmentChooser, @required Function onAudioRecordingAbort}) {
-    AdaptiveIcon icon;
+  Widget buildLeftComposerPart({
+    @required ComposerModeType type,
+    @required Function onShowAttachmentChooser,
+    @required Function onAudioRecordingAbort,
+    @required BuildContext context,
+  }) {
+    AdaptiveSuperellipseIcon icon;
     Function onPressed;
     switch (type) {
       case ComposerModeType.compose:
-        icon = AdaptiveIcon(
+        icon = AdaptiveSuperellipseIcon(
           icon: IconSource.add,
+          color: CustomTheme.of(context).black.withOpacity(barely),
+          iconColor: CustomTheme.of(context).accent,
         );
         onPressed = onShowAttachmentChooser;
         break;
       case ComposerModeType.isComposing:
-        icon = AdaptiveIcon(
+        icon = AdaptiveSuperellipseIcon(
           icon: IconSource.add,
+          color: CustomTheme.of(context).black.withOpacity(barely),
+          iconColor: CustomTheme.of(context).accent,
         );
         onPressed = null;
         break;
       case ComposerModeType.isVoiceRecording:
-        icon = AdaptiveIcon(
+        icon = AdaptiveSuperellipseIcon(
           icon: IconSource.delete,
+          color: CustomTheme.of(context).black.withOpacity(barely),
+          iconColor: CustomTheme.of(context).accent,
         );
         onPressed = onAudioRecordingAbort;
         break;
@@ -95,28 +106,29 @@ mixin ChatComposer {
       @required TextEditingController textController,
       @required Function onTextChanged,
       @required String text}) {
-    return Flexible(
-        child: Container(
-      padding: EdgeInsets.all(composerTextFieldPadding),
-      decoration: BoxDecoration(
-        border: Border.all(color: CustomTheme.of(context).onBackground.withOpacity(barely)),
-        borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
-      ),
-      child: ComposerModeType.isVoiceRecording == type ? getText(text) : getInputTextField(textController, onTextChanged, context),
-    ));
+    return Flexible(child: ComposerModeType.isVoiceRecording == type ? getText(text) : getInputTextField(textController, onTextChanged, context));
   }
 
-  TextField getInputTextField(TextEditingController textController, Function onTextChanged, BuildContext context) {
-    return TextField(
-      keyboardType: TextInputType.multiline,
-      minLines: 1,
-      maxLines: 4,
-      controller: textController,
-      onChanged: onTextChanged,
-      decoration: new InputDecoration.collapsed(
-        hintText: L10n.get(L.typeSomething),
+  Widget getInputTextField(TextEditingController textController, Function onTextChanged, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: TextField(
+        keyboardType: TextInputType.multiline,
+        minLines: 1,
+        maxLines: 4,
+        controller: textController,
+        onChanged: onTextChanged,
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.all(12.0),
+          hintText: L10n.get(L.typeSomething),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: CustomTheme.of(context).onSurface.withOpacity(barely)),
+            borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
+          ),
+        ),
+        key: Key(L.getKey(L.typeSomething)),
       ),
-      key: Key(L.getKey(L.typeSomething)),
     );
   }
 
@@ -132,43 +144,54 @@ mixin ChatComposer {
       @required Function onSendText,
       @required Function onRecordAudioPressed,
       @required Function onRecordVideoPressed,
-      @required Function onCaptureImagePressed}) {
+      @required Function onCaptureImagePressed,
+      @required BuildContext context}) {
     List<Widget> widgets = List();
     switch (type) {
       case ComposerModeType.compose:
-        widgets.add(new AdaptiveIconButton(
-          icon: new AdaptiveIcon(
+        widgets.add(AdaptiveIconButton(
+          icon: AdaptiveSuperellipseIcon(
             icon: IconSource.mic,
+            color: CustomTheme.of(context).black.withOpacity(barely),
+            iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onRecordAudioPressed,
           key: Key(KeyChatComposerMixinOnRecordAudioPressedIcon),
         ));
-        widgets.add(new AdaptiveIconButton(
-          icon: new AdaptiveIcon(
+        widgets.add(AdaptiveIconButton(
+          icon: AdaptiveSuperellipseIcon(
             icon: IconSource.camera,
+            color: CustomTheme.of(context).black.withOpacity(barely),
+            iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onCaptureImagePressed,
         ));
-        widgets.add(new AdaptiveIconButton(
-          icon: new AdaptiveIcon(
+        widgets.add(AdaptiveIconButton(
+          icon: AdaptiveSuperellipseIcon(
             icon: IconSource.videocam,
+            color: CustomTheme.of(context).black.withOpacity(barely),
+            iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onRecordVideoPressed,
         ));
         break;
       case ComposerModeType.isComposing:
-        widgets.add(new AdaptiveIconButton(
-          icon: new AdaptiveIcon(
+        widgets.add(AdaptiveIconButton(
+          icon: AdaptiveSuperellipseIcon(
             icon: IconSource.send,
+            color: CustomTheme.of(context).black.withOpacity(barely),
+            iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onSendText,
           key: Key(KeyChatComposerMixinOnSendTextIcon),
         ));
         break;
       case ComposerModeType.isVoiceRecording:
-        widgets.add(new AdaptiveIconButton(
-          icon: new AdaptiveIcon(
+        widgets.add(AdaptiveIconButton(
+          icon: AdaptiveSuperellipseIcon(
             icon: IconSource.send,
+            color: CustomTheme.of(context).black.withOpacity(barely),
+            iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onRecordAudioPressed,
           key: Key(KeyChatComposerMixinOnRecordAudioSendIcon),

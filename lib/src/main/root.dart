@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -74,12 +75,25 @@ class Root extends StatefulWidget {
 
 class _RootState extends State<Root> {
   int _selectedIndex = 0;
-  var childList = List<RootChild>();
-  InviteBloc _inviteBloc = InviteBloc();
-  Navigation _navigation = Navigation();
+  List<RootChild> childList;
+  var _inviteBloc = InviteBloc();
+  var _navigation = Navigation();
+  var _appBarActionsStream = StreamController.broadcast();
 
-  _RootState() {
-    childList.addAll([new ChatList(state: this), new ContactList(state: this), new UserProfile(state: this)]);
+  @override
+  void initState() {
+    super.initState();
+    childList = [
+      ChatList(appBarActionsStream: _appBarActionsStream),
+      ContactList(appBarActionsStream: _appBarActionsStream),
+      UserProfile(appBarActionsStream: _appBarActionsStream),
+    ];
+  }
+
+  @override
+  void dispose() {
+    _appBarActionsStream.close();
+    super.dispose();
   }
 
   @override
@@ -188,7 +202,23 @@ class _RootState extends State<Root> {
         ),
         onWillPop: _onWillPop,
       ),
-      bottomNavigationBar: _buildBottomBar(),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: childList.map((child) {
+          return BottomNavigationBarItem(
+            icon: AdaptiveIcon(
+              icon: child.getNavigationIcon(),
+              key: Key(child.getNavigationText()),
+            ),
+            title: Text(child.getNavigationText()),
+          );
+        }).toList(),
+        currentIndex: _selectedIndex,
+        backgroundColor: CustomTheme.of(context).surface,
+        unselectedIconTheme: IconThemeData(color: CustomTheme.of(context).onSurface.withOpacity(fade)),
+        unselectedItemColor: CustomTheme.of(context).onSurface.withOpacity(fade),
+        onTap: _onItemTapped,
+      ),
       floatingActionButton: child.getFloatingActionButton(context),
     );
   }
@@ -202,30 +232,6 @@ class _RootState extends State<Root> {
     } else {
       return Future.value(true);
     }
-  }
-
-  Widget _buildBottomBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: getBottomBarItems(),
-      currentIndex: _selectedIndex,
-      backgroundColor: CustomTheme.of(context).surface,
-      unselectedIconTheme: IconThemeData(color: CustomTheme.of(context).onSurface.withOpacity(fade)),
-      unselectedItemColor: CustomTheme.of(context).onSurface.withOpacity(fade),
-      onTap: _onItemTapped,
-    );
-  }
-
-  List<BottomNavigationBarItem> getBottomBarItems() {
-    var bottomBarItems = List<BottomNavigationBarItem>();
-    childList.forEach((item) => bottomBarItems.add(BottomNavigationBarItem(
-          icon: AdaptiveIcon(
-            icon: item.getNavigationIcon(),
-            key: Key(item.getNavigationText()),
-          ),
-          title: Text(item.getNavigationText()),
-        )));
-    return bottomBarItems;
   }
 
   _onItemTapped(int index) {

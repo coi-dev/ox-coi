@@ -60,7 +60,6 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
@@ -84,8 +83,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
     super.initState();
     _navigation.current = Navigatable(Type.contactProfile);
     _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
-    final contactAddedObservable = new Observable<ContactChangeState>(_contactChangeBloc);
-    contactAddedObservable.listen((state) => _handleContactChanged(context, state));
+    _contactChangeBloc.listen((state) => _handleContactChanged(context, state));
   }
 
   _handleContactChanged(BuildContext context, ContactChangeState state) {

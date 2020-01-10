@@ -55,7 +55,6 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'login_bloc.dart';
 import 'login_events_state.dart';
@@ -83,8 +82,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
     var navigation = Navigation();
     navigation.current = Navigatable(Type.loginManualSettings);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
-    final loginObservable = new Observable<LoginState>(_loginBloc);
-    loginObservable.listen((state) => handleLoginStateChange(state));
+    _loginBloc.listen((state) => handleLoginStateChange(state));
   }
 
   void handleLoginStateChange(LoginState state) {
@@ -111,7 +109,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      builder: (context) {
+      create: (context) {
         var settingsManualFormBloc = SettingsManualFormBloc();
         settingsManualFormBloc.add(SetupSettings(
           shouldLoadConfig: false,

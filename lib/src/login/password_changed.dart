@@ -60,7 +60,7 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:ox_coi/src/widgets/superellipse_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class PasswordChanged extends StatefulWidget {
@@ -185,7 +185,7 @@ class _PasswordChangedState extends State<PasswordChanged> {
                           Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
                           Row(
                             children: <Widget>[
-                              SuperellipseIcon(
+                              AdaptiveSuperellipseIcon(
                                 color: CustomTheme.of(context).error,
                                 size: 24.0,
                                 iconColor: CustomTheme.of(context).white,

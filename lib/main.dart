@@ -69,17 +69,17 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider<LifecycleBloc>(
-          builder: (BuildContext context) {
+          create: (BuildContext context) {
             var lifecycleBloc = LifecycleBloc();
             lifecycleBloc.add(ListenerSetup());
             return lifecycleBloc;
           },
         ),
         BlocProvider<PushBloc>(
-          builder: (BuildContext context) => PushBloc(),
+          create: (BuildContext context) => PushBloc(),
         ),
         BlocProvider<ErrorBloc>(
-          builder: (BuildContext context) => ErrorBloc(),
+          create: (BuildContext context) => ErrorBloc(),
         )
       ],
       child: CustomTheme(

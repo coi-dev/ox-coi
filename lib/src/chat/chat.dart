@@ -85,7 +85,6 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
-import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'chat_create_mixin.dart';
@@ -133,8 +132,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
     _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
     _chatBloc.add(ClearNotifications());
-    final chatObservable = new Observable<ChatState>(_chatBloc);
-    chatObservable.listen((state) {
+    _chatBloc.listen((state) {
       if (state is ChatStateSuccess) {
         _phoneNumbers = state.phoneNumbers;
         _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
@@ -147,10 +145,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         }
       }
     });
-    final chatComposerObservable = new Observable<ChatComposerState>(_chatComposerBloc);
-    chatComposerObservable.listen((state) => handleChatComposer(state));
-    final messagesObservable = new Observable<MessageListState>(_messageListBloc);
-    messagesObservable.listen((state) {
+    _chatComposerBloc.listen((state) => handleChatComposer(state));
+    _messageListBloc.listen((state) {
       if (state is MessagesStateSuccess) {
         if (_lifecycleBloc.currentBackgroundState == AppLifecycleState.paused.toString()) {
           return;
@@ -494,6 +490,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   Widget _buildTextComposer() {
     List<Widget> widgets = List();
     widgets.add(buildLeftComposerPart(
+      context: context,
       type: _getComposerType(),
       onShowAttachmentChooser: _showAttachmentChooser,
       onAudioRecordingAbort: _onAudioRecordingAbort,
@@ -506,6 +503,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       text: _composingAudioTimer,
     ));
     widgets.addAll(buildRightComposerPart(
+      context: context,
       onRecordAudioPressed: _onRecordAudioPressed,
       onRecordVideoPressed: _onRecordVideoPressed,
       onCaptureImagePressed: _onCaptureImagePressed,

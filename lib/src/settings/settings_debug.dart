@@ -57,7 +57,6 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
@@ -81,8 +80,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
     _logger = Logger(Navigatable.getTag(type));
     _settingsDebugBloc.add(RequestDebug());
     _pushBloc = BlocProvider.of<PushBloc>(context);
-    final pushStateObservable = Observable<PushState>(_pushBloc);
-    pushStateObservable.listen((state) {
+    _pushBloc.listen((state) {
       if (state is PushStateSuccess) {
         _settingsDebugBloc.add(RequestDebug());
       }

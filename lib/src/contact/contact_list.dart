@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,21 +70,16 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'contact_change_event_state.dart';
 
 class ContactList extends RootChild {
   final Navigation navigation = Navigation();
 
-  ContactList({State<StatefulWidget> state}) : super(state: state);
+  ContactList({appBarActionsStream, Key key}) : super(appBarActionsStream: appBarActionsStream, key: key);
 
   @override
-  _ContactListState createState() {
-    final state = _ContactListState();
-    setActions([state.getImportAction(), state.getBlockedUsersAction(), state.getSearchAction()]);
-    return state;
-  }
+  _ContactListState createState() => _ContactListState();
 
   @override
   Color getColor(BuildContext context) {
@@ -118,6 +115,33 @@ class ContactList extends RootChild {
   IconSource getNavigationIcon() {
     return IconSource.contacts;
   }
+
+  @override
+  List<Widget> getActions(BuildContext context) {
+    return [
+      AdaptiveIconButton(
+        icon: AdaptiveIcon(
+          icon: IconSource.importContacts,
+        ),
+        key: Key(keyContactListImportContactIconButton),
+        onPressed: () => appBarActionsStream.add(AppBarAction.importContacts),
+      ),
+      AdaptiveIconButton(
+        icon: AdaptiveIcon(
+          icon: IconSource.block,
+        ),
+        key: Key(keyContactListBlockIconButton),
+        onPressed: () => appBarActionsStream.add(AppBarAction.blockedContacts),
+      ),
+      AdaptiveIconButton(
+        icon: AdaptiveIcon(
+          icon: IconSource.search,
+        ),
+        key: Key(keyContactListSearchIconButton),
+        onPressed: () => appBarActionsStream.add(AppBarAction.searchContacts),
+      ),
+    ];
+  }
 }
 
 enum SlidableAction {
@@ -130,6 +154,7 @@ class _ContactListState extends State<ContactList> {
   ContactImportBloc _contactImportBloc = ContactImportBloc();
   Navigation navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
+  StreamSubscription appBarActionsSubscription;
 
   @override
   void initState() {
@@ -137,6 +162,24 @@ class _ContactListState extends State<ContactList> {
     navigation.current = Navigatable(Type.contactList);
     requestValidContacts();
     setupContactImport();
+    appBarActionsSubscription = widget.appBarActionsStream.stream.listen((data) {
+      var action = data as AppBarAction;
+      if (action == AppBarAction.importContacts) {
+        _actionImport();
+      } else if (action == AppBarAction.blockedContacts) {
+        _actionBlocked();
+      } else if (action == AppBarAction.searchContacts) {
+        _actionSearch();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _contactImportBloc.close();
+    _contactListBloc.close();
+    appBarActionsSubscription.cancel();
+    super.dispose();
   }
 
   void requestValidContacts() => _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
@@ -146,8 +189,7 @@ class _ContactListState extends State<ContactList> {
       _contactImportBloc.add(MarkContactsAsInitiallyLoaded());
       _showImportDialog(true, context);
     }
-    final contactImportObservable = new Observable<ContactImportState>(_contactImportBloc);
-    contactImportObservable.listen((state) => handleContactImport(state));
+    _contactImportBloc.listen((state) => handleContactImport(state));
   }
 
   handleContactImport(ContactImportState state) {
@@ -163,13 +205,6 @@ class _ContactListState extends State<ContactList> {
       String contactImportFailure = L10n.get(L.contactImportFailed);
       showToast(contactImportFailure);
     }
-  }
-
-  @override
-  void dispose() {
-    _contactImportBloc.close();
-    _contactListBloc.close();
-    super.dispose();
   }
 
   @override
@@ -192,41 +227,6 @@ class _ContactListState extends State<ContactList> {
     );
   }
 
-  Widget getImportAction() {
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.importContacts,
-      ),
-      key: Key(keyContactListImportContactIconButton),
-      onPressed: () => _showImportDialog(false, context),
-    );
-  }
-
-  Widget getBlockedUsersAction() {
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.block,
-      ),
-      key: Key(keyContactListBlockIconButton),
-      onPressed: () => _showBlockedUserList(context),
-    );
-  }
-
-  Widget getSearchAction() {
-    Search search = Search(
-      onBuildResults: onBuildResultOrSuggestion,
-      onBuildSuggestion: onBuildResultOrSuggestion,
-      onClose: onSearchClose,
-    );
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.search,
-      ),
-      key: Key(keyContactListSearchIconButton),
-      onPressed: () => search.show(context),
-    );
-  }
-
   Widget onBuildResultOrSuggestion(String query) {
     _contactListBloc.add(SearchContacts(query: query));
     return buildList();
@@ -236,8 +236,21 @@ class _ContactListState extends State<ContactList> {
     requestValidContacts();
   }
 
-  _showBlockedUserList(BuildContext context) {
+  void _actionImport() {
+    _showImportDialog(false, context);
+  }
+
+  void _actionBlocked() {
     navigation.pushNamed(context, Navigation.contactsBlocked);
+  }
+
+  void _actionSearch() {
+    Search search = Search(
+      onBuildResults: onBuildResultOrSuggestion,
+      onBuildSuggestion: onBuildResultOrSuggestion,
+      onClose: onSearchClose,
+    );
+    search.show(context);
   }
 
   void _showImportDialog(bool initialImport, BuildContext context) {

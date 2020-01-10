@@ -85,7 +85,7 @@ class MessageData extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
   static MessageData of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(MessageData) as MessageData;
+    return context.dependOnInheritedWidgetOfExactType<MessageData>();
   }
 }
 

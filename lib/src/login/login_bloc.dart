@@ -141,9 +141,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   Future<void> _setupConfig(LoginButtonPressed event) async {

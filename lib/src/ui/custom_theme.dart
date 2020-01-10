@@ -132,12 +132,12 @@ class CustomTheme extends StatefulWidget {
   CustomThemeState createState() => new CustomThemeState();
 
   static BrandedTheme of(BuildContext context) {
-    _CustomTheme inherited = (context.inheritFromWidgetOfExactType(_CustomTheme) as _CustomTheme);
+    _CustomTheme inherited = (context.dependOnInheritedWidgetOfExactType<_CustomTheme>());
     return inherited.data.theme;
   }
 
   static CustomThemeState instanceOf(BuildContext context) {
-    _CustomTheme inherited = (context.inheritFromWidgetOfExactType(_CustomTheme) as _CustomTheme);
+    _CustomTheme inherited = (context.dependOnInheritedWidgetOfExactType<_CustomTheme>());
     return inherited.data;
   }
 }

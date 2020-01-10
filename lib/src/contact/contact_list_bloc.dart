@@ -104,9 +104,9 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   }
 
   @override
-  void close() {
+  Future<void> close() {
     _unregisterListeners();
-    super.close();
+    return super.close();
   }
 
   void _registerListeners() {

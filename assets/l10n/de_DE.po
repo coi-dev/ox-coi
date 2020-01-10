@@ -72,7 +72,7 @@ msgid "Advanced SMTP Settings"
 msgstr "Weitere SMTP-Einstellungen"
 
 msgid "All your contacts are in this chat."
-msgstr "Alle bekannten Konktakte sind in dieser Gruppe."
+msgstr "Alle bekannten Kontakte sind in dieser Gruppe."
 
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "

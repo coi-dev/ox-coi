@@ -78,7 +78,7 @@ class ProfileData extends InheritedWidget {
         super(key: key, child: child);
 
   static ProfileData of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(ProfileData) as ProfileData;
+    return context.dependOnInheritedWidgetOfExactType<ProfileData>();
   }
 
   @override
