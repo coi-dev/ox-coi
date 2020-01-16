@@ -163,9 +163,9 @@ class MessageStatus extends StatelessWidget {
 class MessageAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (isImage(context)) {
+    if (isImageOrGif(context)) {
       return MessagePartImageVideoAttachment();
-    } else if (isAudio(context)) {
+    } else if (isAudioOrVoice(context)) {
       return MessagePartAudioAttachment();
     } else if (isVideo(context)) {
       return MessagePartImageVideoAttachment(
@@ -177,12 +177,12 @@ class MessageAttachment extends StatelessWidget {
   }
 }
 
-bool isImage(BuildContext context) {
+bool isImageOrGif(BuildContext context) {
   final attachment = _getMessageStateData(context).attachmentStateData;
-  return attachment != null && attachment.type == ChatMsg.typeImage;
+  return attachment != null && attachment.type == ChatMsg.typeImage || attachment.type == ChatMsg.typeGif;
 }
 
-bool isAudio(BuildContext context) {
+bool isAudioOrVoice(BuildContext context) {
   final attachment = _getMessageStateData(context).attachmentStateData;
   return attachment != null && attachment.type == ChatMsg.typeAudio || attachment.type == ChatMsg.typeVoice;
 }
