@@ -39,8 +39,8 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
-class SharedData{
+
+class SharedData {
   static const String sharedMimeType = "shared_mime_type";
   static const String sharedText = "shared_text";
   static const String sharedPath = "shared_path";
@@ -52,7 +52,7 @@ class SharedData{
   String path;
   String fileName;
 
-  SharedData(Map<dynamic, dynamic> data){
+  SharedData(Map<dynamic, dynamic> data) {
     mimeType = data.containsKey(sharedMimeType) ? data[sharedMimeType] : "";
     text = data.containsKey(sharedText) ? data[sharedText] : "";
     path = data.containsKey(sharedPath) ? data[sharedPath] : "";

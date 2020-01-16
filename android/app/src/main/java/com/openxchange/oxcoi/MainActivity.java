@@ -42,6 +42,7 @@
 
 package com.openxchange.oxcoi;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -153,15 +154,22 @@ public class MainActivity extends FlutterActivity {
                 sharedData.put(SHARED_TEXT, text);
             } else if (type.startsWith("application/") || type.startsWith("audio/") || type.startsWith("image/") || type.startsWith("video/")) {
                 Uri uri = (Uri) Objects.requireNonNull(getIntent().getExtras()).get(Intent.EXTRA_STREAM);
-                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-                ShareHelper shareHelper = new ShareHelper();
-                String uriPath = shareHelper.getFilePathForUri(this, uri);
-                if(text != null && !text.isEmpty()){
-                    sharedData.put(SHARED_TEXT, text);
+                if(uri == null){
+                    ClipData clipData = intent.getClipData();
+                    ClipData.Item item = clipData.getItemAt(0);
+                    uri = item.getUri();
                 }
-                sharedData.put(SHARED_MIME_TYPE, type);
-                sharedData.put(SHARED_PATH, uriPath);
-                sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
+                if(uri != null) {
+                    String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    ShareHelper shareHelper = new ShareHelper();
+                    String uriPath = shareHelper.getFilePathForUri(this, uri);
+                    if (text != null && !text.isEmpty()) {
+                        sharedData.put(SHARED_TEXT, text);
+                    }
+                    sharedData.put(SHARED_MIME_TYPE, type);
+                    sharedData.put(SHARED_PATH, uriPath);
+                    sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
+                }
             }
         }else if(Intent.ACTION_VIEW.equals(action) && data != null){
             startString = data.toString();
