@@ -49,10 +49,9 @@ import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/strings.dart';
-import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/core.dart';
-import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class SettingsManualForm extends StatefulWidget {
   final bool isLogin;
@@ -87,11 +86,13 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPort),
   );
-  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField((context) => L10n.get(L.settingSMTPLogin));
+  ValidatableTextFormField smtpLoginNameField = ValidatableTextFormField(
+    (context) => L10n.get(L.settingSMTPLogin),
+  );
   ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
     (context) => L10n.get(L.settingSMTPPassword),
     textFormType: TextFormType.password,
-    needValidation: true,
+    needValidation: false,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
   );
   ValidatableTextFormField smtpServerField = ValidatableTextFormField(
@@ -148,9 +149,12 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               success: success,
               email: emailField.controller.text,
               password: passwordField.controller.text,
+              imapLogin: imapLoginNameField.controller.text,
               imapServer: imapServerField.controller.text,
               imapPort: imapPortField.controller.text,
               imapSecurity: convertProtocolStringToInt(context, selectedImapSecurity),
+              smtpLogin: smtpLoginNameField.controller.text,
+              smtpPassword: smtpPasswordField.controller.text,
               smtpServer: smtpServerField.controller.text,
               smtpPort: smtpPortField.controller.text,
               smtpSecurity: convertProtocolStringToInt(context, selectedSmtpSecurity),
@@ -158,71 +162,90 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
           }
         }
       },
-      child: Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                L10n.get(L.settingBase),
-                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+      child: BlocBuilder<SettingsManualFormBloc, SettingsManualFormState>(
+        builder: (context, state) {
+          if (state is SettingsManualFormStateReady || state is SettingsManualFormStateValidation || state is SettingsManualFormStateValidationSuccess) {
+            return Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      L10n.get(L.settingBase),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+                    ),
+                  ),
+                  emailField,
+                  passwordField,
+                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      L10n.get(L.loginImapSmtpName),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+                    ),
+                  ),
+                  imapLoginNameField,
+                  smtpLoginNameField,
+                  smtpPasswordField,
+                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      L10n.get(L.loginServerAddresses),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+                    ),
+                  ),
+                  imapServerField,
+                  smtpServerField,
+                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      L10n.get(L.settingAdvancedImap),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+                    ),
+                  ),
+                  imapPortField,
+                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Text(L10n.get(L.settingIMAPSecurity)),
+                  DropdownButton(
+                      value: selectedImapSecurity == null ? L10n.get(L.automatic) : selectedImapSecurity,
+                      items: getSecurityOptions(context),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          selectedImapSecurity = newValue;
+                        });
+                      }),
+                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      L10n.get(L.settingAdvancedSmtp),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+                    ),
+                  ),
+                  smtpPortField,
+                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Text(L10n.get(L.settingSMTPSecurity)),
+                  DropdownButton(
+                    value: selectedSmtpSecurity == null ? L10n.get(L.automatic) : selectedSmtpSecurity,
+                    items: getSecurityOptions(context),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        selectedSmtpSecurity = newValue;
+                      });
+                    },
+                  ),
+                ],
               ),
-            ),
-            emailField,
-            passwordField,
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                L10n.get(L.loginServerAddresses),
-                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
-              ),
-            ),
-            imapServerField,
-            smtpServerField,
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                L10n.get(L.settingAdvancedImap),
-                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
-              ),
-            ),
-            imapPortField,
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Text(L10n.get(L.settingIMAPSecurity)),
-            DropdownButton(
-                value: selectedImapSecurity == null ? L10n.get(L.automatic) : selectedImapSecurity,
-                items: getSecurityOptions(context),
-                onChanged: (String newValue) {
-                  setState(() {
-                    selectedImapSecurity = newValue;
-                  });
-                }),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                L10n.get(L.settingAdvancedSmtp),
-                style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
-              ),
-            ),
-            smtpPortField,
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
-            Text(L10n.get(L.settingSMTPSecurity)),
-            DropdownButton(
-              value: selectedSmtpSecurity == null ? L10n.get(L.automatic) : selectedSmtpSecurity,
-              items: getSecurityOptions(context),
-              onChanged: (String newValue) {
-                setState(() {
-                  selectedSmtpSecurity = newValue;
-                });
-              },
-            ),
-          ],
-        ),
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

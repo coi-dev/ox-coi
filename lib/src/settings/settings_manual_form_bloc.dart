@@ -80,9 +80,12 @@ class SettingsManualFormBloc extends Bloc<SettingsManualFormEvent, SettingsManua
         yield SettingsManualFormStateValidationSuccess(
           email: event.email,
           password: event.password,
+          imapLogin: event.imapLogin,
           imapServer: event.imapServer,
           imapPort: event.imapPort,
           imapSecurity: event.imapSecurity,
+          smtpLogin: event.smtpLogin,
+          smtpPassword: event.smtpPassword,
           smtpServer: event.smtpServer,
           smtpPort: event.smtpPort,
           smtpSecurity: event.smtpSecurity,

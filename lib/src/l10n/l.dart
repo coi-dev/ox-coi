@@ -243,6 +243,7 @@ class L {
   // Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
   static final loginErrorResponseXY = _translationKey("Response from %s: %s\n\nSome providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your provider or friends if you run into problems.");
   static final loginSignIn = _translationKey("Sign in");
+  static final loginImapSmtpName = _translationKey("IMAP/SMTP login names");
   static final loginServerAddresses = _translationKey("Server addresses");
   static final loginManualSetupRequired = _translationKey("We could not determine all settings automatically.");
 

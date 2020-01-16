@@ -140,7 +140,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
               imapPort: state.imapPort,
               imapSecurity: state.imapSecurity,
               smtpLogin: state.smtpLogin,
-              smtpPassword: state.password,
+              smtpPassword: state.smtpPassword,
               smtpServer: state.smtpServer,
               smtpPort: state.smtpPort,
               smtpSecurity: state.smtpSecurity,

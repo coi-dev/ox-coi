@@ -89,6 +89,7 @@ class ValidationDone extends SettingsManualFormEvent {
   final String imapServer;
   final String imapPort;
   final String smtpLogin;
+  final String smtpPassword;
   final String smtpServer;
   final String smtpPort;
   final int imapSecurity;
@@ -102,6 +103,7 @@ class ValidationDone extends SettingsManualFormEvent {
     this.imapServer,
     this.imapPort,
     this.smtpLogin,
+    this.smtpPassword,
     this.smtpServer,
     this.smtpPort,
     this.imapSecurity,
@@ -149,6 +151,7 @@ class SettingsManualFormStateValidationSuccess extends SettingsManualFormState {
   final String imapServer;
   final String imapPort;
   final String smtpLogin;
+  final String smtpPassword;
   final String smtpServer;
   final String smtpPort;
   final int imapSecurity;
@@ -161,6 +164,7 @@ class SettingsManualFormStateValidationSuccess extends SettingsManualFormState {
     this.imapServer,
     this.imapPort,
     this.smtpLogin,
+    this.smtpPassword,
     this.smtpServer,
     this.smtpPort,
     this.imapSecurity,

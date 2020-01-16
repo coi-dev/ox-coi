@@ -97,11 +97,11 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
 
   void _saveUserAccountData(UserAccountDataChanged event) async {
     Config config = Config();
-    await config.setValue(Context.configMailUser, event.imapLogin);
+    await config.setValue(Context.configMailUser, event.imapLogin.isNotEmpty ? event.imapLogin : null);
     await config.setValue(Context.configMailPassword, event.imapPassword);
     await config.setValue(Context.configMailServer, event.imapServer);
     await config.setValue(Context.configMailPort, event.imapPort);
-    await config.setValue(Context.configSendUser, event.smtpLogin);
+    await config.setValue(Context.configSendUser, event.smtpLogin.isNotEmpty ? event.smtpLogin : null);
     await config.setValue(Context.configSendPassword, event.smtpPassword);
     await config.setValue(Context.configSendServer, event.smtpServer);
     await config.setValue(Context.configSendPort, event.smtpPort);
