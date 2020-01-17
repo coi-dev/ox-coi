@@ -106,6 +106,7 @@ enum IconSource {
   checkedCircle,
   circle,
   darkMode,
+  qr,
 }
 
 class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
@@ -192,6 +193,7 @@ class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
     IconSource.checkedCircle : [Icons.check_circle, Icons.check_circle],
     IconSource.circle : [Icons.radio_button_unchecked, Icons.radio_button_unchecked],
     IconSource.darkMode : [Icons.brightness_2, Icons.brightness_2],
+    IconSource.qr : [Icons.filter_center_focus, Icons.filter_center_focus],
   };
 
   AdaptiveIcon({

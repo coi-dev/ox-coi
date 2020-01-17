@@ -82,6 +82,7 @@ const iconTextPadding = 4.0;
 const iconFormPadding = 8.0;
 const iconSize = 18.0;
 const iconMessagePlaySize = 24.0;
+const superellipseIconSize = 32.0;
 const superellipseIconMinimizeFactor = 8.0;
 const iconSelectedSize = 24.0;
 
@@ -94,6 +95,11 @@ const composeTextBorderRadius = 24.0;
 const chatProfileDividerPadding = 8.0;
 const chatProfileVerticalPadding = 16.0;
 const chatProfileButtonPadding = 8.0;
+
+// Edit/Add contact
+const editAddContactTopPadding = 32.0;
+const editAddContactVerticalPadding = 32.0;
+const editAddContactBigVerticalPadding = 72.0;
 
 //Attachment preview
 const attachmentDividerPadding = 4.0;
@@ -114,6 +120,16 @@ const videoPreviewTimePaddingHorizontal = 8.0;
 // Forms
 const formHorizontalPadding = 16.0;
 const formVerticalPadding = 16.0;
+
+//GroupHeader
+const groupHeaderTopPadding = 16.0;
+const groupHeaderHorizontalPadding = 16.0;
+const groupHeaderBottomPadding = 8.0;
+
+//SettingsItem
+const settingsItemHorizontalPadding = 16.0;
+const settingsItemVerticalPadding = 18.0;
+const settingsItemIconTextPadding = 16.0;
 
 // Messages
 const messagesHorizontalPadding = 8.0;

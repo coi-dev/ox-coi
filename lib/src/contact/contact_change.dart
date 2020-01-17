@@ -57,10 +57,13 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/group_header.dart';
+import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -154,8 +157,8 @@ class _ContactChangeState extends State<ContactChange> {
     }
     return Scaffold(
         appBar: AdaptiveAppBar(
-          leadingIcon: new AdaptiveIconButton(
-            icon: new AdaptiveIcon(
+          leadingIcon: AdaptiveIconButton(
+            icon: AdaptiveIcon(
               icon: IconSource.close,
             ),
             key: Key(keyContactChangeCloseIconButton),
@@ -187,18 +190,18 @@ class _ContactChangeState extends State<ContactChange> {
 
   Widget _buildForm() {
     return Builder(builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: formVerticalPadding),
-            child: Column(
-              children: <Widget>[
-                Visibility(
-                  visible: widget.contactAction != ContactAction.add,
+      return Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            Visibility(
+              visible: widget.contactAction != ContactAction.add,
+              child: Padding(
+                padding: const EdgeInsets.only(top: editAddContactTopPadding),
+                child: Container(
+                  color: CustomTheme.of(context).surface,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                    padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
                     child: Row(
                       children: <Widget>[
                         AdaptiveIcon(icon: IconSource.mail),
@@ -213,17 +216,32 @@ class _ContactChangeState extends State<ContactChange> {
                     ),
                   ),
                 ),
-                Row(
-                  children: <Widget>[
-                    AdaptiveIcon(icon: IconSource.person),
-                    Padding(
-                      padding: EdgeInsets.only(right: iconFormPadding),
-                    ),
-                    Expanded(child: _nameField),
-                  ],
+              ),
+            ),
+            Padding(
+              padding: widget.contactAction == ContactAction.add ? const EdgeInsets.only(top: editAddContactTopPadding) : const EdgeInsets.all(0.0),
+              child: Container(
+                color: CustomTheme.of(context).surface,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
+                  child: Row(
+                    children: <Widget>[
+                      AdaptiveIcon(icon: IconSource.person),
+                      Padding(
+                        padding: EdgeInsets.only(right: iconFormPadding),
+                      ),
+                      Expanded(child: _nameField),
+                    ],
+                  ),
                 ),
-                Visibility(
-                  visible: widget.contactAction == ContactAction.add,
+              ),
+            ),
+            Visibility(
+              visible: widget.contactAction == ContactAction.add,
+              child: Container(
+                color: CustomTheme.of(context).surface,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
                   child: Row(
                     children: <Widget>[
                       AdaptiveIcon(icon: IconSource.mail),
@@ -234,48 +252,59 @@ class _ContactChangeState extends State<ContactChange> {
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: widget.contactAction != ContactAction.add && widget.phoneNumbers != null,
-                  child: Column(
-                    children: <Widget>[
-                      for (var phoneNumber in ContactExtension.getPhoneNumberList(widget.phoneNumbers))
-                        Padding(
-                          padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
-                          child: Row(
-                            children: <Widget>[
-                              AdaptiveIcon(icon: IconSource.phone),
-                              Padding(
-                                padding: EdgeInsets.only(right: iconFormPadding),
-                              ),
-                              Text(
-                                phoneNumber,
-                                style: Theme.of(context).textTheme.subhead,
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
-                  child: Text(
-                    L10n.get(L.contactEditPhoneNumberText),
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ),
-                Visibility(
-                  visible: widget.contactAction == ContactAction.add,
-                  child: RaisedButton(
-                    color: CustomTheme.of(context).accent,
-                    textColor: CustomTheme.of(context).onAccent,
-                    child: Text(L10n.get(L.qrScan)),
-                    onPressed: scanQr,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            Visibility(
+              visible: widget.contactAction != ContactAction.add && widget.phoneNumbers != null,
+              child: Container(
+                color: CustomTheme.of(context).surface,
+                child: Column(
+                  children: <Widget>[
+                    for (var phoneNumber in ContactExtension.getPhoneNumberList(widget.phoneNumbers))
+                      Padding(
+                        padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                        child: Row(
+                          children: <Widget>[
+                            AdaptiveIcon(icon: IconSource.phone),
+                            Padding(
+                              padding: EdgeInsets.only(right: iconFormPadding),
+                            ),
+                            Text(
+                              phoneNumber,
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: editAddContactVerticalPadding,
+                  bottom: editAddContactBigVerticalPadding,
+                  left: formVerticalPadding,
+                  right: formVerticalPadding),
+              child: Text(
+                L10n.get(L.contactEditPhoneNumberText),
+                style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.withOpacity(half)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GroupHeader(text: L10n.get(L.qrAddContactHeader),) ,
+            ),
+            Visibility(
+              visible: widget.contactAction == ContactAction.add,
+              child: SettingsItem(
+                icon: IconSource.qr,
+                text: L10n.get(L.qrScan),
+                iconBackground: CustomTheme.of(context).qrIcon,
+              ),
+            ),
+          ],
         ),
       );
     });

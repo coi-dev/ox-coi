@@ -41,46 +41,29 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
-class BrandedTheme {
-  final Color white = Colors.white;
-  final Color black = Colors.black;
-  final Color qrIcon = Colors.green[700];
-  final Color accent;
-  final Color onAccent;
-  final Color info;
-  final Color onInfo;
-  final Color warning;
-  final Color onWarning;
-  final Brightness brightness;
-  final Color background;
-  final Color onBackground;
-  final Color surface;
-  final Color onSurface;
-  final Color secondary;
-  final Color onSecondary;
-  final Color error;
-  final Color onError;
-  final Color primary;
-  final Color onPrimary;
+class GroupHeader extends StatelessWidget {
+  final String text;
 
-  BrandedTheme({
-    this.accent,
-    this.onAccent,
-    this.info,
-    this.onInfo,
-    this.warning,
-    this.onWarning,
-    this.brightness,
-    this.background,
-    this.onBackground,
-    this.surface,
-    this.onSurface,
-    this.secondary,
-    this.onSecondary,
-    this.error,
-    this.onError,
-    this.primary,
-    this.onPrimary
-  });
+  GroupHeader({@required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: CustomTheme.of(context).background,
+      child: Padding(
+          padding: EdgeInsets.only(
+            left: groupHeaderHorizontalPadding,
+            right: groupHeaderHorizontalPadding,
+            top: groupHeaderTopPadding,
+            bottom: groupHeaderBottomPadding,
+          ),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+          )),
+    );
+  }
 }

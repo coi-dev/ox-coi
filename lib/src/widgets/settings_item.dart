@@ -40,47 +40,44 @@
  * for more details.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 
-class BrandedTheme {
-  final Color white = Colors.white;
-  final Color black = Colors.black;
-  final Color qrIcon = Colors.green[700];
-  final Color accent;
-  final Color onAccent;
-  final Color info;
-  final Color onInfo;
-  final Color warning;
-  final Color onWarning;
-  final Brightness brightness;
-  final Color background;
-  final Color onBackground;
-  final Color surface;
-  final Color onSurface;
-  final Color secondary;
-  final Color onSecondary;
-  final Color error;
-  final Color onError;
-  final Color primary;
-  final Color onPrimary;
+class SettingsItem extends StatelessWidget {
+  final IconSource icon;
+  final Color iconBackground;
+  final String text;
 
-  BrandedTheme({
-    this.accent,
-    this.onAccent,
-    this.info,
-    this.onInfo,
-    this.warning,
-    this.onWarning,
-    this.brightness,
-    this.background,
-    this.onBackground,
-    this.surface,
-    this.onSurface,
-    this.secondary,
-    this.onSecondary,
-    this.error,
-    this.onError,
-    this.primary,
-    this.onPrimary
-  });
+  SettingsItem({@required this.icon, @required this.iconBackground, @required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: CustomTheme.of(context).surface,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: settingsItemHorizontalPadding, vertical: settingsItemVerticalPadding),
+        child: Row(
+          children: <Widget>[
+            SuperellipseIcon(
+              size: superellipseIconSize,
+              color: iconBackground,
+              iconColor: CustomTheme.of(context).white,
+              icon: icon,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: settingsItemIconTextPadding),
+            ),
+            Text(
+              text,
+              style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }

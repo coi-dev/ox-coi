@@ -286,7 +286,8 @@ class L {
   static final providerSignInTextX = _translationKey("Sign in with %s");
 
   static final qrProfile = _translationKey("Profile QR");
-  static final qrScan = _translationKey("Scan QR");
+  static final qrAddContactHeader = _translationKey("Or scan QR code");
+  static final qrScan = _translationKey("Scan QR code");
   // Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
   static final qrScanTextX = _translationKey("Scan this QR code to create a new contact or verify a contact with %s.");
   static final qrShow = _translationKey("Show QR");
