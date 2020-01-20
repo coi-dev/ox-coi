@@ -55,6 +55,9 @@ const permissionWriteContacts = 'android.permission.WRITE_CONTACTS';
 
 const environmentDeviceId = 'FLUTTER_TEST_DEVICE_ID';
 const environmentAppId = 'FLUTTER_TEST_APP_ID';
+const environmentTargetPlatform = 'FLUTTER_TEST_TARGET_PLATFORM';
+const environmentTargetPlatformAndroid = 'android';
+const environmentTargetPlatformIos = 'ios';
 
 class Setup {
   FlutterDriver _driver;
@@ -63,12 +66,10 @@ class Setup {
 
   perform() {
     setUpAll(() async {
-      await grantPermission(adbPath, permissionAudio);
-      await grantPermission(adbPath, permissionReadStorage);
-      await grantPermission(adbPath, permissionWriteStorage);
-      await grantPermission(adbPath, permissionReadContacts);
-      await grantPermission(adbPath, permissionWriteContacts);
-
+      String targetPlatform = Platform.environment[environmentTargetPlatform];
+      if (targetPlatform == environmentTargetPlatformAndroid) {
+        await setupAndroid();
+      }
       _driver = await FlutterDriver.connect();
     });
 
@@ -77,6 +78,14 @@ class Setup {
         _driver.close();
       }
     });
+  }
+
+  Future setupAndroid() async {
+    await grantPermission(adbPath, permissionAudio);
+    await grantPermission(adbPath, permissionReadStorage);
+    await grantPermission(adbPath, permissionWriteStorage);
+    await grantPermission(adbPath, permissionReadContacts);
+    await grantPermission(adbPath, permissionWriteContacts);
   }
 
   Future grantPermission(String adbPath, String permission) async {

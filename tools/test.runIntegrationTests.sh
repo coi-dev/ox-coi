@@ -26,6 +26,10 @@ function isInstalled {
     command -v $1 >/dev/null 2>&1 || error "'$1' is not installed." 2
 }
 
+function setupAll {
+    export FLUTTER_TEST_TARGET_PLATFORM=${target}
+}
+
 function setupIos {
     applesimutils --byId ${deviceId} --bundle ${appId} --setPermissions "camera=YES, contacts=YES, calendar=YES, photos=YES, speech=YES, microphone=YES, medialibrary=YES, notifications=YES, faceid=YES, homekit=YES, location=always, reminders=unset, motion=YES"
 }
@@ -69,6 +73,8 @@ elif [[ ${target} = ${TARGET_IOS} ]]; then
     isInstalled applesimutils
 fi
 
+setupAll
+
 cd ..
 if [[ ! -d "$LOG_FOLDER" ]]; then
     mkdir ${LOG_FOLDER}
@@ -89,7 +95,7 @@ do
         elif [[ ${target} = ${TARGET_IOS} ]]; then
             setupIos
             sleep 1
-            flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} >> ${LOG_FILE} 2>&1 # TODO add flavor as soon as iOS support is given
+            flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} --flavor development >> ${LOG_FILE} 2>&1
             testResult=$?
             xcrun simctl uninstall ${deviceId} ${appId}
         fi
