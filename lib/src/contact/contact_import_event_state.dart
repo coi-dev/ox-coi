@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'package:flutter/cupertino.dart';
+
 abstract class ContactImportEvent {}
 
 class MarkContactsAsInitiallyLoaded extends ContactImportEvent {}
@@ -50,6 +52,12 @@ class ImportAborted extends ContactImportEvent {}
 
 class ImportPerformed extends ContactImportEvent {}
 
+class ImportGooglemailContacts extends ContactImportEvent {
+  final bool changeEmails;
+
+  ImportGooglemailContacts({@required this.changeEmails});
+}
+
 abstract class ContactImportState {}
 
 class ContactsImportInitial extends ContactImportState {}
@@ -57,3 +65,5 @@ class ContactsImportInitial extends ContactImportState {}
 class ContactsImportSuccess extends ContactImportState {}
 
 class ContactsImportFailure extends ContactImportState {}
+
+class GooglemailContactsDetected extends ContactImportState {}

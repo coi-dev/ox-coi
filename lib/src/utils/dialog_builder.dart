@@ -41,25 +41,28 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog_action.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+
 import 'keyMapping.dart';
 
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog.dart';
-
-showNavigatableDialog(
-    {@required BuildContext context,
-    @required Widget dialog,
-    @required Navigatable navigatable,
-    Navigatable previousNavigatable}) {
+showNavigatableDialog({
+  @required BuildContext context,
+  @required Widget dialog,
+  @required Navigatable navigatable,
+  Navigatable previousNavigatable,
+  barrierDismissible = true,
+}) {
   Navigation navigation = Navigation();
   previousNavigatable = previousNavigatable ?? navigation.current;
   navigation.current = navigatable;
   return showDialog<void>(
     context: context,
+    barrierDismissible: barrierDismissible,
     builder: (BuildContext context) {
       return dialog;
     },
@@ -68,50 +71,54 @@ showNavigatableDialog(
   });
 }
 
-showConfirmationDialog(
-    {@required BuildContext context,
-    @required String title,
-    @required String content,
-    @required String positiveButton,
-    @required Function positiveAction,
-    @required Navigatable navigatable,
-    Navigatable previousNavigatable,
-    String negativeButton,
-    Function negativeAction,
-    bool selfClose = true}) {
+showConfirmationDialog({
+  @required BuildContext context,
+  @required String title,
+  @required String content,
+  @required String positiveButton,
+  @required Function positiveAction,
+  @required Navigatable navigatable,
+  Navigatable previousNavigatable,
+  String negativeButton,
+  Function negativeAction,
+  bool selfClose = true,
+  barrierDismissible = true,
+  Function onWillPop,
+}) {
   Navigation navigation = Navigation();
   return showNavigatableDialog(
     context: context,
+    barrierDismissible: barrierDismissible,
     navigatable: navigatable,
     previousNavigatable: previousNavigatable,
-    dialog: AdaptiveDialog(
-      title: Text(title),
-      content: new Text(content),
-      actions: <Widget>[
-        new AdaptiveDialogAction(
-          key: Key(keyConfirmationDialogCancelButton),
-          child: new Text(negativeButton != null && negativeButton.isNotEmpty
-              ? negativeButton
-              : L10n.get(L.cancel)),
-          onPressed: () {
-            if (negativeAction != null) {
-              negativeAction();
-            }
-            navigation.pop(context);
-          },
-        ),
-        new AdaptiveDialogAction(
-          key: Key(keyConfirmationDialogPositiveButton),
-          child: new Text(positiveButton),
-          onPressed: () {
-            positiveAction();
-            if (selfClose) {
-              navigation.pop(context);
-            }
-          },
-        ),
-      ],
-    ),
+    dialog: WillPopScope(
+        onWillPop: onWillPop,
+        child: AdaptiveDialog(
+          title: Text(title),
+          content: new Text(content),
+          actions: <Widget>[
+            new AdaptiveDialogAction(
+              key: Key(keyConfirmationDialogCancelButton),
+              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : L10n.get(L.cancel)),
+              onPressed: () {
+                if (negativeAction != null) {
+                  negativeAction();
+                }
+                navigation.pop(context);
+              },
+            ),
+            new AdaptiveDialogAction(
+              key: Key(keyConfirmationDialogPositiveButton),
+              child: new Text(positiveButton),
+              onPressed: () {
+                positiveAction();
+                if (selfClose) {
+                  navigation.pop(context);
+                }
+              },
+            ),
+          ],
+        )),
   );
 }
 
@@ -123,10 +130,10 @@ showInformationDialog(
     Navigatable previousNavigatable}) {
   Navigation navigation = Navigation();
   return showNavigatableDialog(
-    context: context,
-    navigatable: navigatable,
-    previousNavigatable: previousNavigatable,
-    dialog: AdaptiveDialog(
+      context: context,
+      navigatable: navigatable,
+      previousNavigatable: previousNavigatable,
+      dialog: AdaptiveDialog(
         title: Text(title),
         content: new Text(content),
         actions: <Widget>[
@@ -138,6 +145,5 @@ showInformationDialog(
             },
           ),
         ],
-    )
-  );
+      ));
 }

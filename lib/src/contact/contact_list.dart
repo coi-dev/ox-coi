@@ -204,6 +204,18 @@ class _ContactListState extends State<ContactList> {
     } else if (state is ContactsImportFailure) {
       String contactImportFailure = L10n.get(L.contactImportFailed);
       showToast(contactImportFailure);
+    } else if(state is GooglemailContactsDetected){
+      showConfirmationDialog(context: context,
+        title: L10n.get(L.contactGooglemailDialogTitle),
+        content: L10n.get(L.contactGooglemailDialogContent),
+        positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
+        positiveAction: () => _goolemailMailAddressAction(true),
+        negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
+        negativeAction: () => _goolemailMailAddressAction(false),
+        navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
+        barrierDismissible: false,
+        onWillPop: _onGoogleMailDialogWillPop,
+      );
     }
   }
 
@@ -378,5 +390,13 @@ class _ContactListState extends State<ContactList> {
       }
     }
     return false;
+  }
+
+  Future<bool> _onGoogleMailDialogWillPop() {
+    return Future.value(false);
+  }
+
+  _goolemailMailAddressAction(bool changeEmail) {
+    _contactImportBloc.add(ImportGooglemailContacts(changeEmails: changeEmail));
   }
 }

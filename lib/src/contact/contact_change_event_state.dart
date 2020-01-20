@@ -82,6 +82,14 @@ class ContactDeleteFailed extends ContactChangeEvent {
   ContactDeleteFailed({@required this.contactId, @required this.error});
 }
 
+class AddGoogleContact extends ContactChangeEvent {
+  final String name;
+  final String email;
+  final bool changeEmail;
+
+  AddGoogleContact({@required this.name, @required this.email, @required this.changeEmail});
+}
+
 class BlockContact extends ContactChangeEvent {
   final int contactId;
   final int chatId;
@@ -122,4 +130,11 @@ class ContactChangeStateFailure extends ContactChangeState {
   final String error;
 
   ContactChangeStateFailure({this.contactId, @required this.error});
+}
+
+class GoogleContactDetected extends ContactChangeState {
+  final String name;
+  final String email;
+
+  GoogleContactDetected({@required this.name, @required this.email});
 }

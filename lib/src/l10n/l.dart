@@ -194,6 +194,10 @@ class L {
   static final contactEditPhoneNumberText = _translationKey("Phone numbers can be added or edited via the local address book and imported afterwards.");
   static final contactNoPhoneNumber = _translationKey("No phone number");
   static final contactNoPhoneNumberText = _translationKey("This contact has no phone number. Please edit this contact in your device address book and add the phone number there.");
+  static final contactGooglemailDialogTitle = _translationKey("Googlemail account detected");
+  static final contactGooglemailDialogContent = _translationKey("We detected a googlemail address. This leads to broken chats. We recommend to change the mail address to gmail.");
+  static final contactGooglemailDialogPositiveButton = _translationKey("Change");
+  static final contactGooglemailDialogNegativeButton = _translationKey("Don't change");
 
   static final coreMembers = _translationKey('%1\$d member(s)');
   static final coreContacts = _translationKey('%1\$d contact(s)');

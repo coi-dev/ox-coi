@@ -49,7 +49,9 @@ import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 enum ContactChangeType {
   add,
@@ -71,10 +73,12 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     if (event is ChangeContact) {
       yield ContactChangeStateLoading();
       try {
-        _changeContact(event.name, event.email, event.contactAction);
+        yield* _changeContact(event.name, event.email, event.contactAction);
       } catch (error) {
         yield ContactChangeStateFailure(error: error.toString());
       }
+    } else if (event is AddGoogleContact) {
+      _addGoogleContact(event.name, event.email, event.changeEmail);
     } else if (event is ContactAdded) {
       yield ContactChangeStateSuccess(type: ContactChangeType.add, id: event.id);
     } else if (event is ContactEdited) {
@@ -96,19 +100,23 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     }
   }
 
-  void _changeContact(String name, String address, ContactAction contactAction) async {
+  Stream<ContactChangeState> _changeContact(String name, String address, ContactAction contactAction) async* {
     Context context = Context();
-    int id = await context.createContact(name, address);
-    if (contactAction == ContactAction.add) {
-      add(ContactAdded(id: id));
-    } else {
-      Contact contact = contactRepository.get(id);
-      contact.set(Contact.methodContactGetName, name);
-      int chatId = await context.getChatByContactId(id);
-      if (chatId != 0) {
-        renameChat(chatId, name);
+    if (address.contains(googlemailDomain)) {
+      yield GoogleContactDetected(name: name, email: address);
+    }else {
+      int id = await context.createContact(name, address);
+      if (contactAction == ContactAction.add) {
+        add(ContactAdded(id: id));
+      } else {
+        Contact contact = contactRepository.get(id);
+        contact.set(Contact.methodContactGetName, name);
+        int chatId = await context.getChatByContactId(id);
+        if (chatId != 0) {
+          renameChat(chatId, name);
+        }
+        add(ContactEdited());
       }
-      add(ContactEdited());
     }
   }
 
@@ -172,5 +180,15 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     var chatId = await context.getChatByContactId(id);
     adjustChatListOnBlockUnblock(chatId, block: false);
     add(ContactUnblocked());
+  }
+
+  void _addGoogleContact(String name, String email, bool changeEmail) async{
+    Context context = Context();
+    if(changeEmail){
+      email = email.replaceAll(googlemailDomain, gmailDomain);
+    }
+
+    int id = await context.createContact(name, email);
+    add(ContactAdded(id: id));
   }
 }

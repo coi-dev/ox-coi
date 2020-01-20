@@ -59,3 +59,6 @@ const thumbnailFileExtension = '.jpg';
 
 // IMAP https://tools.ietf.org/html/rfc5530
 const imapErrorAuthenticationFailed = '[AUTHENTICATIONFAILED]';
+
+const googlemailDomain = '@googlemail';
+const gmailDomain = '@gmail';

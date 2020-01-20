@@ -43,6 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
@@ -60,6 +61,7 @@ import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/group_header.dart';
@@ -173,7 +175,27 @@ class _ContactChangeState extends State<ContactChange> {
             )
           ],
         ),
-        body: SingleChildScrollView(child: _buildForm()));
+        body: SingleChildScrollView(
+            child: BlocListener(
+              bloc: _contactChangeBloc,
+              listener: (context, state) {
+                if (state is GoogleContactDetected) {
+                  showConfirmationDialog(context: context,
+                    title: L10n.get(L.contactGooglemailDialogTitle),
+                    content: L10n.get(L.contactGooglemailDialogContent),
+                    positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
+                    positiveAction: () => _goolemailMailAddressAction(state.name, state.email, true),
+                    negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
+                    negativeAction: () => _goolemailMailAddressAction(state.name, state.email, false),
+                    navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
+                    barrierDismissible: false,
+                    onWillPop: _onGoogleMailDialogWillPop,
+                  );
+                }
+              },
+              child: _buildForm(),
+            )
+        ));
   }
 
   _onSubmit() {
@@ -310,6 +332,14 @@ class _ContactChangeState extends State<ContactChange> {
         ),
       );
     });
+  }
+
+  Future<bool> _onGoogleMailDialogWillPop() {
+    return Future.value(false);
+  }
+
+  _goolemailMailAddressAction(String name, String email, bool changeEmail) {
+    _contactChangeBloc.add(AddGoogleContact(name: name, email: email, changeEmail: changeEmail));
   }
 
   String _getName() => _nameField.controller.text;

@@ -52,6 +52,7 @@ import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/security.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:path_provider/path_provider.dart';
@@ -59,7 +60,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
-
+  Iterable<SystemContacts.Contact> _systemContacts;
+  String _coreContacts = "";
+  Map<String, String> _phoneNumbers = Map();
   @override
   ContactImportState get initialState => ContactsImportInitial();
 
@@ -68,12 +71,14 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     if (event is MarkContactsAsInitiallyLoaded) {
       markContactsAsInitiallyLoaded();
     } else if (event is PerformImport) {
-      Iterable<SystemContacts.Contact> contacts = await loadSystemContacts();
-      importSystemContacts(contacts);
+      _systemContacts = await loadSystemContacts();
+      yield* importSystemContacts();
     } else if (event is ImportPerformed) {
       yield ContactsImportSuccess();
     } else if (event is ImportAborted) {
       yield ContactsImportFailure();
+    } else if(event is ImportGooglemailContacts){
+      addUpdateContacts(changeEmails: event.changeEmails);
     }
   }
 
@@ -96,33 +101,51 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     }
   }
 
-  void importSystemContacts(Iterable<SystemContacts.Contact> systemContacts) async {
-    String coreContacts = "";
-    Map<String, String> phoneNumbers = Map();
-    systemContacts.forEach((contact) {
+  Stream<ContactImportState> importSystemContacts() async* {
+    bool googlemailDetected = false;
+
+    _systemContacts.forEach((contact) {
       if (contact.emails.length != 0) {
         contact.emails.forEach((email) {
           if (isEmail(email.value)) {
-            coreContacts += getFormattedContactData(contact, email);
-            updatePhoneNumbers(phoneNumbers, contact, email);
+            if(!googlemailDetected){
+              googlemailDetected = email.value.contains(googlemailDomain);
+            }
+            _coreContacts += getFormattedContactData(contact, email);
+            updatePhoneNumbers(_phoneNumbers, contact, email);
           }
         });
       }
     });
-    var context = Context();
-    await updateContacts(coreContacts, context);
 
-    if (phoneNumbers.isNotEmpty) {
+    if(googlemailDetected){
+      yield GooglemailContactsDetected();
+    }else {
+      await addUpdateContacts(changeEmails: false);
+    }
+  }
+
+  Future addUpdateContacts({@required bool changeEmails}) async {
+    var context = Context();
+    if(changeEmails){
+      _coreContacts = _coreContacts.replaceAll(googlemailDomain, gmailDomain);
+    }
+    await updateContacts(_coreContacts, context);
+
+    if (_phoneNumbers.isNotEmpty) {
       List<int> ids = List.from(await context.getContacts(2, null));
-      await updateContactExtensions(ids, phoneNumbers);
+      await updateContactExtensions(ids, _phoneNumbers);
     }
 
     final Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
     await Future.forEach(_contactRepository.getAll(), (contact) async {
-      await updateAvatar(systemContacts, contact);
+      await updateAvatar(_systemContacts, contact);
       await reloadChatName(context, chatRepository, contact.id);
     });
     _contactRepository.clear();
+    _systemContacts = null;
+    _phoneNumbers.clear();
+
     add(ImportPerformed());
   }
 
