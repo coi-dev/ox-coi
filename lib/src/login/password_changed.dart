@@ -187,7 +187,6 @@ class _PasswordChangedState extends State<PasswordChanged> {
                             children: <Widget>[
                               AdaptiveSuperellipseIcon(
                                 color: CustomTheme.of(context).error,
-                                size: 24.0,
                                 iconColor: CustomTheme.of(context).white,
                                 icon: IconSource.error,
                               ),

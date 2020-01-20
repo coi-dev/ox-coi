@@ -186,7 +186,7 @@ packages:
   delta_chat_core:
     dependency: "direct main"
     description:
-      path: "../flutter-deltachat-core"
+      path: "..\\flutter-deltachat-core"
       relative: true
     source: path
     version: "0.0.1"

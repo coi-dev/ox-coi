@@ -45,7 +45,7 @@ import 'package:flutter/material.dart';
 class BrandedTheme {
   final Color white = Colors.white;
   final Color black = Colors.black;
-  final Color qrIcon = Colors.green[700];
+  final Color qrIcon = Colors.green.withAlpha(700);
   final Color accent;
   final Color onAccent;
   final Color info;

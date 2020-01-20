@@ -290,9 +290,12 @@ class _ContactChangeState extends State<ContactChange> {
                 textAlign: TextAlign.center,
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GroupHeader(text: L10n.get(L.qrAddContactHeader),) ,
+            Visibility(
+              visible: widget.contactAction == ContactAction.add,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: GroupHeader(text: L10n.get(L.qrAddContactHeader),) ,
+              ),
             ),
             Visibility(
               visible: widget.contactAction == ContactAction.add,
@@ -300,6 +303,7 @@ class _ContactChangeState extends State<ContactChange> {
                 icon: IconSource.qr,
                 text: L10n.get(L.qrScan),
                 iconBackground: CustomTheme.of(context).qrIcon,
+                onTap: scanQr,
               ),
             ),
           ],
