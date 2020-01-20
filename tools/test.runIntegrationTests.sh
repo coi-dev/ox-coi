@@ -95,7 +95,7 @@ do
         elif [[ ${target} = ${TARGET_IOS} ]]; then
             setupIos
             sleep 1
-            flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} --flavor development >> ${LOG_FILE} 2>&1
+            flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} >> ${LOG_FILE} 2>&1
             testResult=$?
             xcrun simctl uninstall ${deviceId} ${appId}
         fi

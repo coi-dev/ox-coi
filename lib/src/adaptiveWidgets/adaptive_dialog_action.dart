@@ -24,8 +24,8 @@ class AdaptiveDialogAction extends AdaptiveWidget<CupertinoDialogAction, FlatBut
 
   @override
   CupertinoDialogAction buildCupertinoWidget(BuildContext context) {
-    // TODO : Parameter 'key' is missing: https://github.com/flutter/flutter/issues/42729
     return CupertinoDialogAction(
+      key: childKey,
       child: child,
       onPressed: onPressed,
     );

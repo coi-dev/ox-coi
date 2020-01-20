@@ -68,5 +68,5 @@ if [[ ${target} = ${TARGET_ANDROID} ]]; then
 elif [[ ${target} = ${TARGET_IOS} ]]; then
     setupIos
     sleep 1
-    FLUTTER_TEST_TARGET_PLATFORM=${target} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} --flavor development
+    FLUTTER_TEST_TARGET_PLATFORM=${target} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test}
 fi
