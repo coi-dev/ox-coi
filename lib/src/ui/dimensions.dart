@@ -82,8 +82,8 @@ const iconTextPadding = 4.0;
 const iconFormPadding = 8.0;
 const iconSize = 18.0;
 const iconMessagePlaySize = 24.0;
-const superellipseIconSize = 32.0;
-const superellipseIconFactor = 16.0;
+const superellipseIconDefaultBackgroundSize = 32.0;
+const superellipseIconDefaultSize = 24.0;
 const iconSelectedSize = 24.0;
 
 // Chat
