@@ -46,33 +46,48 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
-import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
-import 'package:superellipse_shape/superellipse_shape.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:ox_coi/src/widgets/placeholder_text.dart';
 
 class ProfileData extends InheritedWidget {
-  final Color color;
+  final Color imageBackgroundcolor;
   final String text;
+  final String secondText;
+  final String placeholderText;
+  final String initialsText;
   final IconSource iconData;
   final TextStyle textStyle;
   final Function imageActionCallback;
+  final Function editActionCallback;
+  final String avatarPath;
+  final bool withPlaceholder;
+  final bool showWhiteImageIcon;
 
   const ProfileData({
     Key key,
     @required Widget child,
-    this.color,
+    this.imageBackgroundcolor,
     this.text,
+    this.secondText,
+    this.placeholderText,
+    this.initialsText,
     this.iconData,
     this.textStyle,
     this.imageActionCallback,
+    this.editActionCallback,
+    this.avatarPath,
+    this.withPlaceholder = false,
+    this.showWhiteImageIcon = false,
   })  : assert(child != null),
         super(key: key, child: child);
 
@@ -86,21 +101,54 @@ class ProfileData extends InheritedWidget {
   }
 }
 
-class ProfileAvatar extends StatelessWidget {
-  final String imagePath;
-
-  ProfileAvatar({this.imagePath});
+class ProfileHeader extends StatelessWidget {
+  const ProfileHeader({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double avatarSize = profileAvatarSize;
-    ImageProvider avatarImage;
-    if (isNullOrEmpty(imagePath)) {
-      avatarImage = MemoryImage(kTransparentImage);
-    } else {
-      avatarImage = FileImage(File(imagePath));
-    }
+    return Column(
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ProfileAvatar(),
+                  Padding(
+                    padding: EdgeInsets.only(top: 24.0, bottom: 8.0),
+                    child: ProfileData.of(context).withPlaceholder
+                        ? PlaceholderText(
+                            text: ProfileData.of(context).text,
+                            style: getProfileHeaderTextStyle(context),
+                            align: TextAlign.center,
+                            placeholderText: ProfileData.of(context).placeholderText,
+                            placeholderStyle: getProfileHeaderPlaceholderTextStyle(context),
+                            placeHolderAlign: TextAlign.center,
+                          )
+                        : ProfileHeaderText(),
+                  ),
+                  ProfileSecondText(),
+                ],
+              ),
+            ),
+            ProfileHeaderEditButton(),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+        ),
+      ],
+    );
+  }
+}
 
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     Navigation _navigation = Navigation();
 
     _getNewAvatarPath(ImageSource source) async {
@@ -152,50 +200,44 @@ class ProfileAvatar extends StatelessWidget {
     }
 
     return Stack(
+      alignment: Alignment.center,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
-          child: Avatar(
-            imagePath: imagePath,
-            color: ProfileData.of(context).color,
-            size: avatarSize,
-            textPrimary: ProfileData.of(context).text,
-          ),
+        Avatar(
+          imagePath: ProfileData.of(context).avatarPath,
+          color: ProfileData.of(context).imageBackgroundcolor,
+          size: profileAvatarSize,
+          textPrimary: ProfileData.of(context).initialsText,
         ),
         Visibility(
           visible: ProfileData.of(context).imageActionCallback != null,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: chatProfileVerticalPadding),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: ShapeDecoration(
-                    shape: SuperellipseShape(
-                      borderRadius: BorderRadius.circular(avatarSize * avatarBorderRadiusMultiplier),
-                    ),
-                    gradient: LinearGradient(begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter, colors: [
-                      CustomTheme.of(context).black.withOpacity(transparent),
-                      CustomTheme.of(context).black.withOpacity(half),
-                    ], stops: [
-                      0.7,
-                      1.0
-                    ])),
-                height: avatarSize,
-                width: avatarSize,
-              )),
+          child: InkWell(
+            child: AdaptiveIcon(
+              icon: IconSource.camera,
+              color: ProfileData.of(context).showWhiteImageIcon ? CustomTheme.of(context).white : CustomTheme.of(context).accent,
+            ),
+            onTap: _editPhoto,
+          ),
         ),
-        Visibility(
-            visible: ProfileData.of(context).imageActionCallback != null,
-            child: Positioned(
-                bottom: profileEditPhotoButtonBottomPosition,
-                right: profileEditPhotoButtonRightPosition,
-                child: InkWell(
-                  child: AdaptiveIcon(
-                    icon: IconSource.addAPhoto,
-                    color: CustomTheme.of(context).onPrimary,
-                  ),
-                  onTap: _editPhoto,
-                )))
       ],
+    );
+  }
+}
+
+class ProfileHeaderEditButton extends StatelessWidget {
+  const ProfileHeaderEditButton({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 16.0,
+      child: AdaptiveIconButton(
+        icon: AdaptiveSuperellipseIcon(
+          color: CustomTheme.of(context).onBackground.withOpacity(barely),
+          icon: IconSource.edit,
+          iconColor: CustomTheme.of(context).accent,
+        ),
+        onPressed: () => ProfileData.of(context).editActionCallback(),
+      ),
     );
   }
 }
@@ -209,7 +251,35 @@ class ProfileHeaderText extends StatelessWidget {
       ProfileData.of(context).text,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-      style: ProfileData.of(context).textStyle,
+      style: getProfileHeaderTextStyle(context),
+    );
+    return Flexible(
+        child: ProfileData.of(context).iconData != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  AdaptiveIcon(icon: ProfileData.of(context).iconData),
+                  Padding(
+                    padding: const EdgeInsets.only(left: iconTextPadding),
+                    child: content,
+                  ),
+                ],
+              )
+            : content);
+  }
+}
+
+class ProfileSecondText extends StatelessWidget {
+  const ProfileSecondText({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var content = Text(
+      ProfileData.of(context).secondText,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: getProfileHeaderSecondTextStyle(context),
     );
     return Flexible(
         child: ProfileData.of(context).iconData != null

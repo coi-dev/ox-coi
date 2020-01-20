@@ -58,6 +58,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
@@ -140,11 +141,10 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         Align(
             alignment: Alignment.center,
             child: ProfileData(
-              color: CustomTheme.of(context).accent,
+              imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
               imageActionCallback: _setAvatar,
-              child: ProfileAvatar(
-                imagePath: _avatar,
-              ),
+              avatarPath: _avatar,
+              child: ProfileAvatar(),
             )),
         Padding(
           padding: EdgeInsets.only(

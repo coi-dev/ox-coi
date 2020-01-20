@@ -124,10 +124,9 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                   Align(
                       alignment: Alignment.center,
                       child: ProfileData(
-                        color: state.color,
-                        child: ProfileAvatar(
-                          imagePath: state.imagePath,
-                        ),
+                        imageBackgroundcolor: state.color,
+                        avatarPath: state.imagePath,
+                        child: ProfileAvatar(),
                       )),
                   ProfileData(
                     text: state.name,

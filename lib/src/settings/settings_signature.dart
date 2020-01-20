@@ -39,76 +39,87 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
-
-import 'package:flutter/cupertino.dart';
+ 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/settings/settings_about_bloc.dart';
-import 'package:ox_coi/src/settings/settings_about_event_state.dart';
-import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/user/user_change_bloc.dart';
+import 'package:ox_coi/src/user/user_change_event_state.dart';
 
-class SettingsAbout extends StatefulWidget {
+class EmailSignature extends StatefulWidget {
   @override
-  _SettingsAboutState createState() => _SettingsAboutState();
+  _EmailSignatureState createState() => _EmailSignatureState();
 }
 
-class _SettingsAboutState extends State<SettingsAbout> {
-  SettingsAboutBloc _settingsAboutBloc = SettingsAboutBloc();
+class _EmailSignatureState extends State<EmailSignature> {
+  UserChangeBloc _userChangeBloc = UserChangeBloc();
+  TextEditingController _signatureController = TextEditingController();
   Navigation navigation = Navigation();
 
-  @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.settingsAbout);
-    _settingsAboutBloc.add(RequestAbout());
+    navigation.current = Navigatable(Type.settingsSignature);
+    _userChangeBloc.add(RequestUser());
   }
-
-  @override
-  void dispose() {
-    _settingsAboutBloc.close();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          title: Text(L10n.get(L.about)),
+      appBar: AdaptiveAppBar(
+        leadingIcon: AdaptiveIconButton(
+          icon: AdaptiveIcon(
+            icon: IconSource.close,
+          ),
+          onPressed: () => navigation.pop(context),
         ),
-        body: _buildPreferenceList(context));
+        title: Text(L10n.get(L.settingSignatureTitle)),
+        actions: <Widget>[
+          AdaptiveIconButton(
+              icon: AdaptiveIcon(
+                icon: IconSource.check,
+              ),
+              onPressed: _saveChanges)
+        ],
+      ),
+      body: BlocListener(
+        bloc: _userChangeBloc,
+        listener: (context, state){
+          if (state is UserChangeStateSuccess) {
+            Config config = state.config;
+            _signatureController.text = config.status;
+          } else if (state is UserChangeStateApplied) {
+            navigation.pop(context);
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                minLines: 1,
+                maxLines: 4,
+                controller: _signatureController,
+                decoration: InputDecoration(labelText: L10n.get(L.signature)),
+              ),
+              Padding(padding: const EdgeInsets.all(formVerticalPadding),),
+              Text(
+                "Change your Signature",
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget _buildPreferenceList(BuildContext context) {
-    return BlocBuilder(
-      bloc: _settingsAboutBloc,
-      builder: (context, state) {
-        if (state is SettingsAboutStateInitial) {
-          return StateInfo(showLoading: true);
-        } else if (state is SettingsAboutStateSuccess) {
-          return ListView(
-            children: ListTile.divideTiles(context: context, tiles: [
-              ListTile(
-                title: Text(L10n.get(L.appName)),
-                subtitle: Text(state.name),
-              ),
-              ListTile(
-                title: Text(L10n.get(L.appVersion)),
-                subtitle: Text(state.version),
-              ),
-            ]).toList(),
-          );
-        } else {
-          return Center(
-            child: AdaptiveIcon(icon: IconSource.error),
-          );
-        }
-      },
-    );
+  void _saveChanges() async {
+    _userChangeBloc.add(UserSignatureChanged(signature: _signatureController.text));
   }
 }

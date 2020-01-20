@@ -89,6 +89,7 @@ enum Type {
   settingsChat,
   settingsDebug,
   settingsSecurity,
+  settingsSignature,
   settingsUser,
   settingsExportKeysDialog,
   settingsImportKeysDialog,

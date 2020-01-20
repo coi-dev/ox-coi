@@ -51,7 +51,6 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/error.dart';
-import 'package:ox_coi/src/utils/text.dart';
 
 enum ContactChangeType {
   add,

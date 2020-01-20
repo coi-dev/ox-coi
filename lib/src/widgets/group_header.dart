@@ -51,19 +51,22 @@ class GroupHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: CustomTheme.of(context).background,
-      child: Padding(
-          padding: EdgeInsets.only(
-            left: groupHeaderHorizontalPadding,
-            right: groupHeaderHorizontalPadding,
-            top: groupHeaderTopPadding,
-            bottom: groupHeaderBottomPadding,
-          ),
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
-          )),
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        color: CustomTheme.of(context).background,
+        child: Padding(
+            padding: EdgeInsets.only(
+              left: groupHeaderHorizontalPadding,
+              right: groupHeaderHorizontalPadding,
+              top: groupHeaderTopPadding,
+              bottom: groupHeaderBottomPadding,
+            ),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
+            )),
+      ),
     );
   }
 }

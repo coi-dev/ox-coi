@@ -358,6 +358,27 @@ class L {
   static final settingAboutFeatureRequests = _translationKey("Feature requests");
   // "user echo" is an own name. Please don't translate it
   static final settingAboutFeatureRequestsText = _translationKey("Please suggest your ideas on user echo.");
+  static final settingSignatureTitle = _translationKey("Email signature");
+
+  static final settingGroupHeaderGeneralTitle = _translationKey("General Settings");
+  static final settingGroupHeaderEmailTitle = _translationKey("Email Settings");
+  static final settingGroupHeaderSecurityTitle = _translationKey("Security");
+
+  static final settingItemFlaggedTitle = _translationKey("Flagged messages");
+  static final settingItemQRTitle = _translationKey("Show my QR code");
+  static final settingItemInviteTitle = _translationKey("Invite friend");
+  static final settingItemNotificationsTitle = _translationKey("Notifications");
+  static final settingItemChatTitle = _translationKey("Chat");
+  static final settingItemSignatureTitle = _translationKey("Email signature");
+  static final settingItemServerSettingsTitle = _translationKey("Server settings");
+  static final settingItemDarkModeTitle = _translationKey("Dark mode");
+  static final settingItemDataProtectionTitle = _translationKey("Data protection");
+  static final settingItemBlockedTitle = _translationKey("Blocked contacts");
+  static final settingItemEncryptionTitle = _translationKey("Encryption");
+  static final settingItemAboutTitle = _translationKey("About");
+  static final settingItemFeedbackTitle = _translationKey("Feedback");
+  static final settingItemBugReportTitle = _translationKey("Report a bug");
+
 
   static List<String> _translationKey(String key, [String pluralKey]) {
     String logging = "Registered localization key: '$key'";

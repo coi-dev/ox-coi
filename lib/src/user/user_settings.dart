@@ -51,6 +51,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
@@ -69,7 +70,6 @@ class _UserSettingsState extends State<UserSettings> {
   Navigation navigation = Navigation();
 
   TextEditingController _usernameController = TextEditingController();
-  TextEditingController _statusController = TextEditingController();
 
   String _avatar;
 
@@ -85,7 +85,6 @@ class _UserSettingsState extends State<UserSettings> {
     if (state is UserChangeStateSuccess) {
       Config config = state.config;
       _usernameController.text = config.username;
-      _statusController.text = config.status;
       String avatarPath = config.avatarPath;
       if (avatarPath != null && avatarPath.isNotEmpty) {
         _avatar = config.avatarPath;
@@ -99,8 +98,8 @@ class _UserSettingsState extends State<UserSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AdaptiveAppBar(
-          leadingIcon: new AdaptiveIconButton(
-            icon: new AdaptiveIcon(
+          leadingIcon: AdaptiveIconButton(
+            icon: AdaptiveIcon(
               icon: IconSource.close,
             ),
             onPressed: () => navigation.pop(context),
@@ -142,11 +141,10 @@ class _UserSettingsState extends State<UserSettings> {
             Align(
                 alignment: Alignment.center,
                 child: ProfileData(
-                  color: CustomTheme.of(context).accent,
+                  imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
                   imageActionCallback: _setAvatar,
-                  child: ProfileAvatar(
-                    imagePath: _avatar,
-                  ),
+                  avatarPath: _avatar,
+                  child: ProfileAvatar(),
                 )),
             Padding(
               padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
@@ -157,11 +155,6 @@ class _UserSettingsState extends State<UserSettings> {
                       maxLines: 1,
                       controller: _usernameController,
                       decoration: InputDecoration(labelText: L10n.get(L.username))),
-                  TextFormField(
-                    maxLines: 2,
-                    controller: _statusController,
-                    decoration: InputDecoration(labelText: L10n.get(L.signature)),
-                  ),
                 ],
               ),
             ),
@@ -179,6 +172,6 @@ class _UserSettingsState extends State<UserSettings> {
 
   void _saveChanges() async {
     String avatarPath = !isNullOrEmpty(_avatar) ? _avatar : null;
-    _userChangeBloc.add(UserPersonalDataChanged(username: _usernameController.text, status: _statusController.text, avatarPath: avatarPath));
+    _userChangeBloc.add(UserPersonalDataChanged(username: _usernameController.text, avatarPath: avatarPath));
   }
 }

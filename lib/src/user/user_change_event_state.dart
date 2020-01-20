@@ -57,10 +57,21 @@ class ChangesApplied extends UserChangeEvent {}
 
 class UserPersonalDataChanged extends UserChangeEvent {
   final String username;
-  final String status;
   final String avatarPath;
 
-  UserPersonalDataChanged({@required this.username, @required this.status, @required this.avatarPath});
+  UserPersonalDataChanged({@required this.username, @required this.avatarPath});
+}
+
+class UserSignatureChanged extends UserChangeEvent {
+  final String signature;
+
+  UserSignatureChanged({@required this.signature});
+}
+
+class UserAvatarChanged extends UserChangeEvent {
+  final String avatarPath;
+
+  UserAvatarChanged({@required this.avatarPath});
 }
 
 class UserAccountDataChanged extends UserChangeEvent {

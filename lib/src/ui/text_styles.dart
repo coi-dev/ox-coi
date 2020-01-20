@@ -42,8 +42,21 @@
 
 import 'package:flutter/material.dart';
 
+import 'color.dart';
 import 'custom_theme.dart';
 
 getAccentW500TextStyle(BuildContext context){
     return TextStyle(color: CustomTheme.of(context).accent, fontWeight: FontWeight.w500);
+}
+
+getProfileHeaderTextStyle(BuildContext context){
+    return Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface);
+}
+
+getProfileHeaderSecondTextStyle(BuildContext context){
+    return Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onSurface.withOpacity(fade));
+}
+
+getProfileHeaderPlaceholderTextStyle(BuildContext context){
+    return Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.withOpacity(disabled));
 }

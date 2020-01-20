@@ -115,10 +115,9 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
           Align(
               alignment: Alignment.center,
               child: ProfileData(
-                color: color,
-                child: ProfileAvatar(
-                  imagePath: imagePath,
-                ),
+                imageBackgroundcolor: color,
+                avatarPath: imagePath,
+                child: ProfileAvatar(),
               )),
           ProfileData(
             text: chatName,

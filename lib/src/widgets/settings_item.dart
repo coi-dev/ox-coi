@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
@@ -47,16 +49,43 @@ import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
+enum SettingsItemName {
+  flagged,
+  qrShow,
+  invite,
+  notification,
+  chat,
+  signature,
+  serverSetting,
+  darkMode,
+  dataProtection,
+  blocked,
+  encryption,
+  about,
+  feedback,
+  bugReport,
+}
+
 class SettingsItem extends StatelessWidget {
   final IconSource icon;
   final Color iconBackground;
   final String text;
   final Function onTap;
+  final bool showSwitch;
+  final Function onSwitchChanged;
 
-  SettingsItem({@required this.icon, @required this.iconBackground, @required this.text, @required this.onTap});
+  SettingsItem({
+    @required this.icon,
+    @required this.iconBackground,
+    @required this.text,
+    @required this.onTap,
+    this.showSwitch = false,
+    this.onSwitchChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
+    ThemeKey actualKey = CustomTheme.instanceOf(context).actualThemeKey;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -73,10 +102,23 @@ class SettingsItem extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(right: settingsItemIconTextPadding),
               ),
-              Text(
-                text,
-                style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface),
-              )
+              Expanded(
+                child: Text(
+                  text,
+                  style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface),
+                ),
+              ),
+              Visibility(
+                visible: Platform.isIOS && !showSwitch,
+                child: Text(
+                  ">",
+                  style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface),
+                ),
+              ),
+              Visibility(
+                visible: showSwitch,
+                child: Switch.adaptive(value: actualKey == ThemeKey.DARK ? true : false, onChanged: (value) => onSwitchChanged()),
+              ),
             ],
           ),
         ),
