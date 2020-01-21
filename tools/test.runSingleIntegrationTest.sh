@@ -64,9 +64,10 @@ cd ..
 
 # Execution
 if [[ ${target} = ${TARGET_ANDROID} ]]; then
-    FLUTTER_TEST_DEVICE_ID=${deviceId} FLUTTER_TEST_APP_ID=${appId} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} --flavor development
+    FLUTTER_TEST_TARGET_PLATFORM=${target} FLUTTER_TEST_DEVICE_ID=${deviceId} FLUTTER_TEST_APP_ID=${appId} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} --flavor development
 elif [[ ${target} = ${TARGET_IOS} ]]; then
+    xcrun simctl uninstall ${deviceId} ${appId}
+    sleep 5
     setupIos
-    sleep 1
-    flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} # TODO add flavor as soon as iOS support is given
+    FLUTTER_TEST_TARGET_PLATFORM=${target} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test}
 fi
