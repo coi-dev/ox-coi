@@ -72,7 +72,7 @@ mixin ChatComposer {
       case ComposerModeType.compose:
         icon = AdaptiveSuperellipseIcon(
           icon: IconSource.add,
-          color: CustomTheme.of(context).black.withOpacity(barely),
+          color: CustomTheme.of(context).onSurface.withOpacity(barely),
           iconColor: CustomTheme.of(context).accent,
         );
         onPressed = onShowAttachmentChooser;
@@ -80,7 +80,7 @@ mixin ChatComposer {
       case ComposerModeType.isComposing:
         icon = AdaptiveSuperellipseIcon(
           icon: IconSource.add,
-          color: CustomTheme.of(context).black.withOpacity(barely),
+          color: CustomTheme.of(context).onSurface.withOpacity(barely),
           iconColor: CustomTheme.of(context).accent,
         );
         onPressed = null;
@@ -88,7 +88,7 @@ mixin ChatComposer {
       case ComposerModeType.isVoiceRecording:
         icon = AdaptiveSuperellipseIcon(
           icon: IconSource.delete,
-          color: CustomTheme.of(context).black.withOpacity(barely),
+          color: CustomTheme.of(context).onSurface.withOpacity(barely),
           iconColor: CustomTheme.of(context).accent,
         );
         onPressed = onAudioRecordingAbort;
@@ -152,7 +152,7 @@ mixin ChatComposer {
         widgets.add(AdaptiveIconButton(
           icon: AdaptiveSuperellipseIcon(
             icon: IconSource.mic,
-            color: CustomTheme.of(context).black.withOpacity(barely),
+            color: CustomTheme.of(context).onSurface.withOpacity(barely),
             iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onRecordAudioPressed,
@@ -161,7 +161,7 @@ mixin ChatComposer {
         widgets.add(AdaptiveIconButton(
           icon: AdaptiveSuperellipseIcon(
             icon: IconSource.camera,
-            color: CustomTheme.of(context).black.withOpacity(barely),
+            color: CustomTheme.of(context).onSurface.withOpacity(barely),
             iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onCaptureImagePressed,
@@ -169,7 +169,7 @@ mixin ChatComposer {
         widgets.add(AdaptiveIconButton(
           icon: AdaptiveSuperellipseIcon(
             icon: IconSource.videocam,
-            color: CustomTheme.of(context).black.withOpacity(barely),
+            color: CustomTheme.of(context).onSurface.withOpacity(barely),
             iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onRecordVideoPressed,
@@ -179,7 +179,7 @@ mixin ChatComposer {
         widgets.add(AdaptiveIconButton(
           icon: AdaptiveSuperellipseIcon(
             icon: IconSource.send,
-            color: CustomTheme.of(context).black.withOpacity(barely),
+            color: CustomTheme.of(context).onSurface.withOpacity(barely),
             iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onSendText,
@@ -190,7 +190,7 @@ mixin ChatComposer {
         widgets.add(AdaptiveIconButton(
           icon: AdaptiveSuperellipseIcon(
             icon: IconSource.send,
-            color: CustomTheme.of(context).black.withOpacity(barely),
+            color: CustomTheme.of(context).onSurface.withOpacity(barely),
             iconColor: CustomTheme.of(context).accent,
           ),
           onPressed: onRecordAudioPressed,
