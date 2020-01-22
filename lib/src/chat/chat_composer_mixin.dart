@@ -81,7 +81,7 @@ mixin ChatComposer {
         icon = AdaptiveSuperellipseIcon(
           icon: IconSource.add,
           color: CustomTheme.of(context).onSurface.withOpacity(barely),
-          iconColor: CustomTheme.of(context).accent,
+          iconColor: CustomTheme.of(context).accent.withOpacity(disabled),
         );
         onPressed = null;
         break;
