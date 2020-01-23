@@ -50,7 +50,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
@@ -275,7 +274,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             appBar: AdaptiveAppBar(
               title: isInviteChat(widget.chatId)
                   ? buildRow(imagePath, name, subTitle, color, context, isVerified)
-                  : AdaptiveInkWell(
+                  : InkWell(
                       onTap: () => _chatTitleTapped(),
                       child: buildRow(imagePath, name, subTitle, color, context, isVerified),
                     ),

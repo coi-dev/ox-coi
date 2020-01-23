@@ -44,7 +44,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
@@ -181,7 +180,7 @@ class _ProviderListState extends State<ProviderList> {
     }
     return SizedBox(
       height: loginListItemHeight,
-      child: AdaptiveInkWell(
+      child: InkWell(
         onTap: () => _onItemTap(provider),
         child: Column(
           children: <Widget>[

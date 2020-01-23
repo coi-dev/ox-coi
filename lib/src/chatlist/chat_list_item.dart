@@ -43,7 +43,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
@@ -104,7 +103,7 @@ class _ChatListItemState extends State<ChatListItem> {
         } else {
           name = "";
         }
-        return AdaptiveInkWell(
+        return InkWell(
           //onLongPress: () => chatItemLongPress(),
           child: AvatarListItem(
             title: name,

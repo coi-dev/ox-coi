@@ -46,7 +46,6 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -189,7 +188,7 @@ class ProfileAvatar extends StatelessWidget {
             child: Positioned(
                 bottom: profileEditPhotoButtonBottomPosition,
                 right: profileEditPhotoButtonRightPosition,
-                child: AdaptiveInkWell(
+                child: InkWell(
                   child: AdaptiveIcon(
                     icon: IconSource.addAPhoto,
                     color: CustomTheme.of(context).onPrimary,
@@ -248,7 +247,7 @@ class ProfileCopyableHeaderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveInkWell(
+    return InkWell(
       onTap: () {
         copyToClipboardWithToast(text: ProfileData.of(context).text, toastText: toastMessage);
       },

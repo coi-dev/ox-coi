@@ -43,7 +43,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_ink_well.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
@@ -124,7 +123,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                       Divider(),
                       Visibility(
                         visible: !chatState.isRemoved,
-                        child: AdaptiveInkWell(
+                        child: InkWell(
                           onTap: () => _navigation.push(context,
                               MaterialPageRoute(builder: (context) => ChatAddGroupParticipants(chatId: widget.chatId, contactIds: state.contactIds))),
                           child: Container(
