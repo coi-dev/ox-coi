@@ -110,9 +110,9 @@ class SettingsItem extends StatelessWidget {
               ),
               Visibility(
                 visible: Platform.isIOS && !showSwitch,
-                child: Text(
-                  ">",
-                  style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface),
+                child: AdaptiveIcon(
+                  icon: IconSource.arrowForward,
+                  color: CustomTheme.of(context).onSurface,
                 ),
               ),
               Visibility(
