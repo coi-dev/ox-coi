@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -146,16 +147,12 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
           }
         },
         child: Scaffold(
+          appBar: AdaptiveAppBar(
+            title: Text(L10n.get(L.settingManual)),
+            actions: <Widget>[LoginButton()],
+          ),
           body: Column(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(
-                  top: loginManualSettingsPadding,
-                  right: loginManualSettingsPadding,
-                  left: loginManualSettingsPadding,
-                ),
-                child: LoginButton(),
-              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -163,33 +160,26 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          L10n.get(L.settingManual),
-                          style: Theme.of(context).textTheme.headline,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: loginVerticalPadding8dp),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Visibility(
-                                visible: widget.fromError,
-                                child: Text(
-                                  L10n.get(L.loginManualSetupRequired),
-                                ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Visibility(
+                              visible: widget.fromError,
+                              child: Text(
+                                L10n.get(L.loginManualSetupRequired),
                               ),
-                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                              Text(
-                                L10n.get(L.loginCheckServer),
-                                textAlign: TextAlign.center,
-                              ),
-                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                              Text(
-                                L10n.get(L.loginWelcomeManual),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+                            ),
+                            Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                            Text(
+                              L10n.get(L.loginCheckServer),
+                              textAlign: TextAlign.center,
+                            ),
+                            Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                            Text(
+                              L10n.get(L.loginWelcomeManual),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: loginVerticalPadding),

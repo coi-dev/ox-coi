@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -145,7 +146,12 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: createProviderSignIn());
+    return Scaffold(
+        appBar: AdaptiveAppBar(
+          title: Text(widget.provider.name),
+        ),
+        body: createProviderSignIn()
+    );;
   }
 
   Widget createProviderSignIn() {

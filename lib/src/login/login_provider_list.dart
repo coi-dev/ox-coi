@@ -43,6 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -80,12 +81,12 @@ class _ProviderListState extends State<ProviderList> {
   String title;
   String text;
   Provider otherProvider;
+  final _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
-    var navigation = Navigation();
-    navigation.current = Navigatable(Type.loginProviderList);
+    _navigation.current = Navigatable(Type.loginProviderList);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.add(RequestProviders(type: widget.type));
   }
@@ -99,22 +100,25 @@ class _ProviderListState extends State<ProviderList> {
       title = L10n.get(L.register);
       text = L10n.get(L.providerRegisterChoose);
     }
-    return Scaffold(body: createProviderList());
+    return Scaffold(
+        appBar: AdaptiveAppBar(
+          title: Text(title),
+      ),
+      body: createProviderList()
+    );
   }
 
   Widget createProviderList() {
     return Padding(
-        padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+        padding: EdgeInsets.only(
+            left: loginHorizontalPadding,
+            right: loginHorizontalPadding,
+            bottom: loginVerticalPadding,
+            top: loginTopPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline,
-            ),
-            Padding(padding: EdgeInsets.only(top: loginVerticalPadding24dp)),
             Text(
               text,
               textAlign: TextAlign.center,
@@ -130,9 +134,7 @@ class _ProviderListState extends State<ProviderList> {
                   } else if (state is! LoginStateFailure) {
                     return StateInfo(showLoading: true);
                   } else {
-                    return AdaptiveIcon(
-                        icon: IconSource.error
-                    );
+                    return AdaptiveIcon(icon: IconSource.error);
                   }
                 },
               ),
@@ -185,7 +187,9 @@ class _ProviderListState extends State<ProviderList> {
         child: Column(
           children: <Widget>[
             Padding(
-                padding: EdgeInsets.symmetric(vertical: loginVerticalPadding12dp, horizontal: loginHorizontalPadding16dp),
+                padding: EdgeInsets.symmetric(
+                    vertical: loginVerticalPadding12dp,
+                    horizontal: loginHorizontalPadding16dp),
                 child: Column(
                   children: <Widget>[
                     Row(
