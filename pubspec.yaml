@@ -75,6 +75,7 @@ dev_dependencies:
 
 flutter:
   assets:
+    - assets/customer/
     - assets/html/
     - assets/images/
     - assets/json/

@@ -41,14 +41,17 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
+import 'package:ox_coi/src/customer/customer_config.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
@@ -113,6 +116,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     } else if (event is AppLoaded) {
       bool configured = await _context.isConfigured();
       if (configured) {
+        await _loadCustomerConfig();
         await _setupLoggedInAppState();
       }
       var hasAuthenticationError = await _checkForAuthenticationError();
@@ -133,6 +137,19 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     _notificationManager.setup(context);
     _pushManager.setup(context);
     _localPushManager.setup();
+  }
+
+  Future<void> _loadCustomerConfig() async{
+    Map<String, dynamic> jsonFile = await rootBundle.loadString(customerConfigPath).then((jsonStr) => jsonDecode(jsonStr));
+
+    CustomerConfig customerConfig = CustomerConfig.fromJson(jsonFile);
+    if(customerConfig.chats.length > 0){
+      Context context = Context();
+      for(CustomerChat chat in customerConfig.chats){
+        int contactId = await context.createContact(chat.name, chat.email);
+        await context.createChatByContactId(contactId);
+      }
+    }
   }
 
   Future<void> setupBackgroundRefreshManager(bool coiSupported) async {

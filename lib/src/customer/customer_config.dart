@@ -40,23 +40,50 @@
  * for more details.
  */
 
-import 'package:ox_coi/src/l10n/l.dart';
-import 'package:ox_coi/src/l10n/l10n.dart';
+class CustomerConfig {
+  String name;
+  List<CustomerChat> chats;
 
-String get sslTls => "SSL/TLS";
+  CustomerConfig({this.name, this.chats});
 
-String get startTLS => "StartTLS";
+  CustomerConfig.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    if (json['chats'] != null) {
+      chats = new List<CustomerChat>();
+      json['chats'].forEach((v) {
+        chats.add(new CustomerChat.fromJson(v));
+      });
+    }
+  }
 
-String get projectUrl => "https://coi.me";
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    if (this.chats != null) {
+      data['chats'] = this.chats.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
-String get issueUrl  => "https://github.com/open-xchange/ox-coi/issues";
+class CustomerChat{
+  String name;
+  String email;
+  bool deletable;
 
-String get featureRequestUrl => "https://openxchange.userecho.com/communities/4-ox-coi-messenger";
+  CustomerChat({this.name, this.email, this.deletable});
 
-String get defaultStatus => "${L10n.get(L.profileDefaultStatus)} - $projectUrl";
+  CustomerChat.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    email = json['email'];
+    deletable = json['deletable'];
+  }
 
-String get gif =>  "GIF";
-
-String get pdf => "PDF";
-
-String get customerConfigPath => "assets/customer/customer_config.json";
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['deletable'] = this.deletable;
+    return data;
+  }
+}
