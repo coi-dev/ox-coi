@@ -14,7 +14,7 @@ extension Method {
     struct Invite {
         static let InviteLink = "getInitialLink"
     }
-    
+
     struct Sharing {
         static let SendSharedData = "sendSharedData"
     }

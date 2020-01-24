@@ -9,9 +9,12 @@ disabled_rules:
   - implicitly_unwrapped_optional
   - large_tuple
   - line_length
+  - nesting
   - no_grouping_extension
   - override_in_extension
+  - private_over_fileprivate
   - sorted_imports
+  - strict_fileprivate
   - todo # next to enable again
   - xctfail_message
 excluded:
