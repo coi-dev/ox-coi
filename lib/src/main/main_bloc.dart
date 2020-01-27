@@ -99,9 +99,9 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         var buildContext = event.context;
         await _initCore();
         await _openExtensionDatabase();
+        await _setupDatabaseExtensions();
         String appState = await getPreference(preferenceAppState);
         if (appState == null || appState.isEmpty) {
-          await _setupDatabaseExtensions();
           await _setupDefaultValues();
         }
         await _setupBlocs();
