@@ -47,7 +47,7 @@ function androidDebugBuild {
 
 function androidReleaseBuild {
     echo "Android release build for ${flavor} started"
-    flutter build apk --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor} --split-per-abi
+    flutter build apk --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor} --split-per-abi --no-shrink
 }
 
 function iosDebugBuild {
