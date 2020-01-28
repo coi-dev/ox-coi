@@ -43,7 +43,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
@@ -56,10 +55,8 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'contact_change_bloc.dart';
@@ -72,6 +69,7 @@ class ContactBlockedList extends StatefulWidget {
 class _ContactBlockedListState extends State<ContactBlockedList> {
   ContactListBloc _contactListBloc = ContactListBloc();
   Navigation navigation = Navigation();
+  var _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -119,56 +117,24 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
   }
 
   Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
-    return ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-              height: dividerHeight,
-              color: CustomTheme.of(context).onBackground.withOpacity(barely),
-            ),
-        itemCount: contactIds.length,
-        itemBuilder: (BuildContext context, int index) {
-          var contactId = contactIds[index];
-          var key = "$contactId-${contactLastUpdateValues[index]}";
-          return Slidable.builder(
-            key: Key(key),
-            actionPane: SlidableBehindActionPane(),
-            actionExtentRatio: 0.2,
-            actionDelegate: SlideActionBuilderDelegate(
-                actionCount: 1,
-                builder: (context, index, animation, step) {
-                  return IconSlideAction(
-                    caption: L10n.get(L.unblock),
-                    color: CustomTheme.of(context).warning,
-                    foregroundColor: CustomTheme.of(context).onWarning,
-                    iconWidget: AdaptiveIcon(
-                      icon: IconSource.block,
-                      color: CustomTheme.of(context).onWarning,
-                    ),
-                    onTap: () {
-                      var state = Slidable.of(context);
-                      state.dismiss();
-                    },
-                  );
-                }),
-            dismissal: SlidableDismissal(
-              child: SlidableDrawerDismissal(),
-              onDismissed: (actionType) {
-                _unblockContact(contactId: contactId);
-              },
-            ),
-            child: ContactItem(
-              contactId: contactId,
-              contactItemType: ContactItemType.blocked,
-              key: key,
-            ),
-          );
-        });
-  }
-
-  // Slide Actions
-
-  _unblockContact({@required int contactId}) {
-    ContactChangeBloc bloc = ContactChangeBloc();
-    bloc.add(UnblockContact(id: contactId));
-    bloc.close();
+    return ListView.custom(
+        controller: _scrollController,
+        childrenDelegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+              var contactId = contactIds[index];
+              var key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
+              return ContactItem(
+                contactId: contactId,
+                contactItemType: ContactItemType.blocked,
+                key: key,
+              );
+            },
+            childCount: contactIds.length,
+            findChildIndexCallback: (Key key) {
+              final ValueKey valueKey = key;
+              var id = extractId(valueKey);
+              var indexOf = contactIds.indexOf(id);
+              return indexOf;
+            }));
   }
 }

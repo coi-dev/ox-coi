@@ -61,6 +61,7 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -149,7 +150,7 @@ class _ChatCreateState extends State<ChatCreate> {
           } else {
             int adjustedIndex = index - offset;
             var contactId = state.contactIds[adjustedIndex];
-            var key = "$contactId-${state.contactLastUpdateValues[adjustedIndex]}";
+            var key = createKeyFromId(contactId, [state.contactLastUpdateValues[adjustedIndex]]);
             return ContactItem(contactId: contactId, contactItemType: ContactItemType.createChat, key: key);
           }
         });

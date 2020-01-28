@@ -86,7 +86,14 @@ class AvatarListItem extends StatelessWidget {
       onTap: () => onTap(title, subTitle),
       child: IntrinsicHeight(
         child: Container(
-          color: !isSelected ? CustomTheme.of(context).surface : CustomTheme.of(context).accent.withOpacity(barely),
+          decoration: BoxDecoration(
+            color: !isSelected ? CustomTheme.of(context).surface : CustomTheme.of(context).accent.withOpacity(barely),
+            border: Border(
+              bottom: BorderSide(
+                color: CustomTheme.of(context).onBackground.withOpacity(barely),
+              ),
+            ),
+          ),
           padding: const EdgeInsets.all(listItemPadding),
           child: Row(
             children: <Widget>[
@@ -152,10 +159,12 @@ class AvatarListItem extends StatelessWidget {
                               width: iconSize,
                               height: iconSize,
                               decoration: BoxDecoration(
-                                  color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)), // TODO remove Colors.xyz call as soon as possible
+                                  color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                              // TODO remove Colors.xyz call as soon as possible
                               child: Text(
                                 "!",
-                                style: TextStyle(color: CustomTheme.of(context).white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: CustomTheme.of(context).white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
                             ),

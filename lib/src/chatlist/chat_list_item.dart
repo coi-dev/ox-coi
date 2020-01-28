@@ -64,7 +64,7 @@ class ChatListItem extends StatefulWidget {
     @required this.isMultiSelect,
     @required this.isShareItem,
     key,
-  }) : super(key: Key(key));
+  }) : super(key: key);
 
   @override
   _ChatListItemState createState() => _ChatListItemState();

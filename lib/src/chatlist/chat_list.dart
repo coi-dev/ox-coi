@@ -46,11 +46,8 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/chat/chat_change_bloc.dart';
-import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
@@ -67,9 +64,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
-import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/search.dart';
@@ -150,6 +145,7 @@ class _ChatListState extends State<ChatList> {
   ShareBloc shareBloc = ShareBloc();
   Navigation _navigation = Navigation();
   StreamSubscription appBarActionsSubscription;
+  var _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -215,9 +211,9 @@ class _ChatListState extends State<ChatList> {
           context,
           MaterialPageRoute(
               builder: (context) => Share(
-                messageActionTag: MessageActionTag.share,
-                sharedData: state.sharedData,
-              )),
+                    messageActionTag: MessageActionTag.share,
+                    sharedData: state.sharedData,
+                  )),
           ModalRoute.withName(Navigation.root),
           Navigatable(Type.chatList),
         );
@@ -244,60 +240,40 @@ class _ChatListState extends State<ChatList> {
 
   ListView _buildListItems(ChatListStateSuccess state) {
     var chatListItemWrapper = state.chatListItemWrapper;
-    return ListView.separated(
-      separatorBuilder: (context, index) => Divider(
-        height: dividerHeight,
-        color: CustomTheme.of(context).onBackground.withOpacity(barely),
-      ),
-      itemCount: chatListItemWrapper.ids.length,
-      itemBuilder: (BuildContext context, int index) {
-        var id = chatListItemWrapper.ids[index];
-        var key = createKeyString(id, chatListItemWrapper.lastUpdateValues[index]);
-        if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
-          return Slidable.builder(
-              key: Key(key),
-              actionPane: SlidableBehindActionPane(),
-              actionExtentRatio: 0.2,
-              secondaryActionDelegate: SlideActionBuilderDelegate(
-                  actionCount: 1,
-                  builder: (context, index, animation, renderingMode) {
-                    // for more than one slide action we need take care of `index`
-                    return IconSlideAction(
-                      caption: L10n.get(L.delete),
-                      color: CustomTheme.of(context).error,
-                      iconWidget: AdaptiveIcon(
-                        icon: IconSource.delete,
-                        color: CustomTheme.of(context).onError,
-                      ),
-                      onTap: () {
-                        var state = Slidable.of(context);
-                        state.dismiss();
-                      },
-                    );
-                  }),
-              dismissal: SlidableDismissal(
-                child: SlidableDrawerDismissal(),
-                onDismissed: (actionType) {
-                  _deleteChat(chatId: id);
-                },
-              ),
-              child: ChatListItem(
-                chatId: id,
-                onTap: _multiSelectItemTapped,
-                switchMultiSelect: _switchMultiSelect,
-                isMultiSelect: false,
-                isShareItem: false,
-                key: key,
-              ));
-        } else {
-          return InviteItem(
-            chatId: Chat.typeInvite,
-            messageId: id,
-            key: key,
-          );
-        }
-      },
-    );
+    return ListView.custom(
+        controller: _scrollController,
+        childrenDelegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              var id = chatListItemWrapper.ids[index];
+              var key = createKeyFromId(id, [chatListItemWrapper.lastUpdateValues[index]]);
+              if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
+                return ChatListItem(
+                  chatId: id,
+                  onTap: _multiSelectItemTapped,
+                  switchMultiSelect: _switchMultiSelect,
+                  isMultiSelect: false,
+                  isShareItem: false,
+                  key: key,
+                );
+              } else {
+                return InviteItem(
+                  chatId: Chat.typeInvite,
+                  messageId: id,
+                  key: key,
+                );
+              }
+            },
+            childCount: state.chatListItemWrapper.ids.length,
+            findChildIndexCallback: (Key key) {
+              final ValueKey valueKey = key;
+              var id = extractId(valueKey);
+              if(state.chatListItemWrapper.ids.contains(id)) {
+                var indexOf = state.chatListItemWrapper.ids.indexOf(id);
+                return indexOf;
+              }else{
+                return null;
+              }
+            }));
   }
 
   _multiSelectItemTapped(int id) {}
@@ -331,13 +307,5 @@ class _ChatListState extends State<ChatList> {
         }
       },
     );
-  }
-
-  // Slide Actions
-
-  _deleteChat({@required int chatId}) {
-    ChatChangeBloc chatChangeBloc = ChatChangeBloc();
-    chatChangeBloc.add(DeleteChat(chatId: chatId));
-    chatChangeBloc.close();
   }
 }
