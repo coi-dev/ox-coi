@@ -64,7 +64,7 @@ class ContactItem extends StatefulWidget {
   final ContactItemType contactItemType;
   final Function onTap;
 
-  ContactItem({@required this.contactId, this.contactItemType = ContactItemType.display, this.onTap, key}) : super(key: key);
+  ContactItem({@required this.contactId, this.contactItemType = ContactItemType.display, this.onTap, Key key}) : super(key: key);
 
   @override
   _ContactItemState createState() => _ContactItemState();

@@ -151,7 +151,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
           title: Text(widget.provider.name),
         ),
         body: createProviderSignIn()
-    );;
+    );
   }
 
   Widget createProviderSignIn() {

@@ -54,20 +54,20 @@
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
-import 'package:test_api/src/backend/invoker.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Test block / unblock functionality', () {
-    var setup = Setup();
+  group('Test messages fonctionslity', () {
+    final setup = Setup();
     setup.perform();
+    final driver = setup.driver;
 
-    final openChat = 'Open chat';
-    final flagUnFlag = 'Flag/Unflag';
-    final forward = 'Forward';
+    final flagUnFlag = L.getKey(L.messageActionFlagUnflag);
+    final forward = L.getKey(L.messageActionForward);
     final textToDelete = 'Text to delete';
     final paste = 'PASTE';
     final copy = 'Copy';
@@ -75,76 +75,53 @@ void main() {
     final meContactFinder = find.text(meContact);
     final textToDeleteFinder = find.text(textToDelete);
 
-    test('Test block / unblock functionality.', () async {
-      //  Check real authentication and get chat.
-      await getAuthentication(
-        setup.driver,
-        signInFinder,
-        coiDebugProviderFinder,
-        providerEmailFinder,
-        realEmail,
-        providerPasswordFinder,
-        realPassword,
-      );
-
-      Invoker.current.heartbeat();
-      await setup.driver.waitFor(chatWelcomeFinder);
-      Invoker.current.heartbeat();
-
-      //  Get contacts and add new contacts.
-      await setup.driver.tap(contactsFinder);
-      await setup.driver.tap(cancelFinder);
-      await setup.driver.waitFor(meContactFinder);
-
-      //  Add two new contacts in the contact list.
+    test(': Get contacts and add new contacts.', () async {
+      await driver.tap(contactsFinder);
+      await driver.tap(cancelFinder);
+      var actualMeContact = await driver.getText(meContactFinder);
+      expect(actualMeContact, meContact);
       await addNewContact(
-        setup.driver,
-        personAddFinder,
-        keyContactChangeNameFinder,
+        driver,
         newTestName01,
-        keyContactChangeEmailFinder,
-        newTestContact04,
-        keyContactChangeCheckFinder,
+        newTestEmail04,
       );
+    });
 
-      //  Create chat and write something.
-      await setup.driver.tap(meContactFinder);
-      await setup.driver.tap(find.text(openChat));
-      await writeChatFromChat(setup.driver, helloWorld);
+    test(': Create chat and write something.', () async {
+      await driver.tap(meContactFinder);
+      await driver.tap(find.text(L.getKey(L.chatOpen)));
+      await writeChatFromChat(driver);
+    });
 
-      //  First test action: Flagged messages from  meChat.
-      await flaggedMessage(setup.driver, flagUnFlag, helloWorldFinder);
+    test(': Flagged messages from  meChat.', () async {
+      await flaggedMessage(driver, flagUnFlag, helloWorldFinder);
+      await driver.tap(pageBack);
+      await navigateTo(driver, L.getPluralKey(L.chatP));
+     });
 
-      await setup.driver.tap(pageBack);
-      await navigateTo(setup.driver, chat);
+    test(': UnFlagged messages.', () async {
+      await unFlaggedMessage(driver, flagUnFlag, helloWorld);
+      await driver.waitForAbsent(helloWorldFinder);
+      await driver.tap(pageBack);
+      await driver.tap(meContactFinder);
+    });
 
-      //  Second test action: UnFlagged messages.
-      await unFlaggedMessage(setup.driver, flagUnFlag, helloWorldFinder);
-      await setup.driver.waitForAbsent(helloWorldFinder);
+    test(': Forward message.', () async {
+      await forwardMessageTo(driver, newTestName01, forward);
+      var actualMessage = await driver.getText(helloWorldFinder);
+      expect(actualMessage, helloWorld);
+      await driver.tap(pageBack);
+      await driver.tap(meContactFinder);
+    });
 
-      //  Return to chatList.
-      await setup.driver.tap(pageBack);
-      await setup.driver.tap(meContactFinder);
+    test(': Copy message from meContact and it paste in meContact.', () async {
+      await copyAndPasteMessage(driver, copy, paste);
+    });
 
-      //  Third test action: Forward message.
-      await forwardMessageTo(setup.driver, newTestName01, forward);
-      await setup.driver.waitFor(helloWorldFinder);
-
-      //  Return to chatList.
-      await setup.driver.tap(pageBack);
-      await setup.driver.tap(meContactFinder);
-
-      //  Forth test action: Copy message from meContact and it paste in meContact.
-      await copyAndPasteMessage(setup.driver, copy, paste);
-
-      //  Enter new text to delete.
-      await writeTextInChat(setup.driver, textToDelete);
-      await setup.driver.waitFor(textToDeleteFinder);
-      await catchScreenshot(setup.driver, 'screenshots/addTextToDelete.png');
-
-      //  Fifth test action: Delete message.
-      await deleteMessage(textToDeleteFinder, setup.driver);
-      await setup.driver.waitForAbsent(textToDeleteFinder);
+    test(': Delete message.', () async {
+      await writeTextInChat(driver, textToDelete);
+      await deleteMessage(textToDeleteFinder, driver);
+      await driver.waitForAbsent(textToDeleteFinder);
     });
   });
 }

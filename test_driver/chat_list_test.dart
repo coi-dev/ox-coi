@@ -41,8 +41,6 @@
  */
 
 // Imports the Flutter Driver API.
-import 'package:flutter_driver/flutter_driver.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
 import 'setup/global_consts.dart';
@@ -50,69 +48,43 @@ import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Create chat list integration tests.', () {
-    var setup = Setup();
+  group('Test create chat list', () {
+    final setup = Setup();
     setup.perform();
+    final driver = setup.driver;
 
-    test('Test Create chat list integration tests.', () async {
-      await getAuthentication(
-        setup.driver,
-        signInFinder,
-        coiDebugProviderFinder,
-        providerEmailFinder,
-        realEmail,
-        providerPasswordFinder,
-        realPassword,
-      );
+    const searchString = 'Douglas0';
 
-      //  Create first Me contact.
+    test(': Add three chats.', () async {
       await createNewChat(
-        setup.driver,
-        createChatFinder,
+        driver,
         realEmail,
         meContact,
-        newContact,
-        name,
-        enterContactName,
-        emptyChat,
       );
-      //  Create second contact.
       await createNewChat(
-        setup.driver,
-        createChatFinder,
-        newTestContact02,
+        driver,
+        newTestEmail02,
         newTestName02,
-        newContact,
-        name,
-        enterContactName,
-        emptyChat,
       );
-      //  create third contact
       await createNewChat(
-        setup.driver,
-        createChatFinder,
-        newTestContact04,
+        driver,
+        newTestEmail04,
         newTestName01,
-        newContact,
-        name,
-        enterContactName,
-        emptyChat,
-      );
-
-      //  Type something and get it.
-      await chatTest(setup.driver, newTestName01, typeSomethingComposePlaceholderFinder, helloWorld);
-      await callTest(setup.driver);
-      await setup.driver.tap(pageBack);
-
-      //  Search contact.
-      await chatSearch(
-        setup.driver,
-        newTestName01,
-        searchString,
-        find.byValueKey(keyChatListSearchIconButton),
-        keySearchReturnIconButton,
       );
     });
+
+    test(': Type something and get it.', () async {
+      await chatTest(driver, newTestName01);
+      await callTest(driver);
+      await driver.tap(pageBack);
+    });
+
+    test(': Search chat.', () async {
+      await chatSearch(
+        driver,
+        newTestName01,
+        searchString,
+      );
+    }, timeout: Timeout(Duration(seconds: 60)));
   });
 }
-

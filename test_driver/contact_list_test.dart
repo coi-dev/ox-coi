@@ -44,80 +44,50 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
-import 'package:test_api/src/backend/invoker.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group(
-      'Create contact list integration tests: After login, Me contact is checked first, '
-      'then two contacts are created. The contacts made can then be found in the contact list.'
-      'After that one of the contacts will be delete from the contact list', () {
-
-    var setup = Setup();
+  group('Test create profile integration tests.', () {
+    final setup = Setup();
     setup.perform();
+    final driver = setup.driver;
 
-    test('Test create profile integration tests.', () async {
-      //  Check real authentication and get chat.
-      await getAuthentication(
-        setup.driver,
-        signInFinder,
-        coiDebugProviderFinder,
-        providerEmailFinder,
-        realEmail,
-        providerPasswordFinder,
-        realPassword,
-      );
+    test(': Get conatact.', () async {
+      await driver.tap(contactsFinder);
+      await driver.tap(cancelFinder);
+      var actualMeContact = await driver.getText(find.text(meContact));
+      expect(actualMeContact, meContact);
+    });
 
-      Invoker.current.heartbeat();
-      await setup.driver.waitFor(chatWelcomeFinder);
-      Invoker.current.heartbeat();
-      //  Get contacts and add new contacts.
-      await setup.driver.tap(contactsFinder);
-      await setup.driver.tap(cancelFinder);
-      await setup.driver.waitFor(find.text(meContact));
-
-      // Add two new contacts in the contact list.
+    test(': Add two new contacts in the contact list.', () async {
       await addNewContact(
-        setup.driver,
-        personAddFinder,
-        keyContactChangeNameFinder,
+        driver,
         newTestName01,
-        keyContactChangeEmailFinder,
-        newTestContact04,
-        keyContactChangeCheckFinder,
+        newTestEmail04,
       );
-
       await addNewContact(
-        setup.driver,
-        personAddFinder,
-        keyContactChangeNameFinder,
+        driver,
         newTestName02,
-        keyContactChangeEmailFinder,
-        newTestContact02,
-        keyContactChangeCheckFinder,
+        newTestEmail02,
       );
+    });
+    test(': Manage one created contact.', () async {
+      await manageContact(driver, newTestName01, newMe);
+    });
 
-      // Manage new contact
-      await manageContact(
-          setup.driver, newTestName01, keyContactChangeNameFinder, newMe, keyContactChangeCheckFinder, keyContactDetailEditContactProfileActionIcon);
-      await catchScreenshot(setup.driver, 'screenshots/persone_add02.png');
-      print('\nContacts');
-      // Delete one contact
-      await deleteContact(setup.driver, positiveFinder, newTestName02);
-      Invoker.current.heartbeat();
-      await catchScreenshot(setup.driver, 'screenshots/contactList.png');
+    test(': Delete one contact.', () async {
+      await deleteContact(driver, newTestName02);
     });
   });
 }
 
-Future manageContact(FlutterDriver driver, String newTestName, SerializableFinder keyContactChangeNameFinder, String newMe,
-    SerializableFinder keyContactChangeCheckFinder, String keyContactDetailEditContactProfileActionIcon) async {
+Future manageContact(FlutterDriver driver, String newTestName, String newMe) async {
   await driver.tap(find.text(newTestName));
-  Invoker.current.heartbeat();
-  await driver.waitFor(find.text(newTestName));
+  var actualContactName = await driver.getText(find.text(newTestName));
+  expect(actualContactName, newTestName);
   await driver.tap(find.byValueKey(keyContactDetailEditContactProfileActionIcon));
   await driver.tap(keyContactChangeNameFinder);
   await driver.enterText(newMe);

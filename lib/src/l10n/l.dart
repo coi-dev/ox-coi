@@ -308,7 +308,7 @@ class L {
   // Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
   static final settingSecurityExportKeysTextX = _translationKey("Do you want to save your keys in \"%s\"?");
   static final settingCopyCode = _translationKey("Copy code");
-  static final settingExportKey = _translationKey("Expert: Export keys");
+  static final settingExportKeys = _translationKey("Expert: Export keys");
   static final settingImportKeys = _translationKey("Expert: Import keys");
   static final settingImportKeysText = _translationKey("Import keys from your local storage to change your current encryption setup");
   static final settingIMAPSecurity = _translationKey("IMAP Security");

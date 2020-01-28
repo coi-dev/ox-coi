@@ -169,7 +169,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       children: ListTile.divideTiles(context: context, tiles: [
         ListTile(
           contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
-          title: Text(L10n.get(L.settingExportKey)),
+          title: Text(L10n.get(L.settingExportKeys)),
           subtitle: Text(L10n.get(L.settingSecurityExportText)),
           onTap: () => _onPressed(context, SettingsSecurityType.exportKeys),
         ),
@@ -209,7 +209,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     String path = await getExportImportPath();
     Type navigationType;
     if (type == SettingsSecurityType.exportKeys) {
-      title = L10n.get(L.settingExportKey);
+      title = L10n.get(L.settingExportKeys);
       text = L10n.getFormatted(L.settingSecurityExportKeysTextX, [path]);
       navigationType = Type.settingsExportKeysDialog;
     } else if (type == SettingsSecurityType.importKeys) {

@@ -45,6 +45,9 @@ import 'dart:io';
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
+import 'global_consts.dart';
+import 'helper_methods.dart';
+
 const String adbPath = 'adb';
 
 const permissionAudio = 'android.permission.RECORD_AUDIO';
@@ -64,13 +67,22 @@ class Setup {
 
   FlutterDriver get driver => _driver;
 
-  perform() {
+  perform([bool isLogin = false]) {
     setUpAll(() async {
       String targetPlatform = Platform.environment[environmentTargetPlatform];
       if (targetPlatform == environmentTargetPlatformAndroid) {
         await setupAndroid();
       }
       _driver = await FlutterDriver.connect();
+
+      if (!isLogin) {
+        await getAuthentication(
+          _driver,
+          coiDebug,
+          realEmail,
+          realPassword,
+        );
+      }
     });
 
     tearDownAll(() async {
@@ -103,5 +115,18 @@ class Setup {
         permission,
       ],
     );
+  }
+
+  Future getAuthentication(
+    FlutterDriver driver,
+    String provider,
+    String email,
+    String password,
+  ) async {
+    final providerFinder = find.text(provider);
+    await driver.tap(signInFinder);
+    await driver.scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
+    await driver.tap(providerFinder);
+    await logIn(driver, email, password);
   }
 }

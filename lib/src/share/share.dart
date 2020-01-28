@@ -147,7 +147,7 @@ class _ShareState extends State<Share> {
               contactId: contactId,
               contactItemType: ContactItemType.forward,
               onTap: chatItemTapped,
-              key: contactId.toString(),
+              key: Key(contactId.toString()),
             );
           }
         }
@@ -193,7 +193,7 @@ class _ShareState extends State<Share> {
             L10n.get(L.contactP, count: L10n.plural),
             style: Theme.of(context).textTheme.headline,
           ),
-          ContactItem(contactId: contactId, contactItemType: ContactItemType.forward, onTap: chatItemTapped, key: contactId.toString()),
+          ContactItem(contactId: contactId, contactItemType: ContactItemType.forward, onTap: chatItemTapped, key: Key(contactId.toString())),
         ],
       ),
     );

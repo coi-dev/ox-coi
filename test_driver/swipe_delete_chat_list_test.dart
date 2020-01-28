@@ -54,49 +54,37 @@
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Add swipe to delete for chats test.', () {
-    var setup = Setup();
+  group('Test Add swipe to delete for chats test.', () {
+    final setup = Setup();
     setup.perform();
+    final driver = setup.driver;
 
-    test('Create a chat, swipe and delete created chat.', () async {
-      await getAuthentication(
-        setup.driver,
-        signInFinder,
-        coiDebugProviderFinder,
-        providerEmailFinder,
-        realEmail,
-        providerPasswordFinder,
-        realPassword,
-      );
-
-      //  Create contact which will be swiped and deleted.
+    test(': Create a chat.', () async {
       await createNewChat(
-        setup.driver,
-        createChatFinder,
-        newTestContact04,
+        driver,
+        newTestEmail04,
         newTestName01,
-        newContact,
-        name,
-        enterContactName,
-        emptyChat,
       );
+    });
 
-      //  Swipe and delete one chat.
-      await catchScreenshot(setup.driver, 'screenshots/beforeSwipedChat.png');
-      await setup.driver.scroll(find.text(newTestName01), -100, 0, Duration(milliseconds: 100));
-      await setup.driver.tap(find.text(delete));
-      await catchScreenshot(setup.driver, 'screenshots/afterSwipedChat.png');
-      await setup.driver.waitForAbsent(find.text(newTestName01));
-      await navigateTo(setup.driver, contacts);
-      await setup.driver.tap(cancelFinder);
-      await navigateTo(setup.driver, chat);
-      await setup.driver.waitForAbsent(find.text(newTestName01));
+    test(': Test swipe and delete one chat.', () async {
+      await driver.scroll(find.text(newTestName01), -100, 0, Duration(milliseconds: 100));
+      await driver.tap(find.text(L.getKey(L.delete)));
+      await driver.waitForAbsent(find.text(newTestName01));
+    });
+
+    test(': Test navigate and check if everithing is okay.', () async {
+      await navigateTo(driver, L.getPluralKey(L.contactP));
+      await driver.tap(cancelFinder);
+      await navigateTo(driver, L.getPluralKey(L.chatP));
+      await driver.waitForAbsent(find.text(newTestName01));
     });
   });
 }

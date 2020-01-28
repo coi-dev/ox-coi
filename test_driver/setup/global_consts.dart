@@ -45,11 +45,11 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 
 const realEmail = 'enyakam@ox.com';
 
-const fakeEmail = 'enyakam3@ox.com3';
+const fakeInvalidEmail = 'enyakam3@ox.com3';
+
+const fakeValidEmail = 'enyakam33@ox.com';
 
 const fakePassword = 'secret2';
-
-const testUserNameUserProfile = 'EDN tester';
 
 const realPassword = 'secret';
 
@@ -57,33 +57,13 @@ const coiDebug = 'Debug (mobile-qa)';
 
 const meContact = 'Me';
 
-final ok = 'Ok';
-
 const emailAddress = 'Email address';
-
-const newContact = 'New contact';
 
 const name = 'Name';
 
-const enterContactName = 'Enter the contact name';
+const newTestEmail02 = 'enyakam2@ox.com';
 
-const emptyChat = 'This is a new chat. Send a message to connect.';
-
-const profile = 'Profile';
-
-const chat = 'Chats';
-
-const contacts = 'Contacts';
-
-const blockContact = 'Block contact';
-
-const unblock = 'Unblock';
-
-const newTestContact02 = 'enyakam2@ox.com';
-
-const newTestContact03 = 'enyakam3@ox.com';
-
-const newTestContact04 = 'enyakam4@ox.com';
+const newTestEmail04 = 'enyakam4@ox.com';
 
 const newTestName01 = 'Douglas01';
 
@@ -93,41 +73,21 @@ const newMe = 'newMe';
 
 const mailCom = 'Mail.com';
 
-const profileUserStatus = 'Sent with OX COI Messenger - https://coi.me';
-
-const searchString = 'Douglas0';
-
-final typeSomethingComposePlaceholder = L.getKey(L.typeSomething);
-
 const helloWorld = 'Hello world';
 
-final delete = "Delete";
+final typeSomethingComposePlaceholderFinder = find.byValueKey( L.getKey(L.typeSomething));
 
-final scrollDuration = Duration(milliseconds: 1000);
-
-final typeSomethingComposePlaceholderFinder = find.byValueKey(typeSomethingComposePlaceholder);
-
-final chatWelcomeMessage = L.getKey(L.chatListPlaceholder);
-
-final coiDebugProviderFinder = find.text(coiDebug);
-
-final chatWelcomeFinder = find.text(chatWelcomeMessage);
-
-final profileFinder = find.text(profile);
+final profileFinder = find.text(L.getKey(L.profile));
 
 final pageBack = find.pageBack();
 
 final helloWorldFinder = find.text(helloWorld);
 
-final contactsFinder = find.text(contacts);
+final contactsFinder = find.text(L.getPluralKey(L.contactP));
 
-final chatsFinder = find.text(chat);
+final chatsFinder = find.text(L.getPluralKey(L.chatP));
 
 final signInFinder = find.text(L.getKey(L.loginSignIn).toUpperCase());
-
-final providerEmailFinder = find.byValueKey(keyProviderSignInEmailTextField);
-
-final providerPasswordFinder = find.byValueKey(keyProviderSignInPasswordTextField);
 
 final cancelFinder = find.byValueKey(keyConfirmationDialogCancelButton);
 
@@ -151,16 +111,12 @@ final keyDialogBuilderAlertDialogOkFlatButtonFinder = find.byValueKey(keyInforma
 
 final userProfileEmailTextFinder = find.byValueKey(keyUserProfileEmailText);
 
-final userProfileStatusTextFinder = find.text(profileUserStatus);
-
 final userProfileSettingsAdaptiveIconFinder = find.byValueKey(keyUserProfileSettingsAdaptiveIcon);
 
 final userAccountAdaptiveIconButtonIconCheckFinder = find.byValueKey(keyUserAccountAdaptiveIconButtonIconCheck);
 
 final settingsManuelFormValidatableTextFormFieldPasswordFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldPasswordField);
 
-final settingsManuelFormValidatableTextFormFieldImapServerFieldFinder =find.byValueKey(keySettingsManuelFormValidatableTextFormFieldImapServerField);
+final settingsManuelFormValidatableTextFormFieldImapServerFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldImapServerField);
 
 final settingsManuelFormValidatableTextFormFieldSMTPServerField = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldSMTPServerField);
-
-

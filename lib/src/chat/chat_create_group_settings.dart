@@ -184,7 +184,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
             for (var contactId in contactIds)
               ContactItem(
                 contactId: contactId,
-                key: contactId.toString(),
+                key: Key(contactId.toString()),
               ),
           ],
         ),
