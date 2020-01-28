@@ -54,7 +54,7 @@ class InviteItem extends StatefulWidget {
   final int chatId;
   final int messageId;
 
-  InviteItem({@required this.chatId, @required this.messageId, key}) : super(key: Key(key));
+  InviteItem({@required this.chatId, @required this.messageId, key}) : super(key: key);
 
   @override
   _InviteItemState createState() => _InviteItemState();
