@@ -121,25 +121,16 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Align(
-                      alignment: Alignment.center,
-                      child: ProfileData(
-                        imageBackgroundcolor: state.color,
-                        avatarPath: state.imagePath,
-                        child: ProfileAvatar(),
-                      )),
                   ProfileData(
                     text: state.name,
                     textStyle: Theme.of(context).textTheme.title,
-                    child: ProfileHeaderText(),
+                    secondText: state.email,
+                    avatarPath: state.imagePath,
+                    imageBackgroundcolor: state.color,
+                    editActionCallback: () => _editContact(context, state.name, state.email, state.phoneNumbers),
+                    iconData: state.isVerified ? IconSource.verifiedUser : null,
+                    child: ProfileHeader(),
                   ),
-                  ProfileData(
-                      text: state.email,
-                      textStyle: Theme.of(context).textTheme.subtitle,
-                      iconData: state.isVerified ? IconSource.verifiedUser : null,
-                      child: ProfileCopyableHeaderText(
-                        toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.emailAddress).toLowerCase()]),
-                      )),
                   ProfileActionList(tiles: [
                     ProfileAction(
                       key: Key(keyContactDetailOpenChatProfileActionIcon),

@@ -112,28 +112,15 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Align(
-              alignment: Alignment.center,
-              child: ProfileData(
-                imageBackgroundcolor: color,
-                avatarPath: imagePath,
-                child: ProfileAvatar(),
-              )),
           ProfileData(
+            imageBackgroundcolor: color,
+            avatarPath: imagePath,
             text: chatName,
+            secondText: email,
             textStyle: Theme.of(context).textTheme.title,
-            child: ProfileHeaderText(),
+            iconData: isVerified ? IconSource.verifiedUser : null,
+            child: ProfileHeader(),
           ),
-          Padding(
-              padding: EdgeInsets.all(16.0),
-              child: ProfileData(
-                text: email,
-                textStyle: Theme.of(context).textTheme.subtitle,
-                iconData: isVerified ? IconSource.verifiedUser : null,
-                child: ProfileCopyableHeaderText(
-                  toastMessage: L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.emailAddress).toLowerCase()]),
-                ),
-              )),
           ProfileActionList(tiles: [
             if (!widget.isSelfTalk)
               ProfileAction(

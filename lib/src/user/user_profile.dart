@@ -113,6 +113,7 @@ class _ProfileState extends State<UserProfile> {
   Navigation navigation = Navigation();
   InviteBloc _inviteBloc = InviteBloc();
   OverlayEntry _fullScreenOverlayEntry;
+  String _avatarPath = "";
 
   @override
   void initState() {
@@ -143,6 +144,7 @@ class _ProfileState extends State<UserProfile> {
   }
 
   Widget buildProfileView(Config config) {
+    _avatarPath = config.avatarPath;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return SingleChildScrollView(
@@ -153,121 +155,118 @@ class _ProfileState extends State<UserProfile> {
             child: IntrinsicHeight(
               child: Container(
                 color: CustomTheme.of(context).background,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
-                  child: Column(
-                    children: <Widget>[
-                      ProfileData(
-                        text: config.username,
-                        secondText: config.email,
-                        avatarPath: config.avatarPath,
-                        placeholderText: L10n.get(L.profileNoUsername),
-                        imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
-                        imageActionCallback: _editPhotoCallback,
-                        withPlaceholder: true,
-                        editActionCallback: () => _editUserSettings(),
-                        child: ProfileHeader(),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.flag,
-                        text: L10n.get(L.settingItemFlaggedTitle),
-                        iconBackground: CustomTheme.of(context).flagIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.qr,
-                        text: L10n.get(L.settingItemQRTitle),
-                        iconBackground: CustomTheme.of(context).qrIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.qrShow),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.personAdd,
-                        text: L10n.get(L.settingItemInviteTitle),
-                        iconBackground: CustomTheme.of(context).inviteIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.invite),
-                      ),
-                      GroupHeader(
-                        text: L10n.get(L.settingGroupHeaderGeneralTitle),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.darkMode,
-                        text: L10n.get(L.settingItemDarkModeTitle),
-                        iconBackground: CustomTheme.of(context).darkModeIcon,
-                        onTap: () => _changeTheme(),
-                        showSwitch: true,
-                        onSwitchChanged: () => _changeTheme(),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.notifications,
-                        text: L10n.get(L.settingItemNotificationsTitle),
-                        iconBackground: CustomTheme.of(context).notificationIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.chat,
-                        text: L10n.get(L.settingItemChatTitle),
-                        iconBackground: CustomTheme.of(context).chatIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.chat),
-                      ),
-                      GroupHeader(
-                        text: L10n.get(L.settingGroupHeaderEmailTitle),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.signature,
-                        text: L10n.get(L.settingItemSignatureTitle),
-                        iconBackground: CustomTheme.of(context).signatureIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.signature),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.serverSetting,
-                        text: L10n.get(L.settingItemServerSettingsTitle),
-                        iconBackground: CustomTheme.of(context).serverSettingsIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.serverSetting),
-                      ),
-                      GroupHeader(
-                        text: L10n.get(L.settingGroupHeaderSecurityTitle),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.security,
-                        text: L10n.get(L.settingItemDataProtectionTitle),
-                        iconBackground: CustomTheme.of(context).dataProtectionIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.dataProtection),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.block,
-                        text: L10n.get(L.settingItemBlockedTitle),
-                        iconBackground: CustomTheme.of(context).blockIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.blocked),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.lock,
-                        text: L10n.get(L.settingItemEncryptionTitle),
-                        iconBackground: CustomTheme.of(context).encryptionIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.encryption),
-                      ),
-                      GroupHeader(
-                        text: "",
-                      ),
-                      SettingsItem(
-                        icon: IconSource.info,
-                        text: L10n.get(L.settingItemAboutTitle),
-                        iconBackground: CustomTheme.of(context).aboutIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.about),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.feedback,
-                        text: L10n.get(L.settingItemFeedbackTitle),
-                        iconBackground: CustomTheme.of(context).feedbackIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.feedback),
-                      ),
-                      SettingsItem(
-                        icon: IconSource.bugReport,
-                        text: L10n.get(L.settingItemBugReportTitle),
-                        iconBackground: CustomTheme.of(context).bugReportIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.bugReport),
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: <Widget>[
+                    ProfileData(
+                      text: config.username,
+                      secondText: config.email,
+                      avatarPath: _avatarPath,
+                      placeholderText: L10n.get(L.profileNoUsername),
+                      imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
+                      imageActionCallback: _editPhotoCallback,
+                      withPlaceholder: true,
+                      editActionCallback: () => _editUserSettings(),
+                      child: ProfileHeader(),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.flag,
+                      text: L10n.get(L.settingItemFlaggedTitle),
+                      iconBackground: CustomTheme.of(context).flagIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.qr,
+                      text: L10n.get(L.settingItemQRTitle),
+                      iconBackground: CustomTheme.of(context).qrIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.qrShow),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.personAdd,
+                      text: L10n.get(L.settingItemInviteTitle),
+                      iconBackground: CustomTheme.of(context).inviteIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.invite),
+                    ),
+                    GroupHeader(
+                      text: L10n.get(L.settingGroupHeaderGeneralTitle),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.darkMode,
+                      text: L10n.get(L.settingItemDarkModeTitle),
+                      iconBackground: CustomTheme.of(context).darkModeIcon,
+                      onTap: () => _changeTheme(),
+                      showSwitch: true,
+                      onSwitchChanged: () => _changeTheme(),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.notifications,
+                      text: L10n.get(L.settingItemNotificationsTitle),
+                      iconBackground: CustomTheme.of(context).notificationIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.chat,
+                      text: L10n.get(L.settingItemChatTitle),
+                      iconBackground: CustomTheme.of(context).chatIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.chat),
+                    ),
+                    GroupHeader(
+                      text: L10n.get(L.settingGroupHeaderEmailTitle),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.signature,
+                      text: L10n.get(L.settingItemSignatureTitle),
+                      iconBackground: CustomTheme.of(context).signatureIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.signature),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.serverSetting,
+                      text: L10n.get(L.settingItemServerSettingsTitle),
+                      iconBackground: CustomTheme.of(context).serverSettingsIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.serverSetting),
+                    ),
+                    GroupHeader(
+                      text: L10n.get(L.settingGroupHeaderSecurityTitle),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.security,
+                      text: L10n.get(L.settingItemDataProtectionTitle),
+                      iconBackground: CustomTheme.of(context).dataProtectionIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.dataProtection),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.block,
+                      text: L10n.get(L.settingItemBlockedTitle),
+                      iconBackground: CustomTheme.of(context).blockIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.blocked),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.lock,
+                      text: L10n.get(L.settingItemEncryptionTitle),
+                      iconBackground: CustomTheme.of(context).encryptionIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.encryption),
+                    ),
+                    GroupHeader(
+                      text: "",
+                    ),
+                    SettingsItem(
+                      icon: IconSource.info,
+                      text: L10n.get(L.settingItemAboutTitle),
+                      iconBackground: CustomTheme.of(context).aboutIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.about),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.feedback,
+                      text: L10n.get(L.settingItemFeedbackTitle),
+                      iconBackground: CustomTheme.of(context).feedbackIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.feedback),
+                    ),
+                    SettingsItem(
+                      icon: IconSource.bugReport,
+                      text: L10n.get(L.settingItemBugReportTitle),
+                      iconBackground: CustomTheme.of(context).bugReportIcon,
+                      onTap: () => _settingsItemTapped(context, SettingsItemName.bugReport),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -341,6 +340,9 @@ class _ProfileState extends State<UserProfile> {
   }
 
   _editPhotoCallback(String avatarPath) {
+    setState(() {
+      _avatarPath = avatarPath;
+    });
     _userChangeBloc.add(UserChange.UserAvatarChanged(avatarPath: avatarPath));
   }
 

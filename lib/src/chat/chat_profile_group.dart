@@ -184,36 +184,12 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         text: state.name,
         textStyle: Theme.of(context).textTheme.title,
         iconData: state.isVerified ? IconSource.verifiedUser : null,
-        imageActionCallback: state.isRemoved ? null : () => _editPhotoCallback,
+        imageActionCallback: state.isRemoved ? null : _editPhotoCallback,
         avatarPath: state.avatarPath,
         showWhiteImageIcon: true,
-        child: Column(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.center,
-              child: ProfileAvatar(),
-            ),
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  ProfileHeaderText(),
-                  Visibility(
-                      visible: !state.isRemoved,
-                      child: IconButton(
-                        icon: AdaptiveIcon(
-                          icon: IconSource.edit,
-                          key: Key(keyChatProfileGroupEditIcon),
-                          color: CustomTheme.of(context).accent,
-                        ),
-                        onPressed: _goToEditName,
-                      )),
-                ],
-              ),
-            ),
-          ],
-        ));
+        editActionCallback: state.isRemoved ? null : _goToEditName,
+        child: ProfileHeader(),
+      );
   }
 
   _editPhotoCallback(String avatarPath) {

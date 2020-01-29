@@ -108,6 +108,9 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 24.0),
+        ),
         Stack(
           children: <Widget>[
             Center(
@@ -116,24 +119,33 @@ class ProfileHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ProfileAvatar(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 24.0, bottom: 8.0),
-                    child: ProfileData.of(context).withPlaceholder
-                        ? PlaceholderText(
-                            text: ProfileData.of(context).text,
-                            style: getProfileHeaderTextStyle(context),
-                            align: TextAlign.center,
-                            placeholderText: ProfileData.of(context).placeholderText,
-                            placeholderStyle: getProfileHeaderPlaceholderTextStyle(context),
-                            placeHolderAlign: TextAlign.center,
-                          )
-                        : ProfileHeaderText(),
+                  Visibility(
+                    visible: ProfileData.of(context).text != null && ProfileData.of(context).text.isNotEmpty,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 24.0, bottom: 8.0),
+                      child: ProfileData.of(context).withPlaceholder
+                          ? PlaceholderText(
+                        text: ProfileData.of(context).text,
+                        style: getProfileHeaderTextStyle(context),
+                        align: TextAlign.center,
+                        placeholderText: ProfileData.of(context).placeholderText,
+                        placeholderStyle: getProfileHeaderPlaceholderTextStyle(context),
+                        placeHolderAlign: TextAlign.center,
+                      )
+                          : ProfileHeaderText(),
+                    ),
                   ),
-                  ProfileSecondText(),
+                  Visibility(
+                    visible: ProfileData.of(context).secondText != null && ProfileData.of(context).secondText.isNotEmpty,
+                    child: ProfileSecondText(),
+                  ),
                 ],
               ),
             ),
-            ProfileHeaderEditButton(),
+            Visibility(
+              visible: ProfileData.of(context).editActionCallback != null,
+              child: ProfileHeaderEditButton(),
+            )
           ],
         ),
         Padding(
@@ -169,7 +181,7 @@ class ProfileAvatar extends StatelessWidget {
 
     _removeAvatar() {
       _navigation.pop(context);
-      ProfileData.of(context).imageActionCallback("");
+      ProfileData.of(context).imageActionCallback(null);
     }
 
     _editPhoto() {
@@ -199,26 +211,26 @@ class ProfileAvatar extends StatelessWidget {
           });
     }
 
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Avatar(
-          imagePath: ProfileData.of(context).avatarPath,
-          color: ProfileData.of(context).imageBackgroundcolor,
-          size: profileAvatarSize,
-          textPrimary: ProfileData.of(context).initialsText,
-        ),
-        Visibility(
-          visible: ProfileData.of(context).imageActionCallback != null,
-          child: InkWell(
+    return InkWell(
+      onTap: ProfileData.of(context).imageActionCallback != null ? () => _editPhoto() : null,
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Avatar(
+            imagePath: ProfileData.of(context).avatarPath,
+            color: ProfileData.of(context).imageBackgroundcolor,
+            size: profileAvatarSize,
+            textPrimary: ProfileData.of(context).initialsText,
+          ),
+          Visibility(
+            visible: ProfileData.of(context).imageActionCallback != null && (ProfileData.of(context).avatarPath == null || ProfileData.of(context).avatarPath.isEmpty),
             child: AdaptiveIcon(
               icon: IconSource.camera,
               color: ProfileData.of(context).showWhiteImageIcon ? CustomTheme.of(context).white : CustomTheme.of(context).accent,
             ),
-            onTap: _editPhoto,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -253,20 +265,7 @@ class ProfileHeaderText extends StatelessWidget {
       maxLines: 1,
       style: getProfileHeaderTextStyle(context),
     );
-    return Flexible(
-        child: ProfileData.of(context).iconData != null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  AdaptiveIcon(icon: ProfileData.of(context).iconData),
-                  Padding(
-                    padding: const EdgeInsets.only(left: iconTextPadding),
-                    child: content,
-                  ),
-                ],
-              )
-            : content);
+    return Container(child: content);
   }
 }
 
@@ -281,7 +280,7 @@ class ProfileSecondText extends StatelessWidget {
       maxLines: 1,
       style: getProfileHeaderSecondTextStyle(context),
     );
-    return Flexible(
+    return Container(
         child: ProfileData.of(context).iconData != null
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,

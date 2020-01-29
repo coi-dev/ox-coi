@@ -144,7 +144,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
               imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
               imageActionCallback: _setAvatar,
               avatarPath: _avatar,
-              child: ProfileAvatar(),
+              child: ProfileHeader(),
             )),
         Padding(
           padding: EdgeInsets.only(
