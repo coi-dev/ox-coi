@@ -274,7 +274,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             appBar: AdaptiveAppBar(
               title: isInviteChat(widget.chatId)
                   ? buildRow(imagePath, name, subTitle, color, context, isVerified)
-                  : InkWell(
+                  : GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () => _chatTitleTapped(),
                       child: buildRow(imagePath, name, subTitle, color, context, isVerified),
                     ),
