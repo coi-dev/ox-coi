@@ -52,11 +52,13 @@ class AppDelegate: FlutterAppDelegate {
     var startString: String?
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        application.setMinimumBackgroundFetchInterval(60 * 5)
-
         UIApplication.setupLogging()
+        UIApplication.setupFirebase()
+
         UNUserNotificationCenter.current().delegate = self
         GeneratedPluginRegistrant.register(with: self)
+
+        application.setMinimumBackgroundFetchInterval(60 * 5)
         setupSharingMethodChannel()
 
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

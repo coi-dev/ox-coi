@@ -57,7 +57,7 @@ function iosDebugBuild {
 function iosReleaseBuild {
     echo "iOS release build for ${flavor} started"
     rm -rf ../ios/Flutter/Flutter.framework
-    flutter build ios --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor}
+    flutter build ios --release --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor}
     flutter clean
 
     xcodebuild -workspace ios/Runner.xcworkspace -scheme ${flavor} -sdk iphoneos -configuration Release-${flavor} archive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -allowProvisioningUpdates

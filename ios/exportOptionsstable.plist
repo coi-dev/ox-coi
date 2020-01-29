@@ -5,7 +5,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.openxchange.oxcoi.stable</key>
-		<string>com.openxchange.oxcoi.stable Appstore</string>
+		<string>OX COI Messenger</string>
 	</dict>
 	<key>method</key>
 	<string>app-store</string>
