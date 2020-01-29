@@ -42,26 +42,22 @@
 
 class CustomerConfig {
   String name;
-  List<CustomerChat> chats;
+  List<CustomerChat> chats = List();
 
   CustomerConfig({this.name, this.chats});
 
   CustomerConfig.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    if (json['chats'] != null) {
-      chats = new List<CustomerChat>();
-      json['chats'].forEach((v) {
-        chats.add(new CustomerChat.fromJson(v));
-      });
-    }
+    chats = new List<CustomerChat>();
+    json['chats'].forEach((v) {
+      chats.add(new CustomerChat.fromJson(v));
+    });
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    if (this.chats != null) {
-      data['chats'] = this.chats.map((v) => v.toJson()).toList();
-    }
+    data['chats'] = this.chats.map((v) => v.toJson()).toList();
     return data;
   }
 }
