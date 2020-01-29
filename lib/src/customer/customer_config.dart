@@ -42,27 +42,26 @@
 
 class CustomerConfig {
   String name;
-  List<CustomerChat> chats = List();
+  var chats = List<CustomerChat>();
 
   CustomerConfig({this.name, this.chats});
 
   CustomerConfig.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    chats = new List<CustomerChat>();
-    json['chats'].forEach((v) {
-      chats.add(new CustomerChat.fromJson(v));
+    json['chats']?.forEach((v) {
+      chats.add(CustomerChat.fromJson(v));
     });
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['name'] = this.name;
     data['chats'] = this.chats.map((v) => v.toJson()).toList();
     return data;
   }
 }
 
-class CustomerChat{
+class CustomerChat {
   String name;
   String email;
   bool deletable;
@@ -76,7 +75,7 @@ class CustomerChat{
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['name'] = this.name;
     data['email'] = this.email;
     data['deletable'] = this.deletable;
