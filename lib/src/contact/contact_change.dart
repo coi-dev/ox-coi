@@ -325,7 +325,7 @@ class _ContactChangeState extends State<ContactChange> {
                 icon: IconSource.qr,
                 text: L10n.get(L.qrScan),
                 iconBackground: CustomTheme.of(context).qrIcon,
-                onTap: () => scanQr,
+                onTap: scanQr,
               ),
             ),
           ],

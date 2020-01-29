@@ -647,9 +647,11 @@ packages:
   qr_mobile_vision:
     dependency: "direct main"
     description:
-      name: qr_mobile_vision
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: android-embedding-v2
+      resolved-ref: "0bc7163796e84d5a11c2401b67411615b2c6f7b7"
+      url: "https://github.com/Boehrsi/flutter_qr_mobile_vision"
+    source: git
     version: "0.3.1"
   quiver:
     dependency: transitive
