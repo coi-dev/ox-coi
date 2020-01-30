@@ -179,7 +179,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                   onTapDown: _onTapDown,
                   onLongPress: () => _onLongPress(
                     hasFile: messageStateData.hasFile,
-                    showLongPressMenu: !messageStateData.isSetupMessage,
+                    showLongPressMenu: (!messageStateData.isSetupMessage && !messageStateData.isInfo),
                     text: messageStateData.text,
                     messageInfo: messageStateData.messageInfo,
                     isPending: messageStateData.state == ChatMsg.messageStatePending
