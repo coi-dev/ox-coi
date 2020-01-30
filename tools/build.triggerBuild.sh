@@ -11,9 +11,25 @@ buildName=$4
 buildNumber=$5
 
 # Constants
+SCRIPT_BASEDIR=$(dirname "$0")
 PLUGIN_FOLDER="flutter-deltachat-core";
 CORE_BUILD_SCRIPT="./build-dcc.sh"
 IOS_BUILD_FOLDER="build/app/outputs/ios/${flavor}"
+
+# Setup
+if [[ "$#" != 5 ]]; then
+    echo "Usage of $0:"
+    echo
+    echo "1. parameter:     Platform [android, ios, all]"
+    echo "2. parameter:     Build mode [debug, release]"
+    echo "3. parameter:     Flavor [development, stable]"
+    echo "4. parameter:     Build name (semantic versioning required)"
+    echo "5. parameter:     Build number (integer)"
+    echo
+    echo "Example android:  ./build.triggerBuild.sh android release stable 0.450.1 415"
+    echo "Example iOS:      ./build.triggerBuild.sh ios release stable 0.450.1 415"
+    exit 0
+fi
 
 # Functions
 function isAndroid {
@@ -88,7 +104,7 @@ function buildCore {
 
 # Execution
 echo "-- Setup --"
-cd .. || error 1
+cd ${SCRIPT_BASEDIR}/.. || error 1
 echo "Building / updating core"
 (
     cd .. || error 3

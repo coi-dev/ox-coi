@@ -1,15 +1,15 @@
 #!/bin/bash
 
+# User / CI input
+target=$1
+deviceId=$2
+appId=$3
+
 # Constants
 TARGET_ANDROID="android"
 TARGET_IOS="ios"
 LOG_FOLDER=test_driver/logs
 LOG_FILE=${LOG_FOLDER}/log.txt
-
-# Parameters
-target=$1
-deviceId=$2
-appId=$3
 
 # Variables
 success=0

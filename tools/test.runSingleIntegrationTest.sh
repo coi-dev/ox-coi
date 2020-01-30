@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Constants
-TARGET_ANDROID="android"
-TARGET_IOS="ios"
-
-# Parameters
+# User / CI input
 target=$1
 deviceId=$2
 appId=$3
 test="test_driver/$4"
+
+# Constants
+TARGET_ANDROID="android"
+TARGET_IOS="ios"
 
 # Functions
 function error {
