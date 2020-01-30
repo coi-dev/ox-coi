@@ -47,10 +47,8 @@ import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 enum AppBarAction {
-  flaggedChats,
   searchChats,
   importContacts,
-  blockedContacts,
   searchContacts,
   profileSettings,
 }

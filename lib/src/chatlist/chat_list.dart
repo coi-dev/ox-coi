@@ -123,13 +123,6 @@ class ChatList extends RootChild {
     return [
       AdaptiveIconButton(
         icon: AdaptiveIcon(
-          icon: IconSource.flag,
-        ),
-        key: Key(keyChatListGetFlaggedActionIconButton),
-        onPressed: () => appBarActionsStream.add(AppBarAction.flaggedChats),
-      ),
-      AdaptiveIconButton(
-        icon: AdaptiveIcon(
           icon: IconSource.search,
         ),
         key: Key(keyChatListSearchIconButton),
@@ -156,9 +149,7 @@ class _ChatListState extends State<ChatList> {
     shareBloc.add(LoadSharedData());
     appBarActionsSubscription = widget.appBarActionsStream.stream.listen((data) {
       var action = data as AppBarAction;
-      if (action == AppBarAction.flaggedChats) {
-        _actionFlagged();
-      } else if (action == AppBarAction.searchChats) {
+      if (action == AppBarAction.searchChats) {
         _actionSearch();
       }
     });
@@ -227,15 +218,6 @@ class _ChatListState extends State<ChatList> {
       onBuildSuggestion: _onBuildResultOrSuggestion,
     );
     search.show(context);
-  }
-
-  void _actionFlagged() {
-    _navigation.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Flagged(),
-      ),
-    );
   }
 
   ListView _buildListItems(ChatListStateSuccess state) {

@@ -124,13 +124,6 @@ class ContactList extends RootChild {
       ),
       AdaptiveIconButton(
         icon: AdaptiveIcon(
-          icon: IconSource.block,
-        ),
-        key: Key(keyContactListBlockIconButton),
-        onPressed: () => appBarActionsStream.add(AppBarAction.blockedContacts),
-      ),
-      AdaptiveIconButton(
-        icon: AdaptiveIcon(
           icon: IconSource.search,
         ),
         key: Key(keyContactListSearchIconButton),
@@ -158,8 +151,6 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
       var action = data as AppBarAction;
       if (action == AppBarAction.importContacts) {
         _actionImport();
-      } else if (action == AppBarAction.blockedContacts) {
-        _actionBlocked();
       } else if (action == AppBarAction.searchContacts) {
         _actionSearch();
       }
@@ -284,10 +275,6 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
 
   void _actionImport() {
     _showImportDialog(false, context);
-  }
-
-  void _actionBlocked() {
-    navigation.pushNamed(context, Navigation.contactsBlocked);
   }
 
   void _actionSearch() {
