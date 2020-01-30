@@ -229,9 +229,11 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
       File file = File(_getMessageStateData(context).attachmentStateData.path);
       imageProvider = FileImage(file);
     } else {
-      imageProvider = MemoryImage(kTransparentImage);
-      _messageAttachmentBloc.add(LoadThumbnailAndDuration(
-          path: _getMessageStateData(context).attachmentStateData.path, duration: _getMessageStateData(context).attachmentStateData.duration));
+      if(imageProvider == null) {
+        imageProvider = MemoryImage(kTransparentImage);
+        _messageAttachmentBloc.add(LoadThumbnailAndDuration(
+            path: _getMessageStateData(context).attachmentStateData.path, duration: _getMessageStateData(context).attachmentStateData.duration));
+      }
     }
     precacheImage(imageProvider, context, onError: (error, stacktrace) {
       setState(() {
