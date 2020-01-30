@@ -344,18 +344,20 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     style: TextStyle(color: CustomTheme.of(context).error),
                   ),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+                  borderSide: BorderSide(color: CustomTheme.of(context).onBackground),
                 ),
               ),
               ButtonTheme(
                 minWidth: 120.0,
                 child: OutlineButton(
-                  highlightedBorderColor: CustomTheme.of(context).primary,
+                  highlightedBorderColor: CustomTheme.of(context).accent,
                   onPressed: _createChat,
                   child: Text(
                     L10n.get(L.ok).toUpperCase(),
-                    style: TextStyle(color: CustomTheme.of(context).primary),
+                    style: TextStyle(color: CustomTheme.of(context).accent),
                   ),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
+                  borderSide: BorderSide(color: CustomTheme.of(context).onBackground),
                 ),
               )
             ],

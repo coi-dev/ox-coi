@@ -54,6 +54,7 @@ import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
@@ -126,6 +127,7 @@ class _ShareState extends State<Share> {
       itemBuilder: (BuildContext context, int index) {
         if (state.chatIdCount > 0 && index < state.chatIdCount) {
           var chatId = state.chatAndContactIds[index];
+          var key = createKeyFromId(chatId);
           if (index == 0) {
             return createChatItemWithHeader(chatId);
           } else {
@@ -135,7 +137,7 @@ class _ShareState extends State<Share> {
               switchMultiSelect: null,
               isMultiSelect: false,
               isShareItem: true,
-              key: chatId.toString(),
+              key: key,
             );
           }
         } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
@@ -171,6 +173,7 @@ class _ShareState extends State<Share> {
   }
 
   Widget createChatItemWithHeader(int chatId) {
+    var key = createKeyFromId(chatId);
     return Container(
       child: Column(
         children: <Widget>[
@@ -179,7 +182,7 @@ class _ShareState extends State<Share> {
             style: Theme.of(context).textTheme.headline,
           ),
           ChatListItem(
-              chatId: chatId, onTap: chatItemTapped, switchMultiSelect: null, isMultiSelect: false, isShareItem: true, key: chatId.toString()),
+              chatId: chatId, onTap: chatItemTapped, switchMultiSelect: null, isMultiSelect: false, isShareItem: true, key: key),
         ],
       ),
     );

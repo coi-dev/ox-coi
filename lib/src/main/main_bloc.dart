@@ -116,7 +116,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     } else if (event is AppLoaded) {
       bool configured = await _context.isConfigured();
       if (configured) {
-        await _loadCustomerConfig();
         await _setupLoggedInAppState();
       }
       var hasAuthenticationError = await _checkForAuthenticationError();
@@ -190,6 +189,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       }
       await _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
       _logger.info("Setting coi message prefix to 1");
+      await _loadCustomerConfig();
       await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
     }
     await setupBackgroundRefreshManager(coiSupported);

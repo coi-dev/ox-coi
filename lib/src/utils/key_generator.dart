@@ -58,7 +58,8 @@ ValueKey createKey(var value) {
 }
 
 ValueKey createKeyFromId(int id, [List values]) {
-  String keyString = "$id$idSeparator${values.join(valueSeparator)}";
+  var valueString = values != null ? "$idSeparator${values.join(valueSeparator)}" : "";
+  var keyString = "$id$valueString";
   return ValueKey(keyString);
 }
 
