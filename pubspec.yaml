@@ -60,7 +60,9 @@ dependencies:
       url: https://github.com/Boehrsi/flutter_qr_mobile_vision
       ref: android-embedding-v2
   uuid: ^2.0.4
-  video_thumbnail: ^0.2.0
+  video_thumbnail:
+    git:
+      url: https://github.com/CihanOezkan/video_thumbnail.git
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 
