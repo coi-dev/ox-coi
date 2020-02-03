@@ -43,7 +43,6 @@
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:test/test.dart';
 
 import 'global_consts.dart';
 import 'helper_methods.dart';
@@ -62,71 +61,63 @@ const environmentTargetPlatform = 'FLUTTER_TEST_TARGET_PLATFORM';
 const environmentTargetPlatformAndroid = 'android';
 const environmentTargetPlatformIos = 'ios';
 
-class Setup {
-  FlutterDriver _driver;
-
-  FlutterDriver get driver => _driver;
-
-  perform([bool isLogin = false]) {
-    setUpAll(() async {
-      String targetPlatform = Platform.environment[environmentTargetPlatform];
-      if (targetPlatform == environmentTargetPlatformAndroid) {
-        await setupAndroid();
-      }
-      _driver = await FlutterDriver.connect();
-
-      if (!isLogin) {
-        await getAuthentication(
-          _driver,
-          coiDebug,
-          realEmail,
-          realPassword,
-        );
-      }
-    });
-
-    tearDownAll(() async {
-      if (_driver != null) {
-        _driver.close();
-      }
-    });
+Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
+  String targetPlatform = Platform.environment[environmentTargetPlatform];
+  if (targetPlatform == environmentTargetPlatformAndroid) {
+    await setupAndroid();
   }
-
-  Future setupAndroid() async {
-    await grantPermission(adbPath, permissionAudio);
-    await grantPermission(adbPath, permissionReadStorage);
-    await grantPermission(adbPath, permissionWriteStorage);
-    await grantPermission(adbPath, permissionReadContacts);
-    await grantPermission(adbPath, permissionWriteContacts);
-  }
-
-  Future grantPermission(String adbPath, String permission) async {
-    String deviceId = Platform.environment[environmentDeviceId];
-    String appId = Platform.environment[environmentAppId];
-    await Process.run(
-      adbPath,
-      [
-        '-s',
-        deviceId,
-        'shell',
-        'pm',
-        'grant',
-        appId,
-        permission,
-      ],
+  FlutterDriver driver = await FlutterDriver.connect();
+  if (!isLogin) {
+    await getAuthentication(
+      driver,
+      coiDebug,
+      realEmail,
+      realPassword,
     );
   }
+  return driver;
+}
 
-  Future getAuthentication(
-    FlutterDriver driver,
-    String provider,
-    String email,
-    String password,
-  ) async {
-    final providerFinder = find.text(provider);
-    await driver.tap(signInFinder);
-    await driver.scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
-    await driver.tap(providerFinder);
-    await logIn(driver, email, password);
+teardownDriver(FlutterDriver driver) {
+  if (driver != null) {
+    driver.close();
   }
+}
+
+Future setupAndroid() async {
+  await grantPermission(adbPath, permissionAudio);
+  await grantPermission(adbPath, permissionReadStorage);
+  await grantPermission(adbPath, permissionWriteStorage);
+  await grantPermission(adbPath, permissionReadContacts);
+  await grantPermission(adbPath, permissionWriteContacts);
+}
+
+Future grantPermission(String adbPath, String permission) async {
+  String deviceId = Platform.environment[environmentDeviceId];
+  String appId = Platform.environment[environmentAppId];
+  await Process.run(
+    adbPath,
+    [
+      '-s',
+      deviceId,
+      'shell',
+      'pm',
+      'grant',
+      appId,
+      permission,
+    ],
+  );
+}
+
+Future getAuthentication(
+  FlutterDriver driver,
+  String provider,
+  String email,
+  String password,
+) async {
+  final providerFinder = find.text(provider);
+  await driver.tap(signInFinder);
+  await driver.scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
+  await driver.tap(providerFinder);
+  await logIn(driver, email, password);
 }

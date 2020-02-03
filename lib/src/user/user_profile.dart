@@ -70,6 +70,7 @@ import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class UserProfile extends RootChild {
   UserProfile({appBarActionsStream, Key key}) : super(appBarActionsStream: appBarActionsStream, key: key);
@@ -147,7 +148,7 @@ class _ProfileState extends State<UserProfile> {
   Widget buildProfileView(Config config) {
     _avatarPath = config.avatarPath;
         return SingleChildScrollView(
-          
+
             child: IntrinsicHeight(
               child: Container(
                 color: CustomTheme.of(context).background,
@@ -169,18 +170,21 @@ class _ProfileState extends State<UserProfile> {
                       text: L10n.get(L.settingItemFlaggedTitle),
                       iconBackground: CustomTheme.of(context).flagIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
+                      key: Key(keyUserProfileFlagIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.qr,
                       text: L10n.get(L.settingItemQRTitle),
                       iconBackground: CustomTheme.of(context).qrIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.qrShow),
+                      key: Key(keyUserProfileQrIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.personAdd,
                       text: L10n.get(L.settingItemInviteTitle),
                       iconBackground: CustomTheme.of(context).inviteIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.invite),
+                      key: Key(keyUserProfilePersonAddIconSource),
                     ),
                     ListGroupHeader(
                       text: L10n.get(L.settingGroupHeaderGeneralTitle),
@@ -192,18 +196,21 @@ class _ProfileState extends State<UserProfile> {
                       onTap: () => _changeTheme(),
                       showSwitch: true,
                       onSwitchChanged: () => _changeTheme(),
+                      key: Key(keyUserProfileDarkModeIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.notifications,
                       text: L10n.get(L.settingItemNotificationsTitle),
                       iconBackground: CustomTheme.of(context).notificationIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
+                      key: Key(keyUserProfileNotificationIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.chat,
                       text: L10n.get(L.settingItemChatTitle),
                       iconBackground: CustomTheme.of(context).chatIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.chat),
+                      key: Key(keyUserProfileChatIconSource),
                     ),
                     ListGroupHeader(
                       text: L10n.get(L.settingGroupHeaderEmailTitle),
@@ -213,12 +220,14 @@ class _ProfileState extends State<UserProfile> {
                       text: L10n.get(L.settingItemSignatureTitle),
                       iconBackground: CustomTheme.of(context).signatureIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.signature),
+                      key: Key(keyUserProfileSignatureIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.serverSetting,
                       text: L10n.get(L.settingItemServerSettingsTitle),
                       iconBackground: CustomTheme.of(context).serverSettingsIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.serverSetting),
+                      key:Key(keyUserProfileServerSettingIconSource),
                     ),
                     ListGroupHeader(
                       text: L10n.get(L.settingGroupHeaderSecurityTitle),
@@ -228,18 +237,21 @@ class _ProfileState extends State<UserProfile> {
                       text: L10n.get(L.settingItemDataProtectionTitle),
                       iconBackground: CustomTheme.of(context).dataProtectionIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.dataProtection),
+                      key: Key(keyUserProfileSecurityIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.block,
                       text: L10n.get(L.settingItemBlockedTitle),
                       iconBackground: CustomTheme.of(context).blockIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.blocked),
+                      key: Key(keyUserProfileBlockIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.lock,
                       text: L10n.get(L.settingItemEncryptionTitle),
                       iconBackground: CustomTheme.of(context).encryptionIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.encryption),
+                      key: Key(keyUserProfileLockIconSource),
                     ),
                     ListGroupHeader(
                       text: "",
@@ -249,18 +261,21 @@ class _ProfileState extends State<UserProfile> {
                       text: L10n.get(L.settingItemAboutTitle),
                       iconBackground: CustomTheme.of(context).aboutIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.about),
+                      key: Key(keyUserProfileInfoIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.feedback,
                       text: L10n.get(L.settingItemFeedbackTitle),
                       iconBackground: CustomTheme.of(context).feedbackIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.feedback),
+                      key: Key(keyUserProfileFeedbackIconSource),
                     ),
                     SettingsItem(
                       icon: IconSource.bugReport,
                       text: L10n.get(L.settingItemBugReportTitle),
                       iconBackground: CustomTheme.of(context).bugReportIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.bugReport),
+                      key: Key(keyUserProfileBugReportIconSource),
                     ),
                     if (!isRelease())
                       SettingsItem(
@@ -274,8 +289,8 @@ class _ProfileState extends State<UserProfile> {
               ),
             ),
         );
-      
-    
+
+
   }
 
   _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {

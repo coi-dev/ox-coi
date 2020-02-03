@@ -206,13 +206,13 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void _signIn() {
-    _closeError();
     FocusScope.of(context).requestFocus(FocusNode());
     bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
     var email = emailField.controller.text;
     var password = passwordField.controller.text;
 
     if (simpleLoginIsValid) {
+      _closeError();
       _progressOverlayEntry = FullscreenOverlay(
         fullscreenProgress: FullscreenProgress(
           bloc: _loginBloc,

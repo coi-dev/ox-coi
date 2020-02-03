@@ -188,11 +188,10 @@ class SaveDataButton extends StatelessWidget {
     return AdaptiveIconButton(
       icon: AdaptiveIcon(
         icon: IconSource.check,
-        key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
       ),
       onPressed: () {
         _saveData(context);
-      },
+      },key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
     );
   }
 

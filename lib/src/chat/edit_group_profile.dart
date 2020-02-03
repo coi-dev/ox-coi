@@ -90,7 +90,7 @@ class _EditGroupProfileState extends State<EditGroupProfile> {
           actions: <Widget>[
             AdaptiveIconButton(
               icon: AdaptiveIcon(icon: IconSource.check),
-              key: Key(keyUserSettingsCheckIconButton),
+              key: Key(keyEditGroupProfilAdaptiveIconIconSource),
               onPressed: _saveChanges,
             )
           ],
@@ -112,6 +112,7 @@ class _EditGroupProfileState extends State<EditGroupProfile> {
                 avatar: _avatarPath,
                 imageChangedCallback: _setAvatar,
                 placeholder: L10n.get(L.name),
+                key: Key(keyEditNameEditableProfileHeader),
               );
             } else {
               return Container();

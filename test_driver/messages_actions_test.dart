@@ -61,11 +61,16 @@ import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Test messages fonctionslity', () {
-    final setup = Setup();
-    setup.perform();
-    final driver = setup.driver;
+  FlutterDriver driver;
+  setUpAll(() async {
+    driver = await setupAndGetDriver();
+  });
 
+  tearDownAll(() async {
+    await teardownDriver(driver);
+  });
+
+  group('Test messages fonctionslity', () {
     final flagUnFlag = L.getKey(L.messageActionFlagUnflag);
     final forward = L.getKey(L.messageActionForward);
     final textToDelete = 'Text to delete';
@@ -96,20 +101,20 @@ void main() {
     test(': Flagged messages from  meChat.', () async {
       await flaggedMessage(driver, flagUnFlag, helloWorldFinder);
       await driver.tap(pageBack);
-      await navigateTo(driver, L.getPluralKey(L.chatP));
-     });
+      await navigateTo(driver, L.getKey(L.profile));
+    });
 
     test(': UnFlagged messages.', () async {
       await unFlaggedMessage(driver, flagUnFlag, helloWorld);
       await driver.waitForAbsent(helloWorldFinder);
       await driver.tap(pageBack);
+      await navigateTo(driver, L.getPluralKey(L.chatP));
       await driver.tap(meContactFinder);
     });
 
     test(': Forward message.', () async {
       await forwardMessageTo(driver, newTestName01, forward);
-      var actualMessage = await driver.getText(helloWorldFinder);
-      expect(actualMessage, helloWorld);
+      expect(await driver.getText(helloWorldFinder), helloWorld);
       await driver.tap(pageBack);
       await driver.tap(meContactFinder);
     });

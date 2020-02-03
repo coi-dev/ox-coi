@@ -66,18 +66,18 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   ValidatableTextFormField emailField;
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => L10n.get(L.password),
-    key: Key(keySettingsManuelFormValidatableTextFormFieldPasswordField),
     textFormType: TextFormType.password,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
+    key: Key(keySettingsManuelFormValidatableTextFormFieldPasswordField),
   );
   ValidatableTextFormField imapLoginNameField = ValidatableTextFormField(
     (context) => L10n.get(L.settingIMAPName),
   );
   ValidatableTextFormField imapServerField = ValidatableTextFormField(
     (context) => L10n.get(L.settingIMAPServer),
-    key: Key(keySettingsManuelFormValidatableTextFormFieldImapServerField),
     inputType: TextInputType.url,
+    key: Key(keySettingsManuelFormValidatableTextFormFieldImapServerField),
   );
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
     (context) => L10n.get(L.settingIMAPPort),
@@ -164,7 +164,9 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
       },
       child: BlocBuilder<SettingsManualFormBloc, SettingsManualFormState>(
         builder: (context, state) {
-          if (state is SettingsManualFormStateReady || state is SettingsManualFormStateValidation || state is SettingsManualFormStateValidationSuccess) {
+          if (state is SettingsManualFormStateReady ||
+              state is SettingsManualFormStateValidation ||
+              state is SettingsManualFormStateValidationSuccess) {
             return Form(
               key: formKey,
               child: Column(

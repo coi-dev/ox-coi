@@ -257,7 +257,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         _unregisterListeners();
         add(MessageUpdated(messageStateData: messageStateData));
       } else if (event.hasType(Event.msgsChanged) && state is MessageItemStateSuccess) {
-        var flagged = await _messageListRepository.get(eventMessageId).isStarred();
+        var flagged = await _messageListRepository.get(eventMessageId)?.isStarred();
         add((MessageUpdated(messageStateData: (state as MessageItemStateSuccess).messageStateData.copyWith(isFlagged: flagged))));
       }
     }

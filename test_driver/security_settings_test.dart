@@ -54,24 +54,31 @@
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Security test.', () {
-    final setup = Setup();
-    setup.perform();
-    final driver = setup.driver;
+  FlutterDriver driver;
+  setUpAll(() async {
+    driver = await setupAndGetDriver();
+  });
 
+  tearDownAll(() async {
+    await teardownDriver(driver);
+  });
+
+  group('Security test.', () {
     final security = L.getKey(L.security);
     final expertImportKeys = L.getKey(L.settingImportKeys);
     final expertExportKeys = L.getKey(L.settingExportKeys);
 
     test(': Get profile setting security.', () async {
       await driver.tap(profileFinder);
-      await driver.tap(userProfileSettingsAdaptiveIconFinder);
+      await driver.scroll(find.byValueKey(keyUserProfileDarkModeIconSource), 0.0, -600, Duration(milliseconds: 500));
+      await driver.tap(find.byValueKey(keyUserProfileLockIconSource));
       await driver.tap(find.text(security));
     });
 
@@ -88,6 +95,6 @@ void main() {
     test(': Test import keys.', () async {
       await driver.tap(find.text(expertImportKeys));
       await driver.tap(find.text(L.getKey(L.ok)));
-    });
-  }, skip: "Currently not reliable");
+    }, timeout: Timeout(Duration(seconds: 60)));
+  });
 }

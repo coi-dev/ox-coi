@@ -57,6 +57,7 @@ import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/web/web_asset.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'login_provider_list.dart';
 
@@ -174,6 +175,7 @@ class _LoginState extends State<Login> {
                                   child: Text(
                                     L10n.get(L.loginSignIn).toUpperCase(),
                                     textAlign: TextAlign.center,
+                                    key: Key(keyLoginLoginSignInText),
                                   ),
                                 ),
                               ),
@@ -187,6 +189,7 @@ class _LoginState extends State<Login> {
                                 child: Text(
                                   L10n.get(L.register).toUpperCase(),
                                   style: TextStyle(color: CustomTheme.of(context).accent),
+                                  key: Key(keyLoginRegisterText),
                                 ),
                                 onPressed: () {
                                   _goToProviderList(ProviderListType.register);

@@ -57,6 +57,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
@@ -136,6 +137,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     child: ProfileHeader(),
                   ),
                   SettingsItem(
+                    key: Key(keyContactDetailOpenChatProfileActionIcon),
                     icon: IconSource.chat,
                     text: L10n.get(L.chatOpen),
                     iconBackground: CustomTheme.of(context).chatIcon,
@@ -150,6 +152,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                         _settingsItemTapped(context, SettingsItemName.flagged),
                   ),
                   SettingsItem(
+                    key: Key(keyUserProfileBlockIconSource),
                     icon: IconSource.block,
                     text: L10n.get(L.contactBlock),
                     iconBackground: CustomTheme.of(context).serverSettingsIcon,
@@ -177,6 +180,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     text: "",
                   ),
                   SettingsItem(
+                    key: Key(keyContactDetailDeleteContactProfileActionIcon),
                     icon: IconSource.delete,
                     text: L10n.get(L.contactDelete),
                     textColor: CustomTheme.of(context).error,

@@ -51,11 +51,16 @@ import 'setup/global_consts.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Test navigation tests.', () {
-    final setup = Setup();
-    setup.perform();
-    final driver = setup.driver;
+  FlutterDriver driver;
+  setUpAll(() async {
+    driver = await setupAndGetDriver();
+  });
 
+  tearDownAll(() async {
+    await teardownDriver(driver);
+  });
+
+  group('Test navigation tests.', () {
     test(': Test chat navigation.', () async {
       await driver.tap(profileFinder);
       await driver.tap(contactsFinder);
@@ -79,11 +84,9 @@ void main() {
 }
 
 Future checkProfile(FlutterDriver driver) async {
-  SerializableFinder settingsUserSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUserSettingsUsernameLabel);
-  SerializableFinder finderUserProfileEditRaisedButton = find.byValueKey(keyUserProfileEditProfileRaisedButton);
+  SerializableFinder settingsUserSettingsUsernameLabelFinder = find.byValueKey(keyUserSettingsUsernameLabel);
+  SerializableFinder finderUserProfileEditRaisedButton = find.byValueKey(keyProfileHeaderAdaptiveIconButton);
   await driver.tap(profileFinder);
-  var actualUsernamePlaceholder = await driver.getText(find.text(L.getKey(L.profileNoUsername)));
-  expect(actualUsernamePlaceholder, L.getKey(L.profileNoUsername));
   await driver.tap(finderUserProfileEditRaisedButton);
   await driver.tap(settingsUserSettingsUsernameLabelFinder);
   await driver.tap(userSettingsCheckIconButtonFinder);
@@ -93,12 +96,8 @@ Future checkProfile(FlutterDriver driver) async {
 
 Future checkChat(FlutterDriver driver) async {
   final chatCreate = L.getKey(L.chatCreate);
-  //  Check flaggedButton.
-  await driver.tap(find.byValueKey(keyChatListGetFlaggedActionIconButton));
-  await driver.tap(pageBack);
   await driver.tap(createChatFinder);
-  var actualNewChatName = await driver.getText(find.text(chatCreate));
-  expect(actualNewChatName, chatCreate);
+  expect(await driver.getText(find.text(chatCreate)), chatCreate);
   //  Check newContact.
   await driver.tap(pageBack);
   //  Check searchChat
@@ -109,7 +108,7 @@ Future checkChat(FlutterDriver driver) async {
 
 Future checkContact(FlutterDriver driver, String newTestName) async {
   await driver.tap(contactsFinder);
-  await driver.waitForAbsent(cancelFinder);
+  //  await driver.waitForAbsent(cancelFinder);
   await driver.tap(personAddFinder);
   await driver.tap(find.byValueKey(keyContactChangeCloseIconButton));
   var actualNewContactName = await driver.getText(find.text(newTestName));
@@ -118,11 +117,7 @@ Future checkContact(FlutterDriver driver, String newTestName) async {
   //  Check import contact.
   await driver.tap(find.byValueKey(keyContactListImportContactIconButton));
   await driver.tap(cancelFinder);
-  //  Check blocked.
-  await driver.tap(find.byValueKey(keyContactListBlockIconButton));
-  var actualBlockedContactListPlaceholder = await driver.getText(find.text(L.getKey(L.contactNoBlocked)));
-  expect(actualBlockedContactListPlaceholder, L.getKey(L.contactNoBlocked));
-  await driver.tap(find.byValueKey(keyContactBlockedListCloseIconButton));
+
   //  Check Search.
   await driver.tap(find.byValueKey(keyContactListSearchIconButton));
   expect(actualNewContactName, newTestName);

@@ -75,7 +75,7 @@ const mailCom = 'Mail.com';
 
 const helloWorld = 'Hello world';
 
-final typeSomethingComposePlaceholderFinder = find.byValueKey( L.getKey(L.typeSomething));
+final typeSomethingComposePlaceholderFinder = find.byValueKey(L.getKey(L.typeSomething));
 
 final profileFinder = find.text(L.getKey(L.profile));
 
@@ -95,28 +95,11 @@ final createChatFinder = find.byValueKey(keyChatListChatFloatingActionButton);
 
 final personAddFinder = find.byValueKey(keyContactListPersonAddFloatingActionButton);
 
-final userProfileEditRaisedButtonFinder = find.byValueKey(keyUserProfileEditProfileRaisedButton);
-
 final userSettingsCheckIconButtonFinder = find.byValueKey(keyUserSettingsCheckIconButton);
-
-final positiveFinder = find.byValueKey(keyConfirmationDialogPositiveButton);
 
 final keyContactChangeNameFinder = find.byValueKey(keyContactChangeNameValidatableTextFormField);
 
-final keyContactChangeEmailFinder = find.byValueKey(keyContactChangeEmailValidatableTextFormField);
-
 final keyContactChangeCheckFinder = find.byValueKey(keyContactChangeCheckIconButton);
 
-final keyDialogBuilderAlertDialogOkFlatButtonFinder = find.byValueKey(keyInformationDialogPositiveButton);
 
-final userProfileEmailTextFinder = find.byValueKey(keyUserProfileEmailText);
 
-final userProfileSettingsAdaptiveIconFinder = find.byValueKey(keyUserProfileSettingsAdaptiveIcon);
-
-final userAccountAdaptiveIconButtonIconCheckFinder = find.byValueKey(keyUserAccountAdaptiveIconButtonIconCheck);
-
-final settingsManuelFormValidatableTextFormFieldPasswordFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldPasswordField);
-
-final settingsManuelFormValidatableTextFormFieldImapServerFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldImapServerField);
-
-final settingsManuelFormValidatableTextFormFieldSMTPServerField = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldSMTPServerField);

@@ -93,21 +93,21 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
     return Scaffold(
       appBar: AdaptiveAppBar(
         leadingIcon: AdaptiveIconButton(
-          key: Key(keyChatAddGroupParticipantsCloseIcon),
           icon: AdaptiveIcon(
             icon: IconSource.close,
           ),
           onPressed: () => navigation.pop(context),
+          key: Key(keyChatAddGroupParticipantsCloseIcon),
         ),
         title: Text(L10n.get(L.participantAdd)),
         actions: <Widget>[
           getSearchAction(),
           AdaptiveIconButton(
-            key: Key(keyChatAddGroupParticipantsCheckIcon),
             icon: AdaptiveIcon(
-                icon: IconSource.check,
+              icon: IconSource.check,
             ),
             onPressed: () => _onSubmit(),
+            key: Key(keyChatAddGroupParticipantsCheckIcon),
           )
         ],
       ),
@@ -122,11 +122,9 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       onClose: onSearchClose,
     );
     return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-          icon: IconSource.search
-      ),
-      key: Key(keyChatAddGroupParticipantsSearchIcon),
+      icon: AdaptiveIcon(icon: IconSource.search),
       onPressed: () => search.show(context),
+      key: Key(keyChatAddGroupParticipantsSearchIcon),
     );
   }
 
@@ -157,9 +155,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );

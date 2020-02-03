@@ -55,6 +55,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
@@ -117,8 +118,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         icon: IconSource.flag,
                         text: L10n.get(L.settingItemFlaggedTitle),
                         iconBackground: CustomTheme.of(context).flagIcon,
-                        onTap: () => _settingsItemTapped(
-                            context, SettingsItemName.flagged),
+                        onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
                       ),
                       ListGroupHeader(
                         text: L10n.get(L.settingP),
@@ -126,29 +126,21 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                       SettingsItem(
                         icon: IconSource.notifications,
                         text: L10n.get(L.settingItemNotificationsTitle),
-                        iconBackground:
-                            CustomTheme.of(context).notificationIcon,
-                        onTap: () => _settingsItemTapped(
-                            context, SettingsItemName.notification),
+                        iconBackground: CustomTheme.of(context).notificationIcon,
+                        onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
                       ),
                       ListGroupHeader(
-                        text: L10n.getFormatted(
-                            L.participantXP, [state.contactIds.length],
-                            count: state.contactIds.length),
+                        text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
                       ),
                       Visibility(
                         visible: !chatState.isRemoved,
                         child: SettingsItem(
                           icon: IconSource.groupAdd,
                           text: L10n.get(L.participantAdd),
+                          key: Key(keyChatProfileGroupAddParticipant),
                           iconBackground: CustomTheme.of(context).accent,
-                          onTap: () => _navigation.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChatAddGroupParticipants(
-                                          chatId: widget.chatId,
-                                          contactIds: state.contactIds))),
+                          onTap: () => _navigation.push(context,
+                              MaterialPageRoute(builder: (context) => ChatAddGroupParticipants(chatId: widget.chatId, contactIds: state.contactIds))),
                         ),
                       ),
                       _buildGroupMemberList(state, chatState.isRemoved),
@@ -157,8 +149,8 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         text: L10n.get(L.groupLeave),
                         iconBackground: CustomTheme.of(context).error,
                         textColor: CustomTheme.of(context).error,
-                        onTap: () => showActionDialog(
-                            context, ProfileActionType.leave, _leaveGroup),
+                        onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
+                        key: Key(keyChatProfileGroupDelete),
                       ),
                     ],
                   );
@@ -204,12 +196,10 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   }
 
   _editPhotoCallback(String avatarPath) {
-    _chatChangeBloc
-        .add(SetImagePath(chatId: widget.chatId, newPath: avatarPath));
+    _chatChangeBloc.add(SetImagePath(chatId: widget.chatId, newPath: avatarPath));
   }
 
-  ListView _buildGroupMemberList(
-      ContactListStateSuccess state, bool isRemoved) {
+  ListView _buildGroupMemberList(ContactListStateSuccess state, bool isRemoved) {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               height: 0.0,
@@ -221,11 +211,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         itemBuilder: (BuildContext context, int index) {
           var contactId = state.contactIds[index];
           var key = "$contactId-${state.contactLastUpdateValues[index]}";
-          return ChatProfileGroupContactItem(
-              chatId: widget.chatId,
-              contactId: contactId,
-              showMoreButton: !isRemoved,
-              key: key);
+          return ChatProfileGroupContactItem(chatId: widget.chatId, contactId: contactId, showMoreButton: !isRemoved, key: key);
         });
   }
 
@@ -242,6 +228,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         builder: (context) {
           return BlocProvider.value(
             value: _chatBloc,
+            key: Key(keyChatProfileGroupEditIcon),
             child: EditGroupProfile(
               chatId: widget.chatId,
             ),

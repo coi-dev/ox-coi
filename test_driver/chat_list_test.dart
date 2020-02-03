@@ -42,17 +42,23 @@
 
 // Imports the Flutter Driver API.
 import 'package:test/test.dart';
+import 'package:flutter_driver/flutter_driver.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Test create chat list', () {
-    final setup = Setup();
-    setup.perform();
-    final driver = setup.driver;
+  FlutterDriver driver;
+  setUpAll(() async {
+    driver = await setupAndGetDriver();
+  });
 
+  tearDownAll(() async {
+    await teardownDriver(driver);
+  });
+
+  group('Test create chat list', () {
     const searchString = 'Douglas0';
 
     test(': Add three chats.', () async {

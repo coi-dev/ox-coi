@@ -54,37 +54,45 @@
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
-import 'package:ox_coi/src/l10n/l.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
-  group('Test Add swipe to delete for chats test.', () {
-    final setup = Setup();
-    setup.perform();
-    final driver = setup.driver;
+  FlutterDriver driver;
+  setUpAll(() async {
+    driver = await setupAndGetDriver();
+  });
 
-    test(': Create a chat.', () async {
-      await createNewChat(
+  tearDownAll(() async {
+    await teardownDriver(driver);
+  });
+
+  group('Test: Add swipe to delete for contacts test', () {
+    final newTestName1Finder = find.text(newTestName01);
+
+    test(': Get contacts', () async {
+      await driver.tap(contactsFinder);
+      await driver.tap(cancelFinder);
+      var actualMeContact = await driver.getText(find.text(meContact));
+      expect(actualMeContact, meContact);
+    });
+
+    test(': Add one contact.', () async {
+      await addNewContact(
         driver,
-        newTestEmail04,
         newTestName01,
+        newTestEmail04,
       );
     });
 
-    test(': Test swipe and delete one chat.', () async {
-      await driver.scroll(find.text(newTestName01), -100, 0, Duration(milliseconds: 100));
-      await driver.tap(find.text(L.getKey(L.delete)));
-      await driver.waitForAbsent(find.text(newTestName01));
+    test(': Test Swipe one contact.', () async {
+      await driver.scroll(newTestName1Finder, -500, 0, Duration(milliseconds: 500));
     });
 
-    test(': Test navigate and check if everithing is okay.', () async {
-      await navigateTo(driver, L.getPluralKey(L.contactP));
-      await driver.tap(cancelFinder);
-      await navigateTo(driver, L.getPluralKey(L.chatP));
-      await driver.waitForAbsent(find.text(newTestName01));
+    test(': Test chat after swiping', () async {
+      await writeChatFromChat(driver);
     });
   });
 }

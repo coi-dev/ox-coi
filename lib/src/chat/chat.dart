@@ -292,7 +292,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   ),
                 AdaptiveIconButton(
                   icon: AdaptiveIcon(icon: IconSource.flag,),
-                  key: Key(keyChatListGetFlaggedActionIconButton),
+                  // TODO key: Key(keyChatListGetFlaggedActionIconButton),
                   onPressed: _onFlaggedPressed,
                   color: CustomTheme.of(context).onPrimary,
                 ),

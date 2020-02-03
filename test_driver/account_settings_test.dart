@@ -58,22 +58,31 @@ import 'package:test/test.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/main_test_setup.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 void main() {
-  group('Test account settings', () {
-    final setup = Setup();
-    setup.perform();
-    final driver = setup.driver;
+  FlutterDriver driver;
+  setUpAll(() async {
+    driver = await setupAndGetDriver();
+  });
 
+  tearDownAll(() async {
+    await teardownDriver(driver);
+  });
+
+  group('Test account settings', () {
     const fakeIMAPCoiServer = 'mobile-coi.open-xchange.comm';
     const fakeSMTPCoiServer = 'mobile-coi.open-xchange.comm';
     const realServer = 'mobile-coi.open-xchange.com';
+    final settingsManuelFormValidatableTextFormFieldPasswordFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldPasswordField);
+    final userAccountAdaptiveIconButtonIconCheckFinder = find.byValueKey(keyUserAccountAdaptiveIconButtonIconCheck);
+    final settingsManuelFormValidatableTextFormFieldImapServerFieldFinder =
+        find.byValueKey(keySettingsManuelFormValidatableTextFormFieldImapServerField);
 
-    test(': Open edit profile.', () async {
+    test(': Open profile', () async {
       await driver.tap(profileFinder);
-      await driver.tap(userProfileSettingsAdaptiveIconFinder);
-      await driver.tap(find.text(L.getKey(L.settingAccount)));
-      await driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
+      await driver.scroll(find.byValueKey(keyUserProfileDarkModeIconSource), 0.0, -600, Duration(milliseconds: 500));
+      await driver.tap(find.byValueKey(keyUserProfileServerSettingIconSource));
     });
 
     test(': Case real password and fake IMAP server.', () async {
@@ -104,7 +113,7 @@ void main() {
       await driver.enterText(realPassword);
       await driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
       await driver.enterText(realServer);
-      await driver.tap(settingsManuelFormValidatableTextFormFieldSMTPServerField);
+      await driver.tap(find.byValueKey(keySettingsManuelFormValidatableTextFormFieldSMTPServerField));
       await driver.enterText(realServer);
       await driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
     });
