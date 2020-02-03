@@ -52,13 +52,13 @@ class ContactItemSelectable extends StatefulWidget {
   final Function onTap;
   final bool isSelected;
 
-  ContactItemSelectable({@required this.contactId, @required this.onTap, @required this.isSelected, key, this.previousContactId}) : super(key: Key(key));
+  ContactItemSelectable({@required this.contactId, @required this.onTap, @required this.isSelected, Key key, this.previousContactId}) : super(key: key);
 
   @override
   _ContactItemSelectableState createState() => _ContactItemSelectableState();
 }
 
-class _ContactItemSelectableState extends State<ContactItemSelectable> with ContactItemBuilder {
+class _ContactItemSelectableState extends State<ContactItemSelectable> with ContactItemBuilder, AutomaticKeepAliveClientMixin<ContactItemSelectable> {
   ContactItemBloc _contactBloc = ContactItemBloc();
 
   @override
@@ -68,11 +68,16 @@ class _ContactItemSelectableState extends State<ContactItemSelectable> with Cont
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: _onContactTapped, isSelectable: true, isSelected: widget.isSelected);
   }
 
   _onContactTapped(String name, String email) {
     widget.onTap(widget.contactId);
   }
+
 }

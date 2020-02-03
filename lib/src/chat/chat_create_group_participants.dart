@@ -59,8 +59,6 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
@@ -77,6 +75,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   ContactListBloc _contactListBloc = ContactListBloc();
   Repository<Chat> chatRepository;
   Navigation navigation = Navigation();
+  var _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -159,26 +158,32 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   ListView buildListItems(ContactListStateSuccess state) {
-    return ListView.separated(
-      separatorBuilder: (context, index) => Divider(
-        height: dividerHeight,
-        color: CustomTheme.of(context).onBackground.withOpacity(barely),
-      ),
-      itemCount: state.contactIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        final contactId = state.contactIds[index];
-        final int previousContactId = (index > 0) ? state.contactIds[index - 1] : null;
-        final key = createKeyString(contactId, state.contactLastUpdateValues[index]);
-        final bool isSelected = state.contactsSelected.contains(contactId);
+    var contactIds = state.contactIds;
+    var contactLastUpdateValues = state.contactLastUpdateValues;
+    return ListView.custom(
+      controller: _scrollController,
+      childrenDelegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final contactId = state.contactIds[index];
+          final int previousContactId = (index > 0) ? state.contactIds[index - 1] : null;
+          final key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
+          final bool isSelected = state.contactsSelected.contains(contactId);
 
-        return ContactItemSelectable(
-          contactId: contactId,
-          previousContactId: previousContactId,
-          onTap: _itemTapped,
-          isSelected: isSelected,
-          key: key,
-        );
-      },
+          return ContactItemSelectable(
+            contactId: contactId,
+            previousContactId: previousContactId,
+            onTap: _itemTapped,
+            isSelected: isSelected,
+            key: key,
+          );
+        },
+        childCount: contactIds.length,
+        findChildIndexCallback: (Key key) {
+          final ValueKey valueKey = key;
+          final id = extractId(valueKey);
+          return (contactIds.contains(id) ? contactIds.indexOf(id) : null);
+        },
+      ),
     );
   }
 

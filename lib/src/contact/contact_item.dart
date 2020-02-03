@@ -98,6 +98,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: onContactTapped);
   }
 

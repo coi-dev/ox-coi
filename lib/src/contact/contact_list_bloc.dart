@@ -75,14 +75,14 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
         _currentSearch = null;
         _typeOrChatId = event.typeOrChatId;
         _registerListeners();
-        _setupContacts();
+        yield* _setupContacts();
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
     } else if (event is SearchContacts) {
       try {
         _currentSearch = event.query;
-        _searchContacts();
+        yield* _searchContacts();
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
@@ -99,7 +99,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
         contactsSelected: _contactsSelected,
       );
     } else if (event is ContactsSelectionChanged) {
-      _selectionChanged(event.id);
+      yield* _selectionChanged(event.id);
     }
   }
 
@@ -130,12 +130,11 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     add(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
   }
 
-  Future _setupContacts() async {
-    List<int> contactIs = await getIds(_typeOrChatId);
-    _contactRepository.update(ids: contactIs);
-    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(contactIs);
+  Stream<ContactListStateSuccess> _setupContacts() async* {
+    List<int> contactIds = await getIds(_typeOrChatId);
+    _contactRepository.update(ids: contactIds);
     var contactExtensionProvider = ContactExtensionProvider();
-    await Future.forEach(contactIs, (contactId) async {
+    await Future.forEach(contactIds, (contactId) async {
       var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
       if (contactExtension != null) {
         _contactRepository.get(contactId).set(ContactExtension.contactPhoneNumber, contactExtension.phoneNumbers);
@@ -143,20 +142,30 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     });
 
-    add(ContactsChanged(ids: contactIs, lastUpdates: lastUpdates));
+    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(contactIds);
+    yield ContactListStateSuccess(
+      contactIds: contactIds,
+      contactLastUpdateValues: lastUpdates,
+      contactsSelected: _contactsSelected,
+    );
   }
 
-  void _searchContacts() async {
+  Stream<ContactListStateSuccess> _searchContacts() async* {
     Context context = Context();
     List<int> contactIds = List.from(await context.getContacts(2, _currentSearch));
     List<int> lastUpdates = List();
     contactIds.forEach((contactId) {
       lastUpdates.add(_contactRepository.get(contactId).lastUpdate);
     });
-    add(ContactsSearched(ids: contactIds, lastUpdates: lastUpdates));
+
+    yield ContactListStateSuccess(
+      contactIds: contactIds,
+      contactLastUpdateValues: lastUpdates,
+      contactsSelected: _contactsSelected,
+    );
   }
 
-  void _selectionChanged(int id) {
+  Stream<ContactListStateSuccess> _selectionChanged(int id) async* {
     if (_contactsSelected.contains(id)) {
       _contactsSelected.remove(id);
     } else {
@@ -165,7 +174,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     if (isNullOrEmpty(_currentSearch)) {
       _onContactsChanged();
     } else {
-      _searchContacts();
+      yield* _searchContacts();
     }
   }
 }

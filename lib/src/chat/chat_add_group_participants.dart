@@ -172,7 +172,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       itemBuilder: (BuildContext context, int index) {
         if (!widget.contactIds.contains(state.contactIds[index])) {
           var contactId = state.contactIds[index];
-          var key = createKeyString(contactId, state.contactLastUpdateValues[index]);
+          var key = createKeyFromId(contactId, [state.contactLastUpdateValues[index]]);
           bool isSelected = state.contactsSelected.contains(contactId);
           return ContactItemSelectable(contactId: contactId, onTap: _itemTapped, isSelected: isSelected, key: key);
         } else {

@@ -99,7 +99,7 @@ class AvatarListItem extends StatelessWidget {
                 padding: EdgeInsets.only(
                     top: groupHeaderTopPaddingBig,
                     bottom: groupHeaderBottomPadding,
-                    left: groupHeaderHorizontalPadding * 2,
+                    left: groupHeaderHorizontalPadding,
                     right: groupHeaderHorizontalPadding),
                 fontWeightDelta: 2,
                 fontSizeDelta: 3,

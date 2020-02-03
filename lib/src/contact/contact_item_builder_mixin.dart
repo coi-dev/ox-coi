@@ -49,7 +49,6 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
-import 'package:ox_coi/src/widgets/list_group_header.dart';
 
 import 'contact_item_event_state.dart';
 
