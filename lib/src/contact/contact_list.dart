@@ -176,10 +176,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
   }
 
   handleContactImport(ContactImportState state) {
-    if (_progressOverlayEntry != null) {
-      _progressOverlayEntry.remove();
-      _progressOverlayEntry = null;
-    }
+    _progressOverlayEntry?.remove();
     if (state is ContactsImportSuccess) {
       requestValidContacts();
       String contactImportSuccess = L10n.get(L.contactImportSuccessful);
@@ -223,7 +220,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
                     var key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
                     return Dismissible(
                       key: key,
-                      confirmDismiss: (direction){
+                      confirmDismiss: (direction) {
                         createChatFromContact(context, contactId);
                         return Future.value(false);
                       },
@@ -299,12 +296,11 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
       content: content,
       positiveButton: importPositive,
       positiveAction: () {
-        _progressOverlayEntry = OverlayEntry(
-          builder: (context) => FullscreenProgress(
-            bloc: _contactListBloc,
-            text: L10n.get(L.contactImportRunning),
-          ),
-        );
+        _progressOverlayEntry = FullscreenOverlay(
+            fullscreenProgress: FullscreenProgress(
+          bloc: _contactListBloc,
+          text: L10n.get(L.contactImportRunning),
+        ));
         Overlay.of(context).insert(_progressOverlayEntry);
         _contactImportBloc.add(PerformImport());
       },

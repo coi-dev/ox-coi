@@ -84,7 +84,7 @@ class _ScanQrState extends State<ScanQr> {
         } else {
           showToast(L10n.get(L.errorProgressCanceled));
         }
-        _progressOverlayEntry.remove();
+        _progressOverlayEntry?.remove();
       } else if (state is QrStateFailure) {
         _qrCodeDetected = false;
 
@@ -144,22 +144,21 @@ class _ScanQrState extends State<ScanQr> {
   }
 
   void checkAndJoinQr(String qrString) {
-    _progressOverlayEntry = OverlayEntry(
-      builder: (context) =>
-          FullscreenProgress(
-            bloc: _qrBloc,
-            text: L10n.get(L.pleaseWait),
-            showProgressValues: false,
-            showCancelButton: true,
-            cancelPressed: _cancelPressed,
-          ),
+    _progressOverlayEntry = FullscreenOverlay(
+      fullscreenProgress: FullscreenProgress(
+        bloc: _qrBloc,
+        text: L10n.get(L.pleaseWait),
+        showProgressValues: false,
+        showCancelButton: true,
+        cancelPressed: _cancelPressed,
+      ),
     );
     Overlay.of(context).insert(_progressOverlayEntry);
     _qrBloc.add(CheckQr(qrText: qrString));
   }
 
   void _cancelPressed() {
-    _progressOverlayEntry.remove();
+    _progressOverlayEntry?.remove();
     _qrCodeDetected = false;
     _qrBloc.add(CancelQrProcess());
   }

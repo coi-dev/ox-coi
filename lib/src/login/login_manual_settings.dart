@@ -74,24 +74,20 @@ class LoginManualSettings extends StatefulWidget {
 
 class _LoginManualSettingsState extends State<LoginManualSettings> {
   OverlayEntry _progressOverlayEntry;
-  FullscreenProgress _progress;
   LoginBloc _loginBloc;
+  var _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
-    var navigation = Navigation();
-    navigation.current = Navigatable(Type.loginManualSettings);
+    _navigation.current = Navigatable(Type.loginManualSettings);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.listen((state) => handleLoginStateChange(state));
   }
 
   void handleLoginStateChange(LoginState state) {
     if (state is LoginStateSuccess || state is LoginStateFailure) {
-      if (_progressOverlayEntry != null) {
-        _progressOverlayEntry.remove();
-        _progressOverlayEntry = null;
-      }
+      _progressOverlayEntry?.remove();
     }
     if (state is LoginStateSuccess) {
       widget.success();
@@ -122,15 +118,14 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
       child: BlocListener<SettingsManualFormBloc, SettingsManualFormState>(
         listener: (BuildContext context, state) {
           if (state is SettingsManualFormStateValidationSuccess) {
-            _progress = FullscreenProgress(
-              bloc: _loginBloc,
-              text: L10n.get(L.loginRunning),
-              showProgressValues: true,
-              showCancelButton: false,
+            _progressOverlayEntry = FullscreenOverlay(
+              fullscreenProgress: FullscreenProgress(
+                bloc: _loginBloc,
+                text: L10n.get(L.loginRunning),
+                showProgressValues: true,
+              ),
             );
-            _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-            OverlayState overlayState = Overlay.of(context);
-            overlayState.insert(_progressOverlayEntry);
+            Overlay.of(context).insert(_progressOverlayEntry);
             _loginBloc.add(LoginButtonPressed(
               email: state.email,
               password: state.password,
@@ -146,51 +141,54 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
             ));
           }
         },
-        child: Scaffold(
-          appBar: AdaptiveAppBar(
-            title: Text(L10n.get(L.settingManual)),
-            actions: <Widget>[LoginButton()],
-          ),
-          body: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(loginManualSettingsPadding),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Visibility(
-                              visible: widget.fromError,
-                              child: Text(
-                                L10n.get(L.loginManualSetupRequired),
+        child: WillPopScope(
+          onWillPop: () async => _navigation.allowBackNavigation,
+          child: Scaffold(
+            appBar: AdaptiveAppBar(
+              title: Text(L10n.get(L.settingManual)),
+              actions: <Widget>[LoginButton()],
+            ),
+            body: Column(
+              children: <Widget>[
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(loginManualSettingsPadding),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Visibility(
+                                visible: widget.fromError,
+                                child: Text(
+                                  L10n.get(L.loginManualSetupRequired),
+                                ),
                               ),
-                            ),
-                            Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                            Text(
-                              L10n.get(L.loginCheckServer),
-                              textAlign: TextAlign.center,
-                            ),
-                            Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
-                            Text(
-                              L10n.get(L.loginWelcomeManual),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: loginVerticalPadding),
-                          child: SettingsManualForm(isLogin: true),
-                        ),
-                      ],
+                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                              Text(
+                                L10n.get(L.loginCheckServer),
+                                textAlign: TextAlign.center,
+                              ),
+                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                              Text(
+                                L10n.get(L.loginWelcomeManual),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: loginVerticalPadding),
+                            child: SettingsManualForm(isLogin: true),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

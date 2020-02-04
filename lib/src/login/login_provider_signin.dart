@@ -63,7 +63,6 @@ import 'login_events_state.dart';
 import 'login_manual_settings.dart';
 
 class ProviderSignIn extends StatefulWidget {
-
   final Provider provider;
   final Function success;
 
@@ -115,10 +114,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
       return;
     }
     if (state is LoginStateSuccess || state is LoginStateFailure) {
-      if (_progressOverlayEntry != null) {
-        _progressOverlayEntry.remove();
-        _progressOverlayEntry = null;
-      }
+      _progressOverlayEntry?.remove();
     }
     if (state is LoginStateSuccess) {
       widget.success();
@@ -146,11 +142,13 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AdaptiveAppBar(
-          title: Text(widget.provider.name),
-        ),
-        body: createProviderSignIn()
+    return WillPopScope(
+      onWillPop: () async => _navigation.allowBackNavigation,
+      child: Scaffold(
+          appBar: AdaptiveAppBar(
+            title: Text(widget.provider.name),
+          ),
+          body: createProviderSignIn()),
     );
   }
 
@@ -215,12 +213,11 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     var password = passwordField.controller.text;
 
     if (simpleLoginIsValid) {
-      _progressOverlayEntry = OverlayEntry(
-        builder: (context) => FullscreenProgress(
+      _progressOverlayEntry = FullscreenOverlay(
+        fullscreenProgress: FullscreenProgress(
           bloc: _loginBloc,
           text: L10n.get(L.loginRunning),
           showProgressValues: true,
-          showCancelButton: false,
         ),
       );
       Overlay.of(context).insert(_progressOverlayEntry);
@@ -229,10 +226,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   }
 
   void _closeError() {
-    if (_overlayEntry != null) {
-      _overlayEntry.remove();
-      _overlayEntry = null;
-    }
+    _overlayEntry?.remove();
   }
 
   void _showManualSettings() {

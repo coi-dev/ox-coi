@@ -112,7 +112,7 @@ class _ProfileState extends State<UserProfile> {
   UserChangeBloc _userChangeBloc = UserChangeBloc();
   Navigation navigation = Navigation();
   InviteBloc _inviteBloc = InviteBloc();
-  OverlayEntry _fullScreenOverlayEntry;
+  OverlayEntry _progressOverlayEntry;
   String _avatarPath = "";
 
   @override
@@ -127,7 +127,7 @@ class _ProfileState extends State<UserProfile> {
     return BlocListener(
       bloc: _inviteBloc,
       listener: (context, state) {
-        _fullScreenOverlayEntry.remove();
+        _progressOverlayEntry?.remove();
       },
       child: BlocBuilder(
           bloc: _userBloc,
@@ -332,7 +332,7 @@ class _ProfileState extends State<UserProfile> {
     }
   }
 
-  void _changeTheme() async{
+  void _changeTheme() async {
     ThemeKey actualKey = CustomTheme.instanceOf(context).actualThemeKey;
     var newTheme = actualKey == ThemeKey.DARK ? ThemeKey.LIGHT : ThemeKey.DARK;
     await setPreference(preferenceAppThemeKey, newTheme.toString());
@@ -361,13 +361,13 @@ class _ProfileState extends State<UserProfile> {
   }
 
   createInviteUrl() {
-    _fullScreenOverlayEntry = OverlayEntry(
-      builder: (context) => FullscreenProgress(
+    _progressOverlayEntry = FullscreenOverlay(
+      fullscreenProgress: FullscreenProgress(
         bloc: _inviteBloc,
         text: L10n.get(L.pleaseWait),
       ),
     );
-    Overlay.of(context).insert(_fullScreenOverlayEntry);
+    Overlay.of(context).insert(_progressOverlayEntry);
     _inviteBloc.add(CreateInviteUrl());
   }
 }

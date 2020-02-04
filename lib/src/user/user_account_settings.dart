@@ -43,6 +43,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -58,13 +61,9 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class UserAccountSettings extends StatefulWidget {
   @override
@@ -76,7 +75,6 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
   LoginBloc _loginBloc;
   Navigation _navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
-  FullscreenProgress _progress;
   bool _showedErrorDialog = false;
 
   @override
@@ -101,10 +99,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
 
   void handleLoginStateChange(LoginState state) {
     if (state is LoginStateSuccess || state is LoginStateFailure) {
-      if (_progressOverlayEntry != null) {
-        _progressOverlayEntry.remove();
-        _progressOverlayEntry = null;
-      }
+      _progressOverlayEntry?.remove();
     }
     if (state is LoginStateSuccess) {
       showToast(L10n.get(L.settingAccountChanged));
@@ -135,15 +130,14 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
       child: BlocListener<SettingsManualFormBloc, SettingsManualFormState>(
         listener: (BuildContext context, state) {
           if (state is SettingsManualFormStateValidationSuccess) {
-            _progress = FullscreenProgress(
-              bloc: _loginBloc,
-              text: L10n.get(L.loginRunning),
-              showProgressValues: true,
-              showCancelButton: false,
+            _progressOverlayEntry = FullscreenOverlay(
+              fullscreenProgress: FullscreenProgress(
+                bloc: _loginBloc,
+                text: L10n.get(L.loginRunning),
+                showProgressValues: true,
+              ),
             );
-            _progressOverlayEntry = OverlayEntry(builder: (context) => _progress);
-            OverlayState overlayState = Overlay.of(context);
-            overlayState.insert(_progressOverlayEntry);
+            Overlay.of(context).insert(_progressOverlayEntry);
             _userChangeBloc.add(
               UserAccountDataChanged(
                 imapLogin: state.imapLogin,
@@ -160,23 +154,26 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
             );
           }
         },
-        child: Scaffold(
-          appBar: AdaptiveAppBar(
-            leadingIcon: AdaptiveIconButton(
-              icon: AdaptiveIcon(
-                icon: IconSource.close,
+        child: WillPopScope(
+          onWillPop: () async => _navigation.allowBackNavigation,
+          child: Scaffold(
+            appBar: AdaptiveAppBar(
+              leadingIcon: AdaptiveIconButton(
+                icon: AdaptiveIcon(
+                  icon: IconSource.close,
+                ),
+                onPressed: () => _navigation.pop(context),
               ),
-              onPressed: () => _navigation.pop(context),
+              title: Text(L10n.get(L.settingAccount)),
+              actions: <Widget>[
+                SaveDataButton(),
+              ],
             ),
-            title: Text(L10n.get(L.settingAccount)),
-            actions: <Widget>[
-              SaveDataButton(),
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(loginManualSettingsPadding),
-              child: SettingsManualForm(isLogin: false),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(loginManualSettingsPadding),
+                child: SettingsManualForm(isLogin: false),
+              ),
             ),
           ),
         ),

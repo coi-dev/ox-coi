@@ -63,7 +63,7 @@ class QrCode extends StatefulWidget {
 
 class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
   TabController controller;
-  Navigation navigation = Navigation();
+  Navigation _navigation = Navigation();
 
   @override
   void initState() {
@@ -73,12 +73,15 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AdaptiveAppBar(
-        elevation: zero,
-        title: Text(L10n.get(L.qrProfile)),
+    return WillPopScope(
+      onWillPop: () async => _navigation.allowBackNavigation,
+      child: Scaffold(
+        appBar: AdaptiveAppBar(
+          elevation: zero,
+          title: Text(L10n.get(L.qrProfile)),
+        ),
+        body: buildBody(),
       ),
-      body: buildBody(),
     );
   }
 

@@ -98,6 +98,8 @@ class Navigation {
 
   Navigatable get current => _navigationStack.isEmpty ? null : _navigationStack.last;
 
+  bool allowBackNavigation = true;
+
   set current(Navigatable navigatable) {
     _logger.info("Set current: ${navigatable.tag}");
     _navigationStack.add(navigatable);

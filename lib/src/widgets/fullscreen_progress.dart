@@ -48,8 +48,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/base/bloc_progress_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+
+class FullscreenOverlay<T extends Bloc> extends OverlayEntry {
+  bool _isVisible = true;
+
+  FullscreenOverlay({FullscreenProgress fullscreenProgress}) : super(builder: (context) => fullscreenProgress) {
+    Navigation().allowBackNavigation = false;
+  }
+
+  @override
+  void remove() {
+    Navigation().allowBackNavigation = true;
+    if (_isVisible) {
+      _isVisible = false;
+      super.remove();
+    }
+  }
+}
 
 class FullscreenProgress<T extends Bloc> extends StatelessWidget {
   final String text;
@@ -75,45 +93,48 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         if (state is ProgressState && state.progress != null) {
           progress = state.progress;
         }
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            constraints: BoxConstraints.expand(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(CustomTheme.of(context).onSurface),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: verticalPadding),
-                  child: Center(
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onSurface),
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              constraints: BoxConstraints.expand(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(CustomTheme.of(context).onSurface),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: verticalPadding),
+                    child: Center(
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onSurface),
+                      ),
                     ),
                   ),
-                ),
-                if (showProgressValues)
-                  Padding(
-                    padding: EdgeInsets.only(top: verticalPaddingSmall),
-                    child: Text(
-                      buildDisplayableProgress(progress),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onSurface),
+                  if (showProgressValues)
+                    Padding(
+                      padding: EdgeInsets.only(top: verticalPaddingSmall),
+                      child: Text(
+                        buildDisplayableProgress(progress),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onSurface),
+                      ),
                     ),
-                  ),
-                if (showCancelButton)
-                  Padding(
-                    padding: EdgeInsets.only(top: verticalPaddingSmall),
-                    child: Container(
-                      child: RaisedButton(child: Text(L10n.get(L.cancel)), onPressed: cancelPressed),
-                    ),
-                  )
-              ],
+                  if (showCancelButton)
+                    Padding(
+                      padding: EdgeInsets.only(top: verticalPaddingSmall),
+                      child: Container(
+                        child: RaisedButton(child: Text(L10n.get(L.cancel)), onPressed: cancelPressed),
+                      ),
+                    )
+                ],
+              ),
             ),
           ),
         );

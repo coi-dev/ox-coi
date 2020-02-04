@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -60,7 +61,6 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class PasswordChanged extends StatefulWidget {
@@ -108,35 +108,35 @@ class _PasswordChangedState extends State<PasswordChanged> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener(
-              bloc: _passwordChangedBloc,
-              listener: (context, state) {
-                if (state is PasswordChangedDataLoaded) {
-                  emailField.controller.text = state.email;
-                }
-              }),
-          BlocListener(
-              bloc: _loginBloc,
-              listener: (context, state) {
-                if (state is LoginStateSuccess || state is LoginStateFailure) {
-                  if (_progressOverlayEntry != null) {
-                    _progressOverlayEntry.remove();
-                    _progressOverlayEntry = null;
+    return WillPopScope(
+      onWillPop: () async => _navigation.allowBackNavigation,
+      child: Scaffold(
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener(
+                bloc: _passwordChangedBloc,
+                listener: (context, state) {
+                  if (state is PasswordChangedDataLoaded) {
+                    emailField.controller.text = state.email;
                   }
-                }
-                if (state is LoginStateSuccess) {
-                  _passwordChangedBloc.add(ResetAuthenticationError());
-                  widget.passwordChangedCallback();
-                } else if (state is LoginStateFailure) {
-                  this._errorOverlayEntry = this._createErrorOverlayEntry();
-                  Overlay.of(context).insert(_errorOverlayEntry);
-                }
-              }),
-        ],
-        child: _createBody(),
+                }),
+            BlocListener(
+                bloc: _loginBloc,
+                listener: (context, state) {
+                  if (state is LoginStateSuccess || state is LoginStateFailure) {
+                    _progressOverlayEntry?.remove();
+                  }
+                  if (state is LoginStateSuccess) {
+                    _passwordChangedBloc.add(ResetAuthenticationError());
+                    widget.passwordChangedCallback();
+                  } else if (state is LoginStateFailure) {
+                    this._errorOverlayEntry = this._createErrorOverlayEntry();
+                    Overlay.of(context).insert(_errorOverlayEntry);
+                  }
+                }),
+          ],
+          child: _createBody(),
+        ),
       ),
     );
   }
@@ -261,12 +261,11 @@ class _PasswordChangedState extends State<PasswordChanged> {
     bool validated = formKey.currentState.validate();
     if (validated) {
       FocusScope.of(context).requestFocus(FocusNode());
-      _progressOverlayEntry = OverlayEntry(
-        builder: (context) => FullscreenProgress(
+      _progressOverlayEntry = FullscreenOverlay(
+        fullscreenProgress: FullscreenProgress(
           bloc: _loginBloc,
           text: L10n.get(L.loginRunning),
           showProgressValues: true,
-          showCancelButton: false,
         ),
       );
       Overlay.of(context).insert(_progressOverlayEntry);

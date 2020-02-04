@@ -40,8 +40,9 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -56,23 +57,20 @@ import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-
 class SettingsSecurity extends StatefulWidget {
   @override
   _SettingsSecurityState createState() => _SettingsSecurityState();
 }
 
 class _SettingsSecurityState extends State<SettingsSecurity> {
-  final Navigation navigation = Navigation();
+  final Navigation _navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
   SettingsSecurityBloc _settingsSecurityBloc = SettingsSecurityBloc();
-  bool _enableBack = true;
 
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.settingsSecurity);
+    _navigation.current = Navigatable(Type.settingsSecurity);
     _settingsSecurityBloc.listen((state) => _settingsSecurityStateChange(state));
   }
 
@@ -84,7 +82,6 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
 
   void _settingsSecurityStateChange(SettingsSecurityState state) {
     if (state is SettingsSecurityStateLoading) {
-      _enableBack = false;
       String text;
       if (state.type == SettingsSecurityType.importKeys) {
         text = L10n.get(L.settingKeyImportRunning);
@@ -93,21 +90,16 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
         text = L10n.get(L.settingKeyTransferRunning);
       }
-      _progressOverlayEntry = OverlayEntry(
-        builder: (context) => FullscreenProgress(
+      _progressOverlayEntry = FullscreenOverlay(
+        fullscreenProgress: FullscreenProgress(
           bloc: _settingsSecurityBloc,
           text: text,
           showProgressValues: false,
-          showCancelButton: false,
         ),
       );
       Overlay.of(context).insert(_progressOverlayEntry);
     } else if (state is SettingsSecurityStateSuccess || state is SettingsSecurityStateFailure) {
-      _enableBack = true;
-      if (_progressOverlayEntry != null) {
-        _progressOverlayEntry.remove();
-        _progressOverlayEntry = null;
-      }
+      _progressOverlayEntry?.remove();
       if (state is SettingsSecurityStateSuccess) {
         if (!isNullOrEmpty(state.setupCode)) {
           showNavigatableDialog(
@@ -122,13 +114,13 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
                   onPressed: () {
                     var toastText = L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.code)]);
                     copyToClipboardWithToast(text: state.setupCode, toastText: toastText);
-                    navigation.pop(context);
+                    _navigation.pop(context);
                   },
                 ),
                 new FlatButton(
                   child: new Text(L10n.get(L.ok)),
                   onPressed: () {
-                    navigation.pop(context);
+                    _navigation.pop(context);
                   },
                 ),
               ],
@@ -155,7 +147,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => _enableBack,
+      onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
           appBar: AdaptiveAppBar(
             title: Text(L10n.get(L.security)),

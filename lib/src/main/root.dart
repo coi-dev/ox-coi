@@ -108,6 +108,7 @@ class _RootState extends State<Root> {
       ),
       backgroundColor: CustomTheme.of(context).background,
       body: WillPopScope(
+        onWillPop: _onWillPop,
         child: MultiBlocListener(
           listeners: [
             BlocListener<LifecycleBloc, LifecycleState>(
@@ -200,7 +201,6 @@ class _RootState extends State<Root> {
           ],
           child: ViewSwitcher(child),
         ),
-        onWillPop: _onWillPop,
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -224,6 +224,9 @@ class _RootState extends State<Root> {
   }
 
   Future<bool> _onWillPop() {
+    if (!_navigation.allowBackNavigation) {
+      return Future.value(false);
+    }
     if (_selectedIndex != 0) {
       setState(() {
         _selectedIndex = 0;
