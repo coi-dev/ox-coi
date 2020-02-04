@@ -75,13 +75,14 @@ class SettingsItem extends StatelessWidget {
   final Function onSwitchChanged;
 
   SettingsItem({
+    Key key,
     @required this.icon,
     @required this.iconBackground,
     @required this.text,
     @required this.onTap,
     this.showSwitch = false,
     this.onSwitchChanged,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
