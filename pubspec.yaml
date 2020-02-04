@@ -55,6 +55,7 @@ dependencies:
   superellipse_shape: ^0.1.5
   transparent_image: ^1.0.0
   url_launcher: ^5.4.1
+  vibrate: ^0.0.4
   video_player: ^0.10.5+2
   qr_flutter: ^3.2.0
   qr_mobile_vision:

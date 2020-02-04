@@ -48,7 +48,7 @@ const formatterDateAndTime = [dd, '.', mm, '.', yyyy, ' - ', HH, ':', nn];
 const formatterTime = [HH, ':', nn];
 const formatterDate = [dd, '.', mm];
 const formatterDateLong = [dd, '. ', MM];
-const formatterTimer = [nn, ':', ss, ':', SSS];
+const formatterTimer = [nn, ':', ss,];
 const formatterVideoTime = [n, ':', ss];
 const formatterDateTimeFile = [yy, '-', mm, '-', dd, '_', HH, '-', nn, '-', ss];
 

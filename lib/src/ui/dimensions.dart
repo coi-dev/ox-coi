@@ -94,6 +94,8 @@ const iconDismissiblePadding = 20.0;
 const composerHorizontalPadding = 8.0;
 const composerTextFieldPadding = 8.0;
 const composeTextBorderRadius = 24.0;
+const composerMessagePadding = 56.0;
+const messageListPadding = 8.0;
 
 // Chat profile
 const chatProfileDividerPadding = 8.0;
@@ -204,3 +206,6 @@ const errorBannerPositionLeft = 0.0;
 const errorBannerPositionRight = 0.0;
 const errorBannerPositionTop = 24.0;
 const errorBannerElevation = 4.0;
+
+//Voice Recording
+const audioPlaybackTopPadding = 30.0;

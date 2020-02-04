@@ -248,10 +248,10 @@ class _ChatListState extends State<ChatList> {
             findChildIndexCallback: (Key key) {
               final ValueKey valueKey = key;
               var id = extractId(valueKey);
-              if(state.chatListItemWrapper.ids.contains(id)) {
+              if (state.chatListItemWrapper.ids.contains(id)) {
                 var indexOf = state.chatListItemWrapper.ids.indexOf(id);
                 return indexOf;
-              }else{
+              } else {
                 return null;
               }
             }));

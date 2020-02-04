@@ -108,6 +108,8 @@ enum IconSource {
   signature,
   serverSetting,
   feedback,
+  openLock,
+  stopPlay,
   logout,
   iosChevron,
 }
@@ -175,6 +177,8 @@ const iconData = {
   IconSource.signature: Icons.gesture,
   IconSource.serverSetting: Icons.router,
   IconSource.feedback: Icons.feedback,
+  IconSource.openLock : Icons.lock_open,
+  IconSource.stopPlay : Icons.stop,
   IconSource.iosChevron: CupertinoIcons.right_chevron,
   IconSource.logout: Icons.exit_to_app,
 };

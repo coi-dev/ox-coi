@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -60,6 +61,91 @@ class CurvePainter extends CustomPainter {
     path.close();
 
     canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class BarPainter extends CustomPainter {
+  final List<double> peakLevel;
+  final Function callback;
+  final Color color;
+  double barWidth;
+  double spaceWidth = 1.0;
+
+  BarPainter({@required this.peakLevel, @required this.callback, @required this.color, this.barWidth = 2.0});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill
+      ..strokeWidth = barWidth;
+
+    var x = 0.0;
+    var y = 0.0;
+    var height = 30.0;
+
+    peakLevel?.forEach((peak) {
+      y = peak > height ? y : peak;
+      canvas.drawLine(Offset(x, y), Offset(x, -y), paint);
+      x = (x + barWidth + spaceWidth);
+    });
+
+    if (x >= size.width) {
+      var cutoff = x - size.width;
+
+      int cutoffIndex = (cutoff / (barWidth + spaceWidth)).round();
+
+      callback(true, cutoffIndex);
+    } else {
+      callback(false, 1);
+    }
+  }
+
+  @override
+  bool shouldRepaint(BarPainter oldDelegate) {
+    return true;
+  }
+}
+
+class HorizontalLinePainter extends CustomPainter {
+  Paint _paint;
+
+  HorizontalLinePainter({@required color}) {
+    _paint = Paint()
+      ..color = color
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawLine(Offset(0.0, 0.0), Offset(size.width, 0.0), _paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class VerticalLinePainter extends CustomPainter {
+  Paint _paint;
+
+  VerticalLinePainter({@required color}) {
+    _paint = Paint()
+      ..color = color
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawLine(Offset(0.0, 10.0), Offset(0.0, -10.0), _paint);
   }
 
   @override
