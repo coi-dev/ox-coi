@@ -47,9 +47,10 @@ abstract class ContactItemEvent {}
 
 class RequestContact extends ContactItemEvent {
   final int contactId;
+  final int previousContactId;
   final int typeOrChatId;
 
-  RequestContact({@required this.contactId, @required this.typeOrChatId});
+  RequestContact({@required this.contactId, this.previousContactId, @required this.typeOrChatId});
 }
 
 class ContactLoaded extends ContactItemEvent {
@@ -59,8 +60,9 @@ class ContactLoaded extends ContactItemEvent {
   final bool isVerified;
   final String imagePath;
   final String phoneNumbers;
+  final String headerText;
 
-  ContactLoaded({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath, this.phoneNumbers});
+  ContactLoaded({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath, this.phoneNumbers, this.headerText});
 }
 
 abstract class ContactItemState {}
@@ -76,8 +78,9 @@ class ContactItemStateSuccess extends ContactItemState {
   final bool isVerified;
   final String imagePath;
   final String phoneNumbers;
+  final String headerText;
 
-  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath, this.phoneNumbers});
+  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath, this.phoneNumbers, this.headerText});
 }
 
 class ContactItemStateFailure extends ContactItemState {

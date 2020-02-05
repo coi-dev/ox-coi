@@ -59,6 +59,7 @@ const listItemHeight = 72.0;
 const listItemPaddingBig = 16.0;
 const listItemPadding = 16.0;
 const listItemPaddingSmall = 4.0;
+const listItemHeaderFontSize = 16.0;
 const listAvatarRadius = 20.0;
 const listAvatarDiameter = listAvatarRadius * 2;
 const listAvatarTextPadding = 16.0;
@@ -124,6 +125,7 @@ const formVerticalPadding = 16.0;
 
 //GroupHeader
 const groupHeaderTopPadding = 16.0;
+const groupHeaderTopPaddingBig = 24.0;
 const groupHeaderHorizontalPadding = 16.0;
 const groupHeaderBottomPadding = 8.0;
 

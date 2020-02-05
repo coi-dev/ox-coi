@@ -149,9 +149,10 @@ class _ChatCreateState extends State<ChatCreate> {
             return buildNewContactAndAddGroup();
           } else {
             int adjustedIndex = index - offset;
-            var contactId = state.contactIds[adjustedIndex];
-            var key = createKeyFromId(contactId, [state.contactLastUpdateValues[adjustedIndex]]);
-            return ContactItem(contactId: contactId, contactItemType: ContactItemType.createChat, key: key);
+            final contactId = state.contactIds[adjustedIndex];
+            final int previousContactId = (adjustedIndex > 0) ? state.contactIds[adjustedIndex - 1] : null;
+            final key = createKeyFromId(contactId, [state.contactLastUpdateValues[adjustedIndex]]);
+            return ContactItem(contactId: contactId, previousContactId: previousContactId, contactItemType: ContactItemType.createChat, key: key);
           }
         });
   }

@@ -198,6 +198,7 @@ class L {
   static final contactGooglemailDialogContent = _translationKey("We detected a googlemail address. This leads to broken chats. We recommend to change the mail address to gmail.");
   static final contactGooglemailDialogPositiveButton = _translationKey("Change");
   static final contactGooglemailDialogNegativeButton = _translationKey("Don't change");
+  static final contactOwnCardGroupHeaderText = _translationKey("Own Card");
 
   static final coreMembers = _translationKey('%1\$d member(s)');
   static final coreContacts = _translationKey('%1\$d contact(s)');

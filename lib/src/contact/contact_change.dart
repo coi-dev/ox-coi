@@ -64,7 +64,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/group_header.dart';
+import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
@@ -316,7 +316,7 @@ class _ContactChangeState extends State<ContactChange> {
               visible: widget.contactAction == ContactAction.add,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: GroupHeader(text: L10n.get(L.qrAddContactHeader),) ,
+                child: ListGroupHeader(text: L10n.get(L.qrAddContactHeader),) ,
               ),
             ),
             Visibility(

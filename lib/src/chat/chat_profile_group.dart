@@ -180,7 +180,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
 
   ProfileData buildProfileImageAndTitle(ChatStateSuccess state) {
     return ProfileData(
-        imageBackgroundcolor: widget.chatColor,
+        imageBackgroundColor: widget.chatColor,
         text: state.name,
         textStyle: Theme.of(context).textTheme.title,
         iconData: state.isVerified ? IconSource.verifiedUser : null,

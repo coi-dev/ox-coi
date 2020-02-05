@@ -166,11 +166,14 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
       ),
       itemCount: state.contactIds.length,
       itemBuilder: (BuildContext context, int index) {
-        var contactId = state.contactIds[index];
-        var key = createKeyString(contactId, state.contactLastUpdateValues[index]);
-        bool isSelected = state.contactsSelected.contains(contactId);
+        final contactId = state.contactIds[index];
+        final int previousContactId = (index > 0) ? state.contactIds[index - 1] : null;
+        final key = createKeyString(contactId, state.contactLastUpdateValues[index]);
+        final bool isSelected = state.contactsSelected.contains(contactId);
+
         return ContactItemSelectable(
           contactId: contactId,
+          previousContactId: previousContactId,
           onTap: _itemTapped,
           isSelected: isSelected,
           key: key,

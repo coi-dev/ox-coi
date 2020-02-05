@@ -141,7 +141,7 @@ class _UserSettingsState extends State<UserSettings> {
             Align(
                 alignment: Alignment.center,
                 child: ProfileData(
-                  imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
+                  imageBackgroundColor: CustomTheme.of(context).onBackground.withOpacity(barely),
                   imageActionCallback: _setAvatar,
                   avatarPath: _avatar,
                   child: ProfileAvatar(),

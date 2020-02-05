@@ -48,6 +48,8 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
+import 'list_group_header.dart';
+
 class AvatarListItem extends StatelessWidget {
   final String title;
   final String subTitle;
@@ -63,147 +65,170 @@ class AvatarListItem extends StatelessWidget {
   final bool isVerified;
   final bool isInvite;
   final PopupMenuButton moreButton;
+  final String headerText;
 
-  AvatarListItem(
-      {@required this.title,
-      @required this.subTitle,
-      @required this.onTap,
-      this.isSelectable = false,
-      this.isSelected = false,
-      this.imagePath,
-      this.color,
-      this.freshMessageCount = 0,
-      this.titleIcon,
-      this.subTitleIcon,
-      this.timestamp = 0,
-      this.isVerified = false,
-      this.isInvite = false,
-      this.moreButton});
+  AvatarListItem({
+    @required this.title,
+    @required this.subTitle,
+    @required this.onTap,
+    this.isSelectable = false,
+    this.isSelected = false,
+    this.imagePath,
+    this.color,
+    this.freshMessageCount = 0,
+    this.titleIcon,
+    this.subTitleIcon,
+    this.timestamp = 0,
+    this.isVerified = false,
+    this.isInvite = false,
+    this.moreButton,
+    this.headerText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => onTap(title, subTitle),
       child: IntrinsicHeight(
-        child: Container(
-          decoration: BoxDecoration(
-            color: !isSelected ? CustomTheme.of(context).surface : CustomTheme.of(context).accent.withOpacity(barely),
-            border: Border(
-              bottom: BorderSide(
-                color: CustomTheme.of(context).onBackground.withOpacity(barely),
+        child: Column(
+          children: [
+            Visibility(
+              visible: headerText != null,
+              child: ListGroupHeader(
+                text: headerText,
+                padding: EdgeInsets.only(
+                    top: groupHeaderTopPaddingBig,
+                    bottom: groupHeaderBottomPadding,
+                    left: groupHeaderHorizontalPadding * 2,
+                    right: groupHeaderHorizontalPadding),
+                fontWeightDelta: 2,
+                fontSizeDelta: 3,
               ),
             ),
-          ),
-          padding: const EdgeInsets.all(listItemPadding),
-          child: Row(
-            children: <Widget>[
-              Avatar(
-                imagePath: imagePath,
-                textPrimary: title,
-                textSecondary: subTitle,
-                color: color,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: listAvatarTextPadding),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          titleIcon != null
-                              ? Padding(
-                                  padding: const EdgeInsets.only(right: iconTextPadding),
-                                  child: titleIcon,
-                                )
-                              : Container(),
-                          Expanded(child: shouldHighlight() ? getHighlightedTitle(context) : getTitle(context)),
-                          Visibility(
-                              visible: timestamp != null && timestamp != 0,
-                              child: Text(
-                                getChatListTime(timestamp),
-                                style: shouldHighlight()
-                                    ? Theme.of(context)
-                                        .textTheme
-                                        .caption
-                                        .copyWith(color: CustomTheme.of(context).onSurface, fontWeight: FontWeight.bold)
-                                    : Theme.of(context).textTheme.caption.copyWith(color: CustomTheme.of(context).onSurface),
-                              )),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Visibility(
-                            visible: subTitleIcon != null,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: iconTextPadding),
-                              child: subTitleIcon,
-                            ),
-                          ),
-                          Visibility(
-                            visible: isVerified,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: iconTextPadding),
-                              child: AdaptiveIcon(
-                                icon: IconSource.verifiedUser,
-                                size: iconSize,
-                              ),
-                            ),
-                          ),
-                          Expanded(child: getSubTitle(context)),
-                          Visibility(
-                            visible: isInvite,
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: iconSize,
-                              height: iconSize,
-                              decoration: BoxDecoration(
-                                  color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
-                              // TODO remove Colors.xyz call as soon as possible
-                              child: Text(
-                                "!",
-                                style: TextStyle(
-                                    color: CustomTheme.of(context).white, fontSize: listInviteUnreadIndicatorFontSize, fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          Visibility(
-                            visible: hasNewMessages(),
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: iconSize,
-                              height: iconSize,
-                              decoration: BoxDecoration(
-                                  color: CustomTheme.of(context).accent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
-                              child: Text(
-                                freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
-                                style: TextStyle(color: CustomTheme.of(context).onAccent, fontSize: listInviteUnreadIndicatorFontSize),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+            Container(
+              decoration: BoxDecoration(
+                color: !isSelected ? CustomTheme.of(context).surface : CustomTheme.of(context).accent.withOpacity(barely),
+                border: Border(
+                  bottom: BorderSide(
+                    color: CustomTheme.of(context).onBackground.withOpacity(barely),
                   ),
                 ),
               ),
-              Visibility(
-                visible: moreButton != null,
-                child: Container(child: moreButton),
+              padding: const EdgeInsets.all(listItemPadding),
+              child: Row(
+                children: <Widget>[
+                  Avatar(
+                    imagePath: imagePath,
+                    textPrimary: title,
+                    textSecondary: subTitle,
+                    color: color,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: listAvatarTextPadding),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              titleIcon != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(right: iconTextPadding),
+                                      child: titleIcon,
+                                    )
+                                  : Container(),
+                              Expanded(child: shouldHighlight() ? getHighlightedTitle(context) : getTitle(context)),
+                              Visibility(
+                                  visible: timestamp != null && timestamp != 0,
+                                  child: Text(
+                                    getChatListTime(timestamp),
+                                    style: shouldHighlight()
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .copyWith(color: CustomTheme.of(context).onSurface, fontWeight: FontWeight.bold)
+                                        : Theme.of(context).textTheme.caption.copyWith(color: CustomTheme.of(context).onSurface),
+                                  )),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Visibility(
+                                visible: subTitleIcon != null,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: iconTextPadding),
+                                  child: subTitleIcon,
+                                ),
+                              ),
+                              Visibility(
+                                visible: isVerified,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: iconTextPadding),
+                                  child: AdaptiveIcon(
+                                    icon: IconSource.verifiedUser,
+                                    size: iconSize,
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: getSubTitle(context)),
+                              Visibility(
+                                visible: isInvite,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: iconSize,
+                                  height: iconSize,
+                                  decoration: BoxDecoration(
+                                      color: Colors.orangeAccent, borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                                  // TODO remove Colors.xyz call as soon as possible
+                                  child: Text(
+                                    "!",
+                                    style: TextStyle(
+                                        color: CustomTheme.of(context).white,
+                                        fontSize: listInviteUnreadIndicatorFontSize,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: hasNewMessages(),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: iconSize,
+                                  height: iconSize,
+                                  decoration: BoxDecoration(
+                                      color: CustomTheme.of(context).accent,
+                                      borderRadius: BorderRadius.circular(listInviteUnreadIndicatorBorderRadius)),
+                                  child: Text(
+                                    freshMessageCount <= 99 ? freshMessageCount.toString() : "99+",
+                                    style: TextStyle(color: CustomTheme.of(context).onAccent, fontSize: listInviteUnreadIndicatorFontSize),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: moreButton != null,
+                    child: Container(child: moreButton),
+                  ),
+                  Visibility(
+                    visible: isSelectable,
+                    child: AdaptiveIcon(
+                      icon: isSelected ? IconSource.checkedCircle : IconSource.circle,
+                      size: iconSelectedSize,
+                      color: isSelected ? CustomTheme.of(context).accent : CustomTheme.of(context).onSurface,
+                    ),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: isSelectable,
-                child: AdaptiveIcon(
-                  icon: isSelected ? IconSource.checkedCircle : IconSource.circle,
-                  size: iconSelectedSize,
-                  color: isSelected ? CustomTheme.of(context).accent : CustomTheme.of(context).onSurface,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

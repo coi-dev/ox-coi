@@ -50,11 +50,12 @@ import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
-  Repository<Contact> _contactRepository;
-  int _contactId;
+  Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
 
   ContactItemBloc();
 
@@ -64,14 +65,15 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   @override
   Stream<ContactItemState> mapEventToState(ContactItemEvent event) async* {
     if (event is RequestContact) {
-      _contactId = event.contactId;
-      _contactRepository = RepositoryManager.get(RepositoryType.contact);
       yield ContactItemStateLoading();
+
       try {
-        _setupContact();
+        _setupContact(contactId: event.contactId, previousContactId: event.previousContactId);
+
       } catch (error) {
         yield ContactItemStateFailure(error: error.toString());
       }
+
     } else if (event is ContactLoaded) {
       yield ContactItemStateSuccess(
           name: event.name,
@@ -79,24 +81,34 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
           color: event.color,
           isVerified: event.isVerified,
           imagePath: event.imagePath,
-          phoneNumbers: event.phoneNumbers);
+          phoneNumbers: event.phoneNumbers,
+          headerText: event.headerText);
     }
   }
 
-  void _setupContact() async {
-    Contact contact = _contactRepository.get(_contactId);
-    String name = await contact.getName();
-    String email = await contact.getAddress();
-    int colorValue = await contact.getColor();
-    bool isVerified = await contact.isVerified();
+  void _setupContact({@required int contactId, @required int previousContactId}) async {
+    final Contact contact = _contactRepository.get(contactId);
+    final String name = await contact.getName();
+    final String email = await contact.getAddress();
+    final int colorValue = await contact.getColor();
+    final bool isVerified = await contact.isVerified();
+    final String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
+    final Color color = rgbColorFromInt(colorValue);
+
+    String headerText = name[0].toUpperCase();
+    if (previousContactId != null) {
+      final String previousName = await _contactRepository.get(previousContactId).getName();
+      headerText = headerText == previousName[0].toUpperCase() ? null : headerText;
+    }
+
     String imagePath;
-    if(_contactId == Contact.idSelf){
+    if (Contact.idSelf == contact.id) {
+      headerText = L10n.get(L.contactOwnCardGroupHeaderText);
       imagePath = await contact.getProfileImage();
-    }else {
+    } else {
       imagePath = contact.get(ContactExtension.contactAvatar);
     }
-    String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
-    Color color = rgbColorFromInt(colorValue);
+
     add(ContactLoaded(
       name: name,
       email: email,
@@ -104,6 +116,8 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
       isVerified: isVerified,
       imagePath: imagePath,
       phoneNumbers: phoneNumbers,
+      headerText: headerText,
     ));
   }
+
 }

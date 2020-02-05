@@ -126,7 +126,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     textStyle: Theme.of(context).textTheme.title,
                     secondText: state.email,
                     avatarPath: state.imagePath,
-                    imageBackgroundcolor: state.color,
+                    imageBackgroundColor: state.color,
                     editActionCallback: () => _editContact(context, state.name, state.email, state.phoneNumbers),
                     iconData: state.isVerified ? IconSource.verifiedUser : null,
                     child: ProfileHeader(),

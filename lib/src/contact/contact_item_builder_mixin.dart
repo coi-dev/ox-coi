@@ -49,6 +49,7 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
+import 'package:ox_coi/src/widgets/list_group_header.dart';
 
 import 'contact_item_event_state.dart';
 
@@ -67,6 +68,7 @@ mixin ContactItemBuilder {
               deleteIconColor: CustomTheme.of(context).accent,
             ),
           );
+
         } else {
           return Container();
         }
@@ -89,9 +91,12 @@ mixin ContactItemBuilder {
               isVerified: state.isVerified != null ? state.isVerified : false,
               imagePath: state.imagePath,
               moreButton: moreButton,
+              headerText: state.headerText,
             );
+
           } else if (state is ContactItemStateFailure) {
             return new Text(state.error);
+
           } else {
             return AvatarListItem(
               title: "",
@@ -99,6 +104,9 @@ mixin ContactItemBuilder {
               onTap: onContactTapped,
             );
           }
-        });
+        }
+    );
   }
+
 }
+

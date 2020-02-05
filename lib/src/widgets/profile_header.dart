@@ -60,7 +60,7 @@ import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 
 class ProfileData extends InheritedWidget {
-  final Color imageBackgroundcolor;
+  final Color imageBackgroundColor;
   final String text;
   final String secondText;
   final String placeholderText;
@@ -76,7 +76,7 @@ class ProfileData extends InheritedWidget {
   const ProfileData({
     Key key,
     @required Widget child,
-    this.imageBackgroundcolor,
+    this.imageBackgroundColor,
     this.text,
     this.secondText,
     this.placeholderText,
@@ -218,7 +218,7 @@ class ProfileAvatar extends StatelessWidget {
         children: <Widget>[
           Avatar(
             imagePath: ProfileData.of(context).avatarPath,
-            color: ProfileData.of(context).imageBackgroundcolor,
+            color: ProfileData.of(context).imageBackgroundColor,
             size: profileAvatarSize,
             textPrimary: ProfileData.of(context).initialsText,
           ),

@@ -65,7 +65,7 @@ import 'package:ox_coi/src/user/user_change_event_state.dart' as UserChange;
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:ox_coi/src/widgets/group_header.dart';
+import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -162,7 +162,7 @@ class _ProfileState extends State<UserProfile> {
                       secondText: config.email,
                       avatarPath: _avatarPath,
                       placeholderText: L10n.get(L.profileNoUsername),
-                      imageBackgroundcolor: CustomTheme.of(context).onBackground.withOpacity(barely),
+                      imageBackgroundColor: CustomTheme.of(context).onBackground.withOpacity(barely),
                       imageActionCallback: _editPhotoCallback,
                       withPlaceholder: true,
                       editActionCallback: () => _editUserSettings(),
@@ -186,7 +186,7 @@ class _ProfileState extends State<UserProfile> {
                       iconBackground: CustomTheme.of(context).inviteIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.invite),
                     ),
-                    GroupHeader(
+                    ListGroupHeader(
                       text: L10n.get(L.settingGroupHeaderGeneralTitle),
                     ),
                     SettingsItem(
@@ -209,7 +209,7 @@ class _ProfileState extends State<UserProfile> {
                       iconBackground: CustomTheme.of(context).chatIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.chat),
                     ),
-                    GroupHeader(
+                    ListGroupHeader(
                       text: L10n.get(L.settingGroupHeaderEmailTitle),
                     ),
                     SettingsItem(
@@ -224,7 +224,7 @@ class _ProfileState extends State<UserProfile> {
                       iconBackground: CustomTheme.of(context).serverSettingsIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.serverSetting),
                     ),
-                    GroupHeader(
+                    ListGroupHeader(
                       text: L10n.get(L.settingGroupHeaderSecurityTitle),
                     ),
                     SettingsItem(
@@ -245,7 +245,7 @@ class _ProfileState extends State<UserProfile> {
                       iconBackground: CustomTheme.of(context).encryptionIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.encryption),
                     ),
-                    GroupHeader(
+                    ListGroupHeader(
                       text: "",
                     ),
                     SettingsItem(

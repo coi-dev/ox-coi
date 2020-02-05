@@ -41,32 +41,43 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
-class GroupHeader extends StatelessWidget {
-  final String text;
+class ListGroupHeader extends StatelessWidget {
+  static const EdgeInsets paddingDefault = EdgeInsets.only(
+    left: groupHeaderHorizontalPadding,
+    right: groupHeaderHorizontalPadding,
+    top: groupHeaderTopPadding,
+    bottom: groupHeaderBottomPadding,
+  );
 
-  GroupHeader({@required this.text});
+  final String text;
+  final EdgeInsets padding;
+  final int fontWeightDelta;
+  final double fontSizeDelta;
+
+  ListGroupHeader({@required this.text, this.padding = ListGroupHeader.paddingDefault, this.fontWeightDelta = 1, this.fontSizeDelta = 1.0});
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        color: CustomTheme.of(context).background,
-        child: Padding(
-            padding: EdgeInsets.only(
-              left: groupHeaderHorizontalPadding,
-              right: groupHeaderHorizontalPadding,
-              top: groupHeaderTopPadding,
-              bottom: groupHeaderBottomPadding,
-            ),
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onBackground),
-            )),
-      ),
+    return Row(
+      children: [
+        Expanded(
+          child: Padding(
+              padding: padding,
+              child: Text(
+                text,
+                style: Theme.of(context).textTheme.body2.apply(
+                  color: CustomTheme.of(context).onBackground,
+                  fontWeightDelta: fontWeightDelta,
+                  fontSizeDelta: fontSizeDelta,
+                ),
+              )
+          ),
+        ),
+      ],
     );
   }
 }

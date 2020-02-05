@@ -57,20 +57,21 @@ import 'package:ox_coi/src/utils/dialog_builder.dart';
 
 import 'contact_details.dart';
 
-enum ContactItemType { display, edit, createChat, blocked, forward }
+enum ContactItemType { edit, createChat, blocked, forward }
 
 class ContactItem extends StatefulWidget {
   final int contactId;
+  final int previousContactId;
   final ContactItemType contactItemType;
   final Function onTap;
 
-  ContactItem({@required this.contactId, this.contactItemType = ContactItemType.display, this.onTap, Key key}) : super(key: key);
+  ContactItem({@required this.contactId, this.contactItemType = ContactItemType.edit, this.onTap, this.previousContactId, Key key}) : super(key: key);
 
   @override
   _ContactItemState createState() => _ContactItemState();
 }
 
-class _ContactItemState extends State<ContactItem> with ContactItemBuilder, ChatCreateMixin {
+class _ContactItemState extends State<ContactItem> with ContactItemBuilder, ChatCreateMixin, AutomaticKeepAliveClientMixin<ContactItem> {
   ContactItemBloc _contactBloc = ContactItemBloc();
   Navigation navigation = Navigation();
 
@@ -83,8 +84,11 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
     } else {
       listType = validContacts;
     }
-    _contactBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: listType));
+    _contactBloc.add(RequestContact(contactId: widget.contactId, previousContactId: widget.previousContactId, typeOrChatId: listType));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void dispose() {
@@ -101,7 +105,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
     if (widget.contactItemType == ContactItemType.createChat || widget.contactItemType == ContactItemType.forward) {
       return createChatFromContact(context, widget.contactId, _handleCreateChatStateChange);
     } else if (widget.contactItemType == ContactItemType.blocked) {
-      return buildUnblockContactDialog(name, email);
+      return _buildUnblockContactDialog(name, email);
     } else if (widget.contactItemType == ContactItemType.edit) {
       navigation.push(
         context,
@@ -123,7 +127,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
     }
   }
 
-  buildUnblockContactDialog(String name, String email) {
+  _buildUnblockContactDialog(String name, String email) {
     String contact = name.isNotEmpty ? name : email;
     Navigation navigation = Navigation();
     return showNavigatableDialog(

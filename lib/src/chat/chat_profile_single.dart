@@ -113,7 +113,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ProfileData(
-            imageBackgroundcolor: color,
+            imageBackgroundColor: color,
             avatarPath: imagePath,
             text: chatName,
             secondText: email,
