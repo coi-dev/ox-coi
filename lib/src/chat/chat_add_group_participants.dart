@@ -121,7 +121,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       onBuildSuggestion: onBuildResultOrSuggestion,
       onClose: onSearchClose,
     );
-    return IconButton(
+    return AdaptiveIconButton(
       icon: AdaptiveIcon(
           icon: IconSource.search
       ),

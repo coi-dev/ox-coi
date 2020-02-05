@@ -44,6 +44,12 @@ import 'package:flutter/material.dart';
 
 abstract class ChatChangeEvent {}
 
+class RequestChatData extends ChatChangeEvent {
+  final int chatId;
+
+  RequestChatData({@required this.chatId});
+}
+
 class CreateChat extends ChatChangeEvent {
   final int contactId;
   final int messageId;
@@ -114,11 +120,12 @@ class ChatRemoveParticipant extends ChatChangeEvent {
   ChatRemoveParticipant({@required this.chatId, @required this.contactId});
 }
 
-class SetName extends ChatChangeEvent {
+class ChangeChatData extends ChatChangeEvent {
   final int chatId;
-  final String newName;
+  final String chatName;
+  final String avatarPath;
 
-  SetName({@required this.chatId, @required this.newName});
+  ChangeChatData({@required this.chatId, @required this.chatName, @required this.avatarPath});
 }
 
 class SetImagePath extends ChatChangeEvent {
@@ -128,9 +135,22 @@ class SetImagePath extends ChatChangeEvent {
   SetImagePath({@required this.chatId, @required this.newPath});
 }
 
-class SetNameCompleted extends ChatChangeEvent {}
-
 abstract class ChatChangeState {}
+
+class ChatDataLoaded extends ChatChangeState {
+  final String chatName;
+  final String avatarPath;
+
+  ChatDataLoaded({@required this.chatName, @required this.avatarPath});
+}
+
+class ChatChangeStateSuccess extends ChatChangeState {}
+
+class ChatChangeStateFailure extends ChatChangeState {
+  final String error;
+
+  ChatChangeStateFailure({this.error});
+}
 
 class CreateChatStateInitial extends ChatChangeState {}
 
@@ -147,5 +167,3 @@ class CreateChatStateFailure extends ChatChangeState {
 
   CreateChatStateFailure({@required this.error});
 }
-
-class ChangeNameSuccess extends ChatChangeState {}

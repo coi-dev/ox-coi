@@ -51,82 +51,82 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
+import 'package:ox_coi/src/widgets/profile_header.dart';
 
 import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
 
-class EditName extends StatefulWidget {
+class EditGroupProfile extends StatefulWidget {
   final int chatId;
-  final String actualName;
-  final String title;
 
-  EditName({@required this.chatId, @required this.actualName, @required this.title});
+  EditGroupProfile({@required this.chatId});
 
   @override
-  _EditNameState createState() => _EditNameState();
+  _EditGroupProfileState createState() => _EditGroupProfileState();
 }
 
-class _EditNameState extends State<EditName> {
+class _EditGroupProfileState extends State<EditGroupProfile> {
   ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
   Navigation _navigation = Navigation();
-
-  ValidatableTextFormField _nameField = ValidatableTextFormField(
-    (context) => L10n.get(L.name),
-    key: Key(keyEditNameValidatableTextFormField),
-    hintText: (context) => L10n.get(L.setName),
-    needValidation: true,
-    validationHint: (context) => L10n.get(L.textFieldEmptyHint),
-  );
-  GlobalKey<FormState> _formKey = GlobalKey();
+  TextEditingController _chatNameController = TextEditingController();
+  String _avatarPath;
 
   @override
   void initState() {
     super.initState();
-    _navigation.current = Navigatable(Type.editName);
-    _nameField.controller.text = widget.actualName;
+    _navigation.current = Navigatable(Type.editGroupProfile);
+    _chatChangeBloc.add(RequestChatData(chatId: widget.chatId));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AdaptiveAppBar(
-          leadingIcon: new AdaptiveIconButton(
-            icon: new AdaptiveIcon(
-              key: Key(keyEditNameCloseIcon),
-              icon: IconSource.close,
-            ),
+          leadingIcon: AdaptiveIconButton(
+            icon: AdaptiveIcon(icon: IconSource.close),
             onPressed: () => _navigation.pop(context),
           ),
-          title: Text(widget.title),
+          title: Text(L10n.get(L.groupRename)),
           actions: <Widget>[
             AdaptiveIconButton(
-                key: Key(keyEditNameCheckIcon),
-                icon: AdaptiveIcon(
-                  icon: IconSource.check,
-                ),
-                onPressed: saveNewName)
+              icon: AdaptiveIcon(icon: IconSource.check),
+              key: Key(keyUserSettingsCheckIconButton),
+              onPressed: _saveChanges,
+            )
           ],
         ),
-        body: BlocListener(
+        body: BlocConsumer(
           bloc: _chatChangeBloc,
           listener: (context, state) {
-            if (state is ChangeNameSuccess) {
+            if (state is ChatDataLoaded) {
+              _chatNameController.text = state.chatName;
+              _avatarPath = state.avatarPath;
+            } else if (state is ChatChangeStateSuccess) {
               _navigation.pop(context);
             }
           },
-          child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Form(
-                key: _formKey,
-                child: _nameField,
-              )),
+          builder: (context, state) {
+            if (state is ChatDataLoaded) {
+              return EditableProfileHeader(
+                nameController: _chatNameController,
+                avatar: _avatarPath,
+                imageChangedCallback: _setAvatar,
+                placeholder: L10n.get(L.name),
+              );
+            } else {
+              return Container();
+            }
+          },
         ));
   }
 
-  void saveNewName() {
-    if (_formKey.currentState.validate()) {
-      _chatChangeBloc.add(SetName(chatId: widget.chatId, newName: _nameField.controller.text));
-    }
+  _setAvatar(String avatarPath) {
+    setState(() {
+      _avatarPath = avatarPath;
+    });
+  }
+
+  void _saveChanges() {
+    _chatChangeBloc.add(ChangeChatData(chatId: widget.chatId, chatName: _chatNameController.text, avatarPath: _avatarPath));
   }
 }

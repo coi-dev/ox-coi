@@ -40,12 +40,10 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'adaptive_widget.dart';
+import 'package:ox_coi/src/utils/assets.dart';
 
 enum IconSource {
   flag,
@@ -110,127 +108,117 @@ enum IconSource {
   signature,
   serverSetting,
   feedback,
+  iosChevron,
 }
 
-class AdaptiveIcon extends AdaptiveWidget<Icon, Icon> {
+const iconData = {
+  IconSource.flag: Icons.star,
+  IconSource.phone: Icons.phone,
+  IconSource.check: Icons.check,
+  IconSource.close: Icons.clear,
+  IconSource.add: Icons.add,
+  IconSource.delete: Icons.delete,
+  IconSource.mic: Icons.mic,
+  IconSource.camera: Icons.camera_alt,
+  IconSource.videocam: Icons.videocam,
+  IconSource.send: Icons.send,
+  IconSource.search: Icons.search,
+  IconSource.arrowForward: Icons.arrow_forward,
+  IconSource.importContacts: Icons.import_contacts,
+  IconSource.block: Icons.block,
+  IconSource.back: Icons.arrow_back,
+  IconSource.contentCopy: Icons.content_copy,
+  IconSource.settings: Icons.settings,
+  IconSource.error: Icons.priority_high,
+  IconSource.image: Icons.image,
+  IconSource.videoLibrary: Icons.video_library,
+  IconSource.pictureAsPdf: Icons.picture_as_pdf,
+  IconSource.gif: Icons.gif,
+  IconSource.insertDriveFile: Icons.insert_drive_file,
+  IconSource.groupAdd: Icons.group_add,
+  IconSource.chat: Icons.chat,
+  IconSource.mail: Icons.mail,
+  IconSource.person: Icons.person,
+  IconSource.personAdd: Icons.person_add,
+  IconSource.lock: Icons.lock,
+  IconSource.photo: Icons.photo,
+  IconSource.cameraAlt: Icons.camera_alt,
+  IconSource.clear: Icons.clear,
+  IconSource.arrowBack: Icons.arrow_back,
+  IconSource.group: Icons.group,
+  IconSource.verifiedUser: Icons.verified_user,
+  IconSource.edit: Icons.edit,
+  IconSource.reportProblem: Icons.report_problem,
+  IconSource.attachFile: Icons.attach_file,
+  IconSource.done: Icons.done,
+  IconSource.doneAll: Icons.done_all,
+  IconSource.accountCircle: Icons.account_circle,
+  IconSource.notifications: Icons.notifications,
+  IconSource.https: Icons.https,
+  IconSource.security: Icons.security,
+  IconSource.info: Icons.info,
+  IconSource.bugReport: Icons.bug_report,
+  IconSource.addAPhoto: Icons.add_a_photo,
+  IconSource.visibility: Icons.visibility,
+  IconSource.visibilityOff: Icons.visibility_off,
+  IconSource.contacts: Icons.contacts,
+  IconSource.forward: Icons.forward,
+  IconSource.share: Icons.share,
+  IconSource.play: Icons.play_arrow,
+  IconSource.pending: Icons.hourglass_empty,
+  IconSource.retry: Icons.autorenew,
+  IconSource.checkedCircle: Icons.check_circle,
+  IconSource.circle: Icons.radio_button_unchecked,
+  IconSource.darkMode: Icons.brightness_2,
+  IconSource.qr: Icons.filter_center_focus,
+  IconSource.signature: Icons.gesture,
+  IconSource.serverSetting: Icons.router,
+  IconSource.feedback: Icons.feedback,
+  IconSource.iosChevron: CupertinoIcons.right_chevron,
+};
+
+class AdaptiveIcon extends StatelessWidget {
   final double size;
   final Color color;
   final IconSource icon;
-  final iconData = {
-    // No star icon in CupertinoIcons
-    IconSource.flag: [Icons.star, Icons.star],
-    IconSource.phone: [CupertinoIcons.phone_solid, Icons.phone],
-    IconSource.check: [IconData(0xf383, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.check],
-    IconSource.close: [CupertinoIcons.clear_thick, Icons.clear],
-    IconSource.add: [IconData(0xf2C7, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.add],
-    IconSource.delete: [CupertinoIcons.delete_solid, Icons.delete],
-    IconSource.mic: [IconData(0xf2EC, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.mic],
-    IconSource.camera: [IconData(0xf2D3, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.camera_alt],
-    IconSource.videocam: [CupertinoIcons.video_camera_solid, Icons.videocam],
-    IconSource.send: [CupertinoIcons.forward, Icons.send],
-    IconSource.search: [IconData(0xf4A4, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.search],
-    IconSource.arrowForward: [CupertinoIcons.forward, Icons.arrow_forward],
-    IconSource.importContacts: [CupertinoIcons.person_add_solid, Icons.import_contacts],
-    IconSource.block: [IconData(0xf2E3, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.block],
-    IconSource.back: [CupertinoIcons.back, Icons.arrow_back],
-    IconSource.contentCopy: [CupertinoIcons.collections, Icons.content_copy],
-    IconSource.settings: [IconData(0xf4C3, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.settings],
-    // No error icon in CupertinoIcons
-    IconSource.error: [Icons.priority_high, Icons.priority_high],
-    // No image icon in CupertinoIcons
-    IconSource.image: [Icons.image, Icons.image],
-    // No video library icon in CupertinoIcons
-    IconSource.videoLibrary: [Icons.video_library, Icons.video_library],
-    // No picture as pdf icon in CupertinoIcons
-    IconSource.pictureAsPdf: [Icons.picture_as_pdf, Icons.picture_as_pdf],
-    // No gif icon in CupertinoIcons
-    IconSource.gif: [Icons.gif, Icons.gif],
-    // No file icon in CupertinoIcons
-    IconSource.insertDriveFile: [Icons.insert_drive_file, Icons.insert_drive_file],
-    IconSource.groupAdd: [CupertinoIcons.group_solid, Icons.group_add],
-    IconSource.chat: [IconData(0xf3FC, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.chat],
-    IconSource.mail: [CupertinoIcons.mail_solid, Icons.mail],
-    IconSource.person: [CupertinoIcons.person_solid, Icons.person],
-    IconSource.personAdd: [CupertinoIcons.person_add_solid, Icons.person_add],
-    IconSource.lock: [CupertinoIcons.padlock_solid, Icons.lock],
-    // No photo icon in CupertinoIcons
-    IconSource.photo: [Icons.photo, Icons.photo],
-    IconSource.cameraAlt: [CupertinoIcons.photo_camera_solid, Icons.camera_alt],
-    IconSource.clear: [CupertinoIcons.clear_thick, Icons.clear],
-    IconSource.arrowBack: [CupertinoIcons.back, Icons.arrow_back],
-    IconSource.group: [CupertinoIcons.group_solid, Icons.group],
-    // No verified user icon in CupertinoIcons
-    IconSource.verifiedUser: [Icons.verified_user, Icons.verified_user],
-    IconSource.edit: [CupertinoIcons.pen, Icons.edit],
-    // No report problem icon in CupertinoIcons
-    IconSource.reportProblem: [Icons.report_problem, Icons.report_problem],
-    // No attach file icon in CupertinoIcons
-    IconSource.attachFile: [Icons.attach_file, Icons.attach_file],
-    // No done icon in CupertinoIcons
-    IconSource.done: [Icons.done, Icons.done],
-    // No done all icon in CupertinoIcons
-    IconSource.doneAll: [Icons.done_all, Icons.done_all],
-    // No account circle icon in CupertinoIcons
-    IconSource.accountCircle: [Icons.account_circle, Icons.account_circle],
-    // No notifications icon in CupertinoIcons
-    IconSource.notifications: [Icons.notifications, Icons.notifications],
-    // No https icon in CupertinoIcons
-    IconSource.https: [Icons.https, Icons.https],
-    // No security icon in CupertinoIcons
-    IconSource.security: [Icons.security, Icons.security],
-    IconSource.info: [IconData(0xf44d, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.info],
-    // No bug report icon in CupertinoIcons
-    IconSource.bugReport: [Icons.bug_report, Icons.bug_report],
-    // No add a photo icon in CupertinoIcons
-    IconSource.addAPhoto: [Icons.add_a_photo, Icons.add_a_photo],
-    // No visibility icon in CupertinoIcons
-    IconSource.visibility: [Icons.visibility, Icons.visibility],
-    // No visibility off icon in CupertinoIcons
-    IconSource.visibilityOff: [Icons.visibility_off, Icons.visibility_off],
-    IconSource.contacts: [IconData(0xf2D9, fontFamily: CupertinoIcons.iconFont, fontPackage: CupertinoIcons.iconFontPackage), Icons.contacts],
-    IconSource.forward: [CupertinoIcons.forward, Icons.forward],
-    IconSource.share: [CupertinoIcons.share, Icons.share],
-    IconSource.play: [CupertinoIcons.play_arrow_solid, Icons.play_arrow],
-    IconSource.pending : [Icons.hourglass_empty, Icons.hourglass_empty],
-    IconSource.retry : [Icons.autorenew, Icons.autorenew],
-    IconSource.checkedCircle : [Icons.check_circle, Icons.check_circle],
-    IconSource.circle : [Icons.radio_button_unchecked, Icons.radio_button_unchecked],
-    IconSource.darkMode : [Icons.brightness_2, Icons.brightness_2],
-    IconSource.qr : [Icons.filter_center_focus, Icons.filter_center_focus],
-    IconSource.signature : [Icons.gesture, Icons.gesture],
-    IconSource.serverSetting : [Icons.router, Icons.router],
-    IconSource.feedback : [Icons.feedback, Icons.feedback],
-  };
 
   AdaptiveIcon({
     Key key,
     this.size,
     this.color,
     @required this.icon,
-  }) : super(childKey: key);
+  }) : super(key: key);
 
   @override
-  Icon buildMaterialWidget(BuildContext context) {
-    return Icon(
-      getIconData(icon),
-      size: size,
-      color: color,
-      key: childKey,
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: assetExists(_getPath()),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          bool hasCustomIcon = snapshot.data;
+          if (hasCustomIcon) {
+            return ImageIcon(
+              AssetImage(_getPath()),
+              key: key,
+              size: size,
+              color: color,
+            );
+          } else {
+            return Icon(
+              _getIconData(icon),
+              key: key,
+              size: size,
+              color: color,
+            );
+          }
+        } else {
+          return SizedBox(width: 0, height: 0);
+        }
+      },
     );
   }
 
-  @override
-  Icon buildCupertinoWidget(BuildContext context) {
-    return Icon(
-      getIconData(icon),
-      size: size,
-      color: color,
-      key: childKey,
-    );
-  }
+  String _getPath() => "assets/images/${describeEnum(icon)}.png";
 
-  IconData getIconData(IconSource iconDataSet) {
-    var icon = iconData[iconDataSet];
-    return Platform.isIOS ? icon[0] : icon[1];
-  }
+  IconData _getIconData(IconSource iconDataSet) => iconData[iconDataSet];
 }

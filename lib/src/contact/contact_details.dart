@@ -50,16 +50,18 @@ import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
+import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/utils/error.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
+import 'package:ox_coi/src/widgets/settings_item.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
@@ -82,7 +84,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+    _contactItemBloc.add(RequestContact(
+        contactId: widget.contactId, typeOrChatId: validContacts));
     _contactChangeBloc.listen((state) => _handleContactChanged(context, state));
   }
 
@@ -127,56 +130,67 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     secondaryText: state.email,
                     avatarPath: state.imagePath,
                     imageBackgroundColor: state.color,
-                    editActionCallback: () => _editContact(context, state.name, state.email, state.phoneNumbers),
+                    editActionCallback: () => _editContact(
+                        context, state.name, state.email, state.phoneNumbers),
                     iconData: state.isVerified ? IconSource.verifiedUser : null,
                     child: ProfileHeader(),
                   ),
-                  ProfileActionList(tiles: [
-                    ProfileAction(
-                      key: Key(keyContactDetailOpenChatProfileActionIcon),
-                      iconData: IconSource.chat,
-                      text: L10n.get(L.chatOpen),
-                      color: CustomTheme.of(context).accent,
-                      onTap: () => createChatFromContact(context, widget.contactId),
+                  SettingsItem(
+                    icon: IconSource.chat,
+                    text: L10n.get(L.chatOpen),
+                    iconBackground: CustomTheme.of(context).chatIcon,
+                    onTap: () =>
+                        createChatFromContact(context, widget.contactId),
+                  ),
+                  SettingsItem(
+                    icon: IconSource.flag,
+                    text: L10n.get(L.settingItemFlaggedTitle),
+                    iconBackground: CustomTheme.of(context).flagIcon,
+                    onTap: () =>
+                        _settingsItemTapped(context, SettingsItemName.flagged),
+                  ),
+                  SettingsItem(
+                    icon: IconSource.block,
+                    text: L10n.get(L.contactBlock),
+                    iconBackground: CustomTheme.of(context).serverSettingsIcon,
+                    onTap: () => showActionDialog(
+                      context,
+                      ProfileActionType.block,
+                      _blockContact,
+                      {
+                        ProfileActionParams.name: state.name,
+                        ProfileActionParams.email: state.email,
+                      },
                     ),
-                    ProfileAction(
-                      key: Key(keyContactDetailEditContactProfileActionIcon),
-                      iconData: IconSource.edit,
-                      text: L10n.get(L.contactEdit),
-                      color: CustomTheme.of(context).accent,
-                      onTap: () => _editContact(context, state.name, state.email, state.phoneNumbers),
+                  ),
+                  ListGroupHeader(
+                    text: L10n.get(L.settingP),
+                  ),
+                  SettingsItem(
+                    icon: IconSource.notifications,
+                    text: L10n.get(L.settingItemNotificationsTitle),
+                    iconBackground: CustomTheme.of(context).notificationIcon,
+                    onTap: () => _settingsItemTapped(
+                        context, SettingsItemName.notification),
+                  ),
+                  ListGroupHeader(
+                    text: "",
+                  ),
+                  SettingsItem(
+                    icon: IconSource.delete,
+                    text: L10n.get(L.contactDelete),
+                    textColor: CustomTheme.of(context).error,
+                    iconBackground: CustomTheme.of(context).blockIcon,
+                    onTap: () => showActionDialog(
+                      context,
+                      ProfileActionType.deleteContact,
+                      _deleteContact,
+                      {
+                        ProfileActionParams.name: state.name,
+                        ProfileActionParams.email: state.email,
+                      },
                     ),
-                    ProfileAction(
-                      key: Key(keyContactDetailBlockContactProfileActionIcon),
-                      iconData: IconSource.block,
-                      text: L10n.get(L.contactBlock),
-                      color: CustomTheme.of(context).accent,
-                      onTap: () => showActionDialog(
-                        context,
-                        ProfileActionType.block,
-                        _blockContact,
-                        {
-                          ProfileActionParams.name: state.name,
-                          ProfileActionParams.email: state.email,
-                        },
-                      ),
-                    ),
-                    ProfileAction(
-                      key: Key(keyContactDetailDeleteContactProfileActionIcon),
-                      iconData: IconSource.delete,
-                      text: L10n.get(L.contactDelete),
-                      color: CustomTheme.of(context).error,
-                      onTap: () => showActionDialog(
-                        context,
-                        ProfileActionType.deleteContact,
-                        _deleteContact,
-                        {
-                          ProfileActionParams.name: state.name,
-                          ProfileActionParams.email: state.email,
-                        },
-                      ),
-                    ),
-                  ]),
+                  ),
                 ],
               );
             } else {
@@ -188,7 +202,24 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
     );
   }
 
-  void _editContact(BuildContext context, String name, String email, String phoneNumbers) async {
+  _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {
+    switch (settingsItemName) {
+      case SettingsItemName.flagged:
+        _navigation.push(
+          context,
+          MaterialPageRoute(builder: (context) => Flagged()),
+        );
+        break;
+      case SettingsItemName.notification:
+        _navigation.pushNamed(context, Navigation.settingsNotifications);
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _editContact(BuildContext context, String name, String email,
+      String phoneNumbers) async {
     return await _navigation
         .push(
       context,
@@ -203,7 +234,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
       ),
     )
         .then((value) {
-      _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+      _contactItemBloc.add(RequestContact(
+          contactId: widget.contactId, typeOrChatId: validContacts));
     });
   }
 

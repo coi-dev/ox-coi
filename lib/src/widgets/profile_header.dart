@@ -56,6 +56,7 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
@@ -218,6 +219,14 @@ class ProfileAvatar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
+          Visibility(
+            visible: ProfileData.of(context).imageActionCallback != null &&
+                (ProfileData.of(context).avatarPath == null || ProfileData.of(context).avatarPath.isEmpty),
+            child: AdaptiveIcon(
+              icon: IconSource.camera,
+              color: ProfileData.of(context).showWhiteImageIcon ? CustomTheme.of(context).white : CustomTheme.of(context).accent,
+            ),
+          ),
           Avatar(
             imagePath: ProfileData.of(context).avatarPath,
             color: ProfileData.of(context).imageBackgroundColor,
@@ -314,6 +323,79 @@ class ProfileHeaderParticipantsHeader extends StatelessWidget {
     return Text(
       ProfileData.of(context).text,
       style: Theme.of(context).textTheme.subtitle,
+    );
+  }
+}
+
+class ProfileCopyableHeaderText extends StatelessWidget {
+  final String toastMessage;
+
+  const ProfileCopyableHeaderText({Key key, @required this.toastMessage}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        copyToClipboardWithToast(text: ProfileData.of(context).text, toastText: toastMessage);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ProfileHeaderText(),
+          Padding(padding: EdgeInsets.all(iconTextPadding)),
+          AdaptiveIcon(icon: IconSource.contentCopy),
+        ],
+      ),
+    );
+  }
+}
+
+class EditableProfileHeader extends StatelessWidget {
+  final Function imageChangedCallback;
+  final String avatar;
+  final TextEditingController nameController;
+  final String placeholder;
+
+  const EditableProfileHeader({
+    Key key,
+    @required this.imageChangedCallback,
+    @required this.avatar,
+    @required this.nameController,
+    @required this.placeholder,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: editUserAvatarVerticalPadding)),
+            Align(
+                alignment: Alignment.center,
+                child: ProfileData(
+                  imageBackgroundColor: CustomTheme.of(context).onBackground.withOpacity(barely),
+                  imageActionCallback: imageChangedCallback,
+                  avatarPath: avatar,
+                  child: ProfileAvatar(),
+                )),
+            Padding(
+              padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                      key: Key(keyUserSettingsUserSettingsUsernameLabel),
+                      maxLines: 1,
+                      controller: nameController,
+                      decoration: InputDecoration(labelText: placeholder)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

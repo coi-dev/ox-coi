@@ -145,13 +145,8 @@ class _ProfileState extends State<UserProfile> {
 
   Widget buildProfileView(Config config) {
     _avatarPath = config.avatarPath;
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: viewportConstraints.maxHeight,
-            ),
+          
             child: IntrinsicHeight(
               child: Container(
                 color: CustomTheme.of(context).background,
@@ -270,10 +265,9 @@ class _ProfileState extends State<UserProfile> {
                 ),
               ),
             ),
-          ),
         );
-      },
-    );
+      
+    
   }
 
   _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {

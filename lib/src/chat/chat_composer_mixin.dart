@@ -114,6 +114,7 @@ mixin ChatComposer {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextField(
         keyboardType: TextInputType.multiline,
+        textCapitalization: TextCapitalization.sentences,
         minLines: 1,
         maxLines: 4,
         controller: textController,

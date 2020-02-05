@@ -75,7 +75,7 @@ mixin ContactItemBuilder {
     );
   }
 
-  BlocBuilder getAvatarItemBlocBuilder({ContactItemBloc bloc, Function onContactTapped, bool isSelectable = false, bool isSelected = false, PopupMenuButton moreButton}) {
+  BlocBuilder getAvatarItemBlocBuilder({ContactItemBloc bloc, Function onContactTapped, bool isSelectable = false, bool isSelected = false, PopupMenuButton moreButton, bool showHeaderText = true}) {
     return BlocBuilder(
         bloc: bloc,
         builder: (context, state) {
@@ -91,6 +91,7 @@ mixin ContactItemBuilder {
               imagePath: state.imagePath,
               moreButton: moreButton,
               headerText: state.headerText,
+              showHeaderText: showHeaderText,
             );
 
           } else if (state is ContactItemStateFailure) {

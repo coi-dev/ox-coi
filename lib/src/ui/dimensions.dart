@@ -130,7 +130,7 @@ const groupHeaderHorizontalPadding = 16.0;
 const groupHeaderBottomPadding = 8.0;
 
 //SettingsItem
-const settingsItemHorizontalPadding = 16.0;
+const settingsItemHorizontalPadding = 20.0;
 const settingsItemVerticalPadding = 18.0;
 const settingsItemIconTextPadding = 16.0;
 

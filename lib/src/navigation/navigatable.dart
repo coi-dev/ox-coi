@@ -71,7 +71,7 @@ enum Type {
   contactStartCallDialog,
   contactNoNumberDialog,
   debugViewer,
-  editName,
+  editGroupProfile,
   flagged,
   login,
   loginProviderList,

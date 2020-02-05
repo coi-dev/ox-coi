@@ -58,7 +58,10 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
 
   @override
   Stream<ChatChangeState> mapEventToState(ChatChangeEvent event) async* {
-    if (event is CreateChat) {
+    if (event is RequestChatData) {
+     yield* _requestChatData(event.chatId);
+    }
+    else if (event is CreateChat) {
       yield CreateChatStateLoading();
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
@@ -88,13 +91,18 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       _addParticipants(event.chatId, event.contactIds);
     } else if (event is ChatRemoveParticipant) {
       _removeParticipant(event.chatId, event.contactId);
-    } else if (event is SetName) {
-      _setName(event.chatId, event.newName);
+    } else if (event is ChangeChatData) {
+      yield* _changeChatData(event.chatId, event.chatName, event.avatarPath);
     } else if (event is SetImagePath) {
       _setProfileImage(event.chatId, event.newPath);
-    } else if (event is SetNameCompleted) {
-      yield ChangeNameSuccess();
     }
+  }
+
+  Stream<ChatChangeState> _requestChatData(int chatId) async* {
+    var chat = _chatRepository.get(chatId);
+    String chatName = await chat.getName();
+    String chatAvatarPath = await chat.getProfileImage();
+    yield ChatDataLoaded(chatName: chatName, avatarPath: chatAvatarPath);
   }
 
   void _createChat({int contactId, int messageId, bool verified, String name, List<int> contacts, String imagePath}) async {
@@ -169,16 +177,17 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     await context.removeContactFromChat(chatId, contactId);
   }
 
-  void _setName(int chatId, String newName) async {
+  Stream<ChatChangeState> _changeChatData(int chatId, String chatName, String chatAvatarPath) async* {
     Context context = Context();
-    await context.setChatName(chatId, newName);
-    RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetName, newName);
-    add(SetNameCompleted());
+    await context.setChatName(chatId, chatName);
+    RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetName, chatName);
+    await _setProfileImage(chatId, chatAvatarPath);
+    yield(ChatChangeStateSuccess());
   }
 
-  void _setProfileImage(int chatId, String newPath) async {
+  Future<void> _setProfileImage(int chatId, String chatAvatarPath) async {
     Context context = Context();
-    await context.setChatProfileImage(chatId, newPath);
-    RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetProfileImage, newPath);
+    await context.setChatProfileImage(chatId, chatAvatarPath);
+    RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetProfileImage, chatAvatarPath);
   }
 }

@@ -73,6 +73,7 @@ class SettingsItem extends StatelessWidget {
   final Function onTap;
   final bool showSwitch;
   final Function onSwitchChanged;
+  final Color textColor;
 
   SettingsItem({
     Key key,
@@ -82,10 +83,12 @@ class SettingsItem extends StatelessWidget {
     @required this.onTap,
     this.showSwitch = false,
     this.onSwitchChanged,
+    this.textColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
     ThemeKey actualKey = CustomTheme.instanceOf(context).actualThemeKey;
     return InkWell(
       onTap: onTap,
@@ -106,13 +109,13 @@ class SettingsItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   text,
-                  style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface),
+                  style: Theme.of(context).textTheme.body1.apply(color: this.textColor ?? CustomTheme.of(context).onSurface),
                 ),
               ),
               Visibility(
                 visible: Platform.isIOS && !showSwitch,
                 child: AdaptiveIcon(
-                  icon: IconSource.arrowForward,
+                  icon: IconSource.iosChevron,
                   color: CustomTheme.of(context).onSurface,
                 ),
               ),
