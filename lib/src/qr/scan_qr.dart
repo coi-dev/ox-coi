@@ -89,7 +89,7 @@ class _ScanQrState extends State<ScanQr> {
         _qrCodeDetected = false;
 
         var error = state.error;
-        if (!isNullOrEmpty(error)) {
+        if (!error.isNullOrEmpty()) {
           showToast(error);
           Future.delayed(const Duration(milliseconds: 2000), () {
             requestQrCamera();

@@ -49,7 +49,6 @@ import 'package:ox_coi/src/data/invite_service_resource.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/http.dart';
-import 'package:ox_coi/src/utils/text.dart';
 
 class InviteService {
   static InviteService _instance;
@@ -85,7 +84,7 @@ class InviteService {
 
   Future<String> getUrl() async {
     var url = await getPreference(preferenceInviteServiceUrl);
-    if (isNullOrEmpty(url)) {
+    if (url.isNullOrEmpty()) {
       url = defaultCoiInviteServiceUrl;
     }
     return url;

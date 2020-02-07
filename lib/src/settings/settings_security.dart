@@ -101,7 +101,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     } else if (state is SettingsSecurityStateSuccess || state is SettingsSecurityStateFailure) {
       _progressOverlayEntry?.remove();
       if (state is SettingsSecurityStateSuccess) {
-        if (!isNullOrEmpty(state.setupCode)) {
+        if (!state.setupCode.isNullOrEmpty()) {
           showNavigatableDialog(
             context: context,
             navigatable: Navigatable(Type.settingsKeyTransferDoneDialog),

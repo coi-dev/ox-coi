@@ -273,7 +273,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         }
       });
     }
-    if (isNullOrEmpty(_currentSearch)) {
+    if (_currentSearch.isNullOrEmpty()) {
       ids = _chatRepository.getAllIds();
       lastUpdateValues = _chatRepository.getAllLastUpdateValues();
     } else {

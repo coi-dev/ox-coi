@@ -171,7 +171,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     } else {
       _contactsSelected.add(id);
     }
-    if (isNullOrEmpty(_currentSearch)) {
+    if (_currentSearch.isNullOrEmpty()) {
       _onContactsChanged();
     } else {
       yield* _searchContacts();

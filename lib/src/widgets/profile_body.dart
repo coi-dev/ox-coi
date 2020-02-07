@@ -119,7 +119,7 @@ showActionDialog(BuildContext context, ProfileActionType action, Function onPerf
     case ProfileActionType.deleteContact:
       title = L10n.get(L.contactDelete);
       var name = params[ProfileActionParams.name];
-      if (isNullOrEmpty(name)) {
+      if (name.isNullOrEmpty()) {
         content = L10n.getFormatted(L.contactDeleteTextX, [params[ProfileActionParams.email]]);
       } else {
         content = L10n.getFormatted(L.contactDeleteTextXY, [params[ProfileActionParams.email], name]);

@@ -123,7 +123,7 @@ class PushManager {
   bool _isValidationPush(String decryptedContent) {
     var pushValidationMap = jsonDecode(decryptedContent);
     var pushValidation = PushValidation.fromJson(pushValidationMap);
-    return !isNullOrEmpty(pushValidation.validation);
+    return !pushValidation.validation.isNullOrEmpty();
   }
 
   PushValidation _getPushValidation(String decryptedContent) {

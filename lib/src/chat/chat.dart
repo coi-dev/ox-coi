@@ -744,7 +744,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void callNumber(String phoneNumber) {
-    String parsedPhoneNumber = getPhoneNumberFromString(phoneNumber);
+    String parsedPhoneNumber = phoneNumber.getPhoneNumberFromString();
     launch("tel://$parsedPhoneNumber");
   }
 }

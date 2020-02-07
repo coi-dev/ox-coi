@@ -208,7 +208,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     Providers providers = Providers.fromJson(json);
     if (type == ProviderListType.register) {
-      providers.providerList.removeWhere((provider) => isNullOrEmpty(provider.registerLink));
+      providers.providerList.removeWhere((provider) => provider.registerLink.isNullOrEmpty());
     }
     add(ProvidersLoaded(providers: providers.providerList));
   }

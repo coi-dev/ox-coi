@@ -62,7 +62,7 @@ class PlaceholderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return !isNullOrEmpty(text)
+    return !text.isNullOrEmpty()
         ? Text(
             text,
             style: style,

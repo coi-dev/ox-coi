@@ -40,62 +40,57 @@
  * for more details.
  */
 
-import 'dart:convert';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
-extension Extract on String {
-  static final RegExp matchInvertedNumericAndPlus = RegExp(r'[^0-9+]');
-  static final RegExp matchWhiteSpace = RegExp(r'\s');
+const multiLineString = '''After any such modifications, the original and derivative code shall remain
+under the copyright of the copyright holder(s) and/or original author(s) as stated here:
+https://www.open-xchange.com/legal/. The contributing author shall be
+given Attribution for the derivative code and a license granting use.''';
 
-  String getFirstCharacter() {
-    return this.isNotEmpty ? this[0] : null;
-  }
+void main() {
+  group("Split", () {
+    test('Should split text', () {
+      var text = 'Should split text';
 
-  String getPhoneNumberFromString() {
-    String phoneNumberWithoutOptionals = this.replaceFirst("(0)", '');
-    return phoneNumberWithoutOptionals.replaceAll(matchInvertedNumericAndPlus, '');
-  }
+      var result = text.textSplit();
 
-  int getIndexAfterLastOf(Pattern pattern) {
-    return this.lastIndexOf(pattern) + 1;
-  }
+      expect(result.length, 3);
+    });
 
-  String encodeBase64() {
-    if (this == null) {
-      return null;
-    }
-    var bytes = utf8.encode(this);
-    var base64 = base64Url.encode(bytes);
-    return base64;
-  }
+    test('Should split complex text', () {
+      var text = multiLineString;
 
-  List<String> textSplit() {
-    return this.split(matchWhiteSpace);
-  }
-}
+      var result = text.textSplit();
 
-extension Check on String {
-  static final Pattern matchProtocol = "://";
-  static final RegExp matchEmail = RegExp(
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+      expect(result.length, 41);
+    });
 
-  isNullOrEmpty() => this == null || this.isEmpty;
+    test('Should split on new line', () {
+      var text = '''Should split on
+new line''';
 
-  bool isEmail() {
-    return matchEmail.hasMatch(this);
-  }
+      var result = text.textSplit();
 
-  bool isPort() {
-    if (this.isEmpty) {
-      return true;
-    }
-    int port = int.tryParse(this);
-    if (port == null || port < 1 || port >= 65535) {
-      return false;
-    }
-    return true;
-  }
+      expect(result.length, 5);
+    });
+  });
 
-  bool containsProtocol() {
-    return this.contains(matchProtocol);
-  }
+  group("Find", () {
+    test('Should contain protocol', () {
+      var text = multiLineString;
+
+      var result = text.containsProtocol();
+
+      expect(result, true);
+    });
+
+    test('Should not contain protocol', () {
+      var text = 'Should not contain protocol';
+
+      var result = text.containsProtocol();
+
+      expect(result, false);
+    });
+  });
 }

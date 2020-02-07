@@ -171,7 +171,7 @@ class _UserSettingsState extends State<UserSettings> {
   }
 
   void _saveChanges() async {
-    String avatarPath = !isNullOrEmpty(_avatar) ? _avatar : null;
+    String avatarPath = !_avatar.isNullOrEmpty() ? _avatar : null;
     _userChangeBloc.add(UserPersonalDataChanged(username: _usernameController.text, avatarPath: avatarPath));
   }
 }

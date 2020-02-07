@@ -96,7 +96,7 @@ class NotificationManager {
 
   Future onSelectNotification(String payload) {
     Navigation navigation = Navigation();
-    if (!isNullOrEmpty(payload)) {
+    if (!payload.isNullOrEmpty()) {
       int chatId = getIdFromPayload(payload, chatIdPosition);
       int messageId = getIdFromPayload(payload, messageIdPosition);
       var isChatOpened = navigation.current?.equal(Navigatable(Type.chat, params: [chatId, messageId]));

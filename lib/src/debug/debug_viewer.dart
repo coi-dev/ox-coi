@@ -74,7 +74,7 @@ class _DebugViewerState extends State<DebugViewer> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.debugViewer);
-    if (isNullOrEmpty(widget.input)) {
+    if (widget.input.isNullOrEmpty()) {
       _debugViewerBloc.add(RequestLog());
     } else {
       _debugViewerBloc.add(InputLoaded(input: widget.input));

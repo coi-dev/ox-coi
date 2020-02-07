@@ -122,7 +122,7 @@ class L10n {
     } else {
       msgIdPlural = msgIds[1];
     }
-    if (isNullOrEmpty(msgIdPlural) || count == null) {
+    if (msgIdPlural.isNullOrEmpty() || count == null) {
       return _getText.gettext(msgId);
     } else {
       return _getText.ngettext(msgId, msgIdPlural, count);

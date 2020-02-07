@@ -383,7 +383,7 @@ class L {
 
   static List<String> _translationKey(String key, [String pluralKey]) {
     String logging = "Registered localization key: '$key'";
-    if (!isNullOrEmpty(pluralKey)) {
+    if (!pluralKey.isNullOrEmpty()) {
       logging += " and plural key: '$pluralKey'";
     }
     _logger.fine(logging);

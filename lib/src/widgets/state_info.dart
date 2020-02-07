@@ -68,8 +68,8 @@ class StateInfo extends StatelessWidget {
                 padding: EdgeInsets.only(top: listStateInfoVerticalPadding),
               ),
               if (showLoading != null && showLoading) CircularProgressIndicator(),
-              if (!isNullOrEmpty(imagePath)) Image.asset(imagePath),
-              if (!isNullOrEmpty(title))
+              if (!imagePath.isNullOrEmpty()) Image.asset(imagePath),
+              if (!title.isNullOrEmpty())
                 Padding(
                   padding: buildEdgeInsets(),
                   child: Text(
@@ -78,7 +78,7 @@ class StateInfo extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              if (!isNullOrEmpty(subTitle))
+              if (!subTitle.isNullOrEmpty())
                 Padding(
                   padding: buildEdgeInsets(),
                   child: Text(
@@ -87,7 +87,7 @@ class StateInfo extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              if (!isNullOrEmpty(actionTitle) && action != null)
+              if (!actionTitle.isNullOrEmpty() && action != null)
                 Padding(
                   padding: buildEdgeInsets(),
                   child: RaisedButton(

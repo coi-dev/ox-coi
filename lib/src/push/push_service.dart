@@ -49,7 +49,6 @@ import 'package:ox_coi/src/data/push_resource.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/http.dart';
-import 'package:ox_coi/src/utils/text.dart';
 
 class PushService {
   static PushService _instance;
@@ -93,7 +92,7 @@ class PushService {
 
   Future<String> getUrl() async {
     var url = await getPreference(preferenceNotificationsPushServiceUrl);
-    if (isNullOrEmpty(url)) {
+    if (url.isNullOrEmpty()) {
       url = defaultCoiPushServiceUrl;
     }
     return url;

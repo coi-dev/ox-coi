@@ -62,7 +62,7 @@ mixin ContactItemBuilder {
             padding: EdgeInsets.only(left: listItemPadding),
             child: Chip(
               backgroundColor: CustomTheme.of(context).accent.withOpacity(barely),
-              label: Text(isNullOrEmpty(state.name) ? state.email : state.name),
+              label: Text(state.name.isNullOrEmpty() ? state.email : state.name),
               onDeleted: onContactTapped,
               deleteIconColor: CustomTheme.of(context).accent,
             ),

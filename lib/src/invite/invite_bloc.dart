@@ -113,7 +113,7 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
     if (sharedLink == null) {
       return;
     }
-    int startIndex = getIndexAfterLastOf(sharedLink, '/');
+    int startIndex = sharedLink.getIndexAfterLastOf('/');
     String id = sharedLink.substring(startIndex);
     if (id.isNotEmpty) {
       Response response = await inviteService.getInvite(id);
@@ -122,8 +122,8 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
         InviteServiceResponse responseInviteService = _getInviteResponse(response);
         String imageString = responseInviteService.sender.image;
         String base64Image;
-        if (!isNullOrEmpty(imageString)) {
-          int imageStartIndex = getIndexAfterLastOf(imageString, ',');
+        if (!imageString.isNullOrEmpty()) {
+          int imageStartIndex = imageString.getIndexAfterLastOf(',');
           base64Image = imageString.substring(imageStartIndex);
         }
         yield InviteStateSuccess(inviteServiceResponse: responseInviteService, base64Image: base64Image);

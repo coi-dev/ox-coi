@@ -107,7 +107,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
     _systemContacts.forEach((contact) {
       if (contact.emails.length != 0) {
         contact.emails.forEach((email) {
-          if (isEmail(email.value)) {
+          if (email.value.isEmail()) {
             if(!googlemailDetected){
               googlemailDetected = email.value.contains(googlemailDomain);
             }
@@ -181,7 +181,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
 
     systemContacts.forEach((systemContact) {
       systemContact.emails.forEach((email) async {
-        if (isEmail(email.value) && contactEmail == email.value) {
+        if (email.value.isEmail() && contactEmail == email.value) {
           String filePath = "";
           if (systemContact.avatar.length > 0) {
             _contactRepository.update(id: contactId);

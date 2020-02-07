@@ -62,7 +62,7 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     String initials = "";
     ImageProvider avatarImage;
-    if (isNullOrEmpty(imagePath)) {
+    if (imagePath.isNullOrEmpty()) {
       avatarImage = MemoryImage(kTransparentImage);
       initials = getInitials(textPrimary, textSecondary);
     } else {
@@ -81,7 +81,7 @@ class Avatar extends StatelessWidget {
         ),
       ),
       child: Visibility(
-        visible: isNullOrEmpty(imagePath),
+        visible: imagePath.isNullOrEmpty(),
         child: Text(
           initials,
           style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).white),

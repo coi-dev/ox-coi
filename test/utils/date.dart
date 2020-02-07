@@ -75,7 +75,6 @@ void main() {
     var nowDateTime = DateTime.now();
     String todayDate = formatDate(nowDateTime, [dd, '.', mm]);
     var todayTimestamp = nowDateTime.millisecondsSinceEpoch;
-    when(L10n.get(L.today)).thenReturn(today);
 
     var dateFormTimestamp = getDateFromTimestamp(todayTimestamp, false, true);
 
@@ -86,7 +85,6 @@ void main() {
     var yesterdayDateTime = DateTime.now().subtract(Duration(days: 1));
     String yesterdayDate = formatDate(yesterdayDateTime, [dd, '.', mm]);
     var yesterdayTimestamp = yesterdayDateTime.millisecondsSinceEpoch;
-    when(L10n.get(L.yesterday)).thenReturn(yesterday);
 
     var dateFormTimestamp = getDateFromTimestamp(yesterdayTimestamp, false, true);
 
@@ -125,7 +123,6 @@ void main() {
 
   test('Get chat list date for yesterday from timestamp', () {
     var yesterdayTimestamp = DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch;
-    when(L10n.get(L.yesterday)).thenReturn(yesterday);
 
     var dateFormTimestamp = getChatListTime(yesterdayTimestamp);
 

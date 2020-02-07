@@ -112,7 +112,7 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       for (int i = 0; i < contacts.length; i++) {
         context.addContactToChat(chatId, contacts[i]);
       }
-      if (!isNullOrEmpty(imagePath)) {
+      if (!imagePath.isNullOrEmpty()) {
         _setProfileImage(chatId, imagePath);
       }
     }
