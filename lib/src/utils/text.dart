@@ -81,3 +81,9 @@ String getPhoneNumberFromString(String text) {
   String phoneNumberWithoutOptionals = text.replaceFirst("(0)", '');
   return phoneNumberWithoutOptionals.replaceAll(matchInvertedNumericAndPlus, '');
 }
+
+extension Extract on String {
+  String getFirstCharacter() {
+    return this.isNotEmpty ? this[0] : null;
+  }
+}

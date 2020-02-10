@@ -44,15 +44,19 @@ import 'package:delta_chat_core/delta_chat_core.dart' as DeltaChatCore;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/text.dart';
 
 class NotificationManager {
+  static const idSeparator = "_";
+  static const chatIdPosition = 0;
+  static const messageIdPosition = 1;
+
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   //TODO: Add better AndroidNotificationDetails
@@ -87,31 +91,46 @@ class NotificationManager {
   Future onDidReceiveLocalNotification(int id, String title, String body, String payload) {
     //TODO: Use payload to navigate to the right location/chat
     debugPrint("NotificationManager.onDidRecieveLocalNotification() payload = $payload");
+    return Future.value(false);
   }
 
   Future onSelectNotification(String payload) {
     Navigation navigation = Navigation();
     if (!isNullOrEmpty(payload)) {
-      var chatId = int.parse(payload);
-      var isChatNavigatable = navigation.current?.equal(Navigatable(Type.chat, params: [chatId]));
-      if (isChatNavigatable == null || !isChatNavigatable) {
+      int chatId = getIdFromPayload(payload, chatIdPosition);
+      int messageId = getIdFromPayload(payload, messageIdPosition);
+      var isChatOpened = navigation.current?.equal(Navigatable(Type.chat, params: [chatId, messageId]));
+      if (isChatOpened == null || !isChatOpened) {
         navigation.pushAndRemoveUntil(
           _buildContext,
           MaterialPageRoute(
             builder: (context) {
               return Chat(
                 chatId: chatId,
+                messageId: messageId,
                 headlessStart: true,
               );
             },
           ),
           ModalRoute.withName(Navigation.root),
-          Navigatable(Type.chatList),
+          Navigatable(Type.rootChildren),
         );
       } else {
-        navigation.popUntil(_buildContext, ModalRoute.withName(Navigation.root));
+        navigation.popUntilRoot(_buildContext);
       }
+    } else {
+      navigation.popUntilRoot(_buildContext);
     }
+    return Future.value(true);
+  }
+
+  int getIdFromPayload(String payload, int idPosition) {
+    var hasSeparator = payload.contains(idSeparator);
+    if (!hasSeparator && idPosition > chatIdPosition) {
+      return null;
+    }
+    String idString = hasSeparator ? payload.split(idSeparator)[idPosition] : payload;
+    return idString != null ? int.parse(idString) : null;
   }
 
   Future<void> showNotificationFromPush(String fromEmail, String body) async {
@@ -135,18 +154,19 @@ class NotificationManager {
         chatId = await context.getChatByContactId(contact.id);
       }
     });
-    await _flutterLocalNotificationsPlugin.show(chatId, name, body, platformChannelSpecifics, payload: chatId != 0 ? chatId.toString(): null);
+    await _flutterLocalNotificationsPlugin.show(chatId, name, body, platformChannelSpecifics, payload: chatId != 0 ? chatId.toString() : null);
   }
 
   Future<void> showNotificationFromLocal(int chatId, String title, String body, {String payload}) async {
-    var lifecycleBloc;
     if (_buildContext != null) {
-      lifecycleBloc = BlocProvider.of<LifecycleBloc>(_buildContext);
+      // Ignoring false positive https://github.com/felangel/bloc/issues/587
+      // ignore: close_sinks
+      var lifecycleBloc = BlocProvider.of<LifecycleBloc>(_buildContext);
       var navigation = Navigation();
       if (navigation.hasElements() && lifecycleBloc?.currentBackgroundState == AppLifecycleState.resumed.toString()) {
-        var isChatNavigatable = navigation.current.equal(Navigatable(Type.chat, params: [chatId]));
-        var isChatListNavigatable = navigation.current.equal(Navigatable(Type.chatList));
-        if (isChatNavigatable || isChatListNavigatable) {
+        var isChatOpened = navigation.current.equal(Navigatable(Type.chat, params: [chatId]));
+        var isChatListOpened = navigation.current.equal(Navigatable(Type.chatList));
+        if (isChatOpened || isChatListOpened) {
           return;
         }
       }

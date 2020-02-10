@@ -79,7 +79,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       try {
         _registerListeners();
         bool antiMobbingActivated = await getPreference(preferenceAntiMobbing);
-        _showInvites = antiMobbingActivated == null || !antiMobbingActivated;
+        _showInvites = event.showInvites ?  (antiMobbingActivated == null || !antiMobbingActivated) : false;
         if (_showInvites) {
           setupInvites();
         } else {

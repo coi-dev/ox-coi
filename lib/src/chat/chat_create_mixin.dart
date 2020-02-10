@@ -86,7 +86,7 @@ mixin ChatCreateMixin {
           context,
           MaterialPageRoute(builder: (context) => Chat(chatId: state.chatId)),
           ModalRoute.withName(Navigation.root),
-          Navigatable(Type.chatList),
+          Navigatable(Type.rootChildren),
         );
       }
     }

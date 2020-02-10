@@ -53,6 +53,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/utils/text.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
@@ -95,10 +96,10 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     final String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
     final Color color = rgbColorFromInt(colorValue);
 
-    String headerText = name[0].toUpperCase();
+    String headerText = name.getFirstCharacter()?.toUpperCase();
     if (previousContactId != null) {
       final String previousName = await _contactRepository.get(previousContactId).getName();
-      headerText = headerText == previousName[0].toUpperCase() ? null : headerText;
+      headerText = headerText == previousName.getFirstCharacter()?.toUpperCase() ? null : headerText;
     }
 
     String imagePath;

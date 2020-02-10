@@ -104,7 +104,7 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteMixin {
-  Navigation navigation = Navigation();
+  Navigation _navigation = Navigation();
   ChatBloc _chatBloc = ChatBloc();
   MessageListBloc _messageListBloc = MessageListBloc();
   ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
@@ -128,7 +128,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
+    _navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
     _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
     _chatBloc.add(ClearNotifications());
     _chatBloc.listen((state) {
@@ -373,7 +373,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     // ignore: close_sinks
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
     contactChangeBloc.add(BlockContact(messageId: widget.messageId, chatId: widget.chatId));
-    navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntilRoot(context);
   }
 
   _createChat() {
@@ -553,7 +553,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   _handleCreateChatSuccess(int chatId) {
-    navigation.pushAndRemoveUntil(
+    _navigation.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => Chat(
@@ -564,7 +564,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         ),
       ),
       ModalRoute.withName(Navigation.root),
-      Navigatable(Type.chatList),
+      Navigatable(Type.rootChildren),
     );
   }
 
@@ -668,7 +668,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   _getFilePath(FileType fileType, [String extension]) async {
-    navigation.pop(context);
+    _navigation.pop(context);
     String filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
     if (filePath == null) {
       return;
@@ -697,7 +697,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   _chatTitleTapped() {
-    navigation.push(
+    _navigation.push(
       context,
       MaterialPageRoute(builder: (context) {
         return BlocProvider.value(
@@ -726,7 +726,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           phoneNumberWidgetList.add(SimpleDialogOption(
             child: Text(phoneNumber),
             onPressed: () {
-              navigation.pop(context);
+              _navigation.pop(context);
               callNumber(phoneNumber);
             },
           ));

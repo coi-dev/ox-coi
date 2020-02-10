@@ -215,7 +215,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   _leaveGroup() async {
     _chatChangeBloc.add(LeaveGroupChat(chatId: widget.chatId));
     _chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
-    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntilRoot(context);
   }
 
   void _goToEditName() {

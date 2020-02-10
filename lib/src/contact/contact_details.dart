@@ -93,7 +93,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
       } else if (state.type == ContactChangeType.block) {
         showToast(_getBlockMessage(context));
       }
-      _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+      _navigation.popUntilRoot(context);
     } else if (state is ContactChangeStateFailure) {
       switch (state.error) {
         case contactDeleteGeneric:

@@ -79,7 +79,7 @@ class _ScanQrState extends State<ScanQr> {
             context,
             MaterialPageRoute(builder: (context) => Chat(chatId: state.chatId)),
             ModalRoute.withName(Navigation.root),
-            Navigatable(Type.chat),
+            Navigatable(Type.rootChildren),
           );
         } else {
           showToast(L10n.get(L.errorProgressCanceled));

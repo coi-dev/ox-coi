@@ -81,6 +81,7 @@ enum Type {
   messageInfoDialog,
   passwordChanged,
   profile,
+  rootChildren,
   search,
   settings,
   settingsAccount,

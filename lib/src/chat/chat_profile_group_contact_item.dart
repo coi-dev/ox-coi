@@ -53,7 +53,6 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
-
 import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
 import 'chat_create_mixin.dart';
@@ -147,7 +146,11 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
 
   _handleCreateChatStateChange(int chatId) {
     _navigation.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (context) => Chat(chatId: chatId)), ModalRoute.withName(Navigation.root), Navigatable(Type.chat));
+      context,
+      MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
+      ModalRoute.withName(Navigation.root),
+      Navigatable(Type.rootChildren),
+    );
   }
 }
 

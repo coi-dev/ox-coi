@@ -43,7 +43,7 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/notifications/local_push_manager.dart';
+import 'package:ox_coi/src/notifications/local_notification_manager.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 
 void backgroundHeadlessTask() async {
@@ -60,9 +60,9 @@ void backgroundHeadlessTask() async {
 Future<void> getMessages() async {
   var context = Context();
   await context.interruptIdleForIncomingMessages();
-  var localPushManager = LocalPushManager();
-  localPushManager.setup();
-  await localPushManager.triggerLocalPush();
+  var localNotificationManager = LocalNotificationManager();
+  localNotificationManager.setup();
+  await localNotificationManager.triggerNotification();
 }
 
 class BackgroundRefreshManager {

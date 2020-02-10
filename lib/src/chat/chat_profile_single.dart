@@ -155,7 +155,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     // ignore: close_sinks
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
     contactChangeBloc.add(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
-    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntilRoot(context);
   }
 
   _deleteChat() {
@@ -163,6 +163,6 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     // ignore: close_sinks
     ChatChangeBloc chatChangeBloc = ChatChangeBloc();
     chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
-    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntilRoot(context);
   }
 }

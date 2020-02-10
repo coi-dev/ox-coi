@@ -177,7 +177,7 @@ class _OxCoiState extends State<OxCoi> {
     if (!isRelogin) {
       BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
     }
-    _navigation.popUntil(context, ModalRoute.withName(Navigation.root));
+    _navigation.popUntilRoot(context);
     _mainBloc.add(AppLoaded());
   }
 }

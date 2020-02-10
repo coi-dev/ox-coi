@@ -42,6 +42,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
@@ -56,9 +58,6 @@ import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class Share extends StatefulWidget {
   final List<int> msgIds;
@@ -90,10 +89,7 @@ class _ShareState extends State<Share> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AdaptiveAppBar(
-        title: widget.messageActionTag == MessageActionTag.forward
-            ? Text(L10n.get(L.forward))
-            : Text(L10n.get(L.share)),
-
+        title: widget.messageActionTag == MessageActionTag.forward ? Text(L10n.get(L.forward)) : Text(L10n.get(L.share)),
       ),
       body: _buildShareList(),
     );
@@ -112,9 +108,7 @@ class _ShareState extends State<Share> {
         } else if (state is ShareStateLoading) {
           return StateInfo(showLoading: true);
         } else {
-          return AdaptiveIcon(
-              icon: IconSource.error
-          );
+          return AdaptiveIcon(icon: IconSource.error);
         }
       },
     );
@@ -160,15 +154,20 @@ class _ShareState extends State<Share> {
 
   chatItemTapped(int chatId) {
     Navigation navigation = Navigation();
-    if(widget.messageActionTag == MessageActionTag.forward) {
+    if (widget.messageActionTag == MessageActionTag.forward) {
       _shareBloc.add(ForwardMessages(destinationChatId: chatId, messageIds: widget.msgIds));
     }
 
     navigation.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => Chat(chatId: chatId, sharedData: widget.sharedData,)),
+      MaterialPageRoute(
+        builder: (context) => Chat(
+          chatId: chatId,
+          sharedData: widget.sharedData,
+        ),
+      ),
       ModalRoute.withName(Navigation.root),
-      Navigatable(Type.chat, params: [chatId]),
+      Navigatable(Type.rootChildren),
     );
   }
 
@@ -181,8 +180,7 @@ class _ShareState extends State<Share> {
             L10n.get(L.chatP, count: L10n.plural),
             style: Theme.of(context).textTheme.headline,
           ),
-          ChatListItem(
-              chatId: chatId, onTap: chatItemTapped, switchMultiSelect: null, isMultiSelect: false, isShareItem: true, key: key),
+          ChatListItem(chatId: chatId, onTap: chatItemTapped, switchMultiSelect: null, isMultiSelect: false, isShareItem: true, key: key),
         ],
       ),
     );

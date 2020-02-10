@@ -89,7 +89,7 @@ class ContactChange extends StatefulWidget {
 }
 
 class _ContactChangeState extends State<ContactChange> {
-  Navigation navigation = Navigation();
+  Navigation _navigation = Navigation();
   GlobalKey<FormState> _formKey = GlobalKey();
   ValidatableTextFormField _nameField = ValidatableTextFormField(
     (context) => L10n.get(L.name),
@@ -108,7 +108,7 @@ class _ContactChangeState extends State<ContactChange> {
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.contactChange);
+    _navigation.current = Navigatable(Type.contactChange);
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
         (context) => L10n.get(L.emailAddress),
@@ -129,17 +129,17 @@ class _ContactChangeState extends State<ContactChange> {
     if (state is ContactChangeStateSuccess) {
       if (!widget.createChat) {
         showToast(changeToast);
-        navigation.pop(context);
+        _navigation.pop(context);
       } else {
         if (state.id != null) {
           Core.Context coreContext = Core.Context();
           var chatId = await coreContext.createChatByContactId(state.id);
           chatRepository.putIfAbsent(id: chatId);
-          navigation.pushAndRemoveUntil(
+          _navigation.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
             ModalRoute.withName(Navigation.root),
-            Navigatable(Type.contactList),
+            Navigatable(Type.rootChildren),
           );
         }
       }
@@ -162,7 +162,7 @@ class _ContactChangeState extends State<ContactChange> {
               icon: IconSource.close,
             ),
             key: Key(keyContactChangeCloseIconButton),
-            onPressed: () => navigation.pop(context),
+            onPressed: () => _navigation.pop(context),
           ),
           title: Text(title),
           actions: <Widget>[
@@ -347,7 +347,7 @@ class _ContactChangeState extends State<ContactChange> {
   String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
 
   scanQr() {
-    navigation.push(
+    _navigation.push(
       context,
       MaterialPageRoute(
           builder: (context) => QrCode(

@@ -205,7 +205,7 @@ class _ChatListState extends State<ChatList> {
                     sharedData: state.sharedData,
                   )),
           ModalRoute.withName(Navigation.root),
-          Navigatable(Type.chatList),
+          Navigatable(Type.rootChildren),
         );
       }
     }

@@ -58,7 +58,7 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/error/error_event_state.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
-import 'package:ox_coi/src/notifications/local_push_manager.dart';
+import 'package:ox_coi/src/notifications/local_notification_manager.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
@@ -72,7 +72,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   Context _context = Context();
   var _notificationManager = NotificationManager();
   var _pushManager = PushManager();
-  var _localPushManager = LocalPushManager();
+  var _localNotificationManager = LocalNotificationManager();
   var _config = Config();
   final ErrorBloc errorBloc;
   StreamSubscription errorBlocSubscription;
@@ -135,7 +135,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   Future<void> _setupManagers(BuildContext context) async {
     _notificationManager.setup(context);
     _pushManager.setup(context);
-    _localPushManager.setup();
+    _localNotificationManager.setup();
   }
 
   Future<void> _loadCustomerConfig() async{
