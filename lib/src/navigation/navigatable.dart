@@ -78,6 +78,7 @@ enum Type {
   loginManualSettings,
   loginProviderSignIn,
   loginErrorDialog,
+  logout,
   messageInfoDialog,
   passwordChanged,
   profile,

@@ -65,6 +65,7 @@ enum SettingsItemName {
   feedback,
   bugReport,
   debug,
+  logout,
 }
 
 class SettingsItem extends StatelessWidget {
@@ -73,8 +74,10 @@ class SettingsItem extends StatelessWidget {
   final String text;
   final Function onTap;
   final bool showSwitch;
+  final bool showChevron;
   final Function onSwitchChanged;
   final Color textColor;
+  final double itemHeight;
 
   SettingsItem({
     Key key,
@@ -83,24 +86,33 @@ class SettingsItem extends StatelessWidget {
     @required this.text,
     @required this.onTap,
     this.showSwitch = false,
+    this.showChevron = true,
     this.onSwitchChanged,
     this.textColor,
+    this.itemHeight = listItemHeight,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
-    ThemeKey actualKey = CustomTheme.instanceOf(context).actualThemeKey;
+    final brightness = CustomTheme.of(context).brightness;
+
+    final backgroundSize = itemHeight - settingsItemVerticalPadding * 2;
+    final iconBackgroundPadding = 4.0;
+    final iconSize = backgroundSize - iconBackgroundPadding * 2;
+
     return InkWell(
       onTap: onTap,
       child: Container(
         color: CustomTheme.of(context).surface,
+        height: itemHeight,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: settingsItemHorizontalPadding, vertical: settingsItemVerticalPadding),
           child: Row(
-            children: <Widget>[
+            children: [
               AdaptiveSuperellipseIcon(
                 color: iconBackground,
+                backgroundSize: backgroundSize,
+                iconSize: iconSize,
                 iconColor: CustomTheme.of(context).white,
                 icon: icon,
               ),
@@ -114,7 +126,7 @@ class SettingsItem extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: Platform.isIOS && !showSwitch,
+                visible: Platform.isIOS && !showSwitch && showChevron,
                 child: AdaptiveIcon(
                   icon: IconSource.iosChevron,
                   color: CustomTheme.of(context).onSurface,
@@ -122,7 +134,7 @@ class SettingsItem extends StatelessWidget {
               ),
               Visibility(
                 visible: showSwitch,
-                child: Switch.adaptive(value: actualKey == ThemeKey.DARK ? true : false, onChanged: (value) => onSwitchChanged()),
+                child: Switch.adaptive(value: brightness == Brightness.dark ? true : false, onChanged: (value) => onSwitchChanged()),
               ),
             ],
           ),

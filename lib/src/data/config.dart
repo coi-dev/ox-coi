@@ -75,6 +75,11 @@ class Config {
 
   Config._internal();
 
+  void reset() {
+    _instance = null;
+    _instance = Config();
+  }
+
   load() async {
     if (_lastUpdate != -1) {
       return;

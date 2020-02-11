@@ -54,10 +54,18 @@ class LoadApp extends MainEvent {}
 
 class AppLoaded extends MainEvent {}
 
+class Logout extends MainEvent {}
+
 class UserVisibleErrorEncountered extends MainEvent {
   final userVisibleError;
 
   UserVisibleErrorEncountered({@required this.userVisibleError});
+}
+
+class DatabaseDeleteErrorEncountered extends MainEvent {
+  Error error;
+
+  DatabaseDeleteErrorEncountered({@required this.error});
 }
 
 abstract class MainState {}

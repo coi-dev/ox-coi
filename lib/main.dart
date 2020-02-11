@@ -63,8 +63,12 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 void main() {
-  LogManager _logManager = LogManager();
+  final LogManager _logManager = LogManager();
   _logManager.setup(logToFile: false, logLevel: Level.INFO);
+
+  // ignore: close_sinks
+  final errorBloc = ErrorBloc();
+
   runApp(
     MultiBlocProvider(
       providers: [
@@ -79,8 +83,11 @@ void main() {
           create: (BuildContext context) => PushBloc(),
         ),
         BlocProvider<ErrorBloc>(
-          create: (BuildContext context) => ErrorBloc(),
-        )
+          create: (BuildContext context) => errorBloc,
+        ),
+        BlocProvider<MainBloc>(
+          create: (BuildContext context) => MainBloc(errorBloc),
+        ),
       ],
       child: CustomTheme(
         initialThemeKey: ThemeKey.LIGHT,
@@ -180,4 +187,5 @@ class _OxCoiState extends State<OxCoi> {
     _navigation.popUntilRoot(context);
     _mainBloc.add(AppLoaded());
   }
+
 }

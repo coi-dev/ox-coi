@@ -50,6 +50,8 @@ import 'package:ox_coi/src/invite/invite_bloc.dart';
 import 'package:ox_coi/src/invite/invite_event_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/main/main_bloc.dart';
+import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
@@ -65,6 +67,7 @@ import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart' as UserChange;
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
@@ -120,6 +123,7 @@ class _ProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
+
     navigation.current = Navigatable(Type.profile);
     _userBloc.add(RequestUser());
   }
@@ -147,150 +151,159 @@ class _ProfileState extends State<UserProfile> {
 
   Widget buildProfileView(Config config) {
     _avatarPath = config.avatarPath;
-        return SingleChildScrollView(
-
-            child: IntrinsicHeight(
-              child: Container(
-                color: CustomTheme.of(context).background,
-                child: Column(
-                  children: <Widget>[
-                    ProfileData(
-                      text: config.username,
-                      secondaryText: config.email,
-                      avatarPath: _avatarPath,
-                      placeholderText: L10n.get(L.profileNoUsername),
-                      imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
-                      imageActionCallback: _editPhotoCallback,
-                      withPlaceholder: true,
-                      editActionCallback: () => _editUserSettings(),
-                      child: ProfileHeader(),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.flag,
-                      text: L10n.get(L.settingItemFlaggedTitle),
-                      iconBackground: CustomTheme.of(context).flagIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
-                      key: Key(keyUserProfileFlagIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.qr,
-                      text: L10n.get(L.settingItemQRTitle),
-                      iconBackground: CustomTheme.of(context).qrIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.qrShow),
-                      key: Key(keyUserProfileQrIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.personAdd,
-                      text: L10n.get(L.settingItemInviteTitle),
-                      iconBackground: CustomTheme.of(context).inviteIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.invite),
-                      key: Key(keyUserProfilePersonAddIconSource),
-                    ),
-                    ListGroupHeader(
-                      text: L10n.get(L.settingGroupHeaderGeneralTitle),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.darkMode,
-                      text: L10n.get(L.settingItemDarkModeTitle),
-                      iconBackground: CustomTheme.of(context).darkModeIcon,
-                      onTap: () => _changeTheme(),
-                      showSwitch: true,
-                      onSwitchChanged: () => _changeTheme(),
-                      key: Key(keyUserProfileDarkModeIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.notifications,
-                      text: L10n.get(L.settingItemNotificationsTitle),
-                      iconBackground: CustomTheme.of(context).notificationIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
-                      key: Key(keyUserProfileNotificationIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.chat,
-                      text: L10n.get(L.settingItemChatTitle),
-                      iconBackground: CustomTheme.of(context).chatIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.chat),
-                      key: Key(keyUserProfileChatIconSource),
-                    ),
-                    ListGroupHeader(
-                      text: L10n.get(L.settingGroupHeaderEmailTitle),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.signature,
-                      text: L10n.get(L.settingItemSignatureTitle),
-                      iconBackground: CustomTheme.of(context).signatureIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.signature),
-                      key: Key(keyUserProfileSignatureIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.serverSetting,
-                      text: L10n.get(L.settingItemServerSettingsTitle),
-                      iconBackground: CustomTheme.of(context).serverSettingsIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.serverSetting),
-                      key:Key(keyUserProfileServerSettingIconSource),
-                    ),
-                    ListGroupHeader(
-                      text: L10n.get(L.settingGroupHeaderSecurityTitle),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.security,
-                      text: L10n.get(L.settingItemDataProtectionTitle),
-                      iconBackground: CustomTheme.of(context).dataProtectionIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.dataProtection),
-                      key: Key(keyUserProfileSecurityIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.block,
-                      text: L10n.get(L.settingItemBlockedTitle),
-                      iconBackground: CustomTheme.of(context).blockIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.blocked),
-                      key: Key(keyUserProfileBlockIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.lock,
-                      text: L10n.get(L.settingItemEncryptionTitle),
-                      iconBackground: CustomTheme.of(context).encryptionIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.encryption),
-                      key: Key(keyUserProfileLockIconSource),
-                    ),
-                    ListGroupHeader(
-                      text: "",
-                    ),
-                    SettingsItem(
-                      icon: IconSource.info,
-                      text: L10n.get(L.settingItemAboutTitle),
-                      iconBackground: CustomTheme.of(context).aboutIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.about),
-                      key: Key(keyUserProfileInfoIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.feedback,
-                      text: L10n.get(L.settingItemFeedbackTitle),
-                      iconBackground: CustomTheme.of(context).feedbackIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.feedback),
-                      key: Key(keyUserProfileFeedbackIconSource),
-                    ),
-                    SettingsItem(
-                      icon: IconSource.bugReport,
-                      text: L10n.get(L.settingItemBugReportTitle),
-                      iconBackground: CustomTheme.of(context).bugReportIcon,
-                      onTap: () => _settingsItemTapped(context, SettingsItemName.bugReport),
-                      key: Key(keyUserProfileBugReportIconSource),
-                    ),
-                    if (!isRelease())
-                      SettingsItem(
-                        icon: IconSource.bugReport,
-                        text: L10n.get(L.debug),
-                        iconBackground: CustomTheme.of(context).bugReportIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.debug),
-                      ),
-                  ],
-                ),
+    return SingleChildScrollView(
+      child: IntrinsicHeight(
+        child: Container(
+          color: CustomTheme.of(context).background,
+          child: Column(
+            children: <Widget>[
+              ProfileData(
+                text: config.username,
+                secondaryText: config.email,
+                avatarPath: _avatarPath,
+                placeholderText: L10n.get(L.profileNoUsername),
+                imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
+                imageActionCallback: _editPhotoCallback,
+                withPlaceholder: true,
+                editActionCallback: () => _editUserSettings(),
+                child: ProfileHeader(),
               ),
-            ),
-        );
-
-
+              SettingsItem(
+                icon: IconSource.flag,
+                text: L10n.get(L.settingItemFlaggedTitle),
+                iconBackground: CustomTheme.of(context).flagIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
+                key: Key(keyUserProfileFlagIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.qr,
+                text: L10n.get(L.settingItemQRTitle),
+                iconBackground: CustomTheme.of(context).qrIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.qrShow),
+                key: Key(keyUserProfileQrIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.personAdd,
+                text: L10n.get(L.settingItemInviteTitle),
+                iconBackground: CustomTheme.of(context).inviteIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.invite),
+                key: Key(keyUserProfilePersonAddIconSource),
+              ),
+              ListGroupHeader(
+                text: L10n.get(L.settingGroupHeaderGeneralTitle),
+              ),
+              SettingsItem(
+                icon: IconSource.darkMode,
+                text: L10n.get(L.settingItemDarkModeTitle),
+                iconBackground: CustomTheme.of(context).darkModeIcon,
+                onTap: () => _changeTheme(),
+                showSwitch: true,
+                onSwitchChanged: () => _changeTheme(),
+                key: Key(keyUserProfileDarkModeIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.notifications,
+                text: L10n.get(L.settingItemNotificationsTitle),
+                iconBackground: CustomTheme.of(context).notificationIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
+                key: Key(keyUserProfileNotificationIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.chat,
+                text: L10n.get(L.settingItemChatTitle),
+                iconBackground: CustomTheme.of(context).chatIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.chat),
+                key: Key(keyUserProfileChatIconSource),
+              ),
+              ListGroupHeader(
+                text: L10n.get(L.settingGroupHeaderEmailTitle),
+              ),
+              SettingsItem(
+                icon: IconSource.signature,
+                text: L10n.get(L.settingItemSignatureTitle),
+                iconBackground: CustomTheme.of(context).signatureIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.signature),
+                key: Key(keyUserProfileSignatureIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.serverSetting,
+                text: L10n.get(L.settingItemServerSettingsTitle),
+                iconBackground: CustomTheme.of(context).serverSettingsIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.serverSetting),
+                key: Key(keyUserProfileServerSettingIconSource),
+              ),
+              ListGroupHeader(
+                text: L10n.get(L.settingGroupHeaderSecurityTitle),
+              ),
+              SettingsItem(
+                icon: IconSource.security,
+                text: L10n.get(L.settingItemDataProtectionTitle),
+                iconBackground: CustomTheme.of(context).dataProtectionIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.dataProtection),
+                key: Key(keyUserProfileSecurityIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.block,
+                text: L10n.get(L.settingItemBlockedTitle),
+                iconBackground: CustomTheme.of(context).blockIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.blocked),
+                key: Key(keyUserProfileBlockIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.lock,
+                text: L10n.get(L.settingItemEncryptionTitle),
+                iconBackground: CustomTheme.of(context).encryptionIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.encryption),
+                key: Key(keyUserProfileLockIconSource),
+              ),
+              ListGroupHeader(
+                text: "",
+              ),
+              SettingsItem(
+                icon: IconSource.info,
+                text: L10n.get(L.settingItemAboutTitle),
+                iconBackground: CustomTheme.of(context).aboutIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.about),
+                key: Key(keyUserProfileInfoIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.feedback,
+                text: L10n.get(L.settingItemFeedbackTitle),
+                iconBackground: CustomTheme.of(context).feedbackIcon,
+                showChevron: false,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.feedback),
+                key: Key(keyUserProfileFeedbackIconSource),
+              ),
+              SettingsItem(
+                icon: IconSource.bugReport,
+                text: L10n.get(L.settingItemBugReportTitle),
+                iconBackground: CustomTheme.of(context).bugReportIcon,
+                showChevron: false,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.bugReport),
+                key: Key(keyUserProfileBugReportIconSource),
+              ),
+              if (!isRelease())
+                SettingsItem(
+                  icon: IconSource.bugReport,
+                  text: L10n.get(L.debug),
+                  iconBackground: CustomTheme.of(context).bugReportIcon,
+                  onTap: () => _settingsItemTapped(context, SettingsItemName.debug),
+                ),
+              ListGroupHeader(
+                text: "",
+              ),
+              SettingsItem(
+                icon: IconSource.logout,
+                text: L10n.get(L.logoutTitle),
+                iconBackground: CustomTheme.of(context).logoutIcon,
+                showChevron: false,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.logout),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {
@@ -308,7 +321,7 @@ class _ProfileState extends State<UserProfile> {
         );
         break;
       case SettingsItemName.invite:
-        createInviteUrl();
+        _createInviteUrl();
         break;
       case SettingsItemName.notification:
         navigation.pushNamed(context, Navigation.settingsNotifications);
@@ -346,10 +359,30 @@ class _ProfileState extends State<UserProfile> {
       case SettingsItemName.bugReport:
         launch(issueUrl, forceSafariVC: false);
         break;
+      case SettingsItemName.logout:
+        _showLogoutDialog(context: context);
+        break;
       case SettingsItemName.debug:
         navigation.pushNamed(context, Navigation.settingsDebug);
         break;
     }
+  }
+
+  void _showLogoutDialog({BuildContext context}) {
+    showConfirmationDialog(
+      context: context,
+      title: L10n.get(L.logoutTitle),
+      content: L10n.get(L.logoutConfirmationText),
+      positiveButton: L10n.get(L.logoutTitle),
+      positiveAction: _logoutAction,
+      navigatable: Navigatable(Type.logout),
+    );
+  }
+
+  void _logoutAction() {
+    // ignore: close_sinks
+    final mainBloc = BlocProvider.of<MainBloc>(context);
+    mainBloc.add(Logout());
   }
 
   void _changeTheme() async {
@@ -359,28 +392,21 @@ class _ProfileState extends State<UserProfile> {
     CustomTheme.instanceOf(context).changeTheme(newTheme);
   }
 
-  _editPhotoCallback(String avatarPath) {
+  void _editPhotoCallback(String avatarPath) {
     setState(() {
       _avatarPath = avatarPath;
     });
     _userChangeBloc.add(UserChange.UserAvatarChanged(avatarPath: avatarPath));
   }
 
-  _editUserSettings() {
+  void _editUserSettings() {
     navigation.push(
       context,
       MaterialPageRoute(builder: (context) => UserSettings()),
     );
   }
 
-  showQr() {
-    navigation.push(
-      context,
-      MaterialPageRoute(builder: (context) => QrCode(chatId: 0)),
-    );
-  }
-
-  createInviteUrl() {
+  void _createInviteUrl() {
     _progressOverlayEntry = FullscreenOverlay(
       fullscreenProgress: FullscreenProgress(
         bloc: _inviteBloc,

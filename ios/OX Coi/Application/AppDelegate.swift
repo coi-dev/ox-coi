@@ -74,4 +74,17 @@ class AppDelegate: FlutterAppDelegate {
         Messaging.messaging().apnsToken = deviceToken
     }
 
+    override func applicationDidEnterBackground(_ application: UIApplication) {
+        if UserDefaults.applicationShouldTerminate {
+            UserDefaults.applicationShouldTerminate = false
+            let sel = Selector(("terminateWithSuccess"))
+
+            if application.responds(to: sel) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    application.perform(sel)
+                }
+            }
+        }
+    }
+
 }

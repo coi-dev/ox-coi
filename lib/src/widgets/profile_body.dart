@@ -48,6 +48,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 
+
 class ProfileActionList extends StatelessWidget {
   final List<Widget> tiles;
 

@@ -108,6 +108,7 @@ enum IconSource {
   signature,
   serverSetting,
   feedback,
+  logout,
   iosChevron,
 }
 
@@ -175,6 +176,7 @@ const iconData = {
   IconSource.serverSetting: Icons.router,
   IconSource.feedback: Icons.feedback,
   IconSource.iosChevron: CupertinoIcons.right_chevron,
+  IconSource.logout: Icons.exit_to_app,
 };
 
 class AdaptiveIcon extends StatelessWidget {

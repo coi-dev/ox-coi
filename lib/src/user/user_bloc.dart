@@ -54,11 +54,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> mapEventToState(UserEvent event) async* {
     if (event is RequestUser) {
       yield UserStateLoading();
+
       try {
         _setupUser();
       } catch (error) {
         yield UserStateFailure(error: error.toString());
       }
+
     } else if (event is UserLoaded) {
       yield UserStateSuccess(config: event.config);
     }

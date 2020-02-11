@@ -92,3 +92,8 @@ Future<void> removePreference(String key) async {
   SharedPreferences sharedPreferences = await getSharedPreferences();
   sharedPreferences.remove(key);
 }
+
+Future<void> clearPreferences() async {
+  SharedPreferences sharedPreferences = await getSharedPreferences();
+  await sharedPreferences.clear();
+}
