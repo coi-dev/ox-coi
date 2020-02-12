@@ -40,17 +40,16 @@
  * for more details.
  */
 
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:ox_coi/src/contact/contact_change.dart';
-import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/error.dart';
+
+import 'contact_change.dart';
+import 'contact_change_event_state.dart';
 
 enum ContactChangeType {
   add,
@@ -101,9 +100,16 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
 
   Stream<ContactChangeState> _changeContact(String name, String address, ContactAction contactAction) async* {
     Context context = Context();
+    if (contactAction == ContactAction.add) {
+      var contactIdByAddress = await context.getContactIdByAddress(address);
+      if (contactIdByAddress != 0) {
+        yield ContactChangeStateFailure(error: contactAddGeneric, contactId: contactIdByAddress);
+        return;
+      }
+    }
     if (address.contains(googlemailDomain)) {
       yield GoogleContactDetected(name: name, email: address);
-    }else {
+    } else {
       int id = await context.createContact(name, address);
       if (contactAction == ContactAction.add) {
         add(ContactAdded(id: id));
@@ -181,9 +187,9 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     add(ContactUnblocked());
   }
 
-  void _addGoogleContact(String name, String email, bool changeEmail) async{
+  void _addGoogleContact(String name, String email, bool changeEmail) async {
     Context context = Context();
-    if(changeEmail){
+    if (changeEmail) {
       email = email.replaceAll(googlemailDomain, gmailDomain);
     }
 

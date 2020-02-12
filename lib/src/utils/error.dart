@@ -43,6 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 
 // Internal app errors
+const contactAddGeneric = "contactDelete-generic";
 const contactDeleteGeneric = "contactDelete-generic";
 const contactDeleteChatExists = "contactDelete-chatExists";
 
