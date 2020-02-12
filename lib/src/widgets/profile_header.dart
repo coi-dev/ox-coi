@@ -56,13 +56,14 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
+import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 
 class ProfileData extends InheritedWidget {
   final Color imageBackgroundColor;
   final String text;
-  final String secondText;
+  final String secondaryText;
   final String placeholderText;
   final String initialsText;
   final IconSource iconData;
@@ -78,7 +79,7 @@ class ProfileData extends InheritedWidget {
     @required Widget child,
     this.imageBackgroundColor,
     this.text,
-    this.secondText,
+    this.secondaryText,
     this.placeholderText,
     this.initialsText,
     this.iconData,
@@ -119,25 +120,26 @@ class ProfileHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ProfileAvatar(),
+                  Padding(padding: EdgeInsets.only(top: 24.0)),
                   Visibility(
-                    visible: ProfileData.of(context).text != null && ProfileData.of(context).text.isNotEmpty,
+                    visible: !ProfileData.of(context).text.isNullOrEmpty(),
                     child: Padding(
-                      padding: EdgeInsets.only(top: 24.0, bottom: 8.0),
+                      padding: EdgeInsets.only(bottom: 8.0),
                       child: ProfileData.of(context).withPlaceholder
                           ? PlaceholderText(
-                        text: ProfileData.of(context).text,
-                        style: getProfileHeaderTextStyle(context),
-                        align: TextAlign.center,
-                        placeholderText: ProfileData.of(context).placeholderText,
-                        placeholderStyle: getProfileHeaderPlaceholderTextStyle(context),
-                        placeHolderAlign: TextAlign.center,
-                      )
+                              text: ProfileData.of(context).text,
+                              style: getProfileHeaderTextStyle(context),
+                              align: TextAlign.center,
+                              placeholderText: ProfileData.of(context).placeholderText,
+                              placeholderStyle: getProfileHeaderPlaceholderTextStyle(context),
+                              placeHolderAlign: TextAlign.center,
+                            )
                           : ProfileHeaderText(),
                     ),
                   ),
                   Visibility(
-                    visible: ProfileData.of(context).secondText != null && ProfileData.of(context).secondText.isNotEmpty,
-                    child: ProfileSecondText(),
+                    visible: !ProfileData.of(context).secondaryText.isNullOrEmpty(),
+                    child: ProfileHeaderSecondaryText(),
                   ),
                 ],
               ),
@@ -223,7 +225,8 @@ class ProfileAvatar extends StatelessWidget {
             textPrimary: ProfileData.of(context).initialsText,
           ),
           Visibility(
-            visible: ProfileData.of(context).imageActionCallback != null && (ProfileData.of(context).avatarPath == null || ProfileData.of(context).avatarPath.isEmpty),
+            visible: ProfileData.of(context).imageActionCallback != null &&
+                (ProfileData.of(context).avatarPath.isNullOrEmpty()),
             child: AdaptiveIcon(
               icon: IconSource.camera,
               color: ProfileData.of(context).showWhiteImageIcon ? CustomTheme.of(context).white : CustomTheme.of(context).accent,
@@ -269,66 +272,48 @@ class ProfileHeaderText extends StatelessWidget {
   }
 }
 
-class ProfileSecondText extends StatelessWidget {
-  const ProfileSecondText({Key key}) : super(key: key);
+class ProfileHeaderSecondaryText extends StatelessWidget {
+  const ProfileHeaderSecondaryText({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var content = Text(
-      ProfileData.of(context).secondText,
+      ProfileData.of(context).secondaryText,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: getProfileHeaderSecondTextStyle(context),
     );
-    return Container(
-        child: ProfileData.of(context).iconData != null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  AdaptiveIcon(icon: ProfileData.of(context).iconData),
-                  Padding(
-                    padding: const EdgeInsets.only(left: iconTextPadding),
-                    child: content,
-                  ),
-                ],
-              )
-            : content);
+    return GestureDetector(
+      onTap: () => copyToClipboardWithToast(text: ProfileData.of(context).secondaryText, toastText: getDefaultCopyToastText(context)),
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (ProfileData.of(context).iconData != null)
+            Padding(
+              padding: const EdgeInsets.only(right: iconTextPadding),
+              child: AdaptiveIcon(icon: ProfileData.of(context).iconData),
+            ),
+          content,
+          Padding(
+            padding: const EdgeInsets.only(left: iconTextPadding),
+            child: AdaptiveIcon(icon: IconSource.contentCopy),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-class ProfileMemberHeaderText extends StatelessWidget {
-  const ProfileMemberHeaderText({Key key}) : super(key: key);
+class ProfileHeaderParticipantsHeader extends StatelessWidget {
+  const ProfileHeaderParticipantsHeader({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
       ProfileData.of(context).text,
       style: Theme.of(context).textTheme.subtitle,
-    );
-  }
-}
-
-class ProfileCopyableHeaderText extends StatelessWidget {
-  final String toastMessage;
-
-  const ProfileCopyableHeaderText({Key key, @required this.toastMessage}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        copyToClipboardWithToast(text: ProfileData.of(context).text, toastText: toastMessage);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ProfileHeaderText(),
-          Padding(padding: EdgeInsets.all(iconTextPadding)),
-          AdaptiveIcon(icon: IconSource.contentCopy),
-        ],
-      ),
     );
   }
 }

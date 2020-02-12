@@ -119,8 +119,9 @@ class _ShareState extends State<Share> {
       padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.chatAndContactIds.length,
       itemBuilder: (BuildContext context, int index) {
+        var chatAndContactIds = state.chatAndContactIds;
         if (state.chatIdCount > 0 && index < state.chatIdCount) {
-          var chatId = state.chatAndContactIds[index];
+          var chatId = chatAndContactIds[index];
           var key = createKeyFromId(chatId);
           if (index == 0) {
             return createChatItemWithHeader(chatId);
@@ -135,12 +136,14 @@ class _ShareState extends State<Share> {
             );
           }
         } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
-          var contactId = state.chatAndContactIds[index];
+          var contactId = chatAndContactIds[index];
           if (index == state.chatIdCount) {
             return createContactItemWithHeader(contactId);
           } else {
+            final int previousContactId = (index > state.chatIdCount) ? chatAndContactIds[index - 1] : null;
             return ContactItem(
               contactId: contactId,
+              previousContactId: previousContactId,
               contactItemType: ContactItemType.forward,
               onTap: chatItemTapped,
               key: Key(contactId.toString()),
@@ -187,14 +190,21 @@ class _ShareState extends State<Share> {
   }
 
   Widget createContactItemWithHeader(int contactId) {
-    return Container(
+    return Padding(
+      padding: EdgeInsets.only(top: listItemPadding),
       child: Column(
         children: <Widget>[
           Text(
             L10n.get(L.contactP, count: L10n.plural),
             style: Theme.of(context).textTheme.headline,
           ),
-          ContactItem(contactId: contactId, contactItemType: ContactItemType.forward, onTap: chatItemTapped, key: Key(contactId.toString())),
+          ContactItem(
+            contactId: contactId,
+            contactItemType: ContactItemType.forward,
+            onTap: chatItemTapped,
+            key: Key(contactId.toString()),
+            previousContactId: null,
+          ),
         ],
       ),
     );

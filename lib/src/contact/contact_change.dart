@@ -245,7 +245,7 @@ class _ContactChangeState extends State<ContactChange> {
               child: Container(
                 color: CustomTheme.of(context).surface,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
+                  padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
                   child: Row(
                     children: <Widget>[
                       AdaptiveIcon(icon: IconSource.person),
@@ -284,7 +284,7 @@ class _ContactChangeState extends State<ContactChange> {
                   children: <Widget>[
                     for (var phoneNumber in ContactExtension.getPhoneNumberList(widget.phoneNumbers))
                       Padding(
-                        padding: const EdgeInsets.only(top: formVerticalPadding, bottom: formVerticalPadding),
+                        padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
                         child: Row(
                           children: <Widget>[
                             AdaptiveIcon(icon: IconSource.phone),

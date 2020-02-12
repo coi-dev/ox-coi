@@ -78,7 +78,7 @@ extension Check on String {
   static final RegExp matchEmail = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
-  isNullOrEmpty() => this == null || this.isEmpty;
+  bool isNullOrEmpty() => this == null || this.isEmpty;
 
   bool isEmail() {
     return matchEmail.hasMatch(this);

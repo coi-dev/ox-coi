@@ -118,7 +118,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                           padding: EdgeInsets.only(left: 20.0),
                           child: ProfileData(
                             text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
-                            child: ProfileMemberHeaderText(),
+                            child: ProfileHeaderParticipantsHeader(),
                           )),
                       Divider(),
                       Visibility(

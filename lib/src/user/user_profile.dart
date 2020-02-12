@@ -159,7 +159,7 @@ class _ProfileState extends State<UserProfile> {
                   children: <Widget>[
                     ProfileData(
                       text: config.username,
-                      secondText: config.email,
+                      secondaryText: config.email,
                       avatarPath: _avatarPath,
                       placeholderText: L10n.get(L.profileNoUsername),
                       imageBackgroundColor: CustomTheme.of(context).onBackground.withOpacity(barely),

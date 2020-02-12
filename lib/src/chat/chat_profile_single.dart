@@ -116,7 +116,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             imageBackgroundColor: color,
             avatarPath: imagePath,
             text: chatName,
-            secondText: email,
+            secondaryText: email,
             textStyle: Theme.of(context).textTheme.title,
             iconData: isVerified ? IconSource.verifiedUser : null,
             child: ProfileHeader(),

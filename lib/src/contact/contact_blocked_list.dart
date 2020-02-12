@@ -58,7 +58,6 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-
 class ContactBlockedList extends StatefulWidget {
   @override
   _ContactBlockedListState createState() => _ContactBlockedListState();
@@ -118,11 +117,13 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
     return ListView.custom(
         controller: _scrollController,
         childrenDelegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
+            (BuildContext context, int index) {
               var contactId = contactIds[index];
+              final int previousContactId = (index > 0) ? contactIds[index - 1] : null;
               var key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
               return ContactItem(
                 contactId: contactId,
+                previousContactId: previousContactId,
                 contactItemType: ContactItemType.blocked,
                 key: key,
               );

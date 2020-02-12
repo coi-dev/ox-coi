@@ -124,7 +124,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                   ProfileData(
                     text: state.name,
                     textStyle: Theme.of(context).textTheme.title,
-                    secondText: state.email,
+                    secondaryText: state.email,
                     avatarPath: state.imagePath,
                     imageBackgroundColor: state.color,
                     editActionCallback: () => _editContact(context, state.name, state.email, state.phoneNumbers),

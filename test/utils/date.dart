@@ -42,8 +42,6 @@
 
 import 'package:date_format/date_format.dart';
 import 'package:mockito/mockito.dart';
-import 'package:ox_coi/src/l10n/l.dart';
-import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:test/test.dart';
 

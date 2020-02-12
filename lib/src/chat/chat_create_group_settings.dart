@@ -181,10 +181,11 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         ),
         Column(
           children: <Widget>[
-            for (var contactId in contactIds)
+            for (var index = 0; index < contactIds.length; index++)
               ContactItem(
-                contactId: contactId,
-                key: Key(contactId.toString()),
+                contactId: contactIds[index],
+                previousContactId: index > 0 ? contactIds[index - 1] : null,
+                key: Key(contactIds[index].toString()),
               ),
           ],
         ),
