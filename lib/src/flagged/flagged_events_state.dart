@@ -44,7 +44,11 @@ import 'package:meta/meta.dart';
 
 abstract class FlaggedEvent {}
 
-class RequestFlaggedMessages extends FlaggedEvent {}
+class RequestFlaggedMessages extends FlaggedEvent {
+  final int chatId;
+
+  RequestFlaggedMessages({@required this.chatId});
+}
 
 class FlaggedMessagesLoaded extends FlaggedEvent {
   final List<int> messageIds;

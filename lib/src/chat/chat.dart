@@ -61,6 +61,7 @@ import 'package:ox_coi/src/chat/chat_profile.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
+import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -123,7 +124,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   String _selectedExtension = "";
   String _fileName = "";
   String _phoneNumbers;
-  var _scrollController = ScrollController();
+  final  _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -173,7 +174,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void setFileData() {
-    var path = widget.sharedData.path;
+    final path = widget.sharedData.path;
     FileType type;
     switch (widget.sharedData.mimeType) {
       case "image/*":
@@ -258,18 +259,20 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           Color color;
           bool isVerified = false;
           String imagePath = "";
-          bool isGroup = false;
+          bool isGroupChat = false;
+
           if (state is ChatStateSuccess) {
             name = state.name;
             subTitle = state.subTitle;
             color = state.color;
             isVerified = state.isVerified;
             imagePath = state.avatarPath;
-            isGroup = state.isGroupChat;
+            isGroupChat = state.isGroupChat;
           } else {
             name = "";
             subTitle = "";
           }
+
           return Scaffold(
             appBar: AdaptiveAppBar(
               title: isInviteChat(widget.chatId)
@@ -279,14 +282,20 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                       onTap: () => _chatTitleTapped(),
                       child: buildRow(imagePath, name, subTitle, color, context, isVerified),
                     ),
-              actions: <Widget>[
-                if (!isGroup)
+              actions: [
+                if (!isGroupChat)
                   AdaptiveIconButton(
                     icon: AdaptiveIcon(icon: IconSource.phone),
                     key: Key(keyChatIconButtonIconPhone),
-                    onPressed: onPhonePressed,
+                    onPressed: _onPhonePressed,
                     color: CustomTheme.of(context).onPrimary,
                   ),
+                AdaptiveIconButton(
+                  icon: AdaptiveIcon(icon: IconSource.flag,),
+                  key: Key(keyChatListGetFlaggedActionIconButton),
+                  onPressed: _onFlaggedPressed,
+                  color: CustomTheme.of(context).onPrimary,
+                ),
               ],
             ),
             body: new Column(
@@ -371,7 +380,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     _messageListBloc.close();
     // Ignoring false positive https://github.com/felangel/bloc/issues/587
     // ignore: close_sinks
-    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
+    final contactChangeBloc = ContactChangeBloc();
     contactChangeBloc.add(BlockContact(messageId: widget.messageId, chatId: widget.chatId));
     _navigation.popUntilRoot(context);
   }
@@ -490,7 +499,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   Widget _buildTextComposer() {
-    List<Widget> widgets = List();
+    final List<Widget> widgets = List();
     widgets.add(buildLeftComposerPart(
       context: context,
       type: _getComposerType(),
@@ -512,6 +521,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       type: _getComposerType(),
       onSendText: _onPrepareMessageSend,
     ));
+
     return IconTheme(
       data: IconThemeData(color: CustomTheme.of(context).accent),
       child: Container(
@@ -569,7 +579,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void _onMessageSend() {
-    String text = _textController.text;
+    final String text = _textController.text;
     _textController.clear();
     if (_filePath.isEmpty) {
       _messageListBloc.add(SendMessage(text: text));
@@ -708,7 +718,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     );
   }
 
-  void onPhonePressed() {
+  void _onPhonePressed() {
     if (_phoneNumbers == null || _phoneNumbers.isEmpty) {
       showInformationDialog(
         context: context,
@@ -717,17 +727,17 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         navigatable: Navigatable(Type.contactNoNumberDialog),
       );
     } else {
-      var phoneNumberList = ContactExtension.getPhoneNumberList(_phoneNumbers);
+      final phoneNumberList = ContactExtension.getPhoneNumberList(_phoneNumbers);
       if (phoneNumberList.length == 1) {
-        callNumber(phoneNumberList.first);
+        _callNumber(phoneNumberList.first);
       } else {
-        var phoneNumberWidgetList = List<Widget>();
+        final phoneNumberWidgetList = List<Widget>();
         phoneNumberList.forEach((phoneNumber) {
           phoneNumberWidgetList.add(SimpleDialogOption(
             child: Text(phoneNumber),
             onPressed: () {
               _navigation.pop(context);
-              callNumber(phoneNumber);
+              _callNumber(phoneNumber);
             },
           ));
         });
@@ -743,8 +753,15 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     }
   }
 
-  void callNumber(String phoneNumber) {
-    String parsedPhoneNumber = phoneNumber.getPhoneNumberFromString();
+  void _onFlaggedPressed() {
+    _navigation.push(
+      context,
+      MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
+    );
+  }
+
+  void _callNumber(String phoneNumber) {
+    final String parsedPhoneNumber = phoneNumber.getPhoneNumberFromString();
     launch("tel://$parsedPhoneNumber");
   }
 }
@@ -774,8 +791,8 @@ class MessageList extends StatelessWidget {
                       nextMessageId = state.messageIds[index + 1];
                     }
                     bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-                    var key = createKey(messageId);
-                    return ChatMessageItem(
+                    final key = createKey(messageId);
+                    return MessageItem(
                       chatId: chatId,
                       messageId: messageId,
                       isGroupChat: BlocProvider.of<ChatBloc>(context).isGroup,
@@ -787,8 +804,8 @@ class MessageList extends StatelessWidget {
                   childCount: state.messageIds.length,
                   findChildIndexCallback: (Key key) {
                     final ValueKey valueKey = key;
-                    var id = extractId(valueKey);
-                    var indexOf = state.messageIds.indexOf(id);
+                    final id = extractId(valueKey);
+                    final indexOf = state.messageIds.indexOf(id);
                     return indexOf;
                   }),
             );

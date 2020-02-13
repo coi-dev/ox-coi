@@ -67,7 +67,7 @@ import 'message_received.dart';
 import 'message_sent.dart';
 import 'message_special.dart';
 
-class ChatMessageItem extends StatefulWidget {
+class MessageItem extends StatefulWidget {
   final int chatId;
   final int messageId;
   final int nextMessageId;
@@ -75,7 +75,7 @@ class ChatMessageItem extends StatefulWidget {
   final bool hasDateMarker;
   final bool isFlaggedView;
 
-  ChatMessageItem(
+  MessageItem(
       {@required this.chatId,
       @required this.messageId,
       @required this.nextMessageId,
@@ -86,10 +86,10 @@ class ChatMessageItem extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ChatMessageItemState createState() => _ChatMessageItemState();
+  _MessageItemState createState() => _MessageItemState();
 }
 
-class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAliveClientMixin<ChatMessageItem> {
+class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClientMixin<MessageItem> {
   final List<MessageAction> _messageActions = <MessageAction>[
     MessageAction(title: L10n.get(L.messageActionForward), icon: IconSource.forward, messageActionTag: MessageActionTag.forward),
     MessageAction(title: L10n.get(L.messageActionCopy), icon: IconSource.contentCopy, messageActionTag: MessageActionTag.copy),
@@ -125,8 +125,15 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
   @override
   void initState() {
     super.initState();
-    _messageItemBloc
-        .add(LoadMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
+    _messageItemBloc.add(LoadMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
+  }
+
+  @override
+  void dispose() {
+    _messageItemBloc.close();
+    _messageListBloc.close();
+    _attachmentBloc.close();
+    super.dispose();
   }
 
   @override
@@ -140,7 +147,8 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
         bloc: _messageItemBloc,
         builder: (context, state) {
           if (state is MessageItemStateSuccess) {
-            var messageStateData = state.messageStateData;
+            final messageStateData = state.messageStateData;
+
             Widget message;
             if (messageStateData.isInfo) {
               message = MessageInfo(messageStateData: messageStateData, useInformationText: false);
@@ -151,6 +159,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
             } else {
               message = MessageReceived(messageStateData: messageStateData);
             }
+
             return Column(
               crossAxisAlignment: messageStateData.isOutgoing ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
@@ -191,6 +200,7 @@ class _ChatMessageItemState extends State<ChatMessageItem> with AutomaticKeepAli
                 ),
               ],
             );
+
           } else {
             return Container();
           }

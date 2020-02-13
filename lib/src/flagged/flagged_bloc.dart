@@ -49,9 +49,10 @@ import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'flagged_events_state.dart';
 
 class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
-  RepositoryEventStreamHandler repositoryStreamHandler;
-  Repository<ChatMsg> _messageListRepository;
+  RepositoryEventStreamHandler _repositoryStreamHandler;
+  Repository<ChatMsg> _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
   bool _listenersRegistered = false;
+  int _chatId;
 
   @override
   FlaggedState get initialState => FlaggedStateInitial();
@@ -61,7 +62,7 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
     if (event is RequestFlaggedMessages) {
       yield FlaggedStateLoading();
       try {
-        _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
+        _chatId = event.chatId;
         _registerListeners();
         _loadFlaggedMessages();
       } catch (error) {
@@ -85,39 +86,44 @@ class FlaggedBloc extends Bloc<FlaggedEvent, FlaggedState> {
   }
 
   void _registerListeners() {
-      if (!_listenersRegistered) {
-        _listenersRegistered = true;
-        repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.msgsChanged, _updateMessages);
-        _messageListRepository.addListener(repositoryStreamHandler);
-      }
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
+      _repositoryStreamHandler = RepositoryEventStreamHandler(Type.publish, Event.msgsChanged, _updateMessages);
+      _messageListRepository.addListener(_repositoryStreamHandler);
+    }
   }
 
   void _unregisterListeners() {
-      if (_listenersRegistered) {
-        _listenersRegistered = false;
-        _messageListRepository?.removeListener(repositoryStreamHandler);
-      }
+    if (_listenersRegistered) {
+      _listenersRegistered = false;
+      _messageListRepository?.removeListener(_repositoryStreamHandler);
+    }
   }
 
   void _updateMessages(Event event) => add(UpdateMessages());
 
   void _loadFlaggedMessages() async {
-    List<int> dateMakerIds = List();
-    Context context = Context();
-    List<int> messageIds = List.from(await context.getChatMessages(Chat.typeStarred, Context.chatListAddDayMarker));
+    final List<int> dateMakerIds = List();
+    final Context context = Context();
+    final List<int> messageIds = List.from(await context.getChatMessages(Chat.typeStarred, Context.chatListAddDayMarker));
+    _messageListRepository.putIfAbsent(ids: messageIds.where((id) => id != ChatMsg.idDayMarker).toList());
+
+    if (null != _chatId) {
+      final List<int> messageIdsFromChat = List.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
+      messageIds.removeWhere((id) => !messageIdsFromChat.contains(id));
+    }
+
     for (int index = 0; index < messageIds.length; index++) {
-      int previousIndex = index - 1;
+      final previousIndex = index - 1;
       if (previousIndex >= 0 && messageIds[previousIndex] == ChatMsg.idDayMarker) {
         dateMakerIds.add(messageIds[index]);
       }
     }
     messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
-    _messageListRepository.putIfAbsent(ids: messageIds);
-
     add(
       FlaggedMessagesLoaded(
-          messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
-          messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+          messageIds: messageIds.reversed.toList(growable: false),
+          messageLastUpdateValues: _messageListRepository.getLastUpdateValuesForIds(messageIds).reversed.toList(growable: false),
           dateMarkerIds: dateMakerIds),
     );
   }

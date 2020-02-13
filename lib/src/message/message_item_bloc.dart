@@ -87,12 +87,13 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
   Stream<MessageItemState> _loadMessage(LoadMessage event) async* {
     try {
-      var chatId = event.chatId;
+      final chatId = event.chatId;
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
       _messageId = event.messageId;
-      var nextMessageId = event.nextMessageId;
-      var isGroup = event.isGroupChat;
-      var showContact = isGroup || chatId == Chat.typeInvite;
+      final nextMessageId = event.nextMessageId;
+      final isGroup = event.isGroupChat;
+
+      final showContact = isGroup || chatId == Chat.typeInvite;
       if (showContact) {
         await _setupContact();
       }
@@ -100,9 +101,10 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         await _setupNextMessage(nextMessageId);
       }
       await _setupMessage();
+
       ChatMsg message = _getMessage(messageId: _messageId);
-      var isOutgoing = await message.isOutgoing();
-      var state = await message.getState();
+      final isOutgoing = await message.isOutgoing();
+      final state = await message.getState();
       if (isOutgoing && state != ChatMsg.messageStateReceived) {
         _registerListeners();
       }
@@ -111,22 +113,26 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       bool hasFile = await message.hasFile();
       bool isSetupMessage = await message.isSetupMessage();
       String text = await message.getText();
+
       String informationText;
       if (isSetupMessage) {
         informationText = L10n.get(L.autocryptChatMessagePlaceholder);
       } else if (encryptionStatusChanged) {
         informationText = L10n.get(L.chatEncryptionStatusChanged);
       }
+
       bool isInfo = await message.isInfo();
       int timestamp = await message.getTimestamp();
       int showPadlock = await message.showPadlock();
       bool isFlagged = await message.isStarred();
       String teaser = await message.getSummaryText(200);
       String messageInfo = "";
+
       if (state == ChatMsg.messageStateFailed) {
         Context context = Context();
         messageInfo = await context.getMessageInfo(_messageId);
       }
+
       AttachmentStateData attachmentStateData;
       if (hasFile) {
         attachmentStateData = AttachmentStateData(
@@ -138,6 +144,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           type: await message.getType(),
         );
       }
+
       ContactStateData contactStateData;
       if (showContact) {
         Contact contact = _getContact();
@@ -152,7 +159,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           color: contactColor,
         );
       }
-      var messageStateData = MessageStateData(
+
+      final messageStateData = MessageStateData(
         isOutgoing: isOutgoing,
         text: text,
         informationText: informationText,
@@ -178,31 +186,34 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   Stream<MessageItemState> _deleteMessages(int id) async* {
-    Context context = Context();
-    var messageIds = [id];
+    final context = Context();
+    final messageIds = [id];
+
     _messageListRepository.remove(ids: messageIds);
     await context.deleteMessages(messageIds);
     yield MessageItemStateSuccess(messageStateData: null);
   }
 
-  Stream<MessageItemState> _flagUnflagMessage(int id) async* {
+  Stream<MessageItemState> _flagUnflagMessage(int messageId) async* {
     if (state is MessageItemStateSuccess) {
-      var successState = state as MessageItemStateSuccess;
-      var flagged = !successState.messageStateData.isFlagged;
-      Context context = Context();
-      int nonSpecialChatId = await _messageListRepository.get(id).getChatId();
-      Repository<ChatMsg> nonSpecialMessageListRepository = RepositoryManager.get(RepositoryType.chatMessage, nonSpecialChatId);
-      var message = nonSpecialMessageListRepository.get(id);
-      message?.set(ChatMsg.methodMessageIsStarred, flagged);
+      final successState = state as MessageItemStateSuccess;
+      final isFlagged = !successState.messageStateData.isFlagged;
+      final context = Context();
+      final int nonSpecialChatId = await _messageListRepository.get(messageId).getChatId();
+      final Repository<ChatMsg> nonSpecialMessageListRepository = RepositoryManager.get(RepositoryType.chatMessage, nonSpecialChatId);
+      final message = nonSpecialMessageListRepository.get(messageId);
+
+      message?.set(ChatMsg.methodMessageIsStarred, isFlagged);
       Repository<ChatMsg> _flaggedRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
-      if (flagged) {
-        _flaggedRepository.putIfAbsent(id: id);
+
+      if (isFlagged) {
+        _flaggedRepository.putIfAbsent(id: messageId);
       } else {
-        _flaggedRepository.remove(id: id);
+        _flaggedRepository.remove(id: messageId);
       }
-      int flagType = flagged ? Context.starMessage : Context.unstarMessage;
-      await context.starMessages([id], flagType);
-      var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(isFlagged: flagged);
+
+      await context.starMessages([messageId], (isFlagged ? Context.starMessage : Context.unstarMessage));
+      final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(isFlagged: isFlagged);
       yield MessageItemStateSuccess(messageStateData: messageStateData);
     }
   }
@@ -212,7 +223,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       _listenersRegistered = true;
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
-        [Event.msgDelivered, Event.msgRead, Event.msgFailed],
+        [Event.msgDelivered, Event.msgRead, Event.msgFailed, Event.msgsChanged],
         _onMessageStateChanged,
       );
       _messageListRepository.addListener(_repositoryStreamHandler);
@@ -226,24 +237,29 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     }
   }
 
-  void _onMessageStateChanged(Event event) async{
-    var eventMessageId = event.data2;
-    if (_messageId == eventMessageId && (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead))) {
-      if (state is MessageItemStateSuccess) {
-        int eventMessageState = event.hasType(Event.msgDelivered) ? ChatMsg.messageStateDelivered : ChatMsg.messageStateReceived;
-        var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState);
-        add(MessageUpdated(messageStateData: messageStateData));
-        if (eventMessageState == ChatMsg.messageStateReceived) {
-          _unregisterListeners();
+  void _onMessageStateChanged(Event event) async {
+    final eventMessageId = event.data2;
+    if (_messageId == eventMessageId) {
+      if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead)) {
+        if (state is MessageItemStateSuccess) {
+          final eventMessageState = event.hasType(Event.msgDelivered) ? ChatMsg.messageStateDelivered : ChatMsg.messageStateReceived;
+          final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState);
+          add(MessageUpdated(messageStateData: messageStateData));
+          if (eventMessageState == ChatMsg.messageStateReceived) {
+            _unregisterListeners();
+          }
         }
+      } else if (event.hasType(Event.msgFailed)) {
+        final eventMessageState = ChatMsg.messageStateFailed;
+        final context = Context();
+        final String messageInfo = await context.getMessageInfo(_messageId);
+        final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState, messageInfo: messageInfo);
+        _unregisterListeners();
+        add(MessageUpdated(messageStateData: messageStateData));
+      } else if (event.hasType(Event.msgsChanged) && state is MessageItemStateSuccess) {
+        var flagged = await _messageListRepository.get(eventMessageId).isStarred();
+        add((MessageUpdated(messageStateData: (state as MessageItemStateSuccess).messageStateData.copyWith(isFlagged: flagged))));
       }
-    }else if (event.hasType(Event.msgFailed) && _messageId == event.data2){
-      int eventMessageState = ChatMsg.messageStateFailed;
-      Context context = Context();
-      String messageInfo = await context.getMessageInfo(_messageId);
-      var messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState, messageInfo: messageInfo);
-      _unregisterListeners();
-      add(MessageUpdated(messageStateData: messageStateData));
     }
   }
 
@@ -268,9 +284,10 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   }
 
   Future<void> _setupContact() async {
-    ChatMsg message = _getMessage(messageId: _messageId);
+    final ChatMsg message = _getMessage(messageId: _messageId);
     _contactId = await message.getFromId();
     _contactRepository.putIfAbsent(id: _contactId);
+
     await _getContact().loadValues(keys: [
       Contact.methodContactGetName,
       Contact.methodContactGetAddress,
@@ -290,24 +307,29 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     if (nextMessageId == null) {
       return true;
     }
-    ChatMsg nextChatMsg = _getMessage(messageId: nextMessageId);
-    int nextTimestamp = await nextChatMsg.getTimestamp();
-    ChatMsg chatMsg = _getMessage(messageId: _messageId);
-    int timestamp = await chatMsg.getTimestamp();
+
+    final ChatMsg nextChatMsg = _getMessage(messageId: nextMessageId);
+    final nextTimestamp = await nextChatMsg.getTimestamp();
+    final ChatMsg chatMsg = _getMessage(messageId: _messageId);
+    final timestamp = await chatMsg.getTimestamp();
+
     return getDateAndTimeFromTimestamp(nextTimestamp) != getDateAndTimeFromTimestamp(timestamp);
   }
 
   Future<bool> _hasEncryptionStatusChanged(int nextMessageId) async {
-    ChatMsg chatMsg = _getMessage(messageId: _messageId);
+    final ChatMsg chatMsg = _getMessage(messageId: _messageId);
     if (nextMessageId == null) {
       return await chatMsg.showPadlock() == 1;
     }
-    ChatMsg nextChatMsg = _getMessage(messageId: nextMessageId);
-    int nextPadlock = await nextChatMsg.showPadlock();
-    int padlock = await chatMsg.showPadlock();
+
+    final ChatMsg nextChatMsg = _getMessage(messageId: nextMessageId);
+    final nextPadlock = await nextChatMsg.showPadlock();
+    final padlock = await chatMsg.showPadlock();
+
     if (await chatMsg.isSetupMessage() || await nextChatMsg.isSetupMessage()) {
       return false;
     }
+
     return nextPadlock != padlock;
   }
 }
