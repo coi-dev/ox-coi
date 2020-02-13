@@ -64,6 +64,7 @@ enum SettingsItemName {
   about,
   feedback,
   bugReport,
+  debug,
 }
 
 class SettingsItem extends StatelessWidget {

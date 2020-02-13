@@ -53,6 +53,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/settings/settings_signature.dart';
@@ -261,6 +262,13 @@ class _ProfileState extends State<UserProfile> {
                       iconBackground: CustomTheme.of(context).bugReportIcon,
                       onTap: () => _settingsItemTapped(context, SettingsItemName.bugReport),
                     ),
+                    if (!isRelease())
+                      SettingsItem(
+                        icon: IconSource.bugReport,
+                        text: L10n.get(L.debug),
+                        iconBackground: CustomTheme.of(context).bugReportIcon,
+                        onTap: () => _settingsItemTapped(context, SettingsItemName.debug),
+                      ),
                   ],
                 ),
               ),
@@ -322,6 +330,9 @@ class _ProfileState extends State<UserProfile> {
         break;
       case SettingsItemName.bugReport:
         launch(issueUrl, forceSafariVC: false);
+        break;
+      case SettingsItemName.debug:
+        navigation.pushNamed(context, Navigation.settingsDebug);
         break;
     }
   }
