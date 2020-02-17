@@ -5,6 +5,11 @@ OX COI Messenger is a mail based chat app. This app provides the user interface 
 - **Android state:** Available as beta at the [Google Play Store](https://play.google.com/store/apps/details?id=com.openxchange.oxcoi), more info at [www.coi.me](http://www.coi.me)
 - **iOS state:** Currently in development (2019-11: first internal test release, public release coming soon)
 
+## Testing OX COI Messenger
+OX COI Messenger is available as beta - not to be used in production - for both Android and iOS:
+* [Google Play](https://play.google.com/store/apps/details?id=com.openxchange.oxcoi)
+* [Apple TestFlight](https://testflight.apple.com/join/VoqodiHt)
+
 ## Information
 - The [Developer Documentation](https://github.com/open-xchange/ox-coi/wiki/Developer-Documentation) and the [wiki](https://github.com/open-xchange/ox-coi/wiki) in general provide information around the app, the code and the general idea of COI
 - The IMAP / SMTP interactions are managed by the [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core)
