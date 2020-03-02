@@ -546,8 +546,12 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   void _onInputTextChanged(String text) {
     setState(() {
-      _isComposingText = text.length > 0;
+      _isComposingText = isComposingText();
     });
+  }
+
+  bool isComposingText() {
+    return _textController.text.trim().length > 0;
   }
 
   void _onPrepareMessageSend() {
@@ -689,7 +693,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     _selectedExtension = extension;
     setState(() {
       _filePath = filePath != null ? filePath : "";
-      _isComposingText = _filePath.isEmpty ? false : true;
+      _isComposingText = _filePath.isNotEmpty;
     });
   }
 
@@ -700,9 +704,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       }
       _filePath = "";
       _selectedExtension = "";
-      if (_textController.text.isEmpty) {
-        _isComposingText = false;
-      }
+      _isComposingText = isComposingText();
     });
   }
 
