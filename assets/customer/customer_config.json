@@ -2,9 +2,11 @@
   "name": "Open-Xchange",
   "chats": [
     {
-      "email": "oxcoimessenger@open-xchange.com",
+      "mail": "oxcoimessenger@open-xchange.com",
       "name": "Open-Xchange",
       "deletable": true
     }
+  ],
+  "icons": [
   ]
 }

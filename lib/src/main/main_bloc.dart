@@ -109,6 +109,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         }
         await _setupBlocs();
         await _setupManagers(buildContext);
+        await _loadCustomerConfig();
         add(AppLoaded());
       } catch (error) {
         yield MainStateFailure(error: error.toString());
@@ -138,13 +139,17 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     _localNotificationManager.setup();
   }
 
-  Future<void> _loadCustomerConfig() async{
+  Future<void> _loadCustomerConfig() async {
     Map<String, dynamic> jsonFile = await rootBundle.loadString(customerConfigPath).then((jsonStr) => jsonDecode(jsonStr));
+    var customerConfig = CustomerConfig();
+    customerConfig.loadFromJson(jsonFile);
+  }
 
-    CustomerConfig customerConfig = CustomerConfig.fromJson(jsonFile);
-    if(customerConfig.chats.length > 0){
+  Future<void> _applyCustomerConfig() async {
+    var customerConfig = CustomerConfig();
+    if (customerConfig.chats.length > 0) {
       Context context = Context();
-      for(CustomerChat chat in customerConfig.chats){
+      for (CustomerChat chat in customerConfig.chats) {
         int contactId = await context.createContact(chat.name, chat.email);
         await context.createChatByContactId(contactId);
       }
@@ -189,7 +194,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       }
       await _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
       _logger.info("Setting coi message prefix to 1");
-      await _loadCustomerConfig();
+      await _applyCustomerConfig();
       await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
     }
     await setupBackgroundRefreshManager(coiSupported);

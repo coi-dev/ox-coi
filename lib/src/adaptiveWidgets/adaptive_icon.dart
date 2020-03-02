@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/utils/assets.dart';
+import 'package:ox_coi/src/customer/customer_config.dart';
 
 enum IconSource {
   flag,
@@ -191,31 +191,27 @@ class AdaptiveIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: assetExists(_getPath()),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          bool hasCustomIcon = snapshot.data;
-          if (hasCustomIcon) {
-            return ImageIcon(
-              AssetImage(_getPath()),
-              key: key,
-              size: size,
-              color: color,
-            );
-          } else {
-            return Icon(
-              _getIconData(icon),
-              key: key,
-              size: size,
-              color: color,
-            );
-          }
-        } else {
-          return SizedBox(width: 0, height: 0);
-        }
-      },
-    );
+    if (_hasCustomIcon(icon)) {
+      return ImageIcon(
+        AssetImage(_getPath()),
+        key: key,
+        size: size,
+        color: color,
+      );
+    } else {
+      return Icon(
+        _getIconData(icon),
+        key: key,
+        size: size,
+        color: color,
+      );
+    }
+  }
+
+  bool _hasCustomIcon(IconSource iconSource) {
+    final customerConfig = CustomerConfig();
+    final iconName = describeEnum(icon);
+    return customerConfig.icons.contains(iconName);
   }
 
   String _getPath() => "assets/images/${describeEnum(icon)}.png";
