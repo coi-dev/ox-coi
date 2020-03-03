@@ -1,6 +1,6 @@
 before_script:
 - export GRADLE_USER_HOME=`pwd`/.gradle
-- source utils/setup-build-id
+- source setup-build-id
 
 cache:
   paths:
