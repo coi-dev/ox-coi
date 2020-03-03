@@ -118,28 +118,37 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
         contact.set(Contact.methodContactGetName, name);
         int chatId = await context.getChatByContactId(id);
         if (chatId != 0) {
-          renameChat(chatId, name);
+          _renameChat(chatId, name);
         }
         add(ContactEdited());
       }
     }
   }
 
-  void renameChat(int chatId, String name) {
+  void _renameChat(int chatId, String name) {
     Chat chat = _chatRepository.get(chatId);
     chat.set(Chat.methodChatGetName, name);
   }
 
   void _deleteContact(int id) async {
-    Context context = Context();
-    bool deleted = await context.deleteContact(id);
-    if (deleted) {
+    final context = Context();
+    final chatId = await context.getChatByContactId(id);
+    final wasDeleted = await context.deleteContact(id);
+    if (wasDeleted) {
       contactRepository.remove(id: id);
+      await _deleteEmptyChat(chatId);
       add(ContactDeleted());
     } else {
-      int chatId = await context.getChatByContactId(id);
       String error = chatId != 0 ? contactDeleteChatExists : contactDeleteGeneric;
       add(ContactDeleteFailed(contactId: id, error: error));
+    }
+  }
+
+  Future<void> _deleteEmptyChat(int chatId) async {
+    if (chatId != 0) {
+      _chatRepository.remove(id: chatId);
+      final context = Context();
+      await context.deleteChat(chatId);
     }
   }
 
