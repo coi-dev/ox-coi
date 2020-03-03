@@ -17,7 +17,7 @@ build:
   - docker
   image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
   script:
-  - tools/build.triggerBuild.sh
+  - tools/build.triggerBuild.sh android debug development 0.999.9 $BUILD_ID latest
   artifacts:
     paths:
     - build/app/outputs/apk/development/debug/*.apk
@@ -30,7 +30,7 @@ deploy:
   dependencies:
   - build
   script:
-  - tools/deploy.uploadToHockey.sh
+  - tools/deploy.uploadToAppCenter.sh
 
 status-report-success:
   stage: status-report
