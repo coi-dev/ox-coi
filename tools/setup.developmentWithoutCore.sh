@@ -55,9 +55,21 @@ function isIos {
     fi
 }
 
-function checkoutPlugin {
+function setupPlugin {
     if [[ -d "$PLUGIN_FOLDER" ]]; then
-        echo "Plugin repository found, using the current state. To ensure the latest plugin + DCC is used, please execute 'git pull && git submodule update' in the plugin repository"
+        if [[ -n ${CI} ]]; then
+            (
+                cd ${PLUGIN_FOLDER} || error "Can't navigate into plugin directory" 4
+                if [[ "latest" == ${coreVersion} ]]; then
+                    git checkout develop
+                    git pull
+                else
+                    git checkout ${coreVersion}
+                fi
+            )
+        else
+            echo "Plugin repository found, using the current state. To ensure the latest plugin + DCC is used, please execute 'git pull && git submodule update' in the plugin repository"
+        fi
     else
         git clone --recurse-submodules https://github.com/open-xchange/flutter-deltachat-core.git
     fi
@@ -128,7 +140,7 @@ cd ${SCRIPT_BASEDIR}/.. || error "Can't navigate into app directory" 1
 echo "Get plugin repository"
 (
     cd .. || error "Can't navigate into parent directory" 3
-    checkoutPlugin
+    setupPlugin
 )
 echo "Downloading core"
 (
