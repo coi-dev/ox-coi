@@ -105,7 +105,7 @@ function iosReleaseBuild {
     xcodebuild -exportArchive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -exportOptionsPlist ios/exportOptions${flavor}.plist -exportPath "${IOS_BUILD_FOLDER}/Runner.ipa" -allowProvisioningUpdates
 }
 
-function checkoutCore {
+function checkoutPlugin {
     if [[ -d "$PLUGIN_FOLDER" ]]; then
         echo "Plugin repository found, using the current state. To ensure the latest plugin + DCC is used, please execute 'git pull && git submodule update' in the plugin repository"
     else
@@ -187,11 +187,14 @@ function moveCore {
 # Execution
 echo "-- Setup --"
 cd ${SCRIPT_BASEDIR}/.. || error "Can't navigate into app directory" 1
+echo "Get plugin repository"
+(
+    cd .. || error "Can't navigate into parent directory" 3
+    checkoutPlugin
+)
 if isLocalDcc; then
     echo "Building / updating core"
     (
-        cd .. || error "Can't navigate into parent directory" 3
-        checkoutCore
         cd ${PLUGIN_FOLDER} || error "Can't navigate into plugin directory" 4
         buildCore
     )
