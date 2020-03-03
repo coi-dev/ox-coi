@@ -22,7 +22,7 @@ IOS_LIBRARY_FOLDER="ios/Libraries"
 IOS_LIBRARY_FILENAME="libdeltachat.a"
 
 # Setup
-if [[ "$#" != 6 ]]; then
+if [[ "$#" != 2 ]]; then
     echo "Usage of $0:"
     echo
     echo "1. parameter:     Platform [android, ios, all]"
