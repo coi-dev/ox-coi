@@ -135,7 +135,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     _contactRepository.update(ids: contactIds);
     var contactExtensionProvider = ContactExtensionProvider();
     await Future.forEach(contactIds, (contactId) async {
-      var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
       if (contactExtension != null) {
         _contactRepository.get(contactId).set(ContactExtension.contactPhoneNumber, contactExtension.phoneNumbers);
         _contactRepository.get(contactId).set(ContactExtension.contactAvatar, contactExtension.avatar);

@@ -58,7 +58,7 @@ class ContactExtension {
   String avatar;
 
   Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{
+    final map = <String, dynamic>{
       _columnContactId: contactId,
       _columnPhoneNumbers: phoneNumbers,
       _columnAvatar: avatar,
@@ -89,18 +89,22 @@ class ContactExtension {
 class ContactExtensionProvider {
   static ContactExtensionProvider _instance;
 
-  Database db;
+  Database _db;
+  String _path;
+
+  String get path => _path;
 
   factory ContactExtensionProvider() => _instance ??= new ContactExtensionProvider._internal();
 
   ContactExtensionProvider._internal();
 
   Future<void> open(String path) async {
-    db = await openDatabase(path);
+    _path = path;
+    _db = await openDatabase(_path);
   }
 
   Future createTable() async {
-    await db.execute('''
+    await _db.execute('''
         CREATE TABLE IF NOT EXISTS $_tableContactExtension ( 
           $_columnId INTEGER PRIMARY KEY, 
           $_columnContactId INTEGER NOT NULL,
@@ -110,19 +114,41 @@ class ContactExtensionProvider {
   }
 
   Future<ContactExtension> insert(ContactExtension contactExtension) async {
-    contactExtension.id = await db.insert(_tableContactExtension, contactExtension.toMap());
+    contactExtension.id = await _db.insert(_tableContactExtension, contactExtension.toMap());
     return contactExtension;
   }
 
-  Future<ContactExtension> getContactExtension({int id = -1, int contactId = -1}) async {
-    var whereColumn = _getWhereColumn(id, contactId);
-    var whereId = _getWhereId(id, contactId);
+  Future<int> update(ContactExtension contactExtension) async {
+    return await _db.update(
+      _tableContactExtension,
+      contactExtension.toMap(),
+      where: '$_columnId = ?',
+      whereArgs: [contactExtension.id],
+    );
+  }
+
+  Future<int> delete({int id = -1, int contactId = -1}) async {
+    final whereColumn = _getWhereColumn(id, contactId);
+    final whereId = _getWhereId(id, contactId);
+    if (whereId <= 0) {
+      throw ArgumentError("Either id or contactId must be set to a value > 0");
+    }
+    return await _db.delete(_tableContactExtension, where: '$whereColumn = ?', whereArgs: [whereId]);
+  }
+
+  Future<ContactExtension> get({int id = -1, int contactId = -1}) async {
+    final whereColumn = _getWhereColumn(id, contactId);
+    final whereId = _getWhereId(id, contactId);
     if (whereId <= 0) {
       throw ArgumentError("Either id or contactId must be set to a value > 0");
     }
 
-    List<Map> maps = await db.query(_tableContactExtension,
-        columns: [_columnId, _columnContactId, _columnPhoneNumbers, _columnAvatar], where: '$whereColumn = ?', whereArgs: [whereId]);
+    List<Map> maps = await _db.query(
+      _tableContactExtension,
+      columns: [_columnId, _columnContactId, _columnPhoneNumbers, _columnAvatar],
+      where: '$whereColumn = ?',
+      whereArgs: [whereId],
+    );
     if (maps.length > 0) {
       return ContactExtension.fromMap(maps.first);
     }
@@ -137,18 +163,5 @@ class ContactExtensionProvider {
     return contactId > 0 ? contactId : id;
   }
 
-  Future<int> delete({int id = -1, int contactId = -1}) async {
-    var whereColumn = _getWhereColumn(id, contactId);
-    var whereId = _getWhereId(id, contactId);
-    if (whereId <= 0) {
-      throw ArgumentError("Either id or contactId must be set to a value > 0");
-    }
-    return await db.delete(_tableContactExtension, where: '$whereColumn = ?', whereArgs: [whereId]);
-  }
-
-  Future<int> update(ContactExtension contactExtension) async {
-    return await db.update(_tableContactExtension, contactExtension.toMap(), where: '$_columnId = ?', whereArgs: [contactExtension.id]);
-  }
-
-  Future close() async => db.close();
+  Future close() async => _db.close();
 }

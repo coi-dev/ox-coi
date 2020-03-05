@@ -153,7 +153,7 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
       Uint8List imageBytes = base64Decode(image);
       await file.writeAsBytes(imageBytes);
       var contactExtensionProvider = ContactExtensionProvider();
-      var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
       if (contactExtension == null) {
         contactExtension = ContactExtension(contactId, avatar: file.path);
         contactExtensionProvider.insert(contactExtension);

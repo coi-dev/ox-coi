@@ -191,7 +191,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
             image.evict();
             await file.writeAsBytes(systemContact.avatar);
           }
-          var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+          var contactExtension = await contactExtensionProvider.get(contactId: contactId);
           if (contactExtension == null) {
             contactExtension = ContactExtension(contactId, avatar: filePath);
             contactExtensionProvider.insert(contactExtension);
@@ -219,7 +219,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
       var contact = _contactRepository.get(contactId);
       var mail = await contact.getAddress();
       var contactPhoneNumbers = phoneNumbers[mail];
-      var contactExtension = await contactExtensionProvider.getContactExtension(contactId: contactId);
+      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
       if (contactPhoneNumbers != null && contactPhoneNumbers.isNotEmpty) {
         if (contactExtension == null) {
           contactExtension = ContactExtension(contactId, phoneNumbers: contactPhoneNumbers);

@@ -46,8 +46,11 @@ enum AppState {
   initialLoginDone,
 }
 
-// Delta Chat Core
+// Delta Chat Core - the core places the file in the apps folder structure under ~/files/$dbName
 const dbName = "messenger.db";
+
+// Extension database - the file is placed in the apps folder structure under ~/databases/$extensionDbName
+const extensionDbName = "extension.db";
 
 // External services
 const defaultCoiPushServiceUrl = "https://push.coi.me/push/resource/";
