@@ -50,16 +50,15 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 
 import 'keyMapping.dart';
 
-showNavigatableDialog({
-  @required BuildContext context,
+showNavigatableDialog({@required BuildContext context,
   @required Widget dialog,
   @required Navigatable navigatable,
   Navigatable previousNavigatable,
-  barrierDismissible = true,
-}) {
+  barrierDismissible = true}) {
   Navigation navigation = Navigation();
   previousNavigatable = previousNavigatable ?? navigation.current;
   navigation.current = navigatable;
+
   return showDialog<void>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -71,8 +70,7 @@ showNavigatableDialog({
   });
 }
 
-showConfirmationDialog({
-  @required BuildContext context,
+showConfirmationDialog({@required BuildContext context,
   @required String title,
   @required String content,
   @required String positiveButton,
@@ -83,9 +81,9 @@ showConfirmationDialog({
   Function negativeAction,
   bool selfClose = true,
   barrierDismissible = true,
-  Function onWillPop,
-}) {
+  Function onWillPop}) {
   Navigation navigation = Navigation();
+
   return showNavigatableDialog(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -99,7 +97,10 @@ showConfirmationDialog({
           actions: <Widget>[
             new AdaptiveDialogAction(
               key: Key(keyConfirmationDialogCancelButton),
-              child: new Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : L10n.get(L.cancel)),
+              child: new Text(
+                  negativeButton != null && negativeButton.isNotEmpty
+                      ? negativeButton
+                      : L10n.get(L.cancel)),
               onPressed: () {
                 if (negativeAction != null) {
                   negativeAction();
@@ -129,6 +130,7 @@ showInformationDialog(
     @required Navigatable navigatable,
     Navigatable previousNavigatable}) {
   Navigation navigation = Navigation();
+
   return showNavigatableDialog(
       context: context,
       navigatable: navigatable,

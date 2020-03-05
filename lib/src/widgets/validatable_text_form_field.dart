@@ -41,8 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/utils/text.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 enum TextFormType {
   normal,

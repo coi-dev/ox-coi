@@ -44,6 +44,7 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+
 import 'settings_notifications_event_state.dart';
 
 class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, SettingsNotificationsState> {

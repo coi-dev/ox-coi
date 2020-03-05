@@ -48,7 +48,6 @@ import 'dart:async';
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
-// ignore: implementation_imports
 import 'package:intl/src/intl_helpers.dart';
 import 'package:ox_coi/src/l10n/messages_en.dart' deferred as messages_en;
 import 'package:ox_coi/src/l10n/messages_messages.dart' deferred as messages_messages;

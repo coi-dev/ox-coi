@@ -47,7 +47,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
@@ -57,6 +59,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/conversion.dart';
 import 'package:ox_coi/src/utils/date.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'message_item_event_state.dart';
 
@@ -110,13 +113,23 @@ class MessageMaterial extends StatelessWidget {
 class MessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final markdown = _getText(context).markdown();
+
     return Padding(
       padding: getNamePaddingForGroups(context),
-      child: Text(
-        _getText(context),
-        style: Theme.of(context).textTheme.subhead.apply(color: MessageData.of(context).textColor),
+      child: MarkdownBody(
+        data: markdown,
+        onTapLink: (url) {
+          _launch(url: url);
+        },
       ),
     );
+  }
+}
+
+Future<void> _launch({@required String url}) async {
+  if (await canLaunch(url)) {
+    await launch(url);
   }
 }
 
@@ -129,7 +142,8 @@ MessageStateData _getMessageStateData(BuildContext context) => MessageData.of(co
 class MessageStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AdaptiveIcon icon = MessageData.of(context).icon;
+    final icon = MessageData.of(context).icon;
+
     if (icon != null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: messagesVerticalInnerPadding, horizontal: messagesHorizontalInnerPadding),

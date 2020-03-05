@@ -50,10 +50,10 @@ import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/utils/text.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);

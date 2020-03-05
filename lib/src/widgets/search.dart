@@ -41,12 +41,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class Search extends SearchDelegate {
   final Function onBuildResults;

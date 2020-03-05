@@ -45,6 +45,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chatlist/invite_item.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -55,8 +56,6 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'anti_mobbing_list_bloc.dart';
 import 'anti_mobbing_list_event_state.dart';
-
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 
 class AntiMobbingList extends StatefulWidget {
   @override

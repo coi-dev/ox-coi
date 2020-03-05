@@ -54,13 +54,13 @@ import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/invite_service_resource.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/invite/invite_service.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/utils/http.dart';
 import 'package:ox_coi/src/utils/image.dart';
-import 'package:ox_coi/src/utils/text.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'invite_event_state.dart';

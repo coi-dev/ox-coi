@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 const multiLineString = '''After any such modifications, the original and derivative code shall remain
 under the copyright of the copyright holder(s) and/or original author(s) as stated here:

@@ -50,7 +50,7 @@ import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
-import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactsUpdaterMixin {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);

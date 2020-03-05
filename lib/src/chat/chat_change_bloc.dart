@@ -47,7 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/utils/text.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   Repository<ChatMsg> _messageListRepository;
