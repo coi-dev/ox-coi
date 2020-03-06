@@ -51,6 +51,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 
 class FullscreenOverlay<T extends Bloc> extends OverlayEntry {
   bool _isVisible = true;
@@ -129,8 +130,9 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                   if (showCancelButton)
                     Padding(
                       padding: EdgeInsets.only(top: verticalPaddingSmall),
-                      child: Container(
-                        child: RaisedButton(child: Text(L10n.get(L.cancel)), onPressed: cancelPressed),
+                      child: ButtonImportanceLow(
+                        child: Text(L10n.get(L.cancel)),
+                        onPressed: cancelPressed,
                       ),
                     )
                 ],

@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -56,6 +55,7 @@ import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/web/web_asset.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 
@@ -162,22 +162,11 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
-                          AdaptiveRaisedButton(
-                              color: CustomTheme.of(context).accent,
-                              textColor: CustomTheme.of(context).onAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
-                              ),
-                              child: SizedBox(
-                                width: loginButtonWidth,
-                                height: loginSignInButtonHeight,
-                                child: Center(
-                                  child: Text(
-                                    L10n.get(L.loginSignIn).toUpperCase(),
-                                    textAlign: TextAlign.center,
-                                    key: Key(keyLoginLoginSignInText),
-                                  ),
-                                ),
+                          ButtonImportanceHigh(
+                              minimumWidth: loginButtonWidth,
+                              child: Text(
+                                L10n.get(L.loginSignIn),
+                                key: Key(keyLoginLoginSignInText),
                               ),
                               onPressed: () {
                                 _goToProviderList(ProviderListType.login);
@@ -185,10 +174,10 @@ class _LoginState extends State<Login> {
                           Padding(padding: EdgeInsets.only(top: loginButtonPadding)),
                           Padding(
                             padding: EdgeInsets.all(loginVerticalPadding8dp),
-                            child: FlatButton(
+                            child: ButtonImportanceLow(
+                                minimumWidth: loginButtonWidth,
                                 child: Text(
-                                  L10n.get(L.register).toUpperCase(),
-                                  style: TextStyle(color: CustomTheme.of(context).accent),
+                                  L10n.get(L.register),
                                   key: Key(keyLoginRegisterText),
                                 ),
                                 onPressed: () {

@@ -44,6 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 
 class StateInfo extends StatelessWidget {
   final bool showLoading;
@@ -90,11 +91,9 @@ class StateInfo extends StatelessWidget {
               if (!actionTitle.isNullOrEmpty() && action != null)
                 Padding(
                   padding: buildEdgeInsets(),
-                  child: RaisedButton(
-                    color: CustomTheme.of(context).accent,
-                    textColor: CustomTheme.of(context).onAccent,
-                    onPressed: action,
+                  child: ButtonImportanceHigh(
                     child: Text(actionTitle),
+                    onPressed: action,
                   ),
                 ),
               Padding(

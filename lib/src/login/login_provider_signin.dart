@@ -43,17 +43,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
@@ -178,20 +177,21 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                   ),
                 )),
             Padding(padding: EdgeInsets.all(loginVerticalPadding24dp)),
-            AdaptiveRaisedButton(
-                child: Text(L10n.get(L.loginSignIn).toUpperCase()),
-                onPressed: _signIn,
-                buttonWidth: loginButtonWidth,
-                color: CustomTheme.of(context).accent,
-                textColor: CustomTheme.of(context).onAccent),
+            ButtonImportanceHigh(
+              minimumWidth: loginButtonWidth,
+              child: Text(L10n.get(L.loginSignIn)),
+              onPressed: _signIn,
+            ),
             Visibility(
               visible: widget.provider.id == providerOther,
-              child: FlatButton(
+              child: Padding(
+                padding: const EdgeInsets.all(loginVerticalPadding12dp),
+                child: ButtonImportanceLow(
+                  minimumWidth: loginButtonWidth,
                   onPressed: _showManualSettings,
-                  child: Text(
-                    L10n.get(L.settingManual),
-                    style: TextStyle(color: CustomTheme.of(context).accent),
-                  )),
+                  child: Text(L10n.get(L.settingManual)),
+                ),
+              ),
             )
           ],
         ));

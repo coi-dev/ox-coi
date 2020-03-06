@@ -43,7 +43,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_raised_button.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -58,6 +57,7 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
@@ -224,25 +224,10 @@ class _PasswordChangedState extends State<PasswordChanged> {
                           ),
                           Padding(
                             padding: EdgeInsets.all(passwordChangedFormButtonPadding),
-                            child: AdaptiveRaisedButton(
-                              color: CustomTheme.of(context).accent,
-                              textColor: CustomTheme.of(context).onAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
-                              ),
-                              child: SizedBox(
-                                width: loginButtonWidth,
-                                height: loginSignInButtonHeight,
-                                child: Center(
-                                  child: Text(
-                                    L10n.get(L.passwordChangedButtonText),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              onPressed: () {
-                                _login();
-                              },
+                            child: ButtonImportanceHigh(
+                              minimumWidth: loginButtonWidth,
+                              child: Text(L10n.get(L.passwordChangedButtonText)),
+                              onPressed: _login,
                             ),
                           ),
                         ],

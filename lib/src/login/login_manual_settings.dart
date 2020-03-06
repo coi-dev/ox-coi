@@ -204,7 +204,7 @@ class LoginButton extends StatelessWidget {
       child: FlatButton(
         onPressed: () => _performLogin(context),
         child: Text(
-          L10n.get(L.loginSignIn).toUpperCase(),
+          L10n.get(L.loginSignIn),
           style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).accent),
         ),
       ),

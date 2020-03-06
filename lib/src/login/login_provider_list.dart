@@ -54,6 +54,7 @@ import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -142,16 +143,9 @@ class _ProviderListState extends State<ProviderList> {
             if (widget.type == ProviderListType.login)
               Padding(
                 padding: EdgeInsets.only(top: loginVerticalPadding24dp),
-                child: RaisedButton(
-                  elevation: 0,
-                  onPressed: () => _onItemTap(otherProvider),
+                child: ButtonImportanceMedium(
                   child: Text(L10n.get(L.providerOtherMailProvider)),
-                  textColor: CustomTheme.of(context).accent,
-                  color: CustomTheme.of(context).background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius),
-                    side: BorderSide(color: CustomTheme.of(context).accent),
-                  ),
+                  onPressed: () => _onItemTap(otherProvider),
                 ),
               ),
           ],

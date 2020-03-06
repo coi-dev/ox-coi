@@ -42,13 +42,15 @@
 
 import 'dart:core';
 
-// Flutter defaults
-const buttonThemeMinWidth = 88.0; // https://api.flutter.dev/flutter/material/ButtonTheme/ButtonTheme.html
-
 // Global
 const zero = 0.0;
 const dividerHeight = 1.0;
 const avatarBorderRadiusMultiplier = 0.67;
+
+// Buttons
+const buttonHeight = 44.0;
+const buttonHorizontalContentPadding = 16.0;
+const buttonMinWidth = 88.0; // https://api.flutter.dev/flutter/material/ButtonTheme/ButtonTheme.html
 
 // Progress
 const verticalPaddingSmall = 8.0;

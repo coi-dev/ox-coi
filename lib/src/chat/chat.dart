@@ -83,6 +83,7 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
 import 'package:url_launcher/url_launcher.dart';
@@ -124,7 +125,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   String _selectedExtension = "";
   String _fileName = "";
   String _phoneNumbers;
-  final  _scrollController = ScrollController();
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -291,7 +292,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     color: CustomTheme.of(context).onPrimary,
                   ),
                 AdaptiveIconButton(
-                  icon: AdaptiveIcon(icon: IconSource.flag,),
+                  icon: AdaptiveIcon(icon: IconSource.flag),
                   // TODO key: Key(keyChatListGetFlaggedActionIconButton),
                   onPressed: _onFlaggedPressed,
                   color: CustomTheme.of(context).onPrimary,
@@ -330,6 +331,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   Widget buildInviteChoice() {
+    final inviteChoiceButtonSize = 120.0;
     return Column(
       children: <Widget>[
         Divider(),
@@ -343,31 +345,16 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              ButtonTheme(
-                minWidth: 120.0,
-                child: OutlineButton(
-                  highlightedBorderColor: CustomTheme.of(context).error,
-                  onPressed: _blockContact,
-                  child: Text(
-                    L10n.get(L.block).toUpperCase(),
-                    style: TextStyle(color: CustomTheme.of(context).error),
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-                  borderSide: BorderSide(color: CustomTheme.of(context).onBackground),
-                ),
+              ButtonImportanceMedium(
+                minimumWidth: inviteChoiceButtonSize,
+                isDestructive: true,
+                child: Text(L10n.get(L.block)),
+                onPressed: _blockContact,
               ),
-              ButtonTheme(
-                minWidth: 120.0,
-                child: OutlineButton(
-                  highlightedBorderColor: CustomTheme.of(context).accent,
-                  onPressed: _createChat,
-                  child: Text(
-                    L10n.get(L.ok).toUpperCase(),
-                    style: TextStyle(color: CustomTheme.of(context).accent),
-                  ),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-                  borderSide: BorderSide(color: CustomTheme.of(context).onBackground),
-                ),
+              ButtonImportanceHigh(
+                minimumWidth: inviteChoiceButtonSize,
+                child: Text(L10n.get(L.ok)),
+                onPressed: _createChat,
               )
             ],
           ),
