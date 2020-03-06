@@ -113,7 +113,6 @@ class MessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final markdown = _getText(context).markdownValue;
-
     return Padding(
       padding: getNamePaddingForGroups(context),
       child: MarkdownBody(
@@ -121,7 +120,7 @@ class MessageText extends StatelessWidget {
         onTapLink: (url) {
           _launch(url: url);
         },
-      ),
+        ),
     );
   }
 }
@@ -242,7 +241,7 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
       File file = File(_getMessageStateData(context).attachmentStateData.path);
       imageProvider = FileImage(file);
     } else {
-      if(imageProvider == null) {
+      if (imageProvider == null) {
         imageProvider = MemoryImage(kTransparentImage);
         _messageAttachmentBloc.add(LoadThumbnailAndDuration(
             path: _getMessageStateData(context).attachmentStateData.path, duration: _getMessageStateData(context).attachmentStateData.duration));

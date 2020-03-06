@@ -42,16 +42,12 @@
 
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
-import 'package:ox_coi/src/utils/constants.dart';
-
-import 'l10n.dart';
 
 // Non-translatable strings
-String get sslTls => "SSL/TLS";
-String get startTLS => "StartTLS";
-String get gif =>  "GIF";
-String get pdf => "PDF";
-String get defaultStatus => "${L10n.get(L.profileDefaultStatus)} - $projectUrl";
+const sslTls = "SSL/TLS";
+const startTLS = "StartTLS";
+const gif = "GIF";
+const pdf = "PDF";
 
 class L {
   static final _logger = Logger("l");
@@ -63,11 +59,14 @@ class L {
   static final audio = _translationKey("Audio");
   static final block = _translationKey("Block");
   static final automatic = _translationKey("Automatic");
+
   // Action X performed by user Y (e.g. Login by alice)
   static final byXY = _translationKey("%s by %s");
+
   // Action X performed by the current user (e.g. Login by me)
   static final byMeX = _translationKey("%s by me");
   static final about = _translationKey("About");
+
   // Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
   static final agreeToXY = _translationKey("By using OX COI Messenger you agree to our %s and %s");
   static final camera = _translationKey("Camera");
@@ -83,7 +82,7 @@ class L {
   static final image = _translationKey("Image");
   static final import = _translationKey("Import");
   static final inbox = _translationKey("Inbox");
-  static final invites= _translationKey("Invites");
+  static final invites = _translationKey("Invites");
   static final email = _translationKey("Email");
   static final location = _translationKey("Location");
   static final me = _translationKey("Me");
@@ -110,7 +109,8 @@ class L {
   static final yes = _translationKey("Yes");
   static final yesterday = _translationKey("Yesterday");
   static final textFieldEmptyHint = _translationKey("This field can not be empty");
-  static final readReceiptText = _translationKey("This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
+  static final readReceiptText = _translationKey(
+      "This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
   static final voiceMessage = _translationKey("Voice message");
   static final moreMessages = _translationKey("more messages");
   static final privacyDeclaration = _translationKey("privacy declaration");
@@ -124,16 +124,22 @@ class L {
   static final autocryptSetupCode = _translationKey("Autocrypt setup code");
   static final autocryptFailed = _translationKey("Autocrypt setup failed. Please check your setup code.");
   static final autocryptSuccess = _translationKey("Autocrypt setup successfully changed");
-  static final autocryptText = _translationKey("An Autocrypt setup message securely shares your encryption setup with other Autocrypt-compliant apps. The setup will be secured by a setup code which is displayed here and must be entered on the other device.");
-  static final autocryptCreateMessageText = _translationKey("Creates an Autocrypt setup message, which you can load on other devices to use your current encryption setup.");
+  static final autocryptText = _translationKey(
+      "An Autocrypt setup message securely shares your encryption setup with other Autocrypt-compliant apps. The setup will be secured by a setup code which is displayed here and must be entered on the other device.");
+  static final autocryptCreateMessageText =
+      _translationKey("Creates an Autocrypt setup message, which you can load on other devices to use your current encryption setup.");
   static final autocryptImport = _translationKey("Import Autocrypt setup message");
   static final autocryptMessageCreated = _translationKey("Setup message created");
   static final autocryptImportHintX = _translationKey("The associated setup code starts with: %s");
   static final autocryptInputHint = _translationKey("The code can be entered with or without minus signs");
-  static final autocryptSetupText = _translationKey("This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.");
-  static final autocryptChatMessagePlaceholder = _translationKey("This message is an Autocrypt Setup Message. Tap it to start the import process. You will be guided through the process.");
-  static final autocryptCompleteImport = _translationKey("To complete the import of the Autocrypt setup message please provide the security code shown on the originating device. After entering the code below the Autocrypt settings will be applied to your current encryption setup.");
-  static final autocryptMessageSentX = _translationKey("Your Autocrypt setup has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt:\n%s\nOnce you are done, your other device will be ready to use Autocrypt.");
+  static final autocryptSetupText = _translationKey(
+      "This is the Autocrypt Setup Message used to transfer your end-to-end setup between clients.\n\nTo decrypt and use your setup, open the message in an Autocrypt-compliant client and enter the setup code presented on the generating device.");
+  static final autocryptChatMessagePlaceholder =
+      _translationKey("This message is an Autocrypt Setup Message. Tap it to start the import process. You will be guided through the process.");
+  static final autocryptCompleteImport = _translationKey(
+      "To complete the import of the Autocrypt setup message please provide the security code shown on the originating device. After entering the code below the Autocrypt settings will be applied to your current encryption setup.");
+  static final autocryptMessageSentX = _translationKey(
+      "Your Autocrypt setup has been sent to yourself. Switch to the other device and open the setup message. You should be prompted for a setup code. Type the following digits into the prompt:\n%s\nOnce you are done, your other device will be ready to use Autocrypt.");
 
   static final chatP = _translationKey("Chat", "Chats");
   static final chatArchived = _translationKey("Archived chats");
@@ -146,11 +152,14 @@ class L {
   static final chatNoMessages = _translationKey("No messages");
   static final chatOpen = _translationKey("Open chat");
   static final chatNewPlaceholder = _translationKey("This is a new chat. Send a message to connect.");
+
   // Start a chat with a new user (e.g. Start a chat with alice?)
   static final chatStartWithTextX = _translationKey("Start a chat with %s?");
   static final chatListPlaceholder = _translationKey("Welcome to the OX COI Messenger!\nPlease start a new chat by tapping the chat bubble icon.");
-  static final chatAudioRecordingFailed = _translationKey("Audio recording failed, please grant the permissions to record audio in the app settings on your device.");
-  static final chatVideoRecordingFailed = _translationKey("Video recording failed, please grant the permissions to record video in the app settings on your device.");
+  static final chatAudioRecordingFailed =
+      _translationKey("Audio recording failed, please grant the permissions to record audio in the app settings on your device.");
+  static final chatVideoRecordingFailed =
+      _translationKey("Video recording failed, please grant the permissions to record video in the app settings on your device.");
   static final chatFavoriteMessages = _translationKey("Your favorite messages");
   static final chatFlagged = _translationKey("Flagged");
   static final chatEncryptionStatusChanged = _translationKey("Your messages are encrypted from now on.");
@@ -160,6 +169,7 @@ class L {
   static final chatListInviteDialogX = _translationKey("%s has invited you to chat.");
 
   static final clipboardCopied = _translationKey("Copied to clipboard");
+
   // Content X copied to clipboard (e.g. Text copied to clipboard)
   static final clipboardCopiedX = _translationKey("%s copied to clipboard");
 
@@ -180,15 +190,20 @@ class L {
   static final contactVerifiedSuccess = _translationKey("Contact verified");
   static final contactAddFailedAlreadyExists = _translationKey("Could not add contact. Email address already in use.");
   static final contactDeleteFailed = _translationKey("Could not delete contact.");
-  static final contactDeleteWithActiveChatFailed = _translationKey("Could not delete contact. Active chats with contact found, please remove those chats first.");
+  static final contactDeleteWithActiveChatFailed =
+      _translationKey("Could not delete contact. Active chats with contact found, please remove those chats first.");
   static final contactDelete = _translationKey("Delete contact");
+
   // Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
   static final contactBlockTextXY = _translationKey("Do you really want to block %s (%s)?");
+
   // Do you really want to delete user X with email Y (e.g. Do you really want to delete alice (alice@provider.com)?)
   static final contactDeleteTextXY = _translationKey("Do you really want to delete %s (%s)?");
+
   // Do you really want to delete user with email X (e.g. Do you really want to delete alice@provider.com?)
   static final contactDeleteTextX = _translationKey("Do you really want to delete %s?");
   static final contactEdit = _translationKey("Edit contact");
+
   // Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
   static final contactUnblockTextX = _translationKey("Do you want to unblock %s?");
   static final contactName = _translationKey("Enter the contact name");
@@ -203,11 +218,14 @@ class L {
   static final contactVerificationRunning = _translationKey("Verifying. Please wait a moment.");
   static final contactSystemImportText = _translationKey("Would you like to import your contacts from this device?");
   static final contactUnblock = _translationKey("Unblock contact");
-  static final contactEditPhoneNumberText = _translationKey("Phone numbers can be added or edited via the local address book and imported afterwards.");
+  static final contactEditPhoneNumberText =
+      _translationKey("Phone numbers can be added or edited via the local address book and imported afterwards.");
   static final contactNoPhoneNumber = _translationKey("No phone number");
-  static final contactNoPhoneNumberText = _translationKey("This contact has no phone number. Please edit this contact in your device address book and add the phone number there.");
+  static final contactNoPhoneNumberText =
+      _translationKey("This contact has no phone number. Please edit this contact in your device address book and add the phone number there.");
   static final contactGooglemailDialogTitle = _translationKey("Googlemail account detected");
-  static final contactGooglemailDialogContent = _translationKey("We detected a googlemail address. This leads to broken chats. We recommend to change the mail address to gmail.");
+  static final contactGooglemailDialogContent =
+      _translationKey("We detected a googlemail address. This leads to broken chats. We recommend to change the mail address to gmail.");
   static final contactGooglemailDialogPositiveButton = _translationKey("Change");
   static final contactGooglemailDialogNegativeButton = _translationKey("Don't change");
   static final contactOwnCardGroupHeaderText = _translationKey("Own Card");
@@ -222,7 +240,8 @@ class L {
   static final debugPushResourceRegister = _translationKey("Register new push resource");
   static final debugPushResourceDelete = _translationKey("Delete push resource");
 
-  static final errorCannotDecrypt = _translationKey("This message cannot be decrypted.\n\nIt might help to reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX COI Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
+  static final errorCannotDecrypt = _translationKey(
+      "This message cannot be decrypted.\n\nIt might help to reply to this message and ask the sender to send the message again.\n\nIn case you re-installed the OX COI Messenger or another email program on this or another device you may want to send an Autocrypt setup message from there.");
   static final errorProgressCanceled = _translationKey("There was an error or the progress was canceled.");
 
   static final groupAddContactsAlreadyIn = _translationKey("All your contacts are in this chat.");
@@ -248,8 +267,10 @@ class L {
   static final loginRunning = _translationKey("Logging in, this may take a moment");
   static final loginFailed = _translationKey("Login failed");
   static final login = _translationKey("Log in to OX COI Messenger");
-  static final loginWelcome = _translationKey("OX COI Messenger works with any email provider, but best with COI-compatible providers. If you have an existing email account, please sign in, otherwise register a new account first.");
-  static final loginWelcomeManual = _translationKey("Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.");
+  static final loginWelcome = _translationKey(
+      "OX COI Messenger works with any email provider, but best with COI-compatible providers. If you have an existing email account, please sign in, otherwise register a new account first.");
+  static final loginWelcomeManual = _translationKey(
+      "Often you only need to provide your email address, password and server addresses. The remaining values are determined automatically. Sometimes IMAP needs to be enabled in your email website. Consult your email provider or friends for help.");
   static final loginCheckUsernamePassword = _translationKey("Please check your username and password");
   static final loginCheckMail = _translationKey("Please enter a valid email address");
   static final loginCheckPort = _translationKey("Please enter a valid port (1-65535)");
@@ -257,22 +278,25 @@ class L {
   static final loginChooseProvider = _translationKey("Please select your email provider to sign in");
   static final loginCheckServer = _translationKey("Please specify your email server settings.");
   static final loginErrorWrongCredentials = _translationKey("Cannot login. Please check if the email-address and the password are correct.");
+
   // Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
-  static final loginErrorResponseXY = _translationKey("Response from %s: %s\n\nSome providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your provider or friends if you run into problems.");
+  static final loginErrorResponseXY = _translationKey(
+      "Response from %s: %s\n\nSome providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your provider or friends if you run into problems.");
   static final loginSignIn = _translationKey("Sign in");
   static final loginImapSmtpName = _translationKey("IMAP/SMTP login names");
   static final loginServerAddresses = _translationKey("Server addresses");
   static final loginManualSetupRequired = _translationKey("We could not determine all settings automatically.");
 
   static final logoutTitle = _translationKey("Logout");
-  static final logoutConfirmationText = _translationKey("Do you really want to logout?\n\nYour settings and messages will be removed from this device. After logging out you need to start the app again to log into another account.");
+  static final logoutConfirmationText = _translationKey(
+      "Do you really want to logout?\n\nYour settings and messages will be removed from this device. After logging out you need to start the app again to log into another account.");
 
   static final passwordChangedTitle = _translationKey("Password changed");
   static final passwordChangedInfoText = _translationKey("Your password has changed.\nPlease enter your new one to access your messages.");
   static final passwordChangedButtonText = _translationKey("Login");
   static final passwordChangedCheckPassword = _translationKey("Cannot login. Please check your password.");
 
-  static final memberXP = _translationKey("1 member","%i members");
+  static final memberXP = _translationKey("1 member", "%i members");
   static final memberAdded = _translationKey("Member added");
   static final memberRemoved = _translationKey("Member removed");
 
@@ -300,14 +324,17 @@ class L {
   static final inviteGetTextGeneralErrorX = _translationKey("Something went wrong and we could not load the invite: %s");
 
   static final providerRegisterChoose = _translationKey("Choose a provider from the list below to create a new account");
-  static final providerAutocompleteText = _translationKey("For known email providers additional settings are set up automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");
+  static final providerAutocompleteText = _translationKey(
+      "For known email providers additional settings are set up automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");
   static final providerOtherMailProvider = _translationKey("Other mail provider");
+
   // Sign in with provide X (e.g. Sign in with provider.com)
   static final providerSignInTextX = _translationKey("Sign in with %s");
 
   static final qrProfile = _translationKey("Profile QR");
   static final qrAddContactHeader = _translationKey("Or scan QR code");
   static final qrScan = _translationKey("Scan QR code");
+
   // Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
   static final qrScanTextX = _translationKey("Scan this QR code to create a new contact or verify a contact with %s.");
   static final qrShow = _translationKey("Show QR");
@@ -319,12 +346,18 @@ class L {
   static final settingP = _translationKey("Setting", "Settings");
   static final settingBase = _translationKey("Base Settings");
   static final settingConfigurationChangeFailed = _translationKey("Configuration change aborted");
+
   // Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
-  static final settingSecurityImportKeysAndroidText = _translationKey("Do you want to import your keys from your application folder? \n\nIf no keys are in that folder, the operation will fail.");
-  static final settingSecurityImportKeysIOSText = _translationKey("Do you want to import your keys from your app documents folder? \n\nIf no keys are in that folder, the operation will fail.");
+  static final settingSecurityImportKeysAndroidText =
+      _translationKey("Do you want to import your keys from your application folder? \n\nIf no keys are in that folder, the operation will fail.");
+  static final settingSecurityImportKeysIOSText =
+      _translationKey("Do you want to import your keys from your app documents folder? \n\nIf no keys are in that folder, the operation will fail.");
+
   // Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-  static final settingSecurityExportKeysAndroidTextX = _translationKey("Do you want to save your keys in the application folder? \n\nThe path is:\n\"%s\"");
-  static final settingSecurityExportKeysIOSText = _translationKey("Do you want to save your keys in your devices documents folder? \n\nYou can access it via the \"Files App\".");
+  static final settingSecurityExportKeysAndroidTextX =
+      _translationKey("Do you want to save your keys in the application folder? \n\nThe path is:\n\"%s\"");
+  static final settingSecurityExportKeysIOSText =
+      _translationKey("Do you want to save your keys in your devices documents folder? \n\nYou can access it via the \"Files App\".");
   static final settingCopyCode = _translationKey("Copy code");
   static final settingExportKeys = _translationKey("Expert: Export keys");
   static final settingImportKeys = _translationKey("Expert: Import keys");
@@ -340,7 +373,8 @@ class L {
   static final settingKeyTransferSuccess = _translationKey("Key action successfully done");
   static final settingManual = _translationKey("Manual Settings");
   static final settingChatMessagesUnknownShow = _translationKey("Show messages from unknown contacts");
-  static final settingChatMessagesUnknownText = _translationKey("Messages from unknown contacts do not appear in chats anymore. Instead, you can access such messages here:");
+  static final settingChatMessagesUnknownText =
+      _translationKey("Messages from unknown contacts do not appear in chats anymore. Instead, you can access such messages here:");
   static final settingChatMessagesUnknownNoMessages = _translationKey("There are currently no messages from unknown contacts");
   static final settingMessageSyncing = _translationKey("Message syncing");
   static final settingAntiMobbing = _translationKey("Privacy and Mobbing Protection");
@@ -364,16 +398,20 @@ class L {
   static final settingApplying = _translationKey("Applying new settings, this may take a moment");
   static final settingAdvancedImap = _translationKey("Advanced IMAP Settings");
   static final settingAdvancedSmtp = _translationKey("Advanced SMTP Settings");
-  static final settingSecurityExportText = _translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
+  static final settingSecurityExportText =
+      _translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
   static final settingNotificationP = _translationKey("Notification", "Notifications");
   static final settingNotificationPull = _translationKey("Enable background updates");
-  static final settingNotificationPullText = _translationKey("If enabled, this setting allows the app to perform periodic background tasks to get new messages");
+  static final settingNotificationPullText =
+      _translationKey("If enabled, this setting allows the app to perform periodic background tasks to get new messages");
   static final settingNotificationPush = _translationKey("Change Push Settings");
   static final settingNotificationPushText = _translationKey("Change the push settings for this app in your system settings.");
   static final settingAboutBugReports = _translationKey("Bug reports");
+
   // "GitHub" is an own name. Please don't translate it
   static final settingAboutBugReportsText = _translationKey("Please report bugs on GitHub.");
   static final settingAboutFeatureRequests = _translationKey("Feature requests");
+
   // "user echo" is an own name. Please don't translate it
   static final settingAboutFeatureRequestsText = _translationKey("Please suggest your ideas on user echo.");
   static final settingSignatureTitle = _translationKey("Email signature");
@@ -396,7 +434,6 @@ class L {
   static final settingItemAboutTitle = _translationKey("About");
   static final settingItemFeedbackTitle = _translationKey("Feedback");
   static final settingItemBugReportTitle = _translationKey("Report a bug");
-
 
   static List<String> _translationKey(String key, [String pluralKey]) {
     String logging = "Registered localization key: '$key'";

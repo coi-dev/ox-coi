@@ -47,11 +47,11 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
-import 'global_consts.dart';
+import 'main_test_setup.dart';
+import 'test_constants.dart';
 
 final scrollDuration = Duration(milliseconds: 1000);
 
-//  Take screenshot
 Future catchScreenshot(FlutterDriver driver, String path) async {
   final List<int> pixels = await driver.screenshot();
   final File file = new File(path);
@@ -69,68 +69,64 @@ Future navigateTo(FlutterDriver driver, String pageToNavigate) async {
   }
 }
 
-Future addNewContact(
-  FlutterDriver driver,
-  String newTestName,
-  String newTestContact,
-) async {
-  await driver.tap(personAddFinder);
-  await driver.tap(keyContactChangeNameFinder);
+Future addNewContact(FlutterDriver driver, String newTestName, String newTestContact) async {
+  await driver.tap(contactAddFinder);
+  await driver.tap(contactChangeNameInputFinder);
   await driver.enterText(newTestName);
   await driver.tap(find.byValueKey(keyContactChangeEmailValidatableTextFormField));
   await driver.enterText(newTestContact);
-  await driver.tap(keyContactChangeCheckFinder);
+  await driver.tap(contactChangeSubmitFinder);
   expect(await driver.getText(find.text(newTestName)), newTestName);
 }
 
-Future deleteContact(
-  FlutterDriver driver,
-  String newTestName,
-) async {
+Future deleteContact(FlutterDriver driver, String newTestName) async {
   await driver.tap(find.text(newTestName));
-  await driver.scroll(find.byValueKey(keyContactDetailOpenChatProfileActionIcon), 0.0,-600, Duration(milliseconds: 500));
+  await driver.scroll(find.byValueKey(keyContactDetailOpenChatProfileActionIcon), 0.0, -600, Duration(milliseconds: 500));
   await driver.tap(find.byValueKey(keyContactDetailDeleteContactProfileActionIcon));
   await driver.tap(find.byValueKey(keyConfirmationDialogPositiveButton));
 }
 
 Future chatSearch(FlutterDriver driver, String chatName, String searchString) async {
-  final searchReturnIconButton = find.byValueKey(keySearchReturnIconButton);
-
-  await driver.tap(find.byValueKey(keyChatListSearchIconButton));
-  await driver.waitFor(find.byValueKey(keySearchClearIconButton));
+  final searchBar = find.byValueKey(keySearchBarInput);
+  await driver.tap(searchBar);
+  await driver.waitFor(find.byValueKey(keySearchBarClearButton));
   await driver.enterText(searchString);
   await driver.tap(find.text(chatName));
-  await driver.tap(pageBack);
-  await driver.tap(searchReturnIconButton);
+  await driver.tap(pageBackFinder);
 }
 
-Future chatTest(
-  FlutterDriver driver,
-  String chatName,
-) async {
+Future chatTest(FlutterDriver driver, int messageId, String chatName) async {
   await driver.tap(find.text(chatName));
-  await writeChatFromChat(driver);
+  await writeChatFromChat(driver, messageId);
 }
 
-Future writeChatFromChat(FlutterDriver driver) async {
-  await writeTextInChat(driver);
-  // Enter audio now.
-  await driver.tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioPressedIcon));
-  sleep(Duration(seconds: 1));
-  await driver.tap(find.byValueKey(KeyChatComposerMixinOnRecordAudioSendIcon));
+Future writeChatFromChat(FlutterDriver driver, int messageId) async {
+  await writeTextInChat(driver, messageId);
+  await composeAudio(driver);
+  await driver.tap(find.byValueKey(KeyChatOnSendTextIcon));
 }
 
-Future writeTextInChat(FlutterDriver driver, [String text = ""]) async {
-  await driver.tap(typeSomethingComposePlaceholderFinder);
+Future composeAudio(FlutterDriver driver) async {
+  await performLongPress(driver, find.byValueKey(KeyChatComposerMixinVoiceComposeAdaptiveSuperellipse));
+  await driver.tap(find.byValueKey(KeyChatComposerPlayComposeAdaptiveSuperellipse));
+  sleep(Duration(seconds: 2));
+}
+
+Future writeTextInChat(FlutterDriver driver, int messageId, [String text = ""]) async {
+  await driver.tap(composeInputFinder);
   if (text.isEmpty) {
-    text = helloWorld;
-    await driver.enterText(helloWorld);
+    text = inputHelloWorld;
+    await driver.enterText(inputHelloWorld);
   } else {
     await driver.enterText(text);
   }
   await driver.tap(find.byValueKey(KeyChatComposerMixinOnSendTextIcon));
-  var actualNewMessage = await driver.getText(find.text(text));
-  expect(actualNewMessage, text);
+  await driver.waitFor(find.byValueKey(messageId));
+}
+
+Future<void> performLongPress(FlutterDriver driver, SerializableFinder target) async {
+  await driver.waitFor(target);
+  await driver.scroll(target, 0, 0, Duration(seconds: 2));
 }
 
 Future callTest(FlutterDriver driver) async {
@@ -138,16 +134,13 @@ Future callTest(FlutterDriver driver) async {
   await driver.tap(find.byValueKey(keyInformationDialogPositiveButton));
 }
 
-Future unblockOneContactFromBlockedContacts(
-  FlutterDriver driver,
-  String contactNameToUnblock,
-) async {
+Future unblockOneContactFromBlockedContacts(FlutterDriver driver, String contactNameToUnblock) async {
   const unblock = 'Unblock';
   await driver.tap(find.text(contactNameToUnblock));
   await driver.tap(find.text(unblock));
   var actualUnblockedContact = await driver.getText(find.text(L.getKey(L.contactNoBlocked)));
   expect(actualUnblockedContact, L.getKey(L.contactNoBlocked));
-  await driver.tap(find.byValueKey(keyContactBlockedListCloseIconButton));
+  await driver.tap(find.byValueKey(keyBackOrCloseButton));
 }
 
 Future blockOneContactFromContacts(FlutterDriver driver, String contactNameToBlock) async {
@@ -158,74 +151,67 @@ Future blockOneContactFromContacts(FlutterDriver driver, String contactNameToBlo
 }
 
 Future unFlaggedMessage(FlutterDriver driver, String flagUnFlag, String messageToUnFlagged) async {
-  SerializableFinder messageToUnFlaggedFinder = find.text(messageToUnFlagged);
+  SerializableFinder messageToUnFlaggedFinder = find.byValueKey(messageIdOne);
   await driver.tap(find.byValueKey(keyUserProfileFlagIconSource));
-  expect(await driver.getText(messageToUnFlaggedFinder), messageToUnFlagged);
-  await driver.scroll(messageToUnFlaggedFinder, 0, 0, scrollDuration);
+  await driver.waitFor(messageToUnFlaggedFinder);
+  await performLongPress(driver, messageToUnFlaggedFinder);
   await driver.tap(find.text(flagUnFlag));
 }
 
 Future flaggedMessage(FlutterDriver driver, String flagUnFlag, SerializableFinder messageToFlaggedFinder) async {
-  await driver.scroll(messageToFlaggedFinder, 0, 0, scrollDuration);
+  await performLongPress(driver, messageToFlaggedFinder);
   await driver.tap(find.text(flagUnFlag));
 }
 
 Future deleteMessage(SerializableFinder textToDeleteFinder, FlutterDriver driver) async {
   const deleteLocally = 'Delete locally';
-  await driver.scroll(textToDeleteFinder, 0, 0, scrollDuration);
+  await performLongPress(driver, textToDeleteFinder);
   await driver.tap(find.text(deleteLocally));
 }
 
 Future copyAndPasteMessage(FlutterDriver driver, String copy, String paste) async {
-  await driver.scroll(helloWorldFinder, 0, 0, scrollDuration);
+  await performLongPress(driver, find.byValueKey(messageIdOne));
   await driver.tap(find.text(copy));
-  await driver.scroll(typeSomethingComposePlaceholderFinder, 0, 0, scrollDuration);
+  await performLongPress(driver, composeInputFinder);
   await driver.tap(find.text(paste));
   await driver.tap(find.byValueKey(KeyChatComposerMixinOnSendTextIcon));
-  if (helloWorldFinder.serialize().length <= 2) {
-    print('Copy paste succeed');
-  }
 }
 
 Future forwardMessageTo(FlutterDriver driver, String contactToForward, String forward) async {
-  await driver.scroll(helloWorldFinder, 0, 0, scrollDuration);
+  await performLongPress(driver, find.byValueKey(messageIdOne));
   await driver.tap(find.text(forward));
   await driver.tap(find.text(contactToForward));
 }
 
-Future createNewChat(
-  FlutterDriver driver,
-  String chatEmail,
-  String chatName,
-) async {
-  final finderMe = find.text(meContact);
+Future createNewChat(FlutterDriver driver, String chatEmail, String chatName) async {
+  final finderMe = find.text(nameMe);
   final finderNewContact = find.text(L.getKey(L.contactNew));
 
   await driver.tap(find.byValueKey(keyChatListCreateChatButton));
-  if (chatName == meContact) {
+  if (chatName == nameMe) {
     await driver.tap(finderMe);
-    await driver.tap(pageBack);
-    var actualMeContact = await driver.getText(finderMe);
-    expect(actualMeContact, meContact);
+    await driver.tap(pageBackFinder);
+    var actualSavedMessages = await driver.getText(chatSavedMessagesFinder);
+    expect(actualSavedMessages, textSavedMessages);
 
-    await driver.waitFor(finderMe);
+    await driver.waitFor(chatSavedMessagesFinder);
   } else {
     await driver.tap(finderNewContact);
-    var actualContactName = await driver.getText(find.text(name));
-    expect(actualContactName, name);
-    var actualContactEmail = await driver.getText(find.text(emailAddress));
-    expect(actualContactEmail, emailAddress);
+    var actualContactName = await driver.getText(find.text(textName));
+    expect(actualContactName, textName);
+    var actualContactEmail = await driver.getText(find.text(textEmailAddress));
+    expect(actualContactEmail, textEmailAddress);
     await driver.tap(find.byValueKey(keyContactChangeNameValidatableTextFormField));
     var actualContactNameHintText = await driver.getText(find.text(L.getKey(L.contactName)));
     expect(actualContactNameHintText, L.getKey(L.contactName));
     await driver.enterText(chatName);
     await driver.tap(find.byValueKey(keyContactChangeEmailValidatableTextFormField));
-    expect(actualContactEmail, emailAddress);
+    expect(actualContactEmail, textEmailAddress);
     await driver.enterText(chatEmail);
     await driver.tap(find.byValueKey(keyContactChangeCheckIconButton));
     var actualNewMessageHintText = await driver.getText(find.text(L.getKey(L.chatNewPlaceholder)));
     expect(actualNewMessageHintText, L.getKey(L.chatNewPlaceholder));
-    await driver.tap(pageBack);
+    await driver.tap(pageBackFinder);
   }
 }
 
@@ -239,3 +225,5 @@ Future logIn(FlutterDriver driver, String email, String password) async {
   await driver.enterText(password);
   await driver.tap(signInFinder);
 }
+
+bool isAndroid() => targetPlatform == environmentTargetPlatformAndroid;

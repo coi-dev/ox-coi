@@ -257,6 +257,7 @@ mixin ChatComposer {
                   ),
                   onPressed: onRecordAudioLocked,
                 ),
+                key: Key(KeyChatComposerMixinVoiceComposeAdaptiveSuperellipse),
               ),
               Visibility(
                 visible: type == ComposerModeType.compose,
@@ -295,7 +296,7 @@ mixin ChatComposer {
                               iconColor: CustomTheme.of(context).white,
                             ),
                             onPressed: onAudioPlaying,
-                          ),
+                          ),key: Key(KeyChatComposerPlayComposeAdaptiveSuperellipse)
                         ),
                         Visibility(
                           visible: isPlaying,
@@ -306,7 +307,7 @@ mixin ChatComposer {
                               iconColor: CustomTheme.of(context).white,
                             ),
                             onPressed: onAudioPlayingStopped,
-                          ),
+                          ),key: Key(KeyChatComposerStopPlayComposeAdaptiveSuperellipse)
                         )
                       ],
                     )),

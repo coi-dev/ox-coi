@@ -41,17 +41,18 @@
  */
 
 // Imports the Flutter Driver API.
-import 'package:test/test.dart';
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
+import 'setup/test_constants.dart';
 
 void main() {
   FlutterDriver driver;
   setUpAll(() async {
     driver = await setupAndGetDriver();
+    await driver.setSemantics(true);
   });
 
   tearDownAll(() async {
@@ -62,35 +63,19 @@ void main() {
     const searchString = 'Douglas0';
 
     test(': Add three chats.', () async {
-      await createNewChat(
-        driver,
-        realEmail,
-        meContact,
-      );
-      await createNewChat(
-        driver,
-        newTestEmail02,
-        newTestName02,
-      );
-      await createNewChat(
-        driver,
-        newTestEmail04,
-        newTestName01,
-      );
+      await createNewChat(driver, emailReal, nameMe);
+      await createNewChat(driver, email2, name2);
+      await createNewChat(driver, email3, name3);
     });
 
     test(': Type something and get it.', () async {
-      await chatTest(driver, newTestName01);
+      await chatTest(driver, messageIdOne, name3);
       await callTest(driver);
-      await driver.tap(pageBack);
+      await driver.tap(pageBackFinder);
     });
 
     test(': Search chat.', () async {
-      await chatSearch(
-        driver,
-        newTestName01,
-        searchString,
-      );
+      await chatSearch(driver, name3, searchString);
     }, timeout: Timeout(Duration(seconds: 60)));
   });
 }

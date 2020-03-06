@@ -43,13 +43,13 @@
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
-import 'package:ox_coi/src/l10n/l.dart';
 
-import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
+import 'setup/test_constants.dart';
 
 void main() {
   FlutterDriver driver;
@@ -69,28 +69,16 @@ void main() {
   const popupItemRemove = "Remove from group";
   const popupItemSendMessage = "Send message";
   const searchNew = "new";
-  const groupParticipants = "3 participants";
+  const groupParticipants = "4 participants";
   const newTestContact03 = 'enyakam3@ox.com';
 
   group('Add Contacts.', () {
     test(': Create three cantacts in the conctact list and navigate back to chat.', () async {
       await navigateTo(driver, L.getPluralKey(L.contactP));
       await driver.tap(cancelFinder);
-      await addNewContact(
-        driver,
-        newTestName01,
-        newTestEmail04,
-      );
-      await addNewContact(
-        driver,
-        newTestName02,
-        newTestEmail02,
-      );
-      await addNewContact(
-        driver,
-        newMe,
-        newTestContact03,
-      );
+      await addNewContact(driver, name3, email3);
+      await addNewContact(driver, name2, email2);
+      await addNewContact(driver, nameNewMe, newTestContact03);
       navigateTo(driver, L.getPluralKey(L.chatP));
     });
   });
@@ -99,11 +87,11 @@ void main() {
     test(': Create group.', () async {
       await driver.tap(createChatFinder);
       await driver.tap(find.byValueKey(keyChatCreateGroupAddIcon));
-      await driver.tap(find.text(newTestName01));
-      await driver.tap(find.text(newTestName02));
+      await driver.tap(find.text(name3));
+      await driver.tap(find.text(name2));
       await driver.tap(find.byValueKey(keyChatCreateGroupParticipantsSummitIconButton));
-      expect(await driver.getText(find.text(newTestName01)), newTestName01);
-      expect(await driver.getText(find.text(newTestName02)), newTestName02);
+      expect(await driver.getText(find.text(name3)), name3);
+      expect(await driver.getText(find.text(name2)), name2);
     });
 
     test(': Edit group name', () async {
@@ -111,7 +99,7 @@ void main() {
       await driver.enterText(testNameGroup);
       await driver.tap(find.byValueKey(keyChatCreateGroupSettingCheckIconButton));
       expect(await driver.getText(find.text(testNameGroup)), testNameGroup);
-      await driver.tap(pageBack);
+      await driver.tap(pageBackFinder);
     });
   });
 
@@ -123,29 +111,25 @@ void main() {
       await driver.tap(find.byValueKey(keyUserSettingsUsernameLabel));
       await driver.tap(find.byValueKey(keyUserSettingsUsernameLabel));
       await driver.enterText(newNameTestGroup);
-      await driver.tap(find.byValueKey(keyEditGroupProfilAdaptiveIconIconSource));
+      await driver.tap(find.byValueKey(keyEditGroupProfileAdaptiveIconIconSource));
       expect(await driver.getText(find.text(newNameTestGroup)), newNameTestGroup);
-      await driver.tap(pageBack);
-      await driver.tap(pageBack);
+      await driver.tap(pageBackFinder);
+      await driver.tap(pageBackFinder);
     });
 
     test(': Test chat in group', () async {
-      await chatTest(
-        driver,
-        newNameTestGroup,
-      );
-      await driver.tap(pageBack);
+      await chatTest(driver, messageIdTwo, newNameTestGroup);
+      await driver.tap(pageBackFinder);
     });
 
     test(': Add new Participants in the group and test.', () async {
       await driver.tap(find.text(newNameTestGroup));
       await driver.tap(find.byValueKey(keyChatNameText));
       await driver.tap(find.byValueKey(keyChatProfileGroupAddParticipant));
-      await driver.tap(find.byValueKey(keyChatAddGroupParticipantsSearchIcon));
+      await driver.tap(find.byValueKey(keySearchBarInput));
       sleep(Duration(seconds: 4));
       await driver.enterText(searchNew);
-      await driver.tap(find.text(newMe));
-      await driver.tap(find.byValueKey(keySearchReturnIconButton));
+      await driver.tap(find.text(nameNewMe));
       await driver.tap(find.byValueKey(keyChatAddGroupParticipantsCheckIcon));
       expect(await driver.getText(find.text(groupParticipants)), groupParticipants);
     });
@@ -153,21 +137,20 @@ void main() {
     test(': Check popupMenu: Test info menu.', () async {
       await driver.tap(find.byValueKey(keyMoreButton11));
       await driver.tap(find.text(popupItemInfo));
-      await driver.tap(pageBack);
+      await driver.tap(pageBackFinder);
     });
 
     test(': Check popupMenu: Test remove menu.', () async {
       await driver.tap(find.byValueKey(keyMoreButton11));
       await driver.tap(find.text(popupItemRemove));
-      await driver.waitForAbsent(find.text(newTestName01));
-      expect(await driver.getText(find.text(newMe)), newMe);
+      await driver.waitForAbsent(find.text(name3));
+      expect(await driver.getText(find.text(nameNewMe)), nameNewMe);
     });
 
     test(': Check popupMenu: Test send menu.', () async {
       await driver.tap(find.byValueKey(keyMoreButton12));
       await driver.tap(find.text(popupItemSendMessage));
-      await writeChatFromChat(driver);
-      await driver.tap(pageBack);
+      await driver.tap(pageBackFinder);
     });
 
     test(': Check popupMenu: Leave group.', () async {

@@ -100,10 +100,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
     return Scaffold(
       appBar: DynamicAppBar(
         title: L10n.get(L.participantAdd),
-        leading: AppBarCloseButton(
-          key: Key(keyChatAddGroupParticipantsCloseIcon),
-          context: context,
-        ),
+        leading: AppBarCloseButton(context: context),
         trailingList: [
           IconButton(
             key: Key(keyChatAddGroupParticipantsCheckIcon),

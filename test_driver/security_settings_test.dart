@@ -57,7 +57,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
+import 'setup/test_constants.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {

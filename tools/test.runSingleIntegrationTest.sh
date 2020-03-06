@@ -69,5 +69,5 @@ elif [[ ${target} = ${TARGET_IOS} ]]; then
     xcrun simctl uninstall ${deviceId} ${appId}
     sleep 5
     setupIos
-    FLUTTER_TEST_TARGET_PLATFORM=${target} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test}
+    FLUTTER_TEST_TARGET_PLATFORM=${target} flutter drive -d ${deviceId} --target=test_driver/setup/app.dart --driver=${test} --flavor development
 fi

@@ -85,7 +85,7 @@ class _EditGroupProfileState extends State<EditGroupProfile> {
           leading: AppBarCloseButton(context: context),
           trailingList: [
             IconButton(
-              key: Key(keyEditGroupProfilAdaptiveIconIconSource),
+              key: Key(keyEditGroupProfileAdaptiveIconIconSource),
               icon: AdaptiveIcon(icon: IconSource.check),
               onPressed: _saveChanges,
             )

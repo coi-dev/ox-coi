@@ -43,63 +43,50 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
-const realEmail = 'enyakam@ox.com';
+// Credentials
+const emailReal = 'enyakam@ox.com';
+const email2 = 'enyakam2@ox.com';
+const email3 = 'enyakam4@ox.com';
+const email4 = 'enyakam33@ox.com';
+const mailInvalid = 'enyakam3@ox.com3';
+const passwordReal = 'secret';
+const passwordInvalid = 'secret2';
 
-const fakeInvalidEmail = 'enyakam3@ox.com3';
+// Login provider
+const providerMailCom = 'Mail.com';
+const providerCoiDebug = 'Debug (mobile-qa)';
 
-const fakeValidEmail = 'enyakam33@ox.com';
+// User names
+const name2 = 'Douglas02';
+const name3 = 'Douglas01';
+const nameMe = 'Me';
+const nameNewMe = 'newMe';
 
-const fakePassword = 'secret2';
+// Texts / placeholders
+const textEmailAddress = 'Email address';
+const textName = 'Name';
+const textSavedMessages = 'Saved messages';
 
-const realPassword = 'secret';
+// Input
+const inputHelloWorld = 'Hello world, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd.';
 
-const coiDebug = 'Debug (mobile-qa)';
+// Message Ids
+const messageIdOne = 10;
+const messageIdTwo = 11;
+const messageIdThree = 12;
+const messageIdFour = 13;
 
-const meContact = 'Me';
-
-const emailAddress = 'Email address';
-
-const name = 'Name';
-
-const newTestEmail02 = 'enyakam2@ox.com';
-
-const newTestEmail04 = 'enyakam4@ox.com';
-
-const newTestName01 = 'Douglas01';
-
-const newTestName02 = 'Douglas02';
-
-const newMe = 'newMe';
-
-const mailCom = 'Mail.com';
-
-const helloWorld = 'Hello world';
-
-final typeSomethingComposePlaceholderFinder = find.byValueKey(L.getKey(L.type));
-
+// Finders
+final pageBackFinder = find.byValueKey(keyBackOrCloseButton);
 final profileFinder = find.text(L.getKey(L.profile));
-
-final pageBack = find.pageBack();
-
-final helloWorldFinder = find.text(helloWorld);
-
 final contactsFinder = find.text(L.getPluralKey(L.contactP));
-
 final chatsFinder = find.text(L.getPluralKey(L.chatP));
-
 final signInFinder = find.text(L.getKey(L.loginSignIn));
-
+final composeInputFinder = find.byValueKey(L.getKey(L.type));
 final cancelFinder = find.byValueKey(keyConfirmationDialogCancelButton);
-
 final createChatFinder = find.byValueKey(keyChatListCreateChatButton);
-
-final personAddFinder = find.byValueKey(keyContactListAddContactButton);
-
-final userSettingsCheckIconButtonFinder = find.byValueKey(keyUserSettingsCheckIconButton);
-
-final keyContactChangeNameFinder = find.byValueKey(keyContactChangeNameValidatableTextFormField);
-
-final keyContactChangeCheckFinder = find.byValueKey(keyContactChangeCheckIconButton);
-
-
-
+final contactAddFinder = find.byValueKey(keyContactListAddContactButton);
+final userSettingsSubmitFinder = find.byValueKey(keyUserSettingsCheckIconButton);
+final contactChangeNameInputFinder = find.byValueKey(keyContactChangeNameValidatableTextFormField);
+final contactChangeSubmitFinder = find.byValueKey(keyContactChangeCheckIconButton);
+final chatSavedMessagesFinder = find.text(textSavedMessages);

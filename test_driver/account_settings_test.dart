@@ -56,7 +56,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
+import 'setup/test_constants.dart';
 import 'setup/main_test_setup.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
@@ -87,7 +87,7 @@ void main() {
 
     test(': Case real password and fake IMAP server.', () async {
       await driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
-      await driver.enterText(realPassword);
+      await driver.enterText(passwordReal);
       await driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
       await driver.enterText(fakeIMAPCoiServer);
       await driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
@@ -103,14 +103,14 @@ void main() {
 
     test(': Case fake password and fake IMAP Server and fake SMTP Server.', () async {
       await driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
-      await driver.enterText(helloWorld);
+      await driver.enterText(inputHelloWorld);
       await driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
       await driver.tap(find.text(L.getKey(L.ok)));
     });
 
     test(': Case real password and real IMAP Server and real SMTP Server.', () async {
       await driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
-      await driver.enterText(realPassword);
+      await driver.enterText(passwordReal);
       await driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
       await driver.enterText(realServer);
       await driver.tap(find.byValueKey(keySettingsManuelFormValidatableTextFormFieldSMTPServerField));

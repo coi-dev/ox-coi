@@ -63,7 +63,7 @@ class Search extends SearchDelegate {
         icon: AdaptiveIcon(
             icon: IconSource.clear
         ),
-        key: Key(keySearchClearIconButton),
+        key: Key(keySearchBarClearButton),
         onPressed: () {
           query = "";
         },
@@ -88,7 +88,6 @@ class Search extends SearchDelegate {
       icon: AdaptiveIcon(
           icon: IconSource.arrowBack
       ),
-      key: Key(keySearchReturnIconButton),
       onPressed: () {
         close(context, query);
       },

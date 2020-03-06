@@ -55,9 +55,9 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
+import 'setup/test_constants.dart';
 
 void main() {
   FlutterDriver driver;
@@ -70,21 +70,17 @@ void main() {
   });
 
   group('Test: Add swipe to delete for contacts test', () {
-    final newTestName1Finder = find.text(newTestName01);
+    final newTestName1Finder = find.text(name3);
 
     test(': Get contacts', () async {
       await driver.tap(contactsFinder);
       await driver.tap(cancelFinder);
-      var actualMeContact = await driver.getText(find.text(meContact));
-      expect(actualMeContact, meContact);
+      var actualMeContact = await driver.getText(find.text(nameMe));
+      expect(actualMeContact, nameMe);
     });
 
     test(': Add one contact.', () async {
-      await addNewContact(
-        driver,
-        newTestName01,
-        newTestEmail04,
-      );
+      await addNewContact(driver, name3, email3);
     });
 
     test(': Test Swipe one contact.', () async {
@@ -92,7 +88,7 @@ void main() {
     });
 
     test(': Test chat after swiping', () async {
-      await writeChatFromChat(driver);
+      await writeChatFromChat(driver, messageIdOne);
     });
   });
 }

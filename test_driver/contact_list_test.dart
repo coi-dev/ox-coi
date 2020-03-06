@@ -45,9 +45,9 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
+import 'setup/test_constants.dart';
 
 void main() {
   FlutterDriver driver;
@@ -63,28 +63,20 @@ void main() {
     test(': Get conatact.', () async {
       await driver.tap(contactsFinder);
       await driver.tap(cancelFinder);
-      var actualMeContact = await driver.getText(find.text(meContact));
-      expect(actualMeContact, meContact);
+      var actualMeContact = await driver.getText(find.text(nameMe));
+      expect(actualMeContact, nameMe);
     });
 
     test(': Add two new contacts in the contact list.', () async {
-      await addNewContact(
-        driver,
-        newTestName01,
-        newTestEmail04,
-      );
-      await addNewContact(
-        driver,
-        newTestName02,
-        newTestEmail02,
-      );
+      await addNewContact(driver, name3, email3);
+      await addNewContact(driver, name2, email2);
     });
     test(': Manage one created contact.', () async {
-      await manageContact(driver, newTestName01, newMe);
+      await manageContact(driver, name3, nameNewMe);
     });
 
     test(': Delete one contact.', () async {
-      await deleteContact(driver, newTestName02);
+      await deleteContact(driver, name2);
     });
   });
 }
@@ -94,8 +86,8 @@ Future manageContact(FlutterDriver driver, String newTestName, String newMe) asy
   var actualContactName = await driver.getText(find.text(newTestName));
   expect(actualContactName, newTestName);
   await driver.tap(find.byValueKey(keyProfileHeaderAdaptiveIconButton));
-  await driver.tap(keyContactChangeNameFinder);
+  await driver.tap(contactChangeNameInputFinder);
   await driver.enterText(newMe);
-  await driver.tap(keyContactChangeCheckFinder);
-  await driver.tap(pageBack);
+  await driver.tap(contactChangeSubmitFinder);
+  await driver.tap(pageBackFinder);
 }

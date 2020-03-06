@@ -44,8 +44,8 @@ import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
 
-import 'global_consts.dart';
 import 'helper_methods.dart';
+import 'test_constants.dart';
 
 const String adbPath = 'adb';
 
@@ -61,19 +61,16 @@ const environmentTargetPlatform = 'FLUTTER_TEST_TARGET_PLATFORM';
 const environmentTargetPlatformAndroid = 'android';
 const environmentTargetPlatformIos = 'ios';
 
+String targetPlatform;
+
 Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
-  String targetPlatform = Platform.environment[environmentTargetPlatform];
+  targetPlatform = Platform.environment[environmentTargetPlatform];
   if (targetPlatform == environmentTargetPlatformAndroid) {
     await setupAndroid();
   }
   FlutterDriver driver = await FlutterDriver.connect();
   if (!isLogin) {
-    await getAuthentication(
-      driver,
-      coiDebug,
-      realEmail,
-      realPassword,
-    );
+    await getAuthentication(driver, providerCoiDebug, emailReal, passwordReal);
   }
   return driver;
 }
@@ -95,29 +92,13 @@ Future setupAndroid() async {
 Future grantPermission(String adbPath, String permission) async {
   String deviceId = Platform.environment[environmentDeviceId];
   String appId = Platform.environment[environmentAppId];
-  await Process.run(
-    adbPath,
-    [
-      '-s',
-      deviceId,
-      'shell',
-      'pm',
-      'grant',
-      appId,
-      permission,
-    ],
-  );
+  await Process.run(adbPath, ['-s', deviceId, 'shell', 'pm', 'grant', appId, permission]);
 }
 
-Future getAuthentication(
-  FlutterDriver driver,
-  String provider,
-  String email,
-  String password,
-) async {
+Future getAuthentication(FlutterDriver driver, String provider, String email, String password) async {
   final providerFinder = find.text(provider);
   await driver.tap(signInFinder);
-  await driver.scroll(find.text(mailCom), 0, -600, Duration(milliseconds: 500));
+  await driver.scroll(find.text(providerMailCom), 0, -600, Duration(milliseconds: 500));
   await driver.tap(providerFinder);
   await logIn(driver, email, password);
 }

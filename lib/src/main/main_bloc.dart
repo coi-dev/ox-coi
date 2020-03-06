@@ -59,6 +59,7 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/error/error_event_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/notifications/local_notification_manager.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
@@ -181,7 +182,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupDefaultValues() async {
-    await _config.setValue(Context.configSelfStatus, defaultStatus);
+    await _config.setValue(Context.configSelfStatus, "${L10n.get(L.profileDefaultStatus)} - $projectUrl");
     await _config.setValue(Context.configShowEmails, Context.showEmailsOff);
     String version = await getAppVersion();
     await setPreference(preferenceAppVersion, version);

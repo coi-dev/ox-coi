@@ -50,7 +50,6 @@ import 'package:ox_coi/src/message/message_item.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -131,15 +130,14 @@ class _FlaggedState extends State<Flagged> {
           nextMessageId = state.messageIds[index + 1];
         }
         bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-        var key = createKeyFromId(messageId, [state.messageLastUpdateValues[index]]);
         return MessageItem(
+          key: ValueKey(messageId),
           chatId: widget.chatId,
           messageId: messageId,
           isGroupChat: true,
           hasDateMarker: hasDateMarker,
           nextMessageId: nextMessageId,
           isFlaggedView: true,
-          key: key,
         );
       },
     );

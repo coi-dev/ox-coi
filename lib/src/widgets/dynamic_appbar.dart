@@ -53,6 +53,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/text_field_handling.dart';
 import 'package:provider/provider.dart';
 
@@ -207,18 +208,18 @@ class _AppBarTitle extends StatelessWidget {
 }
 
 class AppBarBackButton extends IconButton {
-  AppBarBackButton({Key key, @required context})
+  AppBarBackButton({@required context})
       : super(
-          key: key,
+          key: ValueKey(keyBackOrCloseButton),
           icon: AdaptiveIcon(icon: IconSource.arrowBack),
           onPressed: () => Navigation().pop(context),
         );
 }
 
 class AppBarCloseButton extends IconButton {
-  AppBarCloseButton({Key key, @required context})
+  AppBarCloseButton({@required context})
       : super(
-          key: key,
+          key: ValueKey(keyBackOrCloseButton),
           icon: AdaptiveIcon(icon: IconSource.close),
           onPressed: () => Navigation().pop(context),
         );
@@ -228,7 +229,7 @@ class DynamicSearchBar extends StatelessWidget {
   final DynamicSearchBarContent content;
   final bool scrollable;
 
-  const DynamicSearchBar({Key key, @required this.content, this.scrollable = true}) : super(key: key);
+  DynamicSearchBar({Key key, @required this.content, this.scrollable = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -318,18 +319,21 @@ class _DynamicSearchBarContentState extends State<DynamicSearchBarContent> {
       padding: const EdgeInsets.symmetric(horizontal: dimension16dp, vertical: searchBarVerticalPadding),
       color: CustomTheme.of(context).background,
       child: TextField(
+        key: ValueKey(keySearchBarInput),
         controller: _controller,
         focusNode: _focusNode,
         onChanged: (text) => widget.onSearch(text),
         decoration: InputDecoration(
           prefixIcon: _canHideAppBar && _isActive
               ? IconButton(
+                  key: ValueKey(keySearchBarResetButton),
                   icon: Icon(Icons.arrow_back),
                   onPressed: () => _resetSearch(context),
                 )
               : Icon(Icons.search),
           suffixIcon: _isActive
               ? IconButton(
+                  key: ValueKey(keySearchBarClearButton),
                   icon: Icon(Icons.close),
                   onPressed: _clearSearch,
                 )

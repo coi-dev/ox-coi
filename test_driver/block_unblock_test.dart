@@ -45,9 +45,9 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
+import 'setup/test_constants.dart';
 
 void main() {
   FlutterDriver driver;
@@ -63,33 +63,29 @@ void main() {
     test(': Get contacts', () async {
       await driver.tap(contactsFinder);
       await driver.tap(cancelFinder);
-      var actualMeContact = await driver.getText(find.text(meContact));
-      expect(actualMeContact, meContact);
+      var actualMeContact = await driver.getText(find.text(nameMe));
+      expect(actualMeContact, nameMe);
       await navigateTo(driver, L.getPluralKey(L.chatP));
     });
 
     test(': Add two new contacts in the contact list.', () async {
       await driver.tap(contactsFinder);
-      await addNewContact(
-        driver,
-        newTestName01,
-        newTestEmail04,
-      );
+      await addNewContact(driver, name3, email3);
     });
 
     test(': Block one contact and check the blocking.', () async {
-      await blockOneContactFromContacts(driver, newTestName01);
-      await driver.waitForAbsent(find.text(newTestName01));
+      await blockOneContactFromContacts(driver, name3);
+      await driver.waitForAbsent(find.text(name3));
       navigateTo(driver, L.getKey(L.profile));
       await driver.scroll(find.byValueKey(keyUserProfileDarkModeIconSource), 0.0, -600.0, Duration(milliseconds: 500));
       await driver.tap(find.byValueKey(keyUserProfileBlockIconSource));
-      expect(await driver.getText(find.text(newTestName01)), newTestName01);
+      expect(await driver.getText(find.text(name3)), name3);
     });
 
     test(': Unblock one contact and check the unblocking.', () async {
-      await unblockOneContactFromBlockedContacts(driver, newTestName01);
+      await unblockOneContactFromBlockedContacts(driver, name3);
       await navigateTo(driver, L.getPluralKey(L.contactP));
-      await driver.waitFor(find.text(newTestName01));
+      await driver.waitFor(find.text(name3));
     });
   });
 }

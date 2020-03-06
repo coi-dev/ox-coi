@@ -372,6 +372,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                               ),
                               onPressed: () => _isLocked ? _chatComposerBloc.add(StopAudioRecording(sendAudio: true)) : _onPrepareMessageSend(),
                             ),
+                            key: Key(KeyChatOnSendTextIcon),
                           ),
                         ),
                       ),
@@ -927,7 +928,7 @@ class MessageList extends StatelessWidget {
                     }
                     bool hasDateMarker = state.dateMarkerIds.contains(messageId);
                     return MessageItem(
-                      key:  ValueKey(messageId),
+                      key: ValueKey(messageId),
                       chatId: chatId,
                       messageId: messageId,
                       isGroupChat: BlocProvider.of<ChatBloc>(context).isGroup,

@@ -46,7 +46,7 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 
-import 'setup/global_consts.dart';
+import 'setup/test_constants.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
@@ -65,11 +65,11 @@ void main() {
 
     test(': Get and edit profile.', () async {
       await driver.tap(profileFinder);
-      expect(await driver.getText(find.byValueKey(keyProfileHeaderText)), realEmail);
+      expect(await driver.getText(find.byValueKey(keyProfileHeaderText)), emailReal);
       await driver.tap(find.byValueKey(keyProfileHeaderAdaptiveIconButton));
       await driver.tap(find.byValueKey(keyUserSettingsUsernameLabel));
       await driver.enterText(testUserNameUserProfile);
-      await driver.tap(userSettingsCheckIconButtonFinder);
+      await driver.tap(userSettingsSubmitFinder);
     });
 
     test(': Check profile after change.', () async {

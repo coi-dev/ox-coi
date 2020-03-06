@@ -47,7 +47,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
-import 'setup/global_consts.dart';
+import 'setup/test_constants.dart';
 import 'setup/main_test_setup.dart';
 
 void main() {
@@ -72,7 +72,7 @@ void main() {
     test(': Test contact navigation.', () async {
       await checkContact(
         driver,
-        meContact,
+        nameMe,
       );
     });
     test(': Test profile navigation.', () async {
@@ -89,7 +89,7 @@ Future checkProfile(FlutterDriver driver) async {
   await driver.tap(profileFinder);
   await driver.tap(finderUserProfileEditRaisedButton);
   await driver.tap(settingsUserSettingsUsernameLabelFinder);
-  await driver.tap(userSettingsCheckIconButtonFinder);
+  await driver.tap(userSettingsSubmitFinder);
   await driver.tap(contactsFinder);
   await driver.waitForAbsent(cancelFinder);
 }
@@ -99,18 +99,17 @@ Future checkChat(FlutterDriver driver) async {
   await driver.tap(createChatFinder);
   expect(await driver.getText(find.text(chatCreate)), chatCreate);
   //  Check newContact.
-  await driver.tap(pageBack);
+  await driver.tap(pageBackFinder);
   //  Check searchChat
-  await driver.tap(find.byValueKey(keyChatListSearchIconButton));
-  await driver.tap(find.byValueKey(keySearchClearIconButton));
-  await driver.tap(find.byValueKey(keySearchReturnIconButton));
+  await driver.tap(find.byValueKey(keySearchBarInput));
+  await driver.tap(find.byValueKey(keySearchBarClearButton));
 }
 
 Future checkContact(FlutterDriver driver, String newTestName) async {
   await driver.tap(contactsFinder);
   //  await driver.waitForAbsent(cancelFinder);
-  await driver.tap(personAddFinder);
-  await driver.tap(find.byValueKey(keyContactChangeCloseIconButton));
+  await driver.tap(contactAddFinder);
+  await driver.tap(find.byValueKey(keyBackOrCloseButton));
   var actualNewContactName = await driver.getText(find.text(newTestName));
   expect(actualNewContactName, newTestName);
 
@@ -119,7 +118,6 @@ Future checkContact(FlutterDriver driver, String newTestName) async {
   await driver.tap(cancelFinder);
 
   //  Check Search.
-  await driver.tap(find.byValueKey(keyContactListSearchIconButton));
+  await driver.tap(find.byValueKey(keySearchBarInput));
   expect(actualNewContactName, newTestName);
-  await driver.tap(find.byValueKey(keySearchReturnIconButton));
 }
