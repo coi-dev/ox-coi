@@ -66,7 +66,7 @@ class MessageReceived extends StatelessWidget {
         messageStateData: messageStateData,
         backgroundColor: CustomTheme.of(context).surface,
         textColor: CustomTheme.of(context).onSurface,
-        secondaryTextColor: CustomTheme.of(context).onSurface.withOpacity(fade),
+        secondaryTextColor: CustomTheme.of(context).onSurface.fade(),
         borderRadius: buildBorderRadius(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -141,7 +141,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       String name = await contact.getName();
       String email = await contact.getAddress();
       int colorValue = await contact.getColor();
-      Color color = rgbColorFromInt(colorValue);
+      Color color = colorFromArgb(colorValue);
       add(
         ChatLoaded(
           name: name,
@@ -176,7 +176,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     int freshMessageCount = await context.getFreshMessageCount(_chatId);
     bool isSelfTalk = await chat.isSelfTalk();
     bool isVerified = await chat.isVerified();
-    Color color = rgbColorFromInt(colorValue);
+    Color color = colorFromArgb(colorValue);
     String avatarPath = await chat.getProfileImage();
     var chatSummary = chat.get(ChatExtension.chatSummary);
     var chatSummaryState = chatSummary?.state;

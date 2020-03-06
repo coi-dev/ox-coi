@@ -212,7 +212,7 @@ class _ProviderListState extends State<ProviderList> {
                 )),
             Divider(
               height: loginListItemDividerHeight,
-              color: CustomTheme.of(context).onBackground.withOpacity(barely),
+              color: CustomTheme.of(context).onBackground.barely(),
             ),
           ],
         ),

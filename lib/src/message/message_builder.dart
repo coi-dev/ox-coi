@@ -299,7 +299,7 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
                         width: videoPreviewIconBackgroundWidth,
                         decoration: ShapeDecoration(
                           shape: CircleBorder(),
-                          color: CustomTheme.of(context).black.withOpacity(fade),
+                          color: CustomTheme.of(context).black.fade(),
                         ),
                         child: AdaptiveIcon(
                           icon: IconSource.play,
@@ -317,7 +317,7 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(videoPreviewTimeBorderRadius),
-                      color: CustomTheme.of(context).black.withOpacity(fade),
+                      color: CustomTheme.of(context).black.fade(),
                     ),
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: videoPreviewTimePaddingVertical, horizontal: videoPreviewTimePaddingHorizontal),
@@ -434,7 +434,7 @@ class MessageDateTime extends StatelessWidget {
       child: Text(
         date,
         style: TextStyle(
-          color: CustomTheme.of(context).onSurface.withOpacity(fade),
+          color: CustomTheme.of(context).onSurface.fade(),
         ),
       ),
     );

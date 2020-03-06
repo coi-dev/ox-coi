@@ -203,7 +203,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               height: 0.0,
-              color: CustomTheme.of(context).onBackground.withOpacity(barely),
+              color: CustomTheme.of(context).onBackground.barely(),
             ),
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

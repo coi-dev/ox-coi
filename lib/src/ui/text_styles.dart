@@ -54,9 +54,9 @@ getProfileHeaderTextStyle(BuildContext context){
 }
 
 getProfileHeaderSecondTextStyle(BuildContext context){
-    return Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onSurface.withOpacity(fade));
+    return Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onSurface.fade());
 }
 
 getProfileHeaderPlaceholderTextStyle(BuildContext context){
-    return Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.withOpacity(disabled));
+    return Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.disabled());
 }

@@ -42,36 +42,31 @@
 
 import 'package:flutter/material.dart';
 
-// Calculated values
+const _fade = 0.7;
+const _half = 0.5;
+const _disabled = 0.3;
+const _slightly = 0.3;
+const _barely = 0.1;
+const _transparent = 0.0;
 
-final semiTransparent = Colors.black.withOpacity(half);
+extension Derive on Color {
+  Color fade() => this.withOpacity(_fade);
 
-// Constants for reusable access
+  Color half() => this.withOpacity(_half);
 
-const fade = 0.7;
-const half = 0.5;
-const disabled = 0.3;
-const slightly = 0.3;
-const barely = 0.1;
-const transparent = 0.0;
+  Color disabled() => this.withOpacity(_disabled);
 
-// Helper methods to generate colors
+  Color slightly() => this.withOpacity(_slightly);
 
-Color rgbColorFromInt(int color, [int alpha]) {
-  if (alpha == null) {
-    alpha = 255;
-  }
-  return Color.fromARGB(alpha, _red(color), _green(color), _blue(color));
+  Color barely() => this.withOpacity(_barely);
+
+  Color transparent() => this.withOpacity(_transparent);
 }
 
-int _red(int color) {
-  return (color >> 16) & 0xFF;
-}
+Color colorFromArgb(int color, [int alpha]) => Color.fromARGB(alpha ?? 255, _red(color), _green(color), _blue(color));
 
-int _green(int color) {
-  return (color >> 8) & 0xFF;
-}
+int _red(int color) => (color >> 16) & 0xFF;
 
-int _blue(int color) {
-  return color & 0xFF;
-}
+int _green(int color) => (color >> 8) & 0xFF;
+
+int _blue(int color) => color & 0xFF;

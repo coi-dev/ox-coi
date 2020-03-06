@@ -68,7 +68,7 @@ class MessageSetup extends StatelessWidget {
             messageStateData: messageStateData,
             backgroundColor: CustomTheme.of(context).secondary,
             textColor: CustomTheme.of(context).onSecondary,
-            secondaryTextColor: CustomTheme.of(context).onSecondary.withOpacity(fade),
+            secondaryTextColor: CustomTheme.of(context).onSecondary.fade(),
             borderRadius: buildInfoBorderRadius(),
             useInformationText: true,
             child: MessageMaterial(

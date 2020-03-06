@@ -94,7 +94,7 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
     final int colorValue = await contact.getColor();
     final bool isVerified = await contact.isVerified();
     final String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
-    final Color color = rgbColorFromInt(colorValue);
+    final Color color = colorFromArgb(colorValue);
 
     String headerText = name.getFirstCharacter()?.toUpperCase();
     if (previousContactId != null) {

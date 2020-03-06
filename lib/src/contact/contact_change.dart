@@ -310,7 +310,7 @@ class _ContactChangeState extends State<ContactChange> {
                   right: formVerticalPadding),
               child: Text(
                 L10n.get(L.contactEditPhoneNumberText),
-                style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.withOpacity(half)),
+                style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.half()),
                 textAlign: TextAlign.center,
               ),
             ),

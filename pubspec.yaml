@@ -61,6 +61,7 @@ dependencies:
     git:
       url: https://github.com/Boehrsi/flutter_qr_mobile_vision
       ref: android-embedding-v2
+  tinycolor: ^1.0.2
   uuid: ^2.0.4
   video_thumbnail:
     git:

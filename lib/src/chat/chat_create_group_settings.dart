@@ -141,7 +141,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
         Align(
             alignment: Alignment.center,
             child: ProfileData(
-              imageBackgroundColor: CustomTheme.of(context).onBackground.withOpacity(barely),
+              imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
               imageActionCallback: _setAvatar,
               avatarPath: _avatar,
               child: ProfileHeader(),

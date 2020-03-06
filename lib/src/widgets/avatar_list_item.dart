@@ -112,7 +112,7 @@ class AvatarListItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: !isSelected
                       ? CustomTheme.of(context).surface
-                      : CustomTheme.of(context).accent.withOpacity(barely),
+                      : CustomTheme.of(context).accent.barely(),
                 ),
                 padding: const EdgeInsets.all(listItemPadding),
                 child: Row(
@@ -305,7 +305,7 @@ class AvatarListItem extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.body1.copyWith(
-              color: CustomTheme.of(context).onSurface.withOpacity(half)),
+              color: CustomTheme.of(context).onSurface.half()),
         ));
   }
 }

@@ -151,7 +151,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         int contactId = contact.id;
         String contactName = await contact.getName();
         String contactAddress = await contact.getAddress();
-        Color contactColor = rgbColorFromInt(await contact.getColor());
+        Color contactColor = colorFromArgb(await contact.getColor());
         contactStateData = ContactStateData(
           id: contactId,
           name: contactName,

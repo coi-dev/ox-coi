@@ -256,7 +256,7 @@ class ProfileHeaderEditButton extends StatelessWidget {
       right: 16.0,
       child: AdaptiveIconButton(
         icon: AdaptiveSuperellipseIcon(
-          color: CustomTheme.of(context).onBackground.withOpacity(barely),
+          color: CustomTheme.of(context).onBackground.barely(),
           icon: IconSource.edit,
           iconColor: CustomTheme.of(context).accent,
         ),key: Key(keyProfileHeaderAdaptiveIconButton),
@@ -376,7 +376,7 @@ class EditableProfileHeader extends StatelessWidget {
             Align(
                 alignment: Alignment.center,
                 child: ProfileData(
-                  imageBackgroundColor: CustomTheme.of(context).onBackground.withOpacity(barely),
+                  imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
                   imageActionCallback: imageChangedCallback,
                   avatarPath: avatar,
                   child: ProfileAvatar(),

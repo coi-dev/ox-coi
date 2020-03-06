@@ -408,7 +408,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                       child: AdaptiveIcon(
                         icon: IconSource.insertDriveFile,
                         size: previewDefaultIconSize,
-                        color: CustomTheme.of(context).black.withOpacity(slightly),
+                        color: CustomTheme.of(context).black.slightly(),
                       ),
                     ),
               Padding(
@@ -417,7 +417,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   onTap: () => _closePreview(),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: CustomTheme.of(context).black.withOpacity(half),
+                      color: CustomTheme.of(context).black.half(),
                       borderRadius: BorderRadiusDirectional.circular(previewCloseIconBorderRadius),
                     ),
                     child: AdaptiveIcon(

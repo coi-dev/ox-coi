@@ -130,7 +130,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             avatarPath: imagePath,
             placeholderText: L10n.get(L.profileNoUsername),
             imageBackgroundColor:
-                CustomTheme.of(context).onBackground.withOpacity(barely),
+                CustomTheme.of(context).onBackground.barely(),
             withPlaceholder: true,
             editActionCallback: () =>
                 _editContact(context, chatName, email, phoneNumbers),
