@@ -613,7 +613,6 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     return IconTheme(
       data: IconThemeData(color: CustomTheme.of(context).accent),
       child: Container(
-        height: 60.0,
         margin: const EdgeInsets.symmetric(horizontal: composerHorizontalPadding),
         child: BlocProvider.value(
           value: _chatComposerBloc,

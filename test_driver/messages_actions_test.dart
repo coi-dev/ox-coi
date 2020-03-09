@@ -52,9 +52,11 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:test/test.dart';
 import 'package:ox_coi/src/l10n/l.dart';
+import 'package:test/test.dart';
 
 import 'setup/global_consts.dart';
 import 'setup/helper_methods.dart';
@@ -74,7 +76,7 @@ void main() {
     final flagUnFlag = L.getKey(L.messageActionFlagUnflag);
     final forward = L.getKey(L.messageActionForward);
     final textToDelete = 'Text to delete';
-    final paste = 'PASTE';
+    final paste = Platform.isAndroid ? 'PASTE' : 'Paste';
     final copy = 'Copy';
 
     final meContactFinder = find.text(meContact);
