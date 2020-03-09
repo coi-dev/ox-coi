@@ -58,6 +58,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
@@ -110,16 +111,14 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
         bloc: _contactItemBloc,
         builder: (context, state) {
           if (state is ContactItemStateSuccess) {
-            return _buildSingleProfileInfo(state.name, state.email, state.color,
-                state.isVerified, state.imagePath, state.phoneNumbers);
+            return _buildSingleProfileInfo(state.name, state.email, state.color, state.isVerified, state.imagePath, state.phoneNumbers);
           } else {
             return Container();
           }
         });
   }
 
-  Widget _buildSingleProfileInfo(String chatName, String email, Color color,
-      bool isVerified, String imagePath, String phoneNumbers) {
+  Widget _buildSingleProfileInfo(String chatName, String email, Color color, bool isVerified, String imagePath, String phoneNumbers) {
     return Container(
       color: CustomTheme.of(context).background,
       child: Column(
@@ -179,7 +178,8 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               text: L10n.get(L.chatDeleteP),
               textColor: CustomTheme.of(context).error,
               iconBackground: CustomTheme.of(context).blockIcon,
-              onTap: () => _deleteChat(),
+              showChevron: false,
+              onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),
             ),
         ],
       ),
