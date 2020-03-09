@@ -87,7 +87,7 @@ final contactsFinder = find.text(L.getPluralKey(L.contactP));
 
 final chatsFinder = find.text(L.getPluralKey(L.chatP));
 
-final signInFinder = find.text(L.getKey(L.loginSignIn).toUpperCase());
+final signInFinder = find.text(L.getKey(L.loginSignIn));
 
 final cancelFinder = find.byValueKey(keyConfirmationDialogCancelButton);
 

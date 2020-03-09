@@ -168,9 +168,9 @@ Future checkOxCoiWelcomeAndProviderList(
   var actualLoginButton = await driver.getText(find.byValueKey(keyLoginLoginSignInText));
   var actualRegisterButton = await driver.getText(find.byValueKey(keyLoginRegisterText));
 
-  expect(actualLoginButton, L.getKey(L.loginSignIn).toUpperCase());
-  expect(actualRegisterButton, L.getKey(L.register).toUpperCase());
-  await driver.tap(find.text(L.getKey(L.loginSignIn).toUpperCase()));
+  expect(actualLoginButton, L.getKey(L.loginSignIn));
+  expect(actualRegisterButton, L.getKey(L.register));
+  await driver.tap(find.text(L.getKey(L.loginSignIn)));
 
   //  Check if all providers are found in the list.
   var actualProvideOutlook = await driver.getText(find.text(outlook));
@@ -195,7 +195,7 @@ Future selectAndTapProvider(FlutterDriver driver) async {
   expect(await driver.getText(find.text(coiDebug)), coiDebug);
   await driver.tap(find.text(coiDebug));
   expect(await driver.getText(find.text(loginProviderSignInText)), loginProviderSignInText);
-  expect(await driver.getText(find.text(L.getKey(L.loginSignIn).toUpperCase())), L.getKey(L.loginSignIn).toUpperCase());
+  expect(await driver.getText(find.text(L.getKey(L.loginSignIn))), L.getKey(L.loginSignIn));
   await driver.waitFor(emailFieldFinder);
   await driver.waitFor(passwordFieldFinder);
 }
