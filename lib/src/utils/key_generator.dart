@@ -40,21 +40,13 @@
  * for more details.
  */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 const idSeparator = "_";
 const valueSeparator = "-";
 
 String createKeyString(int id, int lastUpdateValue) {
   return "$id-$lastUpdateValue";
-}
-
-ValueKey createKey(var value) {
-  if (value is String) {
-    return ValueKey(value);
-  } else {
-    return ValueKey(value.toString());
-  }
 }
 
 ValueKey createKeyFromId(int id, [List values]) {

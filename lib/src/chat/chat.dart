@@ -945,14 +945,13 @@ class MessageList extends StatelessWidget {
                       nextMessageId = state.messageIds[index + 1];
                     }
                     bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-                    final key = createKey(messageId);
                     return MessageItem(
+                      key:  ValueKey(messageId),
                       chatId: chatId,
                       messageId: messageId,
                       isGroupChat: BlocProvider.of<ChatBloc>(context).isGroup,
                       hasDateMarker: hasDateMarker,
                       nextMessageId: nextMessageId,
-                      key: key,
                     );
                   },
                   childCount: state.messageIds.length,
