@@ -56,7 +56,7 @@ ValueKey createKeyFromId(int id, [List values]) {
 }
 
 int extractId(ValueKey valueKey) {
-  String value = valueKey.value;
+  String value = valueKey.value.toString();
   final splitList = value.split(idSeparator);
   if (splitList.length >= 1) {
     final id = int.parse(splitList[0]);
