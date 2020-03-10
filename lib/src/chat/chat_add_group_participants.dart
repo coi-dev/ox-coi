@@ -190,7 +190,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
             ),
           ),
           width: double.infinity,
-          height: 40.0,
+          height: dimension40dp,
           child: selectedContacts.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,

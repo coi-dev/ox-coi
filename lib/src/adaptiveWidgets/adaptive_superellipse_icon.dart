@@ -52,7 +52,7 @@ class AdaptiveSuperellipseIcon extends StatelessWidget {
   final double backgroundSize;
   final double iconSize;
 
-  AdaptiveSuperellipseIcon({@required this.icon, @required this.color, @required this.iconColor, this.backgroundSize = superellipseIconDefaultBackgroundSize, this.iconSize = superellipseIconDefaultSize});
+  AdaptiveSuperellipseIcon({@required this.icon, @required this.color, @required this.iconColor, this.backgroundSize = dimension32dp, this.iconSize = dimension24dp});
 
   @override
   Widget build(BuildContext context) {

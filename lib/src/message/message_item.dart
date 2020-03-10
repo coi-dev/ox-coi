@@ -165,7 +165,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
               children: [
                 if (widget.hasDateMarker || messageStateData.showTime)
                   Padding(
-                    padding: EdgeInsets.only(bottom: messagesVerticalPadding),
+                    padding: const EdgeInsets.only(bottom: messagesVerticalPadding),
                     child: MessageDateTime(
                       timestamp: messageStateData.timestamp,
                       hasDateMarker: widget.hasDateMarker,
@@ -174,7 +174,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                   ),
                 if (!widget.isFlaggedView && messageStateData.encryptionStatusChanged)
                   Padding(
-                    padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
+                    padding: const EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                     child: MessageInfo(
                         messageStateData: messageStateData,
                         useInformationText: true,
@@ -194,7 +194,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                     isPending: messageStateData.state == ChatMsg.messageStatePending
                   ),
                   child: Container(
-                    padding: EdgeInsets.only(bottom: messagesVerticalOuterPadding),
+                    padding: const EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                     child: message,
                   ),
                 ),
@@ -252,7 +252,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                 child: Row(
                   children: <Widget>[
                     AdaptiveIcon(icon: choice.icon),
-                    Padding(padding: EdgeInsets.only(right: iconTextPadding)),
+                    Padding(padding: const EdgeInsets.only(right: iconTextPadding)),
                     Text(choice.title),
                   ],
                 ),

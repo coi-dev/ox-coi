@@ -149,7 +149,7 @@ mixin ChatComposer {
 
           border: OutlineInputBorder(
             borderSide: BorderSide(color: CustomTheme.of(context).onSurface.barely()),
-            borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
+            borderRadius: BorderRadius.all(Radius.circular(dimension24dp)),
           ),
         ),
         key: Key(L.getKey(L.type)),
@@ -209,16 +209,16 @@ mixin ChatComposer {
       widgets.add(Visibility(
         visible: type != ComposerModeType.compose,
         child: SizedBox(
-          width: 70.0,
+          width: voiceRecordingRecordTextContainerWidth,
           child: Row(
             children: <Widget>[
               Visibility(
                 visible: !isStopped,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
+                  padding: const EdgeInsets.only(left: dimension4dp),
                   child: Icon(
                     Icons.fiber_manual_record,
-                    size: 12,
+                    size: dimension12dp,
                     color: Colors.red,
                   ),
                 ),
@@ -226,11 +226,11 @@ mixin ChatComposer {
               Visibility(
                 visible: isStopped,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
+                  padding: const EdgeInsets.only(left: voiceRecordingStopIconPadding),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 4.0),
+                padding: const EdgeInsets.only(left: dimension8dp, right: dimension4dp),
                 child: getText(text),
               )
             ],
@@ -246,7 +246,7 @@ mixin ChatComposer {
             color: isLocked || isStopped || type == ComposerModeType.compose
                 ? Colors.transparent
                 : CustomTheme.of(context).onSurface.barely(),
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+            borderRadius: BorderRadius.all(Radius.circular(voiceRecordingStopLockBackgroundRadius)),
           ),
           child: Row(
             children: <Widget>[
@@ -257,7 +257,7 @@ mixin ChatComposer {
                     icon: isLocked ? IconSource.lock : IconSource.openLock,
                     color: Colors.transparent,
                     iconColor: CustomTheme.of(context).accent,
-                    iconSize: 16.0,
+                    iconSize: dimension16dp,
                   ),
                   onPressed: onRecordAudioLocked,
                 ),
@@ -286,7 +286,7 @@ mixin ChatComposer {
               Visibility(
                 visible: type == ComposerModeType.isVoiceRecording && isStopped,
                 child: Container(
-                    padding: EdgeInsets.only(left: 50.0),
+                    padding: EdgeInsets.only(left: voiceRecordingStopPlayLeftPadding),
                     child: Row(
                       children: <Widget>[
                         Visibility(

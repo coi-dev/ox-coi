@@ -89,7 +89,7 @@ class SettingsItem extends StatelessWidget {
     this.showChevron = true,
     this.onSwitchChanged,
     this.textColor,
-    this.itemHeight = listItemHeight,
+    this.itemHeight = dimension48dp,
   }) : super(key: key);
 
   @override
@@ -106,7 +106,7 @@ class SettingsItem extends StatelessWidget {
         color: CustomTheme.of(context).surface,
         height: itemHeight,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: settingsItemHorizontalPadding, vertical: settingsItemVerticalPadding),
+          padding: EdgeInsets.symmetric(horizontal: dimension20dp, vertical: settingsItemVerticalPadding),
           child: Row(
             children: [
               AdaptiveSuperellipseIcon(
@@ -117,7 +117,7 @@ class SettingsItem extends StatelessWidget {
                 icon: icon,
               ),
               Padding(
-                padding: EdgeInsets.only(right: settingsItemIconTextPadding),
+                padding: EdgeInsets.only(right: dimension16dp),
               ),
               Expanded(
                 child: Text(

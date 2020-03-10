@@ -97,9 +97,9 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            filter: ImageFilter.blur(sigmaX: imageBlurSigmaValue, sigmaY: imageBlurSigmaValue),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: dimension16dp),
               constraints: BoxConstraints.expand(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,7 +109,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                     valueColor: AlwaysStoppedAnimation<Color>(CustomTheme.of(context).onSurface),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: verticalPadding),
+                    padding: EdgeInsets.only(top: dimension16dp),
                     child: Center(
                       child: Text(
                         text,
@@ -120,7 +120,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                   ),
                   if (showProgressValues)
                     Padding(
-                      padding: EdgeInsets.only(top: verticalPaddingSmall),
+                      padding: EdgeInsets.only(top: verticalProgressPadding),
                       child: Text(
                         buildDisplayableProgress(progress),
                         textAlign: TextAlign.center,
@@ -129,7 +129,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                     ),
                   if (showCancelButton)
                     Padding(
-                      padding: EdgeInsets.only(top: verticalPaddingSmall),
+                      padding: EdgeInsets.only(top: verticalProgressPadding),
                       child: ButtonImportanceLow(
                         child: Text(L10n.get(L.cancel)),
                         onPressed: cancelPressed,

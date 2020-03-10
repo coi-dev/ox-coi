@@ -65,7 +65,7 @@ class StateInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: listStateInfoVerticalPadding),
+                padding: const EdgeInsets.only(top: listStateInfoVerticalPadding),
               ),
               if (showLoading != null && showLoading) CircularProgressIndicator(),
               if (!imagePath.isNullOrEmpty()) Image.asset(imagePath),
@@ -96,7 +96,7 @@ class StateInfo extends StatelessWidget {
                   ),
                 ),
               Padding(
-                padding: EdgeInsets.only(bottom: listStateInfoVerticalPadding),
+                padding: const EdgeInsets.only(bottom: listStateInfoVerticalPadding),
               )
             ],
           ),
@@ -106,7 +106,7 @@ class StateInfo extends StatelessWidget {
   }
 
   EdgeInsets buildEdgeInsets() =>
-      EdgeInsets.only(top: listStateInfoVerticalPadding, left: listStateInfoHorizontalPadding, right: listStateInfoHorizontalPadding);
+      const EdgeInsets.only(top: listStateInfoVerticalPadding, left: listStateInfoHorizontalPadding, right: listStateInfoHorizontalPadding);
 }
 
 class EmptyListInfo extends StatelessWidget {
@@ -118,12 +118,12 @@ class EmptyListInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: listEmptyTopPadding, left: listEmptyHorizontalPadding, right: listEmptyHorizontalPadding),
+      padding: const EdgeInsets.only(top: dimension24dp, left: listEmptyHorizontalPadding, right: listEmptyHorizontalPadding),
       child: Column(
         children: <Widget>[
           Image.asset(imagePath),
           Padding(
-            padding: EdgeInsets.only(top: listEmptyVerticalPadding),
+            padding: const EdgeInsets.only(top: dimension16dp),
             child: Text(
               infoText,
               textAlign: TextAlign.center,

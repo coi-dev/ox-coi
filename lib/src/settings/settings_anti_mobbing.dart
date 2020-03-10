@@ -91,7 +91,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
                 title: Text(L10n.get(L.settingAntiMobbing)),
                 subtitle: Text(L10n.get(L.settingAntiMobbingText)),
                 trailing: Switch.adaptive(value: state.antiMobbingActive, onChanged: (value) => _changeAntiMobbingSetting()),
@@ -99,7 +99,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
               Visibility(
                   visible: state.antiMobbingActive,
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: listItemPaddingBig),
+                    contentPadding: EdgeInsets.symmetric(horizontal: listItemPadding),
                     title: Text(L10n.get(L.settingChatMessagesUnknownShow)),
                     onTap: () {
                       _showAntiMobbingList();

@@ -200,14 +200,14 @@ class _PasswordChangedState extends State<PasswordChanged> {
                             ],
                           ),
                           Padding(
-                            padding: EdgeInsets.all(passwordChangedTitleInfoPadding),
+                            padding: EdgeInsets.all(dimension8dp),
                           ),
                           Text(
                             L10n.get(L.passwordChangedInfoText),
                             style: Theme.of(context).textTheme.subhead,
                           ),
                           Padding(
-                            padding: EdgeInsets.all(passwordChangedInfoFormPadding),
+                            padding: EdgeInsets.all(dimension24dp),
                           ),
                           Form(
                             key: formKey,
@@ -216,14 +216,14 @@ class _PasswordChangedState extends State<PasswordChanged> {
                               children: <Widget>[
                                 emailField,
                                 Padding(
-                                  padding: EdgeInsets.all(passwordChangedFormFieldPadding),
+                                  padding: EdgeInsets.all(dimension12dp),
                                 ),
                                 passwordField,
                               ],
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(passwordChangedFormButtonPadding),
+                            padding: EdgeInsets.all(dimension28dp),
                             child: ButtonImportanceHigh(
                               minimumWidth: loginButtonWidth,
                               child: Text(L10n.get(L.passwordChangedButtonText)),

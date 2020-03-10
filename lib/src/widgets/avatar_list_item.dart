@@ -95,8 +95,8 @@ class AvatarListItem extends StatelessWidget {
           visible: headerText != null && showHeaderText,
           child: ListGroupHeader(
             text: headerText,
-            padding: EdgeInsets.only(
-                top: groupHeaderTopPaddingBig,
+            padding: const EdgeInsets.only(
+                top: dimension24dp,
                 bottom: groupHeaderBottomPadding,
                 left: groupHeaderHorizontalPadding,
                 right: groupHeaderHorizontalPadding),
@@ -126,7 +126,7 @@ class AvatarListItem extends StatelessWidget {
                     Expanded(
                       child: Padding(
                         padding:
-                            const EdgeInsets.only(left: listAvatarTextPadding),
+                            const EdgeInsets.only(left: dimension16dp),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -249,7 +249,7 @@ class AvatarListItem extends StatelessWidget {
                         icon: isSelected
                             ? IconSource.checkedCircle
                             : IconSource.circle,
-                        size: iconSelectedSize,
+                        size: dimension24dp,
                         color: isSelected
                             ? CustomTheme.of(context).accent
                             : CustomTheme.of(context).onSurface,

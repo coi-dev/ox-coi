@@ -155,7 +155,7 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: EdgeInsets.all(loginManualSettingsPadding),
+                      padding: const EdgeInsets.all(loginManualSettingsPadding),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -168,12 +168,12 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
                                   L10n.get(L.loginManualSetupRequired),
                                 ),
                               ),
-                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                              Padding(padding: const EdgeInsets.all(loginManualSettingsSubTitlePadding)),
                               Text(
                                 L10n.get(L.loginCheckServer),
                                 textAlign: TextAlign.center,
                               ),
-                              Padding(padding: EdgeInsets.all(loginManualSettingsSubTitlePadding)),
+                              Padding(padding: const EdgeInsets.all(loginManualSettingsSubTitlePadding)),
                               Text(
                                 L10n.get(L.loginWelcomeManual),
                                 textAlign: TextAlign.center,

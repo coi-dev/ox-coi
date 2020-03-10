@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
 import 'adaptive_widget.dart';
 
@@ -28,7 +29,7 @@ class AdaptiveIconButton extends AdaptiveWidget<CupertinoButton, IconButton> {
   CupertinoButton buildCupertinoWidget(BuildContext context) {
     return CupertinoButton(
       key: childKey,
-      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(zero, zero, zero, zero),
       child: icon,
       onPressed: onPressed,
     );

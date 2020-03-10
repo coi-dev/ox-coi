@@ -179,14 +179,14 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
           child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
         ),
         Container(
-          padding: EdgeInsets.only(bottom: 4.0),
+          padding: EdgeInsets.only(bottom: dimension4dp),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(),
             ),
           ),
           width: double.infinity,
-          height: 40.0,
+          height: dimension40dp,
           child: selectedContacts.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,

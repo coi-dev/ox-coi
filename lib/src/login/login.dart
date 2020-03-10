@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
                   Container(
                     color: CustomTheme.of(context).primary,
                     width: viewportConstraints.maxWidth,
-                    padding: EdgeInsets.only(top: loginVerticalPaddingBig, right: loginHorizontalPadding, left: loginHorizontalPadding),
+                    padding: const EdgeInsets.only(top: loginVerticalPaddingBig, right: loginHorizontalPadding, left: loginHorizontalPadding),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
                           height: loginLogoSize,
                           width: loginLogoSize,
                         ),
-                        Padding(padding: EdgeInsets.only(top: loginLogoTextPadding)),
+                        Padding(padding: const EdgeInsets.only(top: dimension16dp)),
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
@@ -142,7 +142,7 @@ class _LoginState extends State<Login> {
                             children: getWelcome(),
                           ),
                         ),
-                        Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
+                        Padding(padding: const EdgeInsets.only(top: loginWaveTopBottomPadding)),
                       ],
                     ),
                   ),
@@ -157,11 +157,11 @@ class _LoginState extends State<Login> {
                     child: Container(
                       color: CustomTheme.of(context).background,
                       width: viewportConstraints.maxWidth,
-                      padding: EdgeInsets.symmetric(horizontal: loginHorizontalPadding),
+                      padding: const EdgeInsets.symmetric(horizontal: loginHorizontalPadding),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Padding(padding: EdgeInsets.only(top: loginWaveTopBottomPadding)),
+                          Padding(padding: const EdgeInsets.only(top: loginWaveTopBottomPadding)),
                           ButtonImportanceHigh(
                               minimumWidth: loginButtonWidth,
                               child: Text(
@@ -171,9 +171,9 @@ class _LoginState extends State<Login> {
                               onPressed: () {
                                 _goToProviderList(ProviderListType.login);
                               }),
-                          Padding(padding: EdgeInsets.only(top: loginButtonPadding)),
+                          Padding(padding: const EdgeInsets.only(top: dimension24dp)),
                           Padding(
-                            padding: EdgeInsets.all(loginVerticalPadding8dp),
+                            padding: const EdgeInsets.all(dimension8dp),
                             child: ButtonImportanceLow(
                                 minimumWidth: loginButtonWidth,
                                 child: Text(
@@ -184,9 +184,9 @@ class _LoginState extends State<Login> {
                                   _goToProviderList(ProviderListType.register);
                                 }),
                           ),
-                          Padding(padding: EdgeInsets.only(top: loginRichTextButtonPadding)),
+                          Padding(padding: const EdgeInsets.only(top: dimension64dp)),
                           Padding(
-                            padding: EdgeInsets.only(bottom: loginRichTextBottomPadding),
+                            padding: const EdgeInsets.only(bottom: dimension32dp),
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(

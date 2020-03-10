@@ -55,6 +55,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
@@ -202,7 +203,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
   ListView _buildGroupMemberList(ContactListStateSuccess state, bool isRemoved) {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
-              height: 0.0,
+              height: zero,
               color: CustomTheme.of(context).onBackground.barely(),
             ),
         shrinkWrap: true,

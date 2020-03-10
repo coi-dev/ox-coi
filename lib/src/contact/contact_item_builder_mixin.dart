@@ -59,7 +59,7 @@ mixin ContactItemBuilder {
       builder: (context, state) {
         if (state is ContactItemStateSuccess) {
           return Padding(
-            padding: EdgeInsets.only(left: listItemPadding),
+            padding: const EdgeInsets.only(left: listItemPadding),
             child: Chip(
               backgroundColor: CustomTheme.of(context).accent.barely(),
               label: Text(state.name.isNullOrEmpty() ? state.email : state.name),

@@ -45,167 +45,128 @@ import 'dart:core';
 // Global
 const zero = 0.0;
 const dividerHeight = 1.0;
-const avatarBorderRadiusMultiplier = 0.67;
+
+//default dimensions
+const dimension2dp = 2.0;
+const dimension4dp = 4.0;
+const dimension8dp = 8.0;
+const dimension12dp = 12.0;
+const dimension16dp = 16.0;
+const dimension20dp = 20.0;
+const dimension24dp = 24.0;
+const dimension28dp = 28.0;
+const dimension32dp = 32.0;
+const dimension36dp = 36.0;
+const dimension40dp = 40.0;
+const dimension48dp = 48.0;
+const dimension64dp = 64.0;
+const dimension72dp = 72.0;
 
 // Buttons
 const buttonHeight = 44.0;
-const buttonHorizontalContentPadding = 16.0;
+const buttonHorizontalContentPadding = dimension16dp;
 const buttonMinWidth = 88.0; // https://api.flutter.dev/flutter/material/ButtonTheme/ButtonTheme.html
 
 // Progress
-const verticalPaddingSmall = 8.0;
-const verticalPadding = 16.0;
+const verticalProgressPadding = dimension8dp;
+const imageBlurSigmaValue = 10.0;
 
 // List
-const listItemHeight = 48.0;
-const listItemPaddingBig = 16.0;
-const listItemPadding = 16.0;
-const listItemPaddingSmall = 4.0;
-const listItemHeaderFontSize = 16.0;
+const listItemPadding = dimension16dp;
+const listItemPaddingSmall = dimension4dp;
 const listAvatarRadius = 20.0;
 const listAvatarDiameter = listAvatarRadius * 2;
-const listAvatarTextPadding = 16.0;
-const listStateInfoHorizontalPadding = 24.0;
-const listStateInfoVerticalPadding = 16.0;
-const listEmptyVerticalPadding = 16.0;
-const listEmptyTopPadding = 24.0;
+const listStateInfoHorizontalPadding = dimension24dp;
+const listStateInfoVerticalPadding = dimension16dp;
 const listEmptyHorizontalPadding = 40.0;
 
 const listInviteUnreadIndicatorFontSize = 12.0;
-const listInviteUnreadIndicatorBorderRadius = 16.0;
+const listInviteUnreadIndicatorBorderRadius = dimension16dp;
 
 // AppBar
-const appBarAvatarTextPadding = 16.0;
-const appBarElevationDefault = 4.0;
+const appBarElevationDefault = dimension4dp;
 
 // Icons
-const iconPadlockBottomPadding = 2.0;
-const iconPadlockSize = 10.0;
-const iconTextPadding = 4.0;
-const iconFormPadding = 8.0;
+const iconTextPadding = dimension4dp;
+const iconTextTopPadding = 10.0;
+const iconFormPadding = dimension8dp;
 const iconSize = 18.0;
-const iconMessagePlaySize = 24.0;
-const superellipseIconDefaultBackgroundSize = 32.0;
-const superellipseIconDefaultSize = 24.0;
-const iconSelectedSize = 24.0;
-const iconDismissiblePadding = 20.0;
 
 // Chat
-const composerHorizontalPadding = 8.0;
-const composerTextFieldPadding = 8.0;
-const composeTextBorderRadius = 24.0;
 const composerMessagePadding = 56.0;
-const messageListPadding = 8.0;
-
-// Chat profile
-const chatProfileDividerPadding = 8.0;
-const chatProfileVerticalPadding = 16.0;
-const chatProfileButtonPadding = 8.0;
+const messageListPadding = dimension8dp;
+const inviteChoiceButtonSize = 120.0;
 
 // Edit/Add contact
-const editAddContactTopPadding = 32.0;
-const editAddContactVerticalPadding = 32.0;
-const editAddContactBigVerticalPadding = 72.0;
+const editAddContactTopPadding = dimension32dp;
 
 //Attachment preview
-const attachmentDividerPadding = 4.0;
 const previewMaxSize = 100.0;
 const previewDefaultIconSize = 100.0;
-const previewCloseIconBorderRadius = 20.0;
 const previewCloseIconSize = 30.0;
-const previewFileNamePadding = 4.0;
 const audioFileImageWidth = 176.0;
-const videoPreviewIconBackgroundWidth = 48.0;
-const videoPreviewIconBackgroundHeight = 48.0;
-const videoPreviewTimePositionBottom = 8.0;
-const videoPreviewTimePositionLeft = 12.0;
-const videoPreviewTimeBorderRadius = 24.0;
-const videoPreviewTimePaddingVertical = 2.0;
-const videoPreviewTimePaddingHorizontal = 8.0;
 
 // Forms
-const formHorizontalPadding = 16.0;
-const formVerticalPadding = 16.0;
+const formHorizontalPadding = dimension16dp;
+const formVerticalPadding = dimension16dp;
 
 //GroupHeader
-const groupHeaderTopPadding = 16.0;
-const groupHeaderTopPaddingBig = 24.0;
-const groupHeaderHorizontalPadding = 16.0;
-const groupHeaderBottomPadding = 8.0;
+const groupHeaderHorizontalPadding = dimension16dp;
+const groupHeaderBottomPadding = dimension8dp;
 
 //SettingsItem
-const settingsItemHorizontalPadding = 20.0;
 const settingsItemVerticalPadding = 10.0;
-const settingsItemIconTextPadding = 16.0;
 
 // Messages
-const messagesHorizontalPadding = 8.0;
-const messagesVerticalPadding = 8.0;
+const messagesVerticalPadding = dimension8dp;
 const messagesVerticalInnerPadding = 11.0;
-const messagesVerticalOuterPadding = 16.0;
-const messagesHorizontalInnerPadding = 16.0;
+const messagesVerticalOuterPadding = dimension16dp;
+const messagesHorizontalInnerPadding = dimension16dp;
 const messagesBoxRadius = 18.0;
-const messagesBoxRadiusSmall = 2.0;
-const messagesBlurRadius = 2.0;
+const messagesBoxRadiusSmall = dimension2dp;
 const messagesFileIconSize = 30.0;
 const messagesElevation = 3.0;
+const messagesWidthFactor = 0.8;
+const messagesUserAvatarGroupSize = 34.0;
 
 // Profile
-const profileVerticalPadding = 8.0;
-const profileSectionsVerticalPadding = 36.0;
-const profileAvatarPlaceholderIconSize = 60.0;
-const profileAvatarMaxRadius = 64.0;
 const profileAvatarSize = 128.0;
-const profileAvatarBorderRadius = 20.0;
+const profileHeaderBottomPadding = 18.0;
 
-const profileEditPhotoButtonRightPosition = 12.0;
-const profileEditPhotoButtonBottomPosition = 24.0;
-
-const editUserAvatarVerticalPadding = 24.0;
-const editUserAvatarEditIconSize = 36.0;
+// Edit profile
 const editUserAvatarImageMaxSize = 512;
 const editUserAvatarRatio = 1.0;
 
 // Login
 const loginLogoSize = 136.0;
-const loginHorizontalPadding16dp = 16.0;
+const loginHorizontalPadding16dp = dimension16dp;
 const loginHorizontalPadding = 40.0;
 const loginVerticalPadding = 28.0;
 const loginVerticalPaddingBig = 56.0;
-const loginTopPadding = 28.0;
+const loginTopPadding = dimension28dp;
 const loginButtonWidth = 200.0;
-const loginVerticalPadding8dp = 8.0;
-const loginVerticalPadding12dp = 12.0;
-const loginVerticalPadding24dp = 24.0;
-const loginProviderIconSize = 40.0;
-const loginManualSettingsSubTitlePadding = 8.0;
-const loginManualSettingsPadding = 20.0;
-const loginTermsAndConditionsHeightFactor = 5.0;
+const loginVerticalPadding12dp = dimension12dp;
+const loginVerticalPadding24dp = dimension24dp;
+const loginProviderIconSize = dimension40dp;
+const loginManualSettingsSubTitlePadding = dimension8dp;
+const loginManualSettingsPadding = dimension20dp;
 const loginProviderIconSizeBig = 150.0;
-const loginErrorOverlayLeftPadding = 12.0;
-const loginErrorOverlayIconSize = 24.0;
-const loginErrorOverlayHeight = 40.0;
-const loginListItemHeight = 64.0;
-const loginListItemDividerHeight = 0.0;
+const loginErrorOverlayLeftPadding = dimension12dp;
 const loginOtherProviderButtonRadius = 22.0;
-const loginLogoTextPadding = 16.0;
-const loginWaveTopBottomPadding = 32.0;
-const loginSignInButtonHeight = 40.0;
-const loginButtonPadding = 24.0;
-const loginRichTextButtonPadding = 64.0;
-const loginRichTextBottomPadding = 32.0;
-
-//Password changed
-const passwordChangedTitleInfoPadding = 8.0;
-const passwordChangedInfoFormPadding = 24.0;
-const passwordChangedFormButtonPadding = 28.0;
-const passwordChangedFormFieldPadding = 12.0;
-
-//Error banner
-const errorBannerPositionLeft = 0.0;
-const errorBannerPositionRight = 0.0;
-const errorBannerPositionTop = 24.0;
-const errorBannerElevation = 4.0;
+const loginWaveTopBottomPadding = dimension32dp;
 
 //Voice Recording
-const audioPlaybackTopPadding = 30.0;
+const voiceRecordingAudioPlaybackTopPadding = 30.0;
+const voiceRecordingRecordTextContainerWidth = 70.0;
+const voiceRecordingStopIconPadding = 18.0;
+const voiceRecordingStopLockBackgroundRadius = 30.0;
+const voiceRecordingStopPlayLeftPadding = 50.0;
+
+//QR
+const qrImageSize = 250.0;
+
+//Custom painter
+const verticalLinePainterPositiveY = 10.0;
+const verticalLinePainterNegativeY = -10.0;
+const barPainterHeight = 30.0;
+const barPainterSpaceWidth = 1.0;

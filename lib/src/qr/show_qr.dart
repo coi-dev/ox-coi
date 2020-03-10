@@ -49,6 +49,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/utils/toast.dart';
@@ -83,7 +84,7 @@ class _ShowQrState extends State<ShowQr> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: dimension20dp),
           child: buildQrCodeArea(),
         ),
         buildInfoText(),
@@ -97,7 +98,7 @@ class _ShowQrState extends State<ShowQr> {
         builder: (context, state) {
           if (state is UserStateSuccess) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(dimension8dp),
               child: Text(
                 L10n.getFormatted(L.qrScanTextX, [state.config.email]),
                 textAlign: TextAlign.center,
@@ -137,7 +138,7 @@ class _ShowQrState extends State<ShowQr> {
   Widget buildQrCode(String qrText) {
     return QrImage(
       data: qrText,
-      size: 250.0,
+      size: qrImageSize,
       backgroundColor: CustomTheme.of(context).white,
       version: 6,
     );

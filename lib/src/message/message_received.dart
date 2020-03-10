@@ -61,7 +61,7 @@ class MessageReceived extends StatelessWidget {
     var isGroup = messageStateData.isGroup;
     return FractionallySizedBox(
       alignment: Alignment.topLeft,
-      widthFactor: 0.8,
+      widthFactor: messagesWidthFactor,
       child: MessageData(
         messageStateData: messageStateData,
         backgroundColor: CustomTheme.of(context).surface,
@@ -74,12 +74,12 @@ class MessageReceived extends StatelessWidget {
             Visibility(
               visible: isGroup,
               child: Padding(
-                padding: const EdgeInsets.only(right: messagesHorizontalPadding),
+                padding: const EdgeInsets.only(right: dimension8dp),
                 child: Avatar(
                   textPrimary: contactStateData?.name,
                   textSecondary: contactStateData?.address,
                   color: contactStateData?.color,
-                  size: 34.0,
+                  size: messagesUserAvatarGroupSize,
                 ),
               ),
             ),
@@ -91,9 +91,9 @@ class MessageReceived extends StatelessWidget {
                   children: <Widget>[
                     isGroup
                         ? Padding(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 top: messagesVerticalPadding,
-                                bottom: 2.0,
+                                bottom: dimension2dp,
                                 left: messagesHorizontalInnerPadding,
                                 right: messagesHorizontalInnerPadding),
                             child: Text(

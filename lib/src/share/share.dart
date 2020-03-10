@@ -117,7 +117,7 @@ class _ShareState extends State<Share> {
 
   Widget buildListView(ShareStateSuccess state) {
     return ListView.builder(
-      padding: EdgeInsets.only(top: listItemPadding),
+      padding: const EdgeInsets.only(top: listItemPadding),
       itemCount: state.chatAndContactIds.length,
       itemBuilder: (BuildContext context, int index) {
         var chatAndContactIds = state.chatAndContactIds;
@@ -192,7 +192,7 @@ class _ShareState extends State<Share> {
 
   Widget createContactItemWithHeader(int contactId) {
     return Padding(
-      padding: EdgeInsets.only(top: listItemPadding),
+      padding: const EdgeInsets.only(top: listItemPadding),
       child: Column(
         children: <Widget>[
           Text(

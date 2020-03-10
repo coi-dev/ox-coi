@@ -55,12 +55,12 @@ class ErrorBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: errorBannerPositionLeft,
-      right: errorBannerPositionRight,
-      top: errorBannerPositionTop,
-      height: loginErrorOverlayHeight,
+      left: zero,
+      right: zero,
+      top: dimension24dp,
+      height: dimension40dp,
       child: Material(
-        elevation: errorBannerElevation,
+        elevation: dimension4dp,
         color: CustomTheme.of(context).error,
         child: Row(
           children: <Widget>[
@@ -86,7 +86,7 @@ class ErrorBanner extends StatelessWidget {
             AdaptiveIconButton(
                 icon: AdaptiveIcon(
                   icon: IconSource.clear,
-                  size: loginErrorOverlayIconSize,
+                  size: dimension24dp,
                   color: CustomTheme.of(context).onError,
                 ),
                 onPressed: closePressed),

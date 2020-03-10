@@ -237,7 +237,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
                       },
                       background: Container(
                         color: CustomTheme.of(context).chatIcon,
-                        padding: const EdgeInsets.only(right: iconDismissiblePadding),
+                        padding: const EdgeInsets.only(right: dimension20dp),
                         alignment: Alignment.centerRight,
                         child: chatIcon,
                       ),

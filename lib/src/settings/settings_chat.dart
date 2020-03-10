@@ -89,13 +89,13 @@ class _SettingsChatState extends State<SettingsChat> {
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
                 title: Text(L10n.get(L.settingReadReceiptP, count: L10n.plural)),
                 subtitle: Text(L10n.get(L.settingReadReceiptText)),
                 trailing: Switch.adaptive(value: state.readReceiptsEnabled, onChanged: (value) => _changeReadReceipts()),
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
                 title: Text(
                   L10n.get(L.settingMessageSyncing),
                 ),

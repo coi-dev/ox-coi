@@ -102,7 +102,7 @@ class _AudioPlaybackState extends State<AudioPlayback> {
           onTapDown: _replayTime > 0 ? _onTapUp : null,
           behavior: HitTestBehavior.opaque,
           child: Container(
-            padding: const EdgeInsets.only(top: audioPlaybackTopPadding),
+            padding: const EdgeInsets.only(top: voiceRecordingAudioPlaybackTopPadding),
             child: Stack(
               children: <Widget>[
                 VoicePainter(

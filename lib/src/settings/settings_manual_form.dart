@@ -181,7 +181,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                   ),
                   emailField,
                   passwordField,
-                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -192,7 +192,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                   imapLoginNameField,
                   smtpLoginNameField,
                   smtpPasswordField,
-                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -202,7 +202,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                   ),
                   imapServerField,
                   smtpServerField,
-                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -211,7 +211,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                     ),
                   ),
                   imapPortField,
-                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
                   Text(L10n.get(L.settingIMAPSecurity)),
                   DropdownButton(
                       value: selectedImapSecurity == null ? L10n.get(L.automatic) : selectedImapSecurity,
@@ -221,7 +221,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                           selectedImapSecurity = newValue;
                         });
                       }),
-                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -230,7 +230,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                     ),
                   ),
                   smtpPortField,
-                  Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+                  Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
                   Text(L10n.get(L.settingSMTPSecurity)),
                   DropdownButton(
                     value: selectedSmtpSecurity == null ? L10n.get(L.automatic) : selectedSmtpSecurity,

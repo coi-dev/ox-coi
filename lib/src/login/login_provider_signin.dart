@@ -154,7 +154,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   Widget createProviderSignIn() {
     return SingleChildScrollView(
-        padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+        padding: const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -163,12 +163,12 @@ class _ProviderSignInState extends State<ProviderSignIn> {
               height: loginProviderIconSizeBig,
               width: loginProviderIconSizeBig,
             ),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+            Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
             Text(
               L10n.getFormatted(L.providerSignInTextX, [widget.provider.name]),
               style: Theme.of(context).textTheme.headline,
             ),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding12dp)),
+            Padding(padding: const EdgeInsets.all(loginVerticalPadding12dp)),
             Container(
                 padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
                 child: Form(
@@ -177,7 +177,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
                     children: <Widget>[emailField, passwordField],
                   ),
                 )),
-            Padding(padding: EdgeInsets.all(loginVerticalPadding24dp)),
+            Padding(padding: const EdgeInsets.all(loginVerticalPadding24dp)),
             ButtonImportanceHigh(
               minimumWidth: loginButtonWidth,
               child: Text(L10n.get(L.loginSignIn)),

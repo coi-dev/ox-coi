@@ -48,7 +48,7 @@ class ListGroupHeader extends StatelessWidget {
   static const EdgeInsets paddingDefault = EdgeInsets.only(
     left: groupHeaderHorizontalPadding,
     right: groupHeaderHorizontalPadding,
-    top: groupHeaderTopPadding,
+    top: dimension16dp,
     bottom: groupHeaderBottomPadding,
   );
 

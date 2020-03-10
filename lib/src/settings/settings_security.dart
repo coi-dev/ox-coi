@@ -164,19 +164,19 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     return ListView(
       children: ListTile.divideTiles(context: context, tiles: [
         ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+          contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
           title: Text(L10n.get(L.settingExportKeys)),
           subtitle: Text(L10n.get(L.settingSecurityExportText)),
           onTap: () => _onPressed(context, SettingsSecurityType.exportKeys),
         ),
         ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+          contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
           title: Text(L10n.get(L.settingImportKeys)),
           subtitle: Text(L10n.get(L.settingImportKeysText)),
           onTap: () => _onPressed(context, SettingsSecurityType.importKeys),
         ),
         ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPaddingBig),
+          contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
           title: Text(L10n.get(L.settingKeyTransferStart)),
           subtitle: Text(L10n.get(L.autocryptCreateMessageText)),
           onTap: () => _onPressed(context, SettingsSecurityType.initiateKeyTransfer),

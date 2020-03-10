@@ -169,7 +169,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(loginManualSettingsPadding),
+                padding: const EdgeInsets.all(loginManualSettingsPadding),
                 child: SettingsManualForm(isLogin: false),
               ),
             ),

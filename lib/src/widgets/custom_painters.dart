@@ -43,6 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
 
 class CurvePainter extends CustomPainter {
   final color;
@@ -74,7 +75,6 @@ class BarPainter extends CustomPainter {
   final Function callback;
   final Color color;
   double barWidth;
-  double spaceWidth = 1.0;
 
   BarPainter({@required this.peakLevel, @required this.callback, @required this.color, this.barWidth = 2.0});
 
@@ -87,18 +87,17 @@ class BarPainter extends CustomPainter {
 
     var x = 0.0;
     var y = 0.0;
-    var height = 30.0;
 
     peakLevel?.forEach((peak) {
-      y = peak > height ? y : peak;
+      y = peak > barPainterHeight ? y : peak;
       canvas.drawLine(Offset(x, y), Offset(x, -y), paint);
-      x = (x + barWidth + spaceWidth);
+      x = (x + barWidth + barPainterSpaceWidth);
     });
 
     if (x >= size.width) {
       var cutoff = x - size.width;
 
-      int cutoffIndex = (cutoff / (barWidth + spaceWidth)).round();
+      int cutoffIndex = (cutoff / (barWidth + barPainterSpaceWidth)).round();
 
       callback(true, cutoffIndex);
     } else {
@@ -124,7 +123,7 @@ class HorizontalLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawLine(Offset(0.0, 0.0), Offset(size.width, 0.0), _paint);
+    canvas.drawLine(Offset(zero, zero), Offset(size.width, zero), _paint);
   }
 
   @override
@@ -145,7 +144,7 @@ class VerticalLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawLine(Offset(0.0, 10.0), Offset(0.0, -10.0), _paint);
+    canvas.drawLine(Offset(zero, verticalLinePainterPositiveY), Offset(zero, verticalLinePainterNegativeY), _paint);
   }
 
   @override

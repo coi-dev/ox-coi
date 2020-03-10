@@ -111,7 +111,7 @@ class ProfileHeader extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 24.0),
+          padding: const EdgeInsets.only(top: dimension24dp),
         ),
         Stack(
           children: <Widget>[
@@ -121,11 +121,11 @@ class ProfileHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ProfileAvatar(),
-                  Padding(padding: EdgeInsets.only(top: 24.0)),
+                  Padding(padding: const EdgeInsets.only(top: dimension24dp)),
                   Visibility(
                     visible: !ProfileData.of(context).text.isNullOrEmpty(),
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsets.only(bottom: dimension8dp),
                       child: ProfileData.of(context).withPlaceholder
                           ? PlaceholderText(
                               text: ProfileData.of(context).text,
@@ -152,7 +152,7 @@ class ProfileHeader extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 18.0),
+          padding: const EdgeInsets.only(bottom: profileHeaderBottomPadding),
         ),
       ],
     );
@@ -253,7 +253,7 @@ class ProfileHeaderEditButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 16.0,
+      right: dimension16dp,
       child: AdaptiveIconButton(
         icon: AdaptiveSuperellipseIcon(
           color: CustomTheme.of(context).onBackground.barely(),
@@ -343,7 +343,7 @@ class ProfileCopyableHeaderText extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ProfileHeaderText(),
-          Padding(padding: EdgeInsets.all(iconTextPadding)),
+          Padding(padding: const EdgeInsets.all(iconTextPadding)),
           AdaptiveIcon(icon: IconSource.contentCopy),
         ],
       ),
@@ -372,7 +372,7 @@ class EditableProfileHeader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: editUserAvatarVerticalPadding)),
+            Padding(padding: const EdgeInsets.only(top: dimension24dp)),
             Align(
                 alignment: Alignment.center,
                 child: ProfileData(
@@ -382,7 +382,7 @@ class EditableProfileHeader extends StatelessWidget {
                   child: ProfileAvatar(),
                 )),
             Padding(
-              padding: EdgeInsets.only(left: listItemPaddingBig, right: listItemPaddingBig),
+              padding: const EdgeInsets.only(left: listItemPadding, right: listItemPadding),
               child: Column(
                 children: <Widget>[
                   TextFormField(
