@@ -309,9 +309,11 @@ class L {
   static final settingBase = _translationKey("Base Settings");
   static final settingConfigurationChangeFailed = _translationKey("Configuration change aborted");
   // Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
-  static final settingSecurityImportKeysTextX = _translationKey("Do you want to import your keys from \"%s\"? If no keys are in that folder, the operation will fail.");
+  static final settingSecurityImportKeysAndroidText = _translationKey("Do you want to import your keys from your application folder? \n\nIf no keys are in that folder, the operation will fail.");
+  static final settingSecurityImportKeysIOSText = _translationKey("Do you want to import your keys from your app documents folder? \n\nIf no keys are in that folder, the operation will fail.");
   // Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-  static final settingSecurityExportKeysTextX = _translationKey("Do you want to save your keys in \"%s\"?");
+  static final settingSecurityExportKeysAndroidTextX = _translationKey("Do you want to save your keys in the application folder? \n\nThe path is:\n\"%s\"");
+  static final settingSecurityExportKeysIOSText = _translationKey("Do you want to save your keys in your devices documents folder? \n\nYou can access it via the \"Files App\".");
   static final settingCopyCode = _translationKey("Copy code");
   static final settingExportKeys = _translationKey("Expert: Export keys");
   static final settingImportKeys = _translationKey("Expert: Import keys");

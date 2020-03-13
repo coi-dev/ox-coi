@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
@@ -199,14 +201,17 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     String title;
     String text;
     String path = await getExportImportPath();
+    if(Platform.isAndroid){
+      path = path.substring(path.getIndexAfterLastOf('0'));
+    }
     Type navigationType;
     if (type == SettingsSecurityType.exportKeys) {
       title = L10n.get(L.settingExportKeys);
-      text = L10n.getFormatted(L.settingSecurityExportKeysTextX, [path]);
+      text = Platform.isAndroid ? L10n.getFormatted(L.settingSecurityExportKeysAndroidTextX, [path]) : L10n.get(L.settingSecurityExportKeysIOSText);
       navigationType = Type.settingsExportKeysDialog;
     } else if (type == SettingsSecurityType.importKeys) {
       title = L10n.get(L.settingImportKeys);
-      text = L10n.getFormatted(L.settingSecurityImportKeysTextX, [path]);
+      text = Platform.isAndroid ? L10n.get(L.settingSecurityImportKeysAndroidText) : L10n.get(L.settingSecurityImportKeysIOSText);
       navigationType = Type.settingsImportKeysDialog;
     }
     showConfirmationDialog(
