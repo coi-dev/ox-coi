@@ -213,7 +213,7 @@ class MessagePartAudioAttachment extends StatelessWidget {
         padding: getNamePaddingForGroups(context),
         child: Image.asset(
           "assets/images/img_audio_waves.png",
-          width: audioFileImageWidth,
+          width: messageAudioImageWidth,
           color: CustomTheme.of(context).onSurface,
         ));
   }

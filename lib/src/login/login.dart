@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
                   Container(
                     color: CustomTheme.of(context).primary,
                     width: viewportConstraints.maxWidth,
-                    padding: const EdgeInsets.only(top: loginVerticalPaddingBig, right: loginHorizontalPadding, left: loginHorizontalPadding),
+                    padding: const EdgeInsets.only(top: loginHeaderVerticalPadding, right: loginHorizontalPadding, left: loginHorizontalPadding),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[

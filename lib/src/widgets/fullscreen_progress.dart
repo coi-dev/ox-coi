@@ -97,7 +97,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: imageBlurSigmaValue, sigmaY: imageBlurSigmaValue),
+            filter: ImageFilter.blur(sigmaX: progressImageBlurSigma, sigmaY: progressImageBlurSigma),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: dimension16dp),
               constraints: BoxConstraints.expand(),
@@ -120,7 +120,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                   ),
                   if (showProgressValues)
                     Padding(
-                      padding: EdgeInsets.only(top: verticalProgressPadding),
+                      padding: EdgeInsets.only(top: progressVerticalPadding),
                       child: Text(
                         buildDisplayableProgress(progress),
                         textAlign: TextAlign.center,
@@ -129,7 +129,7 @@ class FullscreenProgress<T extends Bloc> extends StatelessWidget {
                     ),
                   if (showCancelButton)
                     Padding(
-                      padding: EdgeInsets.only(top: verticalProgressPadding),
+                      padding: EdgeInsets.only(top: progressVerticalPadding),
                       child: ButtonImportanceLow(
                         child: Text(L10n.get(L.cancel)),
                         onPressed: cancelPressed,

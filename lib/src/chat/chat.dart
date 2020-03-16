@@ -926,7 +926,7 @@ class MessageList extends StatelessWidget {
           if (state.messageIds.length > 0) {
             return ListView.custom(
               controller: scrollController,
-              padding: const EdgeInsets.fromLTRB(messageListPadding, messageListPadding, messageListPadding, composerMessagePadding),
+              padding: const EdgeInsets.fromLTRB(chatMessageListPadding, chatMessageListPadding, chatMessageListPadding, chatComposerPadding),
               reverse: true,
               childrenDelegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {

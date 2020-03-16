@@ -87,7 +87,7 @@ class ButtonImportanceHigh extends BaseButton {
         disabledTextColor: baseColor.disabled(),
         highlightColor: highlightColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: buttonHorizontalContentPadding),
+          padding: const EdgeInsets.symmetric(vertical: buttonVerticalContentPadding),
           child: child,
         ),
         shape: _circularBorder,
@@ -122,7 +122,7 @@ class ButtonImportanceMedium extends BaseButton {
         highlightColor: baseColor.slightly(),
         highlightedBorderColor: baseColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: buttonHorizontalContentPadding),
+          padding: const EdgeInsets.symmetric(vertical: buttonVerticalContentPadding),
           child: child,
         ),
         shape: _circularBorder,
@@ -154,7 +154,7 @@ class ButtonImportanceLow extends BaseButton {
         disabledTextColor: baseColor.disabled(),
         highlightColor: baseColor.slightly(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: buttonHorizontalContentPadding),
+          padding: const EdgeInsets.symmetric(vertical: buttonVerticalContentPadding),
           child: child,
         ),
         shape: _circularBorder,

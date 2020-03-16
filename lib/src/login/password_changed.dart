@@ -154,7 +154,7 @@ class _PasswordChangedState extends State<PasswordChanged> {
                   Container(
                     color: CustomTheme.of(context).primary,
                     width: viewportConstraints.maxWidth,
-                    padding: EdgeInsets.only(top: loginVerticalPaddingBig, right: loginHorizontalPadding, left: loginHorizontalPadding),
+                    padding: EdgeInsets.only(top: loginHeaderVerticalPadding, right: loginHorizontalPadding, left: loginHorizontalPadding),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[

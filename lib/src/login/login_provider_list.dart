@@ -121,7 +121,7 @@ class _ProviderListState extends State<ProviderList> {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.body1,
             ),
-            Padding(padding: const EdgeInsets.only(top: loginVerticalPadding24dp)),
+            Padding(padding: const EdgeInsets.only(top: dimension24dp)),
             Flexible(
               child: BlocBuilder(
                 bloc: _loginBloc,
@@ -138,7 +138,7 @@ class _ProviderListState extends State<ProviderList> {
             ),
             if (widget.type == ProviderListType.login)
               Padding(
-                padding: const EdgeInsets.only(top: loginVerticalPadding24dp),
+                padding: const EdgeInsets.only(top: dimension24dp),
                 child: ButtonImportanceMedium(
                   child: Text(L10n.get(L.providerOtherMailProvider)),
                   onPressed: () => _onItemTap(otherProvider),
@@ -177,13 +177,13 @@ class _ProviderListState extends State<ProviderList> {
         child: Column(
           children: <Widget>[
             Padding(
-                padding: const EdgeInsets.symmetric(vertical: loginVerticalPadding12dp, horizontal: loginHorizontalPadding16dp),
+                padding: const EdgeInsets.symmetric(vertical: loginVerticalListPadding, horizontal: loginHorizontalListPadding),
                 child: Column(
                   children: <Widget>[
                     Row(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(right: loginHorizontalPadding16dp),
+                          padding: const EdgeInsets.only(right: loginHorizontalListPadding),
                           child: Image(
                             image: AssetImage(getProviderIconPath(context, provider.id)),
                             height: loginProviderIconSize,
@@ -191,7 +191,7 @@ class _ProviderListState extends State<ProviderList> {
                           ),
                         ),
                         Text(
-                          provider.name,
+                          "${provider.name}",
                           style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onBackground),
                         ),
                       ],

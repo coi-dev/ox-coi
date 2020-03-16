@@ -210,7 +210,7 @@ class _ContactChangeState extends State<ContactChange> {
             Visibility(
               visible: widget.contactAction != ContactAction.add,
               child: Padding(
-                padding: const EdgeInsets.only(top: editAddContactTopPadding),
+                padding: const EdgeInsets.only(top: changeContactTopPadding),
                 child: Container(
                   color: CustomTheme.of(context).surface,
                   child: Padding(
@@ -232,7 +232,7 @@ class _ContactChangeState extends State<ContactChange> {
               ),
             ),
             Padding(
-              padding: widget.contactAction == ContactAction.add ? const EdgeInsets.only(top: editAddContactTopPadding) : const EdgeInsets.all(zero),
+              padding: widget.contactAction == ContactAction.add ? const EdgeInsets.only(top: changeContactTopPadding) : const EdgeInsets.all(zero),
               child: Container(
                 color: CustomTheme.of(context).surface,
                 child: Padding(

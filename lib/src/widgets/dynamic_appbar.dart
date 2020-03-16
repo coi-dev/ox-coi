@@ -78,7 +78,7 @@ class DynamicAppBar extends StatefulWidget implements PreferredSizeWidget {
   _DynamicAppBarState createState() => _DynamicAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(105); // Max size of the large appbar + MediaQuery scale factor of 2
+  Size get preferredSize => Size.fromHeight(appBarPreferredSize); // Max size of the large appbar + MediaQuery scale factor of 2
 }
 
 class _DynamicAppBarState extends State<DynamicAppBar> {
@@ -105,16 +105,18 @@ class _DynamicAppBarState extends State<DynamicAppBar> {
   Widget build(BuildContext context) {
     final large = widget.leading == null;
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    final textScaleFactor = Platform.isIOS && MediaQuery.of(context).textScaleFactor > 1.0 ? 1.0 : MediaQuery.of(context).textScaleFactor;
+    final textScaleFactor =
+        Platform.isIOS && MediaQuery.of(context).textScaleFactor > textScaleDefault ? textScaleDefault : MediaQuery.of(context).textScaleFactor;
 
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
       child: Container(
-        padding: EdgeInsets.only(top: statusBarHeight, bottom: 1.0), // The bottom padding fixes a gap between the appbar and the content
+        padding: EdgeInsets.only(top: statusBarHeight, bottom: appBarBottomOverflowFix),
+        // The bottom padding fixes a gap between the appbar and the content
         color: CustomTheme.of(context).background,
         child: AnimatedCrossFade(
           crossFadeState: visible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: Duration(milliseconds: 200),
+          duration: Duration(milliseconds: appBarAnimationDuration),
           firstChild: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -124,7 +126,7 @@ class _DynamicAppBarState extends State<DynamicAppBar> {
                 children: <Widget>[
                   if (!large)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      padding: const EdgeInsets.symmetric(horizontal: dimension4dp),
                       child: widget.leading,
                     ),
                   Expanded(
@@ -142,7 +144,7 @@ class _DynamicAppBarState extends State<DynamicAppBar> {
                       children: [
                         for (var action in widget.trailingList)
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(right: dimension8dp),
                             child: action,
                           )
                       ],
@@ -186,10 +188,10 @@ class _AppBarTitle extends StatelessWidget {
 
   EdgeInsets _getTitlePadding(bool large) {
     if (large) {
-      return const EdgeInsets.only(left: 16.0, top: 40.0, bottom: 8.0);
+      return const EdgeInsets.only(left: dimension16dp, top: dimension40dp, bottom: dimension8dp);
     } else {
       if (Platform.isIOS) {
-        var padding = 56.0;
+        var padding = appBarTrailingIconSize;
         if (trailingCount == 0) {
           return EdgeInsets.only(right: padding);
         } else if (trailingCount == 1) {
@@ -198,7 +200,7 @@ class _AppBarTitle extends StatelessWidget {
           return EdgeInsets.only(left: padding * (trailingCount - 1));
         }
       } else {
-        return const EdgeInsets.only(left: 16.0);
+        return const EdgeInsets.only(left: dimension16dp);
       }
     }
   }
@@ -241,7 +243,7 @@ class DynamicSearchBar extends StatelessWidget {
 }
 
 class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
-  static const _height = 60.0;
+  static const _height = searchBarHeight;
 
   final DynamicSearchBarContent dynamicSearchBarContent;
 
@@ -313,7 +315,7 @@ class _DynamicSearchBarContentState extends State<DynamicSearchBarContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: dimension16dp, vertical: searchBarVerticalPadding),
       color: CustomTheme.of(context).background,
       child: TextField(
         controller: _controller,
@@ -332,12 +334,12 @@ class _DynamicSearchBarContentState extends State<DynamicSearchBarContent> {
                   onPressed: _clearSearch,
                 )
               : null,
-          contentPadding: const EdgeInsets.only(left: zero, top: zero, right: 8.0, bottom: 0.0),
+          contentPadding: const EdgeInsets.only(left: zero, top: zero, right: dimension8dp, bottom: zero),
           hintText: L10n.get(L.search),
           hintStyle: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.half()),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: CustomTheme.of(context).onSurface.barely()),
-            borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
+            borderRadius: BorderRadius.all(Radius.circular(dimension24dp)),
           ),
         ),
       ),

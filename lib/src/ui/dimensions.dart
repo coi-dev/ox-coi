@@ -45,8 +45,9 @@ import 'dart:core';
 // Global
 const zero = 0.0;
 const dividerHeight = 1.0;
+const textScaleDefault = 1.0;
 
-//default dimensions
+// Defaults
 const dimension2dp = 2.0;
 const dimension4dp = 4.0;
 const dimension8dp = 8.0;
@@ -64,12 +65,12 @@ const dimension72dp = 72.0;
 
 // Buttons
 const buttonHeight = 44.0;
-const buttonHorizontalContentPadding = dimension16dp;
+const buttonVerticalContentPadding = dimension16dp;
 const buttonMinWidth = 88.0; // https://api.flutter.dev/flutter/material/ButtonTheme/ButtonTheme.html
 
 // Progress
-const verticalProgressPadding = dimension8dp;
-const imageBlurSigmaValue = 10.0;
+const progressVerticalPadding = dimension8dp;
+const progressImageBlurSigma = 10.0;
 
 // List
 const listItemPadding = dimension16dp;
@@ -79,12 +80,19 @@ const listAvatarDiameter = listAvatarRadius * 2;
 const listStateInfoHorizontalPadding = dimension24dp;
 const listStateInfoVerticalPadding = dimension16dp;
 const listEmptyHorizontalPadding = 40.0;
-
 const listInviteUnreadIndicatorFontSize = 12.0;
 const listInviteUnreadIndicatorBorderRadius = dimension16dp;
 
 // AppBar
+const appBarPreferredSize = 105.0;
 const appBarElevationDefault = dimension4dp;
+const appBarBottomOverflowFix = 1.0;
+const appBarAnimationDuration = 200;
+const appBarTrailingIconSize = 56.0;
+
+// SearchBar
+const searchBarHeight = 60.0;
+const searchBarVerticalPadding = 10.0;
 
 // Icons
 const iconTextPadding = dimension4dp;
@@ -92,29 +100,28 @@ const iconTextTopPadding = 10.0;
 const iconFormPadding = dimension8dp;
 const iconSize = 18.0;
 
-// Chat
-const composerMessagePadding = 56.0;
-const messageListPadding = dimension8dp;
+// Chat / invite
+const chatComposerPadding = 56.0;
+const chatMessageListPadding = dimension8dp;
 const inviteChoiceButtonSize = 120.0;
 
-// Edit/Add contact
-const editAddContactTopPadding = dimension32dp;
+// Contact change
+const changeContactTopPadding = dimension32dp;
 
-//Attachment preview
+// Attachment preview
 const previewMaxSize = 100.0;
 const previewDefaultIconSize = 100.0;
 const previewCloseIconSize = 30.0;
-const audioFileImageWidth = 176.0;
 
 // Forms
 const formHorizontalPadding = dimension16dp;
 const formVerticalPadding = dimension16dp;
 
-//GroupHeader
+// Groups
 const groupHeaderHorizontalPadding = dimension16dp;
 const groupHeaderBottomPadding = dimension8dp;
 
-//SettingsItem
+// Settings
 const settingsItemVerticalPadding = 10.0;
 
 // Messages
@@ -128,6 +135,7 @@ const messagesFileIconSize = 30.0;
 const messagesElevation = 3.0;
 const messagesWidthFactor = 0.8;
 const messagesUserAvatarGroupSize = 34.0;
+const messageAudioImageWidth = 176.0;
 
 // Profile
 const profileAvatarSize = 128.0;
@@ -139,14 +147,14 @@ const editUserAvatarRatio = 1.0;
 
 // Login
 const loginLogoSize = 136.0;
-const loginHorizontalPadding16dp = dimension16dp;
 const loginHorizontalPadding = 40.0;
 const loginVerticalPadding = 28.0;
-const loginVerticalPaddingBig = 56.0;
+const loginHorizontalListPadding = dimension16dp;
+const loginVerticalListPadding = dimension12dp;
+const loginHeaderVerticalPadding = 56.0;
 const loginTopPadding = dimension28dp;
 const loginButtonWidth = 200.0;
-const loginVerticalPadding12dp = dimension12dp;
-const loginVerticalPadding24dp = dimension24dp;
+const loginVerticalFormPadding = dimension12dp;
 const loginProviderIconSize = dimension40dp;
 const loginManualSettingsSubTitlePadding = dimension8dp;
 const loginManualSettingsPadding = dimension20dp;
@@ -155,17 +163,17 @@ const loginErrorOverlayLeftPadding = dimension12dp;
 const loginOtherProviderButtonRadius = 22.0;
 const loginWaveTopBottomPadding = dimension32dp;
 
-//Voice Recording
+// Voice Recording
 const voiceRecordingAudioPlaybackTopPadding = 30.0;
 const voiceRecordingRecordTextContainerWidth = 70.0;
 const voiceRecordingStopIconPadding = 18.0;
 const voiceRecordingStopLockBackgroundRadius = 30.0;
 const voiceRecordingStopPlayLeftPadding = 50.0;
 
-//QR
+// QR
 const qrImageSize = 250.0;
 
-//Custom painter
+// Custom painter
 const verticalLinePainterPositiveY = 10.0;
 const verticalLinePainterNegativeY = -10.0;
 const barPainterHeight = 30.0;
