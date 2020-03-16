@@ -133,6 +133,7 @@ class _DynamicAppBarState extends State<DynamicAppBar> {
                         : _AppBarTitle(
                             large: large,
                             text: widget.title,
+                            trailingCount: widget.trailingList != null ? widget.trailingList.length : 0,
                           ),
                   ),
                   if (widget.trailingList != null && widget.trailingList.isNotEmpty)
@@ -162,13 +163,13 @@ class _DynamicAppBarState extends State<DynamicAppBar> {
 class _AppBarTitle extends StatelessWidget {
   final bool large;
   final String text;
+  final trailingCount;
 
-  const _AppBarTitle({Key key, @required this.large, @required this.text}) : super(key: key);
+  const _AppBarTitle({Key key, @required this.large, @required this.text, @required this.trailingCount}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final titlePadding =
-        large ? const EdgeInsets.only(left: 16.0, top: 40.0, bottom: 8.0) : Platform.isIOS ? EdgeInsets.zero : const EdgeInsets.only(left: 16.0);
+    final titlePadding = _getTitlePadding(large);
     final titleStyle = large
         ? Theme.of(context).textTheme.headline.copyWith(fontWeight: FontWeight.bold, color: CustomTheme.of(context).onBackground)
         : Theme.of(context).textTheme.title.copyWith(fontWeight: FontWeight.bold, color: CustomTheme.of(context).onBackground);
@@ -181,6 +182,25 @@ class _AppBarTitle extends StatelessWidget {
         textAlign: titleAlignment,
       ),
     );
+  }
+
+  EdgeInsets _getTitlePadding(bool large) {
+    if (large) {
+      return const EdgeInsets.only(left: 16.0, top: 40.0, bottom: 8.0);
+    } else {
+      if (Platform.isIOS) {
+        var padding = 56.0;
+        if (trailingCount == 0) {
+          return EdgeInsets.only(right: padding);
+        } else if (trailingCount == 1) {
+          return EdgeInsets.zero;
+        } else {
+          return EdgeInsets.only(left: padding * (trailingCount - 1));
+        }
+      } else {
+        return const EdgeInsets.only(left: 16.0);
+      }
+    }
   }
 }
 
