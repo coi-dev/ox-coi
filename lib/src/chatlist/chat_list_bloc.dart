@@ -105,16 +105,6 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   @override
-  Stream<ChatListState> transformEvents(Stream<ChatListEvent> events, Stream<ChatListState> Function(ChatListEvent event) next) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 300),
-      ),
-      next,
-    );
-  }
-
-  @override
   Future<void> close() {
     _unregisterListeners();
     _messageListBloc.close();

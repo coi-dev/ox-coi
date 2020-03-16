@@ -54,7 +54,7 @@ enum IconSource {
   delete,
   mic,
   camera,
-  videocam,
+  video,
   send,
   search,
   arrowForward,
@@ -112,6 +112,7 @@ enum IconSource {
   stopPlay,
   logout,
   iosChevron,
+  create,
 }
 
 const iconData = {
@@ -123,7 +124,7 @@ const iconData = {
   IconSource.delete: Icons.delete,
   IconSource.mic: Icons.mic,
   IconSource.camera: Icons.camera_alt,
-  IconSource.videocam: Icons.videocam,
+  IconSource.video: Icons.videocam,
   IconSource.send: Icons.send,
   IconSource.search: Icons.search,
   IconSource.arrowForward: Icons.arrow_forward,
@@ -180,7 +181,8 @@ const iconData = {
   IconSource.openLock : Icons.lock_open,
   IconSource.stopPlay : Icons.stop,
   IconSource.iosChevron: CupertinoIcons.right_chevron,
-  IconSource.logout: Icons.exit_to_app,
+  IconSource.logout: Icons.add,
+  IconSource.create: Icons.create,
 };
 
 class AdaptiveIcon extends StatelessWidget {

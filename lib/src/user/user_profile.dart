@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,6 +71,7 @@ import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
@@ -76,8 +79,6 @@ import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfile extends RootChild {
-  UserProfile({appBarActionsStream, Key key}) : super(appBarActionsStream: appBarActionsStream, key: key);
-
   @override
   _ProfileState createState() => _ProfileState();
 
@@ -92,23 +93,18 @@ class UserProfile extends RootChild {
   }
 
   @override
-  String getTitle() {
+  String getBottomNavigationText() {
     return L10n.get(L.profile);
   }
 
   @override
-  String getNavigationText() {
-    return L10n.get(L.profile);
-  }
-
-  @override
-  IconSource getNavigationIcon() {
+  IconSource getBottomNavigationIcon() {
     return IconSource.accountCircle;
   }
 
   @override
-  List<Widget> getActions(BuildContext context) {
-    return null;
+  DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
+    return DynamicAppBar(title: L10n.get(L.profile));
   }
 }
 

@@ -70,14 +70,14 @@ const keyInformationDialogPositiveButton = "keyDialogBuilderImportFlatButton";
 const keyConfirmationDialogPositiveButton = "keyDialogBuilderImportFlatButton";
 const keyConfirmationDialogCancelButton = "keyDialogBuilderCancelFlatButton";
 
-const keyContactListPersonAddFloatingActionButton = "keyContactListPersonAddFloatingActionButton";
-
+const keyContactListAddContactButton = "keyContactListPersonAddFloatingActionButton";
+//TODO fix all CloseIconButton
 const keyContactChangeCheckIconButton = "keyContactChangeCheckIconButton";
 const keyContactChangeCloseIconButton = "keyContactChangeCloseIconButton";
 const keyContactChangeEmailValidatableTextFormField = "keyContactchangeEmailValidatableTextFormField";
 const keyContactChangeNameValidatableTextFormField = "keyContactChangeNameValidatableTextFormField";
 
-const keyContactListImportContactIconButton = "keyContactListImportContactIconButton";
+const keyContactListImportButton = "keyContactListImportContactIconButton";
 const keyUserProfileBlockIconButton = "keyContactListBlockIconButton";
 const keyUserProfileBlockIconSource = "keyUserProfilBlockIconSource";
 const keyContactListSearchIconButton = "keyContactListSearchIconButton";
@@ -91,7 +91,7 @@ const keyContactDetailDeleteContactProfileActionIcon = "keyContactDetaildeleteCo
 
 const keyContactBlockedListCloseIconButton = "keyContactBlockedListCloseIconButton";
 
-const keyChatListChatFloatingActionButton = "keyChatListChatFloatingActionButton";
+const keyChatListCreateChatButton = "keyChatListChatFloatingActionButton";
 const keyChatListSearchIconButton = "keyChatListSearchIconButton";
 const keyChatListSearchEmptyIconButton = "keyChatListSearchEmptyIconButton";
 
@@ -102,7 +102,6 @@ const keySearchClearIconButton = "keySearchClearIconButton";
 const keyChatCreatePersonAddIcon = "keyChatCreatePersonAddIcon";
 const keyChatCreateGroupAddIcon = "keyChatcreateGroupAddIcon";
 const keyChatCreateSearchIcon = "keyChatcreateSearchIcon";
-const keyChatCreateAdaptiveAppBar = "keyChatCreateAdaptiveAppBar";
 
 const keyChatCreateGroupParticipantsCloseIconButton = "keyChatCreateGroupParticipantsIconButton";
 const keyChatCreateGroupParticipantsSummitIconButton = "keyChatCreateGroupParticipantsSummitIconButton";
@@ -128,6 +127,7 @@ const KeyChatComposerMixinOnRecordAudioPressedIcon = "KeyChatComposerMixinOnReco
 
 const keyChatProfileGroupDelete = "keyChatProfileGroupDelete";
 const keyChatIconButtonIconPhone = "keyChatIconButtonIconPhone";
+const keyChatListGetFlaggedActionIconButton = "keyChatListGetFlaggedActionIconButton";
 const keyChatNameText = "keyChatNameText";
 
 const keyUserAccountAdaptiveIconButtonIconCheck = "keyUserAccoutAdaptiveIconButtonIconCheck";

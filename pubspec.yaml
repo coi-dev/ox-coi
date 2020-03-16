@@ -46,6 +46,7 @@ dependencies:
   package_info: ^0.4.0+13
   path: ^1.6.4
   path_provider: ^1.5.1
+  provider: ^4.0.4
   permission_handler: ^4.2.0+hotfix.2
   pointycastle: ^1.0.2
   rxdart: ^0.23.1

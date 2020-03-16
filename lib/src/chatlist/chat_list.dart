@@ -41,13 +41,14 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
@@ -66,99 +67,107 @@ import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
-import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:provider/provider.dart';
 
 enum ChatListItemType {
   chat,
   message,
 }
 
-class ChatList extends RootChild {
-  final Navigation navigation = Navigation();
+_showCreateChatView(BuildContext context, Navigation navigation) => navigation.pushNamed(context, Navigation.chatCreate);
 
-  ChatList({appBarActionsStream, Key key}) : super(appBarActionsStream: appBarActionsStream, key: key);
+class ChatList extends RootChild {
+  final Navigation _navigation = Navigation();
 
   @override
   _ChatListState createState() => _ChatListState();
 
   @override
-  Color getColor(BuildContext context) {
-    return CustomTheme.of(context).onSurface;
-  }
+  Color getColor(BuildContext context) => CustomTheme.of(context).onSurface;
 
   @override
   FloatingActionButton getFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      child: new AdaptiveIcon(icon: IconSource.chat),
-      key: Key(keyChatListChatFloatingActionButton),
-      onPressed: () {
-        _showCreateChatView(context);
-      },
+    return Platform.isAndroid
+        ? FloatingActionButton(
+            child: new AdaptiveIcon(icon: IconSource.chat),
+            key: Key(keyChatListCreateChatButton),
+            onPressed: () {
+              _showCreateChatView(context, _navigation);
+            },
+          )
+        : null;
+  }
+
+  @override
+  String getBottomNavigationText() => L10n.get(L.chatP, count: L10n.plural);
+
+  @override
+  IconSource getBottomNavigationIcon() => IconSource.chat;
+
+  @override
+  DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
+    return DynamicAppBar(
+      title: L10n.get(L.chatP, count: L10n.plural),
+      trailingList: [
+        if (Platform.isIOS)
+          IconButton(
+            key: Key(keyChatListCreateChatButton),
+            icon: AdaptiveSuperellipseIcon(
+              icon: IconSource.create,
+              iconColor: CustomTheme.of(context).onAccent,
+              color: CustomTheme.of(context).accent,
+            ),
+            onPressed: () => appBarActionsStream.add(AppBarAction.addChat),
+          )
+      ],
     );
-  }
-
-  _showCreateChatView(BuildContext context) {
-    navigation.pushNamed(context, Navigation.chatCreate);
-  }
-
-  @override
-  String getTitle() {
-    return L10n.get(L.chatP, count: L10n.plural);
-  }
-
-  @override
-  String getNavigationText() {
-    return L10n.get(L.chatP, count: L10n.plural);
-  }
-
-  @override
-  IconSource getNavigationIcon() {
-    return IconSource.chat;
-  }
-
-  @override
-  List<Widget> getActions(BuildContext context) {
-    return [
-      AdaptiveIconButton(
-        icon: AdaptiveIcon(
-          icon: IconSource.search,
-        ),
-        key: Key(keyChatListSearchIconButton),
-        onPressed: () => appBarActionsStream.add(AppBarAction.searchChats),
-      ),
-    ];
   }
 }
 
 class _ChatListState extends State<ChatList> {
-  ChatListBloc _chatListBloc = ChatListBloc();
-  ChatListBloc _chatListSearchBloc = ChatListBloc();
-  ShareBloc shareBloc = ShareBloc();
-  Navigation _navigation = Navigation();
-  StreamSubscription appBarActionsSubscription;
-  var _scrollController = ScrollController();
+  final _chatListBloc = ChatListBloc();
+  final _shareBloc = ShareBloc();
+  final _scrollController = ScrollController();
+
+  StreamSubscription<AppBarAction> _appBarActionsSubscription;
+  DynamicSearchBar _searchBar;
+  var _isSearching = false;
 
   @override
   void initState() {
     super.initState();
-    _navigation.current = Navigatable(Type.chatList);
+    widget._navigation.current = Navigatable(Type.chatList);
     _chatListBloc.add(RequestChatList(showInvites: true));
-    shareBloc.listen((state) => _handleShareStateChange(state));
-    shareBloc.add(LoadSharedData());
-    appBarActionsSubscription = widget.appBarActionsStream.stream.listen((data) {
-      var action = data as AppBarAction;
-      if (action == AppBarAction.searchChats) {
-        _actionSearch();
+    _shareBloc.listen((state) => _handleShareStateChange(state));
+    _shareBloc.add(LoadSharedData());
+    _appBarActionsSubscription = Provider.of<StreamController<AppBarAction>>(context, listen: false).stream.listen((data) {
+      if (data == AppBarAction.addChat) {
+        _showCreateChatView(context, widget._navigation);
       }
     });
+    _searchBar = DynamicSearchBar(
+      content: DynamicSearchBarContent(
+        onSearch: (text) {
+          if (text == null) {
+            _chatListBloc.add(RequestChatList(showInvites: true));
+          } else {
+            search(text);
+          }
+        },
+        onFocus: () => search(""),
+        isSearchingCallback: (bool isSearching) => setState(() => _isSearching = isSearching),
+      ),
+    );
   }
+
+  void search(text) => _chatListBloc.add(SearchChatList(query: text, showInvites: false));
 
   @override
   void dispose() {
     _chatListBloc.close();
-    _chatListSearchBloc.close();
-    appBarActionsSubscription.cancel();
+    _appBarActionsSubscription.cancel();
     super.dispose();
   }
 
@@ -168,7 +177,7 @@ class _ChatListState extends State<ChatList> {
       listener: (context, state) {
         if (state is LifecycleStateSuccess) {
           if (state.state == AppLifecycleState.resumed.toString()) {
-            shareBloc.add(LoadSharedData());
+            _shareBloc.add(LoadSharedData());
           }
         }
       },
@@ -176,8 +185,49 @@ class _ChatListState extends State<ChatList> {
         bloc: _chatListBloc,
         builder: (context, state) {
           if (state is ChatListStateSuccess) {
-            if (state.chatListItemWrapper.ids.length > 0) {
-              return _buildListItems(state);
+            if (state.chatListItemWrapper.ids.length > 0 || _isSearching) {
+              var chatListItemWrapper = state.chatListItemWrapper;
+              return CustomScrollView(
+                controller: _scrollController,
+                slivers: <Widget>[
+                  _searchBar,
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        var id = chatListItemWrapper.ids[index];
+                        var key = createKeyFromId(id, [chatListItemWrapper.lastUpdateValues[index]]);
+                        if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
+                          return ChatListItem(
+                            chatId: id,
+                            onTap: _multiSelectItemTapped,
+                            switchMultiSelect: _switchMultiSelect,
+                            isMultiSelect: false,
+                            isShareItem: false,
+                            key: key,
+                          );
+                        } else {
+                          return InviteItem(
+                            chatId: Chat.typeInvite,
+                            messageId: id,
+                            key: key,
+                          );
+                        }
+                      },
+                      childCount: state.chatListItemWrapper.ids.length,
+                      findChildIndexCallback: (Key key) {
+                        final ValueKey valueKey = key;
+                        var id = extractId(valueKey);
+                        if (state.chatListItemWrapper.ids.contains(id)) {
+                          var indexOf = state.chatListItemWrapper.ids.indexOf(id);
+                          return indexOf;
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              );
             } else {
               return EmptyListInfo(
                 infoText: L10n.get(L.chatListPlaceholder),
@@ -197,7 +247,7 @@ class _ChatListState extends State<ChatList> {
   _handleShareStateChange(ShareState state) {
     if (state is ShareStateSuccess) {
       if (state.sharedData != null) {
-        _navigation.pushAndRemoveUntil(
+        widget._navigation.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => Share(
@@ -211,82 +261,7 @@ class _ChatListState extends State<ChatList> {
     }
   }
 
-  void _actionSearch() {
-    Search search = Search(
-      onBuildResults: _onBuildResultOrSuggestion,
-      onBuildSuggestion: _onBuildResultOrSuggestion,
-    );
-    search.show(context);
-  }
-
-  ListView _buildListItems(ChatListStateSuccess state) {
-    var chatListItemWrapper = state.chatListItemWrapper;
-    return ListView.custom(
-        controller: _scrollController,
-        childrenDelegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              var id = chatListItemWrapper.ids[index];
-              var key = createKeyFromId(id, [chatListItemWrapper.lastUpdateValues[index]]);
-              if (chatListItemWrapper.types[index] == ChatListItemType.chat) {
-                return ChatListItem(
-                  chatId: id,
-                  onTap: _multiSelectItemTapped,
-                  switchMultiSelect: _switchMultiSelect,
-                  isMultiSelect: false,
-                  isShareItem: false,
-                  key: key,
-                );
-              } else {
-                return InviteItem(
-                  chatId: Chat.typeInvite,
-                  messageId: id,
-                  key: key,
-                );
-              }
-            },
-            childCount: state.chatListItemWrapper.ids.length,
-            findChildIndexCallback: (Key key) {
-              final ValueKey valueKey = key;
-              var id = extractId(valueKey);
-              if (state.chatListItemWrapper.ids.contains(id)) {
-                var indexOf = state.chatListItemWrapper.ids.indexOf(id);
-                return indexOf;
-              } else {
-                return null;
-              }
-            }));
-  }
-
   _multiSelectItemTapped(int id) {}
 
   _switchMultiSelect(int id) {}
-
-  Widget _onBuildResultOrSuggestion(String query) {
-    _chatListSearchBloc.add(SearchChatList(query: query, showInvites: false));
-    return _buildSearchResults();
-  }
-
-  Widget _buildSearchResults() {
-    return BlocBuilder(
-      bloc: _chatListSearchBloc,
-      builder: (context, state) {
-        if (state is ChatListStateSuccess) {
-          if (state.chatListItemWrapper.ids.length > 0) {
-            return _buildListItems(state);
-          } else {
-            return Center(
-              child: Text(L10n.get(L.noResultsFound)),
-              key: Key(L.getKey(L.noResultsFound)),
-            );
-          }
-        } else if (state is! ChatListStateFailure) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
-        }
-      },
-    );
-  }
 }

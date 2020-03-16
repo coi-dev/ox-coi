@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -55,6 +54,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/button.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,20 +102,16 @@ class _ProviderListState extends State<ProviderList> {
       text = L10n.get(L.providerRegisterChoose);
     }
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          title: Text(title),
-      ),
-      body: createProviderList()
-    );
+        appBar: DynamicAppBar(
+          title: title,
+          leading: AppBarBackButton(context: context),
+        ),
+        body: createProviderList());
   }
 
   Widget createProviderList() {
     return Padding(
-        padding: EdgeInsets.only(
-            left: loginHorizontalPadding,
-            right: loginHorizontalPadding,
-            bottom: loginVerticalPadding,
-            top: loginTopPadding),
+        padding: EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -181,9 +177,7 @@ class _ProviderListState extends State<ProviderList> {
         child: Column(
           children: <Widget>[
             Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: loginVerticalPadding12dp,
-                    horizontal: loginHorizontalPadding16dp),
+                padding: EdgeInsets.symmetric(vertical: loginVerticalPadding12dp, horizontal: loginHorizontalPadding16dp),
                 child: Column(
                   children: <Widget>[
                     Row(

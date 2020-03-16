@@ -52,6 +52,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_chat_bloc.dart';
 import 'package:ox_coi/src/settings/settings_chat_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsChat extends StatefulWidget {
@@ -73,8 +74,9 @@ class _SettingsChatState extends State<SettingsChat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          title: Text(L10n.get(L.chatP)),
+        appBar: DynamicAppBar(
+          title: L10n.get(L.chatP),
+          leading: AppBarBackButton(context: context),
         ),
         body: _buildPreferenceList(context));
   }

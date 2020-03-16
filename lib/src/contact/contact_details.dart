@@ -43,7 +43,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
@@ -59,6 +58,7 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/utils/error.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
@@ -85,8 +85,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.add(RequestContact(
-        contactId: widget.contactId, typeOrChatId: validContacts));
+    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     _contactChangeBloc.listen((state) => _handleContactChanged(context, state));
   }
 
@@ -113,8 +112,9 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        title: Text(L10n.get(L.profile)),
+      appBar: DynamicAppBar(
+        title: L10n.get(L.profile),
+        leading: AppBarBackButton(context: context),
       ),
       body: SingleChildScrollView(
         child: BlocBuilder(
@@ -131,8 +131,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     secondaryText: state.email,
                     avatarPath: state.imagePath,
                     imageBackgroundColor: state.color,
-                    editActionCallback: () => _editContact(
-                        context, state.name, state.email, state.phoneNumbers),
+                    editActionCallback: () => _editContact(context, state.name, state.email, state.phoneNumbers),
                     iconData: state.isVerified ? IconSource.verifiedUser : null,
                     child: ProfileHeader(),
                   ),
@@ -141,15 +140,13 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     icon: IconSource.chat,
                     text: L10n.get(L.chatOpen),
                     iconBackground: CustomTheme.of(context).chatIcon,
-                    onTap: () =>
-                        createChatFromContact(context, widget.contactId),
+                    onTap: () => createChatFromContact(context, widget.contactId),
                   ),
                   SettingsItem(
                     icon: IconSource.flag,
                     text: L10n.get(L.settingItemFlaggedTitle),
                     iconBackground: CustomTheme.of(context).flagIcon,
-                    onTap: () =>
-                        _settingsItemTapped(context, SettingsItemName.flagged),
+                    onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
                   ),
                   SettingsItem(
                     key: Key(keyUserProfileBlockIconSource),
@@ -173,8 +170,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     icon: IconSource.notifications,
                     text: L10n.get(L.settingItemNotificationsTitle),
                     iconBackground: CustomTheme.of(context).notificationIcon,
-                    onTap: () => _settingsItemTapped(
-                        context, SettingsItemName.notification),
+                    onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
                   ),
                   ListGroupHeader(
                     text: "",
@@ -222,8 +218,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
     }
   }
 
-  void _editContact(BuildContext context, String name, String email,
-      String phoneNumbers) async {
+  void _editContact(BuildContext context, String name, String email, String phoneNumbers) async {
     return await _navigation
         .push(
       context,
@@ -238,8 +233,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
       ),
     )
         .then((value) {
-      _contactItemBloc.add(RequestContact(
-          contactId: widget.contactId, typeOrChatId: validContacts));
+      _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     });
   }
 
@@ -260,5 +254,4 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   String _getBlockMessage(BuildContext context) {
     return L10n.get(L.contactBlockedSuccess);
   }
-
 }

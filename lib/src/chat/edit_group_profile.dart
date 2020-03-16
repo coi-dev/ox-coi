@@ -43,14 +43,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 
 import 'chat_change_bloc.dart';
@@ -81,16 +80,13 @@ class _EditGroupProfileState extends State<EditGroupProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          leadingIcon: AdaptiveIconButton(
-            icon: AdaptiveIcon(icon: IconSource.close),
-            onPressed: () => _navigation.pop(context),
-          ),
-          title: Text(L10n.get(L.groupRename)),
-          actions: <Widget>[
-            AdaptiveIconButton(
-              icon: AdaptiveIcon(icon: IconSource.check),
+        appBar: DynamicAppBar(
+          title: L10n.get(L.groupRename),
+          leading: AppBarCloseButton(context: context),
+          trailingList: [
+            IconButton(
               key: Key(keyEditGroupProfilAdaptiveIconIconSource),
+              icon: AdaptiveIcon(icon: IconSource.check),
               onPressed: _saveChanges,
             )
           ],

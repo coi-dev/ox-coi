@@ -43,9 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -63,6 +61,7 @@ import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
 class UserAccountSettings extends StatefulWidget {
@@ -157,16 +156,15 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
         child: WillPopScope(
           onWillPop: () async => _navigation.allowBackNavigation,
           child: Scaffold(
-            appBar: AdaptiveAppBar(
-              leadingIcon: AdaptiveIconButton(
-                icon: AdaptiveIcon(
-                  icon: IconSource.close,
+            appBar: DynamicAppBar(
+              title: L10n.get(L.settingAccount),
+              leading: AppBarCloseButton(context: context),
+              trailingList: <Widget>[
+                IconButton(
+                  key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
+                  icon: AdaptiveIcon(icon: IconSource.check),
+                  onPressed: () => _saveData(context),
                 ),
-                onPressed: () => _navigation.pop(context),
-              ),
-              title: Text(L10n.get(L.settingAccount)),
-              actions: <Widget>[
-                SaveDataButton(),
               ],
             ),
             body: SingleChildScrollView(
@@ -178,20 +176,6 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SaveDataButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.check,
-      ),
-      onPressed: () {
-        _saveData(context);
-      },key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
     );
   }
 

@@ -44,7 +44,6 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item.dart';
@@ -52,6 +51,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'flagged_bloc.dart';
@@ -86,8 +86,9 @@ class _FlaggedState extends State<Flagged> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AdaptiveAppBar(
-          title: Text(L10n.get(L.chatFlagged)),
+        appBar: DynamicAppBar(
+          title: L10n.get(L.chatFlagged),
+          leading: AppBarBackButton(context: context),
         ),
         body: buildListView());
   }

@@ -45,30 +45,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 enum AppBarAction {
-  searchChats,
+  addChat,
+  addContact,
   importContacts,
-  searchContacts,
   profileSettings,
+  toggleAppBarVisibility,
 }
 
 abstract class RootChild extends StatefulWidget {
-  final StreamController appBarActionsStream;
-
-  RootChild({this.appBarActionsStream, Key key}) : super(key: key);
 
   getElevation() {
     return appBarElevationDefault;
   }
 
-  List<Widget> getActions(BuildContext context) ;
+  DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> app);
 
-  String getTitle();
+  String getBottomNavigationText();
 
-  String getNavigationText();
-
-  IconSource getNavigationIcon();
+  IconSource getBottomNavigationIcon();
 
   Color getColor(BuildContext context);
 

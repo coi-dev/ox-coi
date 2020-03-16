@@ -201,7 +201,7 @@ Future createNewChat(
   final finderMe = find.text(meContact);
   final finderNewContact = find.text(L.getKey(L.contactNew));
 
-  await driver.tap(find.byValueKey(keyChatListChatFloatingActionButton));
+  await driver.tap(find.byValueKey(keyChatListCreateChatButton));
   if (chatName == meContact) {
     await driver.tap(finderMe);
     await driver.tap(pageBack);

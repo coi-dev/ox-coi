@@ -43,9 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat_create_group_participants.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
@@ -60,9 +58,8 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
-import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-
 
 class ChatCreate extends StatefulWidget {
   @override
@@ -70,14 +67,24 @@ class ChatCreate extends StatefulWidget {
 }
 
 class _ChatCreateState extends State<ChatCreate> {
-  ContactListBloc _contactListBloc = ContactListBloc();
-  Navigation navigation = Navigation();
+  final _contactListBloc = ContactListBloc();
+  final _navigation = Navigation();
+
+  var _isSearching = false;
+
+  DynamicSearchBar _searchBar;
 
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.chatCreate);
+    _navigation.current = Navigatable(Type.chatCreate);
     _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
+    _searchBar = DynamicSearchBar(
+      content: DynamicSearchBarContent(
+        onSearch: (text) => _contactListBloc.add(SearchContacts(query: text)),
+        isSearchingCallback: (bool isSearching) => setState(() => _isSearching = isSearching),
+      ),
+    );
   }
 
   @override
@@ -89,44 +96,20 @@ class _ChatCreateState extends State<ChatCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          title: Text(L10n.get(L.chatCreate)),
-          actions: <Widget>[getSearchAction()],
-        ),key: Key(keyChatCreateAdaptiveAppBar),
-        body: buildList(true));
+        appBar: DynamicAppBar(
+          title: L10n.get(L.chatCreate),
+          leading: AppBarBackButton(context: context),
+        ),
+        body: buildList());
   }
 
-  Widget getSearchAction() {
-    Search search = Search(
-      onBuildResults: onBuildResultOrSuggestion,
-      onBuildSuggestion: onBuildResultOrSuggestion,
-      onClose: onSearchClose,
-    );
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.search,
-      ),
-      onPressed: () => search.show(context),
-      key: Key(keyChatCreateSearchIcon),
-    );
-  }
-
-  Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.add(SearchContacts(query: query));
-    return buildList(false);
-  }
-
-  void onSearchClose() {
-    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
-  }
-
-  Widget buildList(bool showNewContactAndAddGroup) {
+  Widget buildList() {
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          int offset = showNewContactAndAddGroup ? 1 : 0;
-          return buildListItems(showNewContactAndAddGroup, state, offset);
+          int offset = !_isSearching ? 1 : 0;
+          return buildListItems(!_isSearching, state, offset);
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
@@ -136,19 +119,24 @@ class _ChatCreateState extends State<ChatCreate> {
     );
   }
 
-  ListView buildListItems(bool showNewContactAndAddGroup, ContactListStateSuccess state, int offset) {
-    return ListView.custom(
-      childrenDelegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-        if (showNewContactAndAddGroup && index == 0) {
-          return buildNewContactAndAddGroup();
-        } else {
-          int adjustedIndex = index - offset;
-          final contactId = state.contactIds[adjustedIndex];
-          final int previousContactId = (adjustedIndex > 0) ? state.contactIds[adjustedIndex - 1] : null;
-          final key = createKeyFromId(contactId, [state.contactLastUpdateValues[adjustedIndex]]);
-          return ContactItem(contactId: contactId, previousContactId: previousContactId, contactItemType: ContactItemType.createChat, key: key);
-        }
-      }, childCount: state.contactIds.length + offset),
+  Widget buildListItems(bool showNewContactAndAddGroup, ContactListStateSuccess state, int offset) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        _searchBar,
+        SliverList(
+          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+            if (showNewContactAndAddGroup && index == 0) {
+              return buildNewContactAndAddGroup();
+            } else {
+              int adjustedIndex = index - offset;
+              final contactId = state.contactIds[adjustedIndex];
+              final int previousContactId = (adjustedIndex > 0) ? state.contactIds[adjustedIndex - 1] : null;
+              final key = createKeyFromId(contactId, [state.contactLastUpdateValues[adjustedIndex]]);
+              return ContactItem(contactId: contactId, previousContactId: previousContactId, contactItemType: ContactItemType.createChat, key: key);
+            }
+          }, childCount: state.contactIds.length + offset),
+        )
+      ],
     );
   }
 
@@ -165,7 +153,8 @@ class _ChatCreateState extends State<ChatCreate> {
             L10n.get(L.contactNew),
             style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
           ),
-          onTap: newContactTapped,key: Key(keyChatCreatePersonAddIcon),
+          onTap: newContactTapped,
+          key: Key(keyChatCreatePersonAddIcon),
         ),
         Container(
           decoration: BoxDecoration(
@@ -182,7 +171,8 @@ class _ChatCreateState extends State<ChatCreate> {
               L10n.get(L.groupCreate),
               style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
             ),
-            onTap: createGroupTapped, key: Key(keyChatCreateGroupAddIcon),
+            onTap: createGroupTapped,
+            key: Key(keyChatCreateGroupAddIcon),
           ),
         ),
       ],
@@ -190,7 +180,7 @@ class _ChatCreateState extends State<ChatCreate> {
   }
 
   newContactTapped() {
-    navigation.push(
+    _navigation.push(
       context,
       MaterialPageRoute(
         builder: (context) => ContactChange(
@@ -202,7 +192,7 @@ class _ChatCreateState extends State<ChatCreate> {
   }
 
   createGroupTapped() {
-    navigation.push(
+    _navigation.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatCreateGroupParticipants(),

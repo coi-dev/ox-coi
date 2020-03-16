@@ -40,21 +40,16 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat_create_group_settings.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
 import 'package:ox_coi/src/contact/contact_item_selectable.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/data/repository.dart';
-import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -63,7 +58,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
@@ -72,34 +67,38 @@ class ChatCreateGroupParticipants extends StatefulWidget {
 }
 
 class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipants> {
-  ContactListBloc _contactListBloc = ContactListBloc();
-  Repository<Chat> chatRepository;
-  Navigation navigation = Navigation();
-  var _scrollController = ScrollController();
+  final _contactListBloc = ContactListBloc();
+  final _navigation = Navigation();
+  final _scrollController = ScrollController();
+
+  DynamicSearchBar _searchBar;
+  var _isSearching = false;
 
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.chatCreateGroupParticipants);
+    _navigation.current = Navigatable(Type.chatCreateGroupParticipants);
     _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
-    chatRepository = RepositoryManager.get(RepositoryType.chat);
+    _searchBar = DynamicSearchBar(
+      scrollable: false,
+      content: DynamicSearchBarContent(
+        onSearch: (text) => _contactListBloc.add(SearchContacts(query: text)),
+        isSearchingCallback: (bool isSearching) => setState(() => _isSearching = isSearching),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        leadingIcon: AdaptiveIconButton(
+      appBar: DynamicAppBar(
+        title: L10n.get(L.groupCreate),
+        leading: AppBarCloseButton(
           key: Key(keyChatCreateGroupParticipantsCloseIconButton),
-          icon: AdaptiveIcon(
-            icon: IconSource.close,
-          ),
-          onPressed: () => navigation.pop(context),
+          context: context,
         ),
-        title: Text(L10n.get(L.groupCreate)),
-        actions: <Widget>[
-          getSearchAction(),
-          AdaptiveIconButton(
+        trailingList: [
+          IconButton(
             key: Key(keyChatCreateGroupParticipantsSummitIconButton),
             icon: AdaptiveIcon(
               icon: IconSource.arrowForward,
@@ -112,29 +111,6 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
     );
   }
 
-  Widget getSearchAction() {
-    Search search = Search(
-      onBuildResults: onBuildResultOrSuggestion,
-      onBuildSuggestion: onBuildResultOrSuggestion,
-      onClose: onSearchClose,
-    );
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(
-        icon: IconSource.search,
-      ),
-      onPressed: () => search.show(context),
-    );
-  }
-
-  Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.add(SearchContacts(query: query));
-    return buildList();
-  }
-
-  void onSearchClose() {
-    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
-  }
-
   Widget buildList() {
     return BlocBuilder(
       bloc: _contactListBloc,
@@ -142,6 +118,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         if (state is ContactListStateSuccess) {
           return Column(
             children: <Widget>[
+              _searchBar,
               _buildSelectedParticipantList(state.contactsSelected),
               Flexible(
                 child: buildListItems(state),
@@ -237,7 +214,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
 
   _onSubmit() async {
     if (_contactListBloc.contactsSelectedCount > 0) {
-      navigation.push(
+      _navigation.push(
         context,
         MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(selectedContacts: _contactListBloc.contactsSelected)),
       );

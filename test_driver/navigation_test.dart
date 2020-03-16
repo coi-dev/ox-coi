@@ -115,7 +115,7 @@ Future checkContact(FlutterDriver driver, String newTestName) async {
   expect(actualNewContactName, newTestName);
 
   //  Check import contact.
-  await driver.tap(find.byValueKey(keyContactListImportContactIconButton));
+  await driver.tap(find.byValueKey(keyContactListImportButton));
   await driver.tap(cancelFinder);
 
   //  Check Search.

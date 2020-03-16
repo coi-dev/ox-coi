@@ -75,7 +75,7 @@ const mailCom = 'Mail.com';
 
 const helloWorld = 'Hello world';
 
-final typeSomethingComposePlaceholderFinder = find.byValueKey(L.getKey(L.typeSomething));
+final typeSomethingComposePlaceholderFinder = find.byValueKey(L.getKey(L.type));
 
 final profileFinder = find.text(L.getKey(L.profile));
 
@@ -91,9 +91,9 @@ final signInFinder = find.text(L.getKey(L.loginSignIn));
 
 final cancelFinder = find.byValueKey(keyConfirmationDialogCancelButton);
 
-final createChatFinder = find.byValueKey(keyChatListChatFloatingActionButton);
+final createChatFinder = find.byValueKey(keyChatListCreateChatButton);
 
-final personAddFinder = find.byValueKey(keyContactListPersonAddFloatingActionButton);
+final personAddFinder = find.byValueKey(keyContactListAddContactButton);
 
 final userSettingsCheckIconButtonFinder = find.byValueKey(keyUserSettingsCheckIconButton);
 

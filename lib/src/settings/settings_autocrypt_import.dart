@@ -43,9 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -54,6 +52,7 @@ import 'package:ox_coi/src/settings/settings_autocrypt_bloc.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
@@ -104,20 +103,13 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        leadingIcon: new AdaptiveIconButton(
-          icon: new AdaptiveIcon(
-            icon: IconSource.back,
-          ),
-          onPressed: () => navigation.pop(context),
-        ),
-        title: Text(L10n.get(L.autocryptImport)),
-        actions: <Widget>[
-          AdaptiveIconButton(
-            icon: AdaptiveIcon(
-              icon: IconSource.check,
-            ),
-            onPressed: () => onSubmit(),
+      appBar: DynamicAppBar(
+        title: L10n.get(L.autocryptImport),
+        leading: AppBarBackButton(context: context),
+        trailingList: [
+          IconButton(
+            icon: AdaptiveIcon(icon: IconSource.check),
+            onPressed: onSubmit,
           )
         ],
       ),

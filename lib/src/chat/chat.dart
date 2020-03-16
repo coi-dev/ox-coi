@@ -47,7 +47,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
@@ -87,6 +86,7 @@ import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/utils/vibration.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/button.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
 import 'package:url_launcher/url_launcher.dart';
@@ -271,7 +271,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   _clearAudioComposer() async {
     await Future.delayed(Duration(microseconds: 100));
     setState(() {
-      _dbPeakList.clear();
+      _dbPeakList?.clear();
       _composingAudioTimer = null;
       _isStopped = false;
       _isLocked = false;
@@ -324,30 +324,22 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           }
 
           return Scaffold(
-            appBar: AdaptiveAppBar(
-              title: isInviteChat(widget.chatId)
+            appBar: DynamicAppBar(
+              titleWidget: isInviteChat(widget.chatId)
                   ? buildRow(imagePath, name, subTitle, color, context, isVerified)
                   : GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _chatTitleTapped(),
                       child: buildRow(imagePath, name, subTitle, color, context, isVerified),
                     ),
-              actions: [
+              leading: AppBarBackButton(context: context),
+              trailingList: [
                 if (!isGroupChat)
-                  AdaptiveIconButton(
-                    icon: AdaptiveIcon(icon: IconSource.phone),
+                  IconButton(
                     key: Key(keyChatIconButtonIconPhone),
+                    icon: AdaptiveIcon(icon: IconSource.phone),
                     onPressed: _onPhonePressed,
-                    color: CustomTheme.of(context).onPrimary,
                   ),
-                AdaptiveIconButton(
-                  icon: AdaptiveIcon(
-                    icon: IconSource.flag
-                  ),
-                  // TODO key: Key(keyChatListGetFlaggedActionIconButton),
-                  onPressed: _onFlaggedPressed,
-                  color: CustomTheme.of(context).onPrimary,
-                ),
               ],
             ),
             body: Column(
@@ -680,7 +672,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       _messageListBloc.add(SendMessage(text: text));
     } else {
       int type = getType();
-      if(type == ChatMsg.typeVoice) _onAudioRecordingAbort();
+      if (type == ChatMsg.typeVoice) _onAudioRecordingAbort();
       _messageListBloc.add(SendMessage(path: _filePath, fileType: type, text: text, isShared: widget.sharedData != null));
     }
 

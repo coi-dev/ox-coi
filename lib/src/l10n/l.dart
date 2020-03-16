@@ -94,7 +94,6 @@ class L {
   static final signature = _translationKey("Signature");
   static final today = _translationKey("Today");
   static final unblock = _translationKey("Unblock");
-  static final typeSomething = _translationKey("Type something...");
   static final username = _translationKey("Username");
   static final video = _translationKey("Video");
   static final welcome = _translationKey("Welcome to %s");
@@ -108,6 +107,8 @@ class L {
   static final termsConditions = _translationKey("terms & conditions");
   static final code = _translationKey("Code");
   static final retry = _translationKey("Retry");
+  static final search = _translationKey("Search");
+  static final type = _translationKey("Type");
 
   static final autocryptSetupMessage = _translationKey("Autocrypt Setup Message");
   static final autocryptSetupCode = _translationKey("Autocrypt setup code");

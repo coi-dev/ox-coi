@@ -58,6 +58,7 @@ import 'package:ox_coi/src/settings/settings_debug_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsDebug extends StatefulWidget {
@@ -95,8 +96,9 @@ class _SettingsDebugState extends State<SettingsDebug> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        title: Text(L10n.get(L.debug)),
+      appBar: DynamicAppBar(
+        title: L10n.get(L.debug),
+        leading: AppBarBackButton(context: context),
       ),
       body: BlocBuilder(
         bloc: _settingsDebugBloc,

@@ -43,9 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
 import 'package:ox_coi/src/contact/contact_item_selectable.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
@@ -59,7 +57,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
-import 'package:ox_coi/src/widgets/search.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 import 'chat_change_bloc.dart';
@@ -76,100 +74,93 @@ class ChatAddGroupParticipants extends StatefulWidget {
 }
 
 class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
-  ContactListBloc _contactListBloc = ContactListBloc();
-  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
-  Navigation navigation = Navigation();
+  final _contactListBloc = ContactListBloc();
+  final _chatChangeBloc = ChatChangeBloc();
+  final navigation = Navigation();
+
+  DynamicSearchBar _searchBar;
+  var _isSearching = false;
 
   @override
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatAddGroupParticipants);
     _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
+    _searchBar = DynamicSearchBar(
+      scrollable: false,
+      content: DynamicSearchBarContent(
+        onSearch: (text) => _contactListBloc.add(SearchContacts(query: text)),
+        isSearchingCallback: (bool isSearching) => setState(() => _isSearching = isSearching),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        leadingIcon: AdaptiveIconButton(
-          icon: AdaptiveIcon(
-            icon: IconSource.close,
-          ),
-          onPressed: () => navigation.pop(context),
+      appBar: DynamicAppBar(
+        title: L10n.get(L.participantAdd),
+        leading: AppBarCloseButton(
           key: Key(keyChatAddGroupParticipantsCloseIcon),
+          context: context,
         ),
-        title: Text(L10n.get(L.participantAdd)),
-        actions: <Widget>[
-          getSearchAction(),
-          AdaptiveIconButton(
+        trailingList: [
+          IconButton(
+            key: Key(keyChatAddGroupParticipantsCheckIcon),
             icon: AdaptiveIcon(
               icon: IconSource.check,
             ),
             onPressed: () => _onSubmit(),
-            key: Key(keyChatAddGroupParticipantsCheckIcon),
           )
         ],
       ),
-      body: buildList(),
-    );
-  }
-
-  Widget getSearchAction() {
-    Search search = Search(
-      onBuildResults: onBuildResultOrSuggestion,
-      onBuildSuggestion: onBuildResultOrSuggestion,
-      onClose: onSearchClose,
-    );
-    return AdaptiveIconButton(
-      icon: AdaptiveIcon(icon: IconSource.search),
-      onPressed: () => search.show(context),
-      key: Key(keyChatAddGroupParticipantsSearchIcon),
-    );
-  }
-
-  Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.add(SearchContacts(query: query));
-    return buildList();
-  }
-
-  Widget buildList() {
-    return BlocBuilder(
-      bloc: _contactListBloc,
-      builder: (context, state) {
-        if (state is ContactListStateSuccess) {
-          if (state.contactIds.length != widget.contactIds.length) {
-            return Column(
-              children: <Widget>[
-                _buildSelectedParticipantList(state.contactsSelected),
-                Flexible(
-                  child: buildListItems(state),
-                ),
-              ],
-            );
+      body: BlocBuilder(
+        bloc: _contactListBloc,
+        builder: (context, state) {
+          if (state is ContactListStateSuccess) {
+            if (_isSearching || (state.contactIds.length != widget.contactIds.length)) {
+              return Column(
+                children: <Widget>[
+                  _searchBar,
+                  _buildSelectedParticipantList(state.contactsSelected),
+                  Flexible(
+                    child: _buildListItems(state),
+                  ),
+                ],
+              );
+            } else {
+              return Center(
+                child: Text(L10n.get(L.groupAddContactsAlreadyIn)),
+              );
+            }
+          } else if (state is! ContactListStateFailure) {
+            return StateInfo(showLoading: true);
           } else {
-            return Center(
-              child: Text(L10n.get(L.groupAddContactsAlreadyIn)),
-            );
+            return AdaptiveIcon(icon: IconSource.error);
           }
-        } else if (state is! ContactListStateFailure) {
-          return StateInfo(showLoading: true);
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
-        }
-      },
+        },
+      ),
     );
   }
 
-  ListView buildListItems(ContactListStateSuccess state) {
+  ListView _buildListItems(ContactListStateSuccess state) {
     return ListView.builder(
       padding: EdgeInsets.only(top: listItemPadding),
       itemCount: state.contactIds.length,
       itemBuilder: (BuildContext context, int index) {
-        if (!widget.contactIds.contains(state.contactIds[index])) {
-          var contactId = state.contactIds[index];
+        final contactIds = state.contactIds;
+        if (!widget.contactIds.contains(contactIds[index])) {
+          var contactId = contactIds[index];
           var key = createKeyFromId(contactId, [state.contactLastUpdateValues[index]]);
           bool isSelected = state.contactsSelected.contains(contactId);
-          return ContactItemSelectable(contactId: contactId, onTap: _itemTapped, isSelected: isSelected, key: key);
+          final int previousContactId = (index > 0) ? contactIds[index - 1] : null;
+          return ContactItemSelectable(
+            key: key,
+            contactId: contactId,
+            onTap: _itemTapped,
+            isSelected: isSelected,
+            previousContactId: previousContactId,
+          );
         } else {
           return Container();
         }
@@ -219,10 +210,6 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
         ),
       ],
     );
-  }
-
-  void onSearchClose() {
-    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
   }
 
   _itemTapped(int id) {

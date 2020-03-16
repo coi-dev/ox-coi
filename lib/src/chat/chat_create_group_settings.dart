@@ -44,9 +44,7 @@ import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
@@ -62,6 +60,7 @@ import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
@@ -100,10 +99,11 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        title: Text(L10n.get(L.groupCreate)),
-        actions: <Widget>[
-          AdaptiveIconButton(
+      appBar: DynamicAppBar(
+        title: L10n.get(L.groupCreate),
+        leading: AppBarBackButton(context: context),
+        trailingList: [
+          IconButton(
             key: Key(keyChatCreateGroupSettingCheckIconButton),
             icon: AdaptiveIcon(
               icon: IconSource.check,

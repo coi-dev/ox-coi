@@ -46,7 +46,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list.dart';
@@ -66,7 +65,9 @@ import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_profile.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/utils/text_field_handling.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
+import 'package:provider/provider.dart';
 
 class Root extends StatefulWidget {
   @override
@@ -78,15 +79,15 @@ class _RootState extends State<Root> {
   List<RootChild> childList;
   var _inviteBloc = InviteBloc();
   var _navigation = Navigation();
-  var _appBarActionsStream = StreamController.broadcast();
+  var _appBarActionsStream = StreamController<AppBarAction>.broadcast();
 
   @override
   void initState() {
     super.initState();
     childList = [
-      ChatList(appBarActionsStream: _appBarActionsStream),
-      ContactList(appBarActionsStream: _appBarActionsStream),
-      UserProfile(appBarActionsStream: _appBarActionsStream),
+      ChatList(),
+      ContactList(),
+      UserProfile(),
     ];
   }
 
@@ -100,126 +101,125 @@ class _RootState extends State<Root> {
   Widget build(BuildContext context) {
     RootChild child = childList[_selectedIndex];
 
-    return Scaffold(
-      appBar: AdaptiveAppBar(
-        title: Text(child.getTitle()),
-        actions: child.getActions(context),
-        color: CustomTheme.of(context).surface,
-      ),
-      backgroundColor: CustomTheme.of(context).background,
-      body: WillPopScope(
-        onWillPop: _onWillPop,
-        child: MultiBlocListener(
-          listeners: [
-            BlocListener<LifecycleBloc, LifecycleState>(
-              listener: (context, state) {
-                if (state is LifecycleStateSuccess) {
-                  if (state.state == AppLifecycleState.resumed.toString()) {
-                    _inviteBloc.add(HandleSharedInviteLink());
+    return Provider.value(
+      value: _appBarActionsStream,
+      child: Scaffold(
+        appBar: child.getAppBar(context, _appBarActionsStream),
+        backgroundColor: CustomTheme.of(context).background,
+        body: WillPopScope(
+          onWillPop: _onWillPop,
+          child: MultiBlocListener(
+            listeners: [
+              BlocListener<LifecycleBloc, LifecycleState>(
+                listener: (context, state) {
+                  if (state is LifecycleStateSuccess) {
+                    if (state.state == AppLifecycleState.resumed.toString()) {
+                      _inviteBloc.add(HandleSharedInviteLink());
+                    }
                   }
-                }
-              },
-            ),
-            BlocListener<InviteBloc, InviteState>(
-              bloc: _inviteBloc,
-              listener: (context, state) {
-                if (state is InviteStateSuccess) {
-                  if (state.inviteServiceResponse != null) {
-                    InviteServiceResponse inviteServiceResponse = state.inviteServiceResponse;
-                    String name = inviteServiceResponse.sender.name;
-                    String email = inviteServiceResponse.sender.email;
-                    String chatListInviteDialogXYText = L10n.getFormatted(L.chatListInviteDialogXY, [name, email]);
-                    String chatListInviteDialogXText = L10n.getFormatted(L.chatListInviteDialogX, [email]);
-                    Uint8List imageBytes = state.base64Image != null ? base64Decode(state.base64Image) : Uint8List(0);
-                    showNavigatableDialog(
-                      context: context,
-                      navigatable: Navigatable(Type.chatListInviteDialog),
-                      dialog: AlertDialog(
-                        content: Row(
-                          children: <Widget>[
-                            Visibility(
-                              visible: imageBytes.length > 0,
-                              child: Image.memory(
-                                imageBytes,
-                                height: listAvatarDiameter,
-                                width: listAvatarDiameter,
+                },
+              ),
+              BlocListener<InviteBloc, InviteState>(
+                bloc: _inviteBloc,
+                listener: (context, state) {
+                  if (state is InviteStateSuccess) {
+                    if (state.inviteServiceResponse != null) {
+                      InviteServiceResponse inviteServiceResponse = state.inviteServiceResponse;
+                      String name = inviteServiceResponse.sender.name;
+                      String email = inviteServiceResponse.sender.email;
+                      String chatListInviteDialogXYText = L10n.getFormatted(L.chatListInviteDialogXY, [name, email]);
+                      String chatListInviteDialogXText = L10n.getFormatted(L.chatListInviteDialogX, [email]);
+                      Uint8List imageBytes = state.base64Image != null ? base64Decode(state.base64Image) : Uint8List(0);
+                      showNavigatableDialog(
+                        context: context,
+                        navigatable: Navigatable(Type.chatListInviteDialog),
+                        dialog: AlertDialog(
+                          content: Row(
+                            children: <Widget>[
+                              Visibility(
+                                visible: imageBytes.length > 0,
+                                child: Image.memory(
+                                  imageBytes,
+                                  height: listAvatarDiameter,
+                                  width: listAvatarDiameter,
+                                ),
                               ),
+                              Padding(
+                                padding: EdgeInsets.all(verticalPaddingSmall),
+                              ),
+                              Flexible(
+                                child: Text(name == email ? chatListInviteDialogXText : chatListInviteDialogXYText),
+                              )
+                            ],
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text(L10n.get(L.cancel)),
+                              onPressed: () {
+                                _navigation.pop(context);
+                              },
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(verticalPaddingSmall),
+                            FlatButton(
+                              child: Text(L10n.get(L.chatStart)),
+                              onPressed: () {
+                                _navigation.pop(context);
+                                _inviteBloc.add(AcceptInvite(inviteServiceResponse: inviteServiceResponse));
+                              },
                             ),
-                            Flexible(
-                              child: Text(name == email ? chatListInviteDialogXText : chatListInviteDialogXYText),
-                            )
                           ],
                         ),
+                      );
+                    }
+                  } else if (state is InviteStateFailure) {
+                    showNavigatableDialog(
+                      context: context,
+                      navigatable: Navigatable(Type.chatListInviteErrorDialog),
+                      dialog: AlertDialog(
+                        title: Text(L10n.get(L.error)),
+                        content: Text(state.errorMessage),
                         actions: <Widget>[
                           FlatButton(
-                            child: Text(L10n.get(L.cancel)),
+                            child: Text(L10n.get(L.ok)),
                             onPressed: () {
                               _navigation.pop(context);
-                            },
-                          ),
-                          FlatButton(
-                            child: Text(L10n.get(L.chatStart)),
-                            onPressed: () {
-                              _navigation.pop(context);
-                              _inviteBloc.add(AcceptInvite(inviteServiceResponse: inviteServiceResponse));
                             },
                           ),
                         ],
                       ),
                     );
+                  } else if (state is CreateInviteChatSuccess) {
+                    _navigation.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Chat(
+                                  chatId: state.chatId,
+                                )));
                   }
-                } else if (state is InviteStateFailure) {
-                  showNavigatableDialog(
-                    context: context,
-                    navigatable: Navigatable(Type.chatListInviteErrorDialog),
-                    dialog: AlertDialog(
-                      title: Text(L10n.get(L.error)),
-                      content: Text(state.errorMessage),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text(L10n.get(L.ok)),
-                          onPressed: () {
-                            _navigation.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                } else if (state is CreateInviteChatSuccess) {
-                  _navigation.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Chat(
-                                chatId: state.chatId,
-                              )));
-                }
-              },
-            ),
-          ],
-          child: ViewSwitcher(child),
+                },
+              ),
+            ],
+            child: ViewSwitcher(child),
+          ),
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: childList.map((child) {
+            return BottomNavigationBarItem(
+              icon: AdaptiveIcon(
+                icon: child.getBottomNavigationIcon(),
+                key: Key(child.getBottomNavigationText()),
+              ),
+              title: Text(child.getBottomNavigationText()),
+            );
+          }).toList(),
+          currentIndex: _selectedIndex,
+          backgroundColor: CustomTheme.of(context).surface,
+          unselectedIconTheme: IconThemeData(color: CustomTheme.of(context).onSurface.fade()),
+          unselectedItemColor: CustomTheme.of(context).onSurface.fade(),
+          onTap: _onItemTapped,
+        ),
+        floatingActionButton: child.getFloatingActionButton(context),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: childList.map((child) {
-          return BottomNavigationBarItem(
-            icon: AdaptiveIcon(
-              icon: child.getNavigationIcon(),
-              key: Key(child.getNavigationText()),
-            ),
-            title: Text(child.getNavigationText()),
-          );
-        }).toList(),
-        currentIndex: _selectedIndex,
-        backgroundColor: CustomTheme.of(context).surface,
-        unselectedIconTheme: IconThemeData(color: CustomTheme.of(context).onSurface.fade()),
-        unselectedItemColor: CustomTheme.of(context).onSurface.fade(),
-        onTap: _onItemTapped,
-      ),
-      floatingActionButton: child.getFloatingActionButton(context),
     );
   }
 
@@ -238,6 +238,7 @@ class _RootState extends State<Root> {
   }
 
   _onItemTapped(int index) {
+    resetGlobalFocus(context);
     setState(() {
       _selectedIndex = index;
     });

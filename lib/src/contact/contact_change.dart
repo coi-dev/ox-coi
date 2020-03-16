@@ -44,9 +44,7 @@ import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
@@ -64,6 +62,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
@@ -158,22 +157,14 @@ class _ContactChangeState extends State<ContactChange> {
       changeToast = L10n.get(L.contactEditedSuccess);
     }
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          leadingIcon: AdaptiveIconButton(
-            icon: AdaptiveIcon(
-              icon: IconSource.close,
-            ),
-            key: Key(keyContactChangeCloseIconButton),
-            onPressed: () => _navigation.pop(context),
-          ),
-          title: Text(title),
-          actions: <Widget>[
-            AdaptiveIconButton(
+        appBar: DynamicAppBar(
+          title: title,
+          leading: AppBarCloseButton(context: context),
+          trailingList: [
+            IconButton(
               key: Key(keyContactChangeCheckIconButton),
-              icon: AdaptiveIcon(
-                icon: IconSource.check,
-              ),
-              onPressed: () => _onSubmit(),
+              icon: AdaptiveIcon(icon: IconSource.check),
+              onPressed: _onSubmit,
             )
           ],
         ),

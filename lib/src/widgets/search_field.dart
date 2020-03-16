@@ -45,6 +45,7 @@ import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/utils/text_field_handling.dart';
 
 class Search extends StatelessWidget {
   final TextEditingController controller;
@@ -76,6 +77,6 @@ class Search extends StatelessWidget {
 
   void _exitSearch(BuildContext context) {
     controller.text = "";
-    FocusScope.of(context).requestFocus(new FocusNode());
+    resetGlobalFocus(context);
   }
 }

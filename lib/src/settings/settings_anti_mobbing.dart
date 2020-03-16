@@ -52,6 +52,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_anti_mobbing_bloc.dart';
 import 'package:ox_coi/src/settings/settings_anti_mobbing_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsAntiMobbing extends StatefulWidget {
@@ -73,8 +74,9 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          title: Text(L10n.get(L.settingAntiMobbing)),
+        appBar: DynamicAppBar(
+          title: L10n.get(L.settingAntiMobbing),
+          leading: AppBarBackButton(context: context),
         ),
         body: _buildPreferenceList(context));
   }

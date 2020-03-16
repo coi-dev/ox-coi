@@ -145,13 +145,14 @@ mixin ChatComposer {
         decoration: InputDecoration(
           isDense: true,
           contentPadding: EdgeInsets.all(12.0),
-          hintText: L10n.get(L.typeSomething),
+          hintText: L10n.get(L.type),
+
           border: OutlineInputBorder(
             borderSide: BorderSide(color: CustomTheme.of(context).onSurface.barely()),
             borderRadius: BorderRadius.all(Radius.circular(composeTextBorderRadius)),
           ),
         ),
-        key: Key(L.getKey(L.typeSomething)),
+        key: Key(L.getKey(L.type)),
       ),
     );
   }
@@ -196,7 +197,7 @@ mixin ChatComposer {
             ),
             AdaptiveIconButton(
               icon: AdaptiveSuperellipseIcon(
-                icon: IconSource.videocam,
+                icon: IconSource.video,
                 color: CustomTheme.of(context).onSurface.barely(),
                 iconColor: CustomTheme.of(context).accent,
               ),

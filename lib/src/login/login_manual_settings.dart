@@ -55,6 +55,7 @@ import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
 import 'login_bloc.dart';
@@ -144,9 +145,10 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
         child: WillPopScope(
           onWillPop: () async => _navigation.allowBackNavigation,
           child: Scaffold(
-            appBar: AdaptiveAppBar(
-              title: Text(L10n.get(L.settingManual)),
-              actions: <Widget>[LoginButton()],
+            appBar: DynamicAppBar(
+              title: L10n.get(L.settingManual),
+              leading: AppBarBackButton(context: context),
+              trailingList: [LoginButton()],
             ),
             body: Column(
               children: <Widget>[

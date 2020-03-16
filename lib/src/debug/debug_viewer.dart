@@ -43,9 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/debug/debug_viewer_bloc.dart';
 import 'package:ox_coi/src/debug/debug_viewer_event_state.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
@@ -54,6 +52,7 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class DebugViewer extends StatefulWidget {
@@ -89,20 +88,13 @@ class _DebugViewerState extends State<DebugViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AdaptiveAppBar(
-          leadingIcon: new AdaptiveIconButton(
-            icon: new AdaptiveIcon(
-              icon: IconSource.back,
-            ),
-            onPressed: () => navigation.pop(context),
-          ),
-          title: Text(L10n.get(L.debug)),
-          actions: <Widget>[
-            AdaptiveIconButton(
-              icon: AdaptiveIcon(
-                icon: IconSource.contentCopy,
-              ),
-              onPressed: () => _onCopy(),
+        appBar: DynamicAppBar(
+          title: L10n.get(L.debug),
+          leading: AppBarBackButton(context: context),
+          trailingList: [
+            IconButton(
+              icon: AdaptiveIcon(icon: IconSource.contentCopy),
+              onPressed: _onCopy,
             )
           ],
         ),
@@ -125,9 +117,7 @@ class _DebugViewerState extends State<DebugViewer> {
           );
         } else {
           return Center(
-            child: AdaptiveIcon(
-                icon: IconSource.error
-            ),
+            child: AdaptiveIcon(icon: IconSource.error),
           );
         }
       },

@@ -39,12 +39,10 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
- 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -53,6 +51,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 class EmailSignature extends StatefulWidget {
   @override
@@ -69,28 +68,23 @@ class _EmailSignatureState extends State<EmailSignature> {
     navigation.current = Navigatable(Type.settingsSignature);
     _userChangeBloc.add(RequestUser());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        leadingIcon: AdaptiveIconButton(
-          icon: AdaptiveIcon(
-            icon: IconSource.close,
+      appBar: DynamicAppBar(
+        title: L10n.get(L.settingSignatureTitle),
+        leading: AppBarCloseButton(context: context),
+        trailingList: [
+          IconButton(
+            icon: AdaptiveIcon(icon: IconSource.check),
+            onPressed: _saveChanges,
           ),
-          onPressed: () => navigation.pop(context),
-        ),
-        title: Text(L10n.get(L.settingSignatureTitle)),
-        actions: <Widget>[
-          AdaptiveIconButton(
-              icon: AdaptiveIcon(
-                icon: IconSource.check,
-              ),
-              onPressed: _saveChanges)
         ],
       ),
       body: BlocListener(
         bloc: _userChangeBloc,
-        listener: (context, state){
+        listener: (context, state) {
           if (state is UserChangeStateSuccess) {
             Config config = state.config;
             _signatureController.text = config.status;
@@ -108,7 +102,9 @@ class _EmailSignatureState extends State<EmailSignature> {
                 controller: _signatureController,
                 decoration: InputDecoration(labelText: L10n.get(L.signature)),
               ),
-              Padding(padding: const EdgeInsets.all(formVerticalPadding),),
+              Padding(
+                padding: const EdgeInsets.all(formVerticalPadding),
+              ),
               Text(
                 "Change your Signature",
               ),

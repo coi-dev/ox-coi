@@ -41,12 +41,13 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
+import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_import_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
@@ -59,109 +60,115 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/color.dart';
 import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:ox_coi/src/widgets/search.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:provider/provider.dart';
+
+_showAddContactView(BuildContext context, Navigation navigation) {
+  navigation.pushNamed(context, Navigation.contactsAdd);
+}
 
 class ContactList extends RootChild {
-  final Navigation navigation = Navigation();
-
-  ContactList({appBarActionsStream, Key key}) : super(appBarActionsStream: appBarActionsStream, key: key);
+  final _navigation = Navigation();
 
   @override
   _ContactListState createState() => _ContactListState();
 
   @override
-  Color getColor(BuildContext context) {
-    return CustomTheme.of(context).onSurface;
-  }
+  Color getColor(BuildContext context) => CustomTheme.of(context).onSurface;
 
   @override
   FloatingActionButton getFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      key: Key(keyContactListPersonAddFloatingActionButton),
-      child: new AdaptiveIcon(icon: IconSource.personAdd),
-      onPressed: () {
-        _showAddContactView(context);
-      },
+    return Platform.isAndroid
+        ? FloatingActionButton(
+            key: Key(keyContactListAddContactButton),
+            child: new AdaptiveIcon(icon: IconSource.personAdd),
+            onPressed: () {
+              _showAddContactView(context, _navigation);
+            },
+          )
+        : null;
+  }
+
+  @override
+  String getBottomNavigationText() => L10n.get(L.contactP, count: L10n.plural);
+
+  @override
+  IconSource getBottomNavigationIcon() => IconSource.contacts;
+
+  @override
+  DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
+    return DynamicAppBar(
+      title: L10n.get(L.contactP, count: L10n.plural),
+      trailingList: [
+        IconButton(
+          key: Key(keyContactListImportButton),
+          icon: AdaptiveSuperellipseIcon(
+            icon: IconSource.importContacts,
+            iconColor: CustomTheme.of(context).accent,
+            color: CustomTheme.of(context).onSurface.barely(),
+          ),
+          onPressed: () => appBarActionsStream.add(AppBarAction.importContacts),
+        ),
+        if (Platform.isIOS)
+          IconButton(
+            key: Key(keyContactListAddContactButton),
+            icon: AdaptiveSuperellipseIcon(
+              icon: IconSource.personAdd,
+              iconColor: CustomTheme.of(context).onAccent,
+              color: CustomTheme.of(context).accent,
+            ),
+            onPressed: () => appBarActionsStream.add(AppBarAction.addContact),
+          )
+      ],
     );
-  }
-
-  _showAddContactView(BuildContext context) {
-    navigation.pushNamed(context, Navigation.contactsAdd);
-  }
-
-  @override
-  String getTitle() {
-    return L10n.get(L.contactP, count: L10n.plural);
-  }
-
-  @override
-  String getNavigationText() {
-    return L10n.get(L.contactP, count: L10n.plural);
-  }
-
-  @override
-  IconSource getNavigationIcon() {
-    return IconSource.contacts;
-  }
-
-  @override
-  List<Widget> getActions(BuildContext context) {
-    return [
-      AdaptiveIconButton(
-        icon: AdaptiveIcon(
-          icon: IconSource.importContacts,
-        ),
-        key: Key(keyContactListImportContactIconButton),
-        onPressed: () => appBarActionsStream.add(AppBarAction.importContacts),
-      ),
-      AdaptiveIconButton(
-        icon: AdaptiveIcon(
-          icon: IconSource.search,
-        ),
-        key: Key(keyContactListSearchIconButton),
-        onPressed: () => appBarActionsStream.add(AppBarAction.searchContacts),
-      ),
-    ];
   }
 }
 
 class _ContactListState extends State<ContactList> with ChatCreateMixin {
-  ContactListBloc _contactListBloc = ContactListBloc();
-  ContactImportBloc _contactImportBloc = ContactImportBloc();
-  Navigation navigation = Navigation();
+  final _contactListBloc = ContactListBloc();
+  final _contactImportBloc = ContactImportBloc();
+  final _scrollController = ScrollController();
+  DynamicSearchBar _searchBar;
+
   OverlayEntry _progressOverlayEntry;
-  StreamSubscription appBarActionsSubscription;
-  var _scrollController = ScrollController();
+  StreamSubscription _appBarActionsSubscription;
 
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.contactList);
+    widget._navigation.current = Navigatable(Type.contactList);
     requestValidContacts();
     setupContactImport();
-    appBarActionsSubscription = widget.appBarActionsStream.stream.listen((data) {
-      var action = data as AppBarAction;
-      if (action == AppBarAction.importContacts) {
+    _appBarActionsSubscription = Provider.of<StreamController<AppBarAction>>(context, listen: false).stream.listen((data) {
+      if (data == AppBarAction.importContacts) {
         _actionImport();
-      } else if (action == AppBarAction.searchContacts) {
-        _actionSearch();
+      } else if (data == AppBarAction.addContact) {
+        _showAddContactView(context, widget._navigation);
       }
     });
+    _searchBar = DynamicSearchBar(
+      content: DynamicSearchBarContent(
+        onSearch: (text) {
+          _contactListBloc.add(SearchContacts(query: text));
+        },
+      ),
+    );
   }
 
   @override
   void dispose() {
     _contactImportBloc.close();
     _contactListBloc.close();
-    appBarActionsSubscription.cancel();
+    _appBarActionsSubscription.cancel();
     super.dispose();
   }
 
@@ -190,9 +197,9 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
         title: L10n.get(L.contactGooglemailDialogTitle),
         content: L10n.get(L.contactGooglemailDialogContent),
         positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
-        positiveAction: () => _goolemailMailAddressAction(true),
+        positiveAction: () => _googleMailMailAddressAction(true),
         negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
-        negativeAction: () => _goolemailMailAddressAction(false),
+        negativeAction: () => _googleMailMailAddressAction(false),
         navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
         barrierDismissible: false,
         onWillPop: _onGoogleMailDialogWillPop,
@@ -202,10 +209,6 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return buildList();
-  }
-
-  Widget buildList() {
     return BlocBuilder(
       bloc: _contactListBloc,
       builder: (context, state) {
@@ -213,9 +216,13 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
           final contactIds = state.contactIds;
           final contactLastUpdateValues = state.contactLastUpdateValues;
 
-          return ListView.custom(
-              controller: _scrollController,
-              childrenDelegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+          return CustomScrollView(
+            controller: _scrollController,
+            slivers: <Widget>[
+              _searchBar,
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
                     final contactId = contactIds[index];
                     final int previousContactId = (index > 0) ? contactIds[index - 1] : null;
                     final key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
@@ -243,8 +250,10 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
                     final ValueKey valueKey = key;
                     final id = extractId(valueKey);
                     return (contactIds.contains(id) ? contactIds.indexOf(id) : null);
-                  }
-              )
+                  },
+                ),
+              ),
+            ],
           );
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
@@ -255,26 +264,8 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
     );
   }
 
-  Widget onBuildResultOrSuggestion(String query) {
-    _contactListBloc.add(SearchContacts(query: query));
-    return buildList();
-  }
-
-  void onSearchClose() {
-    requestValidContacts();
-  }
-
   void _actionImport() {
     _showImportDialog(false, context);
-  }
-
-  void _actionSearch() {
-    Search search = Search(
-      onBuildResults: onBuildResultOrSuggestion,
-      onBuildSuggestion: onBuildResultOrSuggestion,
-      onClose: onSearchClose,
-    );
-    search.show(context);
   }
 
   void _showImportDialog(bool initialImport, BuildContext context) {
@@ -306,7 +297,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
     return Future.value(false);
   }
 
-  _goolemailMailAddressAction(bool changeEmail) {
+  _googleMailMailAddressAction(bool changeEmail) {
     _contactImportBloc.add(ImportGooglemailContacts(changeEmails: changeEmail));
   }
 }

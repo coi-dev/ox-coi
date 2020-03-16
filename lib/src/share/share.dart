@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
@@ -57,6 +56,7 @@ import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class Share extends StatefulWidget {
@@ -88,8 +88,9 @@ class _ShareState extends State<Share> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AdaptiveAppBar(
-        title: widget.messageActionTag == MessageActionTag.forward ? Text(L10n.get(L.forward)) : Text(L10n.get(L.share)),
+      appBar: DynamicAppBar(
+        title: widget.messageActionTag == MessageActionTag.forward ? L10n.get(L.forward) : L10n.get(L.share),
+        leading: AppBarBackButton(context: context),
       ),
       body: _buildShareList(),
     );

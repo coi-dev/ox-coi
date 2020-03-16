@@ -57,6 +57,7 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
 class SettingsSecurity extends StatefulWidget {
@@ -151,8 +152,9 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     return WillPopScope(
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
-          appBar: AdaptiveAppBar(
-            title: Text(L10n.get(L.security)),
+          appBar: DynamicAppBar(
+            title: L10n.get(L.security),
+            leading: AppBarBackButton(context: context),
           ),
           body: _buildPreferenceList(context)),
     );
