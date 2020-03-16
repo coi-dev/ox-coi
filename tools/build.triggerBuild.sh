@@ -207,7 +207,7 @@ echo "Get plugin repository"
 if isLocalDcc; then
     echo "Building / updating core"
     (
-        cd ${PLUGIN_FOLDER} || error "Can't navigate into plugin directory" 4
+        cd ../${PLUGIN_FOLDER} || error "Can't navigate into plugin directory" 4
         buildCore
     )
 else
