@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -58,11 +58,11 @@ import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 class UserAccountSettings extends StatefulWidget {
   @override
@@ -92,7 +92,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
       _showedErrorDialog = false;
       _loginBloc.add(EditButtonPressed());
     } else if (state is UserChangeStateFailure) {
-      showToast(state.error);
+      state.error.showToast();
     }
   }
 
@@ -101,7 +101,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
       _progressOverlayEntry?.remove();
     }
     if (state is LoginStateSuccess) {
-      showToast(L10n.get(L.settingAccountChanged));
+      L10n.get(L.settingAccountChanged).showToast();
       _navigation.pop(context);
     } else if (state is LoginStateFailure) {
       if (!_showedErrorDialog) {
@@ -159,7 +159,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
             appBar: DynamicAppBar(
               title: L10n.get(L.settingAccount),
               leading: AppBarCloseButton(context: context),
-              trailingList: <Widget>[
+              trailingList: [
                 IconButton(
                   key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
                   icon: AdaptiveIcon(icon: IconSource.check),

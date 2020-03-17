@@ -45,10 +45,6 @@ import 'package:flutter/widgets.dart';
 const idSeparator = "_";
 const valueSeparator = "-";
 
-String createKeyString(int id, int lastUpdateValue) {
-  return "$id-$lastUpdateValue";
-}
-
 ValueKey createKeyFromId(int id, [List values]) {
   var valueString = values != null ? "$idSeparator${values.join(valueSeparator)}" : "";
   var keyString = "$id$valueString";

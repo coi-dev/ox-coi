@@ -47,9 +47,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
@@ -62,7 +61,6 @@ import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
-import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -74,18 +72,16 @@ import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/ui/strings.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/image.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/utils/vibration.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/button.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:path/path.dart' as Path;
@@ -264,7 +260,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       } else if (state.error == ChatComposerStateError.missingCameraPermission) {
         chatComposeFailed = L10n.get(L.chatVideoRecordingFailed);
       }
-      showToast(chatComposeFailed);
+      chatComposeFailed.showToast();
     }
   }
 
@@ -366,8 +362,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                               shape: getSuperEllipseShape(dimension32dp),
                               color: CustomTheme.of(context).surface,
                             ),
-                            child: AdaptiveIconButton(
-                              icon: AdaptiveSuperellipseIcon(
+                            child: IconButton(
+                              icon: SuperellipseIcon(
                                 icon: IconSource.send,
                                 iconSize: dimension20dp,
                                 color: CustomTheme.of(context).accent,
@@ -896,13 +892,6 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         );
       }
     }
-  }
-
-  void _onFlaggedPressed() {
-    _navigation.push(
-      context,
-      MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
-    );
   }
 
   void _callNumber(String phoneNumber) {

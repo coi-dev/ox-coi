@@ -41,9 +41,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 class ErrorBanner extends StatelessWidget {
@@ -83,7 +82,7 @@ class ErrorBanner extends StatelessWidget {
                 ),
               ),
             ),
-            AdaptiveIconButton(
+            IconButton(
                 icon: AdaptiveIcon(
                   icon: IconSource.clear,
                   size: dimension24dp,

@@ -47,7 +47,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
-import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/utils/core.dart';
 import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';

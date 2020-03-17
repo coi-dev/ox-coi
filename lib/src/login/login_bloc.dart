@@ -54,7 +54,6 @@ import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/core.dart';
-import 'package:ox_coi/src/utils/error.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'login_provider_list.dart';

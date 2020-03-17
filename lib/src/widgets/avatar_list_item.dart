@@ -41,11 +41,11 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
 import 'list_group_header.dart';
@@ -148,7 +148,7 @@ class AvatarListItem extends StatelessWidget {
                                     visible:
                                         timestamp != null && timestamp != 0,
                                     child: Text(
-                                      getChatListTime(timestamp),
+                                      timestamp.getChatListTime(),
                                       style: shouldHighlight()
                                           ? Theme.of(context)
                                               .textTheme

@@ -44,8 +44,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -56,8 +56,6 @@ import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/settings/settings_debug_bloc.dart';
 import 'package:ox_coi/src/settings/settings_debug_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/clipboard.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -119,7 +117,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   subtitle: Text(token),
                   onTap: () {
                     _logger.info(token);
-                    copyToClipboardWithToast(text: token, toastText: getDefaultCopyToastText(context));
+                    token.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context));
                   },
                 ),
                 ListTile(
@@ -128,7 +126,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   subtitle: Text(pushData),
                   onTap: () {
                     _logger.info(pushData);
-                    copyToClipboardWithToast(text: pushData, toastText: getDefaultCopyToastText(context));
+                    pushData.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context));
                   },
                 ),
                 ListTile(
@@ -137,7 +135,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   subtitle: Text(pushResource),
                   onTap: () {
                     _logger.info(pushResource);
-                    copyToClipboardWithToast(text: pushResource, toastText: getDefaultCopyToastText(context));
+                    pushResource.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context));
                   },
                 ),
                 ListTile(
@@ -161,7 +159,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
                     // TODO remove
                     onSubmitted: (text) async {
                       await setPreference(preferenceNotificationsPushServiceUrl, text);
-                      showToast("$text was set as push service URL");
+                      "$text was set as push service URL".showToast();
                       _settingsDebugBloc.add(RequestDebug());
                     },
                   ),

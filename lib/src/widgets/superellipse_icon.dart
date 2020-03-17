@@ -40,32 +40,34 @@
  * for more details.
  */
 
-// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
-// messages from the main program should be duplicated here with the same
-// function name.
+import 'package:flutter/material.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/image.dart';
 
-import 'package:intl/intl.dart';
-import 'package:intl/message_lookup_by_library.dart';
+class SuperellipseIcon extends StatelessWidget {
+  final IconSource icon;
+  final Color color;
+  final Color iconColor;
+  final double backgroundSize;
+  final double iconSize;
 
-// ignore: unnecessary_new
-final messages = new MessageLookup();
+  SuperellipseIcon({@required this.icon, @required this.color, @required this.iconColor, this.backgroundSize = dimension32dp, this.iconSize = dimension24dp});
 
-// ignore: unused_element
-final _keepAnalysisHappy = Intl.defaultLocale;
-
-// ignore: non_constant_identifier_names
-typedef MessageIfAbsent(String message_str, List args);
-
-class MessageLookup extends MessageLookupByLibrary {
-  get localeName => 'en';
-
-  final messages = _notInlinedMessages(_notInlinedMessages);
-
-  static _notInlinedMessages(_) => <String, Function>{
-        "chatTitle": MessageLookupByLibrary.simpleMessage("Chat"),
-        "contactsTitle": MessageLookupByLibrary.simpleMessage("Contacts"),
-        "mailTitle": MessageLookupByLibrary.simpleMessage("Mail"),
-        "profileTitle": MessageLookupByLibrary.simpleMessage("Profile")
-      };
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: backgroundSize,
+      width: backgroundSize,
+      decoration: ShapeDecoration(
+        shape: getSuperEllipseShape(backgroundSize),
+        color: color,
+      ),
+      child: AdaptiveIcon(
+        icon: icon,
+        size: iconSize,
+        color: iconColor,
+      ),
+    );
+  }
 }

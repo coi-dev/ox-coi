@@ -43,7 +43,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 

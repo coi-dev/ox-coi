@@ -44,7 +44,7 @@ import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_change_event_state.dart';
@@ -56,16 +56,16 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 enum ContactAction {
   add,
@@ -127,7 +127,7 @@ class _ContactChangeState extends State<ContactChange> {
   handleContactChanged(ContactChangeState state) async {
     if (state is ContactChangeStateSuccess) {
       if (!widget.createChat) {
-        showToast(changeToast);
+        changeToast.showToast();
         _navigation.pop(context);
       } else {
         if (state.id != null) {
@@ -143,7 +143,7 @@ class _ContactChangeState extends State<ContactChange> {
         }
       }
     } else if (state is ContactChangeStateFailure) {
-      showToast(L10n.get(L.contactAddFailedAlreadyExists));
+      L10n.get(L.contactAddFailedAlreadyExists).showToast();
     }
   }
 

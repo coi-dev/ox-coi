@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
 import 'package:ox_coi/src/contact/contact_item_selectable.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
@@ -56,7 +56,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
-import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -221,7 +221,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
       _chatChangeBloc.add(ChatAddParticipants(chatId: widget.chatId, contactIds: _contactListBloc.contactsSelected));
       navigation.pop(context);
     } else {
-      showToast(L10n.get(L.groupAddNoParticipants));
+      L10n.get(L.groupAddNoParticipants).showToast();
     }
   }
 }

@@ -45,7 +45,12 @@
 
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 
 extension Extract on String {
   static final RegExp matchInvertedNumericAndPlus = RegExp(r'[^0-9+]');
@@ -81,8 +86,11 @@ extension Extract on String {
 
 extension Check on String {
   static final Pattern _matchProtocol = "://";
-  static final RegExp _matchContainsEmail = RegExp(r'(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))');
-  static final RegExp _matchEmail = RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+  static final RegExp _matchContainsEmail = RegExp(
+      r'(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))');
+  static final RegExp _matchEmail = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
   bool isNullOrEmpty() => this == null || this.isEmpty;
 
   bool isEmail() {
@@ -111,7 +119,6 @@ extension Check on String {
 }
 
 extension Markdown on String {
-
   String markdown() {
     final _emailAddresses = emailAddresses();
     String markdown = this;
@@ -129,11 +136,7 @@ extension Markdown on String {
   }
 
   String stripMarkdown() {
-    return
-      this._stripMarkdownLinks()
-          ._stripStrongDelimiter()
-          ._stripUnderscoreDelimiter()
-          ._stripStrikeThroughDelimiter();
+    return this._stripMarkdownLinks()._stripStrongDelimiter()._stripUnderscoreDelimiter()._stripStrikeThroughDelimiter();
   }
 
   String _stripMarkdownLinks() {
@@ -155,5 +158,30 @@ extension Markdown on String {
     final match = RegExp(r'\~{1,2}([0-9a-zA-Z\w\.,;:-_"\!\?][^\~]+)\~{1,2}');
     return this?.replaceAllMapped(match, (Match m) => '${m[1]}');
   }
+}
 
+extension UserVisibleActions on String {
+  void copyToClipboard() {
+    if (this != null) {
+      var clipboardData = ClipboardData(text: this);
+      Clipboard.setData(clipboardData);
+    }
+  }
+
+  void copyToClipboardWithToast({@required String toastText}) {
+    copyToClipboard();
+    toastText.showToast();
+  }
+
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: this,
+      toastLength: Toast.LENGTH_LONG,
+      timeInSecForIos: 4,
+    );
+  }
+}
+
+String getDefaultCopyToastText(BuildContext context) {
+  return context != null ? L10n.get(L.clipboardCopied) : "";
 }

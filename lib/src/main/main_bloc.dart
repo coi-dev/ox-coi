@@ -58,13 +58,13 @@ import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/error/error_event_state.dart';
+import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/notifications/local_notification_manager.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/push/push_manager.dart';
-import 'package:ox_coi/src/ui/strings.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {

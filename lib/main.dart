@@ -59,7 +59,7 @@ import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 void main() {

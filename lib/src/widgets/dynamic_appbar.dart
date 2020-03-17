@@ -45,13 +45,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text_field_handling.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +71,7 @@ class DynamicAppBar extends StatefulWidget implements PreferredSizeWidget {
   final List<Widget> trailingList;
 
   const DynamicAppBar({Key key, this.title, this.titleWidget, this.leading, this.trailingList})
-      : assert(title != null || titleWidget != null),
+      : assert(title == null || titleWidget == null),
         super(key: key);
 
   @override
@@ -179,7 +179,7 @@ class _AppBarTitle extends StatelessWidget {
     return Padding(
       padding: titlePadding,
       child: Text(
-        text,
+        text ?? "",
         style: titleStyle,
         textAlign: titleAlignment,
       ),

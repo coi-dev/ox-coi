@@ -48,7 +48,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
-import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -154,7 +154,7 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     });
 
     _recorderSubscription = _flutterSound.onRecorderStateChanged.listen((e) {
-      String timer = getTimerFromTimestamp(e.currentPosition.toInt());
+      String timer = e.currentPosition.toInt().getTimerFromTimestamp();
       add(UpdateAudioRecording(timer: timer));
     });
   }

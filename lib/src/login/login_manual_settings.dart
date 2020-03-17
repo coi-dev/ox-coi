@@ -42,7 +42,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -52,9 +51,9 @@ import 'package:ox_coi/src/platform/system_interaction.dart';
 import 'package:ox_coi/src/settings/settings_manual_form.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
@@ -146,7 +145,6 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
           onWillPop: () async => _navigation.allowBackNavigation,
           child: Scaffold(
             appBar: DynamicAppBar(
-              title: L10n.get(L.settingManual),
               leading: AppBarBackButton(context: context),
               trailingList: [LoginButton()],
             ),

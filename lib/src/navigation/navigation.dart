@@ -45,7 +45,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/main.dart';
-import 'package:ox_coi/src/antiMobbing/anti_mobbing_list.dart';
+import 'package:ox_coi/src/anti_mobbing/anti_mobbing_list.dart';
 import 'package:ox_coi/src/chat/chat_create.dart';
 import 'package:ox_coi/src/contact/contact_blocked_list.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';

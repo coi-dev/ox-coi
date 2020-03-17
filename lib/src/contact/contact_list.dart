@@ -46,8 +46,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_import_bloc.dart';
 import 'package:ox_coi/src/contact/contact_import_event_state.dart';
@@ -60,17 +60,17 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:provider/provider.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 _showAddContactView(BuildContext context, Navigation navigation) {
   navigation.pushNamed(context, Navigation.contactsAdd);
@@ -111,7 +111,7 @@ class ContactList extends RootChild {
       trailingList: [
         IconButton(
           key: Key(keyContactListImportButton),
-          icon: AdaptiveSuperellipseIcon(
+          icon: SuperellipseIcon(
             icon: IconSource.importContacts,
             iconColor: CustomTheme.of(context).accent,
             color: CustomTheme.of(context).onSurface.barely(),
@@ -121,7 +121,7 @@ class ContactList extends RootChild {
         if (Platform.isIOS)
           IconButton(
             key: Key(keyContactListAddContactButton),
-            icon: AdaptiveSuperellipseIcon(
+            icon: SuperellipseIcon(
               icon: IconSource.personAdd,
               iconColor: CustomTheme.of(context).onAccent,
               color: CustomTheme.of(context).accent,
@@ -187,10 +187,10 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
     if (state is ContactsImportSuccess) {
       requestValidContacts();
       String contactImportSuccess = L10n.get(L.contactImportSuccessful);
-      showToast(contactImportSuccess);
+      contactImportSuccess.showToast();
     } else if (state is ContactsImportFailure) {
       String contactImportFailure = L10n.get(L.contactImportFailed);
-      showToast(contactImportFailure);
+      contactImportFailure.showToast();
     } else if (state is GooglemailContactsDetected) {
       showConfirmationDialog(
         context: context,

@@ -43,7 +43,7 @@
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
@@ -56,8 +56,8 @@ import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
@@ -68,12 +68,12 @@ class ChatProfileOneToOne extends StatefulWidget {
   final int contactId;
   final bool isSelfTalk;
 
-  ChatProfileOneToOne(
-      {@required this.chatId,
-      @required this.isSelfTalk,
-      @required this.contactId,
-      key})
-      : super(key: Key(key));
+  ChatProfileOneToOne({
+    Key key,
+    @required this.chatId,
+    @required this.isSelfTalk,
+    @required this.contactId,
+  }) : super(key: key);
 
   @override
   _ChatProfileOneToOneState createState() => _ChatProfileOneToOneState();
@@ -92,8 +92,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     } else {
       typeOrChatId = validContacts;
     }
-    _contactItemBloc.add(RequestContact(
-        contactId: widget.contactId, typeOrChatId: typeOrChatId));
+    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: typeOrChatId));
   }
 
   bool isInvite() => widget.chatId == Chat.typeInvite;
@@ -127,19 +126,16 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             secondaryText: email,
             avatarPath: imagePath,
             placeholderText: L10n.get(L.profileNoUsername),
-            imageBackgroundColor:
-                CustomTheme.of(context).onBackground.barely(),
+            imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
             withPlaceholder: true,
-            editActionCallback: () =>
-                _editContact(context, chatName, email, phoneNumbers),
+            editActionCallback: () => _editContact(context, chatName, email, phoneNumbers),
             child: ProfileHeader(),
           ),
           SettingsItem(
             icon: IconSource.flag,
             text: L10n.get(L.settingItemFlaggedTitle),
             iconBackground: CustomTheme.of(context).flagIcon,
-            onTap: () =>
-                _settingsItemTapped(context, SettingsItemName.flagged),
+            onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
           ),
           SettingsItem(
             icon: IconSource.block,
@@ -164,8 +160,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               icon: IconSource.notifications,
               text: L10n.get(L.settingItemNotificationsTitle),
               iconBackground: CustomTheme.of(context).notificationIcon,
-              onTap: () =>
-                  _settingsItemTapped(context, SettingsItemName.notification),
+              onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
             ),
           if (!isInvite())
             ListGroupHeader(
@@ -205,8 +200,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     // Ignoring false positive https://github.com/felangel/bloc/issues/587
     // ignore: close_sinks
     ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc
-        .add(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
+    contactChangeBloc.add(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
     _navigation.popUntilRoot(context);
   }
 
@@ -218,8 +212,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
     _navigation.popUntilRoot(context);
   }
 
-  void _editContact(BuildContext context, String name, String email,
-      String phoneNumbers) async {
+  void _editContact(BuildContext context, String name, String email, String phoneNumbers) async {
     return await _navigation
         .push(
       context,
@@ -234,8 +227,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
       ),
     )
         .then((value) {
-      _contactItemBloc.add(RequestContact(
-          contactId: widget.contactId, typeOrChatId: validContacts));
+      _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
     });
   }
 }

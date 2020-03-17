@@ -41,14 +41,14 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_dialog_action.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog_action.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
-import 'keyMapping.dart';
+import '../utils/keyMapping.dart';
 
 showNavigatableDialog({@required BuildContext context,
   @required Widget dialog,

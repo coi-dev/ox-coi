@@ -44,13 +44,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/audio_visualizer.dart';
@@ -68,11 +67,11 @@ mixin ChatComposer {
     @required Function onAudioRecordingAbort,
     @required BuildContext context,
   }) {
-    AdaptiveSuperellipseIcon icon;
+    SuperellipseIcon icon;
     Function onPressed;
     switch (type) {
       case ComposerModeType.compose:
-        icon = AdaptiveSuperellipseIcon(
+        icon = SuperellipseIcon(
           icon: IconSource.add,
           color: CustomTheme.of(context).onSurface.barely(),
           iconColor: CustomTheme.of(context).accent,
@@ -80,7 +79,7 @@ mixin ChatComposer {
         onPressed = onShowAttachmentChooser;
         break;
       case ComposerModeType.isComposing:
-        icon = AdaptiveSuperellipseIcon(
+        icon = SuperellipseIcon(
           icon: IconSource.add,
           color: CustomTheme.of(context).onSurface.barely(),
           iconColor: CustomTheme.of(context).accent.disabled(),
@@ -88,7 +87,7 @@ mixin ChatComposer {
         onPressed = null;
         break;
       case ComposerModeType.isVoiceRecording:
-        icon = AdaptiveSuperellipseIcon(
+        icon = SuperellipseIcon(
           icon: IconSource.delete,
           color: CustomTheme.of(context).onSurface.barely(),
           iconColor: CustomTheme.of(context).error,
@@ -96,7 +95,7 @@ mixin ChatComposer {
         onPressed = onAudioRecordingAbort;
         break;
     }
-    return AdaptiveIconButton(
+    return IconButton(
       icon: icon,
       onPressed: onPressed,
     );
@@ -146,7 +145,6 @@ mixin ChatComposer {
           isDense: true,
           contentPadding: EdgeInsets.all(12.0),
           hintText: L10n.get(L.type),
-
           border: OutlineInputBorder(
             borderSide: BorderSide(color: CustomTheme.of(context).onSurface.barely()),
             borderRadius: BorderRadius.all(Radius.circular(dimension24dp)),
@@ -187,16 +185,16 @@ mixin ChatComposer {
         visible: type == ComposerModeType.compose,
         child: Row(
           children: <Widget>[
-            AdaptiveIconButton(
-              icon: AdaptiveSuperellipseIcon(
+            IconButton(
+              icon: SuperellipseIcon(
                 icon: IconSource.camera,
                 color: CustomTheme.of(context).onSurface.barely(),
                 iconColor: CustomTheme.of(context).accent,
               ),
               onPressed: onCaptureImagePressed,
             ),
-            AdaptiveIconButton(
-              icon: AdaptiveSuperellipseIcon(
+            IconButton(
+              icon: SuperellipseIcon(
                 icon: IconSource.video,
                 color: CustomTheme.of(context).onSurface.barely(),
                 iconColor: CustomTheme.of(context).accent,
@@ -243,17 +241,15 @@ mixin ChatComposer {
         onTapDown: onMicTapDown,
         child: Container(
           decoration: BoxDecoration(
-            color: isLocked || isStopped || type == ComposerModeType.compose
-                ? Colors.transparent
-                : CustomTheme.of(context).onSurface.barely(),
+            color: isLocked || isStopped || type == ComposerModeType.compose ? Colors.transparent : CustomTheme.of(context).onSurface.barely(),
             borderRadius: BorderRadius.all(Radius.circular(voiceRecordingStopLockBackgroundRadius)),
           ),
           child: Row(
             children: <Widget>[
               Visibility(
                 visible: type == ComposerModeType.isVoiceRecording && !isStopped,
-                child: AdaptiveIconButton(
-                  icon: AdaptiveSuperellipseIcon(
+                child: IconButton(
+                  icon: SuperellipseIcon(
                     icon: isLocked ? IconSource.lock : IconSource.openLock,
                     color: Colors.transparent,
                     iconColor: CustomTheme.of(context).accent,
@@ -264,18 +260,19 @@ mixin ChatComposer {
               ),
               Visibility(
                 visible: type == ComposerModeType.compose,
-                child: AdaptiveIconButton(
-                  icon: AdaptiveSuperellipseIcon(
+                child: IconButton(
+                  icon: SuperellipseIcon(
                     icon: IconSource.mic,
                     color: CustomTheme.of(context).onSurface.barely(),
                     iconColor: CustomTheme.of(context).accent,
                   ),
+                  onPressed: () {},
                 ),
               ),
               Visibility(
                 visible: type == ComposerModeType.isVoiceRecording && !isStopped,
-                child: AdaptiveIconButton(
-                  icon: AdaptiveSuperellipseIcon(
+                child: IconButton(
+                  icon: SuperellipseIcon(
                     icon: IconSource.stopPlay,
                     color: CustomTheme.of(context).accent,
                     iconColor: CustomTheme.of(context).white,
@@ -291,8 +288,8 @@ mixin ChatComposer {
                       children: <Widget>[
                         Visibility(
                           visible: !isPlaying,
-                          child: AdaptiveIconButton(
-                            icon: AdaptiveSuperellipseIcon(
+                          child: IconButton(
+                            icon: SuperellipseIcon(
                               icon: IconSource.play,
                               color: CustomTheme.of(context).accent,
                               iconColor: CustomTheme.of(context).white,
@@ -302,8 +299,8 @@ mixin ChatComposer {
                         ),
                         Visibility(
                           visible: isPlaying,
-                          child: AdaptiveIconButton(
-                            icon: AdaptiveSuperellipseIcon(
+                          child: IconButton(
+                            icon: SuperellipseIcon(
                               icon: IconSource.stopPlay,
                               color: CustomTheme.of(context).accent,
                               iconColor: CustomTheme.of(context).white,
@@ -319,8 +316,8 @@ mixin ChatComposer {
         ),
       ));
     } else {
-      widgets.add(AdaptiveIconButton(
-        icon: AdaptiveSuperellipseIcon(
+      widgets.add(IconButton(
+        icon: SuperellipseIcon(
           icon: IconSource.send,
           color: CustomTheme.of(context).accent,
           iconColor: CustomTheme.of(context).white,

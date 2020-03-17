@@ -42,7 +42,7 @@
 
 import 'package:date_format/date_format.dart';
 import 'package:mockito/mockito.dart';
-import 'package:ox_coi/src/utils/date.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:test/test.dart';
 
 const date20190520_120000 = 1558346400000;
@@ -58,13 +58,13 @@ void main() {
     String hour = formatDate(nowDateTime, [HH]);
     String minute = formatDate(nowDateTime, [nn]);
 
-    var timeFormTimestamp = getTimeFormTimestamp(nowTimestamp);
+    var timeFormTimestamp = nowTimestamp.getTimeFormTimestamp();
 
     expect(timeFormTimestamp, "$hour:$minute");
   });
 
   test('Get date from timestamp', () {
-    var dateFormTimestamp = getDateFromTimestamp(date20190520_120000, false);
+    var dateFormTimestamp = date20190520_120000.getDateFromTimestamp(false);
 
     expect(dateFormTimestamp, "20.05");
   });
@@ -74,7 +74,7 @@ void main() {
     String todayDate = formatDate(nowDateTime, [dd, '.', mm]);
     var todayTimestamp = nowDateTime.millisecondsSinceEpoch;
 
-    var dateFormTimestamp = getDateFromTimestamp(todayTimestamp, false, true);
+    var dateFormTimestamp = todayTimestamp.getDateFromTimestamp(false, true);
 
     expect(dateFormTimestamp, "$today - $todayDate");
   });
@@ -84,26 +84,26 @@ void main() {
     String yesterdayDate = formatDate(yesterdayDateTime, [dd, '.', mm]);
     var yesterdayTimestamp = yesterdayDateTime.millisecondsSinceEpoch;
 
-    var dateFormTimestamp = getDateFromTimestamp(yesterdayTimestamp, false, true);
+    var dateFormTimestamp = yesterdayTimestamp.getDateFromTimestamp(false, true);
 
     expect(dateFormTimestamp, "$yesterday - $yesterdayDate");
   });
 
   test('Get long date from timestamp', () {
-    var dateFormTimestamp = getDateFromTimestamp(date20190520_120000, true);
+    var dateFormTimestamp = date20190520_120000.getDateFromTimestamp(true);
 
     expect(dateFormTimestamp, "20. May");
   });
 
   test('Should get timer from timestamp', () {
-    var timerFormTimestamp = getTimerFromTimestamp(date20190520_120000);
+    var timerFormTimestamp = date20190520_120000.getTimerFromTimestamp();
 
-    expect(timerFormTimestamp, "00:00:000");
+    expect(timerFormTimestamp, "00:00");
   });
 
   test('Get chat list date from timestamp', () {
 
-    var dateFormTimestamp = getChatListTime(date20190520_120000);
+    var dateFormTimestamp = date20190520_120000.getChatListTime();
 
     expect(dateFormTimestamp, "20.05");
   });
@@ -114,7 +114,7 @@ void main() {
     String hour = formatDate(nowDateTime, [HH]);
     String minute = formatDate(nowDateTime, [nn]);
 
-    var dateFormTimestamp = getChatListTime(nowTimestamp);
+    var dateFormTimestamp = nowTimestamp.getChatListTime();
 
     expect(dateFormTimestamp, "$hour:$minute");
   });
@@ -122,7 +122,7 @@ void main() {
   test('Get chat list date for yesterday from timestamp', () {
     var yesterdayTimestamp = DateTime.now().subtract(Duration(days: 1)).millisecondsSinceEpoch;
 
-    var dateFormTimestamp = getChatListTime(yesterdayTimestamp);
+    var dateFormTimestamp = yesterdayTimestamp.getChatListTime();
 
     expect(dateFormTimestamp, yesterday);
   });

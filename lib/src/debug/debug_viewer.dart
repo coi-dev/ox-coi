@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/debug/debug_viewer_bloc.dart';
 import 'package:ox_coi/src/debug/debug_viewer_event_state.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
@@ -52,7 +52,6 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -126,6 +125,6 @@ class _DebugViewerState extends State<DebugViewer> {
   }
 
   _onCopy() {
-    copyToClipboardWithToast(text: _debugViewerBloc.data, toastText: getDefaultCopyToastText(context));
+    _debugViewerBloc.data.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context));
   }
 }

@@ -50,7 +50,6 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
@@ -82,7 +81,7 @@ class _ScanQrState extends State<ScanQr> {
             Navigatable(Type.rootChildren),
           );
         } else {
-          showToast(L10n.get(L.errorProgressCanceled));
+          L10n.get(L.errorProgressCanceled).showToast();
         }
         _progressOverlayEntry?.remove();
       } else if (state is QrStateFailure) {
@@ -90,7 +89,7 @@ class _ScanQrState extends State<ScanQr> {
 
         var error = state.error;
         if (!error.isNullOrEmpty()) {
-          showToast(error);
+          error.showToast();
           Future.delayed(const Duration(milliseconds: 2000), () {
             requestQrCamera();
           });

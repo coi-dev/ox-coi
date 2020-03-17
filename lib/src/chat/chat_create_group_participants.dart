@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_group_settings.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
 import 'package:ox_coi/src/contact/contact_item_selectable.dart';
@@ -57,9 +57,9 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
   @override
@@ -72,7 +72,6 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   final _scrollController = ScrollController();
 
   DynamicSearchBar _searchBar;
-  var _isSearching = false;
 
   @override
   void initState() {
@@ -83,7 +82,6 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
       scrollable: false,
       content: DynamicSearchBarContent(
         onSearch: (text) => _contactListBloc.add(SearchContacts(query: text)),
-        isSearchingCallback: (bool isSearching) => setState(() => _isSearching = isSearching),
       ),
     );
   }
@@ -219,7 +217,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
         MaterialPageRoute(builder: (context) => ChatCreateGroupSettings(selectedContacts: _contactListBloc.contactsSelected)),
       );
     } else {
-      showToast(L10n.get(L.groupAddNoParticipants));
+      L10n.get(L.groupAddNoParticipants).showToast();
     }
   }
 }

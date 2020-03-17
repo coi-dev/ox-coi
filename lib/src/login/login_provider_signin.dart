@@ -49,9 +49,9 @@ import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/button.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
@@ -73,12 +73,14 @@ class ProviderSignIn extends StatefulWidget {
 
 class _ProviderSignInState extends State<ProviderSignIn> {
   static const providerOther = 'other';
+
   final _simpleLoginKey = GlobalKey<FormState>();
 
   OverlayEntry _progressOverlayEntry;
   LoginBloc _loginBloc;
   OverlayEntry _overlayEntry;
   var _navigation = Navigation();
+  bool isOtherProvider;
 
   ValidatableTextFormField emailField = ValidatableTextFormField(
     (context) => L10n.get(L.emailAddress),
@@ -106,6 +108,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     _navigation.current = Navigatable(Type.loginProviderSignIn);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.listen((state) => handleLoginStateChange(state));
+    isOtherProvider = widget.provider.id == providerOther;
   }
 
   void handleLoginStateChange(LoginState state) {
@@ -118,7 +121,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     if (state is LoginStateSuccess) {
       widget.success();
     } else if (state is LoginStateFailure) {
-      if (widget.provider.id != providerOther) {
+      if (!isOtherProvider) {
         setState(() {
           this._overlayEntry = this._createErrorOverlayEntry();
           Overlay.of(context).insert(this._overlayEntry);
@@ -145,7 +148,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
           appBar: DynamicAppBar(
-            title: widget.provider.name,
+            title: isOtherProvider ? L10n.get(L.providerOtherMailProvider) : widget.provider.name,
             leading: AppBarBackButton(context: context),
           ),
           body: createProviderSignIn()),
@@ -154,7 +157,8 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   Widget createProviderSignIn() {
     return SingleChildScrollView(
-        padding: const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+        padding:
+            const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -165,7 +169,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
             ),
             Padding(padding: const EdgeInsets.all(loginVerticalListPadding)),
             Text(
-              L10n.getFormatted(L.providerSignInTextX, [widget.provider.name]),
+              isOtherProvider ? L10n.get(L.loginSignIn) : L10n.getFormatted(L.providerSignInTextX, [widget.provider.name]),
               style: Theme.of(context).textTheme.headline,
             ),
             Padding(padding: const EdgeInsets.all(loginVerticalListPadding)),
@@ -184,7 +188,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
               onPressed: _signIn,
             ),
             Visibility(
-              visible: widget.provider.id == providerOther,
+              visible: isOtherProvider,
               child: Padding(
                 padding: const EdgeInsets.all(loginVerticalListPadding),
                 child: ButtonImportanceLow(

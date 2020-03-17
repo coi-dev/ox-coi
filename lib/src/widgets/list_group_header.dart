@@ -41,7 +41,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 class ListGroupHeader extends StatelessWidget {

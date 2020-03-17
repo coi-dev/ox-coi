@@ -48,12 +48,12 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr_bloc.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_event_state.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 class ShowQr extends StatefulWidget {
   final int _chatId;
@@ -120,13 +120,13 @@ class _ShowQrState extends State<ShowQr> {
           }
           return buildQrCode(_qrText);
         } else if (state is QrStateLoading) {
-          showToast(L10n.get(L.contactVerificationRunning));
+          L10n.get(L.contactVerificationRunning).showToast();
           return buildQrCode(_qrText);
         } else if (state is QrStateVerificationFinished) {
-          showToast(L10n.get(L.contactVerificationFinished));
+          L10n.get(L.contactVerificationFinished).showToast();
           return buildQrCode(_qrText);
         } else if (state is QrStateFailure) {
-          showToast(state.error);
+          state.error.showToast();
           return buildQrCode(_qrText);
         } else {
           return Container();

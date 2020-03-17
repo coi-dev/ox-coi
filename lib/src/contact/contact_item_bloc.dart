@@ -53,7 +53,7 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/ui/color.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
 
 class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);

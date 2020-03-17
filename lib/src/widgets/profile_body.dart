@@ -41,12 +41,12 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 
 
 class ProfileActionList extends StatelessWidget {

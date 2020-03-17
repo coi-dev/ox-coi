@@ -54,8 +54,7 @@ import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
-import 'package:ox_coi/src/utils/date.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 
 import 'chat_list.dart' as ChatListWidget;
 

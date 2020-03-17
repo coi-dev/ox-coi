@@ -40,12 +40,33 @@
  * for more details.
  */
 
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 
-showToast(String message) {
-  Fluttertoast.showToast(
-    msg: message,
-    toastLength: Toast.LENGTH_LONG,
-    timeInSecForIos: 4,
-  );
+extension Derive on Color {
+  static const fadeOpacity = 0.7;
+  static const halfOpacity = 0.5;
+  static const disabledOpacity = 0.3;
+  static const slightlyOpacity = 0.3;
+  static const barelyOpacity = 0.1;
+  static const transparentOpacity = 0.0;
+
+  Color fade() => this.withOpacity(fadeOpacity);
+
+  Color half() => this.withOpacity(halfOpacity);
+
+  Color disabled() => this.withOpacity(disabledOpacity);
+
+  Color slightly() => this.withOpacity(slightlyOpacity);
+
+  Color barely() => this.withOpacity(barelyOpacity);
+
+  Color transparent() => this.withOpacity(transparentOpacity);
 }
+
+Color colorFromArgb(int color, [int alpha]) => Color.fromARGB(alpha ?? 255, _red(color), _green(color), _blue(color));
+
+int _red(int color) => (color >> 16) & 0xFF;
+
+int _green(int color) => (color >> 8) & 0xFF;
+
+int _blue(int color) => color & 0xFF;

@@ -44,9 +44,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 
 enum SettingsItemName {
@@ -109,7 +109,7 @@ class SettingsItem extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: dimension20dp, vertical: settingsItemVerticalPadding),
           child: Row(
             children: [
-              AdaptiveSuperellipseIcon(
+              SuperellipseIcon(
                 color: iconBackground,
                 backgroundSize: backgroundSize,
                 iconSize: iconSize,

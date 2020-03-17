@@ -42,16 +42,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
@@ -111,7 +111,8 @@ class _ProviderListState extends State<ProviderList> {
 
   Widget createProviderList() {
     return Padding(
-        padding: const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+        padding:
+            const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -191,7 +192,7 @@ class _ProviderListState extends State<ProviderList> {
                           ),
                         ),
                         Text(
-                          "${provider.name}",
+                          provider.name,
                           style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onBackground),
                         ),
                       ],

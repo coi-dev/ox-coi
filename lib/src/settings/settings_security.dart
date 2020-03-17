@@ -44,7 +44,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_app_bar.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -54,9 +53,7 @@ import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/settings/settings_security_bloc.dart';
 import 'package:ox_coi/src/settings/settings_security_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/utils/clipboard.dart';
-import 'package:ox_coi/src/utils/dialog_builder.dart';
-import 'package:ox_coi/src/utils/toast.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
@@ -116,7 +113,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
                   child: new Text(L10n.get(L.settingCopyCode)),
                   onPressed: () {
                     var toastText = L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.code)]);
-                    copyToClipboardWithToast(text: state.setupCode, toastText: toastText);
+                    state.setupCode.copyToClipboardWithToast(toastText: toastText);
                     _navigation.pop(context);
                   },
                 ),
@@ -130,16 +127,16 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
             ),
           );
         } else {
-          showToast(L10n.get(L.settingKeyTransferSuccess));
+          L10n.get(L.settingKeyTransferSuccess).showToast();
         }
       }
       if (state is SettingsSecurityStateFailure) {
         if (state.error == null) {
-          showToast(L10n.get(L.settingKeyTransferFailed));
+          L10n.get(L.settingKeyTransferFailed).showToast();
         } else {
           switch (state.error) {
             case SettingsSecurityStateError.missingStoragePermission:
-              showToast(L10n.get(L.settingKeyTransferPermissionFailed));
+              L10n.get(L.settingKeyTransferPermissionFailed).showToast();
               break;
           }
         }

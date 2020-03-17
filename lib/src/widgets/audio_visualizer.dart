@@ -44,7 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/chat/chat_composer_bloc.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 

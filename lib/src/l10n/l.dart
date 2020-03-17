@@ -42,6 +42,16 @@
 
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/utils/constants.dart';
+
+import 'l10n.dart';
+
+// Non-translatable strings
+String get sslTls => "SSL/TLS";
+String get startTLS => "StartTLS";
+String get gif =>  "GIF";
+String get pdf => "PDF";
+String get defaultStatus => "${L10n.get(L.profileDefaultStatus)} - $projectUrl";
 
 class L {
   static final _logger = Logger("l");

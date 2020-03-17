@@ -42,7 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';

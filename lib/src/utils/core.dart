@@ -44,7 +44,6 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/ui/strings.dart';
 
 enum ProtocolType { imap, smtp }
 
@@ -96,4 +95,20 @@ int createServerFlagInteger(int imapOption, int smtpOption) {
   if (smtpOption == 2) serverFlags |= Context.serverFlagsSmtpStartTls;
   if (smtpOption == 3) serverFlags |= Context.serverFlagsSmtpPlain;
   return serverFlags;
+}
+
+int getErrorType(Event event) {
+  if (_isErrorEvent(event)) {
+    return event.data1;
+  }
+  return -1;
+}
+
+bool _isErrorEvent(Event event) => event?.eventId == Event.error || event?.eventId == Event.errorNoNetwork || event?.eventId == Event.errorNotInGroup;
+
+String getErrorMessage(Event event) {
+  if (_isErrorEvent(event)) {
+    return event.data2;
+  }
+  return "";
 }

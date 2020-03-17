@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
 import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
@@ -54,15 +54,15 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
-import 'package:ox_coi/src/utils/error.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/utils/toast.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 
 import 'contact_change.dart';
 import 'contact_change_event_state.dart';
@@ -92,18 +92,18 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   _handleContactChanged(BuildContext context, ContactChangeState state) {
     if (state is ContactChangeStateSuccess) {
       if (state.type == ContactChangeType.delete) {
-        showToast(_getDeleteMessage(context));
+        _getDeleteMessage(context).showToast();
       } else if (state.type == ContactChangeType.block) {
-        showToast(_getBlockMessage(context));
+        _getBlockMessage(context).showToast();
       }
       _navigation.popUntilRoot(context);
     } else if (state is ContactChangeStateFailure) {
       switch (state.error) {
         case contactDeleteGeneric:
-          showToast(L10n.get(L.contactDeleteFailed));
+          L10n.get(L.contactDeleteFailed).showToast();
           break;
         case contactDeleteChatExists:
-          showToast(L10n.get(L.contactDeleteWithActiveChatFailed));
+          L10n.get(L.contactDeleteWithActiveChatFailed).showToast();
           break;
       }
     }

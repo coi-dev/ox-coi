@@ -40,7 +40,7 @@
  * for more details.
  */
 
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 
 enum MessageActionTag { forward, copy, delete, flag, share, retry, info }
 

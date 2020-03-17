@@ -56,12 +56,22 @@ const extensionDbName = "extension.db";
 const defaultCoiPushServiceUrl = "https://push.coi.me/push/resource/";
 const defaultCoiInviteServiceUrl = "https://invite.coi.me/invite/";
 
-// Paths, filenames, extensions
+// Paths, filenames, extensions / URLs
 const appLogoPath = 'assets/images/app_logo.png';
 const thumbnailFileExtension = '.jpg';
+const customerConfigPath = "assets/customer/customer_config.json";
+const projectUrl = "https://coi.me";
+const issueUrl  = "https://github.com/open-xchange/ox-coi/issues";
+const featureRequestUrl = "https://openxchange.userecho.com/communities/4-ox-coi-messenger";
 
 // IMAP https://tools.ietf.org/html/rfc5530
 const imapErrorAuthenticationFailed = '[AUTHENTICATIONFAILED]';
 
+// Errors
+const contactAddGeneric = "contactDelete-generic";
+const contactDeleteGeneric = "contactDelete-generic";
+const contactDeleteChatExists = "contactDelete-chatExists";
+
+// Miscellaneous
 const googlemailDomain = '@googlemail';
 const gmailDomain = '@gmail';

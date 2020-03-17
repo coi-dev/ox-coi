@@ -45,18 +45,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon_button.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/color.dart';
-import 'package:ox_coi/src/ui/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
-import 'package:ox_coi/src/utils/clipboard.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
@@ -254,8 +252,8 @@ class ProfileHeaderEditButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: dimension16dp,
-      child: AdaptiveIconButton(
-        icon: AdaptiveSuperellipseIcon(
+      child: IconButton(
+        icon: SuperellipseIcon(
           color: CustomTheme.of(context).onBackground.barely(),
           icon: IconSource.edit,
           iconColor: CustomTheme.of(context).accent,
@@ -293,7 +291,7 @@ class ProfileHeaderSecondaryText extends StatelessWidget {
       style: getProfileHeaderSecondTextStyle(context),key: Key(keyProfileHeaderText),
     );
     return GestureDetector(
-      onTap: () => copyToClipboardWithToast(text: ProfileData.of(context).secondaryText, toastText: getDefaultCopyToastText(context)),
+      onTap: () =>  ProfileData.of(context).secondaryText.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context)),
       behavior: HitTestBehavior.opaque,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -336,7 +334,7 @@ class ProfileCopyableHeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        copyToClipboardWithToast(text: ProfileData.of(context).text, toastText: toastMessage);
+        ProfileData.of(context).text.copyToClipboardWithToast(toastText: toastMessage);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -42,7 +42,7 @@
 
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/adaptiveWidgets/adaptive_icon.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/contact/contact_details.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
