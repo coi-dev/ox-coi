@@ -45,6 +45,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
@@ -58,11 +59,10 @@ import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
-import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
 
 class UserAccountSettings extends StatefulWidget {
   @override
@@ -160,10 +160,14 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
               title: L10n.get(L.settingAccount),
               leading: AppBarCloseButton(context: context),
               trailingList: [
-                IconButton(
-                  key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
-                  icon: AdaptiveIcon(icon: IconSource.check),
-                  onPressed: () => _saveData(context),
+                Builder(
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      key: Key(keyUserAccountAdaptiveIconButtonIconCheck),
+                      icon: AdaptiveIcon(icon: IconSource.check),
+                      onPressed: () => _saveData(context),
+                    );
+                  },
                 ),
               ],
             ),
