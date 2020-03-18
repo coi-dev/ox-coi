@@ -223,7 +223,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> _openExtensionDatabase() async {
     final contactExtensionProvider = ContactExtensionProvider();
-    await contactExtensionProvider.open(core.dbPath);
+    await contactExtensionProvider.open(extensionDbName);
   }
 
   Future<bool> _checkForAuthenticationError() async {

@@ -90,17 +90,15 @@ class ContactExtensionProvider {
   static ContactExtensionProvider _instance;
 
   Database _db;
-  String _path;
 
-  String get path => _path;
+  String get path => _db.path;
 
   factory ContactExtensionProvider() => _instance ??= new ContactExtensionProvider._internal();
 
   ContactExtensionProvider._internal();
 
-  Future<void> open(String path) async {
-    _path = path;
-    _db = await openDatabase(_path);
+  Future<void> open(String name) async {
+    _db = await openDatabase(name);
   }
 
   Future createTable() async {
