@@ -216,7 +216,7 @@ class _RootState extends State<Root> {
           backgroundColor: CustomTheme.of(context).surface,
           unselectedIconTheme: IconThemeData(color: CustomTheme.of(context).onSurface.fade()),
           unselectedItemColor: CustomTheme.of(context).onSurface.fade(),
-          onTap: _onItemTapped,
+          onTap: setIndex,
         ),
         floatingActionButton: child.getFloatingActionButton(context),
       ),
@@ -228,16 +228,14 @@ class _RootState extends State<Root> {
       return Future.value(false);
     }
     if (_selectedIndex != 0) {
-      setState(() {
-        _selectedIndex = 0;
-      });
+      setIndex(0);
       return Future.value(false);
     } else {
       return Future.value(true);
     }
   }
 
-  _onItemTapped(int index) {
+  void setIndex(int index) {
     resetGlobalFocus(context);
     setState(() {
       _selectedIndex = index;
