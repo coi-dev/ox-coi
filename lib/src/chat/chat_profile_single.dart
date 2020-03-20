@@ -139,7 +139,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
           ),
           SettingsItem(
             icon: IconSource.block,
-            text: L10n.get(L.settingItemBlockedTitle),
+            text: L10n.get(L.contactBlock),
             iconBackground: CustomTheme.of(context).blockIcon,
             onTap: () => showActionDialog(
               context,
