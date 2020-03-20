@@ -43,12 +43,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 enum SettingsType {

@@ -43,66 +43,34 @@
  *
  */
 
-import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
 
-extension Extract on String {
-  static final RegExp matchInvertedNumericAndPlus = RegExp(r'[^0-9+]');
-  static final RegExp matchWhiteSpace = RegExp(r'\s');
-
-  String getFirstCharacter() {
-    return this.isNotEmpty ? this[0] : null;
-  }
-
-  String getPhoneNumberFromString() {
-    String phoneNumberWithoutOptionals = this.replaceFirst("(0)", '');
-    return phoneNumberWithoutOptionals.replaceAll(matchInvertedNumericAndPlus, '');
-  }
-
-  int getIndexAfterLastOf(Pattern pattern) {
-    return this.lastIndexOf(pattern) + 1;
-  }
-
-  String encodeBase64() {
-    if (this == null) {
-      return null;
+extension UserVisibleActions on String {
+  void copyToClipboard() {
+    if (this != null) {
+      var clipboardData = ClipboardData(text: this);
+      Clipboard.setData(clipboardData);
     }
-    final bytes = utf8.encode(this);
-    final base64 = base64Url.encode(bytes);
-
-    return base64;
   }
 
-  List<String> textSplit() {
-    return this.split(matchWhiteSpace);
+  void copyToClipboardWithToast({@required String toastText}) {
+    copyToClipboard();
+    toastText.showToast();
+  }
+
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: this,
+      toastLength: Toast.LENGTH_LONG,
+      timeInSecForIos: 4,
+    );
   }
 }
 
-extension Check on String {
-  static final Pattern _matchProtocol = "://";
-  static final RegExp _matchEmail = RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-
-  bool isNullOrEmpty() => this == null || this.isEmpty;
-
-  bool get isEmail {
-    return _matchEmail.hasMatch(this);
-  }
-
-  bool get isPort {
-    if (this.isEmpty) {
-      return true;
-    }
-    final int port = int.tryParse(this);
-    if (port == null || port < 1 || port >= 65535) {
-      return false;
-    }
-    return true;
-  }
-
-  bool get containsProtocol {
-    return this.contains(_matchProtocol);
-  }
-}
-
-extension StringConversion on String {
-  int get intValue => int.parse(this);
+String getDefaultCopyToastText(BuildContext context) {
+  return context != null ? L10n.get(L.clipboardCopied) : "";
 }

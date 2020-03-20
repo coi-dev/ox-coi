@@ -46,7 +46,7 @@ import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/extensions/string_markdown.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';

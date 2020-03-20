@@ -49,14 +49,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
+import 'package:ox_coi/src/extensions/string_markdown.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
-import 'package:ox_coi/src/extensions/color_apis.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -112,7 +112,7 @@ class MessageMaterial extends StatelessWidget {
 class MessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final markdown = _getText(context).markdown();
+    final markdown = _getText(context).markdownValue;
 
     return Padding(
       padding: getNamePaddingForGroups(context),

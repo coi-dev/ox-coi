@@ -45,9 +45,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 
 enum SettingsItemName {
   flagged,

@@ -44,7 +44,8 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
@@ -57,7 +58,6 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/dialog_builder.dart';
 

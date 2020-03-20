@@ -48,7 +48,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/widgets/superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chatlist/chat_list_bloc.dart';
 import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
@@ -64,11 +64,11 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:provider/provider.dart';
 
 enum ChatListItemType {

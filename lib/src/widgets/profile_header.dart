@@ -46,18 +46,19 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/widgets/superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/extensions/color_apis.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 
 class ProfileData extends InheritedWidget {
   final Color imageBackgroundColor;
@@ -232,8 +233,7 @@ class ProfileAvatar extends StatelessWidget {
             textPrimary: ProfileData.of(context).initialsText,
           ),
           Visibility(
-            visible: ProfileData.of(context).imageActionCallback != null &&
-                (ProfileData.of(context).avatarPath.isNullOrEmpty()),
+            visible: ProfileData.of(context).imageActionCallback != null && (ProfileData.of(context).avatarPath.isNullOrEmpty()),
             child: AdaptiveIcon(
               icon: IconSource.camera,
               color: ProfileData.of(context).showWhiteImageIcon ? CustomTheme.of(context).white : CustomTheme.of(context).accent,
@@ -257,7 +257,8 @@ class ProfileHeaderEditButton extends StatelessWidget {
           color: CustomTheme.of(context).onBackground.barely(),
           icon: IconSource.edit,
           iconColor: CustomTheme.of(context).accent,
-        ),key: Key(keyProfileHeaderAdaptiveIconButton),
+        ),
+        key: Key(keyProfileHeaderAdaptiveIconButton),
         onPressed: () => ProfileData.of(context).editActionCallback(),
       ),
     );
@@ -288,10 +289,11 @@ class ProfileHeaderSecondaryText extends StatelessWidget {
       ProfileData.of(context).secondaryText,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-      style: getProfileHeaderSecondTextStyle(context),key: Key(keyProfileHeaderText),
+      style: getProfileHeaderSecondTextStyle(context),
+      key: Key(keyProfileHeaderText),
     );
     return GestureDetector(
-      onTap: () =>  ProfileData.of(context).secondaryText.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context)),
+      onTap: () => ProfileData.of(context).secondaryText.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context)),
       behavior: HitTestBehavior.opaque,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

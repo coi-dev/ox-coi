@@ -80,7 +80,7 @@ new line''';
     test('Should contain protocol', () {
       var text = multiLineString;
 
-      var result = text.containsProtocol();
+      var result = text.containsProtocol;
 
       expect(result, true);
     });
@@ -88,7 +88,7 @@ new line''';
     test('Should not contain protocol', () {
       var text = 'Should not contain protocol';
 
-      var result = text.containsProtocol();
+      var result = text.containsProtocol;
 
       expect(result, false);
     });

@@ -42,9 +42,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
 class Search extends SearchDelegate {

@@ -45,10 +45,10 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/log/log_bloc_delegate.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
-import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LogManager {

@@ -45,7 +45,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';

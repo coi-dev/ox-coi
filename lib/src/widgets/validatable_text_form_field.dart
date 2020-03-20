@@ -119,10 +119,10 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
         valid = value.isNotEmpty;
       } else if (widget.textFormType == TextFormType.email) {
         var trimmedEmail = value.trim();
-        valid = trimmedEmail.isEmail();
+        valid = trimmedEmail.isEmail;
         widget.controller.text = trimmedEmail;
       } else if (widget.textFormType == TextFormType.port) {
-        valid = value.isPort();
+        valid = value.isPort;
       }
     }
     if (!valid) {

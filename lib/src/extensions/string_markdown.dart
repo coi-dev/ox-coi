@@ -43,66 +43,52 @@
  *
  */
 
-import 'dart:convert';
+import 'package:html2md/html2md.dart' as html2md;
 
-extension Extract on String {
-  static final RegExp matchInvertedNumericAndPlus = RegExp(r'[^0-9+]');
-  static final RegExp matchWhiteSpace = RegExp(r'\s');
+extension Markdown on String {
+  String get markdownValue {
+    String markdown = this;
 
-  String getFirstCharacter() {
-    return this.isNotEmpty ? this[0] : null;
+    // NOTE: The MarkDownBody() escapes some characters with '\'. So, this
+    // replaces all matching '\' backslashes, except those who are from a '\n'.
+    final Pattern search = "\\";
+    markdown = html2md.convert(markdown).replaceAll(search, "");
+
+    // Replace all found email addresses by there Markdown counterpart
+    final emailAddressPatterm = RegExp(r'([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6})');
+    markdown = markdown.replaceAllMapped(emailAddressPatterm, (match) {
+      final email = match.group(0);
+      return "[$email](mailto:$email)";
+    });
+
+    return markdown;
   }
 
-  String getPhoneNumberFromString() {
-    String phoneNumberWithoutOptionals = this.replaceFirst("(0)", '');
-    return phoneNumberWithoutOptionals.replaceAll(matchInvertedNumericAndPlus, '');
+  String stripMarkdown() {
+    return this
+        ._stripMarkdownLinks()
+        ._stripStrongDelimiter()
+        ._stripUnderscoreDelimiter()
+        ._stripStrikeThroughDelimiter();
   }
 
-  int getIndexAfterLastOf(Pattern pattern) {
-    return this.lastIndexOf(pattern) + 1;
+  String _stripMarkdownLinks() {
+    final match = RegExp(r'\[(.+?)\]\(([^ ]+)( "(.+?)")??\)');
+    return this?.replaceAllMapped(match, (Match m) => '${m[1]}');
   }
 
-  String encodeBase64() {
-    if (this == null) {
-      return null;
-    }
-    final bytes = utf8.encode(this);
-    final base64 = base64Url.encode(bytes);
-
-    return base64;
+  String _stripStrongDelimiter() {
+    final match = RegExp(r'\*{1,2}([0-9a-zA-Z\w\.,;:-_"\!\?][^\*]+)\*{1,2}');
+    return this?.replaceAllMapped(match, (Match m) => '${m[1]}');
   }
 
-  List<String> textSplit() {
-    return this.split(matchWhiteSpace);
-  }
-}
-
-extension Check on String {
-  static final Pattern _matchProtocol = "://";
-  static final RegExp _matchEmail = RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-
-  bool isNullOrEmpty() => this == null || this.isEmpty;
-
-  bool get isEmail {
-    return _matchEmail.hasMatch(this);
+  String _stripUnderscoreDelimiter() {
+    final match = RegExp(r'\_{1,2}([0-9a-zA-Z\w\.,;:-_"\!\?][^\_]+)\_{1,2}');
+    return this?.replaceAllMapped(match, (Match m) => '${m[1]}');
   }
 
-  bool get isPort {
-    if (this.isEmpty) {
-      return true;
-    }
-    final int port = int.tryParse(this);
-    if (port == null || port < 1 || port >= 65535) {
-      return false;
-    }
-    return true;
+  String _stripStrikeThroughDelimiter() {
+    final match = RegExp(r'\~{1,2}([0-9a-zA-Z\w\.,;:-_"\!\?][^\~]+)\~{1,2}');
+    return this?.replaceAllMapped(match, (Match m) => '${m[1]}');
   }
-
-  bool get containsProtocol {
-    return this.contains(_matchProtocol);
-  }
-}
-
-extension StringConversion on String {
-  int get intValue => int.parse(this);
 }

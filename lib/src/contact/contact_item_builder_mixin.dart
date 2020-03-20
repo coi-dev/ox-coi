@@ -43,10 +43,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/contact/contact_item_bloc.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
-import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/contact/contact_item_bloc.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar_list_item.dart';
 

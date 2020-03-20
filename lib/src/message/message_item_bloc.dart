@@ -49,11 +49,11 @@ import 'package:flutter/foundation.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/extensions/color_apis.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
-import 'package:ox_coi/src/extensions/color_apis.dart';
-import 'package:ox_coi/src/extensions/numbers_apis.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);

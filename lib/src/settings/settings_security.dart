@@ -45,6 +45,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -200,7 +201,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     String title;
     String text;
     String path = await getExportImportPath();
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       path = path.substring(path.getIndexAfterLastOf('0'));
     }
     Type navigationType;

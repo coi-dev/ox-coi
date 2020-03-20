@@ -43,7 +43,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/widgets/superellipse_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -53,7 +53,6 @@ import 'package:ox_coi/src/login/password_changed_bloc.dart';
 import 'package:ox_coi/src/login/password_changed_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
@@ -61,6 +60,7 @@ import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
 import 'package:ox_coi/src/widgets/error_banner.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
+import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class PasswordChanged extends StatefulWidget {

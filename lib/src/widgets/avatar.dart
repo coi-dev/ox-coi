@@ -43,8 +43,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/image.dart';
 import 'package:transparent_image/transparent_image.dart';

@@ -50,11 +50,11 @@ import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
-import 'package:ox_coi/src/extensions/numbers_apis.dart';
 
 import 'chat_list.dart' as ChatListWidget;
 

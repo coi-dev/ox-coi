@@ -43,66 +43,15 @@
  *
  */
 
-import 'dart:convert';
+import 'dart:core';
 
-extension Extract on String {
-  static final RegExp matchInvertedNumericAndPlus = RegExp(r'[^0-9+]');
-  static final RegExp matchWhiteSpace = RegExp(r'\s');
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
-  String getFirstCharacter() {
-    return this.isNotEmpty ? this[0] : null;
-  }
-
-  String getPhoneNumberFromString() {
-    String phoneNumberWithoutOptionals = this.replaceFirst("(0)", '');
-    return phoneNumberWithoutOptionals.replaceAll(matchInvertedNumericAndPlus, '');
-  }
-
-  int getIndexAfterLastOf(Pattern pattern) {
-    return this.lastIndexOf(pattern) + 1;
-  }
-
-  String encodeBase64() {
-    if (this == null) {
-      return null;
+extension UrlLaunch on Uri {
+  Future<void> launch() async {
+    final urlString = this.toString();
+    if (await UrlLauncher.canLaunch(urlString)) {
+      await UrlLauncher.launch(urlString);
     }
-    final bytes = utf8.encode(this);
-    final base64 = base64Url.encode(bytes);
-
-    return base64;
   }
-
-  List<String> textSplit() {
-    return this.split(matchWhiteSpace);
-  }
-}
-
-extension Check on String {
-  static final Pattern _matchProtocol = "://";
-  static final RegExp _matchEmail = RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-
-  bool isNullOrEmpty() => this == null || this.isEmpty;
-
-  bool get isEmail {
-    return _matchEmail.hasMatch(this);
-  }
-
-  bool get isPort {
-    if (this.isEmpty) {
-      return true;
-    }
-    final int port = int.tryParse(this);
-    if (port == null || port < 1 || port >= 65535) {
-      return false;
-    }
-    return true;
-  }
-
-  bool get containsProtocol {
-    return this.contains(_matchProtocol);
-  }
-}
-
-extension StringConversion on String {
-  int get intValue => int.parse(this);
 }
