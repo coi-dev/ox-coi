@@ -422,7 +422,7 @@ class L {
 
   static final settingItemFlaggedTitle = _translationKey("Flagged messages");
   static final settingItemQRTitle = _translationKey("Show my QR code");
-  static final settingItemInviteTitle = _translationKey("Invite friend");
+  static final settingItemInviteTitle = _translationKey("Invite a friend");
   static final settingItemNotificationsTitle = _translationKey("Notifications");
   static final settingItemChatTitle = _translationKey("Chat");
   static final settingItemSignatureTitle = _translationKey("Email signature");
