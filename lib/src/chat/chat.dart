@@ -666,7 +666,9 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     final String text = _textController.text;
     _textController.clear();
     if (_filePath.isEmpty) {
-      _messageListBloc.add(SendMessage(text: text));
+      if (text.isNotEmpty) {
+        _messageListBloc.add(SendMessage(text: text));
+      }
     } else {
       int type = getType();
       if (type == ChatMsg.typeVoice) _onAudioRecordingAbort();
