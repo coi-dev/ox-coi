@@ -56,7 +56,7 @@ import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';
 import 'package:ox_coi/src/settings/settings_chat.dart';
 import 'package:ox_coi/src/settings/settings_debug.dart';
 import 'package:ox_coi/src/settings/settings_notifications.dart';
-import 'package:ox_coi/src/settings/settings_security.dart';
+import 'package:ox_coi/src/settings/settings_encryption.dart';
 import 'package:ox_coi/src/user/user_account_settings.dart';
 
 class Navigation {
@@ -66,7 +66,7 @@ class Navigation {
   static const String contactsAdd = '/contacts/add';
   static const String settings = '/settings';
   static const String settingsAccount = '/settings/account';
-  static const String settingsSecurity = '/settings/security';
+  static const String settingsEncryption = '/settings/encryption';
   static const String settingsAbout = '/settings/about';
   static const String settingsChat = '/settings/chat';
   static const String settingsAntiMobbing = '/settings/antiMobbing';
@@ -81,7 +81,7 @@ class Navigation {
     contactsAdd: (context) => ContactChange(contactAction: ContactAction.add),
     settings: (context) => Settings(),
     settingsAccount: (context) => UserAccountSettings(),
-    settingsSecurity: (context) => SettingsSecurity(),
+    settingsEncryption: (context) => SettingsEncryption(),
     settingsAbout: (context) => SettingsAbout(),
     settingsChat: (context) => SettingsChat(),
     settingsAntiMobbing: (context) => SettingsAntiMobbing(),

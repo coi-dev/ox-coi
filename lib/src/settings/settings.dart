@@ -53,7 +53,7 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 enum SettingsType {
   account,
-  security,
+  encryption,
   about,
   chat,
   antiMobbing,
@@ -118,8 +118,8 @@ class Settings extends StatelessWidget {
             icon: IconSource.security,
             color: CustomTheme.of(context).accent,
           ),
-          title: Text(L10n.get(L.security)),
-          onTap: () => _onPressed(context, SettingsType.security),
+          title: Text(L10n.get(L.settingItemEncryptionTitle)),
+          onTap: () => _onPressed(context, SettingsType.encryption),
         ),
         ListTile(
           leading: AdaptiveIcon(
@@ -147,8 +147,8 @@ class Settings extends StatelessWidget {
       case SettingsType.account:
         _navigation.pushNamed(context, Navigation.settingsAccount);
         break;
-      case SettingsType.security:
-        _navigation.pushNamed(context, Navigation.settingsSecurity);
+      case SettingsType.encryption:
+        _navigation.pushNamed(context, Navigation.settingsEncryption);
         break;
       case SettingsType.about:
         _navigation.pushNamed(context, Navigation.settingsAbout);

@@ -41,50 +41,50 @@
  */
 
 import 'package:meta/meta.dart';
-import 'package:ox_coi/src/settings/settings_security_bloc.dart';
+import 'package:ox_coi/src/settings/settings_encryption_bloc.dart';
 
-abstract class SettingsSecurityEvent {}
+abstract class SettingsEncryptionEvent {}
 
-class ExportKeys extends SettingsSecurityEvent {}
+class ExportKeys extends SettingsEncryptionEvent {}
 
-class ImportKeys extends SettingsSecurityEvent {}
+class ImportKeys extends SettingsEncryptionEvent {}
 
-class InitiateKeyTransfer extends SettingsSecurityEvent {}
+class InitiateKeyTransfer extends SettingsEncryptionEvent {}
 
-class ActionSuccess extends SettingsSecurityEvent {
+class ActionSuccess extends SettingsEncryptionEvent {
   String setupCode;
 
   ActionSuccess({this.setupCode});
 }
 
-class ActionFailed extends SettingsSecurityEvent {
-  final SettingsSecurityStateError error;
+class ActionFailed extends SettingsEncryptionEvent {
+  final SettingsEncryptionStateError error;
 
   ActionFailed({@required this.error});
 }
 
-enum SettingsSecurityStateError {
+enum SettingsEncryptionStateError {
   missingStoragePermission,
 }
 
-abstract class SettingsSecurityState {}
+abstract class SettingsEncryptionState {}
 
-class SettingsSecurityStateInitial extends SettingsSecurityState {}
+class SettingsEncryptionStateInitial extends SettingsEncryptionState {}
 
-class SettingsSecurityStateLoading extends SettingsSecurityState {
-  final SettingsSecurityType type;
+class SettingsEncryptionStateLoading extends SettingsEncryptionState {
+  final SettingsEncryptionType type;
 
-  SettingsSecurityStateLoading({@required this.type});
+  SettingsEncryptionStateLoading({@required this.type});
 }
 
-class SettingsSecurityStateSuccess extends SettingsSecurityState {
+class SettingsEncryptionStateSuccess extends SettingsEncryptionState {
   String setupCode;
 
-  SettingsSecurityStateSuccess({this.setupCode});
+  SettingsEncryptionStateSuccess({this.setupCode});
 }
 
-class SettingsSecurityStateFailure extends SettingsSecurityState {
-  final SettingsSecurityStateError error;
+class SettingsEncryptionStateFailure extends SettingsEncryptionState {
+  final SettingsEncryptionStateError error;
 
-  SettingsSecurityStateFailure({@required this.error});
+  SettingsEncryptionStateFailure({@required this.error});
 }

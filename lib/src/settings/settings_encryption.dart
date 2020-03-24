@@ -51,57 +51,57 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/files.dart';
-import 'package:ox_coi/src/settings/settings_security_bloc.dart';
-import 'package:ox_coi/src/settings/settings_security_event_state.dart';
+import 'package:ox_coi/src/settings/settings_encryption_bloc.dart';
+import 'package:ox_coi/src/settings/settings_encryption_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
-class SettingsSecurity extends StatefulWidget {
+class SettingsEncryption extends StatefulWidget {
   @override
-  _SettingsSecurityState createState() => _SettingsSecurityState();
+  _SettingsEncryptionState createState() => _SettingsEncryptionState();
 }
 
-class _SettingsSecurityState extends State<SettingsSecurity> {
+class _SettingsEncryptionState extends State<SettingsEncryption> {
   final Navigation _navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
-  SettingsSecurityBloc _settingsSecurityBloc = SettingsSecurityBloc();
+  SettingsEncryptionBloc _settingsEncryptionBloc = SettingsEncryptionBloc();
 
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.settingsSecurity);
-    _settingsSecurityBloc.listen((state) => _settingsSecurityStateChange(state));
+    _settingsEncryptionBloc.listen((state) => _settingsEncryptionStateChange(state));
   }
 
   @override
   void dispose() {
-    _settingsSecurityBloc.close();
+    _settingsEncryptionBloc.close();
     super.dispose();
   }
 
-  void _settingsSecurityStateChange(SettingsSecurityState state) {
-    if (state is SettingsSecurityStateLoading) {
+  void _settingsEncryptionStateChange(SettingsEncryptionState state) {
+    if (state is SettingsEncryptionStateLoading) {
       String text;
-      if (state.type == SettingsSecurityType.importKeys) {
+      if (state.type == SettingsEncryptionType.importKeys) {
         text = L10n.get(L.settingKeyImportRunning);
-      } else if (state.type == SettingsSecurityType.exportKeys) {
+      } else if (state.type == SettingsEncryptionType.exportKeys) {
         text = L10n.get(L.settingKeyExportRunning);
-      } else if (state.type == SettingsSecurityType.initiateKeyTransfer) {
+      } else if (state.type == SettingsEncryptionType.initiateKeyTransfer) {
         text = L10n.get(L.settingKeyTransferRunning);
       }
       _progressOverlayEntry = FullscreenOverlay(
         fullscreenProgress: FullscreenProgress(
-          bloc: _settingsSecurityBloc,
+          bloc: _settingsEncryptionBloc,
           text: text,
           showProgressValues: false,
         ),
       );
       Overlay.of(context).insert(_progressOverlayEntry);
-    } else if (state is SettingsSecurityStateSuccess || state is SettingsSecurityStateFailure) {
+    } else if (state is SettingsEncryptionStateSuccess || state is SettingsEncryptionStateFailure) {
       _progressOverlayEntry?.remove();
-      if (state is SettingsSecurityStateSuccess) {
+      if (state is SettingsEncryptionStateSuccess) {
         if (!state.setupCode.isNullOrEmpty()) {
           showNavigatableDialog(
             context: context,
@@ -131,12 +131,12 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
           L10n.get(L.settingKeyTransferSuccess).showToast();
         }
       }
-      if (state is SettingsSecurityStateFailure) {
+      if (state is SettingsEncryptionStateFailure) {
         if (state.error == null) {
           L10n.get(L.settingKeyTransferFailed).showToast();
         } else {
           switch (state.error) {
-            case SettingsSecurityStateError.missingStoragePermission:
+            case SettingsEncryptionStateError.missingStoragePermission:
               L10n.get(L.settingKeyTransferPermissionFailed).showToast();
               break;
           }
@@ -151,7 +151,7 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
           appBar: DynamicAppBar(
-            title: L10n.get(L.security),
+            title: L10n.get(L.settingItemEncryptionTitle),
             leading: AppBarBackButton(context: context),
           ),
           body: _buildPreferenceList(context)),
@@ -164,40 +164,40 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
         ListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
           title: Text(L10n.get(L.settingExportKeys)),
-          subtitle: Text(L10n.get(L.settingSecurityExportText)),
-          onTap: () => _onPressed(context, SettingsSecurityType.exportKeys),
+          subtitle: Text(L10n.get(L.settingEncryptionExportText)),
+          onTap: () => _onPressed(context, SettingsEncryptionType.exportKeys),
         ),
         ListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
           title: Text(L10n.get(L.settingImportKeys)),
           subtitle: Text(L10n.get(L.settingImportKeysText)),
-          onTap: () => _onPressed(context, SettingsSecurityType.importKeys),
+          onTap: () => _onPressed(context, SettingsEncryptionType.importKeys),
         ),
         ListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
           title: Text(L10n.get(L.settingKeyTransferStart)),
           subtitle: Text(L10n.get(L.autocryptCreateMessageText)),
-          onTap: () => _onPressed(context, SettingsSecurityType.initiateKeyTransfer),
+          onTap: () => _onPressed(context, SettingsEncryptionType.initiateKeyTransfer),
         ),
       ]).toList(),
     );
   }
 
-  void _onPressed(BuildContext context, SettingsSecurityType type) {
+  void _onPressed(BuildContext context, SettingsEncryptionType type) {
     switch (type) {
-      case SettingsSecurityType.exportKeys:
+      case SettingsEncryptionType.exportKeys:
         _showExportImportDialog(type);
         break;
-      case SettingsSecurityType.importKeys:
+      case SettingsEncryptionType.importKeys:
         _showExportImportDialog(type);
         break;
-      case SettingsSecurityType.initiateKeyTransfer:
+      case SettingsEncryptionType.initiateKeyTransfer:
         _showKeyTransferDialog();
         break;
     }
   }
 
-  void _showExportImportDialog(SettingsSecurityType type) async {
+  void _showExportImportDialog(SettingsEncryptionType type) async {
     String title;
     String text;
     String path = await getExportImportPath();
@@ -205,11 +205,11 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
       path = path.substring(path.getIndexAfterLastOf('0'));
     }
     Type navigationType;
-    if (type == SettingsSecurityType.exportKeys) {
+    if (type == SettingsEncryptionType.exportKeys) {
       title = L10n.get(L.settingExportKeys);
       text = Platform.isAndroid ? L10n.getFormatted(L.settingSecurityExportKeysAndroidTextX, [path]) : L10n.get(L.settingSecurityExportKeysIOSText);
       navigationType = Type.settingsExportKeysDialog;
-    } else if (type == SettingsSecurityType.importKeys) {
+    } else if (type == SettingsEncryptionType.importKeys) {
       title = L10n.get(L.settingImportKeys);
       text = Platform.isAndroid ? L10n.get(L.settingSecurityImportKeysAndroidText) : L10n.get(L.settingSecurityImportKeysIOSText);
       navigationType = Type.settingsImportKeysDialog;
@@ -224,11 +224,11 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
     );
   }
 
-  void _exportImport(SettingsSecurityType type) {
-    if (type == SettingsSecurityType.exportKeys) {
-      _settingsSecurityBloc.add(ExportKeys());
-    } else if (type == SettingsSecurityType.importKeys) {
-      _settingsSecurityBloc.add(ImportKeys());
+  void _exportImport(SettingsEncryptionType type) {
+    if (type == SettingsEncryptionType.exportKeys) {
+      _settingsEncryptionBloc.add(ExportKeys());
+    } else if (type == SettingsEncryptionType.importKeys) {
+      _settingsEncryptionBloc.add(ImportKeys());
     }
   }
 
@@ -244,6 +244,6 @@ class _SettingsSecurityState extends State<SettingsSecurity> {
   }
 
   void _keyTransfer() {
-    _settingsSecurityBloc.add(InitiateKeyTransfer());
+    _settingsEncryptionBloc.add(InitiateKeyTransfer());
   }
 }

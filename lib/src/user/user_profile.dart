@@ -344,7 +344,7 @@ class _ProfileState extends State<UserProfile> {
         navigation.pushNamed(context, Navigation.contactsBlocked);
         break;
       case SettingsItemName.encryption:
-        navigation.pushNamed(context, Navigation.settingsSecurity);
+        navigation.pushNamed(context, Navigation.settingsEncryption);
         break;
       case SettingsItemName.about:
         navigation.pushNamed(context, Navigation.settingsAbout);

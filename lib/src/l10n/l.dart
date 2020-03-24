@@ -398,7 +398,7 @@ class L {
   static final settingApplying = _translationKey("Applying new settings, this may take a moment");
   static final settingAdvancedImap = _translationKey("Advanced IMAP Settings");
   static final settingAdvancedSmtp = _translationKey("Advanced SMTP Settings");
-  static final settingSecurityExportText =
+  static final settingEncryptionExportText =
       _translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
   static final settingNotificationP = _translationKey("Notification", "Notifications");
   static final settingNotificationPull = _translationKey("Enable background updates");

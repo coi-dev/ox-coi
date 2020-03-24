@@ -45,52 +45,52 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/platform/files.dart';
-import 'package:ox_coi/src/settings/settings_security_event_state.dart';
+import 'package:ox_coi/src/settings/settings_encryption_event_state.dart';
 import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum SettingsSecurityType {
+enum SettingsEncryptionType {
   exportKeys,
   importKeys,
   initiateKeyTransfer,
 }
 
-class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityState> {
+class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncryptionState> {
   PublishSubject<Event> _keyActionSubject = new PublishSubject();
   DeltaChatCore _core = DeltaChatCore();
   bool _listenersRegistered = false;
 
   @override
-  SettingsSecurityState get initialState => SettingsSecurityStateInitial();
+  SettingsEncryptionState get initialState => SettingsEncryptionStateInitial();
 
   @override
-  Stream<SettingsSecurityState> mapEventToState(SettingsSecurityEvent event) async* {
+  Stream<SettingsEncryptionState> mapEventToState(SettingsEncryptionEvent event) async* {
     if (event is ExportKeys) {
-      yield SettingsSecurityStateLoading(type: SettingsSecurityType.exportKeys);
+      yield SettingsEncryptionStateLoading(type: SettingsEncryptionType.exportKeys);
       try {
         if (await _checkPermissions()) {
-          _exportImportKeys(SettingsSecurityType.exportKeys);
+          _exportImportKeys(SettingsEncryptionType.exportKeys);
         }
       } catch (error) {
-        yield SettingsSecurityStateFailure(error: error);
+        yield SettingsEncryptionStateFailure(error: error);
       }
     } else if (event is ImportKeys) {
-      yield SettingsSecurityStateLoading(type: SettingsSecurityType.importKeys);
+      yield SettingsEncryptionStateLoading(type: SettingsEncryptionType.importKeys);
       try {
         if (await _checkPermissions()) {
-          _exportImportKeys(SettingsSecurityType.importKeys);
+          _exportImportKeys(SettingsEncryptionType.importKeys);
         }
       } catch (error) {
-        yield SettingsSecurityStateFailure(error: error);
+        yield SettingsEncryptionStateFailure(error: error);
       }
     } else if (event is InitiateKeyTransfer) {
-      yield SettingsSecurityStateLoading(type: SettingsSecurityType.initiateKeyTransfer);
+      yield SettingsEncryptionStateLoading(type: SettingsEncryptionType.initiateKeyTransfer);
       _initiateKeyTransfer();
     } else if (event is ActionSuccess) {
-      yield SettingsSecurityStateSuccess(setupCode: event.setupCode);
+      yield SettingsEncryptionStateSuccess(setupCode: event.setupCode);
     } else if (event is ActionFailed) {
-      yield SettingsSecurityStateFailure(error: event.error);
+      yield SettingsEncryptionStateFailure(error: event.error);
     }
   }
 
@@ -103,21 +103,21 @@ class SettingsSecurityBloc extends Bloc<SettingsSecurityEvent, SettingsSecurityS
   Future<bool> _checkPermissions() async {
     bool hasFilesPermission = await hasPermission(PermissionGroup.storage);
     if (!hasFilesPermission) {
-      add(ActionFailed(error: SettingsSecurityStateError.missingStoragePermission));
+      add(ActionFailed(error: SettingsEncryptionStateError.missingStoragePermission));
     }
     return hasFilesPermission;
   }
 
-  void _exportImportKeys(SettingsSecurityType type) async {
+  void _exportImportKeys(SettingsEncryptionType type) async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       await _registerListeners();
     }
     var context = Context();
     String path = await getExportImportPath();
-    if (type == SettingsSecurityType.exportKeys) {
+    if (type == SettingsEncryptionType.exportKeys) {
       context.exportKeys(path);
-    } else if (type == SettingsSecurityType.importKeys) {
+    } else if (type == SettingsEncryptionType.importKeys) {
       context.importKeys(path);
     }
   }
