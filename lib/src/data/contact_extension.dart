@@ -41,6 +41,7 @@
  */
 
 import 'package:sqflite/sqflite.dart';
+import 'package:path_provider/path_provider.dart';
 
 final String _tableContactExtension = 'contact_extension';
 final String _columnId = 'id';
@@ -98,7 +99,9 @@ class ContactExtensionProvider {
   ContactExtensionProvider._internal();
 
   Future<void> open(String name) async {
-    _db = await openDatabase(name);
+    final applicationSupportDir = await getApplicationSupportDirectory();
+    final dbPath = "${applicationSupportDir.path}/$name";
+    _db = await openDatabase(dbPath);
   }
 
   Future createTable() async {

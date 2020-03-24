@@ -174,18 +174,19 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   }
 
   Future<void> updateAvatar(Iterable<SystemContacts.Contact> systemContacts, Contact contact) async {
-    String contactEmail = await contact.getAddress();
-    var directory = await getApplicationDocumentsDirectory();
-    var contactExtensionProvider = ContactExtensionProvider();
-    int contactId = contact.id;
+    final avatarPath = await _avatarPath();
+    final contactEmail = await contact.getAddress();
+    final contactExtensionProvider = ContactExtensionProvider();
+    final contactId = contact.id;
 
     systemContacts.forEach((systemContact) {
       systemContact.emails.forEach((email) async {
         if (email.value.isEmail && contactEmail == email.value) {
           String filePath = "";
-          if (systemContact.avatar.length > 0) {
+          // ignore: null_aware_before_operator
+          if (systemContact.avatar != null && systemContact.avatar.length > 0) {
             _contactRepository.update(id: contactId);
-            filePath = "${directory.path}/${email.value}_avatar.png";
+            filePath = "$avatarPath/${email.value}_avatar.png";
             File file = File(filePath);
             FileImage image = FileImage(file);
             image.evict();
@@ -235,5 +236,15 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
         }
       }
     });
+  }
+
+  Future<String> _avatarPath() async {
+    final applicationSupportDirectory = await getApplicationSupportDirectory();
+    final avatarPath = "${applicationSupportDirectory.path}/avatars";
+    final avatarDir = Directory(avatarPath);
+    if (await avatarDir.exists() == false) {
+      avatarDir.createSync(recursive: true);
+    }
+    return avatarPath;
   }
 }
