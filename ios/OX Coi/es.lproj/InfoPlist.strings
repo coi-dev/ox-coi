@@ -1,44 +1,14 @@
-/*
-* OPEN-XCHANGE legal information
-*
-* All intellectual property rights in the Software are protected by
-* international copyright laws.
-*
-*
-* In some countries OX, OX Open-Xchange and open xchange
-* as well as the corresponding Logos OX Open-Xchange and OX are registered
-* trademarks of the OX Software GmbH group of companies.
-* The use of the Logos is not covered by the Mozilla Public License 2.0 (MPL 2.0).
-* Instead, you are allowed to use these Logos according to the terms and
-* conditions of the Creative Commons License, Version 2.5, Attribution,
-* Non-commercial, ShareAlike, and the interpretation of the term
-* Non-commercial applicable to the aforementioned license is published
-* on the web site https://www.open-xchange.com/terms-and-conditions/.
-*
-* Please make sure that third-party modules and libraries are used
-* according to their respective licenses.
-*
-* Any modifications to this package must retain all copyright notices
-* of the original copyright holder(s) for the original code used.
-*
-* After any such modifications, the original and derivative code shall remain
-* under the copyright of the copyright holder(s) and/or original author(s) as stated here:
-* https://www.open-xchange.com/legal/. The contributing author shall be
-* given Attribution for the derivative code and a license granting use.
-*
-* Copyright (C) 2016-2019 OX Software GmbH
-* Mail: info@open-xchange.com
-*
-*
-* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-* or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
-* for more details.
-*/
+/* Bundle display name */
+"CFBundleDisplayName" = "OX COI Messenger";
+
+/* Bundle name */
+"CFBundleName" = "ox_coi";
+
+/* A message that tells the user why the app is requesting access to the user’s media library. */
+"NSAppleMusicUsageDescription" = "Access to your Media Library is required in order to share music files with your friends.";
+
+/* A message that tells the user why the app is requesting access to the user’s calendar data. */
+"NSCalendarsUsageDescription" = "Access to your Calenders are required in order to share events with your friends.";
 
 /* A message that tells the user why the app is requesting access to the device’s camera. */
 "NSCameraUsageDescription" = "Access to your Camera is required in order to take photos.";
@@ -46,23 +16,30 @@
 /* A message that tells the user why the app is requesting access to the user’s contacts. */
 "NSContactsUsageDescription" = "Access to your system addressbook is required in order to import contacts to the app addressbook.";
 
+/* A message that tells the user why the app is requesting the ability to authenticate with Face ID. */
+"NSFaceIDUsageDescription" = "Access to Face ID is required to unlock the app.";
+
+/* Privacy - Location Always Usage Description */
+"NSLocationAlwaysUsageDescription" = "Access to the Location Sensor is required in order to track your movements permanently. (Not in use ATM)";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Access to the Location Sensor is required in order to track your movements when the app is being used. (Not in use ATM)";
+
 /* A message that tells the user why the app is requesting access to the device’s microphone. */
 "NSMicrophoneUsageDescription" = "Access to your Microphone is required in order to take audio messages.";
 
-/* A message that tells the user why the app is requesting access to the user’s photo library. */
-"NSPhotoLibraryUsageDescription" = "Access to the Photo Gallery is required in order to add attachments.";
+/* Privacy - Motion Usage Description */
+"NSMotionUsageDescription" = "Access to the Motion Sensor is required in order to I don't know. (Not in use ATM)";
 
 /* A message that tells the user why the app is requesting write-only access to the user’s photo library. */
 "NSPhotoLibraryAddUsageDescription" = "Access to the Photo Gallery is required in order to store photos to your photo library";
 
-/* A message that tells the user why the app is requesting access to the user’s calendar data. */
-"NSCalendarsUsageDescription" = "Access to your Calenders are required in order to share events with your friends.";
-
-/* A message that tells the user why the app is requesting access to the user’s media library. */
-"NSAppleMusicUsageDescription" = "Access to your Media Library is required in order to share music files with your friends.";
-
-/* A message that tells the user why the app is requesting the ability to authenticate with Face ID. */
-"NSFaceIDUsageDescription" = "Access to Face ID is required to unlock the app.";
+/* A message that tells the user why the app is requesting access to the user’s photo library. */
+"NSPhotoLibraryUsageDescription" = "Access to the Photo Gallery is required in order to add attachments.";
 
 /* A message that tells the user why the app is requesting to send user data to Siri. */
 "NSSiriUsageDescription" = "Access to Siri is required.";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Access to Speech-Recognition is required in order to send data to Apple services. (Not in use ATM)";
+

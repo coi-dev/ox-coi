@@ -5,7 +5,7 @@
 "CFBundleName" = "ox_coi";
 
 /* A message that tells the user why the app is requesting access to the user’s media library. */
-"NSAppleMusicUsageDescription" = "Access to your Media Library is required in order to share music files with your friends.";
+"NSAppleMusicUsageDescription" = "BananaramaAccess to your Media Library is required in order to share music files with your friends.";
 
 /* A message that tells the user why the app is requesting access to the user’s calendar data. */
 "NSCalendarsUsageDescription" = "Access to your Calenders are required in order to share events with your friends.";

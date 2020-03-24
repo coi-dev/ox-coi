@@ -1,0 +1,49 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-28 03:10+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=INTEGER\n"
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSCameraUsageDescription
+msgid "Access to your Camera is required in order to take photos."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSContactsUsageDescription
+msgid "Access to your system addressbook is required in order to import contacts to the app addressbook."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSMicrophoneUsageDescription
+msgid "Access to your Microphone is required in order to take audio messages."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSPhotoLibraryUsageDescription
+msgid "Access to the Photo Gallery is required in order to add attachments."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSPhotoLibraryAddUsageDescription
+msgid "Access to the Photo Gallery is required in order to store photos to your photo library"
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSCalendarsUsageDescription
+msgid "Access to your Calenders are required in order to share events with your friends."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSAppleMusicUsageDescription
+msgid "Access to your Media Library is required in order to share music files with your friends."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSFaceIDUsageDescription
+msgid "Access to Face ID is required to unlock the app."
+msgstr ""
+
+#: ios/OX Coi/en.lproj/InfoPlist.strings,NSSiriUsageDescription
+msgid "Access to Siri is required."
+msgstr ""
