@@ -104,7 +104,7 @@ class UserProfile extends RootChild {
 
   @override
   DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
-    return DynamicAppBar(title: L10n.get(L.profile));
+    return DynamicAppBar(title: L10n.get(L.profileAndSettings));
   }
 }
 

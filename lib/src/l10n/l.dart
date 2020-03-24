@@ -316,6 +316,7 @@ class L {
   static final profileNoSignature = _translationKey("No signature set");
   static final profileNoUsername = _translationKey("No username set");
   static final profile = _translationKey("Profile");
+  static final profileAndSettings = _translationKey("Profile & Settings");
   static final profileDefaultStatus = _translationKey("Sent with OX COI Messenger");
   static final profileShareInviteUrl = _translationKey("Share invite link");
 
