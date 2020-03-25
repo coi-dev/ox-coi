@@ -71,7 +71,7 @@ void main() {
   });
 
   group('Security test.', () {
-    final security = L.getKey(L.security);
+    final security = L.getKey(L.settingItemEncryptionTitle);
     final expertImportKeys = L.getKey(L.settingImportKeys);
     final expertExportKeys = L.getKey(L.settingExportKeys);
 
