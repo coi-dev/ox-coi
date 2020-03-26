@@ -133,6 +133,7 @@ class MessageStateData extends Equatable {
   final bool showTime;
   final bool encryptionStatusChanged;
   final bool isGroup;
+  final bool isForwarded;
   final String messageInfo;
 
   MessageStateData({
@@ -152,6 +153,7 @@ class MessageStateData extends Equatable {
     @required this.showTime,
     @required this.encryptionStatusChanged,
     @required this.isGroup,
+    @required this.isForwarded,
     @required this.messageInfo,
   });
 
@@ -172,6 +174,7 @@ class MessageStateData extends Equatable {
       showTime,
       encryptionStatusChanged,
       isGroup,
+      isForwarded,
       messageInfo}) {
     return MessageStateData(
       text: text ?? this.text,
@@ -190,6 +193,7 @@ class MessageStateData extends Equatable {
       showTime: showTime ?? this.showTime,
       encryptionStatusChanged: encryptionStatusChanged ?? this.encryptionStatusChanged,
       isGroup: isGroup ?? this.isGroup,
+      isForwarded: isForwarded ?? this.isForwarded,
       messageInfo: messageInfo ?? this.messageInfo,
     );
   }
@@ -212,6 +216,7 @@ class MessageStateData extends Equatable {
         showTime,
         encryptionStatusChanged,
         isGroup,
+        isForwarded,
       ];
 }
 

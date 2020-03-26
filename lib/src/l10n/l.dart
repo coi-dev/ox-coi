@@ -78,6 +78,7 @@ class L {
   static final file = _translationKey("File");
   static final error = _translationKey("Error");
   static final forward = _translationKey("Forward");
+  static final forwarded = _translationKey("Forwarded");
   static final gallery = _translationKey("Gallery");
   static final image = _translationKey("Image");
   static final import = _translationKey("Import");

@@ -113,7 +113,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       bool hasFile = await message.hasFile();
       bool isSetupMessage = await message.isSetupMessage();
       String text = await message.getText();
-
+      bool isForwarded = await message.isForwarded();
       String informationText;
       if (isSetupMessage) {
         informationText = L10n.get(L.autocryptChatMessagePlaceholder);
@@ -177,6 +177,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         showTime: showTime,
         encryptionStatusChanged: encryptionStatusChanged,
         isGroup: isGroup,
+        isForwarded: isForwarded,
         messageInfo: messageInfo,
       );
       yield MessageItemStateSuccess(messageStateData: messageStateData);
@@ -276,6 +277,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       ChatMsg.methodMessageGetFilename,
       ChatMsg.methodMessageGetState,
       ChatMsg.methodMessageShowPadlock,
+      ChatMsg.methodMessageIsForwarded,
     ]);
   }
 

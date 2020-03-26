@@ -55,6 +55,7 @@ class MessageSent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isForwarded = messageStateData.isForwarded;
     return FractionallySizedBox(
       alignment: Alignment.topRight,
       widthFactor: 0.8,
@@ -72,7 +73,17 @@ class MessageSent extends StatelessWidget {
             MessagePartFlag(),
             Flexible(
               child: MessageMaterial(
-                child: messageStateData.hasFile ? MessageAttachment() : MessageText(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Visibility(
+                      visible: isForwarded,
+                      child: MessagePartForwarded(),
+                    ),
+                    messageStateData.hasFile ? MessageAttachment() : MessageText(),
+                  ],
+                ),
               ),
             ),
             MessagePartState(),
