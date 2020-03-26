@@ -142,12 +142,13 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     iconBackground: CustomTheme.of(context).chatIcon,
                     onTap: () => createChatFromContact(context, widget.contactId),
                   ),
-                  SettingsItem(
-                    icon: IconSource.flag,
-                    text: L10n.get(L.settingItemFlaggedTitle),
-                    iconBackground: CustomTheme.of(context).flagIcon,
-                    onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
-                  ),
+//TODO: This should be discussed (Flagged messages per user)!
+//                  SettingsItem(
+//                    icon: IconSource.flag,
+//                    text: L10n.get(L.settingItemFlaggedTitle),
+//                    iconBackground: CustomTheme.of(context).flagIcon,
+//                    onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
+//                  ),
                   SettingsItem(
                     key: Key(keyUserProfileBlockIconSource),
                     icon: IconSource.block,

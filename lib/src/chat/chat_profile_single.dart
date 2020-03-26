@@ -185,7 +185,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
       case SettingsItemName.flagged:
         _navigation.push(
           context,
-          MaterialPageRoute(builder: (context) => Flagged()),
+          MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
         );
         break;
       case SettingsItemName.notification:
