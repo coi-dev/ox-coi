@@ -327,6 +327,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                   : GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _chatTitleTapped(),
+                      key: Key(keyChatIconTitleText),
                       child: buildRow(imagePath, name, subTitle, color, context, isVerified),
                     ),
               leading: AppBarBackButton(context: context),

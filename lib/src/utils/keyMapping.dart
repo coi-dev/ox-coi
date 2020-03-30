@@ -95,6 +95,7 @@ const keyChatListCreateChatButton = "keyChatListChatFloatingActionButton";
 
 const keyChatCreatePersonAddIcon = "keyChatCreatePersonAddIcon";
 const keyChatCreateGroupAddIcon = "keyChatcreateGroupAddIcon";
+const keyChatIconTitleText="keyChatIconTitleText";
 
 const keyChatCreateGroupParticipantsSummitIconButton = "keyChatCreateGroupParticipantsSummitIconButton";
 
@@ -103,6 +104,7 @@ const keyChatCreateGroupSettingsGroupNameField = "keyChatCreateGroupSettingsGrou
 
 const keyChatProfileGroupEditIcon = "ChatProfileGroupEditIcon";
 const keyChatProfileGroupAddParticipant = "keyChatProfileGroupAddParticipant";
+const keyChatProfileSingleIconSourceFlaggedTitle= "keyChatProfileIconSourceFlaggedTitle";
 
 const keyEditNameCheckIcon = "keyEditNameICheckIcon";
 const keyEditNameEditableProfileHeader = "keyEditNameValidatableTextFormField";

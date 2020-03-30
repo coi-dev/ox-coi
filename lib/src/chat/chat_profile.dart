@@ -58,6 +58,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
+
 class ChatProfile extends StatefulWidget {
   final int chatId;
   final int messageId;

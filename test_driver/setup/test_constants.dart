@@ -68,7 +68,8 @@ const textName = 'Name';
 const textSavedMessages = 'Saved messages';
 
 // Input
-const inputHelloWorld = 'Hello world, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd.';
+const inputHelloWorld = 'Hello world, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. ';
+const inputTestMessage = 'Test message, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Tessssss Messageeeee Twoooooooooooooo. ';
 
 // Message Ids
 const messageIdOne = 10;
@@ -76,9 +77,11 @@ const messageIdTwo = 11;
 const messageIdThree = 12;
 const messageIdFour = 13;
 
+
 // Finders
 final pageBackFinder = find.byValueKey(keyBackOrCloseButton);
 final profileFinder = find.text(L.getKey(L.profile));
+final flaggedMessagesFinder = find.text(L.getKey(L.settingItemFlaggedTitle));
 final contactsFinder = find.text(L.getPluralKey(L.contactP));
 final chatsFinder = find.text(L.getPluralKey(L.chatP));
 final signInFinder = find.text(L.getKey(L.loginSignIn));
@@ -90,3 +93,6 @@ final userSettingsSubmitFinder = find.byValueKey(keyUserSettingsCheckIconButton)
 final contactChangeNameInputFinder = find.byValueKey(keyContactChangeNameValidatableTextFormField);
 final contactChangeSubmitFinder = find.byValueKey(keyContactChangeCheckIconButton);
 final chatSavedMessagesFinder = find.text(textSavedMessages);
+final finderMessageOne = find.byValueKey(messageIdOne);
+final finderMessageTwo = find.byValueKey(messageIdTwo);
+final finderMessageThree = find.byValueKey(messageIdThree);

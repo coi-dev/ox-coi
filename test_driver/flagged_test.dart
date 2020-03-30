@@ -39,7 +39,7 @@
  *  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  *  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  *  * for more details.
- *  
+ *
  *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -54,78 +54,81 @@
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
 
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 import 'setup/test_constants.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
-
 
 void main() {
   FlutterDriver driver;
   setUpAll(() async {
     driver = await setupAndGetDriver();
+    await createNewChat(driver, email2, name2);
+    await createNewChat(driver, email3, name3);
   });
 
   tearDownAll(() async {
     await teardownDriver(driver);
   });
 
-  group('Test messages fonctionslity', () {
+  group('Flagged messages per chat', () {
     final flagUnFlag = L.getKey(L.messageActionFlagUnflag);
-    final forward = L.getKey(L.messageActionForward);
-    final textToDelete = 'Text to delete';
-    final copy = 'Copy';
+    final name2ContactFinder = find.text(name2);
+    final name3ContactFinder = find.text(name3);
 
-    final meContactFinder = find.text(nameMe);
-    final textToDeleteFinder = find.byValueKey(messageIdFour);
-
-    test(': Get contacts and add new contacts.', () async {
-      await driver.tap(contactsFinder);
-      await driver.tap(cancelFinder);
-      var actualMeContact = await driver.getText(meContactFinder);
-      expect(actualMeContact, nameMe);
-      await addNewContact(driver, name3, email3);
-    });
-
-    test(': Create chat and write something.', () async {
-      await driver.tap(meContactFinder);
-      await driver.tap(find.text(L.getKey(L.chatOpen)));
-      await writeChatFromChat(driver, messageIdOne);
-    });
-
-    test(': Flagged messages from  meChat.', () async {
+    test(': Add messages in chat "name2" and flag those.', () async {
+      await driver.tap(name2ContactFinder);
+      await writeTextInChat(driver, messageIdOne);
+      await writeTextInChat(driver, messageIdTwo, inputTestMessage);
       await flaggedMessage(driver, flagUnFlag, finderMessageOne);
+      await flaggedMessage(driver, flagUnFlag, finderMessageTwo);
+      await driver.tap(find.byValueKey(keyChatIconTitleText));
+      await driver.tap(find.byValueKey(keyChatProfileSingleIconSourceFlaggedTitle));
+      await driver.waitFor(finderMessageOne);
+      await driver.waitFor(finderMessageTwo);
+      await driver.waitForAbsent(finderMessageThree);
       await driver.tap(pageBackFinder);
-      await navigateTo(driver, L.getKey(L.profile));
+      await driver.tap(pageBackFinder);
+      await driver.tap(pageBackFinder);
     });
 
-    test(': UnFlagged messages.', () async {
-      await driver.tap(find.byValueKey(keyUserProfileFlagIconSource));
-      await unflagMessage(driver, flagUnFlag, messageIdOne);
-      await driver.waitForAbsent(find.byValueKey(inputHelloWorld));
-      await driver.tap(pageBackFinder);
-      await navigateTo(driver, L.getPluralKey(L.chatP));
-      await driver.tap(chatSavedMessagesFinder);
-    });
-
-    test(': Forward message.', () async {
-      await forwardMessageTo(driver, name3, forward);
+    test(': Add message in chat "name3" and flag it', () async {
+      await driver.tap(name3ContactFinder);
+      await writeTextInChat(driver, messageIdThree);
+      await flaggedMessage(driver, flagUnFlag, finderMessageThree);
+      await driver.tap(find.byValueKey(keyChatIconTitleText));
+      await driver.tap(find.byValueKey(keyChatProfileSingleIconSourceFlaggedTitle));
+      await driver.waitForAbsent(finderMessageOne);
+      await driver.waitForAbsent(finderMessageTwo);
       await driver.waitFor(finderMessageThree);
       await driver.tap(pageBackFinder);
-      await driver.tap(chatSavedMessagesFinder);
+      await driver.tap(pageBackFinder);
+      await driver.tap(pageBackFinder);
     });
 
-    test(': Copy message from meContact and it paste in meContact.', () async {
-      final paste = isAndroid() ? 'PASTE' : 'Paste';
-      await copyAndPasteMessage(driver, copy, paste);
+    test(': Unflag message in chat "name2".', () async {
+      await driver.tap(name2ContactFinder);
+      await driver.tap(find.byValueKey(keyChatIconTitleText));
+      await driver.tap(find.byValueKey(keyChatProfileSingleIconSourceFlaggedTitle));
+      await unflagMessage(driver, flagUnFlag, messageIdTwo);
+      await driver.waitFor(finderMessageOne);
+      await driver.waitForAbsent(finderMessageTwo);
+      await driver.waitForAbsent(finderMessageThree);
+      await driver.tap(pageBackFinder);
+      await driver.tap(pageBackFinder);
+      await driver.tap(pageBackFinder);
     });
+  });
 
-    test(': Delete message.', () async {
-      await writeTextInChat(driver, messageIdFour, textToDelete);
-      await deleteMessage(textToDeleteFinder, driver);
-      await driver.waitForAbsent(textToDeleteFinder);
+  group("All flagged messages", () {
+    test(': Check all flagged messages', () async {
+      await driver.tap(profileFinder);
+      await driver.tap(flaggedMessagesFinder);
+      await driver.waitFor(finderMessageOne);
+      await driver.waitFor(finderMessageThree);
+      await driver.tap(pageBackFinder);
     });
   });
 }

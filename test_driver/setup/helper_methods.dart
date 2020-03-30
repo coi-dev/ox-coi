@@ -150,9 +150,8 @@ Future blockOneContactFromContacts(FlutterDriver driver, String contactNameToBlo
   await driver.tap(find.text(blockContact));
 }
 
-Future unFlaggedMessage(FlutterDriver driver, String flagUnFlag, String messageToUnFlagged) async {
-  SerializableFinder messageToUnFlaggedFinder = find.byValueKey(messageIdOne);
-  await driver.tap(find.byValueKey(keyUserProfileFlagIconSource));
+Future unflagMessage(FlutterDriver driver,String flagUnFlag, int messageIdToUnFlagged) async {
+  SerializableFinder messageToUnFlaggedFinder = find.byValueKey(messageIdToUnFlagged);
   await driver.waitFor(messageToUnFlaggedFinder);
   await performLongPress(driver, messageToUnFlaggedFinder);
   await driver.tap(find.text(flagUnFlag));
@@ -170,7 +169,7 @@ Future deleteMessage(SerializableFinder textToDeleteFinder, FlutterDriver driver
 }
 
 Future copyAndPasteMessage(FlutterDriver driver, String copy, String paste) async {
-  await performLongPress(driver, find.byValueKey(messageIdOne));
+  await performLongPress(driver, finderMessageOne);
   await driver.tap(find.text(copy));
   await performLongPress(driver, composeInputFinder);
   await driver.tap(find.text(paste));
@@ -178,7 +177,7 @@ Future copyAndPasteMessage(FlutterDriver driver, String copy, String paste) asyn
 }
 
 Future forwardMessageTo(FlutterDriver driver, String contactToForward, String forward) async {
-  await performLongPress(driver, find.byValueKey(messageIdOne));
+  await performLongPress(driver, finderMessageOne);
   await driver.tap(find.text(forward));
   await driver.tap(find.text(contactToForward));
 }

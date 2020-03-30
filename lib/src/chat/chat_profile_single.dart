@@ -62,6 +62,8 @@ import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
+
 
 class ChatProfileOneToOne extends StatefulWidget {
   final int chatId;
@@ -134,6 +136,7 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
           SettingsItem(
             icon: IconSource.flag,
             text: L10n.get(L.settingItemFlaggedTitle),
+            key: Key(keyChatProfileSingleIconSourceFlaggedTitle),
             iconBackground: CustomTheme.of(context).flagIcon,
             onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
           ),
