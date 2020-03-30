@@ -190,7 +190,7 @@ class L {
   static final contactEditedSuccess = _translationKey("Contact successfully edited");
   static final contactVerifiedSuccess = _translationKey("Contact verified");
   static final contactAddFailedAlreadyExists = _translationKey("Could not add contact. Email address already in use.");
-  static final contactDeleteFailed = _translationKey("Could not delete contact.");
+  static final contactDeleteFailed = _translationKey("Could not delete contact. You may have a group conversation with this contact.");
   static final contactDeleteWithActiveChatFailed =
       _translationKey("Could not delete contact. Active chats with contact found, please remove those chats first.");
   static final contactDelete = _translationKey("Delete contact");
