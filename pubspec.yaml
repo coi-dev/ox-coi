@@ -39,10 +39,7 @@ dependencies:
   image_cropper: ^1.2.0
   image_picker: ^0.6.3+1
   logging: ^0.11.4
-  metadata_fetch:
-#    path: ../metadata_fetch/
-    git:
-      url: https://github.com/open-xchange/metadata_fetch
+  metadata_fetch: ^0.3.1
   mime: ^0.9.6+3
   open_file: ^3.0.0
   package_info: ^0.4.0+13
