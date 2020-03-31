@@ -18,3 +18,5 @@ A clear and concise description of any alternative solutions you've considered.
 
 **Additional context**
 Add any other context or screenshots about the feature request here.
+
+[Internal Bug Tracker](https://jira.open-xchange.com/browse/OT-???).
