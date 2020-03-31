@@ -107,7 +107,11 @@ class LogManager {
   }
 
   String _logTemplatePrint(LogRecord logRecord) {
-    return '[COI - ${logRecord.loggerName}] ${logRecord.message}';
+    var errorInformation = "";
+    if (logRecord.error != null || logRecord.stackTrace != null) {
+      errorInformation = "\n- Error:\n${logRecord.error}\n- Stack trace:\n(${logRecord.stackTrace})";
+    }
+    return '[COI - ${logRecord.loggerName}] ${logRecord.message}$errorInformation';
   }
 
   Future<void> _writeToLogFile(LogRecord logRecord) async {

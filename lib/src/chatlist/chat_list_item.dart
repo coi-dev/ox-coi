@@ -94,6 +94,7 @@ class _ChatListItemState extends State<ChatListItem> {
         int timestamp = 0;
         String preview;
         String imagePath = "";
+        bool hasError = false;
 
         if (state is ChatStateSuccess) {
           name = state.name;
@@ -102,26 +103,31 @@ class _ChatListItemState extends State<ChatListItem> {
           timestamp = state.timestamp;
           preview = state.preview;
           imagePath = state.avatarPath;
+        } else if (state is ChatStateFailure) {
+          hasError = true;
         } else {
           name = "";
         }
 
-        return InkWell(
-          //onLongPress: () => chatItemLongPress(),
-          child: AvatarListItem(
-            title: name,
-            subTitle: preview.stripMarkdown(),
-            color: color,
-            imagePath: imagePath,
-            freshMessageCount: freshMessageCount,
-            timestamp: timestamp,
-            subTitleIcon: _chatBloc.isGroup
-                ? AdaptiveIcon(
-                    icon: IconSource.group,
-                    size: iconSize,
-                  )
-                : null,
-            onTap: chatItemTapped,
+        return Visibility(
+          visible: !hasError,
+          child: InkWell(
+            //onLongPress: () => chatItemLongPress(),
+            child: AvatarListItem(
+              title: name,
+              subTitle: preview.stripMarkdown(),
+              color: color,
+              imagePath: imagePath,
+              freshMessageCount: freshMessageCount,
+              timestamp: timestamp,
+              subTitleIcon: _chatBloc.isGroup
+                  ? AdaptiveIcon(
+                      icon: IconSource.group,
+                      size: iconSize,
+                    )
+                  : null,
+              onTap: chatItemTapped,
+            ),
           ),
         );
       },

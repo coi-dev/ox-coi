@@ -76,14 +76,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield ChatStateLoading();
       try {
         _chatId = event.chatId;
-        _registerListeners();
+        await _registerListeners();
         if (_chatId == Chat.typeInvite) {
-          _setupInviteChat(event.messageId);
+          await _setupInviteChat(event.messageId);
         } else {
-          _setupChat(event.isHeadless);
+          await _setupChat(event.isHeadless);
         }
-      } catch (error) {
-        yield ChatStateFailure(error: error.toString());
+      } catch (error, stackTrace) {
+        yield ChatStateFailure(error: error, stackTrace: stackTrace);
       }
     } else if (event is ChatLoaded) {
       yield ChatStateSuccess(
@@ -99,7 +99,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           avatarPath: event.avatarPath,
           isRemoved: event.isRemoved,
           phoneNumbers: event.phoneNumbers);
-    } else if(event is ClearNotifications){
+    } else if (event is ClearNotifications) {
       _removeNotifications();
     }
   }
@@ -110,7 +110,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return super.close();
   }
 
-  void _registerListeners() async {
+  Future<void> _registerListeners() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified], _onChatChanged);
@@ -132,10 +132,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _setupInviteChat(int messageId) async {
+  Future<void> _setupInviteChat(int messageId) async {
     Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     ChatMsg message = messageListRepository.get(messageId);
-    if(message != null) {
+    if (message != null) {
       int contactId = await message.getFromId();
       Contact contact = _contactRepository.get(contactId);
       String name = await contact.getName();
@@ -160,7 +160,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _setupChat(bool isHeadless) async {
+  Future<void> _setupChat(bool isHeadless) async {
     Context context = Context();
     Chat chat = _chatRepository.get(_chatId);
     if (chat == null && isHeadless) {

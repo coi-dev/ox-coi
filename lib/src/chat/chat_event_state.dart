@@ -43,6 +43,7 @@
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+import 'package:ox_coi/src/error/error_logger.dart';
 
 abstract class ChatEvent {}
 
@@ -121,5 +122,7 @@ class ChatStateSuccess extends ChatState {
 }
 
 class ChatStateFailure extends ChatState {
-  ChatStateFailure({@required error});
+  ChatStateFailure({@required error, @required stackTrace}) {
+    logError(this, error, stackTrace);
+  }
 }
