@@ -64,10 +64,11 @@ import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 void main() {
   final LogManager _logManager = LogManager();
-  _logManager.setup(logToFile: false, logLevel: Level.INFO);
-
   // ignore: close_sinks
   final errorBloc = ErrorBloc();
+
+  WidgetsFlutterBinding.ensureInitialized(); // Required to allow plugin calls prior runApp() (performed by LogManager.setup())
+  _logManager.setup(logToFile: true, logLevel: Level.INFO);
 
   runApp(
     MultiBlocProvider(

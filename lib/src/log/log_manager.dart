@@ -43,25 +43,32 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/log/log_bloc_delegate.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:ox_coi/src/platform/system_information.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:synchronized/extension.dart';
 
 class LogManager {
-  static const maxLogFileCount = 10;
-
+  static const _coreLoggerName = "dcc";
+  static const _logManagerLoggerName = "logManager";
+  static const _maxLogFileCount = 10;
+  static const _logFolder = "logs";
   static LogManager _instance;
+
+  final _coreLoggerSubject = PublishSubject<Event>();
+  final _core = DeltaChatCore();
 
   File _logFile;
 
   factory LogManager() {
-    if (_instance == null) {
-      _instance = LogManager._internal();
-    }
+    _instance ??= LogManager._internal();
     return _instance;
   }
 
@@ -72,24 +79,28 @@ class LogManager {
   void setup({@required bool logToFile, @required Level logLevel}) async {
     BlocSupervisor.delegate = LogBlocDelegate();
     if (logToFile) {
-      _logFile = await _setupLogFile();
+      _logFile = await _setupAndGetLogFile();
       await manageLogFiles();
     }
     setupLogger(logLevel, logToFile);
+    setupCoreListener();
+    await logDeviceInfo();
   }
 
-  Future<File> _setupLogFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path;
-    return File('$path/log_${getDateTimeFileFormTimestamp()}.txt');
+  Future<File> _setupAndGetLogFile() async {
+    final userVisiblePath = await getUserVisibleDirectoryPath();
+    final path = userVisiblePath + Platform.pathSeparator + _logFolder;
+    final logFile = '$path/log_${getDateTimeFileFormTimestamp()}.txt';
+    print('File logging enabled and started. Session is logged in $logFile');
+    return File(logFile).create(recursive: true);
   }
 
   Future manageLogFiles() async {
-    List<String> logFiles = List();
-    List<String> currentLogFiles = await getLogFiles();
+    final logFiles = <String>[];
+    final List<String> currentLogFiles = await getLogFiles();
     logFiles.addAll(currentLogFiles);
     logFiles.add(_logFile.path);
-    if (logFiles.length > maxLogFileCount) {
+    if (logFiles.length > _maxLogFileCount) {
       deleteLogFile(logFiles[0]);
       logFiles.removeAt(0);
     }
@@ -99,11 +110,15 @@ class LogManager {
   void setupLogger(Level logLevel, bool logToFile) {
     Logger.root.level = logLevel;
     Logger.root.onRecord.listen((LogRecord logRecord) {
-      print(_logTemplatePrint(logRecord));
-      if (logToFile) {
-        _writeToLogFile(logRecord);
-      }
+      _logEntry(logRecord, logToFile);
     });
+  }
+
+  void _logEntry(LogRecord logRecord, bool logToFile) {
+    debugPrint(_logTemplatePrint(logRecord));
+    if (logToFile) {
+      _writeToLogFile(logRecord);
+    }
   }
 
   String _logTemplatePrint(LogRecord logRecord) {
@@ -115,8 +130,8 @@ class LogManager {
   }
 
   Future<void> _writeToLogFile(LogRecord logRecord) async {
-    var content = _logTemplateFile(logRecord);
-    writeToFile(_logFile, content);
+    final content = _logTemplateFile(logRecord);
+    synchronized(() async => await _logFile.writeAsString(content, mode: FileMode.append));
   }
 
   String _logTemplateFile(LogRecord logRecord) {
@@ -124,7 +139,7 @@ class LogManager {
   }
 
   void deleteAllLogFiles() async {
-    List<String> logFiles = await getLogFiles();
+    final List<String> logFiles = await getLogFiles();
     logFiles.forEach((logFile) {
       deleteLogFile(logFile);
     });
@@ -138,7 +153,28 @@ class LogManager {
     } catch (error) {}
   }
 
-  Future<dynamic> getLogFiles() {
-    return getPreference(preferenceLogFiles) ?? List<String>();
+  Future<List<String>> getLogFiles() async {
+    return await getPreference(preferenceLogFiles) ?? <String>[];
+  }
+
+  void setupCoreListener() {
+    _coreLoggerSubject.listen(_loggingCallback);
+    _core.addListener(eventIdList: [Event.info, Event.warning, Event.error, Event.errorNoNetwork], streamController: _coreLoggerSubject);
+  }
+
+  void _loggingCallback(Event event) {
+    final dccLogMessage = event.data1;
+    final dccLogLevel = event.data2;
+    final message = "$dccLogLevel: $dccLogMessage";
+    final logRecord = LogRecord(Level.INFO, message, _coreLoggerName);
+    _writeToLogFile(logRecord);
+  }
+
+  Future<void> logDeviceInfo() async {
+    final deviceName = await getDeviceName();
+    final deviceOs = await getDeviceOsVersion();
+    final message = "Device: $deviceName, $deviceOs";
+    final logRecord = LogRecord(Level.INFO, message, _logManagerLoggerName);
+    _writeToLogFile(logRecord);
   }
 }

@@ -44,18 +44,11 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-Future<void> writeToFile(File file, String content) async {
-  var sink = file.openWrite(mode: FileMode.append);
-  sink.write(content);
-  await sink.flush();
-  await sink.close();
-}
-
 Future<String> readFile(File file) async {
   return await file.readAsString();
 }
 
-Future<String> getExportImportPath() async {
+Future<String> getUserVisibleDirectoryPath() async {
   var directory;
   if (Platform.isIOS) {
     directory = await getApplicationDocumentsDirectory();

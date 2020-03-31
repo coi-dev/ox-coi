@@ -114,7 +114,7 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
       await _registerListeners();
     }
     var context = Context();
-    String path = await getExportImportPath();
+    String path = await getUserVisibleDirectoryPath();
     if (type == SettingsEncryptionType.exportKeys) {
       context.exportKeys(path);
     } else if (type == SettingsEncryptionType.importKeys) {
