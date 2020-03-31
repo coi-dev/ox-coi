@@ -37,4 +37,4 @@ If applicable, add screenshots to help explain your problem.
 **Additional context**
 Add any other context about the problem here.
 
-(Internal Bug Tracker)[https://jira.open-xchange.com/browse/OT-???].
+[Internal Bug Tracker](https://jira.open-xchange.com/browse/OT-???).
