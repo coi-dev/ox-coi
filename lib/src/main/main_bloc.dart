@@ -169,14 +169,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     }
   }
 
-  Future<void> setupBackgroundRefreshManager(bool coiSupported) async {
-    bool pullPreference = await getPreference(preferenceNotificationsPull);
-    if ((pullPreference == null && !coiSupported) || (pullPreference != null && pullPreference)) {
-      var backgroundRefreshManager = BackgroundRefreshManager();
-      backgroundRefreshManager.setupAndStart();
-    }
-  }
-
   Future<void> _initCore() async {
     await core.init(dbName);
   }
@@ -193,29 +185,56 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     var context = Context();
     bool coiSupported = await isCoiSupported(context);
     String appState = await getPreference(preferenceAppState);
-    if (appState == AppState.initialStartDone.toString()) {
-      if (coiSupported) {
-        await context.setCoiEnabled(1, 1);
-        _logger.info("Setting coi enable to 1");
-        await context.setCoiMessageFilter(1, 1);
-        _logger.info("Setting coi message filter to 1");
-      }
-      await _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
-      _logger.info("Setting coi message prefix to 1");
-      await _applyCustomerConfig();
-      await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
+    if (coiSupported) {
+      await _setupCoi(context);
+    }
+    if (isFreshLogin(appState)) {
+      await _setupFreshLoggedInAppState();
     }
     await setupBackgroundRefreshManager(coiSupported);
+    preloadContacts();
+  }
+
+  bool isFreshLogin(String appState) => appState == AppState.initialStartDone.toString();
+
+  Future<void> setupBackgroundRefreshManager(bool coiSupported) async {
+    bool pullPreference = await getPreference(preferenceNotificationsPull);
+    if ((pullPreference == null && !coiSupported) || (pullPreference != null && pullPreference)) {
+      var backgroundRefreshManager = BackgroundRefreshManager();
+      backgroundRefreshManager.setupAndStart();
+    }
+  }
+
+  void preloadContacts() {
     // Ignoring false positive https://github.com/felangel/bloc/issues/587
     // ignore: close_sinks
     ContactListBloc contactListBloc = ContactListBloc();
     contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
   }
 
-  Future<bool> isCoiSupported(Context context) async {
-    final isCoiSupported = (await context.isCoiSupported()) == 1;
-    return isCoiSupported;
+  Future<void> _setupFreshLoggedInAppState() async {
+    await _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
+    _logger.info("Setting coi message prefix to 1");
+    await _applyCustomerConfig();
+    await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
   }
+
+  Future<void> _setupCoi(Context context) async {
+    if (!await isCoiEnabled(context)) {
+      _logger.info("Setting coi enable to 1");
+      await context.setCoiEnabled(1, 1);
+    }
+    if (!await isCoiMessageFilterEnabled(context)) {
+      _logger.info("Setting coi message filter to 1");
+      await context.setCoiMessageFilter(1, 1);
+    }
+  }
+
+  Future<bool> isCoiSupported(Context context) async => (await context.isCoiSupported()) == 1;
+
+  Future<bool> isCoiEnabled(Context context) async => (await context.isCoiEnabled()) == 1;
+
+  Future<bool> isCoiMessageFilterEnabled(Context context) async => (await context.isCoiMessageFilterEnabled()) == 1;
 
   Future<void> _setupDatabaseExtensions() async {
     final contactExtensionProvider = ContactExtensionProvider();
