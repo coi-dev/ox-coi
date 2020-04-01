@@ -52,6 +52,7 @@ import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/extensions/string_markdown.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -295,6 +296,8 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
             if (state.path.isNotEmpty) {
               File file = File(state.path);
               imageProvider = FileImage(file);
+            }
+            if (!state.duration.isNullOrEmpty()) {
               durationString = state.duration;
             }
           });
