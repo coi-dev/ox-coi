@@ -185,16 +185,16 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     FileType type;
     switch (widget.sharedData.mimeType) {
       case "image/*":
-        type = FileType.IMAGE;
+        type = FileType.image;
         break;
       case "audio/*":
-        type = FileType.AUDIO;
+        type = FileType.audio;
         break;
       case "video/*":
-        type = FileType.VIDEO;
+        type = FileType.video;
         break;
       default:
-        type = FileType.ANY;
+        type = FileType.any;
         break;
     }
     setState(() {
@@ -452,7 +452,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           child: Stack(
             fit: StackFit.loose,
             children: <Widget>[
-              _selectedFileType == FileType.IMAGE || _selectedExtension == "gif"
+              _selectedFileType == FileType.image || _selectedExtension == "gif"
                   ? Image.file(
                       File(_filePath),
                     )
@@ -688,23 +688,23 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     int type = 0;
     if (_knownType == null) {
       switch (_selectedFileType) {
-        case FileType.IMAGE:
+        case FileType.image:
           type = ChatMsg.typeImage;
           break;
-        case FileType.VIDEO:
+        case FileType.video:
           type = ChatMsg.typeVideo;
           break;
-        case FileType.AUDIO:
+        case FileType.audio:
           type = ChatMsg.typeAudio;
           break;
-        case FileType.CUSTOM:
+        case FileType.custom:
           if (_selectedExtension == "gif") {
             type = ChatMsg.typeGif;
           } else {
             type = ChatMsg.typeFile;
           }
           break;
-        case FileType.ANY:
+        case FileType.any:
           type = ChatMsg.typeFile;
           break;
       }
@@ -803,22 +803,22 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               ListTile(
                 leading: AdaptiveIcon(icon: IconSource.image),
                 title: Text(L10n.get(L.image)),
-                onTap: () => _getFilePath(FileType.IMAGE),
+                onTap: () => _getFilePath(FileType.image),
               ),
               ListTile(
                 leading: AdaptiveIcon(icon: IconSource.videoLibrary),
                 title: Text(L10n.get(L.video)),
-                onTap: () => _getFilePath(FileType.VIDEO),
+                onTap: () => _getFilePath(FileType.video),
               ),
               ListTile(
                 leading: AdaptiveIcon(icon: IconSource.pictureAsPdf),
                 title: Text(pdf),
-                onTap: () => _getFilePath(FileType.CUSTOM, "pdf"),
+                onTap: () => _getFilePath(FileType.custom, "pdf"),
               ),
               ListTile(
                 leading: AdaptiveIcon(icon: IconSource.insertDriveFile),
                 title: Text(L10n.get(L.file)),
-                onTap: () => _getFilePath(FileType.ANY),
+                onTap: () => _getFilePath(FileType.any),
               ),
             ],
           );
@@ -827,10 +827,22 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   _getFilePath(FileType fileType, [String extension]) async {
     _navigation.pop(context);
+
     String filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
     if (filePath == null) {
       return;
     }
+
+    if (fileType == FileType.video && Platform.isIOS) {
+      final ext = Path.extension(filePath);
+      final videoFileName = "${filePath.hashCode}$ext";
+      final videoFileDir = Path.dirname(filePath);
+      final videoFilePath = "$videoFileDir${Platform.pathSeparator}$videoFileName";
+      final videoFile = File(filePath);
+      await videoFile.rename(videoFilePath);
+      filePath = videoFilePath;
+    }
+
     _fileName = Path.basename(filePath);
 
     _selectedFileType = fileType;

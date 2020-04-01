@@ -22,10 +22,7 @@ dependencies:
   device_info: ^0.4.2+1
   equatable: ^1.0.2
   firebase_messaging: ^6.0.9
-  file_picker:
-    git:
-      url: git://github.com/Boehrsi/plugins_flutter_file_picker
-      ref: 192_embeddingV2
+  file_picker: ^1.5.1
   flutter_bloc: ^3.1.0
   flutter_html: ^0.11.1
   flutter_local_notifications: ^0.9.1+3
