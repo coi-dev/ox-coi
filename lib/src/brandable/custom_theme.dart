@@ -80,7 +80,7 @@ class CustomerThemes {
   );
 
   static final BrandedTheme darkTheme = BrandedTheme(
-    accent: const Color(0xFF0076FF),
+    accent: const Color(0xFF00A0FF),
     onAccent: const Color(0xFFF3F3F3),
     info: const Color(0xFF4E4E4E),
     onInfo: Colors.white,
@@ -91,7 +91,7 @@ class CustomerThemes {
     onBackground: const Color(0xFFF3F3F3),
     surface: const Color(0xFF1F1F1F),
     onSurface: const Color(0xFFF3F3F3),
-    secondary: const Color(0xFF0D47A1),
+    secondary: const Color(0xFF052D4B),
     onSecondary: const Color(0xFFF3F3F3),
     error: const Color(0xFFE53935),
     onError: Colors.white,
