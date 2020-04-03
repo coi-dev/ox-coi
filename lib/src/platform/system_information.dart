@@ -56,7 +56,7 @@ Future<String> getDeviceName() async {
 Future<String> getDeviceOsVersion() async {
   await getDeviceInfo();
   return Platform.isIOS
-      ? "OS: ${iosInfo.utsname.sysname} - Release: ${iosInfo.utsname.release} - Version: ${iosInfo.utsname.version}"
+      ? "OS: ${iosInfo.systemName} - Version: ${iosInfo.systemVersion} - Kernel: ${iosInfo.utsname.version}"
       : "OS: ${androidInfo.version.baseOS} - Release: ${androidInfo.version.release} (${androidInfo.version.codename}) - SDK: ${androidInfo.version.sdkInt}";
 }
 
