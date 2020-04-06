@@ -109,6 +109,7 @@ class ChatList extends RootChild {
   @override
   DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
     return DynamicAppBar(
+      showDivider: false,
       title: L10n.get(L.chatP, count: L10n.plural),
       trailingList: [
         if (Platform.isIOS)

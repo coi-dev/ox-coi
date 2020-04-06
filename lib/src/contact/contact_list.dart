@@ -107,6 +107,7 @@ class ContactList extends RootChild {
   @override
   DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
     return DynamicAppBar(
+      showDivider: false,
       title: L10n.get(L.contactP, count: L10n.plural),
       trailingList: [
         IconButton(

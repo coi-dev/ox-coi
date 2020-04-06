@@ -55,6 +55,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/text_field_handling.dart';
+import 'package:ox_coi/src/widgets/button.dart';
 import 'package:provider/provider.dart';
 
 StreamController<AppBarAction> _getAppBarActionStream(BuildContext context) {
@@ -65,13 +66,18 @@ StreamController<AppBarAction> _getAppBarActionStream(BuildContext context) {
   }
 }
 
+Border dividerLine(BuildContext context) {
+  return Border(bottom: BorderSide(width: dividerHeight, color: Theme.of(context).dividerColor));
+}
+
 class DynamicAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Widget titleWidget;
   final IconButton leading;
   final List<Widget> trailingList;
+  final showDivider;
 
-  const DynamicAppBar({Key key, this.title, this.titleWidget, this.leading, this.trailingList})
+  const DynamicAppBar({Key key, this.title, this.titleWidget, this.leading, this.trailingList, this.showDivider = true})
       : assert(title == null || titleWidget == null),
         super(key: key);
 
@@ -112,9 +118,12 @@ class _DynamicAppBarState extends State<DynamicAppBar> {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaleFactor: textScaleFactor),
       child: Container(
+        decoration: BoxDecoration(
+          color: CustomTheme.of(context).background,
+          border: widget.showDivider ? dividerLine(context) : null,
+        ),
         padding: EdgeInsets.only(top: statusBarHeight, bottom: appBarBottomOverflowFix),
         // The bottom padding fixes a gap between the appbar and the content
-        color: CustomTheme.of(context).background,
         child: AnimatedCrossFade(
           crossFadeState: visible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
           duration: Duration(milliseconds: appBarAnimationDuration),
@@ -283,6 +292,7 @@ class _DynamicSearchBarContentState extends State<DynamicSearchBarContent> {
   final _controller = TextEditingController();
 
   var _isActive = false;
+  var _isSearchingState = false;
   var _canHideAppBar = false;
 
   @override
@@ -316,43 +326,72 @@ class _DynamicSearchBarContentState extends State<DynamicSearchBarContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: CustomTheme.of(context).background,
+        border: dividerLine(context),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: dimension16dp, vertical: searchBarVerticalPadding),
-      color: CustomTheme.of(context).background,
-      child: TextField(
-        key: ValueKey(keySearchBarInput),
-        controller: _controller,
-        focusNode: _focusNode,
-        onChanged: (text) => widget.onSearch(text),
-        decoration: InputDecoration(
-          prefixIcon: _canHideAppBar && _isActive
-              ? IconButton(
-                  key: ValueKey(keySearchBarResetButton),
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => _resetSearch(context),
-                )
-              : Icon(Icons.search),
-          suffixIcon: _isActive
-              ? IconButton(
-                  key: ValueKey(keySearchBarClearButton),
-                  icon: Icon(Icons.close),
-                  onPressed: _clearSearch,
-                )
-              : null,
-          contentPadding: const EdgeInsets.only(left: zero, top: zero, right: dimension8dp, bottom: zero),
-          hintText: L10n.get(L.search),
-          hintStyle: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.half()),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: CustomTheme.of(context).onSurface.barely()),
-            borderRadius: BorderRadius.all(Radius.circular(dimension24dp)),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: TextField(
+              key: ValueKey(keySearchBarInput),
+              controller: _controller,
+              focusNode: _focusNode,
+              onChanged: (text) {
+                widget.onSearch(text);
+                _setSearchingState();
+              },
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(dimension24dp)),
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(dimension24dp)),
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                filled: true,
+                fillColor: CustomTheme.of(context).onSurface.barely(),
+                prefixIcon: _canHideAppBar && _isActive ? null : Icon(Icons.search),
+                suffixIcon: Visibility(
+                  visible: _isSearchingState,
+                  child: IconButton(
+                    key: ValueKey(keySearchBarClearButton),
+                    icon: Icon(Icons.cancel),
+                    color: CustomTheme.of(context).onSurface.slightly(),
+                    onPressed: _clearSearch,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.only(left: dimension16dp, top: zero, right: dimension8dp, bottom: zero),
+                hintText: _isActive ? "" : L10n.get(L.search),
+                hintStyle: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.half()),
+              ),
+            ),
           ),
-        ),
+          Visibility(
+            visible: _isActive,
+            child: ButtonImportanceNone(
+              key: ValueKey(keySearchBarClearButton),
+              child: Text('Cancel'),
+              onPressed: () => _resetSearch(context),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  void _setSearchingState([bool isSearching]) {
+    setState(() {
+      _isSearchingState = isSearching ?? _isSearching();
+    });
   }
 
   bool _isSearching() => _controller.text.isNotEmpty;
 
   void _clearSearch() {
+    _setSearchingState(false);
     widget.onSearch("");
     safeControllerClear(_controller);
   }

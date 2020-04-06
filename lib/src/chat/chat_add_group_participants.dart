@@ -99,6 +99,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
+        showDivider: false,
         title: L10n.get(L.participantAdd),
         leading: AppBarCloseButton(context: context),
         trailingList: [

@@ -97,6 +97,7 @@ class _ChatCreateState extends State<ChatCreate> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DynamicAppBar(
+          showDivider: false,
           title: L10n.get(L.chatCreate),
           leading: AppBarBackButton(context: context),
         ),
