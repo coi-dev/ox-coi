@@ -340,6 +340,7 @@ class L {
   // Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
   static final qrScanTextX = _translationKey("Scan this QR code to create a new contact or verify a contact with %s.");
   static final qrShow = _translationKey("Show QR");
+  static final qrShowErrorX = _translationKey("Not possible to create qr code: %s");
   static final qrCameraNotAllowed = _translationKey("Camera not ready");
   static final qrCameraNotAllowedText = _translationKey("No camera permission granted.");
   static final qrNoValidCode = _translationKey("No valid QR code");

@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -65,10 +66,11 @@ class ShowQr extends StatefulWidget {
 }
 
 class _ShowQrState extends State<ShowQr> {
-  UserBloc _userBloc = UserBloc();
-  QrBloc _qrBloc = QrBloc();
+  final _logger = Logger("show_qr");
+  final UserBloc _userBloc = UserBloc();
+  final QrBloc _qrBloc = QrBloc();
+  final Navigation _navigation = Navigation();
   String _qrText;
-  Navigation _navigation = Navigation();
 
   @override
   void initState() {
@@ -140,7 +142,19 @@ class _ShowQrState extends State<ShowQr> {
       data: qrText,
       size: qrImageSize,
       backgroundColor: CustomTheme.of(context).white,
-      version: 6,
+      version: 8,
+      errorStateBuilder: (context, error) {
+        _logger.info(L10n.getFormatted(L.qrShowErrorX, [error]));
+        return Container(
+          child: Center(
+            child: Text(
+              L10n.getFormatted(L.qrShowErrorX, [error]),
+              style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).error),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      },
     );
   }
 }
