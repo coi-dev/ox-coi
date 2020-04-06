@@ -45,6 +45,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
@@ -59,7 +60,6 @@ import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
-import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 
 void main() {
@@ -68,34 +68,34 @@ void main() {
   final errorBloc = ErrorBloc();
 
   WidgetsFlutterBinding.ensureInitialized(); // Required to allow plugin calls prior runApp() (performed by LogManager.setup())
-  _logManager.setup(logToFile: true, logLevel: Level.INFO);
-
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<LifecycleBloc>(
-          create: (BuildContext context) {
-            var lifecycleBloc = LifecycleBloc();
-            lifecycleBloc.add(ListenerSetup());
-            return lifecycleBloc;
-          },
+  _logManager.setup(logToFile: true, logLevel: Level.INFO).then(
+        (value) => runApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<LifecycleBloc>(
+                create: (BuildContext context) {
+                  var lifecycleBloc = LifecycleBloc();
+                  lifecycleBloc.add(ListenerSetup());
+                  return lifecycleBloc;
+                },
+              ),
+              BlocProvider<PushBloc>(
+                create: (BuildContext context) => PushBloc(),
+              ),
+              BlocProvider<ErrorBloc>(
+                create: (BuildContext context) => errorBloc,
+              ),
+              BlocProvider<MainBloc>(
+                create: (BuildContext context) => MainBloc(errorBloc),
+              ),
+            ],
+            child: CustomTheme(
+              initialThemeKey: ThemeKey.LIGHT,
+              child: OxCoiApp(),
+            ),
+          ),
         ),
-        BlocProvider<PushBloc>(
-          create: (BuildContext context) => PushBloc(),
-        ),
-        BlocProvider<ErrorBloc>(
-          create: (BuildContext context) => errorBloc,
-        ),
-        BlocProvider<MainBloc>(
-          create: (BuildContext context) => MainBloc(errorBloc),
-        ),
-      ],
-      child: CustomTheme(
-        initialThemeKey: ThemeKey.LIGHT,
-        child: OxCoiApp(),
-      ),
-    ),
-  );
+      );
 }
 
 class OxCoiApp extends StatelessWidget {
@@ -188,5 +188,4 @@ class _OxCoiState extends State<OxCoi> {
     _navigation.popUntilRoot(context);
     _mainBloc.add(AppLoaded());
   }
-
 }

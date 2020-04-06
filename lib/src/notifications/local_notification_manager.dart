@@ -137,6 +137,7 @@ class LocalNotificationManager {
       int senderId = await invite.getFromId();
       if (!createdNotifications.contains(senderId)) {
         createdNotifications.add(senderId);
+        contactRepository.putIfAbsent(id: senderId);
         Contact contact = contactRepository.get(senderId);
         var contactName = await contact.getName();
         var contactMail = await contact.getAddress();

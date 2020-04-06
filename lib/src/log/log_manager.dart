@@ -76,7 +76,7 @@ class LogManager {
 
   get currentLogFile => _logFile;
 
-  void setup({@required bool logToFile, @required Level logLevel}) async {
+  Future<void> setup({@required bool logToFile, @required Level logLevel}) async {
     BlocSupervisor.delegate = LogBlocDelegate();
     if (logToFile) {
       _logFile = await _setupAndGetLogFile();
