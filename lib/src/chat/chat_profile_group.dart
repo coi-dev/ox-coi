@@ -147,10 +147,12 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                       _buildGroupMemberList(state, chatState.isRemoved),
                       SettingsItem(
                         icon: IconSource.delete,
-                        text: L10n.get(L.groupLeave),
+                        text: chatState.isRemoved ? L10n.get(L.groupDelete) : L10n.get(L.groupLeave),
                         iconBackground: CustomTheme.of(context).error,
                         textColor: CustomTheme.of(context).error,
-                        onTap: () => showActionDialog(context, ProfileActionType.leave, _leaveGroup),
+                        onTap: () => chatState.isRemoved
+                            ? showActionDialog(context, ProfileActionType.deleteChat, _deleteGroup)
+                            : showActionDialog(context, ProfileActionType.leave, _leaveGroup),
                         key: Key(keyChatProfileGroupDelete),
                       ),
                     ],
@@ -216,9 +218,13 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         });
   }
 
+  _deleteGroup() async {
+    _chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
+    _navigation.popUntilRoot(context);
+  }
+
   _leaveGroup() async {
     _chatChangeBloc.add(LeaveGroupChat(chatId: widget.chatId));
-    _chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
     _navigation.popUntilRoot(context);
   }
 

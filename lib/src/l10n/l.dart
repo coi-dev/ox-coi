@@ -253,6 +253,7 @@ class L {
   static final groupNameChanged = _translationKey("Group name changed");
   static final groupNewDraft = _translationKey("Hello, I have just created this group for us");
   static final groupLeave = _translationKey("Leave group");
+  static final groupDelete = _translationKey("Delete group");
   static final groupAddNoParticipants = _translationKey("No participants selected. Please select at least one person.");
   static final groupLeaveText = _translationKey("Do you really want to leave the group?");
   static final groupCreate = _translationKey("Create group");
