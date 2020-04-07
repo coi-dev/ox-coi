@@ -1,15 +1,21 @@
 before_script:
 - export GRADLE_USER_HOME=`pwd`/.gradle
-- source setup-build-id
 
 cache:
   paths:
   - .gradle/wrapper
   - .gradle/caches
 
+variables:
+  LANG: "en_US.UTF-8"
+  GIT_SUBMODULE_STRATEGY: "recursive"
+
+
 stages:
 - build
 - deploy
+- build-ios
+- deploy-ios
 - status-report
 
 build:
@@ -18,10 +24,31 @@ build:
   - docker
   image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
   script:
-  - tools/build.triggerBuild.sh android debug development 0.999.9 $BUILD_ID latest
+  - tools/build.triggerBuild.sh android debug development 0.999.9 $CI_PIPELINE_ID latest
   artifacts:
     paths:
     - build/app/outputs/apk/development/debug/*.apk
+
+build-ios:
+  cache: {}
+  stage: build-ios
+  tags:
+    - ios
+  script:
+    - tools/build.triggerBuild.sh ios release development 0.999.9 $CI_PIPELINE_ID latest
+  artifacts:
+    paths:
+      - build/app/outputs/ios/development/Runner.ipa/*.ipa
+
+deploy-ios:
+  cache: {}
+  stage: deploy-ios
+  tags:
+  - ios
+  dependencies:
+  - build-ios
+  script:
+  - tools/deploy.uploadToAppCenter.sh ios
 
 deploy:
   stage: deploy
@@ -31,22 +58,20 @@ deploy:
   dependencies:
   - build
   script:
-  - tools/deploy.uploadToAppCenter.sh
+  - tools/deploy.uploadToAppCenter.sh android
 
 status-report-success:
   stage: status-report
   tags:
-  - docker
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  - ios
   script:
-  - post-ticket-comment -s success
+  - tools/utils/add-issue-link -s success
   when: on_success
 
 status-report-failure:
   stage: status-report
   tags:
-  - docker
-  image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
+  - ios
   script:
-  - post-ticket-comment -s failure
+  - tools/utils/add-issue-link -s failure
   when: on_failure

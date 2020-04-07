@@ -101,8 +101,8 @@ function iosReleaseBuild {
     flutter build ios --release --build-name=${buildName} --build-number=${buildNumber} --flavor ${flavor}
     flutter clean
 
-    xcodebuild -workspace ios/Runner.xcworkspace -scheme ${flavor} -sdk iphoneos -configuration Release-${flavor} archive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -allowProvisioningUpdates
-    xcodebuild -exportArchive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -exportOptionsPlist ios/exportOptions${flavor}.plist -exportPath "${IOS_BUILD_FOLDER}/Runner.ipa" -allowProvisioningUpdates
+    xcodebuild -workspace ios/Runner.xcworkspace -scheme ${flavor} -sdk iphoneos -configuration Release-${flavor} archive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -allowProvisioningUpdates | xcpretty
+    xcodebuild -exportArchive -archivePath "${IOS_BUILD_FOLDER}/Runner.xcarchive" -exportOptionsPlist ios/exportOptions${flavor}.plist -exportPath "${IOS_BUILD_FOLDER}/Runner.ipa" -allowProvisioningUpdates | xcpretty
 }
 
 function setupPlugin {
@@ -116,6 +116,7 @@ function setupPlugin {
                 else
                     git checkout ${coreVersion}
                 fi
+                git submodule update --init --recursive
             )
         else
             echo "Plugin repository found, using the current state. To ensure the latest plugin + DCC is used, please execute 'git pull && git submodule update' in the plugin repository"
@@ -218,6 +219,14 @@ else
         moveCore
     )
 fi
+echo "-- Performing build preparations --"
+if isIos; then
+    echo "Adjusting symlinks"
+    (
+        cd "../$PLUGIN_FOLDER/$IOS_LIBRARY_FOLDER"
+        ln -sf "../../delta_chat_core/deltachat-ffi/deltachat.h" .
+    )
+fi
 echo "-- Building --"
 if isAndroid; then
     if isRelease; then
@@ -231,11 +240,5 @@ elif isIos; then
     else
         iosDebugBuild
     fi
-fi
-echo "-- Performing additional build steps --"
-if isIos; then
-    echo "Adjusting symlinks"
-    cd "../$PLUGIN_FOLDER/$IOS_LIBRARY_FOLDER"
-    ln -sf "../../delta_chat_core/deltachat-ffi/deltachat.h" .
 fi
 echo "-- Finishing --"

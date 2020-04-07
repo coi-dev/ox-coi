@@ -5,7 +5,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.openxchange.oxcoi.dev</key>
-		<string>OX COI Messenger Dev</string>
+		<string>InHouse com.openxchange.oxcoi.dev</string>
 	</dict>
 	<key>method</key>
 	<string>enterprise</string>
