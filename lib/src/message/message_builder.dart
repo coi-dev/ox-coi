@@ -139,9 +139,9 @@ class MessagePartForwarded extends StatelessWidget {
   Widget build(BuildContext context) {
     var messageStateData = _getMessageStateData(context);
     Color color = messageStateData.isOutgoing ? CustomTheme.of(context).onSecondary.half() : CustomTheme.of(context).onSurface.half();
-    double topPadding = messageStateData.isGroup && !messageStateData.isOutgoing ? dimension2dp : dimension8dp;
+    double verticalPadding = messageStateData.isGroup && !messageStateData.isOutgoing ? dimension2dp : dimension8dp;
     return Padding(
-      padding: EdgeInsets.only(top: topPadding, left: messagesHorizontalInnerPadding, right: messagesHorizontalInnerPadding,),
+      padding: EdgeInsets.only(top: verticalPadding, left: messagesHorizontalInnerPadding, right: messagesHorizontalInnerPadding, bottom: verticalPadding),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -153,7 +153,7 @@ class MessagePartForwarded extends StatelessWidget {
           Text(
             L10n.get(L.forwarded),
             style: Theme.of(context).textTheme.caption.apply(color: color),
-          )
+          ),
         ],
       ),
     );
