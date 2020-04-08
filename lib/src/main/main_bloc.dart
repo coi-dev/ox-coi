@@ -191,6 +191,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     if (isFreshLogin(appState)) {
       await _setupFreshLoggedInAppState();
     }
+    await _config.setValue(Context.configMaxAttachSize, maxAttachmentSize);
+    _logger.info("Setting max attachment size to $maxAttachmentSize");
     await setupBackgroundRefreshManager(coiSupported);
     preloadContacts();
   }

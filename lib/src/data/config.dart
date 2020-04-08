@@ -63,6 +63,7 @@ class Config {
   int showEmails;
   int mdnsEnabled;
   int rfc724MsgIdPrefix;
+  int maxAttachSize;
 
   int get lastUpdate => _lastUpdate;
 
@@ -100,6 +101,7 @@ class Config {
     showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
     mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int);
     rfc724MsgIdPrefix = await _context.getConfigValue(Context.configRfc724MsgIdPrefix, ObjectType.int);
+    maxAttachSize = await _context.getConfigValue(Context.configMaxAttachSize, ObjectType.int);
     setLastUpdate();
   }
 
@@ -171,12 +173,20 @@ class Config {
       case Context.configRfc724MsgIdPrefix:
         rfc724MsgIdPrefix = value;
         break;
+      case Context.configMaxAttachSize:
+        maxAttachSize = value;
+        break;
     }
     await _context.setConfigValue(key, value, type);
     setLastUpdate();
   }
 
-  bool isTypeInt(String key) => key == Context.configServerFlags || key == Context.configShowEmails || key == Context.configMdnsEnabled || key == Context.configRfc724MsgIdPrefix;
+  bool isTypeInt(String key) =>
+      key == Context.configServerFlags ||
+      key == Context.configShowEmails ||
+      key == Context.configMdnsEnabled ||
+      key == Context.configRfc724MsgIdPrefix ||
+      key == Context.configMaxAttachSize;
 
   convertEmptyStringToNull(value) {
     if (value == null || (value is String && value.isEmpty)) {

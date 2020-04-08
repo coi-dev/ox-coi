@@ -48,6 +48,7 @@ enum AppState {
 
 // Delta Chat Core - the core places the file in the apps folder structure under ~/files/$dbName
 const dbName = "messenger.db";
+const maxAttachmentSize = 100 * 1024 * 1024; // Means 100 MB
 
 // Extension database - the file is placed in the apps folder structure under ~/databases/$extensionDbName
 const extensionDbName = "extension.db";
