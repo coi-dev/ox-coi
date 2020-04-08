@@ -68,34 +68,32 @@ void main() {
   final errorBloc = ErrorBloc();
 
   WidgetsFlutterBinding.ensureInitialized(); // Required to allow plugin calls prior runApp() (performed by LogManager.setup())
-  _logManager.setup(logToFile: true, logLevel: Level.INFO).then(
-        (value) => runApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<LifecycleBloc>(
-                create: (BuildContext context) {
-                  var lifecycleBloc = LifecycleBloc();
-                  lifecycleBloc.add(ListenerSetup());
-                  return lifecycleBloc;
-                },
-              ),
-              BlocProvider<PushBloc>(
-                create: (BuildContext context) => PushBloc(),
-              ),
-              BlocProvider<ErrorBloc>(
-                create: (BuildContext context) => errorBloc,
-              ),
-              BlocProvider<MainBloc>(
-                create: (BuildContext context) => MainBloc(errorBloc),
-              ),
-            ],
-            child: CustomTheme(
-              initialThemeKey: ThemeKey.LIGHT,
-              child: OxCoiApp(),
+  _logManager.setup(logToFile: true, logLevel: Level.INFO).then((value) => runApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<LifecycleBloc>(
+              create: (BuildContext context) {
+                var lifecycleBloc = LifecycleBloc();
+                lifecycleBloc.add(ListenerSetup());
+                return lifecycleBloc;
+              },
             ),
+            BlocProvider<PushBloc>(
+              create: (BuildContext context) => PushBloc(),
+            ),
+            BlocProvider<ErrorBloc>(
+              create: (BuildContext context) => errorBloc,
+            ),
+            BlocProvider<MainBloc>(
+              create: (BuildContext context) => MainBloc(errorBloc),
+            ),
+          ],
+          child: CustomTheme(
+            initialThemeKey: ThemeKey.light,
+            child: OxCoiApp(),
           ),
         ),
-      );
+      ));
 }
 
 class OxCoiApp extends StatelessWidget {
@@ -104,20 +102,23 @@ class OxCoiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var customTheme = CustomTheme.of(context);
+    final themeData = ThemeData(
+      brightness: customTheme.brightness,
+      backgroundColor: customTheme.background,
+      scaffoldBackgroundColor: customTheme.background,
+      toggleableActiveColor: customTheme.accent,
+      accentColor: customTheme.accent,
+      primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
+            color: customTheme.onSurface,
+          ),
+      primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
+            bodyColor: customTheme.onSurface,
+          ),
+    );
+
     return MaterialApp(
-      theme: ThemeData(
-        brightness: customTheme.brightness,
-        backgroundColor: customTheme.background,
-        scaffoldBackgroundColor: customTheme.background,
-        toggleableActiveColor: customTheme.accent,
-        accentColor: customTheme.accent,
-        primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
-              color: customTheme.onSurface,
-            ),
-        primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
-              bodyColor: customTheme.onSurface,
-            ),
-      ),
+      theme: themeData,
+      themeMode: customTheme.brightness == Brightness.light ? ThemeMode.light : ThemeMode.dark,
       localizationsDelegates: getLocalizationsDelegates(),
       supportedLocales: L10n.supportedLocales,
       localeResolutionCallback: (deviceLocale, supportedLocales) {

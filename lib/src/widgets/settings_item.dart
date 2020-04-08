@@ -53,6 +53,7 @@ enum SettingsItemName {
   flagged,
   qrShow,
   invite,
+  appearance,
   notification,
   chat,
   signature,

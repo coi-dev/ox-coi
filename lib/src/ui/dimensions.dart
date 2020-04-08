@@ -178,3 +178,6 @@ const verticalLinePainterPositiveY = 10.0;
 const verticalLinePainterNegativeY = -10.0;
 const barPainterHeight = 30.0;
 const barPainterSpaceWidth = 1.0;
+
+// Settings
+const settingsAppearanceImageRadius = 6.0;

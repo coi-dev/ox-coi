@@ -62,6 +62,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/qr/qr.dart';
+import 'package:ox_coi/src/settings/settings_appearance.dart';
 import 'package:ox_coi/src/settings/settings_signature.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
 import 'package:ox_coi/src/user/user_change_bloc.dart';
@@ -189,13 +190,11 @@ class _ProfileState extends State<UserProfile> {
                 text: L10n.get(L.settingGroupHeaderGeneralTitle),
               ),
               SettingsItem(
-                icon: IconSource.darkMode,
-                text: L10n.get(L.settingItemDarkModeTitle),
-                iconBackground: CustomTheme.of(context).darkModeIcon,
-                onTap: () => _changeTheme(),
-                showSwitch: true,
-                onSwitchChanged: () => _changeTheme(),
-                key: Key(keyUserProfileDarkModeIconSource),
+                icon: IconSource.appearance,
+                text: SettingsAppearance.viewTitle,
+                iconBackground: CustomTheme.of(context).appearanceIcon,
+                onTap: () => _settingsItemTapped(context, SettingsItemName.appearance),
+                key: Key(keyUserProfileAppearanceIconSource),
               ),
               SettingsItem(
                 icon: IconSource.notifications,
@@ -319,6 +318,9 @@ class _ProfileState extends State<UserProfile> {
       case SettingsItemName.invite:
         _createInviteUrl();
         break;
+      case SettingsItemName.appearance:
+        navigation.pushNamed(context, Navigation.settingsAppearance);
+        break;
       case SettingsItemName.notification:
         navigation.pushNamed(context, Navigation.settingsNotifications);
         break;
@@ -379,13 +381,6 @@ class _ProfileState extends State<UserProfile> {
     // ignore: close_sinks
     final mainBloc = BlocProvider.of<MainBloc>(context);
     mainBloc.add(Logout());
-  }
-
-  void _changeTheme() async {
-    ThemeKey actualKey = CustomTheme.instanceOf(context).actualThemeKey;
-    var newTheme = actualKey == ThemeKey.DARK ? ThemeKey.LIGHT : ThemeKey.DARK;
-    await setPreference(preferenceAppThemeKey, newTheme.toString());
-    CustomTheme.instanceOf(context).changeTheme(newTheme);
   }
 
   void _editPhotoCallback(String avatarPath) {

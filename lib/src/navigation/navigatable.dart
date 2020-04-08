@@ -99,6 +99,7 @@ enum Type {
   settingsKeyTransferDoneDialog,
   settingsAutocryptImport,
   settingsNotifications,
+  settingsAppearance,
   splash,
   share,
   showQr,

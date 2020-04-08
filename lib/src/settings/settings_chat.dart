@@ -44,6 +44,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -91,7 +92,11 @@ class _SettingsChatState extends State<SettingsChat> {
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
                 title: Text(L10n.get(L.settingReadReceiptP, count: L10n.plural)),
                 subtitle: Text(L10n.get(L.settingReadReceiptText)),
-                trailing: Switch.adaptive(value: state.readReceiptsEnabled, onChanged: (value) => _changeReadReceipts()),
+                trailing: Switch.adaptive(
+                  value: state.readReceiptsEnabled,
+                  onChanged: (value) => _changeReadReceipts(),
+                  activeColor: CustomTheme.of(context).accent,
+                ),
               ),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
@@ -130,18 +135,21 @@ class _SettingsChatState extends State<SettingsChat> {
                 value: Context.showEmailsOff,
                 groupValue: inviteSetting,
                 onChanged: _onMessageSyncChooserTab,
+                activeColor: CustomTheme.of(context).accent,
               ),
               RadioListTile<int>(
                 title: Text(L10n.get(L.settingMessageSyncingTypeKnown)),
                 value: Context.showEmailsAcceptedContacts,
                 groupValue: inviteSetting,
                 onChanged: _onMessageSyncChooserTab,
+                activeColor: CustomTheme.of(context).accent,
               ),
               RadioListTile<int>(
                 title: Text(L10n.get(L.settingMessageSyncingTypeAll)),
                 value: Context.showEmailsAll,
                 groupValue: inviteSetting,
                 onChanged: _onMessageSyncChooserTab,
+                activeColor: CustomTheme.of(context).accent,
               ),
             ],
           );

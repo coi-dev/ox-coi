@@ -40,8 +40,29 @@
  * for more details.
  */
 
-import 'package:vibrate/vibrate.dart';
+// Bloc Events
 
-void vibrateLight() => Vibrate.feedback(FeedbackType.light);
+import 'package:flutter/cupertino.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 
-void vibrateMedium() => Vibrate.feedback(FeedbackType.medium);
+mixin SettingsAppearanceEvent {}
+
+class LoadAppearance with SettingsAppearanceEvent {}
+
+class AppearanceChanged with SettingsAppearanceEvent {
+  final ThemeKey themeKey;
+
+  AppearanceChanged({@required this.themeKey});
+}
+
+// Bloc States
+
+mixin SettingsAppearanceState {}
+
+class SettingsAppearanceStateInitial with SettingsAppearanceState {}
+
+class SettingsAppearanceStateLoaded with SettingsAppearanceState {
+  final ThemeKey themeKey;
+
+  SettingsAppearanceStateLoaded({@required this.themeKey});
+}

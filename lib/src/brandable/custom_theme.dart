@@ -40,14 +40,22 @@
  * for more details.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
-
-import 'branded_theme.dart';
+import 'package:ox_coi/src/brandable/branded_theme.dart';
 
 enum ThemeKey {
-  LIGHT,
-  DARK,
+  system,
+  light,
+  dark,
+}
+
+extension ThemeKeyStrings on ThemeKey {
+  String get stringValue {
+    return describeEnum(this);
+  }
 }
 
 class CustomerThemes {
@@ -93,12 +101,13 @@ class CustomerThemes {
 
   static BrandedTheme getThemeFromKey(ThemeKey themeKey) {
     switch (themeKey) {
-      case ThemeKey.LIGHT:
+      case ThemeKey.light:
         return lightTheme;
-      case ThemeKey.DARK:
+      case ThemeKey.dark:
         return darkTheme;
       default:
-        return lightTheme;
+        final brightness = WidgetsBinding.instance.window.platformBrightness;
+        return brightness == Brightness.light ? lightTheme : darkTheme;
     }
   }
 }
@@ -122,11 +131,7 @@ class CustomTheme extends StatefulWidget {
   final Widget child;
   final ThemeKey initialThemeKey;
 
-  const CustomTheme({
-    Key key,
-    this.initialThemeKey,
-    @required this.child,
-  }) : super(key: key);
+  const CustomTheme({Key key, this.initialThemeKey, @required this.child}) : super(key: key);
 
   @override
   CustomThemeState createState() => new CustomThemeState();
@@ -139,6 +144,21 @@ class CustomTheme extends StatefulWidget {
   static CustomThemeState instanceOf(BuildContext context) {
     _CustomTheme inherited = (context.dependOnInheritedWidgetOfExactType<_CustomTheme>());
     return inherited.data;
+  }
+
+  static ThemeKey getThemeKeyFor({@required String name}) {
+    if (name == ThemeKey.system.stringValue) {
+      return ThemeKey.system;
+    } else if (name == ThemeKey.light.stringValue) {
+      return ThemeKey.light;
+    } else {
+      return ThemeKey.dark;
+    }
+  }
+
+  static ThemeKey get systemThemeKey {
+    final brightness = WidgetsBinding.instance.window.platformBrightness;
+    return brightness == Brightness.light ? ThemeKey.light : ThemeKey.dark;
   }
 }
 
@@ -169,22 +189,44 @@ class CustomThemeState extends State<CustomTheme> with WidgetsBindingObserver {
     _checkSavedTheme();
   }
 
-  void _checkSavedTheme() async{
-    var newThemeKey;
-    String savedThemeKey = await getPreference(preferenceAppThemeKey);
-    if(savedThemeKey == null){
-      final Brightness brightness = WidgetsBinding.instance.window.platformBrightness;
-      newThemeKey = brightness == Brightness.light ? ThemeKey.LIGHT : ThemeKey.DARK;
-    }else{
-      newThemeKey = savedThemeKey.compareTo(ThemeKey.LIGHT.toString()) == 0 ? ThemeKey.LIGHT : ThemeKey.DARK;
+  Future<void> _checkSavedTheme() async {
+    var savedThemeKeyString = await getPreference(preferenceApplicationTheme);
+
+    ThemeKey savedThemeKey;
+    if (savedThemeKeyString == null) {
+      savedThemeKey = ThemeKey.system;
+      savedThemeKeyString = savedThemeKey.stringValue;
+      await setPreference(preferenceApplicationTheme, savedThemeKeyString);
     }
-    changeTheme(newThemeKey);
+
+    ThemeKey newThemeKey;
+    if (savedThemeKey == ThemeKey.system) {
+      newThemeKey = CustomTheme.systemThemeKey;
+    } else {
+      newThemeKey = CustomTheme.getThemeKeyFor(name: savedThemeKeyString);
+    }
+
+    await changeTheme(themeKey: newThemeKey, preservePreference: true);
   }
 
-  void changeTheme(ThemeKey themeKey) {
+  Future<void> changeTheme({@required ThemeKey themeKey, bool preservePreference = false}) async {
     setState(() {
       _actualThemeKey = themeKey;
       _theme = CustomerThemes.getThemeFromKey(themeKey);
+
+      if (!preservePreference) {
+        setPreference(preferenceApplicationTheme, themeKey.stringValue);
+      }
+
+      SystemUiOverlayStyle overlayStyle;
+      if (themeKey == ThemeKey.system) {
+        final platformBrightness = WidgetsBinding.instance.window.platformBrightness;
+        overlayStyle = platformBrightness == Brightness.light ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light;
+      } else {
+        overlayStyle = themeKey == ThemeKey.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
+      }
+
+      SystemChrome.setSystemUIOverlayStyle(overlayStyle);
     });
   }
 

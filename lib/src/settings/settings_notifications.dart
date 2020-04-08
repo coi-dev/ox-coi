@@ -45,16 +45,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/settings/settings_notifications_bloc.dart';
 import 'package:ox_coi/src/settings/settings_notifications_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
-
-import 'settings_notifications_bloc.dart';
 
 class SettingsNotifications extends StatefulWidget {
   @override
@@ -97,7 +97,11 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
                   contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
                   title: Text(L10n.get(L.settingNotificationPull)),
                   subtitle: Text(L10n.get(L.settingNotificationPullText)),
-                  trailing: Switch.adaptive(value: state.pullActive, onChanged: (value) => _changeNotificationsSetting()),
+                  trailing: Switch.adaptive(
+                    value: state.pullActive,
+                    onChanged: (value) => _changeNotificationsSetting(),
+                    activeColor: CustomTheme.of(context).accent,
+                  ),
                 ),
               ),
               Visibility(

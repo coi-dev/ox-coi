@@ -45,18 +45,18 @@ import 'package:flutter/material.dart';
 import '../brandable/custom_theme.dart';
 import '../extensions/color_apis.dart';
 
-getAccentW500TextStyle(BuildContext context){
+getAccentW500TextStyle(BuildContext context) {
     return TextStyle(color: CustomTheme.of(context).accent, fontWeight: FontWeight.w500);
 }
 
-getProfileHeaderTextStyle(BuildContext context){
+getProfileHeaderTextStyle(BuildContext context) {
     return Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface);
 }
 
-getProfileHeaderSecondTextStyle(BuildContext context){
+getProfileHeaderSecondTextStyle(BuildContext context) {
     return Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onSurface.fade());
 }
 
-getProfileHeaderPlaceholderTextStyle(BuildContext context){
+getProfileHeaderPlaceholderTextStyle(BuildContext context) {
     return Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onSurface.disabled());
 }

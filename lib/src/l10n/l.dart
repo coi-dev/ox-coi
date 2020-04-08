@@ -431,13 +431,19 @@ class L {
   static final settingItemChatTitle = _translationKey("Chat");
   static final settingItemSignatureTitle = _translationKey("Email signature");
   static final settingItemServerSettingsTitle = _translationKey("Server settings");
-  static final settingItemDarkModeTitle = _translationKey("Dark mode");
   static final settingItemDataProtectionTitle = _translationKey("Data protection");
   static final settingItemBlockedTitle = _translationKey("Blocked contacts");
   static final settingItemEncryptionTitle = _translationKey("Encryption");
   static final settingItemAboutTitle = _translationKey("About");
   static final settingItemFeedbackTitle = _translationKey("Feedback");
   static final settingItemBugReportTitle = _translationKey("Report a bug");
+
+  static final settingsAppearanceTitle = _translationKey("Appearance");
+  static final settingsAppearanceSystemTitle = _translationKey("System");
+  static final settingsAppearanceDarkTitle = _translationKey("Dark");
+  static final settingsAppearanceLightTitle = _translationKey("Light");
+  static final settingsAppearanceDescritpion = _translationKey("Here you can choose your favorite theme. If you choose '%s', the theme may change automatically. This depends on whether you have selected 'Automatic' in the system preferences or not.");
+  static final settingsAppearanceSystemThemeDescription = _translationKey("Current System theme is: %s");
 
   static List<String> _translationKey(String key, [String pluralKey]) {
     String logging = "Registered localization key: '$key'";

@@ -53,10 +53,11 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/settings/settings.dart';
 import 'package:ox_coi/src/settings/settings_about.dart';
 import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';
+import 'package:ox_coi/src/settings/settings_appearance.dart';
 import 'package:ox_coi/src/settings/settings_chat.dart';
 import 'package:ox_coi/src/settings/settings_debug.dart';
-import 'package:ox_coi/src/settings/settings_notifications.dart';
 import 'package:ox_coi/src/settings/settings_encryption.dart';
+import 'package:ox_coi/src/settings/settings_notifications.dart';
 import 'package:ox_coi/src/user/user_account_settings.dart';
 
 class Navigation {
@@ -70,6 +71,7 @@ class Navigation {
   static const String settingsAbout = '/settings/about';
   static const String settingsChat = '/settings/chat';
   static const String settingsAntiMobbing = '/settings/antiMobbing';
+  static const String settingsAppearance = '/settings/appearance';
   static const String settingsNotifications = '/settings/notifications';
   static const String settingsAntiMobbingList = '/settings/antiMobbingList';
   static const String settingsDebug = '/settings/debug';
@@ -86,6 +88,7 @@ class Navigation {
     settingsChat: (context) => SettingsChat(),
     settingsAntiMobbing: (context) => SettingsAntiMobbing(),
     settingsAntiMobbingList: (context) => AntiMobbingList(),
+    settingsAppearance: (context) => SettingsAppearance(),
     settingsNotifications: (context) => SettingsNotifications(),
     settingsDebug: (context) => SettingsDebug(),
     chatCreate: (context) => ChatCreate(),

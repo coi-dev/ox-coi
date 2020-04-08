@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const preferenceSystemContactsImportShown = "preferenceSystemContactsImportShown";
@@ -54,7 +55,7 @@ const preferenceNotificationsPushStatus = "preferenceNotificationsPushStatus";
 const preferenceAppState = "preferenceAppState";
 const preferenceInviteServiceUrl = "preferenceInviteServiceUrl";
 const preferenceHasAuthenticationError = "preferenceHasAuthenticationError";
-const preferenceAppThemeKey = "preferenceAppThemeKey";
+const preferenceApplicationTheme = "preferenceApplicationTheme";
 
 const preferenceNotificationsAuth = "preferenceNotificationsAuth"; // Unused
 const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic"; // Unused

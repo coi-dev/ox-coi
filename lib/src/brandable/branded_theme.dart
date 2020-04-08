@@ -52,7 +52,7 @@ class BrandedTheme {
   final Color chatIcon = Colors.lightBlue[800];
   final Color signatureIcon = Colors.blue[600];
   final Color serverSettingsIcon = Colors.indigo[600];
-  final Color darkModeIcon = Colors.deepPurple[500];
+  final Color appearanceIcon = Colors.deepPurple[500];
   final Color dataProtectionIcon = Colors.purple[400];
   final Color blockIcon = Colors.pink[500];
   final Color encryptionIcon = Colors.red[600];

@@ -85,6 +85,7 @@ const keyUserProfileBlockIconButton = "keyContactListBlockIconButton";
 const keyUserProfileBlockIconSource = "keyUserProfilBlockIconSource";
 const keyUserProfileNotificationIconSource = "keyProfileNotificationIconSource";
 const keyUserProfileDarkModeIconSource = "keyProfileDarkModeIconSource";
+const keyUserProfileAppearanceIconSource = "keyProfileAppearanceIconSource";
 const keyUserProfileServerSettingIconSource = "keyUserProfileServerSettingIconSource";
 
 const keyContactDetailOpenChatProfileActionIcon = "keyContactDetailOpenChatProfileActionIcon";

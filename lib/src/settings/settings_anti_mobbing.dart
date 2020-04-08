@@ -44,6 +44,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -93,7 +94,11 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
                 contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
                 title: Text(L10n.get(L.settingAntiMobbing)),
                 subtitle: Text(L10n.get(L.settingAntiMobbingText)),
-                trailing: Switch.adaptive(value: state.antiMobbingActive, onChanged: (value) => _changeAntiMobbingSetting()),
+                trailing: Switch.adaptive(
+                  value: state.antiMobbingActive,
+                  onChanged: (value) => _changeAntiMobbingSetting(),
+                  activeColor: CustomTheme.of(context).accent,
+                ),
               ),
               Visibility(
                   visible: state.antiMobbingActive,
