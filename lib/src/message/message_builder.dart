@@ -141,7 +141,7 @@ class MessagePartForwarded extends StatelessWidget {
     Color color = messageStateData.isOutgoing ? CustomTheme.of(context).onSecondary.half() : CustomTheme.of(context).onSurface.half();
     double verticalPadding = messageStateData.isGroup && !messageStateData.isOutgoing ? dimension2dp : dimension8dp;
     return Padding(
-      padding: EdgeInsets.only(top: verticalPadding, left: messagesHorizontalInnerPadding, right: messagesHorizontalInnerPadding, bottom: verticalPadding),
+      padding: EdgeInsets.only(top: verticalPadding, left: messagesHorizontalInnerPadding, right: messagesHorizontalInnerPadding, bottom: messageStateData.hasFile ? verticalPadding : zero),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
