@@ -165,7 +165,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _updateConfig() {
     Config config = Config();
-    config.reload();
+    config.forceLoad();
   }
 
   void _registerListeners() async {

@@ -109,7 +109,7 @@ class Config {
     _lastUpdate = DateTime.now().millisecondsSinceEpoch;
   }
 
-  reload() async {
+  forceLoad() async {
     _lastUpdate = -1;
     await load();
   }
