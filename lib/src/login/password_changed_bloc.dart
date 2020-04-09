@@ -64,7 +64,7 @@ class PasswordChangedBloc extends Bloc<PasswordChangedEvent, PasswordChangedStat
 
   Stream<PasswordChangedState> loadData() async* {
     Config config = Config();
-    await config.forceLoad();
+    await config.load();
     yield PasswordChangedDataLoaded(email: config.email);
   }
 }

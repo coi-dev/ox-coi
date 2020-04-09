@@ -183,7 +183,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> _setupLoggedInAppState() async {
     var context = Context();
-    await _config.forceLoad();
+    await _config.load();
     bool coiSupported = await isCoiSupported(context);
     String appState = await getPreference(preferenceAppState);
     if (coiSupported) {

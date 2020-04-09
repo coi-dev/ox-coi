@@ -47,7 +47,6 @@ class Config {
   static Config _instance;
 
   Context _context = Context();
-  int _lastUpdate = -1;
   String username;
   String status;
   String avatarPath;
@@ -65,8 +64,6 @@ class Config {
   int rfc724MsgIdPrefix;
   int maxAttachSize;
 
-  int get lastUpdate => _lastUpdate;
-
   factory Config() {
     if (_instance == null) {
       _instance = Config._internal();
@@ -82,9 +79,6 @@ class Config {
   }
 
   load() async {
-    if (_lastUpdate != -1) {
-      return;
-    }
     username = await _context.getConfigValue(Context.configDisplayName);
     avatarPath = await _context.getConfigValue(Context.configSelfAvatar);
     status = await _context.getConfigValue(Context.configSelfStatus);
@@ -102,16 +96,6 @@ class Config {
     mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int);
     rfc724MsgIdPrefix = await _context.getConfigValue(Context.configRfc724MsgIdPrefix, ObjectType.int);
     maxAttachSize = await _context.getConfigValue(Context.configMaxAttachSize, ObjectType.int);
-    setLastUpdate();
-  }
-
-  void setLastUpdate() {
-    _lastUpdate = DateTime.now().millisecondsSinceEpoch;
-  }
-
-  forceLoad() async {
-    _lastUpdate = -1;
-    await load();
   }
 
   Future<void> setValue(String key, var value) async {
@@ -178,7 +162,6 @@ class Config {
         break;
     }
     await _context.setConfigValue(key, value, type);
-    setLastUpdate();
   }
 
   bool isTypeInt(String key) =>
