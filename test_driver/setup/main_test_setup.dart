@@ -69,6 +69,13 @@ Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
     await setupAndroid();
   }
   FlutterDriver driver = await FlutterDriver.connect();
+  var connected = false;
+  while (!connected) {
+    try {
+      await driver.waitUntilFirstFrameRasterized();
+      connected = true;
+    } catch (error) {}
+  }
   if (!isLogin) {
     await getAuthentication(driver, providerCoiDebug, emailReal, passwordReal);
   }

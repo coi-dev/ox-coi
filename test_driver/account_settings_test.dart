@@ -81,7 +81,7 @@ void main() {
 
     test(': Open profile', () async {
       await driver.tap(profileFinder);
-      await driver.scroll(find.byValueKey(keyUserProfileDarkModeIconSource), 0.0, -600, Duration(milliseconds: 500));
+      await driver.scroll(find.byValueKey(keyUserProfileAppearanceIconSource), 0.0, -600, Duration(milliseconds: 500));
       await driver.tap(find.byValueKey(keyUserProfileServerSettingIconSource));
     });
 

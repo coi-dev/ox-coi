@@ -77,7 +77,7 @@ void main() {
       await blockOneContactFromContacts(driver, name3);
       await driver.waitForAbsent(find.text(name3));
       navigateTo(driver, L.getKey(L.profile));
-      await driver.scroll(find.byValueKey(keyUserProfileDarkModeIconSource), 0.0, -600.0, Duration(milliseconds: 500));
+      await driver.scroll(find.byValueKey(keyUserProfileAppearanceIconSource), 0.0, -600.0, Duration(milliseconds: 500));
       await driver.tap(find.byValueKey(keyUserProfileBlockIconSource));
       expect(await driver.getText(find.text(name3)), name3);
     });

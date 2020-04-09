@@ -60,7 +60,6 @@ import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
-import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/settings/settings_appearance.dart';
 import 'package:ox_coi/src/settings/settings_signature.dart';

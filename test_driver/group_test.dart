@@ -153,11 +153,19 @@ void main() {
       await driver.tap(pageBackFinder);
     });
 
-    test(': Check popupMenu: Leave group.', () async {
+    test(': Leave group.', () async {
       await driver.tap(find.text(newNameTestGroup));
       await driver.tap(find.byValueKey(keyChatNameText));
       await driver.scroll(find.byValueKey(keyChatProfileGroupAddParticipant), 0.0, -600, Duration(milliseconds: 500));
-      await driver.tap(find.byValueKey(keyChatProfileGroupDelete));
+      await driver.tap(find.byValueKey(keyChatProfileGroupLeaveOrDelete));
+      await driver.tap(find.byValueKey(keyConfirmationDialogPositiveButton));
+      await driver.waitFor(find.text(newNameTestGroup));
+    });
+
+    test(': Delete group.', () async {
+      await driver.tap(find.text(newNameTestGroup));
+      await driver.tap(find.byValueKey(keyChatNameText));
+      await driver.tap(find.byValueKey(keyChatProfileGroupLeaveOrDelete));
       await driver.tap(find.byValueKey(keyConfirmationDialogPositiveButton));
       await driver.waitForAbsent(find.text(newNameTestGroup));
     });

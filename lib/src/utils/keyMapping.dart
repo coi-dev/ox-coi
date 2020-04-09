@@ -84,7 +84,6 @@ const keyContactListImportButton = "keyContactListImportContactIconButton";
 const keyUserProfileBlockIconButton = "keyContactListBlockIconButton";
 const keyUserProfileBlockIconSource = "keyUserProfilBlockIconSource";
 const keyUserProfileNotificationIconSource = "keyProfileNotificationIconSource";
-const keyUserProfileDarkModeIconSource = "keyProfileDarkModeIconSource";
 const keyUserProfileAppearanceIconSource = "keyProfileAppearanceIconSource";
 const keyUserProfileServerSettingIconSource = "keyUserProfileServerSettingIconSource";
 
@@ -119,7 +118,7 @@ const KeyChatComposerMixinVoiceComposeAdaptiveSuperellipse = "KeyChatComposerMix
 const KeyChatComposerStopPlayComposeAdaptiveSuperellipse= "KeyChatComposerStopPlayComposeAdaptiveSuperellipse";
 const KeyChatComposerPlayComposeAdaptiveSuperellipse= "KeyChatComposerPlayComposeAdaptiveSuperellipse";
 
-const keyChatProfileGroupDelete = "keyChatProfileGroupDelete";
+const keyChatProfileGroupLeaveOrDelete = "keyChatProfileGroupLeaveOrDelete";
 const keyChatIconButtonIconPhone = "keyChatIconButtonIconPhone";
 const keyChatListGetFlaggedActionIconButton = "keyChatListGetFlaggedActionIconButton";
 const keyChatNameText = "keyChatNameText";

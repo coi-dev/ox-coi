@@ -153,7 +153,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         onTap: () => chatState.isRemoved
                             ? showActionDialog(context, ProfileActionType.deleteChat, _deleteGroup)
                             : showActionDialog(context, ProfileActionType.leave, _leaveGroup),
-                        key: Key(keyChatProfileGroupDelete),
+                        key: Key(keyChatProfileGroupLeaveOrDelete),
                       ),
                     ],
                   );
