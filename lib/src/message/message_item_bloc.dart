@@ -41,19 +41,21 @@
  */
 
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
+import 'package:ox_coi/src/extensions/string_linkpreview.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
+import 'package:ox_coi/src/utils/url_preview_cache.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
@@ -108,11 +110,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       if (isOutgoing && state != ChatMsg.messageStateReceived) {
         _registerListeners();
       }
-      bool showTime = await _showTime(nextMessageId);
-      bool encryptionStatusChanged = await _hasEncryptionStatusChanged(nextMessageId);
-      bool hasFile = await message.hasFile();
-      bool isSetupMessage = await message.isSetupMessage();
-      String text = await message.getText();
+      final showTime = await _showTime(nextMessageId);
+      final encryptionStatusChanged = await _hasEncryptionStatusChanged(nextMessageId);
+      final hasFile = await message.hasFile();
+      final isSetupMessage = await message.isSetupMessage();
+      final text = await message.getText();
       bool isForwarded = await message.isForwarded();
       String informationText;
       if (isSetupMessage) {
@@ -121,15 +123,15 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         informationText = L10n.get(L.chatEncryptionStatusChanged);
       }
 
-      bool isInfo = await message.isInfo();
-      int timestamp = await message.getTimestamp();
-      int showPadlock = await message.showPadlock();
-      bool isFlagged = await message.isStarred();
-      String teaser = await message.getSummaryText(200);
-      String messageInfo = "";
+      final isInfo = await message.isInfo();
+      final timestamp = await message.getTimestamp();
+      final showPadlock = await message.showPadlock();
+      final isFlagged = await message.isStarred();
+      final teaser = await message.getSummaryText(200);
 
+      String messageInfo = "";
       if (state == ChatMsg.messageStateFailed) {
-        Context context = Context();
+        final context = Context();
         messageInfo = await context.getMessageInfo(_messageId);
       }
 
@@ -147,11 +149,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
       ContactStateData contactStateData;
       if (showContact) {
-        Contact contact = _getContact();
-        int contactId = contact.id;
-        String contactName = await contact.getName();
-        String contactAddress = await contact.getAddress();
-        Color contactColor = colorFromArgb(await contact.getColor());
+        final contact = _getContact();
+        final contactId = contact.id;
+        final contactName = await contact.getName();
+        final contactAddress = await contact.getAddress();
+        final contactColor = colorFromArgb(await contact.getColor());
         contactStateData = ContactStateData(
           id: contactId,
           name: contactName,
@@ -159,6 +161,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           color: contactColor,
         );
       }
+
+      // Load possible URL preview data
+      Metadata urlPreviewData = await UrlPreviewCache().getMetadataFor(uri: text.previewUri);
 
       final messageStateData = MessageStateData(
         isOutgoing: isOutgoing,
@@ -179,6 +184,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         isGroup: isGroup,
         isForwarded: isForwarded,
         messageInfo: messageInfo,
+        urlPreviewData: urlPreviewData,
       );
       yield MessageItemStateSuccess(messageStateData: messageStateData);
     } catch (error) {

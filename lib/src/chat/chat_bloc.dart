@@ -76,7 +76,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield ChatStateLoading();
       try {
         _chatId = event.chatId;
-        await _registerListeners();
+
+       await _registerListeners();
         if (_chatId == Chat.typeInvite) {
           await _setupInviteChat(event.messageId);
         } else {

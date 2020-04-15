@@ -136,6 +136,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   @override
   void initState() {
     super.initState();
+
     _navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
     _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
     _chatBloc.add(ClearNotifications());

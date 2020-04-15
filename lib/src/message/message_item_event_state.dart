@@ -44,6 +44,7 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:metadata_fetch/metadata_fetch.dart';
 
 abstract class MessageItemEvent extends Equatable {}
 
@@ -135,6 +136,7 @@ class MessageStateData extends Equatable {
   final bool isGroup;
   final bool isForwarded;
   final String messageInfo;
+  final Metadata urlPreviewData;
 
   MessageStateData({
     @required this.text,
@@ -155,6 +157,7 @@ class MessageStateData extends Equatable {
     @required this.isGroup,
     @required this.isForwarded,
     @required this.messageInfo,
+    this.urlPreviewData,
   });
 
   MessageStateData copyWith(
@@ -175,7 +178,8 @@ class MessageStateData extends Equatable {
       encryptionStatusChanged,
       isGroup,
       isForwarded,
-      messageInfo}) {
+      messageInfo,
+      urlPreviewData}) {
     return MessageStateData(
       text: text ?? this.text,
       informationText: informationText ?? this.informationText,
@@ -195,6 +199,7 @@ class MessageStateData extends Equatable {
       isGroup: isGroup ?? this.isGroup,
       isForwarded: isForwarded ?? this.isForwarded,
       messageInfo: messageInfo ?? this.messageInfo,
+      urlPreviewData: urlPreviewData ?? this.urlPreviewData,
     );
   }
 

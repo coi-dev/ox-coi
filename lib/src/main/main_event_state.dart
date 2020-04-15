@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 
 abstract class MainEvent {}
@@ -63,7 +65,7 @@ class UserVisibleErrorEncountered extends MainEvent {
 }
 
 class DatabaseDeleteErrorEncountered extends MainEvent {
-  Error error;
+  IOException error;
 
   DatabaseDeleteErrorEncountered({@required this.error});
 }

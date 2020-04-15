@@ -48,20 +48,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/src/extension_set.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/extensions/string_markdown.dart';
+import 'package:ox_coi/src/extensions/url_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
 import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/widgets/url_preview_widget.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'message_item_event_state.dart';
 
@@ -98,7 +100,9 @@ class MessageMaterial extends StatelessWidget {
   final Widget child;
   final double elevation;
 
-  const MessageMaterial({Key key, @required this.child, this.elevation = messagesElevation}) : super(key: key);
+  const MessageMaterial(
+      {Key key, @required this.child, this.elevation = messagesElevation})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,22 +119,38 @@ class MessageMaterial extends StatelessWidget {
 class MessageText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final markdown = _getText(context).markdownValue;
-    return Padding(
-      padding: getNamePaddingForGroups(context),
-      child: MarkdownBody(
-        data: markdown,
-        onTapLink: (url) {
-          _launch(url: url);
-        },
-        ),
-    );
-  }
-}
+    final messageText = _getText(context);
+    final MessageStateData messageStateData = _getMessageStateData(context);
+    final urlPreviewIsVisible = messageStateData.urlPreviewData != null && messageStateData.urlPreviewData.hasAllMetadata;
 
-Future<void> _launch({@required String url}) async {
-  if (await canLaunch(url)) {
-    await launch(url);
+    String markdownString;
+    // TODO: This handling SHOULD be moved into the [markdownValue] getter!
+    if (messageText.trim() == messageStateData.urlPreviewData?.url?.trim()) {
+      markdownString = "[$messageText]($messageText)";
+    } else {
+      markdownString = messageText.markdownValue;
+    }
+
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: _getNamePaddingForGroups(context),
+            child: MarkdownBody(
+              extensionSet: ExtensionSet.gitHubWeb,
+              data: markdownString,
+              onTapLink: (url) {
+                final Uri tapUrl = Uri.parse(url);
+                tapUrl.launch();
+              },
+            ),
+          ),
+          if (urlPreviewIsVisible)
+            UrlPreview(messageStateData: messageStateData)
+        ],
+      ),
+    );
   }
 }
 
@@ -238,7 +258,7 @@ class MessagePartAudioAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: getNamePaddingForGroups(context),
+        padding: _getNamePaddingForGroups(context),
         child: Image.asset(
           "assets/images/img_audio_waves.png",
           width: messageAudioImageWidth,
@@ -273,8 +293,8 @@ class _MessagePartImageVideoAttachmentState extends State<MessagePartImageVideoA
     } else {
       if (imageProvider == null) {
         imageProvider = MemoryImage(kTransparentImage);
-        _messageAttachmentBloc.add(LoadThumbnailAndDuration(
-            path: _getMessageStateData(context).attachmentStateData.path, duration: _getMessageStateData(context).attachmentStateData.duration));
+        _messageAttachmentBloc.add(LoadThumbnailAndDuration(path: _getMessageStateData(context).attachmentStateData.path, duration: _getMessageStateData(context).attachmentStateData.duration)
+        );
       }
     }
     precacheImage(imageProvider, context, onError: (error, stacktrace) {
@@ -399,7 +419,7 @@ class MessagePartGenericAttachment extends StatelessWidget {
     var text = _getMessageStateData(context).text;
     AttachmentStateData attachment = _getMessageStateData(context).attachmentStateData;
     return Padding(
-      padding: getNamePaddingForGroups(context),
+      padding: _getNamePaddingForGroups(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -549,7 +569,7 @@ class MessagePartFlag extends StatelessWidget {
   }
 }
 
-EdgeInsetsGeometry getNamePaddingForGroups(BuildContext context) {
+EdgeInsetsGeometry _getNamePaddingForGroups(BuildContext context) {
   var messageStateData = _getMessageStateData(context);
   if (messageStateData.isGroup && !messageStateData.isOutgoing || messageStateData.isForwarded) {
     return EdgeInsets.only(

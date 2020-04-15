@@ -46,7 +46,12 @@ import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlTextSpan extends TextSpan {
-  UrlTextSpan({String asset, String url, String text, Function onAssetTapped, Color color})
+  UrlTextSpan(
+      {String asset,
+      String url,
+      String text,
+      Function onAssetTapped,
+      Color color})
       : super(
           style: TextStyle(color: color, fontWeight: FontWeight.bold),
           text: text ?? url,
@@ -56,7 +61,7 @@ class UrlTextSpan extends TextSpan {
                 launch(url, forceSafariVC: false);
               } else if (asset != null && asset.isNotEmpty) {
                 onAssetTapped(asset);
-              }else{
+              } else {
                 throw Exception("Asset or URL not set.");
               }
             },

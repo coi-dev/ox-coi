@@ -71,33 +71,39 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       yield MessagesStateLoading();
       try {
         _chatId = event.chatId;
+
         if (isInvite(_chatId, event.messageId)) {
           _messageId = event.messageId;
         }
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
         _registerListeners();
         _setupMessages();
+
       } catch (error) {
         yield MessagesStateFailure(error: error.toString());
       }
+
     } else if (event is UpdateMessages) {
       try {
         _setupMessages();
       } catch (error) {
         yield MessagesStateFailure(error: error.toString());
       }
+
     } else if (event is MessagesLoaded) {
       yield MessagesStateSuccess(
         messageIds: event.messageIds,
         messageLastUpdateValues: event.messageLastUpdateValues,
         dateMarkerIds: event.dateMarkerIds,
       );
+
     } else if (event is SendMessage) {
       if (event.path != null) {
         _submitAttachmentMessage(event.path, event.fileType, event.isShared, event.text);
       } else {
         _submitMessage(event.text);
       }
+
     } else if (event is DeleteCacheFile) {
       _deleteCacheFile(event.path);
     } else if (event is RetrySendingPendingMessages) {
