@@ -51,7 +51,6 @@ import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
-import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -136,20 +135,15 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     child: ProfileHeader(),
                   ),
                   SettingsItem(
+                    pushesNewScreen: true,
                     key: Key(keyContactDetailOpenChatProfileActionIcon),
                     icon: IconSource.chat,
                     text: L10n.get(L.chatOpen),
                     iconBackground: CustomTheme.of(context).chatIcon,
                     onTap: () => createChatFromContact(context, widget.contactId),
                   ),
-//TODO: This should be discussed (Flagged messages per user)!
-//                  SettingsItem(
-//                    icon: IconSource.flag,
-//                    text: L10n.get(L.settingItemFlaggedTitle),
-//                    iconBackground: CustomTheme.of(context).flagIcon,
-//                    onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
-//                  ),
                   SettingsItem(
+                    pushesNewScreen: false,
                     key: Key(keyUserProfileBlockIconSource),
                     icon: IconSource.block,
                     text: L10n.get(L.contactBlock),
@@ -168,15 +162,17 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     text: L10n.get(L.settingP),
                   ),
                   SettingsItem(
+                    pushesNewScreen: true,
                     icon: IconSource.notifications,
                     text: L10n.get(L.settingItemNotificationsTitle),
                     iconBackground: CustomTheme.of(context).notificationIcon,
-                    onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
+                    onTap: () => _navigation.pushNamed(context, Navigation.settingsNotifications),
                   ),
                   ListGroupHeader(
                     text: "",
                   ),
                   SettingsItem(
+                    pushesNewScreen: false,
                     key: Key(keyContactDetailDeleteContactProfileActionIcon),
                     icon: IconSource.delete,
                     text: L10n.get(L.contactDelete),
@@ -201,22 +197,6 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
         ),
       ),
     );
-  }
-
-  _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {
-    switch (settingsItemName) {
-      case SettingsItemName.flagged:
-        _navigation.push(
-          context,
-          MaterialPageRoute(builder: (context) => Flagged()),
-        );
-        break;
-      case SettingsItemName.notification:
-        _navigation.pushNamed(context, Navigation.settingsNotifications);
-        break;
-      default:
-        break;
-    }
   }
 
   void _editContact(BuildContext context, String name, String email, String phoneNumbers) async {

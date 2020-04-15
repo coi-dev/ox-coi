@@ -178,7 +178,7 @@ class _ContactChangeState extends State<ContactChange> {
               showConfirmationDialog(
                 context: context,
                 title: L10n.get(L.contactGooglemailDialogTitle),
-                content: L10n.get(L.contactGooglemailDialogContent),
+                contentText: L10n.get(L.contactGooglemailDialogContent),
                 positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
                 positiveAction: () => _goolemailMailAddressAction(state.name, state.email, true),
                 negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
@@ -280,11 +280,7 @@ class _ContactChangeState extends State<ContactChange> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  top: dimension32dp,
-                  bottom: dimension72dp,
-                  left: formVerticalPadding,
-                  right: formVerticalPadding),
+              padding: const EdgeInsets.only(top: dimension32dp, bottom: dimension72dp, left: formVerticalPadding, right: formVerticalPadding),
               child: Text(
                 L10n.get(L.contactEditPhoneNumberText),
                 style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.half()),
@@ -303,10 +299,14 @@ class _ContactChangeState extends State<ContactChange> {
             Visibility(
               visible: widget.contactAction == ContactAction.add,
               child: SettingsItem(
+                pushesNewScreen: true,
                 icon: IconSource.qr,
                 text: L10n.get(L.qrScan),
                 iconBackground: CustomTheme.of(context).qrIcon,
-                onTap: scanQr,
+                onTap: () => _navigation.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QrCode(chatId: 0, initialIndex: 1)),
+                ),
               ),
             ),
           ],
@@ -326,15 +326,4 @@ class _ContactChangeState extends State<ContactChange> {
   String _getName() => _nameField.controller.text;
 
   String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
-
-  scanQr() {
-    _navigation.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => QrCode(
-                chatId: 0,
-                initialIndex: 1,
-              )),
-    );
-  }
 }

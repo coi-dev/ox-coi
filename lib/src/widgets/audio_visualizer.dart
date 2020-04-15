@@ -101,24 +101,21 @@ class _AudioPlaybackState extends State<AudioPlayback> {
           onHorizontalDragEnd: _replayTime > 0 ? _onHorizontalDragEnd : null,
           onTapDown: _replayTime > 0 ? _onTapUp : null,
           behavior: HitTestBehavior.opaque,
-          child: Container(
-            padding: const EdgeInsets.only(top: voiceRecordingAudioPlaybackTopPadding),
-            child: Stack(
-              children: <Widget>[
-                VoicePainter(
-                  dbPeakList: changeableList,
-                  color: CustomTheme.of(context).onSurface,
-                  withChild: true,
-                  width: _maxWidth,
-                ),
-                VoicePainter(
-                  dbPeakList: changeableList.getRange(0, _replayTime).toList(),
-                  color: CustomTheme.of(context).accent,
-                  withChild: false,
-                  width: _maxWidth,
-                ),
-              ],
-            ),
+          child: Stack(
+            children: <Widget>[
+              VoicePainter(
+                dbPeakList: changeableList,
+                color: CustomTheme.of(context).onSurface,
+                withChild: true,
+                width: _maxWidth,
+              ),
+              VoicePainter(
+                dbPeakList: changeableList.getRange(0, _replayTime).toList(),
+                color: CustomTheme.of(context).accent,
+                withChild: false,
+                width: _maxWidth,
+              ),
+            ],
           ),
         );
       },

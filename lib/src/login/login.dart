@@ -100,7 +100,7 @@ class _LoginState extends State<Login> {
         showInformationDialog(
           context: context,
           title: L10n.get(L.loginFailed),
-          content: state.error,
+          contentText: state.error,
           navigatable: Navigatable(Type.loginErrorDialog),
         );
       }

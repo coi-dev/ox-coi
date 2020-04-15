@@ -195,7 +195,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
       showConfirmationDialog(
         context: context,
         title: L10n.get(L.contactGooglemailDialogTitle),
-        content: L10n.get(L.contactGooglemailDialogContent),
+        contentText: L10n.get(L.contactGooglemailDialogContent),
         positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
         positiveAction: () => _googleMailMailAddressAction(true),
         negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
@@ -278,7 +278,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
     showConfirmationDialog(
       context: context,
       title: importTitle,
-      content: content,
+      contentText: content,
       positiveButton: importPositive,
       positiveAction: () {
         _progressOverlayEntry = FullscreenOverlay(

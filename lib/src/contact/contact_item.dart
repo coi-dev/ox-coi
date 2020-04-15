@@ -137,28 +137,13 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
   _buildUnblockContactDialog(String name, String email) {
     String contact = name.isNotEmpty ? name : email;
     Navigation navigation = Navigation();
-    return showNavigatableDialog(
+    return showConfirmationDialog(
       context: context,
       navigatable: Navigatable(Type.contactUnblockDialog),
-      dialog: AlertDialog(
-        title: Text(L10n.get(L.contactUnblock)),
-        content: Text(L10n.getFormatted(L.contactUnblockTextX, [contact])),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(L10n.get(L.cancel)),
-            onPressed: () {
-              navigation.pop(context);
-            },
-          ),
-          FlatButton(
-            child: Text(L10n.get(L.unblock)),
-            onPressed: () {
-              unblockContact();
-              navigation.pop(context);
-            },
-          ),
-        ],
-      ),
+      title: L10n.get(L.contactUnblock),
+      contentText: L10n.getFormatted(L.contactUnblockTextX, [contact]),
+      positiveButton: L10n.get(L.unblock),
+      positiveAction: unblockContact,
     );
   }
 

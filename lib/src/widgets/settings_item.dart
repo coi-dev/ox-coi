@@ -49,33 +49,13 @@ import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 
-enum SettingsItemName {
-  flagged,
-  qrShow,
-  invite,
-  appearance,
-  notification,
-  chat,
-  signature,
-  serverSetting,
-  darkMode,
-  dataProtection,
-  blocked,
-  encryption,
-  about,
-  feedback,
-  bugReport,
-  debug,
-  logout,
-}
-
 class SettingsItem extends StatelessWidget {
   final IconSource icon;
   final Color iconBackground;
   final String text;
   final Function onTap;
+  final bool pushesNewScreen;
   final bool showSwitch;
-  final bool showChevron;
   final Function onSwitchChanged;
   final Color textColor;
   final double itemHeight;
@@ -86,8 +66,8 @@ class SettingsItem extends StatelessWidget {
     @required this.iconBackground,
     @required this.text,
     @required this.onTap,
+    @required this.pushesNewScreen,
     this.showSwitch = false,
-    this.showChevron = true,
     this.onSwitchChanged,
     this.textColor,
     this.itemHeight = dimension48dp,
@@ -127,7 +107,7 @@ class SettingsItem extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: Platform.isIOS && !showSwitch && showChevron,
+                visible: Platform.isIOS && !showSwitch && pushesNewScreen,
                 child: AdaptiveIcon(
                   icon: IconSource.iosChevron,
                   color: CustomTheme.of(context).onSurface,
