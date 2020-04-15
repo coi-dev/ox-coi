@@ -44,7 +44,7 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 
-enum TextFormType {
+enum TextType {
   normal,
   email,
   password,
@@ -52,7 +52,7 @@ enum TextFormType {
 }
 
 class ValidatableTextFormField extends StatefulWidget {
-  final TextFormType textFormType;
+  final TextType textType;
   final Function labelText;
   final Function hintText;
   final TextInputType inputType;
@@ -60,19 +60,19 @@ class ValidatableTextFormField extends StatefulWidget {
   final Function validationHint;
   final bool enabled;
   final int maxLines;
-  final bool showIcon;
+  final AdaptiveIcon icon;
   final TextEditingController controller = TextEditingController();
 
   ValidatableTextFormField(this.labelText,
       {this.hintText,
       Key key,
-      this.textFormType = TextFormType.normal,
+      this.textType = TextType.normal,
       this.inputType = TextInputType.text,
       this.needValidation = false,
       this.validationHint,
       this.enabled = true,
       this.maxLines = 1,
-      this.showIcon = false})
+      this.icon})
       : super(key: key);
 
   @override
@@ -85,7 +85,7 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        obscureText: widget.textFormType == TextFormType.password && !_showReadablePassword,
+        obscureText: widget.textType == TextType.password && !_showReadablePassword,
         maxLines: widget.maxLines,
         controller: widget.controller,
         keyboardType: widget.inputType,
@@ -96,18 +96,21 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
   }
 
   InputDecoration _getInputDecoration() {
-    if (widget.textFormType == TextFormType.password) {
+    if (widget.textType == TextType.password) {
       return InputDecoration(
         labelText: widget.labelText(context),
         hintText: widget.hintText != null ? widget.hintText(context) : "",
-        prefixIcon: widget.showIcon ? AdaptiveIcon(icon: IconSource.lock) : null,
-        suffixIcon: IconButton(icon: AdaptiveIcon(icon: _showReadablePassword ?  IconSource.visibility : IconSource.visibilityOff), onPressed: _togglePasswordVisibility),
+        icon: widget.icon,
+        suffixIcon: IconButton(
+          icon: AdaptiveIcon(icon: _showReadablePassword ? IconSource.visibility : IconSource.visibilityOff),
+          onPressed: _togglePasswordVisibility,
+        ),
       );
     } else {
       return InputDecoration(
         labelText: widget.labelText(context),
         hintText: widget.hintText != null ? widget.hintText(context) : "",
-        prefixIcon: widget.textFormType == TextFormType.email && widget.showIcon ? AdaptiveIcon(icon: IconSource.person) : null,
+        icon: widget.icon,
       );
     }
   }
@@ -115,13 +118,13 @@ class _ValidatableTextFormFieldState extends State<ValidatableTextFormField> {
   String _validate(String value) {
     var valid = true;
     if (widget.needValidation) {
-      if (widget.textFormType == TextFormType.normal || widget.textFormType == TextFormType.password) {
+      if (widget.textType == TextType.normal || widget.textType == TextType.password) {
         valid = value.isNotEmpty;
-      } else if (widget.textFormType == TextFormType.email) {
+      } else if (widget.textType == TextType.email) {
         var trimmedEmail = value.trim();
         valid = trimmedEmail.isEmail;
         widget.controller.text = trimmedEmail;
-      } else if (widget.textFormType == TextFormType.port) {
+      } else if (widget.textType == TextType.port) {
         valid = value.isPort;
       }
     }

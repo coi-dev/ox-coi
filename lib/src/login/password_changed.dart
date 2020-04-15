@@ -85,9 +85,10 @@ class _PasswordChangedState extends State<PasswordChanged> {
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => L10n.get(L.password),
     key: Key(keySettingsManuelFormValidatableTextFormFieldPasswordField),
-    textFormType: TextFormType.password,
+    textType: TextType.password,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
+    icon: AdaptiveIcon(icon: IconSource.lock),
   );
 
   @override
@@ -97,11 +98,12 @@ class _PasswordChangedState extends State<PasswordChanged> {
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     emailField = ValidatableTextFormField(
       (context) => L10n.get(L.emailAddress),
-      textFormType: TextFormType.email,
+      textType: TextType.email,
       inputType: TextInputType.emailAddress,
       needValidation: true,
       enabled: false,
       validationHint: (context) => L10n.get(L.loginCheckMail),
+      icon: AdaptiveIcon(icon: IconSource.person),
     );
     _passwordChangedBloc.add(LoadData());
   }

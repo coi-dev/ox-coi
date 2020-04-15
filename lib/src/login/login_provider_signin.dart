@@ -42,6 +42,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -85,20 +86,20 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   ValidatableTextFormField emailField = ValidatableTextFormField(
     (context) => L10n.get(L.emailAddress),
     hintText: (context) => L10n.get(L.emailAddress),
-    textFormType: TextFormType.email,
+    textType: TextType.email,
     inputType: TextInputType.emailAddress,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckMail),
-    showIcon: true,
+    icon: AdaptiveIcon(icon: IconSource.person),
     key: Key(keyProviderSignInEmailTextField),
   );
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => L10n.get(L.password),
     hintText: (context) => L10n.get(L.password),
-    textFormType: TextFormType.password,
+    textType: TextType.password,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
-    showIcon: true,
+    icon: AdaptiveIcon(icon: IconSource.lock),
     key: Key(keyProviderSignInPasswordTextField),
   );
 

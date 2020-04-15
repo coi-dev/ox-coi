@@ -65,7 +65,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   ValidatableTextFormField emailField;
   ValidatableTextFormField passwordField = ValidatableTextFormField(
     (context) => L10n.get(L.password),
-    textFormType: TextFormType.password,
+    textType: TextType.password,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
     key: Key(keySettingsManuelFormValidatableTextFormFieldPasswordField),
@@ -80,7 +80,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   );
   ValidatableTextFormField imapPortField = ValidatableTextFormField(
     (context) => L10n.get(L.settingIMAPPort),
-    textFormType: TextFormType.port,
+    textType: TextType.port,
     inputType: TextInputType.number,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPort),
@@ -90,7 +90,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   );
   ValidatableTextFormField smtpPasswordField = ValidatableTextFormField(
     (context) => L10n.get(L.settingSMTPPassword),
-    textFormType: TextFormType.password,
+    textType: TextType.password,
     needValidation: false,
     validationHint: (context) => L10n.get(L.loginCheckPassword),
   );
@@ -101,7 +101,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   );
   ValidatableTextFormField smtpPortField = ValidatableTextFormField(
     (context) => L10n.get(L.settingSMTPPort),
-    textFormType: TextFormType.port,
+    textType: TextType.port,
     inputType: TextInputType.number,
     needValidation: true,
     validationHint: (context) => L10n.get(L.loginCheckPort),
@@ -112,7 +112,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
     super.initState();
     emailField = ValidatableTextFormField(
       (context) => L10n.get(L.emailAddress),
-      textFormType: TextFormType.email,
+      textType: TextType.email,
       inputType: TextInputType.emailAddress,
       needValidation: true,
       enabled: widget.isLogin,

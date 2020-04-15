@@ -94,6 +94,7 @@ class _ContactChangeState extends State<ContactChange> {
     (context) => L10n.get(L.name),
     key: Key(keyContactChangeNameValidatableTextFormField),
     hintText: (context) => L10n.get(L.contactName),
+    icon: AdaptiveIcon(icon: IconSource.person),
   );
   ValidatableTextFormField _emailField;
 
@@ -112,8 +113,9 @@ class _ContactChangeState extends State<ContactChange> {
       _emailField = ValidatableTextFormField(
         (context) => L10n.get(L.emailAddress),
         key: Key(keyContactChangeEmailValidatableTextFormField),
-        textFormType: TextFormType.email,
+        textType: TextType.email,
         inputType: TextInputType.emailAddress,
+        icon: AdaptiveIcon(icon: IconSource.mail),
         needValidation: true,
         validationHint: (context) => L10n.get(L.loginCheckMail),
       );
@@ -237,15 +239,7 @@ class _ContactChangeState extends State<ContactChange> {
                 color: CustomTheme.of(context).surface,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-                  child: Row(
-                    children: <Widget>[
-                      AdaptiveIcon(icon: IconSource.person),
-                      Padding(
-                        padding: EdgeInsets.only(right: iconFormPadding),
-                      ),
-                      Expanded(child: _nameField),
-                    ],
-                  ),
+                  child: _nameField,
                 ),
               ),
             ),
@@ -255,15 +249,7 @@ class _ContactChangeState extends State<ContactChange> {
                 color: CustomTheme.of(context).surface,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-                  child: Row(
-                    children: <Widget>[
-                      AdaptiveIcon(icon: IconSource.mail),
-                      Padding(
-                        padding: const EdgeInsets.only(right: iconFormPadding),
-                      ),
-                      Expanded(child: _emailField),
-                    ],
-                  ),
+                  child: _emailField,
                 ),
               ),
             ),
