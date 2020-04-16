@@ -132,7 +132,7 @@ showActionDialog(BuildContext context, ProfileActionType action, Function onPerf
   return showConfirmationDialog(
     context: context,
     title: title,
-    content: content,
+    contentText: content,
     positiveButton: positiveButton,
     positiveAction: onPerform,
     selfClose: false,

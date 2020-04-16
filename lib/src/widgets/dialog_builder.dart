@@ -50,11 +50,12 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 
 import '../utils/keyMapping.dart';
 
-showNavigatableDialog({@required BuildContext context,
-  @required Widget dialog,
-  @required Navigatable navigatable,
-  Navigatable previousNavigatable,
-  barrierDismissible = true}) {
+showNavigatableDialog(
+    {@required BuildContext context,
+    @required Widget dialog,
+    @required Navigatable navigatable,
+    Navigatable previousNavigatable,
+    barrierDismissible = true}) {
   Navigation navigation = Navigation();
   previousNavigatable = previousNavigatable ?? navigation.current;
   navigation.current = navigatable;
@@ -70,9 +71,11 @@ showNavigatableDialog({@required BuildContext context,
   });
 }
 
-showConfirmationDialog({@required BuildContext context,
+showConfirmationDialog({
+  @required BuildContext context,
   @required String title,
-  @required String content,
+  String contentText,
+  Widget content,
   @required String positiveButton,
   @required Function positiveAction,
   @required Navigatable navigatable,
@@ -81,8 +84,10 @@ showConfirmationDialog({@required BuildContext context,
   Function negativeAction,
   bool selfClose = true,
   barrierDismissible = true,
-  Function onWillPop}) {
+  Function onWillPop,
+}) {
   Navigation navigation = Navigation();
+  assert(content != null || contentText != null);
 
   return showNavigatableDialog(
     context: context,
@@ -93,14 +98,11 @@ showConfirmationDialog({@required BuildContext context,
         onWillPop: onWillPop,
         child: AdaptiveDialog(
           title: Text(title),
-          content: new Text(content),
+          content: content ?? Text(contentText),
           actions: <Widget>[
-            new AdaptiveDialogAction(
+            AdaptiveDialogAction(
               key: Key(keyConfirmationDialogCancelButton),
-              child: new Text(
-                  negativeButton != null && negativeButton.isNotEmpty
-                      ? negativeButton
-                      : L10n.get(L.cancel)),
+              child: Text(negativeButton != null && negativeButton.isNotEmpty ? negativeButton : L10n.get(L.cancel)),
               onPressed: () {
                 if (negativeAction != null) {
                   negativeAction();
@@ -108,9 +110,9 @@ showConfirmationDialog({@required BuildContext context,
                 navigation.pop(context);
               },
             ),
-            new AdaptiveDialogAction(
+            AdaptiveDialogAction(
               key: Key(keyConfirmationDialogPositiveButton),
-              child: new Text(positiveButton),
+              child: Text(positiveButton),
               onPressed: () {
                 positiveAction();
                 if (selfClose) {
@@ -126,7 +128,7 @@ showConfirmationDialog({@required BuildContext context,
 showInformationDialog(
     {@required BuildContext context,
     @required String title,
-    @required String content,
+    @required String contentText,
     @required Navigatable navigatable,
     Navigatable previousNavigatable}) {
   Navigation navigation = Navigation();
@@ -137,11 +139,11 @@ showInformationDialog(
       previousNavigatable: previousNavigatable,
       dialog: AdaptiveDialog(
         title: Text(title),
-        content: new Text(content),
+        content: Text(contentText),
         actions: <Widget>[
-          new AdaptiveDialogAction(
+          AdaptiveDialogAction(
             key: Key(keyInformationDialogPositiveButton),
-            child: new Text(L10n.get(L.ok)),
+            child: Text(L10n.get(L.ok)),
             onPressed: () {
               navigation.pop(context);
             },

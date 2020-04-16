@@ -130,70 +130,50 @@ class _RootState extends State<Root> {
                       String chatListInviteDialogXYText = L10n.getFormatted(L.chatListInviteDialogXY, [name, email]);
                       String chatListInviteDialogXText = L10n.getFormatted(L.chatListInviteDialogX, [email]);
                       Uint8List imageBytes = state.base64Image != null ? base64Decode(state.base64Image) : Uint8List(0);
-                      showNavigatableDialog(
+                      showConfirmationDialog(
                         context: context,
                         navigatable: Navigatable(Type.chatListInviteDialog),
-                        dialog: AlertDialog(
-                          content: Row(
-                            children: <Widget>[
-                              Visibility(
-                                visible: imageBytes.length > 0,
+                        title: L10n.get(L.invitation),
+                        content: Row(
+                          children: <Widget>[
+                            Visibility(
+                              visible: imageBytes.length > 0,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: dimension8dp),
                                 child: Image.memory(
                                   imageBytes,
                                   height: listAvatarDiameter,
                                   width: listAvatarDiameter,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(dimension8dp),
-                              ),
-                              Flexible(
-                                child: Text(name == email ? chatListInviteDialogXText : chatListInviteDialogXYText),
-                              )
-                            ],
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text(L10n.get(L.cancel)),
-                              onPressed: () {
-                                _navigation.pop(context);
-                              },
                             ),
-                            FlatButton(
-                              child: Text(L10n.get(L.chatStart)),
-                              onPressed: () {
-                                _navigation.pop(context);
-                                _inviteBloc.add(AcceptInvite(inviteServiceResponse: inviteServiceResponse));
-                              },
-                            ),
+                            Flexible(
+                              child: Text(name == email ? chatListInviteDialogXText : chatListInviteDialogXYText),
+                            )
                           ],
                         ),
+                        positiveButton: L10n.get(L.chatStart),
+                        positiveAction: () {
+                          _inviteBloc.add(AcceptInvite(inviteServiceResponse: inviteServiceResponse));
+                        },
                       );
                     }
                   } else if (state is InviteStateFailure) {
-                    showNavigatableDialog(
+                    showInformationDialog(
                       context: context,
                       navigatable: Navigatable(Type.chatListInviteErrorDialog),
-                      dialog: AlertDialog(
-                        title: Text(L10n.get(L.error)),
-                        content: Text(state.errorMessage),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(L10n.get(L.ok)),
-                            onPressed: () {
-                              _navigation.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
+                      title: L10n.get(L.error),
+                      contentText: state.errorMessage,
                     );
                   } else if (state is CreateInviteChatSuccess) {
                     _navigation.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Chat(
-                                  chatId: state.chatId,
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Chat(
+                          chatId: state.chatId,
+                        ),
+                      ),
+                    );
                   }
                 },
               ),

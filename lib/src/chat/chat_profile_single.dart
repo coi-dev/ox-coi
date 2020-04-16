@@ -58,12 +58,11 @@ import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
 import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
-
 
 class ChatProfileOneToOne extends StatefulWidget {
   final int chatId;
@@ -134,13 +133,18 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             child: ProfileHeader(),
           ),
           SettingsItem(
+            pushesNewScreen: true,
             icon: IconSource.flag,
             text: L10n.get(L.settingItemFlaggedTitle),
             key: Key(keyChatProfileSingleIconSourceFlaggedTitle),
             iconBackground: CustomTheme.of(context).flagIcon,
-            onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
+            onTap: () => _navigation.push(
+              context,
+              MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
+            ),
           ),
           SettingsItem(
+            pushesNewScreen: false,
             icon: IconSource.block,
             text: L10n.get(L.contactBlock),
             iconBackground: CustomTheme.of(context).blockIcon,
@@ -160,10 +164,11 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             ),
           if (!widget.isSelfTalk)
             SettingsItem(
+              pushesNewScreen: true,
               icon: IconSource.notifications,
               text: L10n.get(L.settingItemNotificationsTitle),
               iconBackground: CustomTheme.of(context).notificationIcon,
-              onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
+              onTap: () => _navigation.pushNamed(context, Navigation.settingsNotifications),
             ),
           if (!isInvite())
             ListGroupHeader(
@@ -171,32 +176,16 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             ),
           if (!isInvite())
             SettingsItem(
+              pushesNewScreen: false,
               icon: IconSource.delete,
               text: L10n.get(L.chatDeleteP),
               textColor: CustomTheme.of(context).error,
               iconBackground: CustomTheme.of(context).blockIcon,
-              showChevron: false,
               onTap: () => showActionDialog(context, ProfileActionType.deleteChat, _deleteChat),
             ),
         ],
       ),
     );
-  }
-
-  _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {
-    switch (settingsItemName) {
-      case SettingsItemName.flagged:
-        _navigation.push(
-          context,
-          MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
-        );
-        break;
-      case SettingsItemName.notification:
-        _navigation.pushNamed(context, Navigation.settingsNotifications);
-        break;
-      default:
-        break;
-    }
   }
 
   _blockContact() {

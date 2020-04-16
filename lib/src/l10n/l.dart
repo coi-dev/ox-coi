@@ -84,6 +84,7 @@ class L {
   static final import = _translationKey("Import");
   static final inbox = _translationKey("Inbox");
   static final invites = _translationKey("Invites");
+  static final invitation = _translationKey("Invitation");
   static final email = _translationKey("Email");
   static final location = _translationKey("Location");
   static final me = _translationKey("Me");

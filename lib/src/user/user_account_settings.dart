@@ -109,7 +109,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
         showInformationDialog(
           context: context,
           title: L10n.get(L.settingConfigurationChangeFailed),
-          content: state.error,
+          contentText: state.error,
           navigatable: Navigatable(Type.loginErrorDialog),
         );
       }

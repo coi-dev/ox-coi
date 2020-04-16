@@ -116,19 +116,21 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                     children: <Widget>[
                       buildProfileImageAndTitle(chatState),
                       SettingsItem(
+                        pushesNewScreen: true,
                         icon: IconSource.flag,
                         text: L10n.get(L.settingItemFlaggedTitle),
                         iconBackground: CustomTheme.of(context).flagIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.flagged),
+                        onTap: () => _navigation.push(context, MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId))),
                       ),
                       ListGroupHeader(
                         text: L10n.get(L.settingP),
                       ),
                       SettingsItem(
+                        pushesNewScreen: true,
                         icon: IconSource.notifications,
                         text: L10n.get(L.settingItemNotificationsTitle),
                         iconBackground: CustomTheme.of(context).notificationIcon,
-                        onTap: () => _settingsItemTapped(context, SettingsItemName.notification),
+                        onTap: () => _navigation.pushNamed(context, Navigation.settingsNotifications),
                       ),
                       ListGroupHeader(
                         text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
@@ -136,6 +138,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                       Visibility(
                         visible: !chatState.isRemoved,
                         child: SettingsItem(
+                          pushesNewScreen: true,
                           icon: IconSource.groupAdd,
                           text: L10n.get(L.participantAdd),
                           key: Key(keyChatProfileGroupAddParticipant),
@@ -146,6 +149,7 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                       ),
                       _buildGroupMemberList(state, chatState.isRemoved),
                       SettingsItem(
+                        pushesNewScreen: false,
                         icon: IconSource.delete,
                         text: chatState.isRemoved ? L10n.get(L.groupDelete) : L10n.get(L.groupLeave),
                         iconBackground: CustomTheme.of(context).error,
@@ -166,22 +170,6 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         }
       },
     );
-  }
-
-  _settingsItemTapped(BuildContext context, SettingsItemName settingsItemName) {
-    switch (settingsItemName) {
-      case SettingsItemName.flagged:
-        _navigation.push(
-          context,
-          MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
-        );
-        break;
-      case SettingsItemName.notification:
-        _navigation.pushNamed(context, Navigation.settingsNotifications);
-        break;
-      default:
-        break;
-    }
   }
 
   ProfileData buildProfileImageAndTitle(ChatStateSuccess state) {

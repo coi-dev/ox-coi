@@ -881,7 +881,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
       showInformationDialog(
         context: context,
         title: L10n.get(L.contactNoPhoneNumber),
-        content: L10n.get(L.contactNoPhoneNumberText),
+        contentText: L10n.get(L.contactNoPhoneNumberText),
         navigatable: Navigatable(Type.contactNoNumberDialog),
       );
     } else {

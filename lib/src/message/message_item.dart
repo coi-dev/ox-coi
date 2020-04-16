@@ -310,7 +310,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     showInformationDialog(
       context: context,
       title: L10n.get(L.error),
-      content: messageInfo,
+      contentText: messageInfo,
       navigatable: Navigatable(Type.messageInfoDialog),
     );
   }

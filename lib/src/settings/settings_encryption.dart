@@ -44,6 +44,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog_action.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -106,11 +108,11 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
           showNavigatableDialog(
             context: context,
             navigatable: Navigatable(Type.settingsKeyTransferDoneDialog),
-            dialog: AlertDialog(
+            dialog: AdaptiveDialog(
               title: Text(L10n.get(L.autocryptMessageCreated)),
               content: new Text(L10n.getFormatted(L.autocryptMessageSentX, [state.setupCode])),
               actions: <Widget>[
-                new FlatButton(
+                AdaptiveDialogAction(
                   child: new Text(L10n.get(L.settingCopyCode)),
                   onPressed: () {
                     var toastText = L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.code)]);
@@ -118,7 +120,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
                     _navigation.pop(context);
                   },
                 ),
-                new FlatButton(
+                AdaptiveDialogAction(
                   child: new Text(L10n.get(L.ok)),
                   onPressed: () {
                     _navigation.pop(context);
@@ -217,7 +219,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
     showConfirmationDialog(
       context: context,
       title: title,
-      content: text,
+      contentText: text,
       positiveButton: L10n.get(L.ok),
       positiveAction: () => _exportImport(type),
       navigatable: Navigatable(navigationType),
@@ -236,7 +238,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
     showConfirmationDialog(
       context: context,
       title: L10n.get(L.settingKeyTransferStart),
-      content: L10n.get(L.autocryptText),
+      contentText: L10n.get(L.autocryptText),
       positiveButton: L10n.get(L.ok),
       positiveAction: _keyTransfer,
       navigatable: Navigatable(Type.settingsKeyTransferDialog),
