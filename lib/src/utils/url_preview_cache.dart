@@ -97,8 +97,13 @@ class UrlPreviewCache {
 
   Future<void> prepareCache() async {
     final cachePath = await _getCacheDirPath();
+    final directory = Directory(cachePath);
+
+    if (! await directory.exists()) {
+      await directory.create(recursive: true);
+    }
     debugPrint("** Cache Path: $cachePath");
-    Directory(cachePath).list().listen((entity) async {
+    directory.list().listen((entity) async {
       final cacheFile = File(entity.path);
       final metadata = await _getMetadataFor(file: cacheFile);
       final key = path.basenameWithoutExtension(cacheFile.path).intValue;
