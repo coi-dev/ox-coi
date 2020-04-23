@@ -41,15 +41,12 @@
  */
 
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat_event_state.dart';
 import 'package:ox_coi/src/data/chat_extension.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
-import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
@@ -58,14 +55,12 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  var _chatRepository = RepositoryManager.get(RepositoryType.chat);
-  var _contactRepository = RepositoryManager.get(RepositoryType.contact);
-  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
-  bool _isGroup = false;
-  int _chatId;
+  final _chatRepository = RepositoryManager.get(RepositoryType.chat);
+  final _contactRepository = RepositoryManager.get(RepositoryType.contact);
+  RepositoryEventStreamHandler _repositoryStreamHandler;
   bool _listenersRegistered = false;
-
-  bool get isGroup => _isGroup;
+  bool _isGroupChat;
+  int _chatId;
 
   @override
   ChatState get initialState => ChatStateInitial();
@@ -79,27 +74,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
        await _registerListeners();
         if (_chatId == Chat.typeInvite) {
-          await _setupInviteChat(event.messageId);
+          yield* _setupInviteChat(event.messageId);
         } else {
-          await _setupChat(event.isHeadless);
+          yield* _setupChat(event.isHeadless);
         }
       } catch (error, stackTrace) {
         yield ChatStateFailure(error: error, stackTrace: stackTrace);
       }
-    } else if (event is ChatLoaded) {
-      yield ChatStateSuccess(
-          name: event.name,
-          subTitle: event.subTitle,
-          color: event.color,
-          freshMessageCount: event.freshMessageCount,
-          isSelfTalk: event.isSelfTalk,
-          isGroupChat: event.isGroupChat,
-          preview: event.preview,
-          timestamp: event.timestamp,
-          isVerified: event.isVerified,
-          avatarPath: event.avatarPath,
-          isRemoved: event.isRemoved,
-          phoneNumbers: event.phoneNumbers);
     } else if (event is ClearNotifications) {
       _removeNotifications();
     }
@@ -114,7 +95,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _registerListeners() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified], _onChatChanged);
+      _repositoryStreamHandler = RepositoryEventStreamHandler(
+        Type.publish,
+        Event.chatModified,
+        _onChatChanged,
+      );
       _chatRepository.addListener(_repositoryStreamHandler);
     }
   }
@@ -133,36 +118,34 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  Future<void> _setupInviteChat(int messageId) async {
-    Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-    ChatMsg message = messageListRepository.get(messageId);
+  Stream<ChatState> _setupInviteChat(int messageId) async* {
+    final messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
+    final ChatMsg message = messageListRepository.get(messageId);
     if (message != null) {
-      int contactId = await message.getFromId();
-      Contact contact = _contactRepository.get(contactId);
-      String name = await contact.getName();
-      String email = await contact.getAddress();
-      int colorValue = await contact.getColor();
-      Color color = colorFromArgb(colorValue);
-      add(
-        ChatLoaded(
-          name: name,
-          subTitle: email,
-          color: color,
-          freshMessageCount: 0,
-          isSelfTalk: false,
-          isGroupChat: false,
-          preview: null,
-          timestamp: null,
-          isVerified: false,
-          isRemoved: false,
-          avatarPath: null,
-        ),
+      final contactId = await message.getFromId();
+      final Contact contact = _contactRepository.get(contactId);
+      final name = await contact.getName();
+      final email = await contact.getAddress();
+      final colorValue = await contact.getColor();
+      final color = colorFromArgb(colorValue);
+      yield ChatStateSuccess(
+        name: name,
+        subTitle: email,
+        color: color,
+        freshMessageCount: 0,
+        isSelfTalk: false,
+        isGroupChat: false,
+        preview: null,
+        timestamp: null,
+        isVerified: false,
+        isRemoved: false,
+        avatarPath: null,
       );
     }
   }
 
-  Future<void> _setupChat(bool isHeadless) async {
-    Context context = Context();
+  Stream<ChatState> _setupChat(bool isHeadless) async* {
+    final context = Context();
     Chat chat = _chatRepository.get(_chatId);
     if (chat == null && isHeadless) {
       _chatRepository.putIfAbsent(id: _chatId);
@@ -171,59 +154,57 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (chat == null) {
       return;
     }
-    _isGroup = await chat.isGroup();
-    String name = await chat.getName();
-    int colorValue = await chat.getColor();
-    int freshMessageCount = await context.getFreshMessageCount(_chatId);
-    bool isSelfTalk = await chat.isSelfTalk();
-    bool isVerified = await chat.isVerified();
-    Color color = colorFromArgb(colorValue);
+    _isGroupChat = await chat.isGroup();
+    final name = await chat.getName();
+    final colorValue = await chat.getColor();
+    final freshMessageCount = await context.getFreshMessageCount(_chatId);
+    final isSelfTalk = await chat.isSelfTalk();
+    final isVerified = await chat.isVerified();
+    final color = colorFromArgb(colorValue);
+    final chatSummary = chat.get(ChatExtension.chatSummary);
+    final chatSummaryState = chatSummary?.state;
+    final chatContacts = await context.getChatContacts(_chatId);
     String avatarPath = await chat.getProfileImage();
-    var chatSummary = chat.get(ChatExtension.chatSummary);
-    var chatSummaryState = chatSummary?.state;
     var phoneNumbers;
-    var chatContacts = await context.getChatContacts(_chatId);
     var isRemoved = false;
     String subTitle;
-    if (_isGroup) {
-      var chatContactsCount = chatContacts.length;
+    if (_isGroupChat) {
+      final chatContactsCount = chatContacts.length;
       subTitle = L10n.getFormatted(L.memberXP, [chatContactsCount], count: chatContactsCount);
       isRemoved = !chatContacts.contains(Contact.idSelf);
     } else {
-      var chatContactId = chatContacts.first;
+      final chatContactId = chatContacts.first;
       Contact contact = _contactRepository.get(chatContactId);
       phoneNumbers = contact?.get(ContactExtension.contactPhoneNumber);
       avatarPath = contact?.get(ContactExtension.contactAvatar);
-      var isSelfTalk = await chat.isSelfTalk();
+      final isSelfTalk = await chat.isSelfTalk();
       if (isSelfTalk) {
         subTitle = L10n.get(L.chatMessagesSelf);
       } else {
-        Contact contact = _contactRepository.get(chatContactId);
+        final Contact contact = _contactRepository.get(chatContactId);
         subTitle = await contact.getAddress();
       }
     }
-    add(
-      ChatLoaded(
-        name: name,
-        subTitle: subTitle,
-        color: color,
-        freshMessageCount: freshMessageCount,
-        isSelfTalk: isSelfTalk,
-        isGroupChat: _isGroup,
-        preview: chatSummaryState != ChatMsg.messageStateDraft && chatSummaryState != ChatMsg.messageNone
-            ? chatSummary?.preview
-            : L10n.get(L.chatNoMessages),
-        timestamp: chatSummary?.timestamp,
-        isVerified: isVerified,
-        avatarPath: avatarPath,
-        isRemoved: isRemoved,
-        phoneNumbers: phoneNumbers,
-      ),
+    yield ChatStateSuccess(
+      name: name,
+      subTitle: subTitle,
+      color: color,
+      freshMessageCount: freshMessageCount,
+      isSelfTalk: isSelfTalk,
+      isGroupChat: _isGroupChat,
+      preview: chatSummaryState != ChatMsg.messageStateDraft && chatSummaryState != ChatMsg.messageNone
+          ? chatSummary?.preview
+          : L10n.get(L.chatNoMessages),
+      timestamp: chatSummary?.timestamp,
+      isVerified: isVerified,
+      avatarPath: avatarPath,
+      isRemoved: isRemoved,
+      phoneNumbers: phoneNumbers,
     );
   }
 
   void _removeNotifications() {
-    var _notificationManager = NotificationManager();
-    _notificationManager.cancelNotification(_chatId);
+    final notificationManager = NotificationManager();
+    notificationManager.cancelNotification(_chatId);
   }
 }

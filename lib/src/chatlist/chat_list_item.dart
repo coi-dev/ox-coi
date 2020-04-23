@@ -88,13 +88,14 @@ class _ChatListItemState extends State<ChatListItem> {
     return BlocBuilder(
       bloc: _chatBloc,
       builder: (context, state) {
-        String name;
+        String name = "";
         Color color;
         int freshMessageCount = 0;
         int timestamp = 0;
         String preview;
         String imagePath = "";
         bool hasError = false;
+        bool isGroupChat = false;
 
         if (state is ChatStateSuccess) {
           name = state.name;
@@ -103,16 +104,14 @@ class _ChatListItemState extends State<ChatListItem> {
           timestamp = state.timestamp;
           preview = state.preview;
           imagePath = state.avatarPath;
+          isGroupChat = state.isGroupChat;
         } else if (state is ChatStateFailure) {
           hasError = true;
-        } else {
-          name = "";
         }
 
         return Visibility(
           visible: !hasError,
           child: InkWell(
-            //onLongPress: () => chatItemLongPress(),
             child: AvatarListItem(
               title: name,
               subTitle: preview.stripMarkdown(),
@@ -120,7 +119,7 @@ class _ChatListItemState extends State<ChatListItem> {
               imagePath: imagePath,
               freshMessageCount: freshMessageCount,
               timestamp: timestamp,
-              subTitleIcon: _chatBloc.isGroup
+              subTitleIcon: isGroupChat
                   ? AdaptiveIcon(
                       icon: IconSource.group,
                       size: iconSize,

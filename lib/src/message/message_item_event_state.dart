@@ -52,12 +52,11 @@ class LoadMessage extends MessageItemEvent {
   final int chatId;
   final int messageId;
   final int nextMessageId;
-  final bool isGroupChat;
 
-  LoadMessage({@required this.chatId, @required this.messageId, this.nextMessageId, @required this.isGroupChat});
+  LoadMessage({@required this.chatId, @required this.messageId, this.nextMessageId});
 
   @override
-  List<Object> get props => [chatId, messageId, nextMessageId, isGroupChat];
+  List<Object> get props => [chatId, messageId, nextMessageId];
 }
 
 class DeleteMessage extends MessageItemEvent {

@@ -52,17 +52,16 @@ enum Type {
 
 abstract class BaseRepositoryEventStreamHandler {
   final Type type;
-
   final Function onData;
-
-  Function onError;
+  final Function onError;
+  final maxSizeForReplay;
 
   // ignore: close_sinks
   StreamController _streamController; // Closed by flutter-deltachat-core/lib/delta_chat_core.dart
 
-  get streamController => _streamController;
+  StreamController get streamController => _streamController;
 
-  BaseRepositoryEventStreamHandler(this.type, this.onData, [this.onError]) {
+  BaseRepositoryEventStreamHandler(this.type, this.onData, {this.onError, this.maxSizeForReplay}) {
     switch (type) {
       case Type.publish:
         _streamController = PublishSubject();
@@ -71,7 +70,7 @@ abstract class BaseRepositoryEventStreamHandler {
         _streamController = BehaviorSubject();
         break;
       case Type.replay:
-        _streamController = ReplaySubject();
+        _streamController = ReplaySubject(maxSize: maxSizeForReplay);
         break;
     }
   }
@@ -80,12 +79,11 @@ abstract class BaseRepositoryEventStreamHandler {
 class RepositoryEventStreamHandler extends BaseRepositoryEventStreamHandler {
   final int eventId;
 
-  RepositoryEventStreamHandler(Type type, this.eventId, onData, [onError]) : super(type, onData, onError);
-
+  RepositoryEventStreamHandler(Type type, this.eventId, onData, {onError, intMaxSizeForReplay = 10}) : super(type, onData, onError: onError);
 }
 
 class RepositoryMultiEventStreamHandler extends BaseRepositoryEventStreamHandler {
   final List<int> eventIdList;
 
-  RepositoryMultiEventStreamHandler(Type type, this.eventIdList, onData, [onError]) : super(type, onData, onError);
+  RepositoryMultiEventStreamHandler(Type type, this.eventIdList, onData, {onError, intMaxSizeForReplay = 10}) : super(type, onData, onError: onError);
 }

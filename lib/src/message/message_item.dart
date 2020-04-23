@@ -59,6 +59,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
 import 'package:ox_coi/src/share/share.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/text_field_handling.dart';
 import 'package:ox_coi/src/widgets/dialog_builder.dart';
 
 import 'message_action.dart';
@@ -71,19 +72,17 @@ class MessageItem extends StatefulWidget {
   final int chatId;
   final int messageId;
   final int nextMessageId;
-  final bool isGroupChat;
   final bool hasDateMarker;
   final bool isFlaggedView;
 
-  MessageItem(
-      {@required this.chatId,
-      @required this.messageId,
-      @required this.nextMessageId,
-      @required this.isGroupChat,
-      @required this.hasDateMarker,
-      this.isFlaggedView = false,
-      key})
-      : super(key: key);
+  MessageItem({
+    @required this.chatId,
+    @required this.messageId,
+    @required this.nextMessageId,
+    @required this.hasDateMarker,
+    this.isFlaggedView = false,
+    key,
+  }) : super(key: key);
 
   @override
   _MessageItemState createState() => _MessageItemState();
@@ -115,23 +114,25 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     MessageAction(title: L10n.get(L.messageActionDeleteFailedMessage), icon: IconSource.delete, messageActionTag: MessageActionTag.delete),
   ];
 
-  MessageItemBloc _messageItemBloc = MessageItemBloc();
-  // ignore: close_sinks
-  MessageListBloc _messageListBloc = MessageListBloc();
-  MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
-  Navigation _navigation = Navigation();
+  MessageItemBloc _messageItemBloc;
+  final MessageAttachmentBloc _attachmentBloc = MessageAttachmentBloc();
+  final Navigation _navigation = Navigation();
   Offset tapDownPosition;
 
   @override
   void initState() {
     super.initState();
-    _messageItemBloc.add(LoadMessage(chatId: widget.chatId, messageId: widget.messageId, nextMessageId: widget.nextMessageId, isGroupChat: widget.isGroupChat));
+    _messageItemBloc = MessageItemBloc(messageListBloc: BlocProvider.of<MessageListBloc>(context));
+    _messageItemBloc.add(LoadMessage(
+      chatId: widget.chatId,
+      messageId: widget.messageId,
+      nextMessageId: widget.nextMessageId,
+    ));
   }
 
   @override
   void dispose() {
     _messageItemBloc.close();
-    _messageListBloc.close();
     _attachmentBloc.close();
     super.dispose();
   }
@@ -186,13 +187,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                 GestureDetector(
                   onTap: () => messageStateData.hasFile ? _onTap(messageStateData.isSetupMessage) : null,
                   onTapDown: _onTapDown,
-                  onLongPress: () => _onLongPress(
-                    hasFile: messageStateData.hasFile,
-                    showLongPressMenu: (!messageStateData.isSetupMessage && !messageStateData.isInfo),
-                    text: messageStateData.text,
-                    messageInfo: messageStateData.messageInfo,
-                    isPending: messageStateData.state == ChatMsg.messageStatePending
-                  ),
+                  onLongPress: () => _onLongPress(messageStateData),
                   child: Container(
                     padding: const EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                     child: message,
@@ -200,7 +195,6 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                 ),
               ],
             );
-
           } else {
             return Container();
           }
@@ -225,24 +219,28 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     _attachmentBloc.add(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
   }
 
-  _onLongPress({bool hasFile, bool showLongPressMenu, String text, String messageInfo, bool isPending}) {
+  _onLongPress(MessageStateData messageStateData) {
+    final showLongPressMenu = !messageStateData.isSetupMessage && !messageStateData.isInfo;
     if (!showLongPressMenu) {
       return;
     }
-    _showMenu(hasFile, text, messageInfo, isPending);
-  }
 
-  void _showMenu(bool hasFile, String text, String messageInfo, bool isPending) {
+    final hasFile = messageStateData.hasFile;
+    final hasError = messageStateData.state == ChatMsg.messageStateFailed;
+    final text = messageStateData.text;
+    final messageInfo = messageStateData.messageInfo;
+    final isPending = messageStateData.state == ChatMsg.messageStatePending;
     List<MessageAction> actions;
-    if(hasFile && !isPending){
-      actions = _messageAttachmentActions;
-    }else if(messageInfo.isNotEmpty){
+    if (hasError) {
       actions = _messageErrorActions;
-    }else if(isPending){
+    } else if (isPending) {
       actions = _messagePendingActions;
-    }else{
-      actions  = _messageActions;
+    } else if (hasFile) {
+      actions = _messageAttachmentActions;
+    } else {
+      actions = _messageActions;
     }
+    resetGlobalFocus(context);
     showMenu(
             context: context,
             position: RelativeRect.fromLTRB(tapDownPosition.dx, tapDownPosition.dy, tapDownPosition.dx, tapDownPosition.dy),
@@ -285,7 +283,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
           _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
           break;
         case MessageActionTag.retry:
-            _messageListBloc.add(RetrySendingPendingMessages());
+          BlocProvider.of<MessageListBloc>(context).add(RetrySendingPendingMessages());
           break;
         case MessageActionTag.info:
           _showErrorDialog(messageInfo);
@@ -310,7 +308,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     showInformationDialog(
       context: context,
       title: L10n.get(L.error),
-      contentText: messageInfo,
+      contentText: messageInfo ?? "",
       navigatable: Navigatable(Type.messageInfoDialog),
     );
   }

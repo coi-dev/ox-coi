@@ -443,7 +443,7 @@ class L {
   static final settingsAppearanceSystemTitle = _translationKey("System");
   static final settingsAppearanceDarkTitle = _translationKey("Dark");
   static final settingsAppearanceLightTitle = _translationKey("Light");
-  static final settingsAppearanceDescritpion = _translationKey("Here you can choose your favorite theme. If you choose '%s', the theme may change automatically. This depends on whether you have selected 'Automatic' in the system preferences or not.");
+  static final settingsAppearanceDescription = _translationKey("Here you can choose your favorite theme. If you choose '%s', the theme may change automatically. This depends on whether you have selected 'Automatic' in the system preferences or not.");
   static final settingsAppearanceSystemThemeDescription = _translationKey("Current System theme is: %s");
 
   static List<String> _translationKey(String key, [String pluralKey]) {

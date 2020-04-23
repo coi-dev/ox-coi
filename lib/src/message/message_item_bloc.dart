@@ -48,7 +48,6 @@ import 'package:flutter/foundation.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
-import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/extensions/string_linkpreview.dart';
@@ -57,13 +56,32 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
 import 'package:ox_coi/src/utils/url_preview_cache.dart';
 
+import 'message_list_bloc.dart';
+import 'message_list_event_state.dart';
+
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
-  Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
-  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
+  final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
+  final MessageListBloc messageListBloc;
+
+  Stream _messageChangedStream;
+  StreamSubscription _messageChangedSubscription;
+  StreamSubscription _messageListBlocSubscription;
   Repository<ChatMsg> _messageListRepository;
   int _messageId;
   int _contactId;
   bool _listenersRegistered = false;
+
+  MessageItemBloc({@required this.messageListBloc}) {
+    if (isMessageListAware()) {
+      _messageListBlocSubscription = messageListBloc.listen((state) {
+        if (state is MessagesStateSuccess) {
+          _messageChangedStream ??= state.messageChangedStream;
+        }
+      });
+    }
+  }
+
+  bool isMessageListAware() => messageListBloc != null;
 
   @override
   MessageItemState get initialState => MessageItemStateInitial();
@@ -93,7 +111,14 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
       _messageId = event.messageId;
       final nextMessageId = event.nextMessageId;
-      final isGroup = event.isGroupChat;
+      bool isGroup;
+      if (Chat.typeInvite == chatId) {
+        isGroup = false;
+      } else {
+        final chatRepository = RepositoryManager.get(RepositoryType.chat);
+        Chat chat = chatRepository.get(chatId);
+        isGroup = await chat.isGroup();
+      }
 
       final showContact = isGroup || chatId == Chat.typeInvite;
       if (showContact) {
@@ -107,14 +132,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       ChatMsg message = _getMessage(messageId: _messageId);
       final isOutgoing = await message.isOutgoing();
       final state = await message.getState();
-      if (isOutgoing && state != ChatMsg.messageStateReceived) {
-        _registerListeners();
-      }
-      final showTime = await _showTime(nextMessageId);
-      final encryptionStatusChanged = await _hasEncryptionStatusChanged(nextMessageId);
-      final hasFile = await message.hasFile();
-      final isSetupMessage = await message.isSetupMessage();
-      final text = await message.getText();
+      bool showTime = await _showTime(nextMessageId);
+      bool encryptionStatusChanged = await _hasEncryptionStatusChanged(nextMessageId);
+      bool hasFile = await message.hasFile();
+      bool isSetupMessage = await message.isSetupMessage();
+      String text = await message.getText();
       bool isForwarded = await message.isForwarded();
       String informationText;
       if (isSetupMessage) {
@@ -187,6 +209,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         urlPreviewData: urlPreviewData,
       );
       yield MessageItemStateSuccess(messageStateData: messageStateData);
+      if (isOutgoing && state != ChatMsg.messageStateReceived) {
+        _registerListeners();
+      }
     } catch (error) {
       yield MessageItemStateFailure(error: error.toString());
     }
@@ -228,23 +253,19 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   void _registerListeners() {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
-        Type.publish,
-        [Event.msgDelivered, Event.msgRead, Event.msgFailed, Event.msgsChanged],
-        _onMessageStateChanged,
-      );
-      _messageListRepository.addListener(_repositoryStreamHandler);
+      _messageChangedSubscription ??= _messageChangedStream?.listen(_onMessageStateChanged);
     }
   }
 
   void _unregisterListeners() {
     if (_listenersRegistered) {
       _listenersRegistered = false;
-      _messageListRepository?.removeListener(_repositoryStreamHandler);
+      _messageListBlocSubscription?.cancel();
+      _messageChangedSubscription?.cancel();
     }
   }
 
-  void _onMessageStateChanged(Event event) async {
+  void _onMessageStateChanged(event) async {
     final eventMessageId = event.data2;
     if (_messageId == eventMessageId) {
       if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead)) {

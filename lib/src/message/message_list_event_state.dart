@@ -70,13 +70,13 @@ class SendMessage extends MessageListEvent {
   SendMessage({this.text, this.path, this.fileType, this.isShared});
 }
 
-class DeleteCacheFile extends MessageListEvent{
+class DeleteCacheFile extends MessageListEvent {
   final String path;
 
   DeleteCacheFile({this.path});
 }
 
-class RetrySendingPendingMessages extends MessageListEvent{}
+class RetrySendingPendingMessages extends MessageListEvent {}
 
 abstract class MessageListState {}
 
@@ -87,9 +87,15 @@ class MessagesStateLoading extends MessageListState {}
 class MessagesStateSuccess extends MessageListState {
   final List<int> messageIds;
   final List<int> messageLastUpdateValues;
+  final Stream messageChangedStream;
   final List<int> dateMarkerIds;
 
-  MessagesStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
+  MessagesStateSuccess({
+    @required this.messageIds,
+    @required this.messageLastUpdateValues,
+    @required this.messageChangedStream,
+    this.dateMarkerIds,
+  });
 }
 
 class MessagesStateFailure extends MessageListState {

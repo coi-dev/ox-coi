@@ -40,104 +40,69 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/message/message_item.dart';
-import 'package:ox_coi/src/navigation/navigatable.dart';
-import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-import 'flagged_bloc.dart';
-import 'flagged_events_state.dart';
+import 'message_item.dart';
+import 'message_list_bloc.dart';
+import 'message_list_event_state.dart';
 
-class Flagged extends StatefulWidget {
+class MessageList extends StatelessWidget {
+  final ScrollController scrollController;
   final int chatId;
 
-  const Flagged({Key key, this.chatId = Chat.typeStarred}) : super(key: key);
-
-  @override
-  _FlaggedState createState() => _FlaggedState();
-}
-
-class _FlaggedState extends State<Flagged> {
-  Navigation _navigation = Navigation();
-  FlaggedBloc _flaggedBloc = FlaggedBloc();
-
-  @override
-  void initState() {
-    super.initState();
-    _navigation.current = Navigatable(Type.flagged);
-    _flaggedBloc.add(RequestFlaggedMessages(chatId: widget.chatId));
-  }
-
-  @override
-  void dispose() {
-    _flaggedBloc.close();
-    super.dispose();
-  }
+  MessageList({@required this.scrollController, @required this.chatId});
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: DynamicAppBar(
-          title: L10n.get(L.chatFlagged),
-          leading: AppBarBackButton(context: context),
-        ),
-        body: buildListView());
-  }
-
-  Widget buildListView() {
     return BlocBuilder(
-      bloc: _flaggedBloc,
+      bloc: BlocProvider.of<MessageListBloc>(context),
       builder: (context, state) {
-        if (state is FlaggedStateSuccess) {
+        if (state is MessagesStateSuccess) {
           if (state.messageIds.length > 0) {
-            return buildListItems(state);
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(listItemPadding),
-              child: Center(
-                child: Text(
-                  L10n.get(L.chatNoFlagged),
-                  key: Key(L10n.get(L.chatNoFlagged)),
-                  textAlign: TextAlign.center,
-                ),
+            return ListView.custom(
+              controller: scrollController,
+              padding: const EdgeInsets.only(
+                left: chatMessageListPadding,
+                top: chatMessageListPadding,
+                right: chatMessageListPadding,
+                bottom: chatComposerPadding,
               ),
+              reverse: true,
+              childrenDelegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    final messageId = state.messageIds[index];
+                    int nextMessageId;
+                    if (index < (state.messageIds.length - 1)) {
+                      nextMessageId = state.messageIds[index + 1];
+                    }
+                    final hasDateMarker = state.dateMarkerIds.contains(messageId);
+                    return MessageItem(
+                      key: ValueKey(messageId),
+                      chatId: chatId,
+                      messageId: messageId,
+                      nextMessageId: nextMessageId,
+                      hasDateMarker: hasDateMarker,
+                    );
+                  },
+                  childCount: state.messageIds.length,
+                  findChildIndexCallback: (Key key) {
+                    final ValueKey valueKey = key;
+                    final id = extractId(valueKey);
+                    return state.messageIds.indexOf(id);
+                  }),
             );
+          } else {
+            return StateInfo(title: L10n.get(L.chatNewPlaceholder));
           }
         } else {
           return StateInfo(showLoading: true);
         }
-      },
-    );
-  }
-
-  ListView buildListItems(FlaggedStateSuccess state) {
-    return ListView.builder(
-      padding: new EdgeInsets.all(listItemPadding),
-      reverse: true,
-      itemCount: state.messageIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        int messageId = state.messageIds[index];
-        int nextMessageId;
-        if (index < (state.messageIds.length - 1)) {
-          nextMessageId = state.messageIds[index + 1];
-        }
-        bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-        return MessageItem(
-          key: ValueKey(messageId),
-          chatId: widget.chatId,
-          messageId: messageId,
-          hasDateMarker: hasDateMarker,
-          nextMessageId: nextMessageId,
-          isFlaggedView: true,
-        );
       },
     );
   }

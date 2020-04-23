@@ -57,35 +57,6 @@ class RequestChat extends ChatEvent {
 
 class ClearNotifications extends ChatEvent {}
 
-class ChatLoaded extends ChatEvent {
-  final String name;
-  final String subTitle;
-  final Color color;
-  final int freshMessageCount;
-  final bool isSelfTalk;
-  final bool isGroupChat;
-  final String preview;
-  final int timestamp;
-  final bool isVerified;
-  final String avatarPath;
-  final bool isRemoved;
-  final String phoneNumbers;
-
-  ChatLoaded(
-      {@required this.name,
-      @required this.subTitle,
-      @required this.color,
-      @required this.freshMessageCount,
-      @required this.isSelfTalk,
-      @required this.isGroupChat,
-      @required this.preview,
-      @required this.timestamp,
-      @required this.isVerified,
-      @required this.avatarPath,
-      @required this.isRemoved,
-      this.phoneNumbers});
-}
-
 abstract class ChatState {}
 
 class ChatStateInitial extends ChatState {}

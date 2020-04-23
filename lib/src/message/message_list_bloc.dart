@@ -45,6 +45,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:logging/logging.dart';
 import 'package:mime/mime.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
@@ -54,11 +55,13 @@ import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/utils/video.dart';
 
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with InviteMixin {
-  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
+  static final _logger = Logger("message_list_bloc");
+
+  RepositoryMultiEventStreamHandler _messageListRepositoryStreamHandler;
+  RepositoryMultiEventStreamHandler _messageRepositoryStreamHandler;
   Repository<ChatMsg> _messageListRepository;
   int _chatId;
   int _messageId;
-  String who;
   String _cacheFilePath = "";
   bool _listenersRegistered = false;
 
@@ -95,6 +98,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
         messageIds: event.messageIds,
         messageLastUpdateValues: event.messageLastUpdateValues,
         dateMarkerIds: event.dateMarkerIds,
+        messageChangedStream: _messageRepositoryStreamHandler.streamController.stream,
       );
 
     } else if (event is SendMessage) {
@@ -118,30 +122,44 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   }
 
   void _registerListeners() {
-      if (!_listenersRegistered) {
-        _listenersRegistered = true;
-        _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
-          Type.publish,
-          [Event.incomingMsg, Event.msgsChanged],
-          _onMessagesChanged,
-        );
-        _messageListRepository.addListener(_repositoryStreamHandler);
-      }
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
+      _messageListRepositoryStreamHandler = RepositoryMultiEventStreamHandler(
+        Type.publish,
+        [Event.incomingMsg, Event.msgsChanged, Event.msgFailed],
+        _onMessageListChanged,
+      );
+      _messageListRepository.addListener(_messageListRepositoryStreamHandler);
+      _messageRepositoryStreamHandler = RepositoryMultiEventStreamHandler(
+        Type.replay,
+        [Event.msgDelivered, Event.msgRead, Event.msgFailed],
+        _onMessageChanged,
+      );
+      _messageListRepository.addListener(_messageRepositoryStreamHandler);
+    }
   }
 
   void _unregisterListeners() {
-      if (_listenersRegistered) {
-        _listenersRegistered = false;
-        _messageListRepository?.removeListener(_repositoryStreamHandler);
-
-      }
+    if (_listenersRegistered) {
+      _listenersRegistered = false;
+      _messageListRepository?.removeListener(_messageListRepositoryStreamHandler);
+      _messageListRepository?.removeListener(_messageRepositoryStreamHandler);
+    }
   }
 
-  void _onMessagesChanged(event) => _updateMessages(event);
+  void _onMessageListChanged(event) {
+    if (relevantForChat(event)) {
+      _deleteCacheFile(_cacheFilePath);
+      add(UpdateMessages());
+    }
+  }
 
-  void _updateMessages(Event event) {
-    _deleteCacheFile(_cacheFilePath);
-    add(UpdateMessages());
+  bool relevantForChat(event) => event != null && (event.data1 == _chatId || event.data1 == 0);
+
+  void _onMessageChanged([Event event]) async {
+    if (relevantForChat(event)) {
+      _logger.fine("Message in $_chatId was changed");
+    }
   }
 
   void _deleteCacheFile(String path) {
@@ -211,7 +229,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, duration, text);
   }
 
-  void _retrySendingPendingMessages() async{
+  void _retrySendingPendingMessages() async {
     Context context = Context();
     await context.retrySendingPendingMessages();
   }

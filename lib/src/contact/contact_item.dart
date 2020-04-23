@@ -136,7 +136,6 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
 
   _buildUnblockContactDialog(String name, String email) {
     String contact = name.isNotEmpty ? name : email;
-    Navigation navigation = Navigation();
     return showConfirmationDialog(
       context: context,
       navigatable: Navigatable(Type.contactUnblockDialog),

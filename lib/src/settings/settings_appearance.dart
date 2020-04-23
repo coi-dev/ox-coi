@@ -133,7 +133,7 @@ class _AppearanceSelector extends StatelessWidget {
             Container(
                 padding: EdgeInsets.only(bottom: dimension32dp),
                 child: Text(
-                  L10n.getFormatted(L.settingsAppearanceDescritpion, [L10n.get(L.settingsAppearanceSystemTitle)]),
+                  L10n.getFormatted(L.settingsAppearanceDescription, [L10n.get(L.settingsAppearanceSystemTitle)]),
                 )),
             Row(
               children: <Widget>[

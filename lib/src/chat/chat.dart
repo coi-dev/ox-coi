@@ -68,7 +68,7 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
-import 'package:ox_coi/src/message/message_item.dart';
+import 'package:ox_coi/src/message/message_list.dart';
 import 'package:ox_coi/src/message/message_list_bloc.dart';
 import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
@@ -77,13 +77,11 @@ import 'package:ox_coi/src/share/shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/image.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/utils/vibration.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
-import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:path/path.dart' as Path;
 import 'package:url_launcher/url_launcher.dart';
@@ -324,12 +322,26 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           return Scaffold(
             appBar: DynamicAppBar(
               titleWidget: isInviteChat(widget.chatId)
-                  ? buildRow(imagePath, name, subTitle, color, context, isVerified)
+                  ? ChatAppBar(
+                      imagePath: imagePath,
+                      name: name,
+                      subTitle: subTitle,
+                      color: color,
+                      isVerified: isVerified,
+                      isGroup: isGroupChat,
+                    )
                   : GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _chatTitleTapped(),
                       key: Key(keyChatIconTitleText),
-                      child: buildRow(imagePath, name, subTitle, color, context, isVerified),
+                      child: ChatAppBar(
+                        imagePath: imagePath,
+                        name: name,
+                        subTitle: subTitle,
+                        color: color,
+                        isVerified: isVerified,
+                        isGroup: isGroupChat,
+                      ),
                     ),
               leading: AppBarBackButton(context: context),
               trailingList: [
@@ -488,65 +500,6 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           padding: const EdgeInsets.all(dimension4dp),
           child: Text(_fileName),
         )
-      ],
-    );
-  }
-
-  Row buildRow(String imagePath, String name, String subTitle, Color color, BuildContext context, bool isVerified) {
-    return Row(
-      children: <Widget>[
-        Avatar(
-          imagePath: imagePath,
-          textPrimary: name,
-          textSecondary: subTitle,
-          color: color,
-        ),
-        Padding(padding: const EdgeInsets.only(left: dimension16dp)),
-        Flexible(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                name,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.title.apply(color: CustomTheme.of(context).onSurface),
-                key: Key(keyChatNameText),
-              ),
-              Row(
-                children: <Widget>[
-                  Visibility(
-                    visible: _chatBloc.isGroup,
-                    child: Padding(
-                        padding: const EdgeInsets.only(right: iconTextPadding),
-                        child: AdaptiveIcon(
-                          icon: IconSource.group,
-                          size: iconSize,
-                        )),
-                  ),
-                  Visibility(
-                    visible: isVerified,
-                    child: Padding(
-                        padding: const EdgeInsets.only(right: iconTextPadding),
-                        child: AdaptiveIcon(
-                          icon: IconSource.verifiedUser,
-                          size: iconSize,
-                        )),
-                  ),
-                  Expanded(
-                    child: Text(
-                      subTitle,
-                      style: Theme.of(context).textTheme.subtitle.apply(color: CustomTheme.of(context).onSurface),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -918,63 +871,81 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 }
 
-class MessageList extends StatelessWidget {
-  final ScrollController scrollController;
-  final int chatId;
+class ChatAppBar extends StatelessWidget {
+  final String imagePath;
+  final String name;
+  final String subTitle;
+  final Color color;
+  final bool isVerified;
+  final bool isGroup;
 
-  MessageList({@required this.scrollController, @required this.chatId});
+  const ChatAppBar({
+    Key key,
+    @required this.imagePath,
+    @required this.name,
+    @required this.subTitle,
+    @required this.color,
+    @required this.isVerified,
+    @required this.isGroup,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<MessageListBloc>(context),
-      builder: (context, state) {
-        if (state is MessagesStateSuccess) {
-          if (state.messageIds.length > 0) {
-            return ListView.custom(
-              controller: scrollController,
-              padding: const EdgeInsets.fromLTRB(chatMessageListPadding, chatMessageListPadding, chatMessageListPadding, chatComposerPadding),
-              reverse: true,
-              childrenDelegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    int messageId = state.messageIds[index];
-                    int nextMessageId;
-                    if (index < (state.messageIds.length - 1)) {
-                      nextMessageId = state.messageIds[index + 1];
-                    }
-                    bool hasDateMarker = state.dateMarkerIds.contains(messageId);
-                    return MessageItem(
-                      key: ValueKey(messageId),
-                      chatId: chatId,
-                      messageId: messageId,
-                      isGroupChat: BlocProvider.of<ChatBloc>(context).isGroup,
-                      hasDateMarker: hasDateMarker,
-                      nextMessageId: nextMessageId,
-                    );
-                  },
-                  childCount: state.messageIds.length,
-                  findChildIndexCallback: (Key key) {
-                    final ValueKey valueKey = key;
-                    final id = extractId(valueKey);
-                    final indexOf = state.messageIds.indexOf(id);
-                    return indexOf;
-                  }),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(listItemPadding),
-              child: Center(
-                child: Text(
-                  L10n.get(L.chatNewPlaceholder),
-                  textAlign: TextAlign.center,
-                ),
+    return Row(
+      children: <Widget>[
+        Avatar(
+          imagePath: imagePath,
+          textPrimary: name,
+          textSecondary: subTitle,
+          color: color,
+        ),
+        Padding(padding: const EdgeInsets.only(left: dimension16dp)),
+        Flexible(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                name,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.title.apply(color: CustomTheme.of(context).onSurface),
+                key: Key(keyChatNameText),
               ),
-            );
-          }
-        } else {
-          return StateInfo(showLoading: true);
-        }
-      },
+              Row(
+                children: <Widget>[
+                  Visibility(
+                    visible: isGroup,
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: iconTextPadding),
+                        child: AdaptiveIcon(
+                          icon: IconSource.group,
+                          size: iconSize,
+                        )),
+                  ),
+                  Visibility(
+                    visible: isVerified,
+                    child: Padding(
+                        padding: const EdgeInsets.only(right: iconTextPadding),
+                        child: AdaptiveIcon(
+                          icon: IconSource.verifiedUser,
+                          size: iconSize,
+                        )),
+                  ),
+                  Expanded(
+                    child: Text(
+                      subTitle,
+                      style: Theme.of(context).textTheme.subtitle.apply(color: CustomTheme.of(context).onSurface),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
