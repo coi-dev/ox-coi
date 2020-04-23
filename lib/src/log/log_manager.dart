@@ -147,9 +147,12 @@ class LogManager {
     await setPreference(preferenceLogFiles, logFiles);
   }
 
-  void deleteLogFile(String logFile) async {
+  void deleteLogFile(String logFile) {
     try {
-      File(logFile).delete();
+      var file = File(logFile);
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
     } catch (error) {}
   }
 
