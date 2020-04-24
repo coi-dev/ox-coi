@@ -114,7 +114,7 @@ class L {
   static final readReceiptText = _translationKey(
       "This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
   static final voiceMessage = _translationKey("Voice message");
-  static final moreMessages = _translationKey("more messages");
+  static final moreMessagesX = _translationKey("%d more messages");
   static final privacyDeclaration = _translationKey("privacy declaration");
   static final termsConditions = _translationKey("terms & conditions");
   static final code = _translationKey("Code");

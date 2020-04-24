@@ -62,7 +62,7 @@ Future<void> getMessages() async {
   await context.interruptIdleForIncomingMessages();
   var localNotificationManager = LocalNotificationManager();
   localNotificationManager.setup();
-  await localNotificationManager.triggerNotification();
+  await localNotificationManager.triggerNotificationAsync();
 }
 
 class BackgroundRefreshManager {

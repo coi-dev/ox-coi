@@ -40,26 +40,30 @@
  * for more details.
  */
 
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/data/chat_message_repository.dart';
-import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LocalNotificationManager {
   static LocalNotificationManager _instance;
-  final Logger _logger = Logger("local_notification_manager");
 
-  Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
-  Repository<ChatMsg> _temporaryMessageRepository = ChatMessageRepository(ChatMsg.getCreator());
-  Repository<ChatMsg> _inviteMessageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-  PublishSubject<Event> _messageSubject = new PublishSubject();
-  DeltaChatCore _core = DeltaChatCore();
-  Context _context = Context();
+  final Logger _logger = Logger("local_notification_manager");
+  final _messageSubject = PublishSubject<Event>();
+  final _chatRepository = RepositoryManager.get<Chat>(RepositoryType.chat);
+  final _contactRepository = RepositoryManager.get<Contact>(RepositoryType.contact);
+  final _temporaryMessageRepository = ChatMessageRepository(ChatMsg.getCreator());
+  final _core = DeltaChatCore();
+  final _context = Context();
+
   NotificationManager _notificationManager;
   bool _listenersRegistered = false;
 
@@ -68,96 +72,120 @@ class LocalNotificationManager {
   LocalNotificationManager._internal();
 
   void setup() {
+    _registerListeners();
+  }
+
+  void tearDown() {
+    _unregisterListeners();
+  }
+
+  void _registerListeners() {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       _notificationManager = NotificationManager();
-      _messageSubject.listen(_successCallback);
+      _messageSubject.listen(_messagesUpdated);
       _core.addListener(eventIdList: [Event.incomingMsg, Event.msgsChanged], streamController: _messageSubject);
     }
   }
 
-  Future<void> tearDown() async {
+  void _unregisterListeners() {
     if (_listenersRegistered) {
       _core.removeListener(_messageSubject);
       _listenersRegistered = false;
     }
   }
 
-  void _successCallback(Event event) {
+  void _messagesUpdated(Event event) {
     _logger.info("Callback event for local notification received");
-    triggerNotification();
+    triggerNotificationAsync();
   }
 
-  Future<void> triggerNotification() async {
+  Future<void> triggerNotificationAsync() async {
     _logger.info("Local notification triggered");
-    await createFreshMessagesNotifications();
-    await createInviteNotifications();
+    await createChatNotificationsAsync();
+    await createInviteNotificationsAsync();
   }
 
-  Future createFreshMessagesNotifications() async {
-    var createdNotifications = List<int>();
-    List<int> notNotifiedMessages = await getNotNotifiedMessages();
-    _temporaryMessageRepository.putIfAbsent(ids: notNotifiedMessages);
-    Future.forEach(notNotifiedMessages, (int messageId) async {
-      ChatMsg message = _temporaryMessageRepository.get(messageId);
-      int chatId = await message.getChatId();
-      if (!createdNotifications.contains(chatId) && chatId > Chat.typeLastSpecial) {
-        Chat chat = _chatRepository.get(chatId);
-        if (chat == null) {
-          _chatRepository.putIfAbsent(id: chatId);
-          chat = _chatRepository.get(chatId);
-        }
-        createdNotifications.add(chatId);
+  Future createChatNotificationsAsync() async {
+    final HashMap<String, int> notificationHistory = await _getNotificationHistoryAsync();
+    final List<int> freshMessages = await _context.getFreshMessages();
+    _temporaryMessageRepository.putIfAbsent(ids: freshMessages);
+    _logger.info("Handling ${freshMessages.length} fresh messages");
+
+    await Future.forEach(freshMessages, (int messageId) async {
+      final message = _temporaryMessageRepository.get(messageId);
+      final chatId = await message.getChatId();
+      if (isMessageNew(notificationHistory, chatId, messageId)) {
+        notificationHistory.update(chatId.toString(), (value) => messageId, ifAbsent: () => messageId);
+        _chatRepository.putIfAbsent(id: chatId);
+        final chat = _chatRepository.get(chatId);
         String title = await chat.getName();
-        int count = (await _context.getFreshMessageCount(chatId)) - 1;
+        final count = (await _context.getFreshMessageCount(chatId)) - 1;
         if (count > 1) {
-          title = "$title (+ $count ${L10n.get(L.moreMessages)})";
+          title = "$title (+ ${L10n.getFormatted(L.moreMessagesX, [count])})";
         }
-        String teaser = await message.getSummaryText(200);
-        var payload = chatId?.toString();
+        final teaser = await message.getSummaryText(200);
+        final payload = chatId?.toString();
+        _logger.info("Creating chat notification for chat id $chatId with message id $messageId");
         _notificationManager.showNotificationFromLocal(chatId, title, teaser, payload: payload);
       }
     });
+
+    await _setNotificationHistoryAsync(notificationHistory);
   }
 
-  Future<List<int>> getNotNotifiedMessages() async {
-    var freshMessages = List<int>.from(await _context.getFreshMessages());
-    freshMessages.removeWhere((int messageId) => _temporaryMessageRepository.contains(messageId));
-    _logger.info("Temporary notification repository (messages) contains ${_temporaryMessageRepository.length()} messages");
-    return freshMessages;
+  bool isMessageNew(HashMap<String, int> notificationHistory, int keyId, int messageId, {bool isInvite = false}) {
+    final isNormalMessage = isInvite ? keyId > Contact.idLastSpecial : keyId > Chat.typeLastSpecial;
+    if (isNormalMessage) {
+      final chatIdString = keyId.toString();
+      if (notificationHistory.keys.contains(chatIdString)) {
+        return notificationHistory[chatIdString] < messageId;
+      }
+      return true;
+    }
+    return false;
   }
 
-  Future createInviteNotifications() async {
-    var createdNotifications = List<int>();
-    List<int> notNotifiedInvites = await getNotNotifiedInvites();
-    _inviteMessageListRepository.putIfAbsent(ids: notNotifiedInvites);
-    Repository<Contact> contactRepository = RepositoryManager.get(RepositoryType.contact);
-    Future.forEach(notNotifiedInvites.reversed, (int messageId) async {
-      ChatMsg invite = _inviteMessageListRepository.get(messageId);
-      int senderId = await invite.getFromId();
-      if (!createdNotifications.contains(senderId)) {
-        createdNotifications.add(senderId);
-        contactRepository.putIfAbsent(id: senderId);
-        Contact contact = contactRepository.get(senderId);
-        var contactName = await contact.getName();
-        var contactMail = await contact.getAddress();
+  Future<HashMap<String, int>> _getNotificationHistoryAsync({bool isInvite = false}) async {
+    final preferenceTarget = isInvite ? preferenceNotificationInviteHistory : preferenceNotificationHistory;
+    final notificationHistoryString = await getPreference(preferenceTarget);
+    return notificationHistoryString != null ? HashMap<String, int>.from(json.decode(notificationHistoryString)) : HashMap<String, int>();
+  }
+
+  Future<void> _setNotificationHistoryAsync(HashMap<String, int> notificationHistory, {bool isInvite = false}) async {
+    final preferenceTarget = isInvite ? preferenceNotificationInviteHistory : preferenceNotificationHistory;
+    final notificationHistoryString = json.encode(notificationHistory);
+    await setPreference(preferenceTarget, notificationHistoryString);
+  }
+
+  Future<void> createInviteNotificationsAsync() async {
+    final HashMap<String, int> notificationInviteHistory = await _getNotificationHistoryAsync(isInvite: true);
+    final List<int> openInvites = await _context.getChatMessages(Chat.typeInvite);
+    _temporaryMessageRepository.putIfAbsent(ids: openInvites);
+    _logger.info("Handling ${openInvites.length} open invites");
+
+    await Future.forEach(openInvites.reversed, (int messageId) async {
+      final message = _temporaryMessageRepository.get(messageId);
+      final senderId = await message.getFromId();
+      if (isMessageNew(notificationInviteHistory, senderId, messageId)) {
+        notificationInviteHistory.update(senderId.toString(), (value) => messageId, ifAbsent: () => messageId);
+        _contactRepository.putIfAbsent(id: senderId);
+        final contact = _contactRepository.get(senderId);
+        final contactName = await contact.getName();
+        final contactMail = await contact.getAddress();
         String title;
         if (contactName.isNotEmpty) {
           title = L10n.getFormatted(L.chatListInviteDialogXY, [contactName, contactMail]);
         } else {
           title = L10n.getFormatted(L.chatListInviteDialogX, [contactMail]);
         }
-        String teaser = await invite.getSummaryText(200);
-        String payload = "${Chat.typeInvite.toString()}_$messageId";
+        final teaser = await message.getSummaryText(200);
+        final payload = "${Chat.typeInvite.toString()}_$messageId";
+        _logger.info("Creating invite notification for sender id $senderId with message id $messageId");
         _notificationManager.showNotificationFromLocal(Chat.typeInvite, title, teaser, payload: payload);
       }
     });
-  }
 
-  Future<List<int>> getNotNotifiedInvites() async {
-    var invites = List<int>.from(await _context.getChatMessages(Chat.typeInvite));
-    invites.removeWhere((int messageId) => _inviteMessageListRepository.contains(messageId));
-    _logger.info("Temporary notification repository (invites) contains ${_inviteMessageListRepository.length()} messages");
-    return invites;
+    await _setNotificationHistoryAsync(notificationInviteHistory, isInvite: true);
   }
 }

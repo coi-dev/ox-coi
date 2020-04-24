@@ -57,7 +57,7 @@ class RepositoryManager {
 
   static Map<String, Repository> _repositories = Map();
 
-  static Repository get(RepositoryType type, [int id]) {
+  static Repository<T> get<T extends Base>(RepositoryType type, [int id]) {
     String identifier = getIdentifier(type, id);
     if (_repositories.containsKey(identifier)) {
       return _repositories[identifier];

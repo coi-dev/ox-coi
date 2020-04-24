@@ -55,6 +55,8 @@ const preferenceAppState = "preferenceAppState";
 const preferenceInviteServiceUrl = "preferenceInviteServiceUrl";
 const preferenceHasAuthenticationError = "preferenceHasAuthenticationError";
 const preferenceApplicationTheme = "preferenceApplicationTheme";
+const preferenceNotificationHistory = "preferenceNotificationHistory";
+const preferenceNotificationInviteHistory = "preferenceNotificationInviteHistory";
 
 const preferenceNotificationsAuth = "preferenceNotificationsAuth"; // Unused
 const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic"; // Unused
