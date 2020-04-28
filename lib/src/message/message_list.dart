@@ -98,7 +98,10 @@ class MessageList extends StatelessWidget {
                   }),
             );
           } else {
-            return StateInfo(title: L10n.get(L.chatNewPlaceholder));
+            return EmptyListInfo(
+              infoText: L10n.get(L.chatNewPlaceholder),
+              imagePath: "assets/images/empty_chat.png",
+            );;
           }
         } else {
           return StateInfo(showLoading: true);

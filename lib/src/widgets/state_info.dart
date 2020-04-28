@@ -118,8 +118,10 @@ class EmptyListInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: dimension24dp, left: listEmptyHorizontalPadding, right: listEmptyHorizontalPadding),
+      padding: const EdgeInsets.only(bottom: dimension32dp, left: listEmptyHorizontalPadding, right: listEmptyHorizontalPadding),
+      alignment: Alignment.center,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Image.asset(imagePath),
           Padding(

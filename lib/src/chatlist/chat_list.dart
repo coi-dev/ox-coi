@@ -232,7 +232,7 @@ class _ChatListState extends State<ChatList> {
             } else {
               return EmptyListInfo(
                 infoText: L10n.get(L.chatListPlaceholder),
-                imagePath: "assets/images/empty_chatlist.png",
+                imagePath: "assets/images/empty_chat_list.png",
               );
             }
           } else if (state is! ChatListStateFailure) {
