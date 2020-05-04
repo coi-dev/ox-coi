@@ -156,11 +156,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     await config.setValue(Context.configSendPassword, event.smtpPassword);
     await config.setValue(Context.configSendServer, event.smtpServer);
     await config.setValue(Context.configSendPort, event.smtpPort);
-    int imapSecurity = event.imapSecurity;
-    int smtpSecurity = event.smtpSecurity;
-    int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
-
-    await config.setValue(Context.configServerFlags, serverFlags);
+    await config.setValue(Context.configSmtpSecurity, event.smtpSecurity);
+    await config.setValue(Context.configImapSecurity, event.imapSecurity);
   }
 
   void _updateConfig() {
@@ -226,10 +223,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     await config.setValue(Context.configSendPassword, event.smtpPassword);
     await config.setValue(Context.configSendServer, preset.outgoingServer);
     await config.setValue(Context.configSendPort, preset.outgoingPort.toString());
-    int imapSecurity = getSecurityId(preset.incomingSecurity);
-    int smtpSecurity = getSecurityId(preset.outgoingSecurity);
-    int serverFlags = createServerFlagInteger(imapSecurity, smtpSecurity);
-    await config.setValue(Context.configServerFlags, serverFlags);
+    await config.setValue(Context.configImapSecurity, preset.incomingSecurity.toString());
+    await config.setValue(Context.configSmtpSecurity, preset.outgoingSecurity.toString());
     await setPreference(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
     await setPreference(preferenceInviteServiceUrl, provider.inviteServiceUrl);
   }

@@ -12,11 +12,11 @@
       "id": "yahoo",
       "name": "Yahoo",
       "preset": {
-        "incoming_security": "ssltls",
+        "incoming_security": "ssl",
         "incoming_server": "imap.mail.yahoo.com",
         "incoming_protocol": "imap",
         "incoming_port": 993,
-        "outgoing_security": "ssltls",
+        "outgoing_security": "ssl",
         "outgoing_server": "smtp.mail.yahoo.com",
         "outgoing_port": 465
       }
@@ -25,7 +25,7 @@
       "id": "outlook",
       "name": "Outlook",
       "preset": {
-        "incoming_security": "ssltls",
+        "incoming_security": "ssl",
         "incoming_server": "outlook.office365.com",
         "incoming_protocol": "imap",
         "incoming_port": 993,
@@ -38,7 +38,7 @@
       "id": "gmx",
       "name": "GMX",
       "preset": {
-        "incoming_security": "ssltls",
+        "incoming_security": "ssl",
         "incoming_server": "imap.gmx.net",
         "incoming_protocol": "imap",
         "incoming_port": 993,
@@ -52,11 +52,11 @@
       "name": "Mailbox.org",
       "register_link": "https://register.mailbox.org/",
       "preset": {
-        "incoming_security": "ssltls",
+        "incoming_security": "ssl",
         "incoming_server": "imap.mailbox.org",
         "incoming_protocol": "imap",
         "incoming_port": 993,
-        "outgoing_security": "ssltls",
+        "outgoing_security": "ssl",
         "outgoing_server": "smtp.mailbox.org",
         "outgoing_port": 465
       }
@@ -65,7 +65,7 @@
       "id": "mail_com",
       "name": "Mail.com",
       "preset": {
-        "incoming_security": "ssltls",
+        "incoming_security": "ssl",
         "incoming_server": "imap.mail.com",
         "incoming_protocol": "imap",
         "incoming_port": 993,
@@ -124,7 +124,7 @@
         "incoming_server": "dovecot.qa.open-xchange.com",
         "incoming_protocol": "",
         "incoming_port": 143,
-        "outgoing_security": "plain",
+        "outgoing_security": "plain_socket",
         "outgoing_server": "dovecot.qa.open-xchange.com",
         "outgoing_port": 25
       }

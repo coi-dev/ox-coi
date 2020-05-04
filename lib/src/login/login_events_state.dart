@@ -78,12 +78,12 @@ class LoginButtonPressed extends LoginEvent {
   final String imapLogin;
   final String imapServer;
   final String imapPort;
-  final int imapSecurity;
+  final String imapSecurity;
   final String smtpLogin;
   final String smtpPassword;
   final String smtpServer;
   final String smtpPort;
-  final int smtpSecurity;
+  final String smtpSecurity;
 
   LoginButtonPressed(
       {@required this.email,

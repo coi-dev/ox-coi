@@ -44,6 +44,7 @@ import 'package:logging/logging.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 
 // Non-translatable strings
+const plain = "Plain";
 const sslTls = "SSL/TLS";
 const startTLS = "StartTLS";
 const gif = "GIF";

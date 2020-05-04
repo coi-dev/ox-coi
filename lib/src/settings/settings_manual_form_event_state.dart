@@ -61,8 +61,8 @@ class SettingsPrefilled extends SettingsManualFormEvent {
   final String smtpLogin;
   final String smtpServer;
   final String smtpPort;
-  final int imapSecurity;
-  final int smtpSecurity;
+  final String imapSecurity;
+  final String smtpSecurity;
   final String password;
 
   SettingsPrefilled({
@@ -92,8 +92,8 @@ class ValidationDone extends SettingsManualFormEvent {
   final String smtpPassword;
   final String smtpServer;
   final String smtpPort;
-  final int imapSecurity;
-  final int smtpSecurity;
+  final String imapSecurity;
+  final String smtpSecurity;
   final String password;
 
   ValidationDone({
@@ -125,8 +125,8 @@ class SettingsManualFormStateReady extends SettingsManualFormState {
   final String smtpLogin;
   final String smtpServer;
   final String smtpPort;
-  final int imapSecurity;
-  final int smtpSecurity;
+  final String imapSecurity;
+  final String smtpSecurity;
 
   SettingsManualFormStateReady({
     this.email,
@@ -154,8 +154,8 @@ class SettingsManualFormStateValidationSuccess extends SettingsManualFormState {
   final String smtpPassword;
   final String smtpServer;
   final String smtpPort;
-  final int imapSecurity;
-  final int smtpSecurity;
+  final String imapSecurity;
+  final String smtpSecurity;
 
   SettingsManualFormStateValidationSuccess({
     this.email,

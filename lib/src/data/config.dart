@@ -54,11 +54,11 @@ class Config {
   String imapLogin;
   String imapServer;
   String imapPort;
-  int imapSecurity;
+  String imapSecurity;
   String smtpLogin;
   String smtpServer;
   String smtpPort;
-  int smtpSecurity;
+  String smtpSecurity;
   int showEmails;
   int mdnsEnabled;
   int rfc724MsgIdPrefix;
@@ -89,9 +89,8 @@ class Config {
     smtpLogin = await _context.getConfigValue(Context.configSendUser);
     smtpServer = await _context.getConfigValue(Context.configSendServer);
     smtpPort = await _context.getConfigValue(Context.configSendPort);
-    int serverFlags = await _context.getConfigValue(Context.configServerFlags, ObjectType.int);
-    imapSecurity = getSavedImapSecurityOption(serverFlags);
-    smtpSecurity = getSavedSmtpSecurityOption(serverFlags);
+    imapSecurity = await _context.getConfigValue(Context.configImapSecurity);
+    smtpSecurity = await _context.getConfigValue(Context.configSmtpSecurity);
     showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
     mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int);
     rfc724MsgIdPrefix = await _context.getConfigValue(Context.configRfc724MsgIdPrefix, ObjectType.int);
@@ -135,19 +134,6 @@ class Config {
       case Context.configSendPort:
         smtpPort = value;
         break;
-      case Context.configServerFlags:
-        int sel = 0;
-        if ((value & Context.serverFlagsImapSsl) != 0) sel = 1;
-        if ((value & Context.serverFlagsImapStartTls) != 0) sel = 2;
-        if ((value & Context.serverFlagsImapPlain) != 0) sel = 3;
-        imapSecurity = sel;
-
-        sel = 0;
-        if ((value & Context.serverFlagsSmtpSsl) != 0) sel = 1;
-        if ((value & Context.serverFlagsSmtpStartTls) != 0) sel = 2;
-        if ((value & Context.serverFlagsSmtpPlain) != 0) sel = 3;
-        smtpSecurity = sel;
-        break;
       case Context.configShowEmails:
         showEmails = value;
         break;
@@ -165,7 +151,6 @@ class Config {
   }
 
   bool isTypeInt(String key) =>
-      key == Context.configServerFlags ||
       key == Context.configShowEmails ||
       key == Context.configMdnsEnabled ||
       key == Context.configRfc724MsgIdPrefix ||

@@ -138,8 +138,8 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
           smtpServerField.controller.text = state.smtpServer;
           smtpPortField.controller.text = state.smtpPort;
           setState(() {
-            selectedImapSecurity = convertProtocolIntToString(context, state.imapSecurity);
-            selectedSmtpSecurity = convertProtocolIntToString(context, state.smtpSecurity);
+            selectedImapSecurity = convertProtocolDccStringToString(state.imapSecurity);
+            selectedSmtpSecurity = convertProtocolDccStringToString(state.smtpSecurity);
           });
         } else if (state is SettingsManualFormStateValidation) {
           var success = formKey.currentState.validate();
@@ -151,12 +151,12 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
               imapLogin: imapLoginNameField.controller.text,
               imapServer: imapServerField.controller.text,
               imapPort: imapPortField.controller.text,
-              imapSecurity: convertProtocolStringToInt(context, selectedImapSecurity),
+              imapSecurity: convertProtocolStringToDccString(selectedImapSecurity),
               smtpLogin: smtpLoginNameField.controller.text,
               smtpPassword: smtpPasswordField.controller.text,
               smtpServer: smtpServerField.controller.text,
               smtpPort: smtpPortField.controller.text,
-              smtpSecurity: convertProtocolStringToInt(context, selectedSmtpSecurity),
+              smtpSecurity: convertProtocolStringToDccString(selectedSmtpSecurity),
             ));
           }
         }
@@ -213,7 +213,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                   Padding(padding: const EdgeInsets.all(loginVerticalFormPadding)),
                   Text(L10n.get(L.settingIMAPSecurity)),
                   DropdownButton(
-                      value: selectedImapSecurity == null ? L10n.get(L.automatic) : selectedImapSecurity,
+                      value: selectedImapSecurity,
                       items: getSecurityOptions(context),
                       onChanged: (String newValue) {
                         setState(() {
@@ -232,7 +232,7 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
                   Padding(padding: const EdgeInsets.all(loginVerticalFormPadding)),
                   Text(L10n.get(L.settingSMTPSecurity)),
                   DropdownButton(
-                    value: selectedSmtpSecurity == null ? L10n.get(L.automatic) : selectedSmtpSecurity,
+                    value: selectedSmtpSecurity,
                     items: getSecurityOptions(context),
                     onChanged: (String newValue) {
                       setState(() {
@@ -254,9 +254,9 @@ class _SettingsManualFormState extends State<SettingsManualForm> {
   List<DropdownMenuItem<String>> getSecurityOptions(BuildContext context) {
     return [
       L10n.get(L.automatic),
+      plain,
       sslTls,
       startTLS,
-      L10n.get(L.off),
     ].map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(value: value, child: Text(value));
     }).toList();

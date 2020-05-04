@@ -47,26 +47,25 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 
 enum ProtocolType { imap, smtp }
 
-int convertProtocolStringToInt(BuildContext context, String value) {
-  int newValue = 0;
-  if (value == sslTls)
-    newValue = 1;
+String convertProtocolStringToDccString(String value) {
+  String newValue = "";
+  if (value == plain)
+    newValue = "plain_socket";
+  else if (value == sslTls)
+    newValue = "ssl";
   else if (value == startTLS)
-    newValue = 2;
-  else if (value == L10n.get(L.off)) newValue = 3;
+    newValue = "starttls";
   return newValue;
 }
 
-String convertProtocolIntToString(BuildContext context, int value) {
-  String newValue;
-  if (value == 1)
+String convertProtocolDccStringToString(String value) {
+  String newValue = L10n.get(L.automatic);
+  if (value == "plain_socket")
+    newValue = plain;
+  else if (value == "ssl")
     newValue = sslTls;
-  else if (value == 2)
+  else if (value == "starttls")
     newValue = startTLS;
-  else if (value == 3)
-    newValue = L10n.get(L.off);
-  else
-    newValue = L10n.get(L.automatic);
   return newValue;
 }
 
