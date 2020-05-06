@@ -116,6 +116,7 @@ class L {
       "This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
   static final voiceMessage = _translationKey("Voice message");
   static final moreMessagesX = _translationKey("%d more messages");
+  static final noMoreMedia = _translationKey("No other media files available");
   static final privacyDeclaration = _translationKey("privacy declaration");
   static final termsConditions = _translationKey("terms & conditions");
   static final code = _translationKey("Code");

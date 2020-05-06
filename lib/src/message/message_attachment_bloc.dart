@@ -46,7 +46,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:crypto/crypto.dart';
-import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:ox_coi/src/data/repository.dart';
@@ -60,7 +60,7 @@ import 'package:path/path.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
-  Repository<ChatMsg> _messageListRepository;
+  Repository<Core.ChatMsg> _messageListRepository;
   static const platform = const MethodChannel(SharedData.sharingChannelName);
 
   @override
@@ -91,16 +91,18 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       yield MessageAttachmentStateSuccess();
     } else if (event is LoadThumbnailAndDuration) {
       yield* loadThumbnailAndDuration(event.path, event.duration);
+    } else if (event is GetNextPreviousImage) {
+      yield* getNextPreviousMessageAsync(event);
     }
   }
 
   void _openFile(int messageId) async {
-    ChatMsg message = _getMessage(messageId);
+    Core.ChatMsg message = _getMessage(messageId);
     OpenFile.open(await message.getFile());
   }
 
   void _shareFile(int messageId) async {
-    ChatMsg message = _getMessage(messageId);
+    Core.ChatMsg message = _getMessage(messageId);
     var text = await message.getText();
     var filePath = await message.getFile();
     var mime = filePath.isNotEmpty ? await message.getFileMime() : "text/*";
@@ -109,7 +111,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
     await platform.invokeMethod('sendSharedData', argsMap);
   }
 
-  ChatMsg _getMessage(int messageId) {
+  Core.ChatMsg _getMessage(int messageId) {
     return _messageListRepository.get(messageId);
   }
 
@@ -150,5 +152,19 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
     }
 
     return duration.getVideoTimeFromTimestamp();
+  }
+
+  Stream<MessageAttachmentState> getNextPreviousMessageAsync(GetNextPreviousImage event) async* {
+    Core.Context context = Core.Context();
+
+    int nextMessageId = await context.getNextMedia(
+      event.messageId,
+      event.dir,
+      messageTypeOne: Core.ChatMsg.typeImage,
+      messageTypeTwo: Core.ChatMsg.typeVideo,
+      messageTypeThree: Core.ChatMsg.typeGif,
+    );
+
+    yield MessageAttachmentStateGetNextSuccess(messageId: nextMessageId);
   }
 }

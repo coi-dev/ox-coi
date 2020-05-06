@@ -46,6 +46,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
+import 'package:ox_coi/src/gallery/gallery.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_attachment_bloc.dart';
@@ -123,7 +124,8 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
   void initState() {
     super.initState();
     _messageItemBloc = MessageItemBloc(messageListBloc: BlocProvider.of<MessageListBloc>(context));
-    _messageItemBloc.add(LoadMessage(
+    _messageItemBloc
+        .add(LoadMessage(
       chatId: widget.chatId,
       messageId: widget.messageId,
       nextMessageId: widget.nextMessageId,
@@ -185,9 +187,10 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                         )),
                   ),
                 GestureDetector(
-                  onTap: () => messageStateData.hasFile ? _onTap(messageStateData.isSetupMessage) : null,
+                  onTap: () => messageStateData.hasFile ? _onTap(messageStateData.isSetupMessage, messageStateData.attachmentStateData.type) : null,
                   onTapDown: _onTapDown,
-                  onLongPress: () => _onLongPress(messageStateData),
+                  onLongPress: () => _onLongPress(
+                      messageStateData),
                   child: Container(
                     padding: const EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                     child: message,
@@ -203,11 +206,11 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     );
   }
 
-  _onTap(bool isSetupMessage) {
+  _onTap(bool isSetupMessage, int attachmentType) {
     if (isSetupMessage) {
       _showAutocryptSetup();
     } else {
-      _openTapAttachment();
+      _openTapAttachment(attachmentType: attachmentType);
     }
   }
 
@@ -215,8 +218,12 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     tapDownPosition = details.globalPosition;
   }
 
-  void _openTapAttachment() {
-    _attachmentBloc.add(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
+  void _openTapAttachment({int attachmentType}) {
+    if (attachmentType == ChatMsg.typeImage || attachmentType == ChatMsg.typeVideo || attachmentType == ChatMsg.typeGif) {
+      _navigation.push(context, MaterialPageRoute(builder: (context) => Gallery(chatId: widget.chatId, messageId: widget.messageId)));
+    } else {
+      _attachmentBloc.add(RequestAttachment(chatId: widget.chatId, messageId: widget.messageId));
+    }
   }
 
   _onLongPress(MessageStateData messageStateData) {
@@ -237,7 +244,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
       actions = _messagePendingActions;
     } else if (hasFile) {
       actions = _messageAttachmentActions;
-    } else {
+    }else {
       actions = _messageActions;
     }
     resetGlobalFocus(context);

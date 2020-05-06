@@ -58,7 +58,7 @@ void main() {
     String hour = formatDate(nowDateTime, [HH]);
     String minute = formatDate(nowDateTime, [nn]);
 
-    var timeFormTimestamp = nowTimestamp.getTimeFormTimestamp();
+    var timeFormTimestamp = nowTimestamp.getTimeFromTimestamp();
 
     expect(timeFormTimestamp, "$hour:$minute");
   });

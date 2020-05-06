@@ -42,6 +42,9 @@
 
 import 'package:meta/meta.dart';
 
+const int actionPreviousMessage = -1;
+const int actionNextMessage = 1;
+
 abstract class MessageAttachmentEvent {}
 
 class RequestAttachment extends MessageAttachmentEvent {
@@ -67,6 +70,13 @@ class LoadThumbnailAndDuration extends MessageAttachmentEvent {
   LoadThumbnailAndDuration({@required this.path, @required this.duration});
 }
 
+class GetNextPreviousImage extends MessageAttachmentEvent {
+  final int messageId;
+  final int dir;
+
+  GetNextPreviousImage({@required this.messageId, @required this.dir});
+}
+
 abstract class MessageAttachmentState {}
 
 class MessageAttachmentStateInitial extends MessageAttachmentState {}
@@ -78,6 +88,12 @@ class MessageAttachmentStateSuccess extends MessageAttachmentState {
   final String duration;
 
   MessageAttachmentStateSuccess({this.path, this.duration});
+}
+
+class MessageAttachmentStateGetNextSuccess extends MessageAttachmentState {
+  final int messageId;
+
+  MessageAttachmentStateGetNextSuccess({this.messageId});
 }
 
 class MessageAttachmentStateFailure extends MessageAttachmentState {

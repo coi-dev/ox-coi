@@ -61,7 +61,7 @@ class InviteItem extends StatefulWidget {
 }
 
 class _InviteItemState extends State<InviteItem> with ChatCreateMixin {
-  MessageItemBloc _messageItemBloc = MessageItemBloc(messageListBloc: null);
+  MessageItemBloc _messageItemBloc = MessageItemBloc();
   Navigation navigation = Navigation();
 
   @override

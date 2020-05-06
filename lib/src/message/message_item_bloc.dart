@@ -71,7 +71,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   int _contactId;
   bool _listenersRegistered = false;
 
-  MessageItemBloc({@required this.messageListBloc}) {
+  MessageItemBloc({this.messageListBloc}) {
     if (isMessageListAware()) {
       _messageListBlocSubscription = messageListBloc.listen((state) {
         if (state is MessagesStateSuccess) {

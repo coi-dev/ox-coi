@@ -474,11 +474,11 @@ class MessageDateTime extends StatelessWidget {
   Widget build(BuildContext context) {
     String date;
     if (hasDateMarker && showTime) {
-      date = "${timestamp.getDateFromTimestamp(true, true)} - ${timestamp.getTimeFormTimestamp()}";
+      date = "${timestamp.getDateFromTimestamp(true, true)} - ${timestamp.getTimeFromTimestamp()}";
     } else if (hasDateMarker) {
       date = timestamp.getDateFromTimestamp(true, true);
     } else {
-      date = timestamp.getTimeFormTimestamp();
+      date = timestamp.getTimeFromTimestamp();
     }
     return Center(
       child: Text(
@@ -494,7 +494,7 @@ class MessageDateTime extends StatelessWidget {
 class MessagePartTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String time = _getMessageStateData(context).timestamp.getTimeFormTimestamp();
+    String time = _getMessageStateData(context).timestamp.getTimeFromTimestamp();
     return Text(
       time,
       style: TextStyle(color: MessageData.of(context).secondaryTextColor),

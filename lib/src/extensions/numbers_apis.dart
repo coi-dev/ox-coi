@@ -28,11 +28,12 @@ extension Date on int {
   static const formatterTime = [HH, ':', nn];
   static const formatterDate = [dd, '.', mm];
   static const formatterDateLong = [dd, '. ', MM];
+  static const formatterDateLongAndTime = [dd, '. ', MM, ' - ', HH, ':', nn];
   static const formatterTimer = [nn, ':', ss];
   static const formatterVideoTime = [n, ':', ss];
   static const formatterDateTimeFile = [yy, '-', mm, '-', dd, '_', HH, '-', nn, '-', ss];
 
-  String getTimeFormTimestamp() {
+  String getTimeFromTimestamp() {
     return formatDate(this._getDateTimeFromTimestamp(), formatterTime);
   }
 
@@ -64,12 +65,22 @@ extension Date on int {
 
   String getChatListTime() {
     if (getNowTimestamp()._compareDate(this) == 0) {
-      return this.getTimeFormTimestamp();
+      return this.getTimeFromTimestamp();
     } else if (getYesterdayTimestamp()._compareDate(this) == 0) {
       return L10n.get(L.yesterday);
     } else {
       return formatDate(this._getDateTimeFromTimestamp(), formatterDate);
     }
+  }
+
+  String getGalleryTime() {
+    var date = formatDate(this._getDateTimeFromTimestamp(), formatterDateLongAndTime);
+    if (getNowTimestamp()._compareDate(this) == 0) {
+      return "${L10n.get(L.today)} - $date";
+    } else if (getYesterdayTimestamp()._compareDate(this) == 0) {
+      return "${L10n.get(L.yesterday)} - $date";
+    }
+    return date;
   }
 
   String getDateTimeFileFormTimestamp() {

@@ -40,97 +40,53 @@
  * for more details.
  */
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
-enum Type {
-  antiMobbingList,
-  chat,
-  chatAddGroupParticipants,
-  chatCreate,
-  chatCreateGroupParticipants,
-  chatCreateGroupSettings,
-  chatDeleteDialog,
-  chatGroupProfile,
-  chatList,
-  chatListInviteDialog,
-  chatListInviteErrorDialog,
-  chatLeaveGroupDialog,
-  chatProfile,
-  contactAdd,
-  contactChange,
-  contactListBlocked,
-  contactList,
-  contactBlockDialog,
-  contactDeleteDialog,
-  contactGooglemailDetectedDialog,
-  contactImportDialog,
-  contactInviteDialog,
-  contactProfile,
-  contactUnblockDialog,
-  contactStartCallDialog,
-  contactNoNumberDialog,
-  debugViewer,
-  editGroupProfile,
-  flagged,
-  gallery,
-  login,
-  loginProviderList,
-  loginManualSettings,
-  loginProviderSignIn,
-  loginErrorDialog,
-  logout,
-  messageInfoDialog,
-  passwordChanged,
-  profile,
-  rootChildren,
-  search,
-  settings,
-  settingsAccount,
-  settingsAbout,
-  settingsAntiMobbing,
-  settingsChat,
-  settingsDebug,
-  settingsSecurity,
-  settingsSignature,
-  settingsUser,
-  settingsExportKeysDialog,
-  settingsImportKeysDialog,
-  settingsKeyTransferDialog,
-  settingsKeyTransferDoneDialog,
-  settingsAutocryptImport,
-  settingsNotifications,
-  settingsAppearance,
-  splash,
-  share,
-  showQr,
-  scanQr,
-  webAsset,
+abstract class GalleryEvent {}
+
+class InitializeVideoPlayer extends GalleryEvent {
+  final String path;
+
+  InitializeVideoPlayer({@required this.path});
 }
 
-class Navigatable {
-  final Type type;
+class PlayVideoPlayer extends GalleryEvent {}
 
-  List params;
+class PauseVideoPlayer extends GalleryEvent {}
 
-  String get tag => describeEnum(type);
+class SeekVideoPlayer extends GalleryEvent {
+  final double position;
+  final bool videoStopped;
 
-  Navigatable(this.type, {this.params});
-
-  equal(Navigatable other) {
-    if (other == null) {
-      return false;
-    }
-    bool equal = equalType(other);
-    if (equal) {
-      equal = ListEquality().equals(params, other.params);
-    }
-    return equal;
-  }
-
-  bool equalType(Navigatable other) => type == other.type;
-
-  static String getTag(Type type, [String subTag]) => describeEnum(type) + getSubTag(subTag);
-
-  static String getSubTag(String subTag) => subTag ?? "";
+  SeekVideoPlayer({@required this.position, @required this.videoStopped});
 }
+
+class VideoPlayerStopped extends GalleryEvent {}
+
+class UpdateVideoPlayerPosition extends GalleryEvent {
+  final bool isPlaying;
+  final int position;
+
+  UpdateVideoPlayerPosition({@required this.isPlaying, @required this.position});
+}
+
+abstract class GalleryState {}
+
+class VideoPlayerInitialized extends GalleryState {
+  final VideoPlayerController videoPlayerController;
+  final int duration;
+
+  VideoPlayerInitialized({@required this.videoPlayerController, @required this.duration});
+}
+
+class VideoPlayerStateSuccess extends GalleryState {
+  final bool isPlaying;
+  final int position;
+
+  VideoPlayerStateSuccess({@required this.isPlaying, @required this.position});
+}
+
+class VideoPlayerDisposed extends GalleryState {}
+
+class GalleryInitial extends GalleryState {}

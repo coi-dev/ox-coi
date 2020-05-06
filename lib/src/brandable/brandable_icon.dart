@@ -98,6 +98,7 @@ enum IconSource {
   contacts,
   forward,
   share,
+  pause,
   play,
   pending,
   retry,
@@ -183,6 +184,7 @@ const iconData = {
   IconSource.iosChevron: CupertinoIcons.right_chevron,
   IconSource.logout: Icons.add,
   IconSource.create: Icons.create,
+  IconSource.pause: Icons.pause,
 };
 
 class AdaptiveIcon extends StatelessWidget {
