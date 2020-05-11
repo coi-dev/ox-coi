@@ -127,6 +127,7 @@ class MessageStateData extends Equatable {
   final bool isInfo;
   final int showPadlock;
   final ContactStateData contactStateData;
+  final ChatStateData chatStateData;
   final AttachmentStateData attachmentStateData;
   final String preview;
   final bool isFlagged;
@@ -149,6 +150,7 @@ class MessageStateData extends Equatable {
     @required this.showPadlock,
     @required this.attachmentStateData,
     @required this.contactStateData,
+    @required this.chatStateData,
     @required this.preview,
     @required this.isFlagged,
     @required this.showTime,
@@ -171,6 +173,7 @@ class MessageStateData extends Equatable {
       showPadlock,
       attachmentStateData,
       contactStateData,
+      chatStateData,
       preview,
       isFlagged,
       showTime,
@@ -191,6 +194,7 @@ class MessageStateData extends Equatable {
       showPadlock: showPadlock ?? this.showPadlock,
       attachmentStateData: attachmentStateData ?? this.attachmentStateData,
       contactStateData: contactStateData ?? this.contactStateData,
+      chatStateData: chatStateData ?? this.chatStateData,
       preview: preview ?? this.preview,
       isFlagged: isFlagged ?? this.isFlagged,
       showTime: showTime ?? this.showTime,
@@ -222,6 +226,26 @@ class MessageStateData extends Equatable {
         isGroup,
         isForwarded,
       ];
+}
+
+class ChatStateData extends Equatable{
+  final int id;
+  final String name;
+
+  ChatStateData({
+    @required this.id,
+    @required this.name,
+  });
+
+  ChatStateData copyWith({id, name}) {
+    return ChatStateData(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+
+  @override
+  List<Object> get props => [id, name];
 }
 
 class ContactStateData extends Equatable {

@@ -45,6 +45,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/gallery/gallery.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -146,8 +147,25 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     super.build(context);
     return BlocProvider.value(
       value: _messageItemBloc,
-      child: BlocBuilder<MessageItemBloc, MessageItemState>(
+      child: BlocConsumer(
         bloc: _messageItemBloc,
+        listener: (context, state) {
+          if (state is MessageItemStateSuccess) {
+            final messageStateData = state.messageStateData;
+            if (messageStateData.state == ChatMsg.messageStateFailed) {
+              final chatData = messageStateData.chatStateData;
+              final messageDate = messageStateData.timestamp.getDateAndTimeFromTimestamp();
+              showConfirmationDialog(
+                  context: context,
+                  title: L10n.get(L.error),
+                  contentText: L10n.getFormatted(L.messageFailedDialogContentXY, [chatData.name, messageDate]),
+                  positiveButton: L10n.get(L.messageActionDeleteMessage),
+                  positiveAction: _deleteMessage,
+                  negativeButton: L10n.get(L.cancel),
+                  navigatable: Navigatable(Type.messageFailedDialog));
+            }
+          }
+        },
         builder: (context, state) {
           if (state is MessageItemStateSuccess) {
             final messageStateData = state.messageStateData;
@@ -205,6 +223,8 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
       ),
     );
   }
+
+  _deleteMessage()=> _messageItemBloc.add(DeleteMessage(id: widget.messageId));
 
   _onTap(bool isSetupMessage, int attachmentType) {
     if (isSetupMessage) {
@@ -279,9 +299,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
           text.copyToClipboardWithToast(toastText: getDefaultCopyToastText(context));
           break;
         case MessageActionTag.delete:
-          List<int> messageList = List();
-          messageList.add(widget.messageId);
-          _messageItemBloc.add(DeleteMessage(id: widget.messageId));
+          _deleteMessage();
           break;
         case MessageActionTag.flag:
           _messageItemBloc.add(FlagUnflagMessage(id: widget.messageId));

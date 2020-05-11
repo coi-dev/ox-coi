@@ -61,6 +61,7 @@ import 'message_list_event_state.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
+  final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
   final MessageListBloc messageListBloc;
 
   Stream _messageChangedStream;
@@ -152,9 +153,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       final teaser = await message.getSummaryText(200);
 
       String messageInfo = "";
+      ChatStateData chatStateData;
       if (state == ChatMsg.messageStateFailed) {
         final context = Context();
         messageInfo = await context.getMessageInfo(_messageId);
+        chatStateData = await _getChatDataAsync();
       }
 
       AttachmentStateData attachmentStateData;
@@ -171,17 +174,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
       ContactStateData contactStateData;
       if (showContact) {
-        final contact = _getContact();
-        final contactId = contact.id;
-        final contactName = await contact.getName();
-        final contactAddress = await contact.getAddress();
-        final contactColor = colorFromArgb(await contact.getColor());
-        contactStateData = ContactStateData(
-          id: contactId,
-          name: contactName,
-          address: contactAddress,
-          color: contactColor,
-        );
+        contactStateData = await _getContactDataAsync();
       }
 
       // Load possible URL preview data
@@ -199,6 +192,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         showPadlock: showPadlock,
         attachmentStateData: attachmentStateData,
         contactStateData: contactStateData,
+        chatStateData: chatStateData,
         preview: teaser,
         isFlagged: isFlagged,
         showTime: showTime,
@@ -215,6 +209,32 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     } catch (error) {
       yield MessageItemStateFailure(error: error.toString());
     }
+  }
+
+  Future<ContactStateData> _getContactDataAsync() async {
+    final contact = _getContact();
+    final contactId = contact.id;
+    final contactName = await contact.getName();
+    final contactAddress = await contact.getAddress();
+    final contactColor = colorFromArgb(await contact.getColor());
+    ContactStateData contactStateData = ContactStateData(
+      id: contactId,
+      name: contactName,
+      address: contactAddress,
+      color: contactColor,
+    );
+    return contactStateData;
+  }
+
+  Future<ChatStateData> _getChatDataAsync() async {
+    final ChatMsg message = _getMessage(messageId: _messageId);
+    final chatId = await message.getChatId();
+    final chat = _chatRepository.get(chatId);
+    final chatName = await chat.getName();
+    return ChatStateData(
+      id: chatId,
+      name: chatName,
+    );
   }
 
   Stream<MessageItemState> _deleteMessages(int id) async* {
@@ -281,7 +301,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         final eventMessageState = ChatMsg.messageStateFailed;
         final context = Context();
         final String messageInfo = await context.getMessageInfo(_messageId);
-        final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState, messageInfo: messageInfo);
+        await _setupContact();
+        final chatStateData = await _getChatDataAsync();
+        final messageStateData = (state as MessageItemStateSuccess)
+            .messageStateData
+            .copyWith(state: eventMessageState, messageInfo: messageInfo, chatStateData: chatStateData);
         _unregisterListeners();
         add(MessageUpdated(messageStateData: messageStateData));
       } else if (event.hasType(Event.msgsChanged) && state is MessageItemStateSuccess) {

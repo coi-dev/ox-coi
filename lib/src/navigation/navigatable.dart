@@ -80,6 +80,7 @@ enum Type {
   loginProviderSignIn,
   loginErrorDialog,
   logout,
+  messageFailedDialog,
   messageInfoDialog,
   passwordChanged,
   profile,
