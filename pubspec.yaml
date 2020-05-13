@@ -57,7 +57,7 @@ dependencies:
   transparent_image: ^1.0.0
   url_launcher: ^5.4.1
   vibrate: ^0.0.4
-  video_player: ^0.10.8+1
+  video_player: ^0.10.10
   qr_flutter: ^3.2.0
   qr_mobile_vision:
     git:
@@ -65,9 +65,7 @@ dependencies:
       ref: android-embedding-v2
   tinycolor: ^1.0.2
   uuid: ^2.0.4
-  video_thumbnail:
-    git:
-      url: https://github.com/CihanOezkan/video_thumbnail.git
+  video_thumbnail: ^0.2.1
   delta_chat_core:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 

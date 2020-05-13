@@ -48,6 +48,7 @@ import 'package:bloc/bloc.dart';
 import 'package:crypto/crypto.dart';
 import 'package:delta_chat_core/delta_chat_core.dart' as Core;
 import 'package:flutter/services.dart';
+import 'package:logging/logging.dart';
 import 'package:open_file/open_file.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
@@ -60,8 +61,9 @@ import 'package:path/path.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
-  Repository<Core.ChatMsg> _messageListRepository;
   static const platform = const MethodChannel(SharedData.sharingChannelName);
+  static final _logger = Logger("message_attachment_bloc");
+  Repository<Core.ChatMsg> _messageListRepository;
 
   @override
   MessageAttachmentState get initialState => MessageAttachmentStateInitial();
@@ -116,34 +118,39 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
   }
 
   Stream<MessageAttachmentState> loadThumbnailAndDuration(String videoPath, int duration) async* {
-    String thumbnailPath = await getThumbnailPath(videoPath, duration);
+    String thumbnailPath = await setupAndGetThumbnailPath(videoPath, duration);
     String durationString = await getVideoTime(videoPath, duration);
 
     yield MessageAttachmentStateSuccess(path: thumbnailPath, duration: durationString);
   }
 
-  Future<String> getThumbnailPath(String videoPath, int duration) async {
-    var videoPathBytes = utf8.encode(videoPath);
-    var videoPathSha1 = sha1.convert(videoPathBytes);
-    String thumbnailName = "$videoPathSha1$thumbnailFileExtension";
-    var videoDirectory = dirname(videoPath);
-    String thumbnailPath = "$videoDirectory/$thumbnailName";
+  Future<String> setupAndGetThumbnailPath(String videoPath, int duration) async {
+    String thumbnailPath = _getThumbnailPath(videoPath);
     File file = File(thumbnailPath);
     bool fileExists = await file.exists();
     String result = thumbnailPath;
     if (!fileExists) {
       try {
-        result = await VideoThumbnail.thumbnailFile(
+        final imageData = await VideoThumbnail.thumbnailData(
           video: videoPath,
-          thumbnailPath: thumbnailPath,
           imageFormat: ImageFormat.JPEG,
           quality: 25,
         );
-      } catch (e) {
+        file.writeAsBytes(imageData);
+      } catch (error) {
+        _logger.warning("Couldn't load thumbnail. Error: $error");
         result = "";
       }
     }
     return result;
+  }
+
+  String _getThumbnailPath(String videoPath) {
+    final videoPathBytes = utf8.encode(videoPath);
+    final videoPathSha1 = sha1.convert(videoPathBytes);
+    final thumbnailName = "$videoPathSha1$thumbnailFileExtension";
+    final videoDirectory = dirname(videoPath);
+    return "$videoDirectory/$thumbnailName";
   }
 
   Future<String> getVideoTime(String path, int duration) async {
