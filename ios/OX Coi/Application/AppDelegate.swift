@@ -50,6 +50,7 @@ class AppDelegate: FlutterAppDelegate {
 
     private var sharedData: [String: String]?
     var startString: String?
+    var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIApplication.setupLogging()
@@ -66,14 +67,15 @@ class AppDelegate: FlutterAppDelegate {
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         startString = url.absoluteString
-        setupSharingMethodChannel()
+        self.setupSharingMethodChannel()
+        
         return true
     }
 
     override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
-
+    
     override func applicationDidEnterBackground(_ application: UIApplication) {
         if UserDefaults.applicationShouldTerminate {
             UserDefaults.applicationShouldTerminate = false

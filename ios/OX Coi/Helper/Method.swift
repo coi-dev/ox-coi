@@ -12,10 +12,11 @@ struct Method {}
 
 extension Method {
     struct Invite {
-        static let InviteLink = "getInitialLink"
+        static let InviteLink       = "getInitialLink"
     }
 
     struct Sharing {
-        static let SendSharedData = "sendSharedData"
+        static let SendSharedData   = "sendSharedData"
+        static let GetSharedData    = "getSharedData"
     }
 }

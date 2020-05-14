@@ -166,7 +166,8 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     if (path.isNotEmpty) {
       var cacheFile = File(path);
       if (cacheFile.existsSync()) {
-        cacheFile.delete();
+        //TODO:  The cached file should not be deleted before it's copied to another place.
+        //cacheFile.delete();
       }
       _cacheFilePath = "";
     }

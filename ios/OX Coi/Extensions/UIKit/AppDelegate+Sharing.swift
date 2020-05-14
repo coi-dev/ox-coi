@@ -45,6 +45,19 @@ import Foundation
 fileprivate let INTENT_CHANNEL_NAME = "oxcoi.intent"
 
 extension AppDelegate {
+    
+    fileprivate struct Constant {
+        static let path = "path"
+        static let text = "text"
+        static let mimeType = "text/plain"
+        static let keyPrefixShared = "shared"
+    }
+
+    fileprivate enum DataType: String {
+        case url
+        case text
+        case file
+    }
 
     internal func setupSharingMethodChannel() {
         guard let controller = window.rootViewController as? FlutterViewController else {
@@ -68,6 +81,10 @@ extension AppDelegate {
                     self.shareFile(arguments: args)
                 }
 
+            case Method.Sharing.GetSharedData:
+                result(self.getSharedData())
+                self.clearSharedData()
+                return
             default:
                 break
             }
@@ -78,22 +95,20 @@ extension AppDelegate {
     private func shareFile(arguments: [String: String]) {
         var itemTemp: Any?
 
-        if let path = arguments["path"] {
+        if let path = arguments[Constant.path] {
             if !path.isEmpty {
                 itemTemp = URL(fileURLWithPath: path)
             }
         }
 
-        if let text = arguments["text"] {
+        if let text = arguments[Constant.text] {
             if !text.isEmpty {
                 itemTemp = text
             }
         }
 
-        guard let item = itemTemp else {
-            return
-        }
-        guard let rootViewController = window.rootViewController as? FlutterViewController else {
+        guard let item = itemTemp,
+            let rootViewController = window.rootViewController as? FlutterViewController else {
             return
         }
 
@@ -101,5 +116,45 @@ extension AppDelegate {
         rootViewController.present(activityController, animated: true, completion: nil)
 
     }
+    
+    private func getSharedData() -> [String: Any?]? {
+        var dict: [String: Any?]
+        
+        guard let userDefaults = UserDefaults(suiteName: SharedData.SuiteName),
+            userDefaults.object(forKey: SharedData.DataType) != nil else {
+            return nil
+        }
 
+        if userDefaults.object(forKey: SharedData.DataType) as? String == DataType.url.rawValue {
+            dict = [SharedData.MimeType: Constant.mimeType, SharedData.Text: userDefaults.object(forKey: SharedData.Text)]
+            return dict
+
+        } else if userDefaults.object(forKey: SharedData.DataType) as? String == DataType.text.rawValue {
+            dict = [SharedData.Text: userDefaults.object(forKey: SharedData.Text)]
+            return dict
+
+        } else if userDefaults.object(forKey: SharedData.DataType) as? String == DataType.file.rawValue {
+            dict = [
+                SharedData.MimeType: userDefaults.object(forKey: SharedData.MimeType),
+                SharedData.Path: userDefaults.object(forKey: SharedData.Path),
+                SharedData.FileName: userDefaults.object(forKey: SharedData.FileName)]
+            return dict
+
+        } else {
+            return nil
+        }
+        
+    }
+    
+    private func clearSharedData() {
+        guard let userDefaults = UserDefaults(suiteName: SharedData.SuiteName) else {
+            return
+        }
+
+        for key in userDefaults.dictionaryRepresentation().keys {
+            if key.hasPrefix(Constant.keyPrefixShared) {
+                userDefaults.removeObject(forKey: key)
+            }
+        }
+    }
 }

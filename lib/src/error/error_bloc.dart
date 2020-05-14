@@ -113,7 +113,7 @@ class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
   }
 
   bool isAuthenticationError(Event event) {
-    String data2 = event.data2;
-    return (event.eventId == Event.errorNoNetwork && data2.contains(imapErrorAuthenticationFailed));
+    final data2 = event.data2;
+    return (event.eventId == Event.errorNoNetwork && data2 is String && data2.contains(imapErrorAuthenticationFailed));
   }
 }
