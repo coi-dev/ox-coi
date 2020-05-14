@@ -47,7 +47,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
-import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/invite/invite_bloc.dart';
@@ -109,18 +108,20 @@ class UserProfile extends RootChild {
 }
 
 class _ProfileState extends State<UserProfile> {
-  UserBloc _userBloc = UserBloc();
-  UserChangeBloc _userChangeBloc = UserChangeBloc();
-  Navigation navigation = Navigation();
-  InviteBloc _inviteBloc = InviteBloc();
+  final Navigation _navigation = Navigation();
+  final InviteBloc _inviteBloc = InviteBloc();
+  final UserChangeBloc _userChangeBloc = UserChangeBloc();
+
+  UserBloc _userBloc;
   OverlayEntry _progressOverlayEntry;
   String _avatarPath = "";
 
   @override
   void initState() {
     super.initState();
+    _navigation.current = Navigatable(Type.profile);
 
-    navigation.current = Navigatable(Type.profile);
+    _userBloc = UserBloc(userChangeBloc: _userChangeBloc);
     _userBloc.add(RequestUser());
   }
 
@@ -135,190 +136,187 @@ class _ProfileState extends State<UserProfile> {
           bloc: _userBloc,
           builder: (context, state) {
             if (state is UserStateSuccess) {
-              return buildProfileView(state.config);
+              final config = state.config;
+              _avatarPath = config.avatarPath;
+              return SingleChildScrollView(
+                child: IntrinsicHeight(
+                  child: Container(
+                    color: CustomTheme.of(context).background,
+                    child: Column(
+                      children: <Widget>[
+                        ProfileData(
+                          text: config.username,
+                          secondaryText: config.email,
+                          avatarPath: _avatarPath,
+                          placeholderText: L10n.get(L.profileNoUsername),
+                          imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
+                          imageActionCallback: _editPhotoCallback,
+                          withPlaceholder: true,
+                          editActionCallback: () => _editUserSettings(),
+                          child: ProfileHeader(),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.flag,
+                          text: L10n.get(L.settingItemFlaggedTitle),
+                          iconBackground: CustomTheme.of(context).flagIcon,
+                          onTap: () => _navigation.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Flagged()),
+                          ),
+                          key: Key(keyUserProfileFlagIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.qr,
+                          text: L10n.get(L.settingItemQRTitle),
+                          iconBackground: CustomTheme.of(context).qrIcon,
+                          onTap: () => _navigation.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => QrCode(chatId: 0)),
+                          ),
+                          key: Key(keyUserProfileQrIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: false,
+                          icon: IconSource.personAdd,
+                          text: L10n.get(L.settingItemInviteTitle),
+                          iconBackground: CustomTheme.of(context).inviteIcon,
+                          onTap: _createInviteUrl,
+                          key: Key(keyUserProfilePersonAddIconSource),
+                        ),
+                        ListGroupHeader(
+                          text: L10n.get(L.settingGroupHeaderGeneralTitle),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.appearance,
+                          text: SettingsAppearance.viewTitle,
+                          iconBackground: CustomTheme.of(context).appearanceIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsAppearance),
+                          key: Key(keyUserProfileAppearanceIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.notifications,
+                          text: L10n.get(L.settingItemNotificationsTitle),
+                          iconBackground: CustomTheme.of(context).notificationIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsNotifications),
+                          key: Key(keyUserProfileNotificationIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.chat,
+                          text: L10n.get(L.settingItemChatTitle),
+                          iconBackground: CustomTheme.of(context).chatIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsChat),
+                          key: Key(keyUserProfileChatIconSource),
+                        ),
+                        ListGroupHeader(
+                          text: L10n.get(L.settingGroupHeaderEmailTitle),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.signature,
+                          text: L10n.get(L.settingItemSignatureTitle),
+                          iconBackground: CustomTheme.of(context).signatureIcon,
+                          onTap: () => _navigation.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => EmailSignature()),
+                          ),
+                          key: Key(keyUserProfileSignatureIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.serverSetting,
+                          text: L10n.get(L.settingItemServerSettingsTitle),
+                          iconBackground: CustomTheme.of(context).serverSettingsIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsAccount),
+                          key: Key(keyUserProfileServerSettingIconSource),
+                        ),
+                        ListGroupHeader(
+                          text: L10n.get(L.settingGroupHeaderSecurityTitle),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.security,
+                          text: L10n.get(L.settingItemDataProtectionTitle),
+                          iconBackground: CustomTheme.of(context).dataProtectionIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsAntiMobbing),
+                          key: Key(keyUserProfileSecurityIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.block,
+                          text: L10n.get(L.settingItemBlockedTitle),
+                          iconBackground: CustomTheme.of(context).blockIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.contactsBlocked),
+                          key: Key(keyUserProfileBlockIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.lock,
+                          text: L10n.get(L.settingItemEncryptionTitle),
+                          iconBackground: CustomTheme.of(context).encryptionIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsEncryption),
+                          key: Key(keyUserProfileLockIconSource),
+                        ),
+                        ListGroupHeader(
+                          text: "",
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.info,
+                          text: L10n.get(L.settingItemAboutTitle),
+                          iconBackground: CustomTheme.of(context).aboutIcon,
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsAbout),
+                          key: Key(keyUserProfileInfoIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: false,
+                          icon: IconSource.feedback,
+                          text: L10n.get(L.settingItemFeedbackTitle),
+                          iconBackground: CustomTheme.of(context).feedbackIcon,
+                          onTap: () => launch(featureRequestUrl, forceSafariVC: false),
+                          key: Key(keyUserProfileFeedbackIconSource),
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: false,
+                          icon: IconSource.bugReport,
+                          text: L10n.get(L.settingItemBugReportTitle),
+                          iconBackground: CustomTheme.of(context).bugReportIcon,
+                          onTap: () => launch(issueUrl, forceSafariVC: false),
+                          key: Key(keyUserProfileBugReportIconSource),
+                        ),
+                        if (!isRelease())
+                          SettingsItem(
+                            pushesNewScreen: true,
+                            icon: IconSource.bugReport,
+                            text: L10n.get(L.debug),
+                            iconBackground: CustomTheme.of(context).bugReportIcon,
+                            onTap: () => _navigation.pushNamed(context, Navigation.settingsDebug),
+                          ),
+                        ListGroupHeader(
+                          text: "",
+                        ),
+                        SettingsItem(
+                          pushesNewScreen: false,
+                          icon: IconSource.logout,
+                          text: L10n.get(L.logoutTitle),
+                          iconBackground: CustomTheme.of(context).logoutIcon,
+                          onTap: () => _showLogoutDialog(context: context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
             } else if (state is UserStateFailure) {
-              return new Text(state.error);
+              return Text(state.error);
             } else {
-              return new Container();
+              return Container();
             }
           }),
-    );
-  }
-
-  Widget buildProfileView(Config config) {
-    _avatarPath = config.avatarPath;
-    return SingleChildScrollView(
-      child: IntrinsicHeight(
-        child: Container(
-          color: CustomTheme.of(context).background,
-          child: Column(
-            children: <Widget>[
-              ProfileData(
-                text: config.username,
-                secondaryText: config.email,
-                avatarPath: _avatarPath,
-                placeholderText: L10n.get(L.profileNoUsername),
-                imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
-                imageActionCallback: _editPhotoCallback,
-                withPlaceholder: true,
-                editActionCallback: () => _editUserSettings(),
-                child: ProfileHeader(),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.flag,
-                text: L10n.get(L.settingItemFlaggedTitle),
-                iconBackground: CustomTheme.of(context).flagIcon,
-                onTap: () => navigation.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Flagged()),
-                ),
-                key: Key(keyUserProfileFlagIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.qr,
-                text: L10n.get(L.settingItemQRTitle),
-                iconBackground: CustomTheme.of(context).qrIcon,
-                onTap: () => navigation.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => QrCode(chatId: 0)),
-                ),
-                key: Key(keyUserProfileQrIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: false,
-                icon: IconSource.personAdd,
-                text: L10n.get(L.settingItemInviteTitle),
-                iconBackground: CustomTheme.of(context).inviteIcon,
-                onTap: _createInviteUrl,
-                key: Key(keyUserProfilePersonAddIconSource),
-              ),
-              ListGroupHeader(
-                text: L10n.get(L.settingGroupHeaderGeneralTitle),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.appearance,
-                text: SettingsAppearance.viewTitle,
-                iconBackground: CustomTheme.of(context).appearanceIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsAppearance),
-                key: Key(keyUserProfileAppearanceIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.notifications,
-                text: L10n.get(L.settingItemNotificationsTitle),
-                iconBackground: CustomTheme.of(context).notificationIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsNotifications),
-                key: Key(keyUserProfileNotificationIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.chat,
-                text: L10n.get(L.settingItemChatTitle),
-                iconBackground: CustomTheme.of(context).chatIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsChat),
-                key: Key(keyUserProfileChatIconSource),
-              ),
-              ListGroupHeader(
-                text: L10n.get(L.settingGroupHeaderEmailTitle),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.signature,
-                text: L10n.get(L.settingItemSignatureTitle),
-                iconBackground: CustomTheme.of(context).signatureIcon,
-                onTap: () => navigation.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EmailSignature()),
-                ),
-                key: Key(keyUserProfileSignatureIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.serverSetting,
-                text: L10n.get(L.settingItemServerSettingsTitle),
-                iconBackground: CustomTheme.of(context).serverSettingsIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsAccount),
-                key: Key(keyUserProfileServerSettingIconSource),
-              ),
-              ListGroupHeader(
-                text: L10n.get(L.settingGroupHeaderSecurityTitle),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.security,
-                text: L10n.get(L.settingItemDataProtectionTitle),
-                iconBackground: CustomTheme.of(context).dataProtectionIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsAntiMobbing),
-                key: Key(keyUserProfileSecurityIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.block,
-                text: L10n.get(L.settingItemBlockedTitle),
-                iconBackground: CustomTheme.of(context).blockIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.contactsBlocked),
-                key: Key(keyUserProfileBlockIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.lock,
-                text: L10n.get(L.settingItemEncryptionTitle),
-                iconBackground: CustomTheme.of(context).encryptionIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsEncryption),
-                key: Key(keyUserProfileLockIconSource),
-              ),
-              ListGroupHeader(
-                text: "",
-              ),
-              SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.info,
-                text: L10n.get(L.settingItemAboutTitle),
-                iconBackground: CustomTheme.of(context).aboutIcon,
-                onTap: () => navigation.pushNamed(context, Navigation.settingsAbout),
-                key: Key(keyUserProfileInfoIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: false,
-                icon: IconSource.feedback,
-                text: L10n.get(L.settingItemFeedbackTitle),
-                iconBackground: CustomTheme.of(context).feedbackIcon,
-                onTap: () => launch(featureRequestUrl, forceSafariVC: false),
-                key: Key(keyUserProfileFeedbackIconSource),
-              ),
-              SettingsItem(
-                pushesNewScreen: false,
-                icon: IconSource.bugReport,
-                text: L10n.get(L.settingItemBugReportTitle),
-                iconBackground: CustomTheme.of(context).bugReportIcon,
-                onTap: () => launch(issueUrl, forceSafariVC: false),
-                key: Key(keyUserProfileBugReportIconSource),
-              ),
-              if (!isRelease())
-                SettingsItem(
-                  pushesNewScreen: true,
-                  icon: IconSource.bugReport,
-                  text: L10n.get(L.debug),
-                  iconBackground: CustomTheme.of(context).bugReportIcon,
-                  onTap: () => navigation.pushNamed(context, Navigation.settingsDebug),
-                ),
-              ListGroupHeader(
-                text: "",
-              ),
-              SettingsItem(
-                pushesNewScreen: false,
-                icon: IconSource.logout,
-                text: L10n.get(L.logoutTitle),
-                iconBackground: CustomTheme.of(context).logoutIcon,
-                onTap: () => _showLogoutDialog(context: context),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -334,9 +332,7 @@ class _ProfileState extends State<UserProfile> {
   }
 
   void _logoutAction() {
-    // ignore: close_sinks
-    final mainBloc = BlocProvider.of<MainBloc>(context);
-    mainBloc.add(Logout());
+    BlocProvider.of<MainBloc>(context).add(Logout());
   }
 
   void _editPhotoCallback(String avatarPath) {
@@ -346,10 +342,15 @@ class _ProfileState extends State<UserProfile> {
     _userChangeBloc.add(UserChange.UserAvatarChanged(avatarPath: avatarPath));
   }
 
-  void _editUserSettings() {
-    navigation.push(
+  void _editUserSettings() async {
+    _navigation.push(
       context,
-      MaterialPageRoute(builder: (context) => UserSettings()),
+      MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: _userChangeBloc,
+          child: UserSettings(),
+        ),
+      ),
     );
   }
 

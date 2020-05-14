@@ -46,9 +46,9 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/user/user_change_event_state.dart';
-import 'package:ox_coi/src/utils/core.dart';
 
 class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
+
   @override
   UserChangeState get initialState => UserChangeStateInitial();
 
@@ -57,70 +57,64 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
     if (event is RequestUser) {
       yield UserChangeStateLoading();
       try {
-        _setupUser();
+        yield* _setupUserAsync();
       } catch (error) {
         yield UserChangeStateFailure(error: error.toString());
       }
-    } else if (event is UserLoaded) {
-      yield UserChangeStateSuccess(config: event.config);
     } else if (event is UserPersonalDataChanged) {
       try {
-        _saveUserPersonalData(event);
+        yield* _saveUserPersonalDataAsync(event);
       } catch (error) {
         yield UserChangeStateFailure(error: error.toString());
       }
     } else if (event is UserSignatureChanged) {
       try {
-        _saveUserSignature(event);
+        yield* _saveUserSignatureAsync(event);
       } catch (error) {
         yield UserChangeStateFailure(error: error.toString());
       }
     } else if (event is UserAccountDataChanged) {
       try {
-        _saveUserAccountData(event);
+        yield* _saveUserAccountDataAsync(event);
       } catch (error) {
         yield UserChangeStateFailure(error: error.toString());
       }
     } else if (event is UserAvatarChanged) {
       try {
-        _saveUserAvatar(event);
+        yield* _saveUserAvatarAsync(event);
       } catch (error) {
         yield UserChangeStateFailure(error: error.toString());
       }
-    } else if (event is ChangesApplied) {
-      yield UserChangeStateApplied();
     }
   }
 
-  void _setupUser() async {
-    Config config = Config();
+  Stream<UserChangeState> _setupUserAsync() async* {
+    final config = Config();
     await config.load();
-    add(UserLoaded(config: config));
+    yield UserChangeStateSuccess(config: config);
   }
 
-  void _saveUserPersonalData(UserPersonalDataChanged event) async {
-    Config config = Config();
+  Stream<UserChangeState> _saveUserPersonalDataAsync(UserPersonalDataChanged event) async* {
+    final config = Config();
     await config.setValue(Context.configDisplayName, event.username);
-    var avatarPath = event.avatarPath;
-    await config.setValue(Context.configSelfAvatar, avatarPath);
-    add(ChangesApplied());
+    await config.setValue(Context.configSelfAvatar, event.avatarPath);
+    yield UserChangeStateApplied();
   }
 
-  void _saveUserSignature(UserSignatureChanged event) async {
-    Config config = Config();
+  Stream<UserChangeState> _saveUserSignatureAsync(UserSignatureChanged event) async* {
+    final config = Config();
     await config.setValue(Context.configSelfStatus, event.signature);
-    add(ChangesApplied());
+    yield UserChangeStateApplied();
   }
 
-  void _saveUserAvatar(UserAvatarChanged event) async {
-    Config config = Config();
-    var avatarPath = event.avatarPath;
-    await config.setValue(Context.configSelfAvatar, avatarPath);
-    add(ChangesApplied());
+  Stream<UserChangeState> _saveUserAvatarAsync(UserAvatarChanged event) async* {
+    final config = Config();
+    await config.setValue(Context.configSelfAvatar, event.avatarPath);
+    yield UserChangeStateApplied();
   }
 
-  void _saveUserAccountData(UserAccountDataChanged event) async {
-    Config config = Config();
+  Stream<UserChangeState> _saveUserAccountDataAsync(UserAccountDataChanged event) async* {
+    final config = Config();
     await config.setValue(Context.configMailUser, event.imapLogin.isNotEmpty ? event.imapLogin : null);
     await config.setValue(Context.configMailPassword, event.imapPassword);
     await config.setValue(Context.configMailServer, event.imapServer);
@@ -131,7 +125,6 @@ class UserChangeBloc extends Bloc<UserChangeEvent, UserChangeState> {
     await config.setValue(Context.configSendServer, event.smtpServer);
     await config.setValue(Context.configSendPort, event.smtpPort);
     await config.setValue(Context.configSmtpSecurity, event.smtpSecurity);
-
-    add(ChangesApplied());
+    yield UserChangeStateApplied();
   }
 }

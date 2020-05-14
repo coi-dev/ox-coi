@@ -47,12 +47,6 @@ abstract class UserEvent {}
 
 class RequestUser extends UserEvent {}
 
-class UserLoaded extends UserEvent {
-  final Config config;
-
-  UserLoaded({@required this.config});
-}
-
 abstract class UserState {}
 
 class UserStateInitial extends UserState {}

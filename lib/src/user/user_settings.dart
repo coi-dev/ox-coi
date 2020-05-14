@@ -44,7 +44,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
-import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
@@ -62,30 +61,17 @@ class UserSettings extends StatefulWidget {
 }
 
 class _UserSettingsState extends State<UserSettings> {
-  UserChangeBloc _userChangeBloc = UserChangeBloc();
-  Navigation _navigation = Navigation();
-  TextEditingController _usernameController = TextEditingController();
+  final Navigation _navigation = Navigation();
+  final TextEditingController _usernameController = TextEditingController();
+  UserChangeBloc _userChangeBloc;
   String _avatar;
 
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.settingsUser);
+    _userChangeBloc = BlocProvider.of<UserChangeBloc>(context);
     _userChangeBloc.add(RequestUser());
-    _userChangeBloc.listen((state) => _handleUserChangeStateChange(state));
-  }
-
-  _handleUserChangeStateChange(UserChangeState state) {
-    if (state is UserChangeStateSuccess) {
-      Config config = state.config;
-      _usernameController.text = config.username;
-      String avatarPath = config.avatarPath;
-      if (avatarPath != null && avatarPath.isNotEmpty) {
-        _avatar = config.avatarPath;
-      }
-    } else if (state is UserChangeStateApplied) {
-      _navigation.pop(context);
-    }
   }
 
   @override
@@ -102,8 +88,20 @@ class _UserSettingsState extends State<UserSettings> {
           )
         ],
       ),
-      body: BlocBuilder(
+      body: BlocConsumer(
         bloc: _userChangeBloc,
+        listener: (context, state) {
+          if (state is UserChangeStateSuccess) {
+            final config = state.config;
+            final avatarPath = config.avatarPath;
+            _usernameController.text = config.username;
+            if (!avatarPath.isNullOrEmpty()) {
+              _avatar = config.avatarPath;
+            }
+          } else if (state is UserChangeStateApplied) {
+            _navigation.pop(context);
+          }
+        },
         builder: (context, state) {
           if (state is UserChangeStateSuccess) {
             return EditableProfileHeader(
@@ -113,9 +111,9 @@ class _UserSettingsState extends State<UserSettings> {
               placeholder: L10n.get(L.username),
             );
           } else if (state is UserChangeStateFailure) {
-            return new Text(state.error);
+            return Text(state.error);
           } else {
-            return new Container();
+            return Container();
           }
         },
       ),
@@ -129,7 +127,7 @@ class _UserSettingsState extends State<UserSettings> {
   }
 
   void _saveChanges() async {
-    String avatarPath = !_avatar.isNullOrEmpty() ? _avatar : null;
+    final avatarPath = !_avatar.isNullOrEmpty() ? _avatar : null;
     _userChangeBloc.add(UserPersonalDataChanged(username: _usernameController.text, avatarPath: avatarPath));
   }
 }

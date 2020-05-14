@@ -73,7 +73,8 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   bool _listenersRegistered = false;
 
   MessageItemBloc({this.messageListBloc}) {
-    if (isMessageListAware()) {
+    final listensToMessageChanges = messageListBloc != null;
+    if (listensToMessageChanges) {
       _messageListBlocSubscription = messageListBloc.listen((state) {
         if (state is MessagesStateSuccess) {
           _messageChangedStream ??= state.messageChangedStream;
@@ -81,8 +82,6 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       });
     }
   }
-
-  bool isMessageListAware() => messageListBloc != null;
 
   @override
   MessageItemState get initialState => MessageItemStateInitial();

@@ -53,8 +53,6 @@ class UserLoaded extends UserChangeEvent {
   UserLoaded({@required this.config});
 }
 
-class ChangesApplied extends UserChangeEvent {}
-
 class UserPersonalDataChanged extends UserChangeEvent {
   final String username;
   final String avatarPath;
