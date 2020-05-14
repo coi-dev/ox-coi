@@ -52,7 +52,7 @@ class RequestChat extends ChatEvent {
   final int messageId;
   final bool isHeadless;
 
-  RequestChat({@required this.chatId, this.isHeadless, this.messageId});
+  RequestChat({@required this.chatId, this.isHeadless = false, this.messageId});
 }
 
 class ClearNotifications extends ChatEvent {}

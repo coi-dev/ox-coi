@@ -71,10 +71,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield ChatStateLoading();
       try {
         _chatId = event.chatId;
-
-       await _registerListeners();
+        await _registerListeners();
         if (_chatId == Chat.typeInvite) {
-          yield* _setupInviteChat(event.messageId);
+          yield* _setupInviteChat(event.messageId, event.isHeadless);
         } else {
           yield* _setupChat(event.isHeadless);
         }
@@ -118,42 +117,40 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  Stream<ChatState> _setupInviteChat(int messageId) async* {
+  Stream<ChatState> _setupInviteChat(int messageId, bool isHeadless) async* {
     final messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-    final ChatMsg message = messageListRepository.get(messageId);
-    if (message != null) {
-      final contactId = await message.getFromId();
-      final Contact contact = _contactRepository.get(contactId);
-      final name = await contact.getName();
-      final email = await contact.getAddress();
-      final colorValue = await contact.getColor();
-      final color = colorFromArgb(colorValue);
-      yield ChatStateSuccess(
-        name: name,
-        subTitle: email,
-        color: color,
-        freshMessageCount: 0,
-        isSelfTalk: false,
-        isGroupChat: false,
-        preview: null,
-        timestamp: null,
-        isVerified: false,
-        isRemoved: false,
-        avatarPath: null,
-      );
+    if (isHeadless) {
+      messageListRepository.putIfAbsent(id: messageId);
     }
+    final ChatMsg message = messageListRepository.get(messageId);
+
+    final contactId = await message.getFromId();
+    final Contact contact = _contactRepository.get(contactId);
+    final name = await contact.getName();
+    final email = await contact.getAddress();
+    final colorValue = await contact.getColor();
+    final color = colorFromArgb(colorValue);
+    yield ChatStateSuccess(
+      name: name,
+      subTitle: email,
+      color: color,
+      freshMessageCount: 0,
+      isSelfTalk: false,
+      isGroupChat: false,
+      preview: null,
+      timestamp: null,
+      isVerified: false,
+      isRemoved: false,
+      avatarPath: null,
+    );
   }
 
   Stream<ChatState> _setupChat(bool isHeadless) async* {
     final context = Context();
-    Chat chat = _chatRepository.get(_chatId);
-    if (chat == null && isHeadless) {
+    if (isHeadless) {
       _chatRepository.putIfAbsent(id: _chatId);
-      chat = _chatRepository.get(_chatId);
     }
-    if (chat == null) {
-      return;
-    }
+    Chat chat = _chatRepository.get(_chatId);
     _isGroupChat = await chat.isGroup();
     final name = await chat.getName();
     final colorValue = await chat.getColor();
@@ -192,9 +189,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       freshMessageCount: freshMessageCount,
       isSelfTalk: isSelfTalk,
       isGroupChat: _isGroupChat,
-      preview: chatSummaryState != ChatMsg.messageStateDraft && chatSummaryState != ChatMsg.messageNone
-          ? chatSummary?.preview
-          : L10n.get(L.chatNoMessages),
+      preview: chatSummaryState != ChatMsg.messageStateDraft && chatSummaryState != ChatMsg.messageNone ? chatSummary?.preview : L10n.get(L.chatNoMessages),
       timestamp: chatSummary?.timestamp,
       isVerified: isVerified,
       avatarPath: avatarPath,

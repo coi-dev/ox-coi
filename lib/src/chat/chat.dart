@@ -100,21 +100,18 @@ class Chat extends StatefulWidget {
   Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType, this.sharedData, this.headlessStart = false});
 
   @override
-  _ChatState createState() => new _ChatState();
+  _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteMixin {
-  Navigation _navigation = Navigation();
-  ChatBloc _chatBloc = ChatBloc();
-  MessageListBloc _messageListBloc = MessageListBloc();
-  ChatComposerBloc _chatComposerBloc = ChatComposerBloc();
-  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
+  final _navigation = Navigation();
+  final _chatBloc = ChatBloc();
+  final _messageListBloc = MessageListBloc();
+  final _chatComposerBloc = ChatComposerBloc();
+  final _chatChangeBloc = ChatChangeBloc();
+  final _textController = TextEditingController();
+  final _scrollController = ScrollController();
 
-  // Ignoring false positive https://github.com/felangel/bloc/issues/587
-  // ignore: close_sinks
-  LifecycleBloc _lifecycleBloc;
-
-  final TextEditingController _textController = new TextEditingController();
   bool _isComposingText = false;
   bool _isLocked = false;
   bool _isStopped = false;
@@ -128,39 +125,14 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   FileType _selectedFileType;
   String _selectedExtension = "";
   String _fileName = "";
-  String _phoneNumbers;
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-
     _navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
     _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
     _chatBloc.add(ClearNotifications());
-    _chatBloc.listen((state) {
-      if (state is ChatStateSuccess) {
-        _phoneNumbers = state.phoneNumbers;
-        _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
-        if (widget.newMessage != null || widget.newPath != null) {
-          if (widget.newPath.isEmpty) {
-            _messageListBloc.add(SendMessage(text: widget.newMessage));
-          } else {
-            _messageListBloc.add(SendMessage(path: widget.newPath, fileType: widget.newFileType, text: widget.newMessage));
-          }
-        }
-      }
-    });
     _chatComposerBloc.listen((state) => handleChatComposer(state));
-    _messageListBloc.listen((state) {
-      if (state is MessagesStateSuccess) {
-        if (_lifecycleBloc.currentBackgroundState == AppLifecycleState.paused.toString()) {
-          return;
-        }
-        _chatChangeBloc.add(ChatMarkMessagesSeen(messageIds: state.messageIds));
-      }
-    });
-
     if (widget.sharedData != null) {
       if (widget.sharedData.mimeType.contains("text/")) {
         _textController.text = widget.sharedData.text;
@@ -287,25 +259,52 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
 
   @override
   Widget build(BuildContext context) {
-    _lifecycleBloc = BlocProvider.of<LifecycleBloc>(context);
-    return BlocListener(
-      bloc: _lifecycleBloc,
-      listener: (context, state) {
-        if (state is LifecycleStateSuccess) {
-          if (state.state == AppLifecycleState.resumed.toString()) {
-            _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
-          }
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<LifecycleBloc, LifecycleState>(
+          listener: (context, state) {
+            if (state is LifecycleStateSuccess) {
+              if (state.state == AppLifecycleState.resumed.toString()) {
+                _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
+              }
+            }
+          },
+        ),
+        BlocListener(
+          bloc: _chatBloc,
+          listener: (context, state) {
+            if (state is ChatStateSuccess) {
+              _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
+              if (!widget.newPath.isNullOrEmpty()) {
+                _messageListBloc.add(SendMessage(path: widget.newPath, fileType: widget.newFileType, text: widget.newMessage));
+              } else if (!widget.newMessage.isNullOrEmpty()) {
+                _messageListBloc.add(SendMessage(text: widget.newMessage));
+              }
+            }
+          },
+        ),
+        BlocListener(
+          bloc: _messageListBloc,
+          listener: (context, state) {
+            if (BlocProvider.of<LifecycleBloc>(context).currentBackgroundState == AppLifecycleState.paused.toString()) {
+              return;
+            }
+            if (state is MessagesStateSuccess) {
+              _chatChangeBloc.add(ChatMarkMessagesSeen(messageIds: state.messageIds));
+            }
+          },
+        )
+      ],
       child: BlocBuilder(
         bloc: _chatBloc,
         builder: (context, state) {
-          String name;
-          String subTitle;
-          Color color;
+          String name = "";
+          String subTitle = "";
           bool isVerified = false;
-          String imagePath = "";
           bool isGroupChat = false;
+          String imagePath = "";
+          Color color;
+          String phoneNumbers;
 
           if (state is ChatStateSuccess) {
             name = state.name;
@@ -314,9 +313,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             isVerified = state.isVerified;
             imagePath = state.avatarPath;
             isGroupChat = state.isGroupChat;
-          } else {
-            name = "";
-            subTitle = "";
+            phoneNumbers = state.phoneNumbers;
           }
 
           return Scaffold(
@@ -332,7 +329,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     )
                   : GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: () => _chatTitleTapped(),
+                      onTap: _chatTitleTapped,
                       key: Key(keyChatIconTitleText),
                       child: ChatAppBar(
                         imagePath: imagePath,
@@ -345,11 +342,11 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     ),
               leading: AppBarBackButton(context: context),
               trailingList: [
-                if (!isGroupChat)
+                if (phoneNumbers != null)
                   IconButton(
                     key: Key(keyChatIconButtonIconPhone),
                     icon: AdaptiveIcon(icon: IconSource.phone),
-                    onPressed: _onPhonePressed,
+                    onPressed: () => _onPhonePressed(phoneNumbers),
                   ),
               ],
             ),
@@ -393,8 +390,19 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     ]),
                   ),
                 ),
-                if (isInviteChat(widget.chatId)) buildInviteChoice(),
-                if (_filePath.isNotEmpty && _knownType != ChatMsg.typeVoice) buildPreview(),
+                if (isInviteChat(widget.chatId))
+                  ChatInviteChoice(
+                    chatId: widget.chatId,
+                    messageId: widget.messageId,
+                  ),
+                if (_filePath.isNotEmpty && _knownType != ChatMsg.typeVoice)
+                  ChatAttachmentPreview(
+                    filePath: _filePath,
+                    fileType: _selectedFileType,
+                    onClose: _closePreview,
+                    extension: _selectedExtension,
+                    fileName: _fileName,
+                  ),
                 Divider(height: dividerHeight),
                 if (state is ChatStateSuccess && !state.isRemoved)
                   Container(
@@ -406,101 +414,6 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           );
         },
       ),
-    );
-  }
-
-  Widget buildInviteChoice() {
-    return Column(
-      children: <Widget>[
-        Divider(),
-        Padding(
-          padding: const EdgeInsets.all(dimension16dp),
-          child: Text(L10n.get(L.chatCreateText), style: Theme.of(context).textTheme.subhead),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: dimension16dp, left: dimension16dp, bottom: dimension16dp),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              ButtonImportanceMedium(
-                minimumWidth: inviteChoiceButtonSize,
-                isDestructive: true,
-                child: Text(L10n.get(L.block)),
-                onPressed: _blockContact,
-              ),
-              ButtonImportanceHigh(
-                minimumWidth: inviteChoiceButtonSize,
-                child: Text(L10n.get(L.ok)),
-                onPressed: _createChat,
-              )
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  _blockContact() {
-    _messageListBloc.close();
-    // Ignoring false positive https://github.com/felangel/bloc/issues/587
-    // ignore: close_sinks
-    final contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.add(BlockContact(messageId: widget.messageId, chatId: widget.chatId));
-    _navigation.popUntilRoot(context);
-  }
-
-  _createChat() {
-    _messageListBloc.close();
-    createChatFromMessage(context, widget.messageId, widget.chatId);
-  }
-
-  Widget buildPreview() {
-    return Column(
-      children: <Widget>[
-        Divider(height: dividerHeight),
-        Padding(padding: EdgeInsets.all(dimension4dp)),
-        SizedBox(
-          height: previewMaxSize,
-          child: Stack(
-            fit: StackFit.loose,
-            children: <Widget>[
-              _selectedFileType == FileType.image || _selectedExtension == "gif"
-                  ? Image.file(
-                      File(_filePath),
-                    )
-                  : Center(
-                      child: AdaptiveIcon(
-                        icon: IconSource.insertDriveFile,
-                        size: previewDefaultIconSize,
-                        color: CustomTheme.of(context).black.slightly(),
-                      ),
-                    ),
-              Padding(
-                padding: const EdgeInsets.all(iconTextPadding),
-                child: GestureDetector(
-                  onTap: () => _closePreview(),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: CustomTheme.of(context).black.half(),
-                      borderRadius: BorderRadiusDirectional.circular(dimension20dp),
-                    ),
-                    child: AdaptiveIcon(
-                      icon: IconSource.close,
-                      size: previewCloseIconSize,
-                      color: CustomTheme.of(context).white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(dimension4dp),
-          child: Text(_fileName),
-        )
-      ],
     );
   }
 
@@ -830,8 +743,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     );
   }
 
-  void _onPhonePressed() {
-    if (_phoneNumbers == null || _phoneNumbers.isEmpty) {
+  void _onPhonePressed(String phoneNumbers) {
+    if (phoneNumbers == null || phoneNumbers.isEmpty) {
       showInformationDialog(
         context: context,
         title: L10n.get(L.contactNoPhoneNumber),
@@ -839,7 +752,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
         navigatable: Navigatable(Type.contactNoNumberDialog),
       );
     } else {
-      final phoneNumberList = ContactExtension.getPhoneNumberList(_phoneNumbers);
+      final phoneNumberList = ContactExtension.getPhoneNumberList(phoneNumbers);
       if (phoneNumberList.length == 1) {
         _callNumber(phoneNumberList.first);
       } else {
@@ -857,7 +770,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           context: context,
           navigatable: Navigatable(Type.contactStartCallDialog),
           dialog: SimpleDialog(
-            title: new Text(L10n.get(L.chatChooseCallNumber)),
+            title: Text(L10n.get(L.chatChooseCallNumber)),
             children: phoneNumberWidgetList,
           ),
         );
@@ -945,6 +858,109 @@ class ChatAppBar extends StatelessWidget {
             ],
           ),
         ),
+      ],
+    );
+  }
+}
+
+class ChatInviteChoice extends StatelessWidget with ChatCreateMixin {
+  final _navigation = Navigation();
+  final int chatId;
+  final int messageId;
+
+  ChatInviteChoice({Key key, @required this.chatId, @required this.messageId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Divider(),
+        Padding(
+          padding: const EdgeInsets.all(dimension16dp),
+          child: Text(L10n.get(L.chatCreateText), style: Theme.of(context).textTheme.subhead),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: dimension16dp, left: dimension16dp, bottom: dimension16dp),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ButtonImportanceMedium(
+                minimumWidth: inviteChoiceButtonSize,
+                isDestructive: true,
+                child: Text(L10n.get(L.block)),
+                onPressed: () {
+                  ContactChangeBloc().add(BlockContact(messageId: messageId, chatId: chatId));
+                  _navigation.popUntilRoot(context);
+                },
+              ),
+              ButtonImportanceHigh(
+                minimumWidth: inviteChoiceButtonSize,
+                child: Text(L10n.get(L.ok)),
+                onPressed: () => createChatFromMessage(context, messageId, chatId),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class ChatAttachmentPreview extends StatelessWidget {
+  final FileType fileType;
+  final String filePath;
+  final Function onClose;
+  final String extension;
+  final String fileName;
+
+  const ChatAttachmentPreview({Key key, @required this.fileType, @required this.filePath, @required this.onClose, this.extension, this.fileName})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Divider(height: dividerHeight),
+        Padding(padding: EdgeInsets.only(top: dimension4dp)),
+        SizedBox(
+          height: previewMaxSize,
+          width: double.infinity,
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: fileType == FileType.image || extension == "gif"
+                    ? Image.file(File(filePath))
+                    : AdaptiveIcon(
+                        icon: IconSource.insertDriveFile,
+                        size: previewDefaultIconSize,
+                        color: CustomTheme.of(context).onBackground.slightly(),
+                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(iconTextPadding),
+                child: GestureDetector(
+                  onTap: onClose,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: CustomTheme.of(context).onBackground.half(),
+                      borderRadius: BorderRadiusDirectional.circular(dimension20dp),
+                    ),
+                    child: AdaptiveIcon(
+                      icon: IconSource.close,
+                      size: previewCloseIconSize,
+                      color: CustomTheme.of(context).white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(dimension4dp),
+          child: Text(fileName),
+        )
       ],
     );
   }

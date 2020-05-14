@@ -117,7 +117,7 @@ class _GalleryState extends State<Gallery> {
     _navigation.current = Navigatable(Type.gallery);
     _messageItemBloc = MessageItemBloc();
     _messageId = widget.messageId;
-    _chatBloc.add(RequestChat(chatId: widget.chatId, messageId: _messageId, isHeadless: false));
+    _chatBloc.add(RequestChat(chatId: widget.chatId, messageId: _messageId));
     _messageItemBloc.add(LoadMessage(chatId: widget.chatId, messageId: _messageId));
   }
 
