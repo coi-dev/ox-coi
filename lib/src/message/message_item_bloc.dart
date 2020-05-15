@@ -378,7 +378,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     final nextPadlock = await nextChatMsg.showPadlock();
     final padlock = await chatMsg.showPadlock();
 
-    if (await chatMsg.isSetupMessage() || await nextChatMsg.isSetupMessage()) {
+    if (await chatMsg.isSetupMessage() || await nextChatMsg.isSetupMessage() || await chatMsg.isInfo()) {
       return false;
     }
 

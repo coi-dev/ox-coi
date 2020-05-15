@@ -123,7 +123,7 @@ class EmptyListInfo extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.asset(imagePath),
+          Flexible(child: Image.asset(imagePath)),
           Padding(
             padding: const EdgeInsets.only(top: dimension16dp),
             child: Text(
