@@ -55,6 +55,7 @@ const preferenceAppState = "preferenceAppState";
 const preferenceInviteServiceUrl = "preferenceInviteServiceUrl";
 const preferenceHasAuthenticationError = "preferenceHasAuthenticationError";
 const preferenceApplicationTheme = "preferenceApplicationTheme";
+const preferenceNeedsOnboarding = "preferenceNeedsOnboarding";
 const preferenceNotificationHistory = "preferenceNotificationHistory";
 const preferenceNotificationInviteHistory = "preferenceNotificationInviteHistory";
 

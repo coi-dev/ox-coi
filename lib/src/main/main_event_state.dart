@@ -79,8 +79,9 @@ class MainStateLoading extends MainState {}
 class MainStateSuccess extends MainState {
   bool configured;
   bool hasAuthenticationError;
+  bool needsOnboarding;
 
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError});
+  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError, @required this.needsOnboarding});
 }
 
 class MainStateFailure extends MainState {

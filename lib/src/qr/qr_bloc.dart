@@ -48,7 +48,6 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/qr/qr_event_state.dart';
 import 'package:ox_coi/src/utils/core.dart';
-import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -75,7 +74,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
         yield QrStateFailure(error: error.toString());
       }
     } else if (event is RequestQrCamera) {
-      bool hasCameraPermission = await hasPermission(PermissionGroup.camera);
+      bool hasCameraPermission = await Permission.camera.request().isGranted;
       yield QrStateCameraRequested(successfullyLoaded: hasCameraPermission);
     } else if (event is QrTextLoaded) {
       yield QrStateSuccess(qrText: event.qrText);

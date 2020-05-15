@@ -38,6 +38,7 @@ dependencies:
   http: ^0.12.0+4
   image_cropper: ^1.2.0
   image_picker: ^0.6.3+1
+  json_annotation: ^3.0.1
   logging: ^0.11.4
   metadata_fetch: ^0.3.1
   mime: ^0.9.6+3
@@ -46,7 +47,7 @@ dependencies:
   path: ^1.6.4
   path_provider: ^1.5.1
   provider: ^4.0.4
-  permission_handler: ^4.2.0+hotfix.2
+  permission_handler: ^5.0.0+hotfix.6
   pointycastle: ^1.0.2
   rxdart: ^0.23.1
   shared_preferences: ^0.5.6
@@ -70,19 +71,21 @@ dependencies:
     path: ../flutter-deltachat-core/ # Intended path outside the project context
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  mockito: ^4.1.1
-  test: any
+  build_runner: ^1.10.0
   flutter_driver:
     sdk: flutter
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^3.3.0
+  mockito: ^4.1.1
+  test: any
 
 flutter:
   assets:
     - assets/customer/
+    - assets/customer/images/
+    - assets/customer/json/
     - assets/html/
     - assets/images/
-    - assets/json/
     - assets/l10n/
   uses-material-design: true
-

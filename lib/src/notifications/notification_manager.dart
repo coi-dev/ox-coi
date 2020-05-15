@@ -57,7 +57,7 @@ class NotificationManager {
   static const chatIdPosition = 0;
   static const messageIdPosition = 1;
 
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
 
   //TODO: Add better AndroidNotificationDetails
   final platformChannelSpecifics = NotificationDetails(
@@ -85,6 +85,8 @@ class NotificationManager {
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     _flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   }
 

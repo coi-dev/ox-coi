@@ -46,7 +46,6 @@ import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/settings/settings_encryption_event_state.dart';
-import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -101,7 +100,7 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
   }
 
   Future<bool> _checkPermissions() async {
-    bool hasFilesPermission = await hasPermission(PermissionGroup.storage);
+    bool hasFilesPermission = await Permission.storage.request().isGranted;
     if (!hasFilesPermission) {
       add(ActionFailed(error: SettingsEncryptionStateError.missingStoragePermission));
     }

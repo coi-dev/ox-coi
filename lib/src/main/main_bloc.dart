@@ -41,7 +41,6 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -52,7 +51,8 @@ import 'package:logging/logging.dart';
 import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
-import 'package:ox_coi/src/customer/customer_config.dart';
+import 'package:ox_coi/src/customer/customer.dart';
+import 'package:ox_coi/src/customer/model/customer_chat.dart';
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
@@ -79,7 +79,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   Context _context = Context();
 
   var _core = DeltaChatCore();
-
   DeltaChatCore get core => _core;
 
   final ErrorBloc _errorBloc;
@@ -107,7 +106,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     if (event is PrepareApp) {
       yield MainStateLoading();
       try {
-        final buildContext = event.context;
         await _initCore();
         await _openExtensionDatabase();
         await _setupDatabaseExtensions();
@@ -116,9 +114,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
           await _setupDefaultValues();
         }
         await _setupBlocs();
-        await _setupManagers(buildContext);
-        await _loadCustomerConfig();
 
+        await Customer().configureAsync();
         await UrlPreviewCache().prepareCache();
 
         add(AppLoaded());
@@ -131,8 +128,18 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         await _setupLoggedInAppState();
       }
 
+      final needsOnboarding = Customer.needsOnboarding;
+      if (needsOnboarding) {
+        await Customer().configureOnboardingAsync();
+      }
+
       final bool hasAuthenticationError = await _checkForAuthenticationError();
-      yield MainStateSuccess(configured: configured, hasAuthenticationError: hasAuthenticationError);
+      yield MainStateSuccess(
+        configured: configured,
+        hasAuthenticationError: hasAuthenticationError,
+        needsOnboarding: needsOnboarding
+      );
+
     } else if (event is Logout) {
       await _logout();
     } else if (event is DatabaseDeleteErrorEncountered) {
@@ -140,9 +147,13 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     }
 
     if (event is UserVisibleErrorEncountered) {
-      bool configured = await _context.isConfigured();
-      var hasAuthenticationError = event.userVisibleError == UserVisibleError.authenticationFailed;
-      yield MainStateSuccess(configured: configured, hasAuthenticationError: hasAuthenticationError);
+      final configured = await _context.isConfigured();
+      final hasAuthenticationError = event.userVisibleError == UserVisibleError.authenticationFailed;
+      yield MainStateSuccess(
+          configured: configured,
+          hasAuthenticationError: hasAuthenticationError,
+          needsOnboarding: Customer.needsOnboarding
+      );
     }
   }
 
@@ -150,23 +161,16 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     _errorBloc.add(SetupListeners());
   }
 
-  Future<void> _setupManagers(BuildContext context) async {
+  Future<void> setupManagers(BuildContext context) async {
     _notificationManager.setup(context);
     _pushManager.setup(context);
     _localNotificationManager.setup();
   }
 
-  Future<void> _loadCustomerConfig() async {
-    Map<String, dynamic> jsonFile = await rootBundle.loadString(customerConfigPath).then((jsonStr) => jsonDecode(jsonStr));
-    var customerConfig = CustomerConfig();
-    customerConfig.loadFromJson(jsonFile);
-  }
-
   Future<void> _applyCustomerConfig() async {
-    var customerConfig = CustomerConfig();
-    if (customerConfig.chats.length > 0) {
+    if (Customer.chats.length > 0) {
       Context context = Context();
-      for (CustomerChat chat in customerConfig.chats) {
+      for (CustomerChat chat in Customer.chats) {
         int contactId = await context.createContact(chat.name, chat.email);
         await context.createChatByContactId(contactId);
       }

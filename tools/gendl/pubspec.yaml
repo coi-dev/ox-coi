@@ -1,0 +1,7 @@
+name: gendl
+
+environment:
+  sdk: '>=2.6.0 <3.0.0'
+
+dependencies:
+  args: ^1.6.0

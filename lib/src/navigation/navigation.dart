@@ -50,6 +50,7 @@ import 'package:ox_coi/src/chat/chat_create.dart';
 import 'package:ox_coi/src/contact/contact_blocked_list.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/dynamic_screen/widgets/dynamic_screen.dart';
 import 'package:ox_coi/src/settings/settings.dart';
 import 'package:ox_coi/src/settings/settings_about.dart';
 import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';

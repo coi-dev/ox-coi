@@ -46,6 +46,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
+import 'package:ox_coi/src/customer/customer.dart';
+import 'package:ox_coi/src/customer/customer_delegate.dart';
+import 'package:ox_coi/src/customer/customer_delegate_change_notifier.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
@@ -58,9 +61,11 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/dynamic_screen/dynamic_screen.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   final LogManager _logManager = LogManager();
@@ -152,12 +157,14 @@ class OxCoi extends StatefulWidget {
 class _OxCoiState extends State<OxCoi> {
   MainBloc _mainBloc;
   Navigation _navigation = Navigation();
+  CustomerDelegate _customerDelegate;
 
   @override
   void initState() {
     super.initState();
-    _mainBloc = MainBloc(BlocProvider.of<ErrorBloc>(context));
+    _mainBloc = BlocProvider.of<MainBloc>(context);
     _mainBloc.add(PrepareApp(context: context));
+    _customerDelegate = CustomerDelegate();
   }
 
   @override
@@ -167,10 +174,24 @@ class _OxCoiState extends State<OxCoi> {
       builder: (context, state) {
         Widget child;
         if (state is MainStateSuccess) {
-          if (state.configured && !state.hasAuthenticationError) {
+          if (state.configured && !state.hasAuthenticationError && state.needsOnboarding) {
+            // TODO: NEEDS TO BE DISCUSSED!
+            // TODO: Maybe we should add an additional 'Onboarding' layer here, from within the 'DynamicScreen' is being called, just for separation purposes.
+            child = MultiProvider(
+              providers: [
+                Provider<DynamicScreenModel>.value(value: Customer.onboardingModel),
+                Provider<DynamicScreenCustomerDelegate>.value(value: _customerDelegate),
+                ChangeNotifierProvider<CustomerDelegateChangeNotifier>.value(value: _customerDelegate.changeNotifier)
+              ],
+              child: DynamicScreen()
+            );
+
+          } else if (state.configured && !state.hasAuthenticationError && !state.needsOnboarding) {
             child = Root();
+
           } else if (state.configured && state.hasAuthenticationError) {
             child = PasswordChanged(passwordChangedCallback: () => _loginSuccess(isRelogin: true));
+
           } else {
             child = Login(success: _loginSuccess);
           }
@@ -182,7 +203,7 @@ class _OxCoiState extends State<OxCoi> {
     );
   }
 
-  _loginSuccess({bool isRelogin = false}) {
+  void _loginSuccess({bool isRelogin = false}) {
     if (!isRelogin) {
       BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
     }

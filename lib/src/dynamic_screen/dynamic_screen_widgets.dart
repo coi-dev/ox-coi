@@ -40,14 +40,20 @@
  * for more details.
  */
 
-import 'package:permission_handler/permission_handler.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/dynamic_screen.dart';
 
-Future<bool> hasPermission(PermissionGroup permissionGroup) async {
-  PermissionStatus readContactsStatus = await PermissionHandler().checkPermissionStatus(permissionGroup);
-  if (readContactsStatus != PermissionStatus.granted) {
-    Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([permissionGroup]);
-    return permissions[permissionGroup] == PermissionStatus.granted;
-  } else {
-    return true;
-  }
-}
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_avatar_component.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_base_component.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_button_component.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_image_component.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_radio_list_component.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_text_component.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/page_components/page_textfield_component.dart';
+
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_app_bar.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_flat_button.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_navigation.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_navigator.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_page.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_page_multi.dart';
+export 'package:ox_coi/src/dynamic_screen/widgets/screen_components/dynamic_screen_page_single.dart';

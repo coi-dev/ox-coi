@@ -60,7 +60,8 @@ const defaultCoiInviteServiceUrl = "https://invite.coi.me/invite/";
 // Paths, filenames, extensions / URLs
 const appLogoPath = 'assets/images/app_logo.png';
 const thumbnailFileExtension = '.jpg';
-const customerConfigPath = "assets/customer/customer_config.json";
+const customerConfigPath = "assets/customer/json/config.json";
+const customerOnboardingConfigPath = "assets/customer/json/onboarding.json";
 const projectUrl = "https://coi.me";
 const issueUrl  = "https://github.com/open-xchange/ox-coi/issues";
 const featureRequestUrl = "https://openxchange.userecho.com/communities/4-ox-coi-messenger";

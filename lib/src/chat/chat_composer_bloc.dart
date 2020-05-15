@@ -49,7 +49,6 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
-import 'package:ox_coi/src/utils/security.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
@@ -70,8 +69,8 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
   @override
   Stream<ChatComposerState> mapEventToState(ChatComposerEvent event) async* {
     if (event is CheckPermissions) {
-      bool hasMicPermission = await hasPermission(PermissionGroup.microphone);
-      bool hasFilesPermission = await hasPermission(PermissionGroup.storage);
+      bool hasMicPermission = await Permission.microphone.request().isGranted;
+      bool hasFilesPermission = await Permission.storage.request().isGranted;
 
       if (hasMicPermission && hasFilesPermission) {
         yield ChatComposerPermissionsAccepted();
@@ -106,7 +105,7 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
     } else if (event is AbortAudioRecording) {
       yield* stopAudioRecorder(isAborted: true);
     } else if (event is StartImageOrVideoRecording) {
-      bool hasCameraPermission = await hasPermission(PermissionGroup.camera);
+      bool hasCameraPermission = await Permission.camera.request().isGranted;
 
       if (hasCameraPermission) {
         startImageOrVideoRecorder(event.pickImage);

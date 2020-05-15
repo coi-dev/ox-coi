@@ -54,7 +54,6 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/utils/constants.dart';
-import 'package:ox_coi/src/utils/security.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -92,7 +91,7 @@ class ContactImportBloc extends Bloc<ContactImportEvent, ContactImportState> {
   }
 
   Future<Iterable<SystemContacts.Contact>> loadSystemContacts() async {
-    bool hasContactPermission = await hasPermission(PermissionGroup.contacts);
+    bool hasContactPermission = await Permission.contacts.request().isGranted;
     if (hasContactPermission) {
       return await SystemContacts.ContactsService.getContacts();
     } else {

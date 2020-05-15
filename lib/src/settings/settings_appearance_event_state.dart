@@ -42,7 +42,7 @@
 
 // Bloc Events
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 
 mixin SettingsAppearanceEvent {}

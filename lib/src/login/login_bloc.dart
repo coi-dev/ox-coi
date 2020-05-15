@@ -200,7 +200,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _loadProviders(ProviderListType type) async {
-    Map<String, dynamic> json = await rootBundle.loadString('assets/json/providers.json').then((jsonStr) => jsonDecode(jsonStr));
+    Map<String, dynamic> json = await rootBundle.loadString('assets/customer/json/providers.json').then((jsonStr) => jsonDecode(jsonStr));
 
     Providers providers = Providers.fromJson(json);
     if (type == ProviderListType.register) {

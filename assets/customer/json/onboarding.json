@@ -1,0 +1,353 @@
+{
+  "show_navigation": true,
+  "appbar": {
+    "title": {
+      "localizable": {
+        "key": "onboardingPageProfileAppbarTitle",
+        "value": "Profile"
+      }
+    },
+    "actions": [
+      {
+        "button": {
+          "on_pressed": "appbarSkipButtonPressed",
+          "title": {
+            "localizable": {
+              "key": "appbarSkipButton",
+              "value": "Skip"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "pages": [
+    {
+      "skipable": false,
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
+              "key": "profileTitle",
+              "value": "Profile"
+            }
+          }
+        },
+        {
+          "text": {
+            "padding": [0.0, 24.0, 0.0, 32.0],
+            "localizable": {
+              "key": "profileDescription",
+              "value": "Please add your name or nickname and choose a profile picture."
+            }
+          }
+        },
+        {
+          "avatar": {
+            "avatar_pressed": "avatarPressed"
+          }
+        },
+        {
+          "textfield": {
+            "required": true,
+            "padding": [0.0, 48.0, 0.0, 0.0],
+            "controls_navigation_if_required": true,
+            "label": {
+              "text_style": "title",
+              "localizable": {
+                "key": "profileUserNameTextfieldLabel",
+                "value": "Name"
+              }
+            },
+            "placeholder": {
+              "text_style": "subhead",
+              "localizable": {
+                "key": "profileUserNameTextfieldPlaceholder",
+                "value": "Please enter your name"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "skipable": true,
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
+              "key": "chatSettingsTitle",
+              "value": "Chat Settings"
+            }
+          }
+        },
+        {
+          "text": {
+            "text_style": "body1",
+            "padding": [0.0, 24.0, 0.0, 32.0],
+            "localizable": {
+              "key": "chatSettingsDescription",
+              "value": "What kind of message do you want to handle?"
+            }
+          }
+        },
+        {
+          "text": {
+            "text_style": "caption",
+            "localizable": {
+              "key": "chatSettingsSubtitle",
+              "value": "(Please choose one option to proceed.)"
+            }
+          }
+        },
+        {
+          "radiolist": {
+            "padding": [0.0, 42.0, 0.0, 0.0],
+            "group_value": 0,
+            "group_key": "chatSettingsRadioChanged",
+            "items": [
+              {
+                "radio": {
+                  "value": 0,
+                  "title": {
+                    "text_style": "button",
+                    "localizable": {
+                      "key": "chatSettingsRadio1Label",
+                      "value": "Only chat messages."
+                    }
+                  }
+                }
+              },
+              {
+                "radio": {
+                  "value": 1,
+                  "title": {
+                    "text_style": "button",
+                    "localizable": {
+                      "key": "chatSettingsRadio2Label",
+                      "value": "Both email and chat messages from known contacts."
+                    }
+                  }
+                }
+              },
+              {
+                "radio": {
+                  "value": 2,
+                  "title": {
+                    "text_style": "button",
+                    "localizable": {
+                      "key": "chatSettingsRadio3Label",
+                      "value": "Both email and chat messages from anyone."
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "padding": [32.0, 0.0, 32.0, 0.0],
+      "skipable": true,
+      "availabilities": [
+        {
+          "isCoiSupported": true
+        }
+      ],
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
+              "key": "notifications1Title",
+              "value": "Notifications"
+            }
+          }
+        },
+        {
+          "text": {
+            "padding": [0.0, 24.0, 0.0, 0.0],
+            "localizable": {
+              "key": "notifications1Description1",
+              "value": "Congratulations, your email service provider is COI compliant, so you will be informed immediately about new messages.\\n\\nDo you want to receive notifications about new messages?"
+            }
+          }
+        },
+        {
+          "button": {
+            "importance": "high",
+            "padding": [48.0, 42.0, 48.0, 16.0],
+            "on_pressed": "notificationsAllowButtonPressed",
+            "title": {
+              "localizable": {
+                "key": "notificationsAllowButtonTitle",
+                "value": "Allow Notifications"
+              }
+            }
+          }
+        },
+        {
+          "button": {
+            "importance": "medium",
+            "padding": [48.0, 0.0, 48.0, 16.0],
+            "on_pressed": "notificationsAllowLaterButtonPressed",
+            "title": {
+              "localizable": {
+                "key": "notificationsAllowLaterButtonTitle",
+                "value": "Maybe later"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "padding": [32.0, 0.0, 32.0, 0.0],
+      "skipable": true,
+      "availabilities": [
+        {
+          "isCoiSupported": false
+        }
+      ],
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
+              "key": "notifications2Title",
+              "value": "Notifications"
+            }
+          }
+        },
+        {
+          "text": {
+            "padding": [0.0, 24.0, 0.0, 16.0],
+            "localizable": {
+              "key": "notifications2Description1",
+              "value": "Your email service provider does not yet support COI, but we can check for new messages in the background.\\n\\nShould we look for new messages regularly, or should we constantly check for new messages, which uses more battery?"
+            }
+          }
+        },
+        {
+          "radiolist": {
+            "group_value": 0,
+            "group_key": "notificationsRadioChanged",
+            "items": [
+              {
+                "radio": {
+                  "value": 0,
+                  "title": {
+                    "text_style": "button",
+                    "localizable": {
+                      "key": "notificationsRadioLabel1",
+                      "value": "Check regularly"
+                    }
+                  }
+                }
+              },
+              {
+                "radio": {
+                  "value": 1,
+                  "title": {
+                    "text_style": "button",
+                    "localizable": {
+                      "key": "notificationsRadioLabel2",
+                      "value": "Check constantly"
+                    }
+                  }
+                }
+              },
+              {
+                "radio": {
+                  "value": 2,
+                  "title": {
+                    "text_style": "button",
+                    "localizable": {
+                      "key": "notificationsRadioLabel3",
+                      "value": "Only check when starting the app"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "skipable": true,
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
+              "key": "feedbackTitle",
+              "value": "Feedback"
+            }
+          }
+        },
+        {
+          "text": {
+            "text_style": "body1",
+            "padding": [0.0, 24.0, 0.0, 32.0],
+            "localizable": {
+              "key": "feedbackDescription",
+              "value": "This is a beta version, therefore please keep in mind that the app is still in development. Do you want to share your thoughts? You can share your feedback in the profile section in the settings."
+            }
+          }
+        },
+        {
+          "image": {
+            "padding": [0.0, 0.0, 0.0, 32.0],
+            "name": "onboarding_feedback.png"
+          }
+        }
+      ]
+    },
+    {
+      "skipable": false,
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
+              "key": "readyTitle",
+              "value": "Ready!"
+            }
+          }
+        },
+        {
+          "text": {
+            "text_style": "body1",
+            "padding": [0.0, 24.0, 0.0, 32.0],
+            "localizable": {
+              "key": "readyDescription",
+              "value": "You're good to go!"
+            }
+          }
+        },
+        {
+          "image": {
+            "padding": [0.0, 0.0, 0.0, 32.0],
+            "name": "onboarding_app_ready.png"
+          }
+        },
+        {
+          "button": {
+            "padding": [48.0, 0.0, 48.0, 16.0],
+            "on_pressed": "readyButtonPressed",
+            "title": {
+              "localizable": {
+                "key": "readyButtonTitle",
+                "value": "Lets Go"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

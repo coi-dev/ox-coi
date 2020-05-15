@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
@@ -47,7 +48,7 @@ import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:tinycolor/tinycolor.dart';
 
-final _circularBorder = RoundedRectangleBorder(borderRadius: BorderRadius.circular(loginOtherProviderButtonRadius));
+final _circularBorder = RoundedRectangleBorder(borderRadius: BorderRadius.circular(buttonHeight));
 
 abstract class BaseButton extends StatelessWidget {
   static final darkenFactor = 10;

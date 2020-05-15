@@ -43,7 +43,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ox_coi/src/customer/customer_config.dart';
+import 'package:ox_coi/src/customer/customer.dart';
 
 enum IconSource {
   flag,
@@ -218,10 +218,9 @@ class AdaptiveIcon extends StatelessWidget {
     }
   }
 
-  bool _hasCustomIcon(IconSource iconSource) {
-    final customerConfig = CustomerConfig();
+  bool _hasCustomIcon(IconSource icon) {
     final iconName = describeEnum(icon);
-    return customerConfig.icons.contains(iconName);
+    return Customer.icons.contains(iconName);
   }
 
   String _getPath() => "assets/images/${describeEnum(icon)}.png";

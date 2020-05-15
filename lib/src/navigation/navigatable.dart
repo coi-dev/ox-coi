@@ -82,6 +82,7 @@ enum Type {
   logout,
   messageFailedDialog,
   messageInfoDialog,
+  onboarding,
   passwordChanged,
   profile,
   rootChildren,

@@ -112,7 +112,6 @@ class UrlPreview extends StatelessWidget {
                         ),
                       ),
                     )
-
                   ],
                 ),
               ],
