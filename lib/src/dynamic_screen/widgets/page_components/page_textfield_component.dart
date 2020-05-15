@@ -50,8 +50,7 @@ import 'package:provider/provider.dart';
 class PageTextFieldComponent extends PageBaseComponent {
   final DynamicScreenTextfieldModel model;
 
-  static String _textFieldValue = "";
-  final _textController = TextEditingController(text: _textFieldValue);
+  final _textController = TextEditingController();
   final _focusNode = FocusNode();
 
   PageTextFieldComponent({Key key, this.model}) : super(key: key);
@@ -77,14 +76,11 @@ class PageTextFieldComponent extends PageBaseComponent {
             focusNode: _focusNode,
             key: Key(L.getKey(L.type)),
             onChanged: (value) {
-              _textFieldValue = value;
-              print("[Textfield Changed] Value: $_textFieldValue");
+              customerDelegate.textfieldEditingCompleteAsync(context: context, value: value);
+              print("[Textfield Changed] Value: $value");
             },
             onEditingComplete: () {
               unFocus(context);
-              _textController.text = _textFieldValue;
-              customerDelegate.textfieldEditingCompleteAsync(context: context, value: _textFieldValue);
-              print("[Textfield Edit Complete] Value: $_textFieldValue");
             },
           ),
         );
