@@ -8,11 +8,11 @@ repository=$1
 
 # Constants
 SCRIPT_BASEDIR=$(dirname "$0")
-TEMP_CUSTOMER_FOLDER="customerSource"
+TEMP_CUSTOMER_FOLDER="customerRepository"
 
 ANDROID_APP_FOLDER="android/app"
 
-IOS_APP_FOLDER="ios/OX Coi/"
+IOS_APP_FOLDER="ios/OX Coi"
 IOS_FIREBASE_FOLDER="${IOS_APP_FOLDER}/Firebase"
 
 # Setup
@@ -42,6 +42,8 @@ echo "---------------------------"
 cat ${TEMP_CUSTOMER_FOLDER}/README.md
 echo "---------------------------"
 echo "-- Copy Firebase config --"
+mkdir -p "../${ANDROID_APP_FOLDER}"
+mkdir -p "../${IOS_FIREBASE_FOLDER}"
 cp "${TEMP_CUSTOMER_FOLDER}/${ANDROID_APP_FOLDER}/"* "../${ANDROID_APP_FOLDER}/"
 cp "${TEMP_CUSTOMER_FOLDER}/${IOS_FIREBASE_FOLDER}/"* "../${IOS_FIREBASE_FOLDER}/"
 echo "-- Finishing --"

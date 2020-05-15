@@ -77,7 +77,7 @@ screenshots/
 **/ios/Podfile.lock
 
 # Customer specific files
-tools/customerSource/*
+/tools/customerRepository/
 android/app/google-services.json
 ios/OX Coi/Firebase/GoogleService-Info-*.plist
 
@@ -87,3 +87,4 @@ ios/OX Coi/Firebase/GoogleService-Info-*.plist
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
