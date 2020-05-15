@@ -172,7 +172,7 @@
             "padding": [0.0, 24.0, 0.0, 0.0],
             "localizable": {
               "key": "notifications1Description1",
-              "value": "Congratulations, your email service provider is COI compliant, so you will be informed immediately about new messages.\\n\\nDo you want to receive notifications about new messages?"
+              "value": "Congratulations, your email service provider is COI compliant, so you will be informed immediately about new messages. Do you want to receive notifications about new messages?"
             }
           }
         },
@@ -227,7 +227,7 @@
             "padding": [0.0, 24.0, 0.0, 16.0],
             "localizable": {
               "key": "notifications2Description1",
-              "value": "Your email service provider does not yet support COI, but we can check for new messages in the background.\\n\\nShould we look for new messages regularly, or should we constantly check for new messages, which uses more battery?"
+              "value": "Your email service provider does not yet support COI, but we can check for new messages in the background. Should we look for new messages regularly, or should we constantly check for new messages, which uses more battery?"
             }
           }
         },
