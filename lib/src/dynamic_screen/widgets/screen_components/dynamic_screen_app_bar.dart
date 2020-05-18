@@ -69,6 +69,7 @@ class DynamicScreenAppBar extends StatelessWidget implements PreferredSizeWidget
               opacity: buttonIsVisible ? 1.0 : 0.0,
               duration: Duration(milliseconds: 250),
               child: DynamicScreenFlatButton(
+                key: Key(buttonModel.title.localizable.key),
                 title: L10n.get(L.translationKey(buttonModel.title.stringValue)),
                 onPressed: () => buttonIsVisible ? {
                   customerDelegate.buttonPressedAsync(

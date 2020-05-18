@@ -132,3 +132,7 @@ const keySettingsManuelFormValidatableTextFormFieldSMTPServerField = "keySetting
 
 const keyLoginLoginSignInText ="keyLoginLoginSignInText";
 const keyLoginRegisterText = "keyLoginRegisterText";
+
+const keyDynamicNavigationNext = "keyDynamicNavigationNext";
+const keyDynamicNavigationBack = "keyDynamicNavigationBack";
+const keyDynamicNavigationSkip = "appbarSkipButton"; // Used in the dynamic onboarding to skip the whole process

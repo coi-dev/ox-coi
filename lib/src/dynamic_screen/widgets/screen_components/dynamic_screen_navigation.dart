@@ -46,6 +46,7 @@ import 'package:ox_coi/src/dynamic_screen/dynamic_screen.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:provider/provider.dart';
 
 
@@ -69,6 +70,7 @@ class DynamicScreenNavigation extends StatelessWidget {
                   opacity: backIsVisible ? 1.0 : 0.0,
                   duration: animationDuration,
                   child: DynamicScreenFlatButton(
+                      key: Key(keyDynamicNavigationBack),
                       title: L10n.get(L.dynamicScreenBackButtonTitle),
                       onPressed: () => backIsVisible ? {
                         navigator.animateToPage(
@@ -89,6 +91,7 @@ class DynamicScreenNavigation extends StatelessWidget {
                   opacity: nextIsVisible ? 1.0 : 0.0,
                   duration: animationDuration,
                   child: DynamicScreenFlatButton(
+                      key: Key(keyDynamicNavigationNext),
                       title: L10n.get(L.dynamicScreenNextButtonTitle),
                       onPressed: () => nextIsVisible ? {
                         navigator.animateToPage(
