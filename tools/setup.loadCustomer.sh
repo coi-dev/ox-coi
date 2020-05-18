@@ -21,7 +21,7 @@ if [[ "$#" != 1 ]]; then
     echo
     echo "1. parameter:     A git repository providing required customer files"
     echo
-    echo "Example:  ./setup.loadCustomer https://gitlab.open-xchange.com/mobile/coi-customer-ox.git"
+    echo "Example: ./setup.loadCustomer.sh git@gitlab.open-xchange.com:mobile/coi-customer-ox.git"
     exit 0
 fi
 

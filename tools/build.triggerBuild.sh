@@ -16,6 +16,7 @@ SCRIPT_BASEDIR=$(dirname "$0")
 PLUGIN_FOLDER="flutter-deltachat-core";
 CORE_BUILD_SCRIPT="./build-dcc.sh"
 IOS_BUILD_FOLDER="build/app/outputs/ios/${flavor}"
+CUSTOMER_README="tools/customerRepository/README.md"
 
 ANDROID_ARM_32="armeabi-v7a_libnative-utils.so"
 ANDROID_ARM_64="arm64-v8a_libnative-utils.so"
@@ -196,9 +197,21 @@ function moveCore {
     fi
 }
 
+function hasCustomer {
+    if [[ -f ${CUSTOMER_README} ]]; then
+        true;
+     else
+        false;
+    fi
+}
+
+
 # Execution
 echo "-- Setup --"
 cd ${SCRIPT_BASEDIR}/.. || error "Can't navigate into app directory" 1
+if ! hasCustomer; then
+    error "Customer missing, execute tools/setup.loadCustomer.sh" 5
+fi
 echo "Get plugin repository"
 (
     cd .. || error "Can't navigate into parent directory" 3
@@ -226,6 +239,7 @@ if isIos; then
         ln -sf "../../delta_chat_core/deltachat-ffi/deltachat.h" .
     )
 fi
+flutter clean
 echo "-- Building --"
 if isAndroid; then
     if isRelease; then
