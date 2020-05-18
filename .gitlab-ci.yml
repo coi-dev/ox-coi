@@ -24,7 +24,7 @@ build:
   - docker
   image: gitlab.open-xchange.com:4567/mobile/build/container/flutter
   script:
-    - tools/setup.loadCustomer.sh git@gitlab.open-xchange.com:mobile/coi-customer-ox.git
+    - tools/setup.loadCustomer.sh https://gitlab.open-xchange.com/mobile/coi-customer-ox.git
     - tools/build.triggerBuild.sh android debug development 0.999.9 $CI_PIPELINE_ID latest
   artifacts:
     paths:
@@ -36,7 +36,7 @@ build-ios:
   tags:
     - ios
   script:
-    - tools/setup.loadCustomer.sh git@gitlab.open-xchange.com:mobile/coi-customer-ox.git
+    - tools/setup.loadCustomer.sh https://gitlab.open-xchange.com/mobile/coi-customer-ox.git
     - tools/build.triggerBuild.sh ios release development 0.999.9 $CI_PIPELINE_ID latest
   artifacts:
     paths:
