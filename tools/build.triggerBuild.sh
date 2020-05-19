@@ -239,7 +239,6 @@ if isIos; then
         ln -sf "../../delta_chat_core/deltachat-ffi/deltachat.h" .
     )
 fi
-flutter clean
 echo "-- Building --"
 if isAndroid; then
     if isRelease; then
