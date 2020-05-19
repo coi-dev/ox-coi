@@ -383,7 +383,7 @@ class L {
   static final settingKeyTransferPermissionFailed = translationKey("Key action failed, missing permissions");
   static final settingKeyTransferSuccess = translationKey("Key action successfully done");
   static final settingManual = translationKey("Manual Settings");
-  static final settingChatMessagesUnknownShow = translationKey("Show messages from unknown contacts");
+  static final settingChatMessagesUnknownShow = translationKey("Messages from unknown contacts");
   static final settingChatMessagesUnknownText =
       translationKey("Messages from unknown contacts do not appear in chats anymore. Instead, you can access such messages here:");
   static final settingChatMessagesUnknownNoMessages = translationKey("There are currently no messages from unknown contacts");
@@ -426,6 +426,7 @@ class L {
   // "user echo" is an own name. Please don't translate it
   static final settingAboutFeatureRequestsText = translationKey("Please suggest your ideas on user echo.");
   static final settingSignatureTitle = translationKey("Email signature");
+  static final settingSignatureDescription = translationKey("Change your Signature");
 
   static final settingGroupHeaderGeneralTitle = translationKey("General Settings");
   static final settingGroupHeaderEmailTitle = translationKey("Email Settings");
