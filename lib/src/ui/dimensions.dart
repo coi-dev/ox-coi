@@ -162,6 +162,7 @@ const loginProviderIconSizeBig = 150.0;
 const loginErrorOverlayLeftPadding = dimension12dp;
 const loginOtherProviderButtonRadius = 22.0;
 const loginWaveTopBottomPadding = dimension32dp;
+const loginWaveHeight = 50.0;
 
 // Voice Recording
 const voiceRecordingAudioPlaybackTopPadding = 30.0;

@@ -46,6 +46,8 @@ import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/main/main_bloc.dart';
+import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/system_interaction.dart';
@@ -61,53 +63,35 @@ import 'login_bloc.dart';
 import 'login_events_state.dart';
 
 class LoginManualSettings extends StatefulWidget {
-  final Function success;
   final bool fromError;
   final String email;
   final String password;
 
-  LoginManualSettings({@required this.success, @required this.fromError, this.email, this.password});
+  LoginManualSettings({@required this.fromError, this.email, this.password});
 
   @override
   _LoginManualSettingsState createState() => _LoginManualSettingsState();
 }
 
 class _LoginManualSettingsState extends State<LoginManualSettings> {
+  final _navigation = Navigation();
+  MainBloc _mainBloc;
   OverlayEntry _progressOverlayEntry;
   LoginBloc _loginBloc;
-  var _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
+    _mainBloc = BlocProvider.of<MainBloc>(context);
     _navigation.current = Navigatable(Type.loginManualSettings);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
-    _loginBloc.listen((state) => handleLoginStateChange(state));
-  }
-
-  void handleLoginStateChange(LoginState state) {
-    if (state is LoginStateSuccess || state is LoginStateFailure) {
-      _progressOverlayEntry?.remove();
-    }
-    if (state is LoginStateSuccess) {
-      widget.success();
-    } else if (state is LoginStateFailure) {
-      setState(() {
-        showInformationDialog(
-          context: context,
-          title: L10n.get(L.loginFailed),
-          contentText: state.error,
-          navigatable: Navigatable(Type.loginErrorDialog),
-        );
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        var settingsManualFormBloc = SettingsManualFormBloc();
+        final settingsManualFormBloc = SettingsManualFormBloc();
         settingsManualFormBloc.add(SetupSettings(
           shouldLoadConfig: false,
           email: widget.email,
@@ -115,32 +99,57 @@ class _LoginManualSettingsState extends State<LoginManualSettings> {
         ));
         return settingsManualFormBloc;
       },
-      child: BlocListener<SettingsManualFormBloc, SettingsManualFormState>(
-        listener: (BuildContext context, state) {
-          if (state is SettingsManualFormStateValidationSuccess) {
-            _progressOverlayEntry = FullscreenOverlay(
-              fullscreenProgress: FullscreenProgress(
-                bloc: _loginBloc,
-                text: L10n.get(L.loginRunning),
-                showProgressValues: true,
-              ),
-            );
-            Overlay.of(context).insert(_progressOverlayEntry);
-            _loginBloc.add(LoginButtonPressed(
-              email: state.email,
-              password: state.password,
-              imapLogin: state.imapLogin,
-              imapServer: state.imapServer,
-              imapPort: state.imapPort,
-              imapSecurity: state.imapSecurity,
-              smtpLogin: state.smtpLogin,
-              smtpPassword: state.smtpPassword,
-              smtpServer: state.smtpServer,
-              smtpPort: state.smtpPort,
-              smtpSecurity: state.smtpSecurity,
-            ));
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener(
+            bloc: _loginBloc,
+            listener: (context, state){
+              if (state is LoginStateSuccess) {
+                _mainBloc.add(AppLoaded());
+              } else if (state is LoginStateFailure) {
+                _progressOverlayEntry?.remove();
+                setState(() {
+                  showInformationDialog(
+                    context: context,
+                    title: L10n.get(L.loginFailed),
+                    contentText: state.error,
+                    navigatable: Navigatable(Type.loginErrorDialog),
+                  );
+                });
+              }
+            },
+          ),
+          BlocListener<SettingsManualFormBloc, SettingsManualFormState>(listener: (BuildContext context, state) {
+            if (state is SettingsManualFormStateValidationSuccess) {
+              _progressOverlayEntry = FullscreenOverlay(
+                fullscreenProgress: FullscreenProgress(
+                  bloc: _loginBloc,
+                  text: L10n.get(L.loginRunning),
+                  showProgressValues: true,
+                ),
+              );
+              Overlay.of(context).insert(_progressOverlayEntry);
+              _loginBloc.add(LoginButtonPressed(
+                email: state.email,
+                password: state.password,
+                imapLogin: state.imapLogin,
+                imapServer: state.imapServer,
+                imapPort: state.imapPort,
+                imapSecurity: state.imapSecurity,
+                smtpLogin: state.smtpLogin,
+                smtpPassword: state.smtpPassword,
+                smtpServer: state.smtpServer,
+                smtpPort: state.smtpPort,
+                smtpSecurity: state.smtpSecurity,
+              ));
+            }
+          }),
+          BlocListener<MainBloc, MainState>(
+            listener: (context, state) {
+              _progressOverlayEntry?.remove();
+            },
+          )
+        ],
         child: WillPopScope(
           onWillPop: () async => _navigation.allowBackNavigation,
           child: Scaffold(

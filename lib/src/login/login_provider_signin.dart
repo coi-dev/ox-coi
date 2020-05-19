@@ -47,6 +47,8 @@ import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/providers.dart';
+import 'package:ox_coi/src/main/main_bloc.dart';
+import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -64,9 +66,8 @@ import 'login_manual_settings.dart';
 
 class ProviderSignIn extends StatefulWidget {
   final Provider provider;
-  final Function success;
 
-  ProviderSignIn({this.provider, this.success});
+  ProviderSignIn({this.provider});
 
   @override
   _ProviderSignInState createState() => _ProviderSignInState();
@@ -74,16 +75,15 @@ class ProviderSignIn extends StatefulWidget {
 
 class _ProviderSignInState extends State<ProviderSignIn> {
   static const providerOther = 'other';
-
+  final _navigation = Navigation();
   final _simpleLoginKey = GlobalKey<FormState>();
-
+  MainBloc _mainBloc;
   OverlayEntry _progressOverlayEntry;
   LoginBloc _loginBloc;
   OverlayEntry _overlayEntry;
-  var _navigation = Navigation();
   bool isOtherProvider;
 
-  ValidatableTextFormField emailField = ValidatableTextFormField(
+  final emailField = ValidatableTextFormField(
     (context) => L10n.get(L.emailAddress),
     hintText: (context) => L10n.get(L.emailAddress),
     textType: TextType.email,
@@ -93,7 +93,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     icon: AdaptiveIcon(icon: IconSource.person),
     key: Key(keyProviderSignInEmailTextField),
   );
-  ValidatableTextFormField passwordField = ValidatableTextFormField(
+  final passwordField = ValidatableTextFormField(
     (context) => L10n.get(L.password),
     hintText: (context) => L10n.get(L.password),
     textType: TextType.password,
@@ -106,41 +106,10 @@ class _ProviderSignInState extends State<ProviderSignIn> {
   @override
   void initState() {
     super.initState();
+    _mainBloc = BlocProvider.of<MainBloc>(context);
     _navigation.current = Navigatable(Type.loginProviderSignIn);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
-    _loginBloc.listen((state) => handleLoginStateChange(state));
     isOtherProvider = widget.provider.id == providerOther;
-  }
-
-  void handleLoginStateChange(LoginState state) {
-    if (!_navigation.current.equal(Navigatable(Type.loginProviderSignIn))) {
-      return;
-    }
-    if (state is LoginStateSuccess || state is LoginStateFailure) {
-      _progressOverlayEntry?.remove();
-    }
-    if (state is LoginStateSuccess) {
-      widget.success();
-    } else if (state is LoginStateFailure) {
-      if (!isOtherProvider) {
-        setState(() {
-          this._overlayEntry = this._createErrorOverlayEntry();
-          Overlay.of(context).insert(this._overlayEntry);
-          showInformationDialog(
-            context: context,
-            title: L10n.get(L.loginFailed),
-            contentText: state.error,
-            navigatable: Navigatable(Type.loginErrorDialog),
-          );
-        });
-      } else {
-        _navigation.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LoginManualSettings(
-                    success: widget.success, email: emailField.controller.text, password: passwordField.controller.text, fromError: true)));
-      }
-    }
   }
 
   @override
@@ -148,59 +117,99 @@ class _ProviderSignInState extends State<ProviderSignIn> {
     return WillPopScope(
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
-          appBar: DynamicAppBar(
-            title: isOtherProvider ? L10n.get(L.providerOtherMailProvider) : widget.provider.name,
-            leading: AppBarBackButton(context: context),
-          ),
-          body: createProviderSignIn()),
-    );
-  }
-
-  Widget createProviderSignIn() {
-    return SingleChildScrollView(
-        padding:
-            const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(
-              image: AssetImage(getProviderIconPath(context, widget.provider.id)),
-              height: loginProviderIconSizeBig,
-              width: loginProviderIconSizeBig,
+        appBar: DynamicAppBar(
+          title: isOtherProvider ? L10n.get(L.providerOtherMailProvider) : widget.provider.name,
+          leading: AppBarBackButton(context: context),
+        ),
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener<MainBloc, MainState>(
+              listener: (context, state){
+                _progressOverlayEntry?.remove();
+              },
             ),
-            Padding(padding: const EdgeInsets.all(loginVerticalListPadding)),
-            Text(
-              isOtherProvider ? L10n.get(L.loginSignIn) : L10n.getFormatted(L.providerSignInTextX, [widget.provider.name]),
-              style: Theme.of(context).textTheme.headline,
-            ),
-            Padding(padding: const EdgeInsets.all(loginVerticalListPadding)),
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-                child: Form(
-                  key: _simpleLoginKey,
-                  child: Column(
-                    children: <Widget>[emailField, passwordField],
-                  ),
-                )),
-            Padding(padding: const EdgeInsets.all(dimension24dp)),
-            ButtonImportanceHigh(
-              minimumWidth: loginButtonWidth,
-              child: Text(L10n.get(L.loginSignIn)),
-              onPressed: _signIn,
-            ),
-            Visibility(
-              visible: isOtherProvider,
-              child: Padding(
-                padding: const EdgeInsets.all(loginVerticalListPadding),
-                child: ButtonImportanceLow(
-                  minimumWidth: loginButtonWidth,
-                  onPressed: _showManualSettings,
-                  child: Text(L10n.get(L.settingManual)),
-                ),
-              ),
+            BlocListener(
+              bloc: _loginBloc,
+              listener: (context, state){
+                if (!_navigation.current.equal(Navigatable(Type.loginProviderSignIn))) {
+                  return;
+                }
+                if (state is LoginStateSuccess) {
+                  _mainBloc.add(AppLoaded());
+                } else if (state is LoginStateFailure) {
+                  _progressOverlayEntry?.remove();
+                  if (!isOtherProvider) {
+                    setState(() {
+                      this._overlayEntry = this._createErrorOverlayEntry();
+                      Overlay.of(context).insert(this._overlayEntry);
+                      showInformationDialog(
+                        context: context,
+                        title: L10n.get(L.loginFailed),
+                        contentText: state.error,
+                        navigatable: Navigatable(Type.loginErrorDialog),
+                      );
+                    });
+                  } else {
+                    _navigation.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginManualSettings(
+                              email: emailField.controller.text,
+                              password: passwordField.controller.text,
+                              fromError: true,
+                            )));
+                  }
+                }
+              },
             )
           ],
-        ));
+          child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                  left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image(
+                    image: AssetImage(getProviderIconPath(context, widget.provider.id)),
+                    height: loginProviderIconSizeBig,
+                    width: loginProviderIconSizeBig,
+                  ),
+                  Padding(padding: const EdgeInsets.all(loginVerticalListPadding)),
+                  Text(
+                    isOtherProvider ? L10n.get(L.loginSignIn) : L10n.getFormatted(L.providerSignInTextX, [widget.provider.name]),
+                    style: Theme.of(context).textTheme.headline,
+                  ),
+                  Padding(padding: const EdgeInsets.all(loginVerticalListPadding)),
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
+                      child: Form(
+                        key: _simpleLoginKey,
+                        child: Column(
+                          children: <Widget>[emailField, passwordField],
+                        ),
+                      )),
+                  Padding(padding: const EdgeInsets.all(dimension24dp)),
+                  ButtonImportanceHigh(
+                    minimumWidth: loginButtonWidth,
+                    child: Text(L10n.get(L.loginSignIn)),
+                    onPressed: _signIn,
+                  ),
+                  Visibility(
+                    visible: isOtherProvider,
+                    child: Padding(
+                      padding: const EdgeInsets.all(loginVerticalListPadding),
+                      child: ButtonImportanceLow(
+                        minimumWidth: loginButtonWidth,
+                        onPressed: _showManualSettings,
+                        child: Text(L10n.get(L.settingManual)),
+                      ),
+                    ),
+                  )
+                ],
+              )),
+        ),
+      ),
+    );
   }
 
   OverlayEntry _createErrorOverlayEntry() {
@@ -213,9 +222,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
 
   void _signIn() {
     FocusScope.of(context).requestFocus(FocusNode());
-    bool simpleLoginIsValid = _simpleLoginKey.currentState.validate();
-    var email = emailField.controller.text;
-    var password = passwordField.controller.text;
+    final simpleLoginIsValid = _simpleLoginKey.currentState.validate();
+    final email = emailField.controller.text;
+    final password = passwordField.controller.text;
 
     if (simpleLoginIsValid) {
       _closeError();
@@ -240,6 +249,9 @@ class _ProviderSignInState extends State<ProviderSignIn> {
         context,
         MaterialPageRoute(
             builder: (context) => LoginManualSettings(
-                success: widget.success, email: emailField.controller.text, password: passwordField.controller.text, fromError: false)));
+                  email: emailField.controller.text,
+                  password: passwordField.controller.text,
+                  fromError: false,
+                )));
   }
 }

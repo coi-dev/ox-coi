@@ -45,7 +45,7 @@ import 'package:flutter/material.dart';
 class ViewSwitcher extends AnimatedSwitcher {
   static const defaultDuration = Duration(milliseconds: 200);
 
-  ViewSwitcher(Widget child)
+  ViewSwitcher({@required Widget child})
       : super(
             duration: defaultDuration,
             transitionBuilder: (Widget child, Animation<double> animation) => FadeTransition(child: child, opacity: animation),

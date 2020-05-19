@@ -50,6 +50,7 @@ import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/ui/animations.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/button.dart';
 
@@ -65,7 +66,7 @@ class FullscreenOverlay<T extends Bloc> extends OverlayEntry {
     Navigation().allowBackNavigation = true;
     if (_isVisible) {
       _isVisible = false;
-      super.remove();
+      Future.delayed(Duration(milliseconds: kProgressDismissDelay), () => super.remove());
     }
   }
 }

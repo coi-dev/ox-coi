@@ -49,6 +49,7 @@ import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/customer/customer.dart';
 import 'package:ox_coi/src/customer/customer_delegate.dart';
 import 'package:ox_coi/src/customer/customer_delegate_change_notifier.dart';
+import 'package:ox_coi/src/dynamic_screen/dynamic_screen.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
@@ -61,7 +62,6 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/dynamic_screen/dynamic_screen.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
@@ -169,44 +169,41 @@ class _OxCoiState extends State<OxCoi> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: _mainBloc,
-      builder: (context, state) {
-        Widget child;
-        if (state is MainStateSuccess) {
-          if (state.configured && !state.hasAuthenticationError && state.needsOnboarding) {
-            // TODO: NEEDS TO BE DISCUSSED!
-            // TODO: Maybe we should add an additional 'Onboarding' layer here, from within the 'DynamicScreen' is being called, just for separation purposes.
-            child = MultiProvider(
-              providers: [
+    return ViewSwitcher(
+      child: BlocConsumer(
+        bloc: _mainBloc,
+        listener: (context, state) {
+          if (state is MainStateSuccess) {
+            _navigation.popUntilRoot(context);
+          }
+        },
+        builder: (context, state) {
+          if (state is MainStateSuccess) {
+            if (state.configured && !state.hasAuthenticationError && state.needsOnboarding) {
+              // TODO: NEEDS TO BE DISCUSSED!
+              // TODO: Maybe we should add an additional 'Onboarding' layer here, from within the 'DynamicScreen' is being called, just for separation purposes.
+              return MultiProvider(providers: [
                 Provider<DynamicScreenModel>.value(value: Customer.onboardingModel),
                 Provider<DynamicScreenCustomerDelegate>.value(value: _customerDelegate),
                 ChangeNotifierProvider<CustomerDelegateChangeNotifier>.value(value: _customerDelegate.changeNotifier)
-              ],
-              child: DynamicScreen()
-            );
-
-          } else if (state.configured && !state.hasAuthenticationError && !state.needsOnboarding) {
-            child = Root();
-
-          } else if (state.configured && state.hasAuthenticationError) {
-            child = PasswordChanged(passwordChangedCallback: () => _loginSuccess(isRelogin: true));
-
+              ], child: DynamicScreen());
+            } else if (state.configured && !state.hasAuthenticationError && !state.needsOnboarding) {
+              return Root();
+            } else if (state.configured && state.hasAuthenticationError) {
+              return PasswordChanged(passwordChangedCallback: () => _loginSuccess);
+            } else {
+              return Login();
+            }
           } else {
-            child = Login(success: _loginSuccess);
+            return Splash();
           }
-        } else {
-          child = Splash();
-        }
-        return ViewSwitcher(child);
-      },
+        },
+      ),
     );
   }
 
-  void _loginSuccess({bool isRelogin = false}) {
-    if (!isRelogin) {
-      BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
-    }
+  void _loginSuccess() {
+    BlocProvider.of<PushBloc>(context).add(RegisterPushResource());
     _navigation.popUntilRoot(context);
     _mainBloc.add(AppLoaded());
   }

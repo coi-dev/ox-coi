@@ -178,7 +178,7 @@ class _RootState extends State<Root> {
                 },
               ),
             ],
-            child: ViewSwitcher(child),
+            child: ViewSwitcher(child: child),
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(

@@ -48,6 +48,8 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/login/login_bloc.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
+import 'package:ox_coi/src/main/main_bloc.dart';
+import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -56,25 +58,18 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/web/web_asset.dart';
 import 'package:ox_coi/src/widgets/button.dart';
 import 'package:ox_coi/src/widgets/custom_painters.dart';
-import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/url_text_span.dart';
 
 import 'login_provider_list.dart';
 
 class Login extends StatefulWidget {
-  final Function success;
-
-  Login({@required this.success});
-
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  final _navigation = Navigation();
   LoginBloc _loginBloc;
-  Navigation _navigation = Navigation();
-  bool _showedErrorDialog = false;
-  OverlayEntry _progressOverlayEntry;
 
   @override
   void initState() {
@@ -82,128 +77,105 @@ class _LoginState extends State<Login> {
     _navigation.current = Navigatable(Type.login);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
     _loginBloc.add(RequestProviders(type: ProviderListType.login));
-    _loginBloc.listen((state) => handleLoginStateChange(state));
-  }
-
-  void handleLoginStateChange(LoginState state) {
-    if (state is LoginStateSuccess || state is LoginStateFailure) {
-      if (_progressOverlayEntry != null) {
-        _progressOverlayEntry.remove();
-        _progressOverlayEntry = null;
-      }
-    }
-    if (state is LoginStateSuccess) {
-      widget.success();
-    } else if (state is LoginStateFailure) {
-      if (!_showedErrorDialog) {
-        _showedErrorDialog = true;
-        showInformationDialog(
-          context: context,
-          title: L10n.get(L.loginFailed),
-          contentText: state.error,
-          navigatable: Navigatable(Type.loginErrorDialog),
-        );
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: createWelcomeScreen());
-  }
-
-  Widget createWelcomeScreen() {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: viewportConstraints.maxHeight,
-            ),
-            child: IntrinsicHeight(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    color: CustomTheme.of(context).primary,
-                    width: viewportConstraints.maxWidth,
-                    padding: const EdgeInsets.only(top: loginHeaderVerticalPadding, right: loginHorizontalPadding, left: loginHorizontalPadding),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Image(
-                          image: AssetImage(appLogoPath),
-                          height: loginLogoSize,
-                          width: loginLogoSize,
-                        ),
-                        Padding(padding: const EdgeInsets.only(top: dimension16dp)),
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onAccent),
-                            children: getWelcome(),
-                          ),
-                        ),
-                        Padding(padding: const EdgeInsets.only(top: loginWaveTopBottomPadding)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: viewportConstraints.maxWidth,
-                    height: 50,
-                    child: CustomPaint(
-                      painter: CurvePainter(color: CustomTheme.of(context).primary),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: CustomTheme.of(context).background,
+    return Scaffold(
+      body: LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      color: CustomTheme.of(context).primary,
                       width: viewportConstraints.maxWidth,
-                      padding: const EdgeInsets.symmetric(horizontal: loginHorizontalPadding),
+                      padding: const EdgeInsets.only(top: loginHeaderVerticalPadding, right: loginHorizontalPadding, left: loginHorizontalPadding),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Padding(padding: const EdgeInsets.only(top: loginWaveTopBottomPadding)),
-                          ButtonImportanceHigh(
-                              minimumWidth: loginButtonWidth,
-                              child: Text(
-                                L10n.get(L.loginSignIn),
-                                key: Key(keyLoginLoginSignInText),
-                              ),
-                              onPressed: () {
-                                _goToProviderList(ProviderListType.login);
-                              }),
-                          Padding(padding: const EdgeInsets.only(top: dimension24dp)),
-                          Padding(
-                            padding: const EdgeInsets.all(dimension8dp),
-                            child: ButtonImportanceLow(
-                                minimumWidth: loginButtonWidth,
-                                child: Text(
-                                  L10n.get(L.register),
-                                  key: Key(keyLoginRegisterText),
-                                ),
-                                onPressed: () {
-                                  _goToProviderList(ProviderListType.register);
-                                }),
+                          Image(
+                            image: AssetImage(appLogoPath),
+                            height: loginLogoSize,
+                            width: loginLogoSize,
                           ),
-                          Padding(padding: const EdgeInsets.only(top: dimension64dp)),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: dimension32dp),
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground),
-                                children: getAgreeTo(),
-                              ),
+                          Padding(padding: const EdgeInsets.only(top: dimension16dp)),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onAccent),
+                              children: getWelcome(),
                             ),
-                          )
+                          ),
+                          Padding(padding: const EdgeInsets.only(top: loginWaveTopBottomPadding)),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )),
-      );
-    });
+                    RepaintBoundary(
+                      child: SizedBox(
+                        width: viewportConstraints.maxWidth,
+                        height: loginWaveHeight,
+                        child: CustomPaint(
+                          painter: CurvePainter(color: CustomTheme.of(context).primary),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: CustomTheme.of(context).background,
+                        width: viewportConstraints.maxWidth,
+                        padding: const EdgeInsets.symmetric(horizontal: loginHorizontalPadding),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(padding: const EdgeInsets.only(top: loginWaveTopBottomPadding)),
+                            ButtonImportanceHigh(
+                                minimumWidth: loginButtonWidth,
+                                child: Text(
+                                  L10n.get(L.loginSignIn),
+                                  key: Key(keyLoginLoginSignInText),
+                                ),
+                                onPressed: () {
+                                  _goToProviderList(ProviderListType.login);
+                                }),
+                            Padding(padding: const EdgeInsets.only(top: dimension24dp)),
+                            Padding(
+                              padding: const EdgeInsets.all(dimension8dp),
+                              child: ButtonImportanceLow(
+                                  minimumWidth: loginButtonWidth,
+                                  child: Text(
+                                    L10n.get(L.register),
+                                    key: Key(keyLoginRegisterText),
+                                  ),
+                                  onPressed: () {
+                                    _goToProviderList(ProviderListType.register);
+                                  }),
+                            ),
+                            Padding(padding: const EdgeInsets.only(top: dimension64dp)),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: dimension32dp),
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground),
+                                  children: getAgreeTo(),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        );
+      }),
+    );
   }
 
   void _goToProviderList(ProviderListType type) {
@@ -212,7 +184,6 @@ class _LoginState extends State<Login> {
       MaterialPageRoute(
         builder: (context) => ProviderList(
           type: type,
-          success: widget.success,
         ),
       ),
     );
@@ -220,10 +191,10 @@ class _LoginState extends State<Login> {
 
   List<TextSpan> getWelcome() {
     int spanBoundary = 0;
-    var oxCoiName = L10n.get(L.oxCoiName);
-    var formattedWelcomeString = L10n.getFormatted(L.welcome, [oxCoiName]);
-    var oxCoiNameStartIndex = formattedWelcomeString.indexOf(oxCoiName, spanBoundary);
-    var oxCoiNameEndIndex = oxCoiNameStartIndex + oxCoiName.length;
+    final oxCoiName = L10n.get(L.oxCoiName);
+    final formattedWelcomeString = L10n.getFormatted(L.welcome, [oxCoiName]);
+    final oxCoiNameStartIndex = formattedWelcomeString.indexOf(oxCoiName, spanBoundary);
+    final oxCoiNameEndIndex = oxCoiNameStartIndex + oxCoiName.length;
 
     List<TextSpan> textParts = [];
     textParts.add(TextSpan(
@@ -245,13 +216,13 @@ class _LoginState extends State<Login> {
 
   List<TextSpan> getAgreeTo() {
     int spanBoundary = 0;
-    var termsAndConditions = L10n.get(L.termsConditions);
-    var privacyPolicy = L10n.get(L.privacyDeclaration);
-    var formattedAgreeString = L10n.getFormatted(L.agreeToXY, [termsAndConditions, privacyPolicy]);
-    var termsConditionsStartIndex = formattedAgreeString.indexOf(termsAndConditions, spanBoundary);
-    var termsConditionsEndIndex = termsConditionsStartIndex + termsAndConditions.length;
-    var privacyPolicyStartIndex = formattedAgreeString.indexOf(privacyPolicy, spanBoundary);
-    var privacyPolicyEndIndex = privacyPolicyStartIndex + privacyPolicy.length;
+    final termsAndConditions = L10n.get(L.termsConditions);
+    final privacyPolicy = L10n.get(L.privacyDeclaration);
+    final formattedAgreeString = L10n.getFormatted(L.agreeToXY, [termsAndConditions, privacyPolicy]);
+    final termsConditionsStartIndex = formattedAgreeString.indexOf(termsAndConditions, spanBoundary);
+    final termsConditionsEndIndex = termsConditionsStartIndex + termsAndConditions.length;
+    final privacyPolicyStartIndex = formattedAgreeString.indexOf(privacyPolicy, spanBoundary);
+    final privacyPolicyEndIndex = privacyPolicyStartIndex + privacyPolicy.length;
 
     List<TextSpan> textParts = [];
     textParts.add(TextSpan(text: formattedAgreeString.substring(spanBoundary, termsConditionsStartIndex)));

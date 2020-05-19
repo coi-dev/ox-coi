@@ -68,21 +68,20 @@ enum ProviderListType {
 }
 
 class ProviderList extends StatefulWidget {
-  final Function success;
   final ProviderListType type;
 
-  ProviderList({@required this.type, this.success});
+  ProviderList({@required this.type});
 
   @override
   _ProviderListState createState() => _ProviderListState();
 }
 
 class _ProviderListState extends State<ProviderList> {
+  final _navigation = Navigation();
   LoginBloc _loginBloc;
   String title;
   String text;
   Provider otherProvider;
-  final _navigation = Navigation();
 
   @override
   void initState() {
@@ -102,51 +101,48 @@ class _ProviderListState extends State<ProviderList> {
       text = L10n.get(L.providerRegisterChoose);
     }
     return Scaffold(
-        appBar: DynamicAppBar(
-          title: title,
-          leading: AppBarBackButton(context: context),
-        ),
-        body: createProviderList());
-  }
-
-  Widget createProviderList() {
-    return Padding(
-        padding:
-            const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.body1,
-            ),
-            Padding(padding: const EdgeInsets.only(top: dimension24dp)),
-            Flexible(
-              child: BlocBuilder(
-                bloc: _loginBloc,
-                builder: (context, state) {
-                  if (state is LoginStateProvidersLoaded) {
-                    return buildListItems(state);
-                  } else if (state is! LoginStateFailure) {
-                    return StateInfo(showLoading: true);
-                  } else {
-                    return AdaptiveIcon(icon: IconSource.error);
-                  }
-                },
+      appBar: DynamicAppBar(
+        title: title,
+        leading: AppBarBackButton(context: context),
+      ),
+      body: Padding(
+          padding:
+              const EdgeInsets.only(left: loginHorizontalPadding, right: loginHorizontalPadding, bottom: loginVerticalPadding, top: loginTopPadding),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.body1,
               ),
-            ),
-            if (widget.type == ProviderListType.login)
-              Padding(
-                padding: const EdgeInsets.only(top: dimension24dp),
-                child: ButtonImportanceMedium(
-                  child: Text(L10n.get(L.providerOtherMailProvider)),
-                  onPressed: () => _onItemTap(otherProvider),
+              Padding(padding: const EdgeInsets.only(top: dimension24dp)),
+              Flexible(
+                child: BlocBuilder(
+                  bloc: _loginBloc,
+                  builder: (context, state) {
+                    if (state is LoginStateProvidersLoaded) {
+                      return buildListItems(state);
+                    } else if (state is! LoginStateFailure) {
+                      return StateInfo(showLoading: true);
+                    } else {
+                      return AdaptiveIcon(icon: IconSource.error);
+                    }
+                  },
                 ),
               ),
-          ],
-        ));
+              if (widget.type == ProviderListType.login)
+                Padding(
+                  padding: const EdgeInsets.only(top: dimension24dp),
+                  child: ButtonImportanceMedium(
+                    child: Text(L10n.get(L.providerOtherMailProvider)),
+                    onPressed: () => _onItemTap(otherProvider),
+                  ),
+                ),
+            ],
+          )),
+    );
   }
 
   ListView buildListItems(LoginStateProvidersLoaded state) {
@@ -155,7 +151,50 @@ class _ProviderListState extends State<ProviderList> {
       itemCount: state.providers.length,
       itemBuilder: (BuildContext context, int index) {
         if (state.providers[index].oauth == null) {
-          return createProviderItem(state.providers[index]);
+          var provider = state.providers[index];
+          if (isCoiDebugProvider(provider.id) && isRelease()) {
+            return Container();
+          }
+          if (provider.id == "other") {
+            otherProvider = provider;
+            return Container();
+          }
+          return SizedBox(
+            height: dimension64dp,
+            child: InkWell(
+              onTap: () => _onItemTap(provider),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: loginVerticalListPadding, horizontal: loginHorizontalListPadding),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(right: loginHorizontalListPadding),
+                                child: Image(
+                                  image: AssetImage(getProviderIconPath(context, provider.id)),
+                                  height: loginProviderIconSize,
+                                  width: loginProviderIconSize,
+                                ),
+                              ),
+                              Text(
+                                provider.name,
+                                style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onBackground),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                  Divider(
+                    height: zero,
+                    color: CustomTheme.of(context).onBackground.barely(),
+                  ),
+                ],
+              ),
+            ),
+          );
         } else {
           return Container();
         }
@@ -163,59 +202,12 @@ class _ProviderListState extends State<ProviderList> {
     );
   }
 
-  Widget createProviderItem(Provider provider) {
-    if (isCoiDebugProvider(provider.id) && isRelease()) {
-      return Container();
-    }
-    if (provider.id == "other") {
-      otherProvider = provider;
-      return Container();
-    }
-    return SizedBox(
-      height: dimension64dp,
-      child: InkWell(
-        onTap: () => _onItemTap(provider),
-        child: Column(
-          children: <Widget>[
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: loginVerticalListPadding, horizontal: loginHorizontalListPadding),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: loginHorizontalListPadding),
-                          child: Image(
-                            image: AssetImage(getProviderIconPath(context, provider.id)),
-                            height: loginProviderIconSize,
-                            width: loginProviderIconSize,
-                          ),
-                        ),
-                        Text(
-                          provider.name,
-                          style: Theme.of(context).textTheme.body1.apply(color: CustomTheme.of(context).onBackground),
-                        ),
-                      ],
-                    ),
-                  ],
-                )),
-            Divider(
-              height: zero,
-              color: CustomTheme.of(context).onBackground.barely(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   _onItemTap(Provider provider) {
     if (widget.type == ProviderListType.login) {
-      var navigation = Navigation();
-      navigation.push(
+      _navigation.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProviderSignIn(provider: provider, success: widget.success),
+          builder: (context) => ProviderSignIn(provider: provider),
         ),
       );
     } else if (widget.type == ProviderListType.register) {

@@ -132,7 +132,9 @@ class LoginStateLoading extends LoginState {
   LoginStateLoading({@required progress}) : super(progress: progress);
 }
 
-class LoginStateSuccess extends LoginState {}
+class LoginStateSuccess extends LoginState {
+  final progress = 1000;
+}
 
 class LoginStateProvidersLoaded extends LoginState {
   List<Provider> providers;
