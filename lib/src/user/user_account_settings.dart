@@ -57,12 +57,13 @@ import 'package:ox_coi/src/settings/settings_manual_form.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_bloc.dart';
 import 'package:ox_coi/src/settings/settings_manual_form_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/user/user_change_bloc.dart';
-import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/dialog_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
+
+import 'user_bloc.dart';
+import 'user_event_state.dart';
 
 class UserAccountSettings extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ class UserAccountSettings extends StatefulWidget {
 }
 
 class _UserAccountSettingsState extends State<UserAccountSettings> {
-  UserChangeBloc _userChangeBloc = UserChangeBloc();
+  UserBloc _userBloc = UserBloc();
   LoginBloc _loginBloc;
   Navigation _navigation = Navigation();
   OverlayEntry _progressOverlayEntry;
@@ -81,17 +82,17 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
     super.initState();
     _navigation.current = Navigatable(Type.settingsAccount);
     _loginBloc = LoginBloc(BlocProvider.of<ErrorBloc>(context));
-    _userChangeBloc.add(RequestUser());
-    _userChangeBloc.listen((state) => _handleUserChangeStateChange(state));
+    _userBloc.add(RequestUser());
+    _userBloc.listen((state) => _handleUserChangeStateChange(state));
 
     _loginBloc.listen((event) => handleLoginStateChange(event));
   }
 
-  _handleUserChangeStateChange(UserChangeState state) {
-    if (state is UserChangeStateApplied) {
+  _handleUserChangeStateChange(UserState state) {
+    if (state is UserStateSuccess && state.manuallyChanged) {
       _showedErrorDialog = false;
       _loginBloc.add(EditButtonPressed());
-    } else if (state is UserChangeStateFailure) {
+    } else if (state is UserStateFailure) {
       state.error.showToast();
     }
   }
@@ -137,7 +138,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
               ),
             );
             Overlay.of(context).insert(_progressOverlayEntry);
-            _userChangeBloc.add(
+            _userBloc.add(
               UserAccountDataChanged(
                 imapLogin: state.imapLogin,
                 imapPassword: state.password,

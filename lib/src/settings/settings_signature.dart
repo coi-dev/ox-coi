@@ -49,8 +49,8 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/user/user_change_bloc.dart';
-import 'package:ox_coi/src/user/user_change_event_state.dart';
+import 'package:ox_coi/src/user/user_bloc.dart';
+import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 class EmailSignature extends StatefulWidget {
@@ -59,14 +59,15 @@ class EmailSignature extends StatefulWidget {
 }
 
 class _EmailSignatureState extends State<EmailSignature> {
-  UserChangeBloc _userChangeBloc = UserChangeBloc();
+  UserBloc _userBloc;
   TextEditingController _signatureController = TextEditingController();
   Navigation navigation = Navigation();
 
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.settingsSignature);
-    _userChangeBloc.add(RequestUser());
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    _userBloc.add(RequestUser());
   }
 
   @override
@@ -83,13 +84,13 @@ class _EmailSignatureState extends State<EmailSignature> {
         ],
       ),
       body: BlocListener(
-        bloc: _userChangeBloc,
+        bloc: _userBloc,
         listener: (context, state) {
-          if (state is UserChangeStateSuccess) {
+          if (state is UserStateSuccess && state.manuallyChanged) {
+            navigation.pop(context);
+          } else if (state is UserStateSuccess) {
             Config config = state.config;
             _signatureController.text = config.status;
-          } else if (state is UserChangeStateApplied) {
-            navigation.pop(context);
           }
         },
         child: Padding(
@@ -106,7 +107,7 @@ class _EmailSignatureState extends State<EmailSignature> {
                 padding: const EdgeInsets.all(formVerticalPadding),
               ),
               Text(
-                "Change your Signature",
+                L10n.get(L.settingSignatureDescription),
               ),
             ],
           ),
@@ -116,6 +117,6 @@ class _EmailSignatureState extends State<EmailSignature> {
   }
 
   void _saveChanges() async {
-    _userChangeBloc.add(UserSignatureChanged(signature: _signatureController.text));
+    _userBloc.add(UserSignatureChanged(signature: _signatureController.text));
   }
 }

@@ -47,6 +47,52 @@ abstract class UserEvent {}
 
 class RequestUser extends UserEvent {}
 
+class UserPersonalDataChanged extends UserEvent {
+  final String username;
+  final String avatarPath;
+
+  UserPersonalDataChanged({@required this.username, @required this.avatarPath});
+}
+
+class UserSignatureChanged extends UserEvent {
+  final String signature;
+
+  UserSignatureChanged({@required this.signature});
+}
+
+class UserAvatarChanged extends UserEvent {
+  final String avatarPath;
+
+  UserAvatarChanged({@required this.avatarPath});
+}
+
+class UserAccountDataChanged extends UserEvent {
+  final String imapLogin;
+  final String imapPassword;
+  final String imapServer;
+  final String imapPort;
+  final String imapSecurity;
+  final String smtpLogin;
+  final String smtpPassword;
+  final String smtpServer;
+  final String smtpPort;
+  final String smtpSecurity;
+
+  UserAccountDataChanged({
+    @required this.imapLogin,
+    @required this.imapPassword,
+    @required this.imapServer,
+    @required this.imapPort,
+    @required this.imapSecurity,
+    @required this.smtpLogin,
+    @required this.smtpPassword,
+    @required this.smtpServer,
+    @required this.smtpPort,
+    @required this.smtpSecurity,
+  });
+}
+
+
 abstract class UserState {}
 
 class UserStateInitial extends UserState {}
@@ -55,8 +101,9 @@ class UserStateLoading extends UserState {}
 
 class UserStateSuccess extends UserState {
   final Config config;
+  final bool manuallyChanged;
 
-  UserStateSuccess({@required this.config});
+  UserStateSuccess({@required this.config, this.manuallyChanged = false});
 }
 
 class UserStateFailure extends UserState {

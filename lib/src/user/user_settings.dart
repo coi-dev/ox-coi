@@ -49,11 +49,12 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/user/user_change_bloc.dart';
-import 'package:ox_coi/src/user/user_change_event_state.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
+
+import 'user_bloc.dart';
+import 'user_event_state.dart';
 
 class UserSettings extends StatefulWidget {
   @override
@@ -63,15 +64,15 @@ class UserSettings extends StatefulWidget {
 class _UserSettingsState extends State<UserSettings> {
   final Navigation _navigation = Navigation();
   final TextEditingController _usernameController = TextEditingController();
-  UserChangeBloc _userChangeBloc;
+  UserBloc _userBloc;
   String _avatar;
 
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.settingsUser);
-    _userChangeBloc = BlocProvider.of<UserChangeBloc>(context);
-    _userChangeBloc.add(RequestUser());
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    _userBloc.add(RequestUser());
   }
 
   @override
@@ -89,28 +90,28 @@ class _UserSettingsState extends State<UserSettings> {
         ],
       ),
       body: BlocConsumer(
-        bloc: _userChangeBloc,
+        bloc: _userBloc,
         listener: (context, state) {
-          if (state is UserChangeStateSuccess) {
+          if (state is UserStateSuccess && state.manuallyChanged) {
+            _navigation.pop(context);
+          } else if (state is UserStateSuccess) {
             final config = state.config;
             final avatarPath = config.avatarPath;
             _usernameController.text = config.username;
             if (!avatarPath.isNullOrEmpty()) {
               _avatar = config.avatarPath;
             }
-          } else if (state is UserChangeStateApplied) {
-            _navigation.pop(context);
           }
         },
         builder: (context, state) {
-          if (state is UserChangeStateSuccess) {
+          if (state is UserStateSuccess) {
             return EditableProfileHeader(
               nameController: _usernameController,
               avatar: _avatar,
               imageChangedCallback: _setAvatar,
               placeholder: L10n.get(L.username),
             );
-          } else if (state is UserChangeStateFailure) {
+          } else if (state is UserStateFailure) {
             return Text(state.error);
           } else {
             return Container();
@@ -128,6 +129,6 @@ class _UserSettingsState extends State<UserSettings> {
 
   void _saveChanges() async {
     final avatarPath = !_avatar.isNullOrEmpty() ? _avatar : null;
-    _userChangeBloc.add(UserPersonalDataChanged(username: _usernameController.text, avatarPath: avatarPath));
+    _userBloc.add(UserPersonalDataChanged(username: _usernameController.text, avatarPath: avatarPath));
   }
 }

@@ -63,8 +63,6 @@ import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/settings/settings_appearance.dart';
 import 'package:ox_coi/src/settings/settings_signature.dart';
 import 'package:ox_coi/src/user/user_bloc.dart';
-import 'package:ox_coi/src/user/user_change_bloc.dart';
-import 'package:ox_coi/src/user/user_change_event_state.dart' as UserChange;
 import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/user/user_settings.dart';
 import 'package:ox_coi/src/utils/constants.dart';
@@ -110,9 +108,8 @@ class UserProfile extends RootChild {
 class _ProfileState extends State<UserProfile> {
   final Navigation _navigation = Navigation();
   final InviteBloc _inviteBloc = InviteBloc();
-  final UserChangeBloc _userChangeBloc = UserChangeBloc();
+  final UserBloc _userBloc = UserBloc();
 
-  UserBloc _userBloc;
   OverlayEntry _progressOverlayEntry;
   String _avatarPath = "";
 
@@ -120,8 +117,6 @@ class _ProfileState extends State<UserProfile> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.profile);
-
-    _userBloc = UserBloc(userChangeBloc: _userChangeBloc);
     _userBloc.add(RequestUser());
   }
 
@@ -222,7 +217,11 @@ class _ProfileState extends State<UserProfile> {
                           iconBackground: CustomTheme.of(context).signatureIcon,
                           onTap: () => _navigation.push(
                             context,
-                            MaterialPageRoute(builder: (context) => EmailSignature()),
+                            MaterialPageRoute(
+                                builder: (context) => BlocProvider.value(
+                                      value: _userBloc,
+                                      child: EmailSignature(),
+                                    )),
                           ),
                           key: Key(keyUserProfileSignatureIconSource),
                         ),
@@ -339,7 +338,7 @@ class _ProfileState extends State<UserProfile> {
     setState(() {
       _avatarPath = avatarPath;
     });
-    _userChangeBloc.add(UserChange.UserAvatarChanged(avatarPath: avatarPath));
+    _userBloc.add(UserAvatarChanged(avatarPath: avatarPath));
   }
 
   void _editUserSettings() async {
@@ -347,7 +346,7 @@ class _ProfileState extends State<UserProfile> {
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider.value(
-          value: _userChangeBloc,
+          value: _userBloc,
           child: UserSettings(),
         ),
       ),
