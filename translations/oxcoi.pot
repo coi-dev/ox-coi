@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 17:21+0200\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,6 +108,7 @@ msgstr ""
 msgid "App version"
 msgstr ""
 
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
 msgid "Appearance"
 msgstr ""
 
@@ -173,13 +174,6 @@ msgid "Camera not ready"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
-
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-
-msgid "Cannot login. Please check your password."
 msgstr ""
 
 msgid "Cannot verify contact"
@@ -355,7 +349,7 @@ msgid "Do you really want to leave the group?"
 msgstr ""
 
 msgid ""
-"Do you really want to logout?\n"
+"Do you really want to log out?\n"
 "\n"
 "Your settings and messages will be removed from this device. After logging "
 "out you need to start the app again to log into another account."
@@ -580,7 +574,7 @@ msgstr ""
 msgid "Leave group"
 msgstr ""
 
-msgid "Lets Go"
+msgid "Let's Go"
 msgstr ""
 
 msgid "Light"
@@ -599,6 +593,13 @@ msgid "Login"
 msgstr ""
 
 msgid "Login failed"
+msgstr ""
+
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+
+msgid "Login failed. Please check your password."
 msgstr ""
 
 msgid "Logout"
@@ -724,6 +725,7 @@ msgstr ""
 msgid "Open chat"
 msgstr ""
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
 msgid "Or scan QR code"
 msgstr ""
 

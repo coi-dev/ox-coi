@@ -32,5 +32,5 @@ extension DynamicLocalizations on L {
 	static final feedbackDescription = L.translationKey("This is a beta version, therefore please keep in mind that the app is still in development. Do you want to share your thoughts? You can share your feedback in the profile section in the settings.");
 	static final readyTitle = L.translationKey("Ready!");
 	static final readyDescription = L.translationKey("You're good to go!");
-	static final readyButtonTitle = L.translationKey("Lets Go");
+	static final readyButtonTitle = L.translationKey("Let's Go");
 }

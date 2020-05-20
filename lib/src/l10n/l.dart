@@ -282,7 +282,7 @@ class L {
   static final loginCheckPassword = translationKey("Please enter your password");
   static final loginChooseProvider = translationKey("Please select your email provider to sign in");
   static final loginCheckServer = translationKey("Please specify your email server settings.");
-  static final loginErrorWrongCredentials = translationKey("Cannot login. Please check if the email-address and the password are correct.");
+  static final loginErrorWrongCredentials = translationKey("Login failed. Please check if the email-address and the password are correct.");
 
   // Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
   static final loginErrorResponseXY = translationKey(
@@ -294,12 +294,12 @@ class L {
 
   static final logoutTitle = translationKey("Logout");
   static final logoutConfirmationText = translationKey(
-      "Do you really want to logout?\n\nYour settings and messages will be removed from this device. After logging out you need to start the app again to log into another account.");
+      "Do you really want to log out?\n\nYour settings and messages will be removed from this device. After logging out you need to start the app again to log into another account.");
 
   static final passwordChangedTitle = translationKey("Password changed");
   static final passwordChangedInfoText = translationKey("Your password has changed.\nPlease enter your new one to access your messages.");
   static final passwordChangedButtonText = translationKey("Login");
-  static final passwordChangedCheckPassword = translationKey("Cannot login. Please check your password.");
+  static final passwordChangedCheckPassword = translationKey("Login failed. Please check your password.");
 
   static final memberXP = translationKey("1 member", "%i members");
   static final memberAdded = translationKey("Member added");
@@ -342,6 +342,8 @@ class L {
   static final providerSignInTextX = translationKey("Sign in with %s");
 
   static final qrProfile = translationKey("Profile QR");
+
+  // Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
   static final qrAddContactHeader = translationKey("Or scan QR code");
   static final qrScan = translationKey("Scan QR code");
 
@@ -446,6 +448,7 @@ class L {
   static final settingItemFeedbackTitle = translationKey("Feedback");
   static final settingItemBugReportTitle = translationKey("Report a bug");
 
+  // Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
   static final settingsAppearanceTitle = translationKey("Appearance");
   static final settingsAppearanceSystemTitle = translationKey("System");
   static final settingsAppearanceDarkTitle = translationKey("Dark");
