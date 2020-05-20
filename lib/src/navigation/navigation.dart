@@ -50,10 +50,8 @@ import 'package:ox_coi/src/chat/chat_create.dart';
 import 'package:ox_coi/src/contact/contact_blocked_list.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
-import 'package:ox_coi/src/dynamic_screen/widgets/dynamic_screen.dart';
-import 'package:ox_coi/src/settings/settings.dart';
 import 'package:ox_coi/src/settings/settings_about.dart';
-import 'package:ox_coi/src/settings/settings_anti_mobbing.dart';
+import 'package:ox_coi/src/settings/settings_data_protection.dart';
 import 'package:ox_coi/src/settings/settings_appearance.dart';
 import 'package:ox_coi/src/settings/settings_chat.dart';
 import 'package:ox_coi/src/settings/settings_debug.dart';
@@ -66,12 +64,11 @@ class Navigation {
 
   static const String root = '/';
   static const String contactsAdd = '/contacts/add';
-  static const String settings = '/settings';
   static const String settingsAccount = '/settings/account';
   static const String settingsEncryption = '/settings/encryption';
   static const String settingsAbout = '/settings/about';
   static const String settingsChat = '/settings/chat';
-  static const String settingsAntiMobbing = '/settings/antiMobbing';
+  static const String settingsDataProtection = '/settings/dataProtection';
   static const String settingsAppearance = '/settings/appearance';
   static const String settingsNotifications = '/settings/notifications';
   static const String settingsAntiMobbingList = '/settings/antiMobbingList';
@@ -82,12 +79,11 @@ class Navigation {
   final Map<String, WidgetBuilder> routesMapping = {
     root: (context) => OxCoi(),
     contactsAdd: (context) => ContactChange(contactAction: ContactAction.add),
-    settings: (context) => Settings(),
     settingsAccount: (context) => UserAccountSettings(),
     settingsEncryption: (context) => SettingsEncryption(),
     settingsAbout: (context) => SettingsAbout(),
     settingsChat: (context) => SettingsChat(),
-    settingsAntiMobbing: (context) => SettingsAntiMobbing(),
+    settingsDataProtection: (context) => SettingsDataProtection(),
     settingsAntiMobbingList: (context) => AntiMobbingList(),
     settingsAppearance: (context) => SettingsAppearance(),
     settingsNotifications: (context) => SettingsNotifications(),

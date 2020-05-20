@@ -90,7 +90,7 @@ enum Type {
   settings,
   settingsAccount,
   settingsAbout,
-  settingsAntiMobbing,
+  settingsDataProtection,
   settingsChat,
   settingsDebug,
   settingsSecurity,

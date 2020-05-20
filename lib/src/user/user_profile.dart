@@ -241,7 +241,7 @@ class _ProfileState extends State<UserProfile> {
                           icon: IconSource.security,
                           text: L10n.get(L.settingItemDataProtectionTitle),
                           iconBackground: CustomTheme.of(context).dataProtectionIcon,
-                          onTap: () => _navigation.pushNamed(context, Navigation.settingsAntiMobbing),
+                          onTap: () => _navigation.pushNamed(context, Navigation.settingsDataProtection),
                           key: Key(keyUserProfileSecurityIconSource),
                         ),
                         SettingsItem(

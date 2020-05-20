@@ -40,6 +40,8 @@
  * for more details.
  */
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,26 +51,26 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/settings/settings_anti_mobbing_bloc.dart';
-import 'package:ox_coi/src/settings/settings_anti_mobbing_event_state.dart';
+import 'package:ox_coi/src/settings/settings_data_protection_bloc.dart';
+import 'package:ox_coi/src/settings/settings_data_protection_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-class SettingsAntiMobbing extends StatefulWidget {
+class SettingsDataProtection extends StatefulWidget {
   @override
-  _SettingsAntiMobbingState createState() => _SettingsAntiMobbingState();
+  _DataProtectionState createState() => _DataProtectionState();
 }
 
-class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
-  SettingsAntiMobbingBloc _settingsAntiMobbingBloc = SettingsAntiMobbingBloc();
+class _DataProtectionState extends State<SettingsDataProtection> {
+  SettingsDataProtectionBloc _settingsDataProtectionBloc = SettingsDataProtectionBloc();
   Navigation navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
-    navigation.current = Navigatable(Type.settingsAntiMobbing);
-    _settingsAntiMobbingBloc.add(RequestSettings());
+    navigation.current = Navigatable(Type.settingsDataProtection);
+    _settingsDataProtectionBloc.add(RequestSettings());
   }
 
   @override
@@ -83,11 +85,11 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
 
   Widget _buildPreferenceList(BuildContext context) {
     return BlocBuilder(
-      bloc: _settingsAntiMobbingBloc,
+      bloc: _settingsDataProtectionBloc,
       builder: (context, state) {
-        if (state is SettingsAntiMobbingStateInitial) {
+        if (state is SettingsDataProtectionStateInitial) {
           return StateInfo(showLoading: true);
-        } else if (state is SettingsAntiMobbingStateSuccess) {
+        } else if (state is SettingsDataProtectionStateSuccess) {
           return ListView(
             children: ListTile.divideTiles(context: context, tiles: [
               ListTile(
@@ -108,14 +110,13 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
                     onTap: () {
                       _showAntiMobbingList();
                     },
+                    trailing: Platform.isIOS ? AdaptiveIcon(icon: IconSource.iosChevron) : null,
                   )),
             ]).toList(),
           );
         } else {
           return Center(
-            child: AdaptiveIcon(
-                icon: IconSource.error
-            ),
+            child: AdaptiveIcon(icon: IconSource.error),
           );
         }
       },
@@ -123,7 +124,7 @@ class _SettingsAntiMobbingState extends State<SettingsAntiMobbing> {
   }
 
   _changeAntiMobbingSetting() {
-    _settingsAntiMobbingBloc.add(ChangeSettings());
+    _settingsDataProtectionBloc.add(ChangeSettings());
   }
 
   void _showAntiMobbingList() {

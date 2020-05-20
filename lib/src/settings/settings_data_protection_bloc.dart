@@ -40,34 +40,45 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:bloc/bloc.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/settings/settings_data_protection_event_state.dart';
 
-abstract class SettingsAntiMobbingEvent {}
+class SettingsDataProtectionBloc extends Bloc<SettingsDataProtectionEvent, SettingsDataProtectionState> {
+  @override
+  SettingsDataProtectionState get initialState => SettingsDataProtectionStateInitial();
 
-class RequestSettings extends SettingsAntiMobbingEvent {}
+  @override
+  Stream<SettingsDataProtectionState> mapEventToState(SettingsDataProtectionEvent event) async* {
+    if (event is RequestSettings) {
+      try {
+        loadSettings();
+      } catch (error) {
+        yield SettingsDataProtectionStateFailure();
+      }
+    } else if (event is SettingsLoaded) {
+      yield SettingsDataProtectionStateSuccess(antiMobbingActive: event.antiMobbingActive);
+    } else if (event is ActionSuccess) {
+      yield SettingsDataProtectionStateSuccess(antiMobbingActive: event.antiMobbingActive);
+    } else if (event is ChangeSettings) {
+      changeSettings();
+    }
+  }
 
-class SettingsLoaded extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
+  void loadSettings() async {
+    bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
 
-  SettingsLoaded({@required this.antiMobbingActive});
+    if (antiMobbingPreference == null) {
+      await setPreference(preferenceAntiMobbing, false);
+      antiMobbingPreference = false;
+    }
+
+    add(SettingsLoaded(antiMobbingActive: antiMobbingPreference));
+  }
+
+  void changeSettings() async {
+    bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
+    await setPreference(preferenceAntiMobbing, !antiMobbingPreference);
+    add(ActionSuccess(antiMobbingActive: !antiMobbingPreference));
+  }
 }
-
-class ChangeSettings extends SettingsAntiMobbingEvent {}
-
-class ActionSuccess extends SettingsAntiMobbingEvent {
-  final bool antiMobbingActive;
-
-  ActionSuccess({@required this.antiMobbingActive});
-}
-
-abstract class SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateInitial extends SettingsAntiMobbingState {}
-
-class SettingsAntiMobbingStateSuccess extends SettingsAntiMobbingState {
-  final bool antiMobbingActive;
-
-  SettingsAntiMobbingStateSuccess({@required this.antiMobbingActive});
-}
-
-class SettingsAntiMobbingStateFailure extends SettingsAntiMobbingState {}
