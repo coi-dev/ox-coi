@@ -123,16 +123,6 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         onTap: () => _navigation.push(context, MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId))),
                       ),
                       ListGroupHeader(
-                        text: L10n.get(L.settingP),
-                      ),
-                      SettingsItem(
-                        pushesNewScreen: true,
-                        icon: IconSource.notifications,
-                        text: L10n.get(L.settingItemNotificationsTitle),
-                        iconBackground: CustomTheme.of(context).notificationIcon,
-                        onTap: () => _navigation.pushNamed(context, Navigation.settingsNotifications),
-                      ),
-                      ListGroupHeader(
                         text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
                       ),
                       Visibility(

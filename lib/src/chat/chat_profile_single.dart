@@ -158,18 +158,6 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
               },
             ),
           ),
-          if (!widget.isSelfTalk)
-            ListGroupHeader(
-              text: L10n.get(L.settingP),
-            ),
-          if (!widget.isSelfTalk)
-            SettingsItem(
-              pushesNewScreen: true,
-              icon: IconSource.notifications,
-              text: L10n.get(L.settingItemNotificationsTitle),
-              iconBackground: CustomTheme.of(context).notificationIcon,
-              onTap: () => _navigation.pushNamed(context, Navigation.settingsNotifications),
-            ),
           if (!isInvite())
             ListGroupHeader(
               text: "",
