@@ -52,44 +52,67 @@
  * for more details.
  */
 
-import 'package:flutter_driver/flutter_driver.dart';
-import 'package:test/test.dart';
+import 'dart:convert';
+import 'dart:io';
 
-import 'setup/helper_methods.dart';
-import 'setup/main_test_setup.dart';
-import 'setup/test_constants.dart';
+class Providers {
+  List<Provider> providerList;
 
-SerializableFinder newTestName1Finder ;
+  Providers({this.providerList});
 
-void main() {
-  FlutterDriver driver;
-  setUpAll(() async {
-    driver = await setupAndGetDriver();
-    newTestName1Finder = find.text(name1);
-  });
+  Providers.fromJson(Map<String, dynamic> json) {
+    if (json['providers'] != null) {
+      providerList = List<Provider>();
+      json['providers'].forEach((v) {
+        providerList.add(Provider.fromJson(v));
+      });
+    }
+  }
+}
 
-  tearDownAll(() async {
-    await teardownDriver(driver);
-  });
+class Provider {
+  String id;
+  String username;
+  String email;
+  String server;
+  String password;
+  List<Contact> contacts;
 
-  group('Test: Add swipe to delete for contacts test', () {
-    test(': Get contacts', () async {
-      await driver.tap(contactsFinder);
-      await driver.tap(cancelFinder);
-      var actualMeContact = await driver.getText(find.text(nameMe));
-      expect(actualMeContact, nameMe);
-    });
+  Provider({this.id, this.username, this.email, this.server, this.password, this.contacts});
 
-    test(': Add one contact.', () async {
-      await addNewContact(driver, name1, email1);
-    });
+  Provider.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    username = json['username'];
+    email = json['email'];
+    server = json['server'];
+    password = json['password'];
 
-    test(': Test Swipe one contact.', () async {
-      await driver.scroll(newTestName1Finder, -500, 0, Duration(milliseconds: 500));
-    });
+    if (json['contacts'] != null) {
+      contacts = List<Contact>();
+      json['contacts'].forEach((v) {
+        contacts.add(Contact.fromJson(v));
+      });
+    }
+  }
+}
 
-    test(': Test chat after swiping', () async {
-      await writeChatFromChat(driver, messageIdOne);
-    });
-  });
+class Contact {
+  String id;
+  String username;
+  String email;
+
+  Contact({this.id, this.username, this.email});
+
+  Contact.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    username = json['username'];
+    email = json['email'];
+  }
+}
+
+Future<List<Provider>> loadTestProviders() async {
+  final path = 'test_driver/setup/credential.json';
+  Map<String, dynamic> json = await File(path).readAsString().then((jsonStr) => jsonDecode(jsonStr));
+  Providers providers = Providers.fromJson(json);
+  return providers.providerList;
 }

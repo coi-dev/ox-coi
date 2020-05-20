@@ -5,6 +5,7 @@ target=$1
 deviceId=$2
 appId=$3
 test="test_driver/$4"
+provider=$5
 
 # Constants
 TARGET_ANDROID="android"
@@ -17,6 +18,10 @@ function error {
 }
 function isInstalled {
     command -v $1 >/dev/null 2>&1 || error "'$1' is not installed." 2
+}
+
+function setupAll {
+   export FLUTTER_TEST_PROVIDER_TO_USE=${provider}
 }
 
 function setupIos {
@@ -59,6 +64,8 @@ elif [[ ${target} = ${TARGET_IOS} ]]; then
         error "No bundle id specified. Use e.g. com.openxchange.oxcoi.dev" 3
     fi
 fi
+
+setupAll
 
 cd ..
 

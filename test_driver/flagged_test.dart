@@ -61,12 +61,18 @@ import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 import 'setup/test_constants.dart';
 
+SerializableFinder name2ContactFinder;
+
+SerializableFinder name3ContactFinder;
+
 void main() {
   FlutterDriver driver;
   setUpAll(() async {
     driver = await setupAndGetDriver();
     await createNewChat(driver, email2, name2);
-    await createNewChat(driver, email3, name3);
+    await createNewChat(driver, email1, name1);
+    name2ContactFinder = find.text(name2);
+    name3ContactFinder = find.text(name1);
   });
 
   tearDownAll(() async {
@@ -75,8 +81,6 @@ void main() {
 
   group('Flagged messages per chat', () {
     final flagUnFlag = L.getKey(L.messageActionFlagUnflag);
-    final name2ContactFinder = find.text(name2);
-    final name3ContactFinder = find.text(name3);
 
     test(': Add messages in chat "name2" and flag those.', () async {
       await driver.tap(name2ContactFinder);

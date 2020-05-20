@@ -70,22 +70,22 @@ void main() {
 
     test(': Add two new contacts in the contact list.', () async {
       await driver.tap(contactsFinder);
-      await addNewContact(driver, name3, email3);
+      await addNewContact(driver, name1, email1);
     });
 
     test(': Block one contact and check the blocking.', () async {
-      await blockOneContactFromContacts(driver, name3);
-      await driver.waitForAbsent(find.text(name3));
+      await blockOneContactFromContacts(driver, name1);
+      await driver.waitForAbsent(find.text(name1));
       navigateTo(driver, L.getKey(L.profile));
       await driver.scroll(find.byValueKey(keyUserProfileAppearanceIconSource), 0.0, -600.0, Duration(milliseconds: 500));
       await driver.tap(find.byValueKey(keyUserProfileBlockIconSource));
-      expect(await driver.getText(find.text(name3)), name3);
+      expect(await driver.getText(find.text(name1)), name1);
     });
 
     test(': Unblock one contact and check the unblocking.', () async {
-      await unblockOneContactFromBlockedContacts(driver, name3);
+      await unblockOneContactFromBlockedContacts(driver, name1);
       await navigateTo(driver, L.getPluralKey(L.contactP));
-      await driver.waitFor(find.text(name3));
+      await driver.waitFor(find.text(name1));
     });
   });
 }

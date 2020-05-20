@@ -4,6 +4,7 @@
 target=$1
 deviceId=$2
 appId=$3
+provider=$4
 
 # Constants
 TARGET_ANDROID="android"
@@ -37,6 +38,7 @@ function isInstalled {
 
 function setupAll {
     export FLUTTER_TEST_TARGET_PLATFORM=${target}
+    export FLUTTER_TEST_PROVIDER_TO_USE=${provider}
 }
 
 function setupIos {

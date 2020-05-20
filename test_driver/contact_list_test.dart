@@ -41,6 +41,7 @@
  */
 
 // Imports the Flutter Driver API.
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:test/test.dart';
@@ -51,6 +52,7 @@ import 'setup/test_constants.dart';
 
 void main() {
   FlutterDriver driver;
+
   setUpAll(() async {
     driver = await setupAndGetDriver();
   });
@@ -68,11 +70,11 @@ void main() {
     });
 
     test(': Add two new contacts in the contact list.', () async {
-      await addNewContact(driver, name3, email3);
+      await addNewContact(driver, name1, email1);
       await addNewContact(driver, name2, email2);
     });
     test(': Manage one created contact.', () async {
-      await manageContact(driver, name3, nameNewMe);
+      await manageContact(driver, name1, nameNewMe);
     });
 
     test(': Delete one contact.', () async {

@@ -63,19 +63,19 @@ void main() {
     const searchString = 'Douglas0';
 
     test(': Add three chats.', () async {
-      await createNewChat(driver, emailReal, nameMe);
+      await createNewChat(driver, providerEmail, nameMe);
       await createNewChat(driver, email2, name2);
-      await createNewChat(driver, email3, name3);
+      await createNewChat(driver, email1, name1);
     });
 
     test(': Type something and get it.', () async {
-      await chatTest(driver, messageIdOne, name3);
-      await callTest(driver);
+      await chatTest(driver, messageIdOne, name1);
+     // await callTest(driver);
       await driver.tap(pageBackFinder);
     });
 
     test(': Search chat.', () async {
-      await chatSearch(driver, name3, searchString);
+      await chatSearch(driver, name1, searchString);
     }, timeout: Timeout(Duration(seconds: 60)));
   });
 }

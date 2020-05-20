@@ -46,6 +46,8 @@ import 'package:flutter_driver/flutter_driver.dart';
 
 import 'helper_methods.dart';
 import 'test_constants.dart';
+import 'test_config_credential.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 const String adbPath = 'adb';
 
@@ -61,10 +63,12 @@ const environmentTargetPlatform = 'FLUTTER_TEST_TARGET_PLATFORM';
 const environmentTargetPlatformAndroid = 'android';
 const environmentTargetPlatformIos = 'ios';
 
-String targetPlatform;
-
 Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
   targetPlatform = Platform.environment[environmentTargetPlatform];
+  targetProvider = Platform.environment[environmentProvider];
+
+  initProviders();
+
   if (targetPlatform == environmentTargetPlatformAndroid) {
     await setupAndroid();
   }
@@ -77,9 +81,32 @@ Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
     } catch (error) {}
   }
   if (!isLogin) {
-    await getAuthentication(driver, providerCoiDebug, emailReal, passwordReal);
+    await getAuthentication(driver, targetProvider, providerEmail, providerPassword);
   }
   return driver;
+}
+
+Future initProviders()  async{
+  final providerName1 = "contact1";
+  final providerName2 = "contact2";
+
+  providers = await loadTestProviders();
+  for (var provider in providers) {
+    if (provider.username == targetProvider) {
+      providerEmail = provider.email;
+      realServer = provider.server;
+      providerPassword = provider.password;
+      for (var contact in provider.contacts) {
+        if (contact.id == providerName1) {
+          name1 = contact.username;
+          email1 = contact.email;
+        } else if (contact.id == providerName2) {
+          name2 = contact.username;
+          email2 = contact.email;
+        }
+      }
+    }
+  }
 }
 
 teardownDriver(FlutterDriver driver) {
@@ -108,4 +135,6 @@ Future getAuthentication(FlutterDriver driver, String provider, String email, St
   await driver.scroll(find.text(providerMailCom), 0, -600, Duration(milliseconds: 500));
   await driver.tap(providerFinder);
   await logIn(driver, email, password);
+  await driver.tap(find.byValueKey(keyDynamicNavigationNext));
+  await driver.tap(find.byValueKey(keyDynamicNavigationSkip));
 }

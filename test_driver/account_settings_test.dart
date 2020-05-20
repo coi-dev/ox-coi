@@ -71,9 +71,6 @@ void main() {
   });
 
   group('Test account settings', () {
-    const fakeIMAPCoiServer = 'mobile-coi.open-xchange.comm';
-    const fakeSMTPCoiServer = 'mobile-coi.open-xchange.comm';
-    const realServer = 'mobile-coi.open-xchange.com';
     final settingsManuelFormValidatableTextFormFieldPasswordFieldFinder = find.byValueKey(keySettingsManuelFormValidatableTextFormFieldPasswordField);
     final userAccountAdaptiveIconButtonIconCheckFinder = find.byValueKey(keyUserAccountAdaptiveIconButtonIconCheck);
     final settingsManuelFormValidatableTextFormFieldImapServerFieldFinder =
@@ -87,7 +84,7 @@ void main() {
 
     test(': Case real password and fake IMAP server.', () async {
       await driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
-      await driver.enterText(passwordReal);
+      await driver.enterText(providerPassword);
       await driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
       await driver.enterText(fakeIMAPCoiServer);
       await driver.tap(userAccountAdaptiveIconButtonIconCheckFinder);
@@ -110,7 +107,7 @@ void main() {
 
     test(': Case real password and real IMAP Server and real SMTP Server.', () async {
       await driver.tap(settingsManuelFormValidatableTextFormFieldPasswordFieldFinder);
-      await driver.enterText(passwordReal);
+      await driver.enterText(providerPassword);
       await driver.tap(settingsManuelFormValidatableTextFormFieldImapServerFieldFinder);
       await driver.enterText(realServer);
       await driver.tap(find.byValueKey(keySettingsManuelFormValidatableTextFormFieldSMTPServerField));

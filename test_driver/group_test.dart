@@ -76,7 +76,7 @@ void main() {
     test(': Create three cantacts in the conctact list and navigate back to chat.', () async {
       await navigateTo(driver, L.getPluralKey(L.contactP));
       await driver.tap(cancelFinder);
-      await addNewContact(driver, name3, email3);
+      await addNewContact(driver, name1, email1);
       await addNewContact(driver, name2, email2);
       await addNewContact(driver, nameNewMe, newTestContact03);
       navigateTo(driver, L.getPluralKey(L.chatP));
@@ -87,10 +87,10 @@ void main() {
     test(': Create group.', () async {
       await driver.tap(createChatFinder);
       await driver.tap(find.byValueKey(keyChatCreateGroupAddIcon));
-      await driver.tap(find.text(name3));
+      await driver.tap(find.text(name1));
       await driver.tap(find.text(name2));
       await driver.tap(find.byValueKey(keyChatCreateGroupParticipantsSummitIconButton));
-      expect(await driver.getText(find.text(name3)), name3);
+      expect(await driver.getText(find.text(name1)), name1);
       expect(await driver.getText(find.text(name2)), name2);
     });
 
@@ -143,7 +143,7 @@ void main() {
     test(': Check popupMenu: Test remove menu.', () async {
       await driver.tap(find.byValueKey(keyMoreButton11));
       await driver.tap(find.text(popupItemRemove));
-      await driver.waitForAbsent(find.text(name3));
+      await driver.waitForAbsent(find.text(name1));
       expect(await driver.getText(find.text(nameNewMe)), nameNewMe);
     });
 

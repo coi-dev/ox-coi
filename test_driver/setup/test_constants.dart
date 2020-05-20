@@ -43,22 +43,39 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
+import 'test_config_credential.dart';
+
 // Credentials
-const emailReal = 'enyakam@ox.com';
-const email2 = 'enyakam2@ox.com';
-const email3 = 'enyakam4@ox.com';
-const email4 = 'enyakam33@ox.com';
+String email2;
+String email1;
+String providerEmail;
+String providerPassword;
+List<Provider> providers;
+
+const email3 = 'enyakam33@ox.com';
 const mailInvalid = 'enyakam3@ox.com3';
-const passwordReal = 'secret';
 const passwordInvalid = 'secret2';
 
 // Login provider
+const environmentProvider = 'FLUTTER_TEST_PROVIDER_TO_USE';
 const providerMailCom = 'Mail.com';
 const providerCoiDebug = 'Debug (mobile-qa)';
+final providerDemoBetaEnvironment = "Demo / Beta Environment";
+
+// IMap server configuration
+String realServer;
+final fakeIMAPCoiServer="fakeIMAPCoiServer";
+final fakeSMTPCoiServer="fakeIMAPCoiServer";
+
+// Platform info
+String targetPlatform;
+String targetProvider;
+
 
 // User names
-const name2 = 'Douglas02';
-const name3 = 'Douglas01';
+String name1;
+String name2;
+
 const nameMe = 'Me';
 const nameNewMe = 'newMe';
 
@@ -68,15 +85,16 @@ const textName = 'Name';
 const textSavedMessages = 'Saved messages';
 
 // Input
-const inputHelloWorld = 'Hello world, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. ';
-const inputTestMessage = 'Test message, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Tessssss Messageeeee Twoooooooooooooo. ';
+const inputHelloWorld =
+    'Hello world, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrlllllddddddddoooooooooooooooooo. ';
+const inputTestMessage =
+    'Test message, hello really. Hi at world. Helllllloooo Woooooooorrrrllllldddddddd. Helllllloooo Woooooooorrrrllllldddddddd. Tessssss Messageeeee Twooooooooooooooooooooooooooooooo. ';
 
 // Message Ids
 const messageIdOne = 10;
 const messageIdTwo = 11;
 const messageIdThree = 12;
 const messageIdFour = 13;
-
 
 // Finders
 final pageBackFinder = find.byValueKey(keyBackOrCloseButton);

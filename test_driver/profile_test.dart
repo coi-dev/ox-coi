@@ -50,8 +50,12 @@ import 'setup/test_constants.dart';
 import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
+const environmentProvider = 'PROVIDER_TO_USE';
+String targetProvider;
+
 void main() {
   FlutterDriver driver;
+
   setUpAll(() async {
     driver = await setupAndGetDriver();
   });
@@ -63,13 +67,17 @@ void main() {
   group('Test profile.', () {
     final testUserNameUserProfile = 'EDN tester';
 
+
     test(': Get and edit profile.', () async {
+
       await driver.tap(profileFinder);
-      expect(await driver.getText(find.byValueKey(keyProfileHeaderText)), emailReal);
+
+      expect(await driver.getText(find.byValueKey(keyProfileHeaderText)), providerEmail);
       await driver.tap(find.byValueKey(keyProfileHeaderAdaptiveIconButton));
       await driver.tap(find.byValueKey(keyUserSettingsUsernameLabel));
       await driver.enterText(testUserNameUserProfile);
       await driver.tap(userSettingsSubmitFinder);
+
     });
 
     test(': Check profile after change.', () async {

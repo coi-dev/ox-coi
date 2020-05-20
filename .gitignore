@@ -36,6 +36,7 @@ ios/Flutter/Flutter.podspec
 # Tests
 screenshots/
 /test_driver/logs/log.txt
+/test_driver/setup/credential.json
 
 # Android related
 **/android/**/gradle-wrapper.jar

@@ -86,7 +86,7 @@ void main() {
       await driver.tap(cancelFinder);
       var actualMeContact = await driver.getText(meContactFinder);
       expect(actualMeContact, nameMe);
-      await addNewContact(driver, name3, email3);
+      await addNewContact(driver, name1, email3);
     });
 
     test(': Create chat and write something.', () async {
@@ -111,7 +111,7 @@ void main() {
     });
 
     test(': Forward message.', () async {
-      await forwardMessageTo(driver, name3, forward);
+      await forwardMessageTo(driver, name1, forward);
       await driver.waitFor(finderMessageThree);
       await driver.tap(pageBackFinder);
       await driver.tap(chatSavedMessagesFinder);

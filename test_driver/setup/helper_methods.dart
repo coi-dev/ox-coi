@@ -155,6 +155,7 @@ Future unflagMessage(FlutterDriver driver,String flagUnFlag, int messageIdToUnFl
   await driver.waitFor(messageToUnFlaggedFinder);
   await performLongPress(driver, messageToUnFlaggedFinder);
   await driver.tap(find.text(flagUnFlag));
+
 }
 
 Future flaggedMessage(FlutterDriver driver, String flagUnFlag, SerializableFinder messageToFlaggedFinder) async {
@@ -217,7 +218,6 @@ Future createNewChat(FlutterDriver driver, String chatEmail, String chatName) as
 Future logIn(FlutterDriver driver, String email, String password) async {
   final providerEmailFieldFinder = find.byValueKey(keyProviderSignInEmailTextField);
   final providerPasswordFieldFinder = find.byValueKey(keyProviderSignInPasswordTextField);
-
   await driver.tap(providerEmailFieldFinder);
   await driver.enterText(email);
   await driver.tap(providerPasswordFieldFinder);
