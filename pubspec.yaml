@@ -40,7 +40,9 @@ dependencies:
   image_picker: ^0.6.3+1
   json_annotation: ^3.0.1
   logging: ^0.11.4
-  metadata_fetch: ^0.3.1
+  metadata_fetch:
+    git:
+      url: https://github.com/open-xchange/metadata_fetch
   mime: ^0.9.6+3
   open_file: ^3.0.0
   package_info: ^0.4.0+13

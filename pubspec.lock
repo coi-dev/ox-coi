@@ -519,9 +519,11 @@ packages:
   metadata_fetch:
     dependency: "direct main"
     description:
-      name: metadata_fetch
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "9e2f1494aae6871715b7b850aa6f071a1ee4c13e"
+      url: "https://github.com/open-xchange/metadata_fetch"
+    source: git
     version: "0.3.1"
   mime:
     dependency: "direct main"
