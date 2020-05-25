@@ -52,8 +52,8 @@ import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
-import 'package:ox_coi/src/message/message_list_bloc.dart';
-import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/message_list/message_list_bloc.dart';
+import 'package:ox_coi/src/message_list/message_list_event_state.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 
 import 'chat_list.dart' as ChatListWidget;
@@ -117,7 +117,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
           RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChanged);
       _chatRepository.addListener(_repositoryStreamHandler);
       _messageListBloc.listen((state) async {
-        if (state is MessagesStateSuccess) {
+        if (state is MessageListStateSuccess) {
           Context context = Context();
           var inviteContactList = await getInviteContactList(state);
           await createChatsFromKnownContactsInvites(context, inviteContactList);
@@ -134,7 +134,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  Future<LinkedHashMap<int, int>> getInviteContactList(MessagesStateSuccess state) async {
+  Future<LinkedHashMap<int, int>> getInviteContactList(MessageListStateSuccess state) async {
     var contactList = LinkedHashMap<int, int>();
     await Future.forEach(state.messageIds, (messageId) async {
       ChatMsg message = _inviteMessageListRepository.get(messageId);
@@ -171,7 +171,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   }
 
   Future setupInvites() async {
-    _messageListBloc.add(RequestMessages(chatId: Chat.typeInvite));
+    _messageListBloc.add(RequestMessageList(chatId: Chat.typeInvite));
   }
 
   ChatListItemWrapper createChatListItemWrapper(List<int> ids, List<int> lastUpdateValues, [List<int> types]) {

@@ -48,7 +48,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
-import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/invite/invite_bloc.dart';
 import 'package:ox_coi/src/invite/invite_event_state.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -56,6 +55,8 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/main_bloc.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root_child.dart';
+import 'package:ox_coi/src/message_list/message_list_bloc.dart';
+import 'package:ox_coi/src/message_list/message_list_flagged.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
@@ -157,7 +158,9 @@ class _ProfileState extends State<UserProfile> {
                           iconBackground: CustomTheme.of(context).flagIcon,
                           onTap: () => _navigation.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Flagged()),
+                            MaterialPageRoute(
+                              builder: (context) => MessageListFlagged(),
+                            ),
                           ),
                           key: Key(keyUserProfileFlagIconSource),
                         ),

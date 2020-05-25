@@ -51,11 +51,12 @@ import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/invite/invite_mixin.dart';
-import 'package:ox_coi/src/message/message_list_event_state.dart';
 import 'package:ox_coi/src/utils/video.dart';
 
+import 'message_list_event_state.dart';
+
 class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with InviteMixin {
-  static final _logger = Logger("message_list_bloc");
+  final _logger = Logger("message_list_bloc");
 
   RepositoryMultiEventStreamHandler _messageListRepositoryStreamHandler;
   RepositoryMultiEventStreamHandler _messageRepositoryStreamHandler;
@@ -64,54 +65,49 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   int _messageId;
   String _cacheFilePath = "";
   bool _listenersRegistered = false;
+  bool _handlesFlaggedMessages = false;
 
   @override
-  MessageListState get initialState => MessagesStateInitial();
+  MessageListState get initialState => MessageListStateInitial();
 
   @override
   Stream<MessageListState> mapEventToState(MessageListEvent event) async* {
-    if (event is RequestMessages) {
-      yield MessagesStateLoading();
+    if (event is RequestMessageList || event is RequestFlaggedMessageList) {
+      yield MessageListStateLoading();
       try {
-        _chatId = event.chatId;
-
-        if (isInvite(_chatId, event.messageId)) {
-          _messageId = event.messageId;
+        if (event is RequestMessageList) {
+          _handlesFlaggedMessages = false;
+          _setupBloc(event.chatId, event.messageId);
+          yield* _setupMessagesAsync();
+        } else if (event is RequestFlaggedMessageList) {
+          _handlesFlaggedMessages = true;
+          _setupBloc(event.chatId);
+          yield* _setupFlaggedMessagesAsync();
         }
-        _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
-        _registerListeners();
-        _setupMessages();
-
       } catch (error) {
-        yield MessagesStateFailure(error: error.toString());
+        _logger.warning(error.toString());
+        yield MessageListStateFailure(error: error.toString());
       }
-
-    } else if (event is UpdateMessages) {
+    } else if (event is UpdateMessageList) {
       try {
-        _setupMessages();
+        if (_handlesFlaggedMessages) {
+          yield* _setupFlaggedMessagesAsync();
+        } else {
+          yield* _setupMessagesAsync();
+        }
       } catch (error) {
-        yield MessagesStateFailure(error: error.toString());
+        yield MessageListStateFailure(error: error.toString());
       }
-
-    } else if (event is MessagesLoaded) {
-      yield MessagesStateSuccess(
-        messageIds: event.messageIds,
-        messageLastUpdateValues: event.messageLastUpdateValues,
-        dateMarkerIds: event.dateMarkerIds,
-        messageChangedStream: _messageRepositoryStreamHandler.streamController.stream,
-      );
-
     } else if (event is SendMessage) {
-      if (event.path != null) {
-        _submitAttachmentMessage(event.path, event.fileType, event.isShared, event.text);
+      if (_hasAttachment(event)) {
+        _submitAttachmentMessageAsync(event.path, event.fileType, event.isShared, event.text);
       } else {
-        _submitMessage(event.text);
+        _submitMessageAsync(event.text);
       }
-
     } else if (event is DeleteCacheFile) {
       _deleteCacheFile(event.path);
-    } else if (event is RetrySendingPendingMessages) {
-      _retrySendingPendingMessages();
+    } else if (event is RetrySendPendingMessages) {
+      _retrySendPendingMessagesAsync();
     }
   }
 
@@ -119,6 +115,15 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   Future<void> close() {
     _unregisterListeners();
     return super.close();
+  }
+
+  void _setupBloc(int chatId, [int messageId]) {
+    _chatId = chatId;
+    _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
+    if (isInvite(_chatId, messageId)) {
+      _messageId = messageId;
+    }
+    _registerListeners();
   }
 
   void _registerListeners() {
@@ -132,7 +137,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       _messageListRepository.addListener(_messageListRepositoryStreamHandler);
       _messageRepositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.replay,
-        [Event.msgDelivered, Event.msgRead, Event.msgFailed],
+        [Event.msgDelivered, Event.msgRead, Event.msgFailed, Event.msgsChanged],
         _onMessageChanged,
       );
       _messageListRepository.addListener(_messageRepositoryStreamHandler);
@@ -150,11 +155,11 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
   void _onMessageListChanged(event) {
     if (relevantForChat(event)) {
       _deleteCacheFile(_cacheFilePath);
-      add(UpdateMessages());
+      add(UpdateMessageList());
     }
   }
 
-  bool relevantForChat(event) => event != null && (event.data1 == _chatId || event.data1 == 0);
+  bool relevantForChat(event) => event.data1 == null || (event.data1 == _chatId || event.data1 == 0);
 
   void _onMessageChanged([Event event]) async {
     if (relevantForChat(event)) {
@@ -173,65 +178,97 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     }
   }
 
-  void _setupMessages() async {
-    List<int> dateMakerIds = List();
-    Context context = Context();
-    List<int> messageIds = List.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
-    for (int index = 0; index < messageIds.length; index++) {
-      int previousIndex = index - 1;
-      if (previousIndex >= 0 && messageIds[previousIndex] == ChatMsg.idDayMarker) {
-        dateMakerIds.add(messageIds[index]);
-      }
-    }
-    messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
+  Stream<MessageListState> _setupMessagesAsync() async* {
+    final context = Context();
+    final messageIds = List<int>.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
+    final dateMakerIds = _setupDayMarkerList(messageIds);
+
     _messageListRepository.putIfAbsent(ids: messageIds);
     if (isInvite(_chatId, _messageId)) {
-      var messageIds = List<int>();
-      var lastUpdateValues = List<int>();
-      int inviteContactId = await getContactIdFromMessage(_messageId);
+      final messageIds = List<int>();
+      final lastUpdateValues = List<int>();
+      final inviteContactId = await getContactIdFromMessage(_messageId);
       await Future.forEach(_messageListRepository.getAll(), (ChatMsg message) async {
-        var contactId = await message.getFromId();
+        final contactId = await message.getFromId();
         if (inviteContactId == contactId) {
           messageIds.add(message.id);
           lastUpdateValues.add(message.lastUpdate);
         }
       });
-      add(MessagesLoaded(
-          messageIds: messageIds.reversed.toList(growable: false),
-          messageLastUpdateValues: lastUpdateValues.reversed.toList(growable: false),
-          dateMarkerIds: dateMakerIds));
+
+      yield MessageListStateSuccess(
+        messageIds: messageIds.reversed.toList(growable: false),
+        messageLastUpdateValues: lastUpdateValues.reversed.toList(growable: false),
+        dateMarkerIds: dateMakerIds,
+        messageChangedStream: _messageRepositoryStreamHandler.streamController.stream,
+        handlesFlaggedMessages: _handlesFlaggedMessages,
+      );
     } else {
-      add(
-        MessagesLoaded(
-            messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
-            messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
-            dateMarkerIds: dateMakerIds),
+      yield MessageListStateSuccess(
+        messageIds: _messageListRepository.getAllIds().reversed.toList(growable: false),
+        messageLastUpdateValues: _messageListRepository.getAllLastUpdateValues().reversed.toList(growable: false),
+        dateMarkerIds: dateMakerIds,
+        messageChangedStream: _messageRepositoryStreamHandler.streamController.stream,
+        handlesFlaggedMessages: _handlesFlaggedMessages,
       );
     }
   }
 
-  void _submitMessage(String text) async {
-    Context context = Context();
+  List<int> _setupDayMarkerList(List messageIds) {
+    final dateMakerIds = List<int>();
+    for (int index = 0; index < messageIds.length; index++) {
+      final previousIndex = index - 1;
+      if (previousIndex >= 0 && messageIds[previousIndex] == ChatMsg.idDayMarker) {
+        dateMakerIds.add(messageIds[index]);
+      }
+    }
+    messageIds.removeWhere((id) => id == ChatMsg.idDayMarker);
+    return dateMakerIds;
+  }
+
+  Stream<MessageListState> _setupFlaggedMessagesAsync() async* {
+    final context = Context();
+    final flaggedMessageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
+
+    final chatMessageList = List.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
+    final flaggedMessageList = List<int>.from(await context.getChatMessages(Chat.typeStarred, Context.chatListAddDayMarker));
+    flaggedMessageListRepository.putIfAbsent(ids: flaggedMessageList.where((id) => id != ChatMsg.idDayMarker).toList());
+    flaggedMessageList.removeWhere((id) => !chatMessageList.contains(id));
+    final dateMakerIds = _setupDayMarkerList(flaggedMessageList);
+
+    yield MessageListStateSuccess(
+      messageIds: flaggedMessageList.reversed.toList(growable: false),
+      messageLastUpdateValues: _messageListRepository.getLastUpdateValuesForIds(flaggedMessageList).reversed.toList(growable: false),
+      dateMarkerIds: dateMakerIds,
+      messageChangedStream: null,
+      handlesFlaggedMessages: _handlesFlaggedMessages,
+    );
+  }
+
+  bool _hasAttachment(SendMessage event) => event.path != null;
+
+  void _submitMessageAsync(String text) async {
+    final context = Context();
     await context.createChatMessage(_chatId, text);
   }
 
-  void _submitAttachmentMessage(String path, int fileType, bool isShared, [String text]) async {
-    Context _context = Context();
+  void _submitAttachmentMessageAsync(String path, int fileType, bool isShared, [String text]) async {
+    final context = Context();
     String mimeType = lookupMimeType(path);
     int duration = 0;
+
     if (isShared) {
       _cacheFilePath = path;
     }
-
     if (fileType == ChatMsg.typeVideo) {
       duration = await getDurationInMilliseconds(path);
     }
 
-    await _context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, duration, text);
+    await context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, duration, text);
   }
 
-  void _retrySendingPendingMessages() async {
-    Context context = Context();
+  void _retrySendPendingMessagesAsync() async {
+    final context = Context();
     await context.retrySendingPendingMessages();
   }
 }

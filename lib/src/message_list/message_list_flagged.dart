@@ -40,44 +40,63 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
+import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/invite/invite_mixin.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
+import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
-abstract class FlaggedEvent {}
+import 'message_list.dart';
+import 'message_list_bloc.dart';
+import 'message_list_event_state.dart';
 
-class RequestFlaggedMessages extends FlaggedEvent {
+class MessageListFlagged extends StatefulWidget {
   final int chatId;
 
-  RequestFlaggedMessages({@required this.chatId});
+  const MessageListFlagged({Key key, this.chatId = Chat.typeStarred}) : super(key: key);
+
+  @override
+  _MessageListFlaggedState createState() => _MessageListFlaggedState();
 }
 
-class FlaggedMessagesLoaded extends FlaggedEvent {
-  final List<int> messageIds;
-  final List<int> messageLastUpdateValues;
-  final List<int> dateMarkerIds;
+class _MessageListFlaggedState extends State<MessageListFlagged> with InviteMixin {
+  final _navigation = Navigation();
+  final _scrollController = ScrollController();
+  final _messageListBloc = MessageListBloc();
 
-  FlaggedMessagesLoaded({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
-}
+  @override
+  void initState() {
+    super.initState();
+    _navigation.current = Navigatable(Type.flagged);
+    _messageListBloc.add(RequestFlaggedMessageList(chatId: widget.chatId));
+  }
 
-class UpdateMessages extends FlaggedEvent {}
+  @override
+  void dispose() {
+    super.dispose();
+    _messageListBloc.close();
+  }
 
-abstract class FlaggedState {}
-
-class FlaggedStateInitial extends FlaggedState {}
-
-class FlaggedStateLoading extends FlaggedState {}
-
-class FlaggedStateSuccess extends FlaggedState {
-  final List<int> messageIds;
-  final List<int> messageLastUpdateValues;
-  final List<int> dateMarkerIds;
-
-  FlaggedStateSuccess({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
-}
-
-class FlaggedStateProvidersLoaded extends FlaggedState {}
-
-class FlaggedStateFailure extends FlaggedState {
-  final String error;
-
-  FlaggedStateFailure({@required this.error});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: DynamicAppBar(
+        title: L10n.get(L.chatFlagged),
+        leading: AppBarBackButton(context: context),
+      ),
+      body: BlocProvider.value(
+        value: _messageListBloc,
+        child: MessageList(
+          scrollController: _scrollController,
+          chatId: widget.chatId,
+          emptyListTextTranslation: L.chatNoFlagged,
+        ),
+      ),
+    );
+  }
 }

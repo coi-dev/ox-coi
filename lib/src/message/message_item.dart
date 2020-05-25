@@ -55,7 +55,7 @@ import 'package:ox_coi/src/message/message_attachment_event_state.dart';
 import 'package:ox_coi/src/message/message_builder.dart';
 import 'package:ox_coi/src/message/message_item_bloc.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
-import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/message_list/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/settings/settings_autocrypt_import.dart';
@@ -64,8 +64,8 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/text_field_handling.dart';
 import 'package:ox_coi/src/widgets/dialog_builder.dart';
 
+import '../message_list/message_list_bloc.dart';
 import 'message_action.dart';
-import 'message_list_bloc.dart';
 import 'message_received.dart';
 import 'message_sent.dart';
 import 'message_special.dart';
@@ -125,8 +125,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
   void initState() {
     super.initState();
     _messageItemBloc = MessageItemBloc(messageListBloc: BlocProvider.of<MessageListBloc>(context));
-    _messageItemBloc
-        .add(LoadMessage(
+    _messageItemBloc.add(LoadMessage(
       chatId: widget.chatId,
       messageId: widget.messageId,
       nextMessageId: widget.nextMessageId,
@@ -207,8 +206,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
                 GestureDetector(
                   onTap: () => messageStateData.hasFile ? _onTap(messageStateData.isSetupMessage, messageStateData.attachmentStateData.type) : null,
                   onTapDown: _onTapDown,
-                  onLongPress: () => _onLongPress(
-                      messageStateData),
+                  onLongPress: () => _onLongPress(messageStateData),
                   child: Container(
                     padding: const EdgeInsets.only(bottom: messagesVerticalOuterPadding),
                     child: message,
@@ -224,7 +222,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
     );
   }
 
-  _deleteMessage()=> _messageItemBloc.add(DeleteMessage(id: widget.messageId));
+  _deleteMessage() => _messageItemBloc.add(DeleteMessage(id: widget.messageId));
 
   _onTap(bool isSetupMessage, int attachmentType) {
     if (isSetupMessage) {
@@ -264,7 +262,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
       actions = _messagePendingActions;
     } else if (hasFile) {
       actions = _messageAttachmentActions;
-    }else {
+    } else {
       actions = _messageActions;
     }
     resetGlobalFocus(context);
@@ -308,7 +306,7 @@ class _MessageItemState extends State<MessageItem> with AutomaticKeepAliveClient
           _attachmentBloc.add(ShareAttachment(chatId: widget.chatId, messageId: widget.messageId));
           break;
         case MessageActionTag.retry:
-          BlocProvider.of<MessageListBloc>(context).add(RetrySendingPendingMessages());
+          BlocProvider.of<MessageListBloc>(context).add(RetrySendPendingMessages());
           break;
         case MessageActionTag.info:
           _showErrorDialog(messageInfo);

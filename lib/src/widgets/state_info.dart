@@ -113,7 +113,7 @@ class EmptyListInfo extends StatelessWidget {
   final String infoText;
   final String imagePath;
 
-  EmptyListInfo({this.infoText, this.imagePath});
+  EmptyListInfo({Key key, this.infoText, this.imagePath}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

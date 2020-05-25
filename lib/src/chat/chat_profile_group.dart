@@ -50,9 +50,9 @@ import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
-import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/message_list/message_list_flagged.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
@@ -120,7 +120,12 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                         icon: IconSource.flag,
                         text: L10n.get(L.settingItemFlaggedTitle),
                         iconBackground: CustomTheme.of(context).flagIcon,
-                        onTap: () => _navigation.push(context, MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId))),
+                        onTap: () => _navigation.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MessageListFlagged(chatId: widget.chatId),
+                          ),
+                        ),
                       ),
                       ListGroupHeader(
                         text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
@@ -133,8 +138,12 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
                           text: L10n.get(L.participantAdd),
                           key: Key(keyChatProfileGroupAddParticipant),
                           iconBackground: CustomTheme.of(context).accent,
-                          onTap: () => _navigation.push(context,
-                              MaterialPageRoute(builder: (context) => ChatAddGroupParticipants(chatId: widget.chatId, contactIds: state.contactIds))),
+                          onTap: () => _navigation.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatAddGroupParticipants(chatId: widget.chatId, contactIds: state.contactIds),
+                            ),
+                          ),
                         ),
                       ),
                       _buildGroupMemberList(state, chatState.isRemoved),

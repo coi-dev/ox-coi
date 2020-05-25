@@ -62,7 +62,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachmentState> {
   static const platform = const MethodChannel(SharedData.sharingChannelName);
-  static final _logger = Logger("message_attachment_bloc");
+  final _logger = Logger("message_attachment_bloc");
   Repository<Core.ChatMsg> _messageListRepository;
 
   @override

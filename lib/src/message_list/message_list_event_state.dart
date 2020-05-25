@@ -44,22 +44,20 @@ import 'package:meta/meta.dart';
 
 abstract class MessageListEvent {}
 
-class RequestMessages extends MessageListEvent {
+class RequestMessageList extends MessageListEvent {
   final int chatId;
   final int messageId;
 
-  RequestMessages({@required this.chatId, this.messageId});
+  RequestMessageList({@required this.chatId, this.messageId});
 }
 
-class UpdateMessages extends MessageListEvent {}
+class RequestFlaggedMessageList extends MessageListEvent {
+  final int chatId;
 
-class MessagesLoaded extends MessageListEvent {
-  final List<int> messageIds;
-  final List<int> messageLastUpdateValues;
-  final List<int> dateMarkerIds;
-
-  MessagesLoaded({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
+  RequestFlaggedMessageList({@required this.chatId});
 }
+
+class UpdateMessageList extends MessageListEvent {}
 
 class SendMessage extends MessageListEvent {
   final String text;
@@ -76,30 +74,32 @@ class DeleteCacheFile extends MessageListEvent {
   DeleteCacheFile({this.path});
 }
 
-class RetrySendingPendingMessages extends MessageListEvent {}
+class RetrySendPendingMessages extends MessageListEvent {}
 
 abstract class MessageListState {}
 
-class MessagesStateInitial extends MessageListState {}
+class MessageListStateInitial extends MessageListState {}
 
-class MessagesStateLoading extends MessageListState {}
+class MessageListStateLoading extends MessageListState {}
 
-class MessagesStateSuccess extends MessageListState {
+class MessageListStateSuccess extends MessageListState {
   final List<int> messageIds;
   final List<int> messageLastUpdateValues;
   final Stream messageChangedStream;
+  final bool handlesFlaggedMessages;
   final List<int> dateMarkerIds;
 
-  MessagesStateSuccess({
+  MessageListStateSuccess({
     @required this.messageIds,
     @required this.messageLastUpdateValues,
     @required this.messageChangedStream,
+    @required this.handlesFlaggedMessages,
     this.dateMarkerIds,
   });
 }
 
-class MessagesStateFailure extends MessageListState {
+class MessageListStateFailure extends MessageListState {
   final String error;
 
-  MessagesStateFailure({@required this.error});
+  MessageListStateFailure({@required this.error});
 }

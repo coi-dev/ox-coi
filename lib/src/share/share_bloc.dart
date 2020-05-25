@@ -87,6 +87,13 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     }
   }
 
+  @override
+  Future<void> close() {
+    _chatListBloc.close();
+    _contactListBloc.close();
+    return super.close();
+  }
+
   void createShareList() {
     List<int> _chatIds;
     List<int> _completeList = List();

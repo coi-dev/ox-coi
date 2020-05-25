@@ -54,9 +54,10 @@ import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
-import 'package:ox_coi/src/flagged/flagged.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/message_list/message_list_bloc.dart';
+import 'package:ox_coi/src/message_list/message_list_flagged.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
@@ -64,12 +65,12 @@ import 'package:ox_coi/src/widgets/profile_body.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 
-class ChatProfileOneToOne extends StatefulWidget {
+class ChatProfileSingle extends StatefulWidget {
   final int chatId;
   final int contactId;
   final bool isSelfTalk;
 
-  ChatProfileOneToOne({
+  ChatProfileSingle({
     Key key,
     @required this.chatId,
     @required this.isSelfTalk,
@@ -77,10 +78,10 @@ class ChatProfileOneToOne extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ChatProfileOneToOneState createState() => _ChatProfileOneToOneState();
+  _ChatProfileSingleState createState() => _ChatProfileSingleState();
 }
 
-class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
+class _ChatProfileSingleState extends State<ChatProfileSingle> {
   ContactItemBloc _contactItemBloc = ContactItemBloc();
   Navigation _navigation = Navigation();
 
@@ -140,7 +141,9 @@ class _ChatProfileOneToOneState extends State<ChatProfileOneToOne> {
             iconBackground: CustomTheme.of(context).flagIcon,
             onTap: () => _navigation.push(
               context,
-              MaterialPageRoute(builder: (context) => Flagged(chatId: widget.chatId)),
+              MaterialPageRoute(
+                builder: (context) => MessageListFlagged(chatId: widget.chatId),
+              ),
             ),
           ),
           SettingsItem(

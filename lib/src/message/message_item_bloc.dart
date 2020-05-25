@@ -45,6 +45,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
@@ -54,12 +55,14 @@ import 'package:ox_coi/src/extensions/string_linkpreview.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_item_event_state.dart';
+import 'package:ox_coi/src/message_list/message_list_event_state.dart';
 import 'package:ox_coi/src/utils/url_preview_cache.dart';
 
-import 'message_list_bloc.dart';
-import 'message_list_event_state.dart';
+import '../message_list/message_list_bloc.dart';
 
 class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
+  final _logger = Logger("message_item_bloc");
+
   final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
   final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
   final MessageListBloc messageListBloc;
@@ -76,7 +79,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     final listensToMessageChanges = messageListBloc != null;
     if (listensToMessageChanges) {
       _messageListBlocSubscription = messageListBloc.listen((state) {
-        if (state is MessagesStateSuccess) {
+        if (state is MessageListStateSuccess) {
           _messageChangedStream ??= state.messageChangedStream;
         }
       });
@@ -114,13 +117,15 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       bool isGroup;
       if (Chat.typeInvite == chatId) {
         isGroup = false;
+      } else if (Chat.typeStarred == chatId) {
+        isGroup = true;
       } else {
         final chatRepository = RepositoryManager.get(RepositoryType.chat);
         Chat chat = chatRepository.get(chatId);
         isGroup = await chat.isGroup();
       }
 
-      final showContact = isGroup || chatId == Chat.typeInvite;
+      final showContact = isGroup || Chat.typeInvite == chatId;
       if (showContact) {
         await _setupContact();
       }
@@ -202,10 +207,9 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         urlPreviewData: urlPreviewData,
       );
       yield MessageItemStateSuccess(messageStateData: messageStateData);
-      if (isOutgoing && state != ChatMsg.messageStateReceived) {
-        _registerListeners();
-      }
+      _registerListeners();
     } catch (error) {
+      _logger.warning(error.toString());
       yield MessageItemStateFailure(error: error.toString());
     }
   }
@@ -292,9 +296,6 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
           final eventMessageState = event.hasType(Event.msgDelivered) ? ChatMsg.messageStateDelivered : ChatMsg.messageStateReceived;
           final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(state: eventMessageState);
           add(MessageUpdated(messageStateData: messageStateData));
-          if (eventMessageState == ChatMsg.messageStateReceived) {
-            _unregisterListeners();
-          }
         }
       } else if (event.hasType(Event.msgFailed)) {
         final eventMessageState = ChatMsg.messageStateFailed;
@@ -302,10 +303,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         final String messageInfo = await context.getMessageInfo(_messageId);
         await _setupContact();
         final chatStateData = await _getChatDataAsync();
-        final messageStateData = (state as MessageItemStateSuccess)
-            .messageStateData
-            .copyWith(state: eventMessageState, messageInfo: messageInfo, chatStateData: chatStateData);
-        _unregisterListeners();
+        final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(
+              state: eventMessageState,
+              messageInfo: messageInfo,
+              chatStateData: chatStateData,
+            );
         add(MessageUpdated(messageStateData: messageStateData));
       } else if (event.hasType(Event.msgsChanged) && state is MessageItemStateSuccess) {
         var flagged = await _messageListRepository.get(eventMessageId)?.isStarred();

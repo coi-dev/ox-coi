@@ -68,9 +68,9 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_bloc.dart';
 import 'package:ox_coi/src/lifecycle/lifecycle_event_state.dart';
-import 'package:ox_coi/src/message/message_list.dart';
-import 'package:ox_coi/src/message/message_list_bloc.dart';
-import 'package:ox_coi/src/message/message_list_event_state.dart';
+import 'package:ox_coi/src/message_list/message_list.dart';
+import 'package:ox_coi/src/message_list/message_list_bloc.dart';
+import 'package:ox_coi/src/message_list/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
@@ -261,7 +261,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           listener: (context, state) {
             if (state is LifecycleStateSuccess) {
               if (state.state == AppLifecycleState.resumed.toString()) {
-                _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
+                _messageListBloc.add(RequestMessageList(chatId: widget.chatId, messageId: widget.messageId));
               }
             }
           },
@@ -270,7 +270,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
           bloc: _chatBloc,
           listener: (context, state) {
             if (state is ChatStateSuccess) {
-              _messageListBloc.add(RequestMessages(chatId: widget.chatId, messageId: widget.messageId));
+              _messageListBloc.add(RequestMessageList(chatId: widget.chatId, messageId: widget.messageId));
               if (!widget.newPath.isNullOrEmpty()) {
                 _messageListBloc.add(SendMessage(path: widget.newPath, fileType: widget.newFileType, text: widget.newMessage));
               } else if (!widget.newMessage.isNullOrEmpty()) {
@@ -285,7 +285,7 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
             if (BlocProvider.of<LifecycleBloc>(context).currentBackgroundState == AppLifecycleState.paused.toString()) {
               return;
             }
-            if (state is MessagesStateSuccess) {
+            if (state is MessageListStateSuccess) {
               _chatChangeBloc.add(ChatMarkMessagesSeen(messageIds: state.messageIds));
             }
           },
@@ -351,15 +351,15 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                 Flexible(
                   child: MultiBlocProvider(
                     providers: [
-                      BlocProvider<MessageListBloc>.value(
-                        value: _messageListBloc,
-                      ),
-                      BlocProvider<ChatBloc>.value(
-                        value: _chatBloc,
-                      ),
+                      BlocProvider<ChatBloc>.value(value: _chatBloc),
+                      BlocProvider<MessageListBloc>.value(value: _messageListBloc),
                     ],
                     child: Stack(children: <Widget>[
-                      MessageList(scrollController: _scrollController, chatId: widget.chatId),
+                      MessageList(
+                        scrollController: _scrollController,
+                        chatId: widget.chatId,
+                        emptyListTextTranslation: L.chatNewPlaceholder,
+                      ),
                       Visibility(
                         visible: _composingAudioTimer != null,
                         child: Positioned(
@@ -731,8 +731,10 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     _navigation.push(
       context,
       MaterialPageRoute(builder: (context) {
-        return BlocProvider.value(
-          value: _chatBloc,
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<ChatBloc>.value(value: _chatBloc),
+          ],
           child: ChatProfile(chatId: widget.chatId, messageId: widget.messageId),
         );
       }),

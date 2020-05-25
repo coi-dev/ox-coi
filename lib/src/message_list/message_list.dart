@@ -42,28 +42,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
-import 'message_item.dart';
+import '../message/message_item.dart';
 import 'message_list_bloc.dart';
 import 'message_list_event_state.dart';
 
 class MessageList extends StatelessWidget {
   final ScrollController scrollController;
   final int chatId;
+  final List<String> emptyListTextTranslation;
 
-  MessageList({@required this.scrollController, @required this.chatId});
+  MessageList({@required this.scrollController, @required this.chatId, @required this.emptyListTextTranslation});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<MessageListBloc>(context),
+    return BlocBuilder<MessageListBloc, MessageListState>(
       builder: (context, state) {
-        if (state is MessagesStateSuccess) {
+        if (state is MessageListStateSuccess) {
           if (state.messageIds.length > 0) {
             return ListView.custom(
               controller: scrollController,
@@ -88,6 +87,7 @@ class MessageList extends StatelessWidget {
                       messageId: messageId,
                       nextMessageId: nextMessageId,
                       hasDateMarker: hasDateMarker,
+                      isFlaggedView: state.handlesFlaggedMessages,
                     );
                   },
                   childCount: state.messageIds.length,
@@ -99,9 +99,9 @@ class MessageList extends StatelessWidget {
             );
           } else {
             return EmptyListInfo(
-              infoText: L10n.get(L.chatNewPlaceholder),
+              infoText: L10n.get(emptyListTextTranslation),
               imagePath: "assets/images/empty_chat.png",
-            );;
+            );
           }
         } else {
           return StateInfo(showLoading: true);

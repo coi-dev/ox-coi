@@ -58,7 +58,6 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
-
 class ChatProfile extends StatefulWidget {
   final int chatId;
   final int messageId;
@@ -115,31 +114,27 @@ class _ChatProfileState extends State<ChatProfile> {
                       isVerified: _isVerified,
                     );
                   } else {
-                    return _buildChatProfileOneToOne(state);
+                    bool _isSelfTalk = state.isSelfTalk;
+                    return BlocBuilder(
+                        bloc: _contactListBloc,
+                        builder: (context, state) {
+                          if (state is ContactListStateSuccess) {
+                            var key = createKeyFromId(state.contactIds.first, [state.contactLastUpdateValues.first]);
+                            return ChatProfileSingle(
+                              chatId: widget.chatId,
+                              isSelfTalk: _isSelfTalk,
+                              contactId: state.contactIds.first,
+                              key: key,
+                            );
+                          } else {
+                            return Container();
+                          }
+                        });
                   }
                 } else {
                   return Container();
                 }
               }),
         ));
-  }
-
-  Widget _buildChatProfileOneToOne(ChatStateSuccess state) {
-    bool _isSelfTalk = state.isSelfTalk;
-    return BlocBuilder(
-        bloc: _contactListBloc,
-        builder: (context, state) {
-          if (state is ContactListStateSuccess) {
-            var key = createKeyFromId(state.contactIds.first, [state.contactLastUpdateValues.first]);
-            return ChatProfileOneToOne(
-              chatId: widget.chatId,
-              isSelfTalk: _isSelfTalk,
-              contactId: state.contactIds.first,
-              key: key,
-            );
-          } else {
-            return Container();
-          }
-        });
   }
 }
