@@ -159,6 +159,7 @@ Future unflagMessage(FlutterDriver driver,String flagUnFlag, int messageIdToUnFl
 }
 
 Future flaggedMessage(FlutterDriver driver, String flagUnFlag, SerializableFinder messageToFlaggedFinder) async {
+  sleep(Duration(seconds: 5));
   await performLongPress(driver, messageToFlaggedFinder);
   await driver.tap(find.text(flagUnFlag));
 }
