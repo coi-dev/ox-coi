@@ -69,7 +69,6 @@ class ChatProfile extends StatefulWidget {
 }
 
 class _ChatProfileState extends State<ChatProfile> {
-  ChatBloc _chatBloc = ChatBloc();
   ContactListBloc _contactListBloc = ContactListBloc();
   final Navigation _navigation = Navigation();
 
@@ -77,19 +76,12 @@ class _ChatProfileState extends State<ChatProfile> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chatProfile);
-    _chatBloc.add(RequestChat(chatId: widget.chatId, messageId: widget.messageId));
-    int typeOrChatId;
-    if (widget.chatId == Chat.typeInvite) {
-      typeOrChatId = inviteContacts;
-    } else {
-      typeOrChatId = widget.chatId;
-    }
+    final typeOrChatId = widget.chatId == Chat.typeInvite ? inviteContacts : widget.chatId;
     _contactListBloc.add(RequestContacts(typeOrChatId: typeOrChatId));
   }
 
   @override
   void dispose() {
-    _chatBloc.close();
     _contactListBloc.close();
     super.dispose();
   }
@@ -97,44 +89,46 @@ class _ChatProfileState extends State<ChatProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DynamicAppBar(
-          title: L10n.get(L.profile),
-          leading: AppBarBackButton(context: context),
+      appBar: DynamicAppBar(
+        title: L10n.get(L.profile),
+        leading: AppBarBackButton(context: context),
+      ),
+      body: SingleChildScrollView(
+        child: BlocBuilder<ChatBloc, ChatState>(
+          builder: (context, state) {
+            if (state is ChatStateSuccess) {
+              bool _isVerified = state.isVerified;
+              if (state.isGroupChat) {
+                return ChatProfileGroup(
+                  chatId: widget.chatId,
+                  chatColor: state.color,
+                  isVerified: _isVerified,
+                );
+              } else {
+                bool _isSelfTalk = state.isSelfTalk;
+                return BlocBuilder(
+                  bloc: _contactListBloc,
+                  builder: (context, state) {
+                    if (state is ContactListStateSuccess) {
+                      var key = createKeyFromId(state.contactIds.first, [state.contactLastUpdateValues.first]);
+                      return ChatProfileSingle(
+                        chatId: widget.chatId,
+                        isSelfTalk: _isSelfTalk,
+                        contactId: state.contactIds.first,
+                        key: key,
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                );
+              }
+            } else {
+              return Container();
+            }
+          },
         ),
-        body: SingleChildScrollView(
-          child: BlocBuilder(
-              bloc: _chatBloc,
-              builder: (context, state) {
-                if (state is ChatStateSuccess) {
-                  bool _isVerified = state.isVerified;
-                  if (state.isGroupChat) {
-                    return ChatProfileGroup(
-                      chatId: widget.chatId,
-                      chatColor: state.color,
-                      isVerified: _isVerified,
-                    );
-                  } else {
-                    bool _isSelfTalk = state.isSelfTalk;
-                    return BlocBuilder(
-                        bloc: _contactListBloc,
-                        builder: (context, state) {
-                          if (state is ContactListStateSuccess) {
-                            var key = createKeyFromId(state.contactIds.first, [state.contactLastUpdateValues.first]);
-                            return ChatProfileSingle(
-                              chatId: widget.chatId,
-                              isSelfTalk: _isSelfTalk,
-                              contactId: state.contactIds.first,
-                              key: key,
-                            );
-                          } else {
-                            return Container();
-                          }
-                        });
-                  }
-                } else {
-                  return Container();
-                }
-              }),
-        ));
+      ),
+    );
   }
 }

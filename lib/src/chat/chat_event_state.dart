@@ -55,6 +55,8 @@ class RequestChat extends ChatEvent {
   RequestChat({@required this.chatId, this.isHeadless = false, this.messageId});
 }
 
+class UpdateChat extends ChatEvent {}
+
 class ClearNotifications extends ChatEvent {}
 
 abstract class ChatState {}

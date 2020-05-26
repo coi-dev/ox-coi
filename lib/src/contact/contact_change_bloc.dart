@@ -109,16 +109,18 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
     if (address.contains(googlemailDomain)) {
       yield GoogleContactDetected(name: name, email: address);
     } else {
-      int id = await context.createContact(name, address);
       if (contactAction == ContactAction.add) {
-        add(ContactAdded(id: id));
+        int contactId = await context.createContact(name, address);
+        add(ContactAdded(id: contactId));
       } else {
-        Contact contact = contactRepository.get(id);
-        contact.set(Contact.methodContactGetName, name);
-        int chatId = await context.getChatByContactId(id);
+        int contactId = await context.getContactIdByAddress(address);
+        int chatId = await context.getChatByContactId(contactId);
         if (chatId != 0) {
           _renameChat(chatId, name);
         }
+        await context.createContact(name, address);
+        Contact contact = contactRepository.get(contactId);
+        contact.set(Contact.methodContactGetName, name);
         add(ContactEdited());
       }
     }

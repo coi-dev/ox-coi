@@ -79,13 +79,9 @@ class ChatProfileGroup extends StatefulWidget {
 }
 
 class _ChatProfileGroupState extends State<ChatProfileGroup> {
-  ContactListBloc _contactListBloc = ContactListBloc();
-  ChatChangeBloc _chatChangeBloc = ChatChangeBloc();
-
-  // Ignoring false positive https://github.com/felangel/bloc/issues/587
-  // ignore: close_sinks
-  ChatBloc _chatBloc;
-  Navigation _navigation = Navigation();
+  final _contactListBloc = ContactListBloc();
+  final _chatChangeBloc = ChatChangeBloc();
+  final _navigation = Navigation();
 
   @override
   void initState() {
@@ -102,68 +98,35 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
 
   @override
   Widget build(BuildContext context) {
-    _chatBloc = BlocProvider.of<ChatBloc>(context);
-    return BlocBuilder(
-      bloc: _chatBloc,
-      builder: (context, chatState) {
-        if (chatState is ChatStateSuccess) {
-          return BlocBuilder(
-              bloc: _contactListBloc,
-              builder: (context, state) {
-                if (state is ContactListStateSuccess) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      buildProfileImageAndTitle(chatState),
-                      SettingsItem(
-                        pushesNewScreen: true,
-                        icon: IconSource.flag,
-                        text: L10n.get(L.settingItemFlaggedTitle),
-                        iconBackground: CustomTheme.of(context).flagIcon,
-                        onTap: () => _navigation.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MessageListFlagged(chatId: widget.chatId),
-                          ),
-                        ),
-                      ),
-                      ListGroupHeader(
-                        text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
-                      ),
-                      Visibility(
-                        visible: !chatState.isRemoved,
-                        child: SettingsItem(
-                          pushesNewScreen: true,
-                          icon: IconSource.groupAdd,
-                          text: L10n.get(L.participantAdd),
-                          key: Key(keyChatProfileGroupAddParticipant),
-                          iconBackground: CustomTheme.of(context).accent,
-                          onTap: () => _navigation.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatAddGroupParticipants(chatId: widget.chatId, contactIds: state.contactIds),
-                            ),
-                          ),
-                        ),
-                      ),
-                      _buildGroupMemberList(state, chatState.isRemoved),
-                      SettingsItem(
-                        pushesNewScreen: false,
-                        icon: IconSource.delete,
-                        text: chatState.isRemoved ? L10n.get(L.groupDelete) : L10n.get(L.groupLeave),
-                        iconBackground: CustomTheme.of(context).error,
-                        textColor: CustomTheme.of(context).error,
-                        onTap: () => chatState.isRemoved
-                            ? showActionDialog(context, ProfileActionType.deleteChat, _deleteGroup)
-                            : showActionDialog(context, ProfileActionType.leave, _leaveGroup),
-                        key: Key(keyChatProfileGroupLeaveOrDelete),
-                      ),
-                    ],
-                  );
-                } else {
-                  return Container();
-                }
-              });
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, state) {
+        if (state is ChatStateSuccess) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ProfileData(
+                imageBackgroundColor: widget.chatColor,
+                text: state.name,
+                textStyle: Theme.of(context).textTheme.title,
+                iconData: state.isVerified ? IconSource.verifiedUser : null,
+                imageActionCallback: state.isRemoved ? null : _editPhotoCallback,
+                avatarPath: state.avatarPath,
+                showWhiteImageIcon: true,
+                editActionCallback: state.isRemoved ? null : _openEditGroupProfile,
+                child: ProfileHeader(),
+              ),
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider<ChatChangeBloc>.value(value: _chatChangeBloc),
+                  BlocProvider<ContactListBloc>.value(value: _contactListBloc),
+                ],
+                child: GroupMemberList(
+                  chatId: widget.chatId,
+                  isRemoved: state.isRemoved,
+                ),
+              ),
+            ],
+          );
         } else {
           return Container();
         }
@@ -171,57 +134,19 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
     );
   }
 
-  ProfileData buildProfileImageAndTitle(ChatStateSuccess state) {
-    return ProfileData(
-      imageBackgroundColor: widget.chatColor,
-      text: state.name,
-      textStyle: Theme.of(context).textTheme.title,
-      iconData: state.isVerified ? IconSource.verifiedUser : null,
-      imageActionCallback: state.isRemoved ? null : _editPhotoCallback,
-      avatarPath: state.avatarPath,
-      showWhiteImageIcon: true,
-      editActionCallback: state.isRemoved ? null : _openEditGroupProfile,
-      child: ProfileHeader(),
-    );
-  }
-
   _editPhotoCallback(String avatarPath) {
     _chatChangeBloc.add(SetImagePath(chatId: widget.chatId, newPath: avatarPath));
   }
 
-  ListView _buildGroupMemberList(ContactListStateSuccess state, bool isRemoved) {
-    return ListView.separated(
-        separatorBuilder: (context, index) => Divider(
-              height: zero,
-              color: CustomTheme.of(context).onBackground.barely(),
-            ),
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: state.contactIds.length,
-        itemBuilder: (BuildContext context, int index) {
-          var contactId = state.contactIds[index];
-          var key = "$contactId-${state.contactLastUpdateValues[index]}";
-          return ChatProfileGroupContactItem(chatId: widget.chatId, contactId: contactId, showMoreButton: !isRemoved, key: key);
-        });
-  }
-
-  _deleteGroup() async {
-    _chatChangeBloc.add(DeleteChat(chatId: widget.chatId));
-    _navigation.popUntilRoot(context);
-  }
-
-  _leaveGroup() async {
-    _chatChangeBloc.add(LeaveGroupChat(chatId: widget.chatId));
-    _navigation.popUntilRoot(context);
-  }
-
   void _openEditGroupProfile() {
+    // ignore: close_sinks
+    final chatBloc = BlocProvider.of<ChatBloc>(context);
     _navigation.push(
       context,
       MaterialPageRoute<EditGroupProfile>(
         builder: (context) {
           return BlocProvider.value(
-            value: _chatBloc,
+            value: chatBloc,
             key: Key(keyChatProfileGroupEditIcon),
             child: EditGroupProfile(
               chatId: widget.chatId,
@@ -230,5 +155,96 @@ class _ChatProfileGroupState extends State<ChatProfileGroup> {
         },
       ),
     );
+  }
+}
+
+class GroupMemberList extends StatelessWidget {
+  final _navigation = Navigation();
+  final bool isRemoved;
+  final int chatId;
+
+  GroupMemberList({Key key, @required this.isRemoved, @required this.chatId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ContactListBloc, ContactListState>(
+      builder: (context, state) {
+        if (state is ContactListStateSuccess) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SettingsItem(
+                pushesNewScreen: true,
+                icon: IconSource.flag,
+                text: L10n.get(L.settingItemFlaggedTitle),
+                iconBackground: CustomTheme.of(context).flagIcon,
+                onTap: () => _navigation.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MessageListFlagged(chatId: chatId),
+                  ),
+                ),
+              ),
+              ListGroupHeader(
+                text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
+              ),
+              Visibility(
+                visible: !isRemoved,
+                child: SettingsItem(
+                  pushesNewScreen: true,
+                  icon: IconSource.groupAdd,
+                  text: L10n.get(L.participantAdd),
+                  key: Key(keyChatProfileGroupAddParticipant),
+                  iconBackground: CustomTheme.of(context).accent,
+                  onTap: () => _navigation.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatAddGroupParticipants(chatId: chatId, contactIds: state.contactIds),
+                    ),
+                  ),
+                ),
+              ),
+              ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  height: zero,
+                  color: CustomTheme.of(context).onBackground.barely(),
+                ),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: state.contactIds.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var contactId = state.contactIds[index];
+                  var key = "$contactId-${state.contactLastUpdateValues[index]}";
+                  return ChatProfileGroupContactItem(chatId: chatId, contactId: contactId, showMoreButton: !isRemoved, key: key);
+                },
+              ),
+              SettingsItem(
+                key: Key(keyChatProfileGroupLeaveOrDelete),
+                pushesNewScreen: false,
+                icon: IconSource.delete,
+                text: isRemoved ? L10n.get(L.groupDelete) : L10n.get(L.groupLeave),
+                iconBackground: CustomTheme.of(context).error,
+                textColor: CustomTheme.of(context).error,
+                onTap: () => isRemoved
+                    ? showActionDialog(context, ProfileActionType.deleteChat, () => _deleteGroup(context))
+                    : showActionDialog(context, ProfileActionType.leave, () => _leaveGroup(context)),
+              ),
+            ],
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  _deleteGroup(BuildContext context) async {
+    BlocProvider.of<ChatChangeBloc>(context).add(DeleteChat(chatId: chatId));
+    _navigation.popUntilRoot(context);
+  }
+
+  _leaveGroup(BuildContext context) async {
+    BlocProvider.of<ChatChangeBloc>(context).add(LeaveGroupChat(chatId: chatId));
+    _navigation.popUntilRoot(context);
   }
 }

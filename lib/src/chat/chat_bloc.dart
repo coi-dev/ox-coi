@@ -57,7 +57,8 @@ import 'package:ox_coi/src/notifications/notification_manager.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final _chatRepository = RepositoryManager.get(RepositoryType.chat);
   final _contactRepository = RepositoryManager.get(RepositoryType.contact);
-  RepositoryEventStreamHandler _repositoryStreamHandler;
+
+  RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   bool _listenersRegistered = false;
   bool _isGroupChat;
   int _chatId;
@@ -80,6 +81,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       } catch (error, stackTrace) {
         yield ChatStateFailure(error: error, stackTrace: stackTrace);
       }
+    } else if (event is UpdateChat) {
+      yield* _setupChat(false);
     } else if (event is ClearNotifications) {
       _removeNotifications();
     }
@@ -94,10 +97,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _registerListeners() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _repositoryStreamHandler = RepositoryEventStreamHandler(
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.publish,
-        Event.chatModified,
-        _onChatChanged,
+        [
+          Event.chatModified,
+          Event.contactsChanged,
+        ],
+        _onCoreEvent,
       );
       _chatRepository.addListener(_repositoryStreamHandler);
     }
@@ -110,10 +116,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _onChatChanged([Event event]) async {
+  void _onCoreEvent([Event event]) {
     int eventChatId = event.data1;
-    if (_chatId == eventChatId) {
-      _setupChat(false);
+    if (event.eventId == Event.contactsChanged || (event.eventId == Event.chatModified && _chatId == eventChatId)) {
+      add(UpdateChat());
     }
   }
 
