@@ -78,6 +78,7 @@ String name2;
 
 const nameMe = 'Me';
 const nameNewMe = 'newMe';
+final testUserNameUserProfile = 'EDN tester';
 
 // Texts / placeholders
 const textEmailAddress = 'Email address';

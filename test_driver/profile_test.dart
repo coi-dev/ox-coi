@@ -65,11 +65,7 @@ void main() {
   });
 
   group('Test profile.', () {
-    final testUserNameUserProfile = 'EDN tester';
-
-
     test(': Get and edit profile.', () async {
-
       await driver.tap(profileFinder);
 
       expect(await driver.getText(find.byValueKey(keyProfileHeaderText)), providerEmail);
@@ -77,7 +73,6 @@ void main() {
       await driver.tap(find.byValueKey(keyUserSettingsUsernameLabel));
       await driver.enterText(testUserNameUserProfile);
       await driver.tap(userSettingsSubmitFinder);
-
     });
 
     test(': Check profile after change.', () async {

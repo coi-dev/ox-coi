@@ -86,7 +86,7 @@ Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
   return driver;
 }
 
-Future initProviders()  async{
+Future initProviders() async {
   final providerName1 = "contact1";
   final providerName2 = "contact2";
 
@@ -130,11 +130,15 @@ Future grantPermission(String adbPath, String permission) async {
 }
 
 Future getAuthentication(FlutterDriver driver, String provider, String email, String password) async {
+  await getProvider(provider, driver);
+  await logIn(driver, email, password);
+  await driver.tap(find.byValueKey(keyDynamicNavigationNext));
+  await driver.tap(find.byValueKey(keyDynamicNavigationSkip));
+}
+
+Future getProvider(String provider, FlutterDriver driver) async {
   final providerFinder = find.text(provider);
   await driver.tap(signInFinder);
   await driver.scroll(find.text(providerMailCom), 0, -600, Duration(milliseconds: 500));
   await driver.tap(providerFinder);
-  await logIn(driver, email, password);
-  await driver.tap(find.byValueKey(keyDynamicNavigationNext));
-  await driver.tap(find.byValueKey(keyDynamicNavigationSkip));
 }
