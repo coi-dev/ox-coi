@@ -77,12 +77,12 @@ android {
     productFlavors {
         stable {
             dimension "configuration"
-            resValue "string", "app_name", "OX COI Messenger"
+            resValue "string", "app_name", "OX COI"
         }
         development {
             dimension "configuration"
             applicationIdSuffix ".dev"
-            resValue "string", "app_name", "OX COI Messenger Dev"
+            resValue "string", "app_name", "OX COI Dev"
         }
     }
 

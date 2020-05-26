@@ -1,6 +1,6 @@
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-development.xcconfig"
 #include "Generated.xcconfig"
-FLUTTER_BUNDLE_DISPLAY_NAME=OX COI Messenger Dev
+FLUTTER_BUNDLE_DISPLAY_NAME=OX COI Dev
 PRODUCT_BUNDLE_DISPLAY_NAME=$FLUTTER_BUNDLE_DISPLAY_NAME
 PRODUCT_BUNDLE_IDENTIFIER=com.openxchange.oxcoi.dev
 PRODUCT_NAME=Runner
