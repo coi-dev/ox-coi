@@ -59,7 +59,6 @@ class PushManager {
   static const securityChannelName = const MethodChannel("oxcoi.security");
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   var _notificationManager = NotificationManager();
-  BuildContext _buildContext;
   PushBloc _pushBloc;
 
   static PushManager _instance;
@@ -68,9 +67,8 @@ class PushManager {
 
   PushManager._internal();
 
-  void setup(BuildContext buildContext) async {
-    this._buildContext = buildContext;
-    _pushBloc = BlocProvider.of<PushBloc>(_buildContext);
+  Future<void> setup(PushBloc pushBloc) async {
+    this._pushBloc = pushBloc;
     //firebase setup
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {

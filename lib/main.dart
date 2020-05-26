@@ -62,6 +62,7 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
+import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
@@ -71,6 +72,8 @@ void main() {
   final LogManager _logManager = LogManager();
   // ignore: close_sinks
   final errorBloc = ErrorBloc();
+  // ignore: close_sinks
+  final pushBloc = PushBloc();
 
   WidgetsFlutterBinding.ensureInitialized(); // Required to allow plugin calls prior runApp() (performed by LogManager.setup())
   _logManager.setup(logToFile: true, logLevel: Level.INFO).then((value) => runApp(
@@ -84,13 +87,13 @@ void main() {
               },
             ),
             BlocProvider<PushBloc>(
-              create: (BuildContext context) => PushBloc(),
+              create: (BuildContext context) => pushBloc,
             ),
             BlocProvider<ErrorBloc>(
               create: (BuildContext context) => errorBloc,
             ),
             BlocProvider<MainBloc>(
-              create: (BuildContext context) => MainBloc(errorBloc),
+              create: (BuildContext context) => MainBloc(errorBloc, pushBloc),
             ),
           ],
           child: CustomTheme(
@@ -163,7 +166,7 @@ class _OxCoiState extends State<OxCoi> {
   void initState() {
     super.initState();
     _mainBloc = BlocProvider.of<MainBloc>(context);
-    _mainBloc.add(PrepareApp(context: context));
+    _mainBloc.add(PrepareApp());
     _customerDelegate = CustomerDelegate();
   }
 
@@ -175,6 +178,9 @@ class _OxCoiState extends State<OxCoi> {
         listener: (context, state) {
           if (state is MainStateSuccess) {
             _navigation.popUntilRoot(context);
+            if (state.configured && !state.needsOnboarding && !state.hasAuthenticationError && state.notificationsActivated) {
+              NotificationManager().setup(context);
+            }
           }
         },
         builder: (context, state) {

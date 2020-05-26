@@ -40,6 +40,10 @@
  * for more details.
  */
 
-class ChatExtension {
-  static const chatSummary = "chat_extension_summary";
+class ConfigExtension {
+  static const coiSupported = "coi_supported";
+  static const coiEnabled = "coi_enabled";
+  static const coiMessageFilterEnabled = "coi_message_filter_enabled";
+
+  static const getAll = [coiSupported, coiEnabled, coiMessageFilterEnabled];
 }

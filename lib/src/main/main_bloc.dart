@@ -54,6 +54,7 @@ import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/customer/customer.dart';
 import 'package:ox_coi/src/customer/model/customer_chat.dart';
 import 'package:ox_coi/src/data/config.dart';
+import 'package:ox_coi/src/data/config_extension.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
@@ -62,29 +63,30 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/notifications/local_notification_manager.dart';
-import 'package:ox_coi/src/notifications/notification_manager.dart';
 import 'package:ox_coi/src/platform/app_information.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/push/push_bloc.dart';
+import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/push/push_manager.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 import 'package:ox_coi/src/utils/url_preview_cache.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainBloc extends Bloc<MainEvent, MainState> {
   final _logger = Logger("main_bloc");
-  final _notificationManager = NotificationManager();
-  final _pushManager = PushManager();
-  final _localNotificationManager = LocalNotificationManager();
 
   Config _config = Config();
   Context _context = Context();
 
   var _core = DeltaChatCore();
+
   DeltaChatCore get core => _core;
 
   final ErrorBloc _errorBloc;
+  final PushBloc _pushBloc;
   StreamSubscription _errorBlocSubscription;
 
-  MainBloc(this._errorBloc) {
+  MainBloc(this._errorBloc, this._pushBloc) {
     _errorBlocSubscription = _errorBloc.listen((state) {
       if (state is ErrorStateUserVisibleError) {
         add(UserVisibleErrorEncountered(userVisibleError: state.userVisibleError));
@@ -133,13 +135,27 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         await Customer().configureOnboardingAsync();
       }
 
+      final notificationsActivated = await Permission.notification.isGranted;
+      if (!needsOnboarding && notificationsActivated) {
+        LocalNotificationManager().setup();
+        if (_config.coiSupported) {
+          await PushManager().setup(_pushBloc);
+          String pushState = await getPreference(preferenceNotificationsPushStatus);
+          if (pushState == null) {
+            _pushBloc.add(RegisterPushResource());
+          }
+        } else {
+          await setupBackgroundRefreshManager();
+        }
+      }
+
       final bool hasAuthenticationError = await _checkForAuthenticationError();
       yield MainStateSuccess(
         configured: configured,
         hasAuthenticationError: hasAuthenticationError,
-        needsOnboarding: needsOnboarding
+        needsOnboarding: needsOnboarding,
+        notificationsActivated: notificationsActivated,
       );
-
     } else if (event is Logout) {
       await _logout();
     } else if (event is DatabaseDeleteErrorEncountered) {
@@ -150,21 +166,16 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       final configured = await _context.isConfigured();
       final hasAuthenticationError = event.userVisibleError == UserVisibleError.authenticationFailed;
       yield MainStateSuccess(
-          configured: configured,
-          hasAuthenticationError: hasAuthenticationError,
-          needsOnboarding: Customer.needsOnboarding
+        configured: configured,
+        hasAuthenticationError: hasAuthenticationError,
+        needsOnboarding: Customer.needsOnboarding,
+        notificationsActivated: false,
       );
     }
   }
 
   Future<void> _setupBlocs() async {
     _errorBloc.add(SetupListeners());
-  }
-
-  Future<void> setupManagers(BuildContext context) async {
-    _notificationManager.setup(context);
-    _pushManager.setup(context);
-    _localNotificationManager.setup();
   }
 
   Future<void> _applyCustomerConfig() async {
@@ -192,9 +203,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   Future<void> _setupLoggedInAppState() async {
     var context = Context();
     await _config.load();
-    bool coiSupported = await isCoiSupported(context);
     String appState = await getPreference(preferenceAppState);
-    if (coiSupported) {
+    if (_config.coiSupported) {
       await _setupCoi(context);
     }
     if (isFreshLogin(appState)) {
@@ -202,25 +212,21 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     }
     await _config.setValue(Context.configMaxAttachSize, maxAttachmentSize);
     _logger.info("Setting max attachment size to $maxAttachmentSize");
-    await setupBackgroundRefreshManager(coiSupported);
     preloadContacts();
   }
 
   bool isFreshLogin(String appState) => appState == AppState.initialStartDone.toString();
 
-  Future<void> setupBackgroundRefreshManager(bool coiSupported) async {
+  Future<void> setupBackgroundRefreshManager() async {
     bool pullPreference = await getPreference(preferenceNotificationsPull);
-    if ((pullPreference == null && !coiSupported) || (pullPreference != null && pullPreference)) {
+    if (pullPreference == null || (pullPreference != null && pullPreference)) {
       var backgroundRefreshManager = BackgroundRefreshManager();
       backgroundRefreshManager.setupAndStart();
     }
   }
 
   void preloadContacts() {
-    // Ignoring false positive https://github.com/felangel/bloc/issues/587
-    // ignore: close_sinks
-    ContactListBloc contactListBloc = ContactListBloc();
-    contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
+    ContactListBloc().add(RequestContacts(typeOrChatId: validContacts));
   }
 
   Future<void> _setupFreshLoggedInAppState() async {
@@ -231,13 +237,13 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _setupCoi(Context context) async {
-    if (!await isCoiEnabled(context)) {
+    if (!_config.coiEnabled) {
       _logger.info("Setting coi enable to 1");
-      await context.setCoiEnabled(1, 1);
+      await _config.setValue(ConfigExtension.coiEnabled, 1);
     }
-    if (!await isCoiMessageFilterEnabled(context)) {
+    if (!_config.coiMessageFilterEnabled) {
       _logger.info("Setting coi message filter to 1");
-      await context.setCoiMessageFilter(1, 1);
+      await _config.setValue(ConfigExtension.coiMessageFilterEnabled, 1);
     }
   }
 
@@ -277,7 +283,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       if (Platform.isAndroid) {
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       }
-    } on FileSystemException catch(error) {
+    } on FileSystemException catch (error) {
       debugPrint(error.toString());
       add(DatabaseDeleteErrorEncountered(error: error));
     }

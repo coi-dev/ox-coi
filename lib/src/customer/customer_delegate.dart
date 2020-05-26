@@ -47,7 +47,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/customer/customer.dart';
 import 'package:ox_coi/src/customer/customer_delegate_change_notifier.dart';
@@ -76,8 +75,9 @@ const _kAppbarSkipButtonPressed = "appbarSkipButtonPressed";
 const _kReadyButtonPressed = "readyButtonPressed";
 
 class CustomerDelegate with DynamicScreenCustomerDelegate {
-
   final changeNotifier = CustomerDelegateChangeNotifier();
+  final _config = Config();
+
   MainBloc _mainBloc;
 
   void dispose() {
@@ -98,21 +98,16 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
 
         case _kNotificationsAllowButtonPressed:
           if (await Permission.notification.request().isGranted) {
-            _mainBloc = BlocProvider.of<MainBloc>(context);
-            await _mainBloc.setupManagers(context);
-            await setPreference(preferenceNotificationsPull, true);
-            BackgroundRefreshManager().start();
-
-          } else {
-            await setPreference(preferenceNotificationsPull, false);
-            BackgroundRefreshManager().stop();
+            if (_config.coiSupported) {
+              await setPreference(preferenceNotificationsPull, false);
+            } else {
+              await setPreference(preferenceNotificationsPull, true);
+            }
           }
           navigateToNextPage(context: context);
           break;
 
         case _kNotificationsAllowLaterButtonPressed:
-          await setPreference(preferenceNotificationsPull, false);
-          BackgroundRefreshManager().stop();
           navigateToNextPage(context: context);
           break;
 
@@ -156,17 +151,16 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
                   title: Text(L10n.get(L.camera)),
                   onTap: () => _getNewAvatarPathAsync(sheetContext, ImageSource.camera),
                 ),
-              ]
+              ],
             ),
           );
-        }
-    );
+        });
   }
 
   @override
   Future<void> textfieldEditingCompleteAsync({BuildContext context, String value}) async {
     debugPrint("[Textfield Edit Complete] Value: $value");
-    await Config().setValue(Context.configDisplayName, value);
+    await _config.setValue(Context.configDisplayName, value);
     changeNotifier.userName = value;
   }
 
@@ -180,8 +174,8 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
   bool isPageAvailable({List<Map<String, bool>> availabilities}) {
     bool result = true;
     availabilities?.forEach((item) {
-      result &= (item[_kIsCoiEnabled] != null ? Customer.isCoiEnabled == item[_kIsCoiEnabled] : true);
-      result &= (item[_kIsCoiSupported] != null ? Customer.isCoiSupported == item[_kIsCoiSupported] : true);
+      result &= (item[_kIsCoiEnabled] != null ? _config.coiEnabled == item[_kIsCoiEnabled] : true);
+      result &= (item[_kIsCoiSupported] != null ? _config.coiSupported == item[_kIsCoiSupported] : true);
     });
     return result;
   }
@@ -194,17 +188,15 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
     _mainBloc = BlocProvider.of<MainBloc>(context);
     _mainBloc.add(AppLoaded());
   }
-
 }
 
 extension CustomerDelegatePrivateHelper on CustomerDelegate {
-
   void navigateToNextPage({BuildContext context}) {
     final pageNavigator = Provider.of<DynamicScreenPageNavigator>(context, listen: false);
     pageNavigator.animateToPage(
-        pageNavigator.currentPageIndex + 1,
-        duration: Duration(milliseconds: 350),
-        curve: Curves.easeInOutQuint
+      pageNavigator.currentPageIndex + 1,
+      duration: Duration(milliseconds: 350),
+      curve: Curves.easeInOutQuint,
     );
   }
 
@@ -221,17 +213,15 @@ extension CustomerDelegatePrivateHelper on CustomerDelegate {
       );
 
       if (croppedAvatar != null) {
-        await Config().setValue(Context.configSelfAvatar, croppedAvatar.path);
+        await _config.setValue(Context.configSelfAvatar, croppedAvatar.path);
         changeNotifier.avatarPath = croppedAvatar.path;
       }
     }
   }
 
-  void _importContacts({BuildContext context}) {
-  }
+  void _importContacts({BuildContext context}) {}
 
   Future<void> _setConfigShowEmailsAsync({int value}) async {
-    await Config().setValue(Context.configShowEmails, value);
+    await _config.setValue(Context.configShowEmails, value);
   }
-
 }

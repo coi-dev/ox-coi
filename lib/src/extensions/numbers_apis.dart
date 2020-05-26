@@ -21,6 +21,16 @@ extension Convert on int {
     }
     return "${result.toStringAsFixed(2)} $unit";
   }
+
+  bool toBool() {
+    if (this == 0) {
+      return false;
+    } else if (this == 1) {
+      return true;
+    } else {
+      throw ArgumentError("Only 0 and 1 are supported values");
+    }
+  }
 }
 
 extension Date on int {

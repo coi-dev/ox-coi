@@ -41,8 +41,36 @@
  */
 
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/data/config_extension.dart';
+import 'package:ox_coi/src/extensions/numbers_apis.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
+
+class InvalidConfigKeyException implements Exception {
+  final String key;
+
+  InvalidConfigKeyException(this.key);
+
+  @override
+  String toString() {
+    return 'Key must be valid, unknown key "$key" found.';
+  }
+}
+
+class ReadOnlyConfigValueException implements Exception {
+  final String key;
+
+  ReadOnlyConfigValueException(this.key);
+
+  @override
+  String toString() {
+    return 'Value for key is read only, could not write value for key "$key".';
+  }
+}
 
 class Config {
+  final _logger = Logger("config");
+
   static Config _instance;
 
   Context _context = Context();
@@ -59,9 +87,12 @@ class Config {
   String smtpPort;
   String smtpSecurity;
   int showEmails;
-  int mdnsEnabled;
   int rfc724MsgIdPrefix;
   int maxAttachSize;
+  bool mdnsEnabled;
+  bool coiSupported;
+  bool coiEnabled;
+  bool coiMessageFilterEnabled;
 
   factory Config() {
     if (_instance == null) {
@@ -73,11 +104,11 @@ class Config {
   Config._internal();
 
   void reset() {
-    _instance = null;
-    _instance = Config();
+    _instance = Config._internal();
   }
 
   load() async {
+    _logger.info('Loading config');
     username = await _context.getConfigValue(Context.configDisplayName);
     avatarPath = await _context.getConfigValue(Context.configSelfAvatar);
     status = await _context.getConfigValue(Context.configSelfStatus);
@@ -91,14 +122,18 @@ class Config {
     imapSecurity = await _context.getConfigValue(Context.configImapSecurity);
     smtpSecurity = await _context.getConfigValue(Context.configSmtpSecurity);
     showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
-    mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int);
     rfc724MsgIdPrefix = await _context.getConfigValue(Context.configRfc724MsgIdPrefix, ObjectType.int);
     maxAttachSize = await _context.getConfigValue(Context.configMaxAttachSize, ObjectType.int);
+    mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int) == 1;
+
+    coiSupported = (await _context.isCoiSupported()) == 1;
+    coiEnabled = (await _context.isCoiEnabled()) == 1;
+    coiMessageFilterEnabled = (await _context.isCoiMessageFilterEnabled()) == 1;
   }
 
   Future<void> setValue(String key, var value) async {
     ObjectType type = isTypeInt(key) ? ObjectType.int : ObjectType.String;
-    if (key != Context.configDisplayName && key != Context.configSelfAvatar && key != Context.configSelfStatus) {
+    if (type == ObjectType.String && !isEmptyStringValid(key)) {
       value = convertEmptyStringToNull(value);
     }
 
@@ -136,29 +171,58 @@ class Config {
       case Context.configShowEmails:
         showEmails = value;
         break;
-      case Context.configMdnsEnabled:
-        mdnsEnabled = value;
-        break;
       case Context.configRfc724MsgIdPrefix:
         rfc724MsgIdPrefix = value;
         break;
       case Context.configMaxAttachSize:
         maxAttachSize = value;
         break;
+      case Context.configMdnsEnabled:
+        mdnsEnabled = (value as int).toBool();
+        break;
+      case ConfigExtension.coiSupported:
+        throw ReadOnlyConfigValueException(key);
+      case ConfigExtension.coiEnabled:
+        coiEnabled = (value as int).toBool();
+        await _context.setCoiEnabled(value, 1);
+        break;
+      case ConfigExtension.coiMessageFilterEnabled:
+        coiMessageFilterEnabled = (value as int).toBool();
+        await _context.setCoiMessageFilter(value, 1);
+        break;
+      case Context.configMailPassword:
+      case Context.configSendPassword:
+      case Context.configImapSecurity:
+      case Context.configSmtpSecurity:
+        // No actions required
+        break;
+      default:
+        throw InvalidConfigKeyException(key);
     }
-    await _context.setConfigValue(key, value, type);
+    if (shouldPersistsViaContextSetConfig(key)) {
+      await _context.setConfigValue(key, value, type);
+    }
+    _logConfigChange(value, key);
+  }
+
+  void _logConfigChange(value, String key) {
+    if (key == Context.configMailPassword || key == Context.configSendPassword) {
+      value = "*****";
+    }
+    _logger.info('Value "$value" for key "$key" successfully set and persisted');
   }
 
   bool isTypeInt(String key) =>
       key == Context.configShowEmails ||
       key == Context.configMdnsEnabled ||
       key == Context.configRfc724MsgIdPrefix ||
-      key == Context.configMaxAttachSize;
+      key == Context.configMaxAttachSize ||
+      key == ConfigExtension.coiEnabled ||
+      key == ConfigExtension.coiMessageFilterEnabled;
 
-  convertEmptyStringToNull(value) {
-    if (value == null || (value is String && value.isEmpty)) {
-      return null;
-    }
-    return value;
-  }
+  bool isEmptyStringValid(String key) => key == Context.configDisplayName || key == Context.configSelfAvatar || key == Context.configSelfStatus;
+
+  String convertEmptyStringToNull(String value) => value.isNullOrEmpty() ? null : value;
+
+  bool shouldPersistsViaContextSetConfig(String key) => !ConfigExtension.getAll.contains(key);
 }

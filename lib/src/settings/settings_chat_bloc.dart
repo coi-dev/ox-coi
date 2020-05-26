@@ -78,19 +78,19 @@ class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
 
   void _requestValues() {
     Config config = Config();
-    add(ChatSettingsActionSuccess(readReceiptsEnabled: config.mdnsEnabled == 1, inviteSetting: config.showEmails));
+    add(ChatSettingsActionSuccess(readReceiptsEnabled: config.mdnsEnabled, inviteSetting: config.showEmails));
   }
 
   void _changeReadReceipts() async {
     Config config = Config();
-    int enable = config.mdnsEnabled == 1 ? 0 : 1;
-    await config.setValue(Context.configMdnsEnabled, enable);
-    add(ChatSettingsActionSuccess(readReceiptsEnabled: enable == 1, inviteSetting: config.showEmails));
+    bool newMdnsSetting = !config.mdnsEnabled;
+    await config.setValue(Context.configMdnsEnabled, newMdnsSetting ? 1 : 0);
+    add(ChatSettingsActionSuccess(readReceiptsEnabled: newMdnsSetting, inviteSetting: config.showEmails));
   }
 
   void _changeInviteSetting(int newInviteSetting) async {
     Config config = Config();
     await config.setValue(Context.configShowEmails, newInviteSetting);
-    add(ChatSettingsActionSuccess(inviteSetting: newInviteSetting, readReceiptsEnabled: config.mdnsEnabled == 1));
+    add(ChatSettingsActionSuccess(inviteSetting: newInviteSetting, readReceiptsEnabled: config.mdnsEnabled));
   }
 }

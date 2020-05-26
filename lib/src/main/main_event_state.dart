@@ -46,11 +46,7 @@ import 'package:flutter/widgets.dart';
 
 abstract class MainEvent {}
 
-class PrepareApp extends MainEvent {
-  BuildContext context;
-
-  PrepareApp({@required this.context});
-}
+class PrepareApp extends MainEvent {}
 
 class LoadApp extends MainEvent {}
 
@@ -80,8 +76,14 @@ class MainStateSuccess extends MainState {
   bool configured;
   bool hasAuthenticationError;
   bool needsOnboarding;
+  bool notificationsActivated;
 
-  MainStateSuccess({@required this.configured, @required this.hasAuthenticationError, @required this.needsOnboarding});
+  MainStateSuccess({
+    @required this.configured,
+    @required this.hasAuthenticationError,
+    @required this.needsOnboarding,
+    @required this.notificationsActivated,
+  });
 }
 
 class MainStateFailure extends MainState {

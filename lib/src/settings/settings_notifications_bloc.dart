@@ -43,10 +43,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/customer/customer.dart';
+import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/settings/settings_notifications_event_state.dart';
 
 class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, SettingsNotificationsState> {
+  final _config = Config();
+
   @override
   SettingsNotificationsState get initialState => SettingsNotificationsStateInitial();
 
@@ -69,7 +72,7 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
 
   void loadSettings() async {
     bool pullPreference = await getPreference(preferenceNotificationsPull);
-    bool isSupportedCoi = Customer.isCoiSupported;
+    bool isSupportedCoi = _config.coiSupported;
     if (pullPreference == null) {
       bool defaultPullPreference = !isSupportedCoi;
       await setPreference(preferenceNotificationsPull, defaultPullPreference);

@@ -42,11 +42,8 @@
 
 import 'dart:convert';
 
-import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:ox_coi/src/background_refresh/background_refresh_manager.dart';
 import 'package:ox_coi/src/customer/model/customer_chat.dart';
 import 'package:ox_coi/src/customer/model/customer_config.dart';
 import 'package:ox_coi/src/dynamic_screen/model/dynamic_screen.dart';
@@ -58,8 +55,6 @@ class Customer {
   CustomerConfig _config;
   DynamicScreenModel _onboardingModel;
   bool _needsOnboarding;
-  bool _isCoiEnabled;
-  bool _isCoiSupported;
 
   final _logger = Logger("customer");
 
@@ -73,14 +68,8 @@ class Customer {
 
   Future<void> configureOnboardingAsync() async {
     try {
-      _isCoiEnabled = (await Context().isCoiSupported()) == 1;
-      _isCoiSupported = (await Context().isCoiSupported()) == 1;
-
       Map<String, dynamic> jsonFile = await rootBundle.loadString(customerOnboardingConfigPath).then((jsonStr) => jsonDecode(jsonStr));
       _onboardingModel = DynamicScreenModel.fromJson(jsonFile);
-
-      // We need to check if all Pages are
-
     } catch (error) {
       _logger.shout("[Configure Onboarding] ** ERROR **: ${error.toString()}");
       throw(error.toString());
@@ -115,14 +104,6 @@ class Customer {
 
   static List<String> get icons {
     return Customer.config.icons;
-  }
-
-  static bool get isCoiEnabled {
-    return Customer()._isCoiEnabled;
-  }
-
-  static bool get isCoiSupported {
-    return Customer()._isCoiSupported;
   }
 
   // Onboarding
