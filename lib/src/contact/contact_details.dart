@@ -40,6 +40,7 @@
  * for more details.
  */
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -142,20 +143,23 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                     iconBackground: CustomTheme.of(context).chatIcon,
                     onTap: () => createChatFromContact(context, widget.contactId),
                   ),
-                  SettingsItem(
-                    pushesNewScreen: false,
-                    key: Key(keyUserProfileBlockIconSource),
-                    icon: IconSource.block,
-                    text: L10n.get(L.contactBlock),
-                    iconBackground: CustomTheme.of(context).serverSettingsIcon,
-                    onTap: () => showActionDialog(
-                      context,
-                      ProfileActionType.block,
-                      _blockContact,
-                      {
-                        ProfileActionParams.name: state.name,
-                        ProfileActionParams.email: state.email,
-                      },
+                  Visibility(
+                    visible: widget.contactId != Contact.idSelf,
+                    child: SettingsItem(
+                      pushesNewScreen: false,
+                      key: Key(keyUserProfileBlockIconSource),
+                      icon: IconSource.block,
+                      text: L10n.get(L.contactBlock),
+                      iconBackground: CustomTheme.of(context).serverSettingsIcon,
+                      onTap: () => showActionDialog(
+                        context,
+                        ProfileActionType.block,
+                        _blockContact,
+                        {
+                          ProfileActionParams.name: state.name,
+                          ProfileActionParams.email: state.email,
+                        },
+                      ),
                     ),
                   ),
                   ListGroupHeader(
@@ -171,21 +175,24 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                   ListGroupHeader(
                     text: "",
                   ),
-                  SettingsItem(
-                    pushesNewScreen: false,
-                    key: Key(keyContactDetailDeleteContactProfileActionIcon),
-                    icon: IconSource.delete,
-                    text: L10n.get(L.contactDelete),
-                    textColor: CustomTheme.of(context).error,
-                    iconBackground: CustomTheme.of(context).blockIcon,
-                    onTap: () => showActionDialog(
-                      context,
-                      ProfileActionType.deleteContact,
-                      _deleteContact,
-                      {
-                        ProfileActionParams.name: state.name,
-                        ProfileActionParams.email: state.email,
-                      },
+                  Visibility(
+                    visible: widget.contactId != Contact.idSelf,
+                    child: SettingsItem(
+                      pushesNewScreen: false,
+                      key: Key(keyContactDetailDeleteContactProfileActionIcon),
+                      icon: IconSource.delete,
+                      text: L10n.get(L.contactDelete),
+                      textColor: CustomTheme.of(context).error,
+                      iconBackground: CustomTheme.of(context).blockIcon,
+                      onTap: () => showActionDialog(
+                        context,
+                        ProfileActionType.deleteContact,
+                        _deleteContact,
+                        {
+                          ProfileActionParams.name: state.name,
+                          ProfileActionParams.email: state.email,
+                        },
+                      ),
                     ),
                   ),
                 ],
