@@ -45,6 +45,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet_action.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
@@ -52,13 +54,17 @@ import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/placeholder_text.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
+
+import 'modal_builder.dart';
 
 class ProfileData extends InheritedWidget {
   final Color imageBackgroundColor;
@@ -189,33 +195,34 @@ class ProfileAvatar extends StatelessWidget {
     }
 
     _editPhoto() {
-      showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  leading: AdaptiveIcon(icon: IconSource.photo),
-                  title: Text(L10n.get(L.gallery)),
-                  onTap: () => _getNewAvatarPath(ImageSource.gallery),
-                ),
-                ListTile(
-                  leading: AdaptiveIcon(icon: IconSource.cameraAlt),
-                  title: Text(L10n.get(L.camera)),
-                  onTap: () => _getNewAvatarPath(ImageSource.camera),
-                ),
-                Visibility(
-                  visible: _isImageAvailable,
-                  child: ListTile(
-                    leading: AdaptiveIcon(icon: IconSource.delete),
-                    title: Text(L10n.get(L.groupRemoveImage)),
-                    onTap: () => _removeAvatar(),
-                  ),
-                )
-              ],
-            );
-          });
+      showNavigatableBottomSheet(
+        context: context,
+        navigatable: Navigatable(Type.changeProfilePhotoModal),
+        bottomSheet: AdaptiveBottomSheet(
+          actions: <Widget>[
+            AdaptiveBottomSheetAction(
+              key: Key(keyAdaptiveBottomSheetGallery),
+              title: Text(L10n.get(L.gallery)),
+              leading: AdaptiveIcon(icon: IconSource.photo),
+              onPressed: () => _getNewAvatarPath(ImageSource.gallery),
+            ),
+            AdaptiveBottomSheetAction(
+              key: Key(keyAdaptiveBottomSheetCamera),
+              title: Text(L10n.get(L.camera)),
+              leading: AdaptiveIcon(icon: IconSource.cameraAlt),
+              onPressed: () => _getNewAvatarPath(ImageSource.camera),
+            ),
+            if (_isImageAvailable)
+              AdaptiveBottomSheetAction(
+                key: Key(keyAdaptiveBottomSheetRemove),
+                title: Text(L10n.get(L.groupRemoveImage)),
+                leading: AdaptiveIcon(icon: IconSource.delete),
+                isDestructive: true,
+                onPressed: _removeAvatar,
+              ),
+          ],
+        ),
+      );
     }
 
     return InkWell(
@@ -391,10 +398,11 @@ class EditableProfileHeader extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                      key: Key(keyUserSettingsUsernameLabel),
-                      maxLines: 1,
-                      controller: nameController,
-                      decoration: InputDecoration(labelText: placeholder)),
+                    key: Key(keyUserSettingsUsernameLabel),
+                    maxLines: 1,
+                    controller: nameController,
+                    decoration: InputDecoration(labelText: placeholder),
+                  ),
                 ],
               ),
             ),

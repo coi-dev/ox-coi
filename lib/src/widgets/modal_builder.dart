@@ -40,6 +40,9 @@
  * for more details.
  */
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog_action.dart';
@@ -49,6 +52,36 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 
 import '../utils/keyMapping.dart';
+
+showNavigatableBottomSheet({
+  @required BuildContext context,
+  @required Widget bottomSheet,
+  @required Navigatable navigatable,
+  Navigatable previousNavigatable,
+}) {
+  Navigation navigation = Navigation();
+  previousNavigatable = previousNavigatable ?? navigation.current;
+  navigation.current = navigatable;
+  if (Platform.isIOS) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return bottomSheet;
+      },
+    ).then((value) {
+      navigation.current = previousNavigatable;
+    });
+  } else {
+    return showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return bottomSheet;
+      },
+    ).then((value) {
+      navigation.current = previousNavigatable;
+    });
+  }
+}
 
 showNavigatableDialog(
     {@required BuildContext context,

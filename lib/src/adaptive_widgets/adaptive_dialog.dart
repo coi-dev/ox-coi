@@ -10,9 +10,9 @@ class AdaptiveDialog extends AdaptiveWidget<CupertinoAlertDialog, AlertDialog> {
 
   AdaptiveDialog({
     Key key,
-    this.title,
-    this.content,
-    this.actions,
+    @required this.title,
+    @required this.content,
+    @required this.actions,
   }) : super(childKey: key);
 
   @override

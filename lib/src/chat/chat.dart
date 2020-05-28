@@ -47,6 +47,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet_action.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_bloc.dart';
@@ -80,7 +81,7 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/vibration.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/button.dart';
-import 'package:ox_coi/src/widgets/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:path/path.dart' as Path;
@@ -657,35 +658,38 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void _showAttachmentChooser() {
-    showModalBottomSheet(
+    showNavigatableBottomSheet(
         context: context,
-        builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: AdaptiveIcon(icon: IconSource.image),
-                title: Text(L10n.get(L.image)),
-                onTap: () => _getFilePath(FileType.image),
-              ),
-              ListTile(
-                leading: AdaptiveIcon(icon: IconSource.videoLibrary),
-                title: Text(L10n.get(L.video)),
-                onTap: () => _getFilePath(FileType.video),
-              ),
-              ListTile(
-                leading: AdaptiveIcon(icon: IconSource.pictureAsPdf),
-                title: Text(pdf),
-                onTap: () => _getFilePath(FileType.custom, "pdf"),
-              ),
-              ListTile(
-                leading: AdaptiveIcon(icon: IconSource.insertDriveFile),
-                title: Text(L10n.get(L.file)),
-                onTap: () => _getFilePath(FileType.any),
-              ),
-            ],
-          );
-        });
+        navigatable: Navigatable(Type.addAttachmentModal),
+        bottomSheet: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            AdaptiveBottomSheetAction(
+              key: Key(keyAttachmentAddImage),
+              title: Text(L10n.get(L.image)),
+              leading: AdaptiveIcon(icon: IconSource.image),
+              onPressed: () => _getFilePath(FileType.image),
+            ),
+            AdaptiveBottomSheetAction(
+              key: Key(keyAttachmentAddVideo),
+              title: Text(L10n.get(L.video)),
+              leading: AdaptiveIcon(icon: IconSource.videoLibrary),
+              onPressed: () => _getFilePath(FileType.video),
+            ),
+            AdaptiveBottomSheetAction(
+              key: Key(keyAttachmentAddPdf),
+              title: Text(pdf),
+              leading: AdaptiveIcon(icon: IconSource.pictureAsPdf),
+              onPressed: () => _getFilePath(FileType.custom, "pdf"),
+            ),
+            AdaptiveBottomSheetAction(
+              key: Key(keyAttachmentAddFile),
+              title: Text(L10n.get(L.file)),
+              leading: AdaptiveIcon(icon: IconSource.insertDriveFile),
+              onPressed: () => _getFilePath(FileType.any),
+            ),
+          ],
+        ));
   }
 
   _getFilePath(FileType fileType, [String extension]) async {

@@ -8,9 +8,9 @@ class AdaptiveDialogAction extends AdaptiveWidget<CupertinoDialogAction, FlatBut
   final Function onPressed;
 
   AdaptiveDialogAction({
-    Key key,
-    this.child,
-    this.onPressed,
+    @required Key key,
+    @required this.child,
+    @required this.onPressed,
   }) : super(childKey: key);
 
   @override

@@ -136,3 +136,16 @@ const keyLoginRegisterText = "keyLoginRegisterText";
 const keyDynamicNavigationNext = "keyDynamicNavigationNext";
 const keyDynamicNavigationBack = "keyDynamicNavigationBack";
 const keyDynamicNavigationSkip = "appbarSkipButton"; // Used in the dynamic onboarding to skip the whole process
+
+const keyAdaptiveBottomSheetCancel = "keyAdaptiveBottomSheetCancel";
+const keyAdaptiveBottomSheetGallery = "keyAdaptiveBottomSheetPhoto";
+const keyAdaptiveBottomSheetCamera = "keyAdaptiveBottomSheetCamera";
+const keyAdaptiveBottomSheetRemove = "keyAdaptiveBottomSheetRemove";
+
+const keySettingsEncryptionDialogCodeCopy = "keySettingsEncryptionCopyCode";
+const keySettingsEncryptionDialogCodeOk = "keySettingsEncryptionCodeOk";
+
+const keyAttachmentAddImage = "keyAttachmentAddImage";
+const keyAttachmentAddVideo = "keyAttachmentAddVideo";
+const keyAttachmentAddPdf = "keyAttachmentAddPdf";
+const keyAttachmentAddFile = "keyAttachmentAddFile";

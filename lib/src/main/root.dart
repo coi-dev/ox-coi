@@ -65,7 +65,7 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/user/user_profile.dart';
 import 'package:ox_coi/src/utils/text_field_handling.dart';
-import 'package:ox_coi/src/widgets/dialog_builder.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
 import 'package:provider/provider.dart';
 

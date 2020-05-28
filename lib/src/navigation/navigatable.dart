@@ -44,7 +44,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 enum Type {
+  addAttachmentModal,
   antiMobbingList,
+  changeProfilePhotoModal,
   chat,
   chatAddGroupParticipants,
   chatCreate,

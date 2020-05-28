@@ -56,7 +56,8 @@ import 'package:ox_coi/src/platform/files.dart';
 import 'package:ox_coi/src/settings/settings_encryption_bloc.dart';
 import 'package:ox_coi/src/settings/settings_encryption_event_state.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
-import 'package:ox_coi/src/widgets/dialog_builder.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
@@ -113,6 +114,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
               content: new Text(L10n.getFormatted(L.autocryptMessageSentX, [state.setupCode])),
               actions: <Widget>[
                 AdaptiveDialogAction(
+                  key: Key(keySettingsEncryptionDialogCodeCopy),
                   child: new Text(L10n.get(L.settingCopyCode)),
                   onPressed: () {
                     var toastText = L10n.getFormatted(L.clipboardCopiedX, [L10n.get(L.code)]);
@@ -121,6 +123,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
                   },
                 ),
                 AdaptiveDialogAction(
+                  key: Key(keySettingsEncryptionDialogCodeOk),
                   child: new Text(L10n.get(L.ok)),
                   onPressed: () {
                     _navigation.pop(context);

@@ -47,6 +47,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet_action.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/customer/customer.dart';
 import 'package:ox_coi/src/customer/customer_delegate_change_notifier.dart';
@@ -58,10 +60,13 @@ import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/main_bloc.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
+import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/platform/system_interaction.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -134,27 +139,27 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
   void avatarPressedCallback({BuildContext context, data}) {
     debugPrint("[Avatar] => Data: $data");
     unFocus(context);
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext sheetContext) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  leading: AdaptiveIcon(icon: IconSource.photo),
-                  title: Text(L10n.get(L.gallery)),
-                  onTap: () => _getNewAvatarPathAsync(sheetContext, ImageSource.gallery),
-                ),
-                ListTile(
-                  leading: AdaptiveIcon(icon: IconSource.cameraAlt),
-                  title: Text(L10n.get(L.camera)),
-                  onTap: () => _getNewAvatarPathAsync(sheetContext, ImageSource.camera),
-                ),
-              ],
-            ),
-          );
-        });
+
+    showNavigatableBottomSheet(
+      context: context,
+      navigatable: Navigatable(Type.changeProfilePhotoModal),
+      bottomSheet: AdaptiveBottomSheet(
+        actions: <Widget>[
+          AdaptiveBottomSheetAction(
+            key: Key(keyAdaptiveBottomSheetGallery),
+            title: Text(L10n.get(L.gallery)),
+            leading: AdaptiveIcon(icon: IconSource.photo),
+            onPressed: () => _getNewAvatarPathAsync(context, ImageSource.gallery),
+          ),
+          AdaptiveBottomSheetAction(
+            key: Key(keyAdaptiveBottomSheetCamera),
+            title: Text(L10n.get(L.camera)),
+            leading: AdaptiveIcon(icon: IconSource.cameraAlt),
+            onPressed: () => _getNewAvatarPathAsync(context, ImageSource.camera),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
