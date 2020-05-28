@@ -50,9 +50,6 @@ import 'package:provider/provider.dart';
 class PageTextFieldComponent extends PageBaseComponent {
   final DynamicScreenTextfieldModel model;
 
-  final _textController = TextEditingController();
-  final _focusNode = FocusNode();
-
   PageTextFieldComponent({Key key, this.model}) : super(key: key);
 
   @override
@@ -67,13 +64,12 @@ class PageTextFieldComponent extends PageBaseComponent {
       builder: (context, changeNotifier, child) {
         return Padding(
           padding: model.padding.edgeInsetsValue,
-          child: TextField(
+          child: TextFormField(
+            initialValue: changeNotifier.userName,
             keyboardType: TextInputType.text,
             textCapitalization: TextCapitalization.none,
             textInputAction: TextInputAction.done,
             decoration: decoration,
-            controller: _textController,
-            focusNode: _focusNode,
             key: Key(L.getKey(L.type)),
             onChanged: (value) {
               customerDelegate.textfieldEditingCompleteAsync(context: context, value: value);
