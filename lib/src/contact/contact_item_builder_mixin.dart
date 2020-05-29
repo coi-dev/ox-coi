@@ -80,9 +80,10 @@ mixin ContactItemBuilder {
         bloc: bloc,
         builder: (context, state) {
           if (state is ContactItemStateSuccess) {
+            final hasName = state.name.isNotEmpty;
             return AvatarListItem(
-              title: state.name,
-              subTitle: state.email,
+              title: hasName ? state.name : state.email,
+              subTitle: hasName ? state.email : null,
               color: state.color,
               isSelectable: isSelectable,
               isSelected: isSelected,

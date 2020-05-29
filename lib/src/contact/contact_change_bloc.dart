@@ -128,7 +128,11 @@ class ContactChangeBloc extends Bloc<ContactChangeEvent, ContactChangeState> wit
 
   void _renameChat(int chatId, String name) {
     Chat chat = _chatRepository.get(chatId);
-    chat.set(Chat.methodChatGetName, name);
+    if (name.isEmpty) {
+      chat.remove(Chat.methodChatGetName);
+    } else {
+      chat.set(Chat.methodChatGetName, name);
+    }
   }
 
   void _deleteContact(int id) async {
