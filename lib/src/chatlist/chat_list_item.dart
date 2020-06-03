@@ -96,6 +96,7 @@ class _ChatListItemState extends State<ChatListItem> {
         String imagePath = "";
         bool hasError = false;
         bool isGroupChat = false;
+        bool isDeviceTalk = false;
 
         if (state is ChatStateSuccess) {
           name = state.name;
@@ -105,12 +106,13 @@ class _ChatListItemState extends State<ChatListItem> {
           preview = state.preview;
           imagePath = state.avatarPath;
           isGroupChat = state.isGroupChat;
+          isDeviceTalk = state.isDeviceTalk;
         } else if (state is ChatStateFailure) {
           hasError = true;
         }
 
         return Visibility(
-          visible: !hasError,
+          visible: !hasError && !isDeviceTalk,
           child: InkWell(
             child: AvatarListItem(
               title: name,

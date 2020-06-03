@@ -119,15 +119,18 @@ class LocalNotificationManager {
         notificationHistory.update(chatId.toString(), (value) => messageId, ifAbsent: () => messageId);
         _chatRepository.putIfAbsent(id: chatId);
         final chat = _chatRepository.get(chatId);
-        String title = await chat.getName();
-        final count = (await _context.getFreshMessageCount(chatId)) - 1;
-        if (count > 1) {
-          title = "$title (+ ${L10n.getFormatted(L.moreMessagesX, [count])})";
+        final isDeviceTalk = await chat.isDeviceTalk();
+        if(!isDeviceTalk) {
+          String title = await chat.getName();
+          final count = (await _context.getFreshMessageCount(chatId)) - 1;
+          if (count > 1) {
+            title = "$title (+ ${L10n.getFormatted(L.moreMessagesX, [count])})";
+          }
+          final teaser = await message.getSummaryText(200);
+          final payload = chatId?.toString();
+          _logger.info("Creating chat notification for chat id $chatId with message id $messageId");
+          _notificationManager.showNotificationFromLocal(chatId, title, teaser, payload: payload);
         }
-        final teaser = await message.getSummaryText(200);
-        final payload = chatId?.toString();
-        _logger.info("Creating chat notification for chat id $chatId with message id $messageId");
-        _notificationManager.showNotificationFromLocal(chatId, title, teaser, payload: payload);
       }
     });
 

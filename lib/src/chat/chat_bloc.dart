@@ -142,6 +142,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       color: color,
       freshMessageCount: 0,
       isSelfTalk: false,
+      isDeviceTalk: false,
       isGroupChat: false,
       preview: null,
       timestamp: null,
@@ -162,6 +163,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final colorValue = await chat.getColor();
     final freshMessageCount = await context.getFreshMessageCount(_chatId);
     final isSelfTalk = await chat.isSelfTalk();
+    final isDeviceTalk = await chat.isDeviceTalk();
     final isVerified = await chat.isVerified();
     final color = colorFromArgb(colorValue);
     final chatSummary = chat.get(ChatExtension.chatSummary);
@@ -180,10 +182,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Contact contact = _contactRepository.get(chatContactId);
       phoneNumbers = contact?.get(ContactExtension.contactPhoneNumber);
       avatarPath = contact?.get(ContactExtension.contactAvatar);
-      final isSelfTalk = await chat.isSelfTalk();
       if (isSelfTalk) {
         subTitle = L10n.get(L.chatMessagesSelf);
-      } else {
+      } else if(!isDeviceTalk) {
         final Contact contact = _contactRepository.get(chatContactId);
         subTitle = await contact.getAddress();
       }
@@ -194,6 +195,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       color: color,
       freshMessageCount: freshMessageCount,
       isSelfTalk: isSelfTalk,
+      isDeviceTalk: isDeviceTalk,
       isGroupChat: _isGroupChat,
       preview: chatSummaryState != ChatMsg.messageStateDraft && chatSummaryState != ChatMsg.messageNone ? chatSummary?.preview : L10n.get(L.chatNoMessages),
       timestamp: chatSummary?.timestamp,

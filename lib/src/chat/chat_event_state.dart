@@ -71,6 +71,7 @@ class ChatStateSuccess extends ChatState {
   final Color color;
   final int freshMessageCount;
   final bool isSelfTalk;
+  final bool isDeviceTalk;
   final bool isGroupChat;
   final String preview;
   final int timestamp;
@@ -85,6 +86,7 @@ class ChatStateSuccess extends ChatState {
       @required this.color,
       @required this.freshMessageCount,
       @required this.isSelfTalk,
+      @required this.isDeviceTalk,
       @required this.isGroupChat,
       @required this.preview,
       @required this.timestamp,
