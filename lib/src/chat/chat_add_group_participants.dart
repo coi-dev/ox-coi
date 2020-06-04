@@ -45,8 +45,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
-import 'package:ox_coi/src/contact/contact_item_selectable.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
@@ -56,7 +56,6 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -65,7 +64,7 @@ import 'chat_change_event_state.dart';
 
 class ChatAddGroupParticipants extends StatefulWidget {
   final int chatId;
-  final List<int> contactIds;
+  final List<dynamic> contactIds;
 
   ChatAddGroupParticipants({@required this.chatId, @required this.contactIds});
 
@@ -85,7 +84,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   void initState() {
     super.initState();
     navigation.current = Navigatable(Type.chatAddGroupParticipants);
-    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
+    _contactListBloc.add(RequestContacts(typeOrChatId: validContacts, chatId: widget.chatId));
     _searchBar = DynamicSearchBar(
       scrollable: false,
       content: DynamicSearchBarContent(
@@ -116,7 +115,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
         bloc: _contactListBloc,
         builder: (context, state) {
           if (state is ContactListStateSuccess) {
-            if (_isSearching || (state.contactIds.length != widget.contactIds.length)) {
+            if (_isSearching || (state.contactElements.length != widget.contactIds.length)) {
               return Column(
                 children: <Widget>[
                   _searchBar,
@@ -144,20 +143,18 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   ListView _buildListItems(ContactListStateSuccess state) {
     return ListView.builder(
       padding: EdgeInsets.only(top: listItemPadding),
-      itemCount: state.contactIds.length,
+      itemCount: state.contactElements.length,
       itemBuilder: (BuildContext context, int index) {
-        final contactIds = state.contactIds;
+        final contactIds = state.contactElements;
         if (!widget.contactIds.contains(contactIds[index])) {
-          var contactId = contactIds[index];
-          var key = createKeyFromId(contactId, [state.contactLastUpdateValues[index]]);
-          bool isSelected = state.contactsSelected.contains(contactId);
-          final int previousContactId = (index > 0) ? contactIds[index - 1] : null;
-          return ContactItemSelectable(
-            key: key,
-            contactId: contactId,
-            onTap: _itemTapped,
-            isSelected: isSelected,
-            previousContactId: previousContactId,
+          final contentElement = contactIds[index];
+
+          return ContactListContent(
+            contactElement: contentElement,
+            hasHeader: true,
+            isSelectable: true,
+            selectedContacts: state.contactsSelected,
+            callback: _itemTapped,
           );
         } else {
           return Container();

@@ -81,7 +81,7 @@ class _InviteItemState extends State<InviteItem> with ChatCreateMixin {
         int timestamp = 0;
         if (state is MessageItemStateSuccess) {
           MessageStateData messageStateData = state.messageStateData;
-          name = messageStateData.contactStateData.address;
+          name = messageStateData.contactStateData.email;
           preview = messageStateData.preview;
           timestamp = messageStateData.timestamp;
           color = CustomTheme.of(context).primary;

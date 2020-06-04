@@ -58,11 +58,12 @@ mixin ContactItemBuilder {
       bloc: bloc,
       builder: (context, state) {
         if (state is ContactItemStateSuccess) {
+          final contactStateData = state.contactStateData;
           return Padding(
             padding: const EdgeInsets.only(left: listItemPadding),
             child: Chip(
               backgroundColor: CustomTheme.of(context).accent.barely(),
-              label: Text(state.name.isNullOrEmpty() ? state.email : state.name),
+              label: Text(contactStateData.name.isNullOrEmpty() ? contactStateData.email : contactStateData.name),
               onDeleted: onContactTapped,
               deleteIconColor: CustomTheme.of(context).accent,
             ),
@@ -75,28 +76,25 @@ mixin ContactItemBuilder {
     );
   }
 
-  BlocBuilder getAvatarItemBlocBuilder({ContactItemBloc bloc, Function onContactTapped, bool isSelectable = false, bool isSelected = false, PopupMenuButton moreButton, bool showHeaderText = true}) {
+  BlocBuilder getAvatarItemBlocBuilder({ContactItemBloc bloc, Function onContactTapped, bool isSelectable = false, bool isSelected = false, PopupMenuButton moreButton}) {
     return BlocBuilder(
         bloc: bloc,
         builder: (context, state) {
           if (state is ContactItemStateSuccess) {
+            final contactStateData = state.contactStateData;
             return AvatarListItem(
-              title: state.name,
-              subTitle: state.email,
-              color: state.color,
+              title: contactStateData.name,
+              subTitle: contactStateData.email,
+              color: contactStateData.color,
               isSelectable: isSelectable,
               isSelected: isSelected,
               onTap: onContactTapped,
-              isVerified: state.isVerified != null ? state.isVerified : false,
-              imagePath: state.imagePath,
+              isVerified: contactStateData.isVerified != null ? contactStateData.isVerified : false,
+              imagePath: contactStateData.imagePath,
               moreButton: moreButton,
-              headerText: state.headerText,
-              showHeaderText: showHeaderText,
             );
-
           } else if (state is ContactItemStateFailure) {
             return new Text(state.error);
-
           } else {
             return AvatarListItem(
               title: "",

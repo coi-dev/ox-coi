@@ -41,50 +41,155 @@
  */
 import 'dart:ui';
 
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-abstract class ContactItemEvent {}
+import 'contact_change.dart';
+import 'contact_item_bloc.dart';
+
+abstract class ContactItemEvent extends Equatable {}
 
 class RequestContact extends ContactItemEvent {
-  final int contactId;
+  final int id;
   final int previousContactId;
   final int typeOrChatId;
 
-  RequestContact({@required this.contactId, this.previousContactId, @required this.typeOrChatId});
+  RequestContact({@required this.id, this.previousContactId, @required this.typeOrChatId});
+
+  @override
+  List<Object> get props => [id, previousContactId, typeOrChatId];
 }
 
-class ContactLoaded extends ContactItemEvent {
+class ChangeContact extends ContactItemEvent {
   final String name;
   final String email;
-  final Color color;
-  final bool isVerified;
-  final String imagePath;
-  final String phoneNumbers;
-  final String headerText;
+  final ContactAction contactAction;
 
-  ContactLoaded({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath, this.phoneNumbers, this.headerText});
+  ChangeContact({
+    @required this.name,
+    @required this.email,
+    @required this.contactAction,
+  });
+
+  @override
+  List<Object> get props => [name, email, contactAction];
 }
 
-abstract class ContactItemState {}
+class DeleteContact extends ContactItemEvent {
+  final int id;
 
-class ContactItemStateInitial extends ContactItemState {}
+  DeleteContact({@required this.id});
 
-class ContactItemStateLoading extends ContactItemState {}
+  @override
+  List<Object> get props => [id];
+}
+
+class AddGoogleContact extends ContactItemEvent {
+  final String name;
+  final String email;
+  final bool changeEmail;
+
+  AddGoogleContact({@required this.name,  @required this.email, @required this.changeEmail});
+
+  @override
+  List<Object> get props => [name, email, changeEmail];
+}
+
+class BlockContact extends ContactItemEvent {
+  final int id;
+  final int chatId;
+  final int messageId;
+
+  BlockContact({this.chatId, this.id, this.messageId});
+
+  @override
+  List<Object> get props => [id, chatId, messageId];
+}
+
+class UnblockContact extends ContactItemEvent {
+  final int id;
+
+  UnblockContact({@required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
+
+abstract class ContactItemState extends Equatable{}
+
+class ContactItemStateInitial extends ContactItemState {
+  @override
+  List<Object> get props => null;
+}
+
+class ContactItemStateLoading extends ContactItemState {
+  @override
+  List<Object> get props => null;
+}
 
 class ContactItemStateSuccess extends ContactItemState {
-  final String name;
-  final String email;
-  final Color color;
-  final bool isVerified;
-  final String imagePath;
-  final String phoneNumbers;
-  final String headerText;
+  final ContactStateData contactStateData;
+  final ContactChangeType type;
+  final bool contactHasChanged;
 
-  ContactItemStateSuccess({@required this.name, @required this.email, @required this.color, @required this.isVerified, @required this.imagePath, this.phoneNumbers, this.headerText});
+  ContactItemStateSuccess({@required this.contactStateData, this.type, this.contactHasChanged = false});
+
+  @override
+  List<Object> get props => [contactStateData, type, contactHasChanged];
 }
 
 class ContactItemStateFailure extends ContactItemState {
+  final int id;
   final String error;
 
-  ContactItemStateFailure({@required this.error});
+
+  ContactItemStateFailure({this.id, @required this.error});
+
+  @override
+  List<Object> get props => [id, error];
+}
+
+class GoogleContactDetected extends ContactItemState {
+  final String name;
+  final String email;
+
+  GoogleContactDetected({@required this.name, @required this.email});
+
+  @override
+  List<Object> get props => [name, email];
+}
+
+class ContactStateData extends Equatable {
+  final int id;
+  final String name;
+  final String email;
+  final Color color;
+  final bool isVerified;
+  final String imagePath;
+  final String phoneNumbers;
+
+  ContactStateData({
+    @required this.id,
+    this.name,
+    this.email,
+    this.color,
+    this.isVerified,
+    this.imagePath,
+    this.phoneNumbers,
+  });
+
+  ContactStateData copyWith({id, name, email, color, isVerified, imagePath, phoneNumbers}) {
+    return ContactStateData(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      color: color ?? this.color,
+      isVerified: isVerified ?? this.isVerified,
+      imagePath: imagePath ?? this.imagePath,
+      phoneNumbers: phoneNumbers ?? this.phoneNumbers,
+    );
+  }
+
+  @override
+  List<Object> get props => [id, name, email, color, isVerified, imagePath, phoneNumbers];
 }

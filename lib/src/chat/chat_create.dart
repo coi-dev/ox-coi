@@ -47,8 +47,8 @@ import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_create_group_participants.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
-import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -57,7 +57,6 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/text_styles.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
@@ -129,13 +128,12 @@ class _ChatCreateState extends State<ChatCreate> {
             if (showNewContactAndAddGroup && index == 0) {
               return buildNewContactAndAddGroup();
             } else {
-              int adjustedIndex = index - offset;
-              final contactId = state.contactIds[adjustedIndex];
-              final int previousContactId = (adjustedIndex > 0) ? state.contactIds[adjustedIndex - 1] : null;
-              final key = createKeyFromId(contactId, [state.contactLastUpdateValues[adjustedIndex]]);
-              return ContactItem(contactId: contactId, previousContactId: previousContactId, contactItemType: ContactItemType.createChat, key: key);
+              final adjustedIndex = index - offset;
+              final contactElement = state.contactElements[adjustedIndex];
+
+              return ContactListContent(contactElement: contactElement, hasHeader: true);
             }
-          }, childCount: state.contactIds.length + offset),
+          }, childCount: state.contactElements.length + offset),
         )
       ],
     );

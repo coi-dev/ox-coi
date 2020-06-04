@@ -57,7 +57,7 @@ class ListGroupHeader extends StatelessWidget {
   final int fontWeightDelta;
   final double fontSizeDelta;
 
-  ListGroupHeader({@required this.text, this.padding = ListGroupHeader.paddingDefault, this.fontWeightDelta = 1, this.fontSizeDelta = 1.0});
+  ListGroupHeader({@required this.text, this.padding = ListGroupHeader.paddingDefault, this.fontWeightDelta = 1, this.fontSizeDelta = 1.0, key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

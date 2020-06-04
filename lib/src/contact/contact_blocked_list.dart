@@ -46,6 +46,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -88,8 +89,26 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          if (state.contactIds.length > 0) {
-            return buildListViewItems(state.contactIds, state.contactLastUpdateValues);
+          var contactIds = state.contactElements;
+          if (contactIds.length > 0) {
+            return ListView.custom(
+                controller: _scrollController,
+                childrenDelegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final contactElement = contactIds[index];
+                      return ContactListContent(
+                        contactElement: contactElement,
+                        hasHeader: true,
+                        contactItemType: ContactItemType.blocked,
+                      );
+                    },
+                    childCount: contactIds.length,
+                    findChildIndexCallback: (Key key) {
+                      final ValueKey valueKey = key;
+                      var id = extractId(valueKey);
+                      var indexOf = contactIds.indexOf(id);
+                      return indexOf;
+                    }));
           } else {
             return EmptyListInfo(
               infoText: L10n.get(L.contactNoBlocked),
@@ -103,29 +122,5 @@ class _ContactBlockedListState extends State<ContactBlockedList> {
         }
       },
     );
-  }
-
-  Widget buildListViewItems(List<int> contactIds, List<int> contactLastUpdateValues) {
-    return ListView.custom(
-        controller: _scrollController,
-        childrenDelegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              var contactId = contactIds[index];
-              final int previousContactId = (index > 0) ? contactIds[index - 1] : null;
-              var key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
-              return ContactItem(
-                contactId: contactId,
-                previousContactId: previousContactId,
-                contactItemType: ContactItemType.blocked,
-                key: key,
-              );
-            },
-            childCount: contactIds.length,
-            findChildIndexCallback: (Key key) {
-              final ValueKey valueKey = key;
-              var id = extractId(valueKey);
-              var indexOf = contactIds.indexOf(id);
-              return indexOf;
-            }));
   }
 }

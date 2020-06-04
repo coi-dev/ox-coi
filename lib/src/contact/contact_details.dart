@@ -47,7 +47,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
-import 'package:ox_coi/src/contact/contact_change_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
@@ -65,7 +64,6 @@ import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 
 import 'contact_change.dart';
-import 'contact_change_event_state.dart';
 
 class ContactDetails extends StatefulWidget {
   final int contactId;
@@ -78,26 +76,27 @@ class ContactDetails extends StatefulWidget {
 
 class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   final _contactItemBloc = ContactItemBloc();
-  final _contactChangeBloc = ContactChangeBloc();
   final _navigation = Navigation();
 
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.contactProfile);
-    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
-    _contactChangeBloc.listen((state) => _handleContactChanged(context, state));
+    _contactItemBloc.add(RequestContact(id: widget.contactId, typeOrChatId: validContacts));
+    _contactItemBloc.listen((state) => _handleContactChanged(context, state));
   }
 
-  _handleContactChanged(BuildContext context, ContactChangeState state) {
-    if (state is ContactChangeStateSuccess) {
-      if (state.type == ContactChangeType.delete) {
-        _getDeleteMessage(context).showToast();
-      } else if (state.type == ContactChangeType.block) {
-        _getBlockMessage(context).showToast();
+  _handleContactChanged(BuildContext context, ContactItemState state) {
+    if (state is ContactItemStateSuccess) {
+      if(state.contactHasChanged){
+        if (state.type == ContactChangeType.delete) {
+          _getDeleteMessage(context).showToast();
+        } else if (state.type == ContactChangeType.block) {
+          _getBlockMessage(context).showToast();
+        }
+        _navigation.popUntilRoot(context);
       }
-      _navigation.popUntilRoot(context);
-    } else if (state is ContactChangeStateFailure) {
+    } else if (state is ContactItemStateFailure) {
       switch (state.error) {
         case contactDeleteGeneric:
           L10n.get(L.contactDeleteFailed).showToast();
@@ -106,6 +105,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
           L10n.get(L.contactDeleteWithActiveChatFailed).showToast();
           break;
       }
+      _navigation.popUntilRoot(context);
     }
   }
 
@@ -121,18 +121,19 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
           bloc: _contactItemBloc,
           builder: (context, state) {
             if (state is ContactItemStateSuccess) {
+              final contactStateData = state.contactStateData;
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ProfileData(
-                    text: state.name,
+                    text: contactStateData?.name,
                     textStyle: Theme.of(context).textTheme.title,
-                    secondaryText: state.email,
-                    avatarPath: state.imagePath,
-                    imageBackgroundColor: state.color,
-                    editActionCallback: () => _editContact(context, state.name, state.email, state.phoneNumbers),
-                    iconData: state.isVerified ? IconSource.verifiedUser : null,
+                    secondaryText: contactStateData?.email,
+                    avatarPath: contactStateData?.imagePath,
+                    imageBackgroundColor: contactStateData?.color,
+                    editActionCallback: () => _editContact(context, contactStateData?.name, contactStateData?.email, contactStateData?.phoneNumbers),
+                    iconData: (contactStateData?.isVerified != null && contactStateData.isVerified) ? IconSource.verifiedUser : null,
                     child: ProfileHeader(),
                   ),
                   SettingsItem(
@@ -156,8 +157,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                         ProfileActionType.block,
                         _blockContact,
                         {
-                          ProfileActionParams.name: state.name,
-                          ProfileActionParams.email: state.email,
+                          ProfileActionParams.name: contactStateData?.name,
+                          ProfileActionParams.email: contactStateData?.email,
                         },
                       ),
                     ),
@@ -189,8 +190,8 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
                         ProfileActionType.deleteContact,
                         _deleteContact,
                         {
-                          ProfileActionParams.name: state.name,
-                          ProfileActionParams.email: state.email,
+                          ProfileActionParams.name: contactStateData?.name,
+                          ProfileActionParams.email: contactStateData?.email,
                         },
                       ),
                     ),
@@ -214,25 +215,22 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
         builder: (context) => ContactChange(
           contactAction: ContactAction.edit,
           id: widget.contactId,
-          name: name,
-          email: email,
-          phoneNumbers: phoneNumbers,
         ),
       ),
     )
         .then((value) {
-      _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+      _contactItemBloc.add(RequestContact(id: widget.contactId, typeOrChatId: validContacts));
     });
   }
 
   _deleteContact() {
     _navigation.pop(context);
-    _contactChangeBloc.add(DeleteContact(id: widget.contactId));
+    _contactItemBloc.add(DeleteContact(id: widget.contactId));
   }
 
   _blockContact() {
     _navigation.pop(context);
-    _contactChangeBloc.add(BlockContact(contactId: widget.contactId));
+    _contactItemBloc.add(BlockContact(id: widget.contactId));
   }
 
   String _getDeleteMessage(BuildContext context) {

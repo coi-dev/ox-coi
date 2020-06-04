@@ -47,6 +47,7 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
+import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
@@ -220,10 +221,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     final contactName = await contact.getName();
     final contactAddress = await contact.getAddress();
     final contactColor = colorFromArgb(await contact.getColor());
+
     ContactStateData contactStateData = ContactStateData(
       id: contactId,
       name: contactName,
-      address: contactAddress,
+      email: contactAddress,
       color: contactColor,
     );
     return contactStateData;

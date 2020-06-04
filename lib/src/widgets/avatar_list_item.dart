@@ -48,8 +48,6 @@ import 'package:ox_coi/src/extensions/numbers_apis.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 
-import 'list_group_header.dart';
-
 class AvatarListItem extends StatelessWidget {
   final String title;
   final String subTitle;
@@ -65,8 +63,6 @@ class AvatarListItem extends StatelessWidget {
   final bool isVerified;
   final bool isInvite;
   final PopupMenuButton moreButton;
-  final String headerText;
-  final bool showHeaderText;
 
   AvatarListItem({
     @required this.title,
@@ -83,27 +79,12 @@ class AvatarListItem extends StatelessWidget {
     this.isVerified = false,
     this.isInvite = false,
     this.moreButton,
-    this.headerText,
-    this.showHeaderText = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Visibility(
-          visible: headerText != null && showHeaderText,
-          child: ListGroupHeader(
-            text: headerText,
-            padding: const EdgeInsets.only(
-                top: dimension24dp,
-                bottom: groupHeaderBottomPadding,
-                left: groupHeaderHorizontalPadding,
-                right: groupHeaderHorizontalPadding),
-            fontWeightDelta: 2,
-            fontSizeDelta: 3,
-          ),
-        ),
         InkWell(
           onTap: () => onTap(title, subTitle),
           child: Column(

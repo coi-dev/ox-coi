@@ -78,7 +78,7 @@ class MessageReceived extends StatelessWidget {
                 padding: const EdgeInsets.only(right: dimension8dp),
                 child: Avatar(
                   textPrimary: contactStateData?.name,
-                  textSecondary: contactStateData?.address,
+                  textSecondary: contactStateData?.email,
                   color: contactStateData?.color,
                   size: messagesUserAvatarGroupSize,
                 ),
@@ -98,7 +98,7 @@ class MessageReceived extends StatelessWidget {
                                 left: messagesHorizontalInnerPadding,
                                 right: messagesHorizontalInnerPadding),
                             child: Text(
-                              contactStateData.name.isNotEmpty ? contactStateData.name : contactStateData.address,
+                              contactStateData.name.isNotEmpty ? contactStateData.name : contactStateData.email,
                               style: TextStyle(color: contactStateData.color),
                             ),
                           )

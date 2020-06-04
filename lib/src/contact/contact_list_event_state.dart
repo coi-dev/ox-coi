@@ -41,13 +41,15 @@
  */
 
 import 'package:meta/meta.dart';
+import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 
 abstract class ContactListEvent {}
 
 class RequestContacts extends ContactListEvent {
   final int typeOrChatId;
+  final int chatId;
 
-  RequestContacts({@required this.typeOrChatId});
+  RequestContacts({@required this.typeOrChatId, this.chatId});
 }
 
 class RequestContactsForGroup extends ContactListEvent {
@@ -58,10 +60,9 @@ class RequestContactsForGroup extends ContactListEvent {
 }
 
 class ContactsChanged extends ContactListEvent {
-  final List<int> ids;
-  final List<int> lastUpdates;
+  final List<dynamic> ids;
 
-  ContactsChanged({@required this.ids, @required this.lastUpdates});
+  ContactsChanged({@required this.ids});
 }
 
 class ContactsSelectionChanged extends ContactListEvent {
@@ -79,11 +80,20 @@ class SearchContacts extends ContactListEvent {
 }
 
 class ContactsSearched extends ContactListEvent {
-  final List<int> ids;
-  final List<int> lastUpdates;
+  final List<dynamic> ids;
 
-  ContactsSearched({@required this.ids, @required this.lastUpdates});
+  ContactsSearched({@required this.ids});
 }
+
+class AddGoogleContacts extends ContactListEvent {
+  final bool changeEmail;
+
+  AddGoogleContacts({@required this.changeEmail});
+}
+
+class MarkContactsAsInitiallyLoaded extends ContactListEvent {}
+
+class PerformImport extends ContactListEvent {}
 
 abstract class ContactListState {}
 
@@ -92,11 +102,11 @@ class ContactListStateInitial extends ContactListState {}
 class ContactListStateLoading extends ContactListState {}
 
 class ContactListStateSuccess extends ContactListState {
-  final List<int> contactIds;
-  final List<int> contactLastUpdateValues;
+  final List<dynamic> contactElements;
   final List<int> contactsSelected;
+  final ContactImportState importState;
 
-  ContactListStateSuccess({@required this.contactIds, @required this.contactLastUpdateValues, @required this.contactsSelected});
+  ContactListStateSuccess({@required this.contactElements, @required this.contactsSelected, this.importState});
 }
 
 class ContactListStateFailure extends ContactListState {
@@ -104,3 +114,5 @@ class ContactListStateFailure extends ContactListState {
 
   ContactListStateFailure({@required this.error});
 }
+
+class GooglemailContactsDetected extends ContactListState {}

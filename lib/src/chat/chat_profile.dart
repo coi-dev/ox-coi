@@ -110,11 +110,14 @@ class _ChatProfileState extends State<ChatProfile> {
                   bloc: _contactListBloc,
                   builder: (context, state) {
                     if (state is ContactListStateSuccess) {
-                      var key = createKeyFromId(state.contactIds.first, [state.contactLastUpdateValues.first]);
-                      return ChatProfileSingle(
+                      final contactId = state.contactElements[1];
+            final key = contactId is String ? ValueKey(contactId) : contactId;
+            var id = extractId(key);
+
+            return ChatProfileSingle(
                         chatId: widget.chatId,
                         isSelfTalk: _isSelfTalk,
-                        contactId: state.contactIds.first,
+                        contactId: id,
                         key: key,
                       );
                     } else {

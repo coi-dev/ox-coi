@@ -48,8 +48,6 @@ import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
-import 'package:ox_coi/src/contact/contact_change_bloc.dart';
-import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
@@ -94,7 +92,7 @@ class _ChatProfileSingleState extends State<ChatProfileSingle> {
     } else {
       typeOrChatId = validContacts;
     }
-    _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: typeOrChatId));
+    _contactItemBloc.add(RequestContact(id: widget.contactId, typeOrChatId: typeOrChatId));
   }
 
   bool isInvite() => widget.chatId == Chat.typeInvite;
@@ -111,7 +109,15 @@ class _ChatProfileSingleState extends State<ChatProfileSingle> {
         bloc: _contactItemBloc,
         builder: (context, state) {
           if (state is ContactItemStateSuccess) {
-            return _buildSingleProfileInfo(state.name, state.email, state.color, state.isVerified, state.imagePath, state.phoneNumbers);
+            final contactStateData = state.contactStateData;
+            return _buildSingleProfileInfo(
+              contactStateData.name,
+              contactStateData.email,
+              contactStateData.color,
+              contactStateData.isVerified,
+              contactStateData.imagePath,
+              contactStateData.phoneNumbers,
+            );
           } else {
             return Container();
           }
@@ -180,10 +186,7 @@ class _ChatProfileSingleState extends State<ChatProfileSingle> {
   }
 
   _blockContact() {
-    // Ignoring false positive https://github.com/felangel/bloc/issues/587
-    // ignore: close_sinks
-    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.add(BlockContact(contactId: widget.contactId, chatId: widget.chatId));
+    _contactItemBloc.add(BlockContact(id: widget.contactId, chatId: widget.chatId));
     _navigation.popUntilRoot(context);
   }
 
@@ -202,15 +205,12 @@ class _ChatProfileSingleState extends State<ChatProfileSingle> {
       MaterialPageRoute(
         builder: (context) => ContactChange(
           contactAction: ContactAction.edit,
-          id: widget.contactId,
-          name: name,
-          email: email,
-          phoneNumbers: phoneNumbers,
+          id: widget.contactId
         ),
       ),
     )
         .then((value) {
-      _contactItemBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+      _contactItemBloc.add(RequestContact(id: widget.contactId, typeOrChatId: validContacts));
     });
   }
 }

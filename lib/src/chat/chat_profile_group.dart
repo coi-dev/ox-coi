@@ -46,8 +46,8 @@ import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_change_bloc.dart';
 import 'package:ox_coi/src/chat/chat_change_event_state.dart';
-import 'package:ox_coi/src/chat/chat_profile_group_contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -170,9 +170,11 @@ class GroupMemberList extends StatelessWidget {
     return BlocBuilder<ContactListBloc, ContactListState>(
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+          state.contactElements.retainWhere((item) => item is ValueKey);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+
               SettingsItem(
                 pushesNewScreen: true,
                 icon: IconSource.flag,
@@ -186,7 +188,7 @@ class GroupMemberList extends StatelessWidget {
                 ),
               ),
               ListGroupHeader(
-                text: L10n.getFormatted(L.participantXP, [state.contactIds.length], count: state.contactIds.length),
+                text: L10n.getFormatted(L.participantXP, [state.contactElements.length], count: state.contactElements.length),
               ),
               Visibility(
                 visible: !isRemoved,
@@ -199,7 +201,7 @@ class GroupMemberList extends StatelessWidget {
                   onTap: () => _navigation.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatAddGroupParticipants(chatId: chatId, contactIds: state.contactIds),
+                      builder: (context) => ChatAddGroupParticipants(chatId: chatId, contactIds: state.contactElements),
                     ),
                   ),
                 ),
@@ -211,11 +213,16 @@ class GroupMemberList extends StatelessWidget {
                 ),
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: state.contactIds.length,
+                itemCount: state.contactElements.length,
                 itemBuilder: (BuildContext context, int index) {
-                  var contactId = state.contactIds[index];
-                  var key = "$contactId-${state.contactLastUpdateValues[index]}";
-                  return ChatProfileGroupContactItem(chatId: chatId, contactId: contactId, showMoreButton: !isRemoved, key: key);
+                  final contactElement = state.contactElements[index];
+
+                  return ContactListContent(
+            contactElement: contactElement,
+            chatId: chatId,
+            isGroupMember: true,
+            showMoreButton: !isRemoved,
+          );
                 },
               ),
               SettingsItem(

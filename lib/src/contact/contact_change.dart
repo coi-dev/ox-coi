@@ -47,9 +47,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat.dart';
-import 'package:ox_coi/src/contact/contact_change_bloc.dart';
-import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
+import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
@@ -61,11 +60,14 @@ import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/qr/qr.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
-import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/list_group_header.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
+
+import 'contact_item_bloc.dart';
+import 'contact_item_event_state.dart';
 
 enum ContactAction {
   add,
@@ -75,13 +77,9 @@ enum ContactAction {
 class ContactChange extends StatefulWidget {
   final ContactAction contactAction;
   final int id;
-  final String name;
-  final String email;
-  final String phoneNumbers;
-
   final bool createChat;
 
-  ContactChange({@required this.contactAction, this.id, this.name, this.email, this.phoneNumbers, this.createChat = false});
+  ContactChange({@required this.contactAction, this.id, this.createChat = false});
 
   @override
   _ContactChangeState createState() => _ContactChangeState();
@@ -100,8 +98,9 @@ class _ContactChangeState extends State<ContactChange> {
 
   String title;
   String changeToast;
+  ContactStateData _contactData;
 
-  ContactChangeBloc _contactChangeBloc = ContactChangeBloc();
+  ContactItemBloc _contactItemBloc = ContactItemBloc();
 
   Repository<Core.Chat> chatRepository;
 
@@ -109,6 +108,7 @@ class _ContactChangeState extends State<ContactChange> {
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.contactChange);
+
     if (widget.contactAction == ContactAction.add) {
       _emailField = ValidatableTextFormField(
         (context) => L10n.get(L.emailAddress),
@@ -120,33 +120,10 @@ class _ContactChangeState extends State<ContactChange> {
         validationHint: (context) => L10n.get(L.loginCheckMail),
       );
     } else {
-      _nameField.controller.text = widget.name != null ? widget.name : "";
+      _contactItemBloc.add(RequestContact(id: widget.id, typeOrChatId: validContacts));
     }
-    _contactChangeBloc.listen((state) => handleContactChanged(state));
-    chatRepository = RepositoryManager.get(RepositoryType.chat);
-  }
 
-  handleContactChanged(ContactChangeState state) async {
-    if (state is ContactChangeStateSuccess) {
-      if (!widget.createChat) {
-        changeToast.showToast();
-        _navigation.pop(context);
-      } else {
-        if (state.id != null) {
-          Core.Context coreContext = Core.Context();
-          var chatId = await coreContext.createChatByContactId(state.id);
-          chatRepository.putIfAbsent(id: chatId);
-          _navigation.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
-            ModalRoute.withName(Navigation.root),
-            Navigatable(Type.rootChildren),
-          );
-        }
-      }
-    } else if (state is ContactChangeStateFailure) {
-      L10n.get(L.contactAddFailedAlreadyExists).showToast();
-    }
+    chatRepository = RepositoryManager.get(RepositoryType.chat);
   }
 
   @override
@@ -171,31 +148,170 @@ class _ContactChangeState extends State<ContactChange> {
           ],
         ),
         body: SingleChildScrollView(
-            child: BlocListener(
-          bloc: _contactChangeBloc,
-          listener: (context, state) {
-            if (state is GoogleContactDetected) {
-              showConfirmationDialog(
-                context: context,
-                title: L10n.get(L.contactGooglemailDialogTitle),
-                contentText: L10n.get(L.contactGooglemailDialogContent),
-                positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
-                positiveAction: () => _goolemailMailAddressAction(state.name, state.email, true),
-                negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
-                negativeAction: () => _goolemailMailAddressAction(state.name, state.email, false),
-                navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
-                barrierDismissible: false,
-                onWillPop: _onGoogleMailDialogWillPop,
-              );
-            }
-          },
-          child: _buildForm(),
-        )));
+          child: BlocListener(
+            bloc: _contactItemBloc,
+            listener: (context, state) async {
+              if (state is ContactItemStateSuccess) {
+                setState(() {
+                  _contactData = state.contactStateData;
+                });
+                _nameField.controller.text = _contactData.name != null ? _contactData.name : "";
+                if (state.contactHasChanged) {
+                  if (!widget.createChat) {
+                    changeToast.showToast();
+                    _navigation.pop(context);
+                  } else {
+                    if (state.contactStateData.id != null) {
+                      Core.Context coreContext = Core.Context();
+                      var chatId = await coreContext.createChatByContactId(state.contactStateData.id);
+                      chatRepository.putIfAbsent(id: chatId);
+                      _navigation.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => Chat(chatId: chatId)),
+                        ModalRoute.withName(Navigation.root),
+                        Navigatable(Type.rootChildren),
+                      );
+                    }
+                  }
+                }
+              } else if (state is GoogleContactDetected) {
+                showConfirmationDialog(
+                  context: context,
+                  title: L10n.get(L.contactGooglemailDialogTitle),
+                  contentText: L10n.get(L.contactGooglemailDialogContent),
+                  positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
+                  positiveAction: () => _googlemailMailAddressAction(true),
+                  negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
+                  negativeAction: () => _googlemailMailAddressAction(false),
+                  navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
+                  barrierDismissible: false,
+                  onWillPop: _onGoogleMailDialogWillPop,
+                );
+              } else if (state is ContactItemStateFailure) {
+                L10n.get(L.contactAddFailedAlreadyExists).showToast();
+              }
+            },
+            child: Builder(
+              builder: (BuildContext context) {
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Visibility(
+                        visible: widget.contactAction != ContactAction.add,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: changeContactTopPadding),
+                          child: Container(
+                            color: CustomTheme.of(context).surface,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
+                              child: Row(
+                                children: <Widget>[
+                                  AdaptiveIcon(icon: IconSource.mail),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: iconFormPadding),
+                                  ),
+                                  Text(
+                                    _contactData?.email ?? "",
+                                    style: Theme.of(context).textTheme.subhead,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: widget.contactAction == ContactAction.add
+                            ? const EdgeInsets.only(top: changeContactTopPadding)
+                            : const EdgeInsets.all(zero),
+                        child: Container(
+                          color: CustomTheme.of(context).surface,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
+                            child: _nameField,
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.contactAction == ContactAction.add,
+                        child: Container(
+                          color: CustomTheme.of(context).surface,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
+                            child: _emailField,
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.contactAction != ContactAction.add && _contactData?.phoneNumbers != null,
+                        child: Container(
+                          color: CustomTheme.of(context).surface,
+                          child: Column(
+                            children: <Widget>[
+                              for (var phoneNumber in ContactExtension.getPhoneNumberList(_contactData?.phoneNumbers))
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
+                                  child: Row(
+                                    children: <Widget>[
+                                      AdaptiveIcon(icon: IconSource.phone),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: iconFormPadding),
+                                      ),
+                                      Text(
+                                        phoneNumber,
+                                        style: Theme.of(context).textTheme.subhead,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: dimension32dp, bottom: dimension72dp, left: formVerticalPadding, right: formVerticalPadding),
+                        child: Text(
+                          L10n.get(L.contactEditPhoneNumberText),
+                          style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.half()),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.contactAction == ContactAction.add,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: ListGroupHeader(
+                            text: L10n.get(L.qrAddContactHeader),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: widget.contactAction == ContactAction.add,
+                        child: SettingsItem(
+                          pushesNewScreen: true,
+                          icon: IconSource.qr,
+                          text: L10n.get(L.qrScan),
+                          iconBackground: CustomTheme.of(context).qrIcon,
+                          onTap: () => _navigation.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => QrCode(chatId: 0, initialIndex: 1)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ));
   }
 
   _onSubmit() {
     if (_formKey.currentState.validate()) {
-      _contactChangeBloc.add(ChangeContact(
+      _contactItemBloc.add(ChangeContact(
         name: _getName(),
         email: _getEmail(),
         contactAction: widget.contactAction,
@@ -203,127 +319,15 @@ class _ContactChangeState extends State<ContactChange> {
     }
   }
 
-  Widget _buildForm() {
-    return Builder(builder: (BuildContext context) {
-      return Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Visibility(
-              visible: widget.contactAction != ContactAction.add,
-              child: Padding(
-                padding: const EdgeInsets.only(top: changeContactTopPadding),
-                child: Container(
-                  color: CustomTheme.of(context).surface,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
-                    child: Row(
-                      children: <Widget>[
-                        AdaptiveIcon(icon: IconSource.mail),
-                        Padding(
-                          padding: const EdgeInsets.only(right: iconFormPadding),
-                        ),
-                        Text(
-                          widget.email ?? "",
-                          style: Theme.of(context).textTheme.subhead,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: widget.contactAction == ContactAction.add ? const EdgeInsets.only(top: changeContactTopPadding) : const EdgeInsets.all(zero),
-              child: Container(
-                color: CustomTheme.of(context).surface,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-                  child: _nameField,
-                ),
-              ),
-            ),
-            Visibility(
-              visible: widget.contactAction == ContactAction.add,
-              child: Container(
-                color: CustomTheme.of(context).surface,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding),
-                  child: _emailField,
-                ),
-              ),
-            ),
-            Visibility(
-              visible: widget.contactAction != ContactAction.add && widget.phoneNumbers != null,
-              child: Container(
-                color: CustomTheme.of(context).surface,
-                child: Column(
-                  children: <Widget>[
-                    for (var phoneNumber in ContactExtension.getPhoneNumberList(widget.phoneNumbers))
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
-                        child: Row(
-                          children: <Widget>[
-                            AdaptiveIcon(icon: IconSource.phone),
-                            Padding(
-                              padding: const EdgeInsets.only(right: iconFormPadding),
-                            ),
-                            Text(
-                              phoneNumber,
-                              style: Theme.of(context).textTheme.subhead,
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: dimension32dp, bottom: dimension72dp, left: formVerticalPadding, right: formVerticalPadding),
-              child: Text(
-                L10n.get(L.contactEditPhoneNumberText),
-                style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.half()),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Visibility(
-              visible: widget.contactAction == ContactAction.add,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ListGroupHeader(
-                  text: L10n.get(L.qrAddContactHeader),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: widget.contactAction == ContactAction.add,
-              child: SettingsItem(
-                pushesNewScreen: true,
-                icon: IconSource.qr,
-                text: L10n.get(L.qrScan),
-                iconBackground: CustomTheme.of(context).qrIcon,
-                onTap: () => _navigation.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => QrCode(chatId: 0, initialIndex: 1)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
   Future<bool> _onGoogleMailDialogWillPop() {
     return Future.value(false);
   }
 
-  _goolemailMailAddressAction(String name, String email, bool changeEmail) {
-    _contactChangeBloc.add(AddGoogleContact(name: name, email: email, changeEmail: changeEmail));
+  _googlemailMailAddressAction(bool changeEmail) {
+    _contactItemBloc.add(AddGoogleContact(name: _getName(), email: _getEmail(), changeEmail: changeEmail));
   }
 
   String _getName() => _nameField.controller.text;
 
-  String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : widget.email;
+  String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : _contactData?.email;
 }

@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:flutter/services.dart';
@@ -50,7 +48,6 @@ import 'package:ox_coi/src/chatlist/chat_list_event_state.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
-import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
 import 'package:ox_coi/src/share/shared_data.dart';
 
@@ -96,18 +93,18 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
 
   void createShareList() {
     List<int> _chatIds;
-    List<int> _completeList = List();
+    List<dynamic> _completeList = List();
 
     _contactListBloc.listen((state) {
       if (state is ContactListStateSuccess) {
         int index = _chatIds.length;
-        if (state.contactIds != null) {
-          _completeList.insertAll(index, state.contactIds);
+        if (state.contactElements != null) {
+          _completeList.insertAll(index, state.contactElements);
         }
         add(ChatsAndContactsLoaded(
           chatAndContactList: _completeList,
           chatListLength: _chatIds.length,
-          contactListLength: state.contactIds.length,
+          contactListLength: state.contactElements.length,
         ));
       }
     });

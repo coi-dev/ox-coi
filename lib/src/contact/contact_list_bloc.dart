@@ -41,9 +41,12 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:contacts_service/contacts_service.dart' as SystemContacts;
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/material.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/contact/contacts_updater_mixin.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
@@ -51,14 +54,27 @@ import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/l10n/l.dart';
+import 'package:ox_coi/src/l10n/l10n.dart';
+import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/utils/constants.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+enum ContactImportState { success, fail }
 
 class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with ContactsUpdaterMixin {
   Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
+  final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
   RepositoryMultiEventStreamHandler _repositoryStreamHandler;
   int _typeOrChatId;
   List<int> _contactsSelected = List();
   String _currentSearch;
   bool _listenersRegistered = false;
+  Iterable<SystemContacts.Contact> _systemContacts;
+  String _coreContacts = "";
+  Map<String, String> _phoneNumbers = Map();
 
   int get contactsSelectedCount => _contactsSelected.length;
 
@@ -75,7 +91,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
         _currentSearch = null;
         _typeOrChatId = event.typeOrChatId;
         _registerListeners();
-        yield* _setupContacts();
+        yield* _setupContacts(chatId: event.chatId);
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
@@ -88,18 +104,28 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     } else if (event is ContactsChanged) {
       yield ContactListStateSuccess(
-        contactIds: event.ids,
-        contactLastUpdateValues: event.lastUpdates,
+        contactElements: event.ids,
         contactsSelected: _contactsSelected,
       );
     } else if (event is ContactsSearched) {
       yield ContactListStateSuccess(
-        contactIds: event.ids,
-        contactLastUpdateValues: event.lastUpdates,
+        contactElements: event.ids,
         contactsSelected: _contactsSelected,
       );
+    } else if (event is AddGoogleContacts) {
+      yield* _addUpdateContactsAsync(changeEmails: event.changeEmail);
     } else if (event is ContactsSelectionChanged) {
       yield* _selectionChanged(event.id);
+    } else if (event is MarkContactsAsInitiallyLoaded) {
+      await _markContactsAsInitiallyLoadedAsync();
+    } else if (event is PerformImport) {
+      _systemContacts = await _loadSystemContactsAsync();
+      if (_systemContacts == null) {
+        yield* _setupContacts(importState: ContactImportState.fail);
+      } else {
+        yield ContactListStateLoading();
+        yield* _importSystemContacts();
+      }
     }
   }
 
@@ -110,27 +136,28 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   }
 
   void _registerListeners() {
-      if (!_listenersRegistered) {
-        _listenersRegistered = true;
-        _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChanged);
-        _contactRepository.addListener(_repositoryStreamHandler);
-      }
+    if (!_listenersRegistered) {
+      _listenersRegistered = true;
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChanged);
+      _contactRepository.addListener(_repositoryStreamHandler);
+    }
   }
 
   void _unregisterListeners() {
-      if (_listenersRegistered) {
-        _listenersRegistered = false;
-        _contactRepository.removeListener(_repositoryStreamHandler);
-      }
+    if (_listenersRegistered) {
+      _listenersRegistered = false;
+      _contactRepository.removeListener(_repositoryStreamHandler);
+    }
   }
 
   void _onContactsChanged([event]) async {
     List<int> ids = await getIds(_typeOrChatId);
-    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(ids);
-    add(ContactsChanged(ids: ids, lastUpdates: lastUpdates));
+    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: ids);
+
+    add(ContactsChanged(ids: contactHeaderList));
   }
 
-  Stream<ContactListStateSuccess> _setupContacts() async* {
+  Stream<ContactListStateSuccess> _setupContacts({int chatId, ContactImportState importState}) async* {
     List<int> contactIds = await getIds(_typeOrChatId);
     _contactRepository.update(ids: contactIds);
     var contactExtensionProvider = ContactExtensionProvider();
@@ -142,25 +169,74 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     });
 
-    List<int> lastUpdates = _contactRepository.getLastUpdateValuesForIds(contactIds);
+    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: contactIds, chatId: chatId);
+
     yield ContactListStateSuccess(
-      contactIds: contactIds,
-      contactLastUpdateValues: lastUpdates,
+      contactElements: contactHeaderList,
       contactsSelected: _contactsSelected,
+      importState: importState,
     );
+  }
+
+  Future<List<dynamic>> _mergeHeaderAndContacts({List<int> contactIds, int chatId}) async {
+    final headerList = List();
+    final context = Context();
+    List<int> chatParticipants;
+    var meHeader = L10n.get(L.contactOwnCardGroupHeaderText);
+    var meContactDetails;
+
+    if (chatId != null) {
+      chatParticipants = await context.getChatContacts(chatId);
+    }
+
+    await Future.forEach(contactIds, (id) async {
+      if (chatParticipants != null && chatParticipants.contains(id)) {
+        return;
+      }
+      final Contact contact = _contactRepository.get(id);
+      final String name = await contact.getName();
+      final String email = await contact.getAddress();
+      final int lastUpdate = contact.lastUpdate;
+      final index = contactIds.indexOf(id);
+      final previousContactId = (index > 0) ? contactIds[index - 1] : null;
+
+      if (Contact.idSelf == id) {
+        meContactDetails = createKeyFromId(id, [lastUpdate]);
+        return;
+      }
+      String headerText = name.isNullOrEmpty() ? email.getFirstCharacter()?.toUpperCase() : name.getFirstCharacter()?.toUpperCase();
+
+      if (previousContactId != null) {
+        String previousName = await _contactRepository.get(previousContactId).getName();
+        if (previousName.isNullOrEmpty()) {
+          previousName = await _contactRepository.get(previousContactId).getAddress();
+        }
+
+        if (headerText == previousName.getFirstCharacter()?.toUpperCase()) {
+          headerList.add(createKeyFromId(id, [lastUpdate]));
+        } else {
+          headerList.add(headerText);
+          headerList.add(createKeyFromId(id, [lastUpdate]));
+        }
+      } else {
+        headerList.add(headerText);
+        headerList.add(createKeyFromId(id, [lastUpdate]));
+      }
+    });
+    if (chatId == null) {
+      headerList.add(meHeader);
+      headerList.add(meContactDetails);
+    }
+    return headerList;
   }
 
   Stream<ContactListStateSuccess> _searchContacts() async* {
     Context context = Context();
     List<int> contactIds = List.from(await context.getContacts(2, _currentSearch));
-    List<int> lastUpdates = List();
-    contactIds.forEach((contactId) {
-      lastUpdates.add(_contactRepository.get(contactId).lastUpdate);
-    });
+    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: contactIds);
 
     yield ContactListStateSuccess(
-      contactIds: contactIds,
-      contactLastUpdateValues: lastUpdates,
+      contactElements: contactHeaderList,
       contactsSelected: _contactsSelected,
     );
   }
@@ -176,5 +252,169 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     } else {
       yield* _searchContacts();
     }
+  }
+
+  Future<bool> isInitialContactsOpeningAsync() async {
+    bool systemContactImportShown = await getPreference(preferenceSystemContactsImportShown);
+    return systemContactImportShown == null || !systemContactImportShown;
+  }
+
+  Future<void> _markContactsAsInitiallyLoadedAsync() async {
+    await setPreference(preferenceSystemContactsImportShown, true);
+  }
+
+  Future<Iterable<SystemContacts.Contact>> _loadSystemContactsAsync() async {
+    bool hasContactPermission = await Permission.contacts.request().isGranted;
+    if (hasContactPermission) {
+      return await SystemContacts.ContactsService.getContacts();
+    } else {
+      return null;
+    }
+  }
+
+  Stream<ContactListState> _importSystemContacts() async* {
+    bool googlemailDetected = false;
+
+    _systemContacts.forEach((contact) {
+      if (contact.emails.length != 0) {
+        contact.emails.forEach((email) {
+          if (email.value.isEmail) {
+            if (!googlemailDetected) {
+              googlemailDetected = email.value.contains(googlemailDomain);
+            }
+            _coreContacts += getFormattedContactData(contact, email);
+            updatePhoneNumbers(_phoneNumbers, contact, email);
+          }
+        });
+      }
+    });
+
+    if (googlemailDetected) {
+      yield GooglemailContactsDetected();
+    } else {
+      yield* _addUpdateContactsAsync(changeEmails: false);
+    }
+  }
+
+  Stream<ContactListState> _addUpdateContactsAsync({@required bool changeEmails}) async* {
+    final context = Context();
+    if (changeEmails) {
+      _coreContacts = _coreContacts.replaceAll(googlemailDomain, gmailDomain);
+    }
+    await updateContacts(_coreContacts, context);
+
+    if (_phoneNumbers.isNotEmpty) {
+      List<int> ids = List.from(await context.getContacts(2, null));
+      await updateContactExtensions(ids, _phoneNumbers);
+    }
+
+    await Future.forEach(_contactRepository.getAll(), (contact) async {
+      await updateAvatar(_systemContacts, contact);
+      await reloadChatName(context, contact.id);
+    });
+
+    _systemContacts = null;
+    _phoneNumbers.clear();
+
+    yield* _setupContacts(importState: ContactImportState.success);
+  }
+
+  Future<void> reloadChatName(Context context, int contactId) async {
+    int chatId = await context.getChatByContactId(contactId);
+    if (chatId != 0) {
+      Chat chat = _chatRepository.get(chatId);
+      chat.reloadValue(Chat.methodChatGetName);
+    }
+  }
+
+  String getFormattedContactData(SystemContacts.Contact contact, SystemContacts.Item email) {
+    return "${contact.displayName}\n${email.value}\n";
+  }
+
+  void updatePhoneNumbers(Map<String, String> phoneNumbers, SystemContacts.Contact contact, SystemContacts.Item email) {
+    if (contact.phones.isNotEmpty) {
+      contact.phones.forEach((phoneNumber) {
+        var currentPhoneNumber = phoneNumbers[email.value];
+        if (currentPhoneNumber == null) {
+          phoneNumbers[email.value] = "";
+        }
+        phoneNumbers[email.value] += "${phoneNumber.value}\n";
+      });
+    }
+  }
+
+  Future<void> updateAvatar(Iterable<SystemContacts.Contact> systemContacts, Contact contact) async {
+    final avatarPath = await _avatarPathAsync();
+    final contactEmail = await contact.getAddress();
+    final contactExtensionProvider = ContactExtensionProvider();
+    final contactId = contact.id;
+
+    systemContacts.forEach((systemContact) {
+      systemContact.emails.forEach((email) async {
+        if (email.value.isEmail && contactEmail == email.value) {
+          String filePath = "";
+          // ignore: null_aware_before_operator
+          if (systemContact.avatar != null && systemContact.avatar.length > 0) {
+            _contactRepository.update(id: contactId);
+            filePath = "$avatarPath/${email.value}_avatar.png";
+            File file = File(filePath);
+            FileImage image = FileImage(file);
+            image.evict();
+            await file.writeAsBytes(systemContact.avatar);
+          }
+          var contactExtension = await contactExtensionProvider.get(contactId: contactId);
+          if (contactExtension == null) {
+            contactExtension = ContactExtension(contactId, avatar: filePath);
+            contactExtensionProvider.insert(contactExtension);
+          } else {
+            contactExtension.avatar = filePath;
+            contactExtensionProvider.update(contactExtension);
+          }
+        }
+      });
+    });
+  }
+
+  Future<int> updateContacts(String coreContacts, Context context) async {
+    int changedCount = 0;
+    if (coreContacts != null && coreContacts.isNotEmpty) {
+      changedCount = await context.addAddressBook(coreContacts);
+    }
+    return changedCount;
+  }
+
+  Future updateContactExtensions(List<int> contactIds, Map<String, String> phoneNumbers) async {
+    var contactExtensionProvider = ContactExtensionProvider();
+    _contactRepository.update(ids: contactIds);
+    contactIds.forEach((contactId) async {
+      var contact = _contactRepository.get(contactId);
+      var mail = await contact.getAddress();
+      var contactPhoneNumbers = phoneNumbers[mail];
+      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
+      if (contactPhoneNumbers != null && contactPhoneNumbers.isNotEmpty) {
+        if (contactExtension == null) {
+          contactExtension = ContactExtension(contactId, phoneNumbers: contactPhoneNumbers);
+          contactExtensionProvider.insert(contactExtension);
+        } else {
+          contactExtension.phoneNumbers = contactPhoneNumbers;
+          contactExtensionProvider.update(contactExtension);
+        }
+      } else {
+        if (contactExtension != null) {
+          contactExtension.phoneNumbers = "";
+          contactExtensionProvider.update(contactExtension);
+        }
+      }
+    });
+  }
+
+  Future<String> _avatarPathAsync() async {
+    final applicationSupportDirectory = await getApplicationSupportDirectory();
+    final avatarPath = "${applicationSupportDirectory.path}/avatars";
+    final avatarDir = Directory(avatarPath);
+    if (await avatarDir.exists() == false) {
+      avatarDir.createSync(recursive: true);
+    }
+    return avatarPath;
   }
 }

@@ -46,8 +46,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat_create_group_settings.dart';
 import 'package:ox_coi/src/contact/contact_item_chip.dart';
-import 'package:ox_coi/src/contact/contact_item_selectable.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/extensions/string_ui.dart';
@@ -131,24 +131,15 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
   }
 
   ListView buildListItems(ContactListStateSuccess state) {
-    var contactIds = state.contactIds;
-    var contactLastUpdateValues = state.contactLastUpdateValues;
+    var contactIds = state.contactElements;
+
     return ListView.custom(
       controller: _scrollController,
       childrenDelegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          final contactId = state.contactIds[index];
-          final int previousContactId = (index > 0) ? state.contactIds[index - 1] : null;
-          final key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
-          final bool isSelected = state.contactsSelected.contains(contactId);
+          final contactElement = state.contactElements[index];
 
-          return ContactItemSelectable(
-            contactId: contactId,
-            previousContactId: previousContactId,
-            onTap: _itemTapped,
-            isSelected: isSelected,
-            key: key,
-          );
+          return ContactListContent(contactElement: contactElement, hasHeader: true, isSelectable: true, selectedContacts: state.contactsSelected, callback: _itemTapped,);
         },
         childCount: contactIds.length,
         findChildIndexCallback: (Key key) {

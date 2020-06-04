@@ -47,8 +47,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
-import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
@@ -60,6 +60,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/profile_header.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
@@ -121,79 +122,74 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
       bloc: _contactListBloc,
       builder: (context, state) {
         if (state is ContactListStateSuccess) {
-          return buildParticipantList(state.contactIds, state.contactLastUpdateValues);
+          final contactElements = state.contactElements;
+          contactElements.removeWhere((contactElement) {
+            final key = getKeyFromContactElement(contactElement);
+            final idOrHeader = extractId(key);
+            return !widget.selectedContacts.contains(idOrHeader);
+          });
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Align(
+                  alignment: Alignment.center,
+                  child: ProfileData(
+                    imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
+                    imageActionCallback: _setAvatar,
+                    avatarPath: _avatar,
+                    child: ProfileHeader(),
+                  )),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: formHorizontalPadding,
+                  right: formHorizontalPadding,
+                  top: formVerticalPadding,
+                ),
+                child: Text(
+                  L10n.get(L.groupName),
+                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
+                child: Form(
+                  key: _formKey,
+                  child: _groupNameField,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: formHorizontalPadding,
+                  right: formHorizontalPadding,
+                  top: formVerticalPadding,
+                ),
+                child: Text(
+                  L10n.get(L.participantP, count: L10n.plural),
+                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: listItemPadding),
+                child: Divider(height: 1),
+              ),
+              Column(
+                children: <Widget>[
+                  for (var index = 0; index < contactElements.length; index++)
+                    ContactListContent(contactElement: contactElements[index], hasHeader: false,)
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: listItemPaddingSmall),
+                child: Divider(height: 1),
+              ),
+            ],
+          );
         } else if (state is! ContactListStateFailure) {
           return StateInfo(showLoading: true);
         } else {
           return AdaptiveIcon(icon: IconSource.error);
         }
       },
-    );
-  }
-
-  Widget buildParticipantList(List<int> contactIds, List<int> contactLastUpdateValues) {
-    contactIds.removeWhere((contactId) {
-      return !widget.selectedContacts.contains(contactId);
-    });
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Align(
-            alignment: Alignment.center,
-            child: ProfileData(
-              imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
-              imageActionCallback: _setAvatar,
-              avatarPath: _avatar,
-              child: ProfileHeader(),
-            )),
-        Padding(
-          padding: EdgeInsets.only(
-            left: formHorizontalPadding,
-            right: formHorizontalPadding,
-            top: formVerticalPadding,
-          ),
-          child: Text(
-            L10n.get(L.groupName),
-            style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
-          child: Form(
-            key: _formKey,
-            child: _groupNameField,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: formHorizontalPadding,
-            right: formHorizontalPadding,
-            top: formVerticalPadding,
-          ),
-          child: Text(
-            L10n.get(L.participantP, count: L10n.plural),
-            style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: listItemPadding),
-          child: Divider(height: 1),
-        ),
-        Column(
-          children: <Widget>[
-            for (var index = 0; index < contactIds.length; index++)
-              ContactItem(
-                contactId: contactIds[index],
-                previousContactId: index > 0 ? contactIds[index - 1] : null,
-                key: Key(contactIds[index].toString()),
-              ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: listItemPaddingSmall),
-          child: Divider(height: 1),
-        ),
-      ],
     );
   }
 

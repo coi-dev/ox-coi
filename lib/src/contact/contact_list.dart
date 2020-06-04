@@ -49,9 +49,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
-import 'package:ox_coi/src/contact/contact_import_bloc.dart';
-import 'package:ox_coi/src/contact/contact_import_event_state.dart';
-import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
@@ -62,7 +59,6 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/root_child.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/modal_builder.dart';
@@ -71,6 +67,9 @@ import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:provider/provider.dart';
+
+import 'contact_item_bloc.dart';
+import 'contact_list_content.dart';
 
 _showAddContactView(BuildContext context, Navigation navigation) {
   navigation.pushNamed(context, Navigation.contactsAdd);
@@ -136,7 +135,7 @@ class ContactList extends RootChild {
 
 class _ContactListState extends State<ContactList> with ChatCreateMixin {
   final _contactListBloc = ContactListBloc();
-  final _contactImportBloc = ContactImportBloc();
+  final _contactItemBloc = ContactItemBloc();
   final _scrollController = ScrollController();
   DynamicSearchBar _searchBar;
 
@@ -167,8 +166,8 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
 
   @override
   void dispose() {
-    _contactImportBloc.close();
     _contactListBloc.close();
+    _contactItemBloc.close();
     _appBarActionsSubscription.cancel();
     super.dispose();
   }
@@ -176,92 +175,84 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
   void requestValidContacts() => _contactListBloc.add(RequestContacts(typeOrChatId: validContacts));
 
   setupContactImport() async {
-    if (await _contactImportBloc.isInitialContactsOpening()) {
-      _contactImportBloc.add(MarkContactsAsInitiallyLoaded());
+    if (await _contactListBloc.isInitialContactsOpeningAsync()) {
+      _contactListBloc.add(MarkContactsAsInitiallyLoaded());
       _showImportDialog(true, context);
-    }
-    _contactImportBloc.listen((state) => handleContactImport(state));
-  }
-
-  handleContactImport(ContactImportState state) {
-    _progressOverlayEntry?.remove();
-    if (state is ContactsImportSuccess) {
-      requestValidContacts();
-      String contactImportSuccess = L10n.get(L.contactImportSuccessful);
-      contactImportSuccess.showToast();
-    } else if (state is ContactsImportFailure) {
-      String contactImportFailure = L10n.get(L.contactImportFailed);
-      contactImportFailure.showToast();
-    } else if (state is GooglemailContactsDetected) {
-      showConfirmationDialog(
-        context: context,
-        title: L10n.get(L.contactGooglemailDialogTitle),
-        contentText: L10n.get(L.contactGooglemailDialogContent),
-        positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
-        positiveAction: () => _googleMailMailAddressAction(true),
-        negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
-        negativeAction: () => _googleMailMailAddressAction(false),
-        navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
-        barrierDismissible: false,
-        onWillPop: _onGoogleMailDialogWillPop,
-      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
+    return BlocListener(
       bloc: _contactListBloc,
-      builder: (context, state) {
+      listener: (context, state) {
+        _progressOverlayEntry?.remove();
         if (state is ContactListStateSuccess) {
-          final contactIds = state.contactIds;
-          final contactLastUpdateValues = state.contactLastUpdateValues;
-
-          return CustomScrollView(
-            controller: _scrollController,
-            slivers: <Widget>[
-              _searchBar,
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    final contactId = contactIds[index];
-                    final int previousContactId = (index > 0) ? contactIds[index - 1] : null;
-                    final key = createKeyFromId(contactId, [contactLastUpdateValues[index]]);
-                    final contactItem = ContactItem(contactId: contactId, previousContactId: previousContactId, key: key);
-                    final chatIcon = AdaptiveIcon(icon: IconSource.chat, color: CustomTheme.of(context).white);
-
-                    return Dismissible(
-                      key: key,
-                      confirmDismiss: (direction) {
-                        createChatFromContact(context, contactId);
-                        return Future.value(false);
-                      },
-                      background: Container(
-                        color: CustomTheme.of(context).chatIcon,
-                        padding: const EdgeInsets.only(right: dimension20dp),
-                        alignment: Alignment.centerRight,
-                        child: chatIcon,
-                      ),
-                      direction: DismissDirection.endToStart,
-                      child: contactItem,
-                    );
-                  },
-                  childCount: contactIds.length,
-                  findChildIndexCallback: (Key key) {
-                    final ValueKey valueKey = key;
-                    final id = extractId(valueKey);
-                    return (contactIds.contains(id) ? contactIds.indexOf(id) : null);
-                  },
-                ),
-              ),
-            ],
+          if(state.importState == ContactImportState.success){
+            String contactImportSuccess = L10n.get(L.contactImportSuccessful);
+            contactImportSuccess.showToast();
+          } else if(state.importState == ContactImportState.fail){
+            String contactImportFailure = L10n.get(L.contactImportFailed);
+            contactImportFailure.showToast();
+          }
+        } else if (state is GooglemailContactsDetected) {
+          showConfirmationDialog(
+            context: context,
+            title: L10n.get(L.contactGooglemailDialogTitle),
+            contentText: L10n.get(L.contactGooglemailDialogContent),
+            positiveButton: L10n.get(L.contactGooglemailDialogPositiveButton),
+            positiveAction: () => _googleMailAddressAction(true),
+            negativeButton: L10n.get(L.contactGooglemailDialogNegativeButton),
+            negativeAction: () => _googleMailAddressAction(false),
+            navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
+            barrierDismissible: false,
+            onWillPop: _onGoogleMailDialogWillPop,
           );
-        } else if (state is! ContactListStateFailure) {
-          return StateInfo(showLoading: true);
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
         }
       },
+      child: BlocBuilder(
+        bloc: _contactListBloc,
+        builder: (context, state) {
+          if (state is ContactListStateSuccess) {
+            if(state.importState == ContactImportState.success){
+              String contactImportSuccess = L10n.get(L.contactImportSuccessful);
+              contactImportSuccess.showToast();
+            } else if(state.importState == ContactImportState.fail){
+              String contactImportFailure = L10n.get(L.contactImportFailed);
+              contactImportFailure.showToast();
+            }
+            final contactIds = state.contactElements;
+
+            return CustomScrollView(
+              controller: _scrollController,
+              slivers: <Widget>[
+                _searchBar,
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final contactElement = contactIds[index];
+                      return ContactListContent(contactElement: contactElement, hasHeader: true, isDismissible: true);
+                    },
+                    childCount: contactIds.length,
+                    findChildIndexCallback: (Key key) {
+                      if (key is int) {
+                        final ValueKey valueKey = key;
+                        final id = extractId(valueKey);
+                        return (contactIds.contains(id) ? contactIds.indexOf(id) : null);
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            );
+          } else if (state is! ContactListStateFailure) {
+            return StateInfo(showLoading: true);
+          } else {
+            return AdaptiveIcon(icon: IconSource.error);
+          }
+        },
+      ),
     );
   }
 
@@ -288,7 +279,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
           text: L10n.get(L.contactImportRunning),
         ));
         Overlay.of(context).insert(_progressOverlayEntry);
-        _contactImportBloc.add(PerformImport());
+        _contactListBloc.add(PerformImport());
       },
       navigatable: Navigatable(Type.contactImportDialog),
     );
@@ -298,7 +289,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
     return Future.value(false);
   }
 
-  _googleMailMailAddressAction(bool changeEmail) {
-    _contactImportBloc.add(ImportGooglemailContacts(changeEmails: changeEmail));
+  _googleMailAddressAction(bool changeEmail) {
+    _contactListBloc.add(AddGoogleContacts(changeEmail: changeEmail));
   }
 }

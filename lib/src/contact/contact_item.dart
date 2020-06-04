@@ -43,8 +43,6 @@
 import 'package:flutter/material.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chat/chat_create_mixin.dart';
-import 'package:ox_coi/src/contact/contact_change_bloc.dart';
-import 'package:ox_coi/src/contact/contact_change_event_state.dart';
 import 'package:ox_coi/src/contact/contact_item_bloc.dart';
 import 'package:ox_coi/src/contact/contact_item_builder_mixin.dart';
 import 'package:ox_coi/src/contact/contact_item_event_state.dart';
@@ -61,13 +59,11 @@ enum ContactItemType { edit, createChat, blocked, forward }
 
 class ContactItem extends StatefulWidget {
   final int contactId;
-  final int previousContactId;
   final ContactItemType contactItemType;
   final Function onTap;
 
   ContactItem({
     @required this.contactId,
-    @required this.previousContactId,
     this.contactItemType = ContactItemType.edit,
     this.onTap,
     Key key,
@@ -78,8 +74,8 @@ class ContactItem extends StatefulWidget {
 }
 
 class _ContactItemState extends State<ContactItem> with ContactItemBuilder, ChatCreateMixin, AutomaticKeepAliveClientMixin<ContactItem> {
-  ContactItemBloc _contactBloc = ContactItemBloc();
-  Navigation _navigation = Navigation();
+  ContactItemBloc _contactItemBloc = ContactItemBloc();
+  final _navigation = Navigation();
 
   @override
   void initState() {
@@ -90,7 +86,7 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
     } else {
       listType = validContacts;
     }
-    _contactBloc.add(RequestContact(contactId: widget.contactId, previousContactId: widget.previousContactId, typeOrChatId: listType));
+    _contactItemBloc.add(RequestContact(id: widget.contactId, typeOrChatId: listType));
   }
 
   @override
@@ -98,14 +94,14 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
 
   @override
   void dispose() {
-    _contactBloc.close();
+    _contactItemBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return getAvatarItemBlocBuilder(bloc: _contactBloc, onContactTapped: onContactTapped);
+    return getAvatarItemBlocBuilder(bloc: _contactItemBloc, onContactTapped: onContactTapped);
   }
 
   onContactTapped(String name, String email) async {
@@ -149,7 +145,6 @@ class _ContactItemState extends State<ContactItem> with ContactItemBuilder, Chat
   void unblockContact() {
     // Ignoring false positive https://github.com/felangel/bloc/issues/587
     // ignore: close_sinks
-    ContactChangeBloc contactChangeBloc = ContactChangeBloc();
-    contactChangeBloc.add(UnblockContact(id: widget.contactId));
+    _contactItemBloc.add(UnblockContact(id: widget.contactId));
   }
 }

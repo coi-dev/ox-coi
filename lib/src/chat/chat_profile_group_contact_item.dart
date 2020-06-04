@@ -66,7 +66,7 @@ class ChatProfileGroupContactItem extends StatefulWidget {
   final int contactId;
   final bool showMoreButton;
 
-  ChatProfileGroupContactItem({this.chatId, this.contactId, this.showMoreButton = false, key}) : super(key: Key(key));
+  ChatProfileGroupContactItem({this.chatId, this.contactId, this.showMoreButton = false, key}) : super(key: key);
 
   @override
   _ChatProfileGroupContactItemState createState() => _ChatProfileGroupContactItemState();
@@ -94,7 +94,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   @override
   void initState() {
     super.initState();
-    _contactBloc.add(RequestContact(contactId: widget.contactId, typeOrChatId: validContacts));
+    _contactBloc.add(RequestContact(id: widget.contactId, typeOrChatId: validContacts));
     if (widget.contactId != Core.Contact.idSelf) {
       choices = participantChoices;
     } else {
@@ -111,7 +111,7 @@ class _ChatProfileGroupContactItemState extends State<ChatProfileGroupContactIte
   @override
   Widget build(BuildContext context) {
     return getAvatarItemBlocBuilder(
-        bloc: _contactBloc, onContactTapped: goToProfile, moreButton: widget.showMoreButton ? getMoreButton() : null, showHeaderText: false);
+        bloc: _contactBloc, onContactTapped: goToProfile, moreButton: widget.showMoreButton ? getMoreButton() : null);
   }
 
   goToProfile(String title, String subtitle) {

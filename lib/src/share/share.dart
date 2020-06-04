@@ -46,6 +46,7 @@ import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/chat/chat.dart';
 import 'package:ox_coi/src/chatlist/chat_list_item.dart';
 import 'package:ox_coi/src/contact/contact_item.dart';
+import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/message/message_action.dart';
@@ -102,7 +103,66 @@ class _ShareState extends State<Share> {
       builder: (context, state) {
         if (state is ShareStateSuccess) {
           if (state.chatAndContactIds.length > 0) {
-            return buildListView(state);
+            return ListView.builder(
+              padding: const EdgeInsets.only(top: listItemPadding),
+              itemCount: state.chatAndContactIds.length,
+              itemBuilder: (BuildContext context, int index) {
+                var chatAndContactIds = state.chatAndContactIds;
+                if (state.chatIdCount > 0 && index < state.chatIdCount) {
+                  var chatId = chatAndContactIds[index];
+                  var key = createKeyFromId(chatId);
+                  if (index == 0) {
+                    var key = createKeyFromId(chatId);
+                    return Container(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            L10n.get(L.chatP, count: L10n.plural),
+                            style: Theme.of(context).textTheme.headline,
+                          ),
+                          ChatListItem(
+                            chatId: chatId,
+                            onTap: chatItemTapped,
+                            switchMultiSelect: null,
+                            isMultiSelect: false,
+                            isShareItem: true,
+                            key: key,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return ChatListItem(
+                      chatId: chatId,
+                      onTap: chatItemTapped,
+                      switchMultiSelect: null,
+                      isMultiSelect: false,
+                      isShareItem: true,
+                      key: key,
+                    );
+                  }
+                } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
+                  var contactId = chatAndContactIds[index];
+                  if (index == state.chatIdCount) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: listItemPadding),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            L10n.get(L.contactP, count: L10n.plural),
+                            style: Theme.of(context).textTheme.headline,
+                          ),
+                          ContactListContent(contactElement: contactId, contactItemType: ContactItemType.forward, callback: chatItemTapped,)
+                        ],
+                      ),
+                    );
+                  } else {
+                    return ContactListContent(contactElement: contactId, contactItemType: ContactItemType.forward, callback: chatItemTapped);
+                  }
+                }
+                return Container();
+              },
+            );
           } else {
             return Container();
           }
@@ -111,47 +171,6 @@ class _ShareState extends State<Share> {
         } else {
           return AdaptiveIcon(icon: IconSource.error);
         }
-      },
-    );
-  }
-
-  Widget buildListView(ShareStateSuccess state) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: listItemPadding),
-      itemCount: state.chatAndContactIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var chatAndContactIds = state.chatAndContactIds;
-        if (state.chatIdCount > 0 && index < state.chatIdCount) {
-          var chatId = chatAndContactIds[index];
-          var key = createKeyFromId(chatId);
-          if (index == 0) {
-            return createChatItemWithHeader(chatId);
-          } else {
-            return ChatListItem(
-              chatId: chatId,
-              onTap: chatItemTapped,
-              switchMultiSelect: null,
-              isMultiSelect: false,
-              isShareItem: true,
-              key: key,
-            );
-          }
-        } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
-          var contactId = chatAndContactIds[index];
-          if (index == state.chatIdCount) {
-            return createContactItemWithHeader(contactId);
-          } else {
-            final int previousContactId = (index > state.chatIdCount) ? chatAndContactIds[index - 1] : null;
-            return ContactItem(
-              contactId: contactId,
-              previousContactId: previousContactId,
-              contactItemType: ContactItemType.forward,
-              onTap: chatItemTapped,
-              key: Key(contactId.toString()),
-            );
-          }
-        }
-        return Container();
       },
     );
   }
@@ -172,42 +191,6 @@ class _ShareState extends State<Share> {
       ),
       ModalRoute.withName(Navigation.root),
       Navigatable(Type.rootChildren),
-    );
-  }
-
-  Widget createChatItemWithHeader(int chatId) {
-    var key = createKeyFromId(chatId);
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Text(
-            L10n.get(L.chatP, count: L10n.plural),
-            style: Theme.of(context).textTheme.headline,
-          ),
-          ChatListItem(chatId: chatId, onTap: chatItemTapped, switchMultiSelect: null, isMultiSelect: false, isShareItem: true, key: key),
-        ],
-      ),
-    );
-  }
-
-  Widget createContactItemWithHeader(int contactId) {
-    return Padding(
-      padding: const EdgeInsets.only(top: listItemPadding),
-      child: Column(
-        children: <Widget>[
-          Text(
-            L10n.get(L.contactP, count: L10n.plural),
-            style: Theme.of(context).textTheme.headline,
-          ),
-          ContactItem(
-            contactId: contactId,
-            contactItemType: ContactItemType.forward,
-            onTap: chatItemTapped,
-            key: Key(contactId.toString()),
-            previousContactId: null,
-          ),
-        ],
-      ),
     );
   }
 }

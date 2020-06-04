@@ -45,6 +45,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
+import 'package:ox_coi/src/contact/contact_item_event_state.dart';
 
 abstract class MessageItemEvent extends Equatable {}
 
@@ -246,32 +247,6 @@ class ChatStateData extends Equatable{
 
   @override
   List<Object> get props => [id, name];
-}
-
-class ContactStateData extends Equatable {
-  final int id;
-  final String name;
-  final String address;
-  final Color color;
-
-  ContactStateData({
-    @required this.id,
-    @required this.name,
-    @required this.address,
-    @required this.color,
-  });
-
-  ContactStateData copyWith({id, name, address, color}) {
-    return ContactStateData(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      address: address ?? this.address,
-      color: color ?? this.color,
-    );
-  }
-
-  @override
-  List<Object> get props => [id, name, address, color];
 }
 
 class AttachmentStateData extends Equatable {

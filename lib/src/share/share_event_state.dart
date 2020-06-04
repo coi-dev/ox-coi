@@ -48,7 +48,7 @@ abstract class ShareEvent {}
 class RequestChatsAndContacts extends ShareEvent {}
 
 class ChatsAndContactsLoaded extends ShareEvent {
-  final List<int> chatAndContactList;
+  final List<dynamic> chatAndContactList;
   final int chatListLength;
   final int contactListLength;
 
@@ -84,7 +84,7 @@ class ShareStateInitial extends ShareState {}
 class ShareStateLoading extends ShareState {}
 
 class ShareStateSuccess extends ShareState {
-  final List<int> chatAndContactIds;
+  final List<dynamic> chatAndContactIds;
   final int chatIdCount;
   final int contactIdCount;
   final SharedData sharedData;

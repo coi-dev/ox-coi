@@ -51,14 +51,21 @@ ValueKey createKeyFromId(int id, [List values]) {
   return ValueKey(keyString);
 }
 
-int extractId(ValueKey valueKey) {
+dynamic extractId(ValueKey valueKey) {
   String value = valueKey.value.toString();
   final splitList = value.split(idSeparator);
+
   if (splitList.length >= 1) {
-    final id = int.parse(splitList[0]);
+    final id = int.tryParse(splitList[0]);
     if (id != null) {
       return id;
+    } else {
+      return splitList.first;
     }
   }
   throw ArgumentError("Value key does not contain an id");
+}
+
+ValueKey getKeyFromContactElement(dynamic contactElement){
+  return contactElement is String ? ValueKey(contactElement) : contactElement;
 }
