@@ -12,7 +12,9 @@ OX COI Messenger is a mail based chat app. This app provides the user interface 
   - The Flutter plugin uses the [Delta Chat Core](https://github.com/deltachat/deltachat-core-rust) library to realize the actual message handling
 
 ## Requirements
-- Flutter **v1.9.1+hotfix.6** is used
+- Flutter **1.17.2** is used
+- [Android setup](https://github.com/open-xchange/ox-coi/wiki/Development-Setup-for-Android)
+- [iOS setup](https://github.com/open-xchange/ox-coi/wiki/Development-Setup-for-iOS)
 - The [Flutter Delta Chat Core Plugin](https://github.com/open-xchange/flutter-deltachat-core) needs to be checked out right beside the OX COI Messenger app (the repositories should be located in the same folder)
   - Please follow the requirements given by the plugin project before building the app project
 
