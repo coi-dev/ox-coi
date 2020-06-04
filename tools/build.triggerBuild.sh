@@ -39,8 +39,11 @@ if [[ "$#" != 6 ]]; then
     echo "5. parameter:     Build number (integer)"
     echo "6. parameter:     Core version [local, latest, 'Github tag']"
     echo
-    echo "Example android:  ./build.triggerBuild.sh android release stable 0.450.1 415 local"
-    echo "Example iOS:      ./build.triggerBuild.sh ios release stable 0.450.1 415 local"
+    echo "Examples:"
+    echo "Android AppCenter:    ./build.triggerBuild.sh android release stable 0.700.2 518 local"
+    echo "Android Google Play:  ./build.triggerBuild.sh android release stable 0.700.2 518 local"
+    echo "iOS AppCenter:        ./build.triggerBuild.sh ios release development 0.700.2 518 local"
+    echo "iOS TestFlight:       ./build.triggerBuild.sh ios release stable 0.700.2 518 local"
     exit 0
 fi
 
