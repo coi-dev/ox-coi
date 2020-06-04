@@ -4,15 +4,18 @@ import 'package:ox_coi/src/l10n/l.dart';
  ************************************************************************* 
  AUTOMATICALLY GENERATED FILE. DO NOT EDIT, ALL YOUR CHANGES WILL BE LOST!
  *************************************************************************
-*/ 
+*/
 
-extension DynamicLocalizations on L {
+class DynamicLocalizations extends L {
 	static final onboardingPageProfileAppbarTitle = L.translationKey("Profile");
 	static final appbarSkipButton = L.translationKey("Skip");
 	static final profileTitle = L.translationKey("Profile");
 	static final profileDescription = L.translationKey("Please add your name or nickname and choose a profile picture.");
 	static final profileUserNameTextfieldLabel = L.translationKey("Name");
 	static final profileUserNameTextfieldPlaceholder = L.translationKey("Please enter your name");
+	static final contactsTitle = L.translationKey("Contacts");
+	static final contactsDescription = L.translationKey("Do you want to import your contacts?");
+	static final contactsImportButtonTitle = L.translationKey("Import contacts");
 	static final chatSettingsTitle = L.translationKey("Chat Settings");
 	static final chatSettingsDescription = L.translationKey("What kind of message do you want to handle?");
 	static final chatSettingsSubtitle = L.translationKey("(Please choose one option to proceed.)");

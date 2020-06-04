@@ -28,7 +28,7 @@ Future<void> main(List<String> arguments) async {
     if (argResults.arguments.length == 0 || argResults[argHelp]) {
       showVersionAndUsage();
     } else {
-      await generatteLocalizationsAsync(argResults);
+      await generateLocalizationsAsync(argResults);
     }
     exit(0);
 
@@ -37,7 +37,7 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
-Future<void> generatteLocalizationsAsync(ArgResults argResults) async {
+Future<void> generateLocalizationsAsync(ArgResults argResults) async {
   final jsonPath = argResults[argJson];
   final jsonFile = File(jsonPath);
 
@@ -61,7 +61,7 @@ import 'package:ox_coi/src/l10n/l.dart';
  *************************************************************************
 */ 
 
-extension DynamicLocalizations on L {
+class DynamicLocalizations extends L {
 ''';
   final extensionClose = "}\n";
   final jsonString = await jsonFile.readAsString();

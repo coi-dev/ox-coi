@@ -93,7 +93,11 @@ class AddGoogleContacts extends ContactListEvent {
 
 class MarkContactsAsInitiallyLoaded extends ContactListEvent {}
 
-class PerformImport extends ContactListEvent {}
+class PerformImport extends ContactListEvent {
+  final bool shouldUpdateUi;
+
+  PerformImport({this.shouldUpdateUi = true});
+}
 
 abstract class ContactListState {}
 

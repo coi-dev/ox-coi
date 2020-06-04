@@ -112,8 +112,8 @@ class L {
   static final yes = translationKey("Yes");
   static final yesterday = translationKey("Yesterday");
   static final textFieldEmptyHint = translationKey("This field can not be empty");
-  static final readReceiptText = translationKey(
-      "This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
+  static final readReceiptText =
+      translationKey("This is a read receipt.\n\nIt means the message was displayed on the recipient's device, not necessarily that the content was read.");
   static final voiceMessage = translationKey("Voice message");
   static final moreMessagesX = translationKey("%d more messages");
   static final noMoreMedia = translationKey("No other media files available");
@@ -222,8 +222,7 @@ class L {
   static final contactVerificationRunning = translationKey("Verifying. Please wait a moment.");
   static final contactSystemImportText = translationKey("Would you like to import your contacts from this device?");
   static final contactUnblock = translationKey("Unblock contact");
-  static final contactEditPhoneNumberText =
-      translationKey("Phone numbers can be added or edited via the local address book and imported afterwards.");
+  static final contactEditPhoneNumberText = translationKey("Phone numbers can be added or edited via the local address book and imported afterwards.");
   static final contactNoPhoneNumber = translationKey("No phone number");
   static final contactNoPhoneNumberText =
       translationKey("This contact has no phone number. Please edit this contact in your device address book and add the phone number there.");
@@ -367,8 +366,7 @@ class L {
       translationKey("Do you want to import your keys from your app documents folder? \n\nIf no keys are in that folder, the operation will fail.");
 
   // Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-  static final settingSecurityExportKeysAndroidTextX =
-      translationKey("Do you want to save your keys in the application folder? \n\nThe path is:\n\"%s\"");
+  static final settingSecurityExportKeysAndroidTextX = translationKey("Do you want to save your keys in the application folder? \n\nThe path is:\n\"%s\"");
   static final settingSecurityExportKeysIOSText =
       translationKey("Do you want to save your keys in your devices documents folder? \n\nYou can access it via the \"Files App\".");
   static final settingCopyCode = translationKey("Copy code");
@@ -415,8 +413,7 @@ class L {
       translationKey("This keys enable another device to use your current encryption setup. Keys are saved on your local storage.");
   static final settingNotificationP = translationKey("Notification", "Notifications");
   static final settingNotificationPull = translationKey("Enable background updates");
-  static final settingNotificationPullText =
-      translationKey("If enabled, this setting allows the app to perform periodic background tasks to get new messages");
+  static final settingNotificationPullText = translationKey("If enabled, this setting allows the app to perform periodic background tasks to get new messages");
   static final settingNotificationPush = translationKey("Change Push Settings");
   static final settingNotificationPushText = translationKey("Change the push settings for this app in your system settings.");
   static final settingAboutBugReports = translationKey("Bug reports");
@@ -453,7 +450,8 @@ class L {
   static final settingsAppearanceSystemTitle = translationKey("System");
   static final settingsAppearanceDarkTitle = translationKey("Dark");
   static final settingsAppearanceLightTitle = translationKey("Light");
-  static final settingsAppearanceDescription = translationKey("Here you can choose your favorite theme. If you choose '%s', the theme may change automatically. This depends on whether you have selected 'Automatic' in the system preferences or not.");
+  static final settingsAppearanceDescription = translationKey(
+      "Here you can choose your favorite theme. If you choose '%s', the theme may change automatically. This depends on whether you have selected 'Automatic' in the system preferences or not.");
   static final settingsAppearanceSystemThemeDescription = translationKey("Current System theme is: %s");
 
   static final dynamicScreenSkipButtonTitle = L.translationKey("Skip");

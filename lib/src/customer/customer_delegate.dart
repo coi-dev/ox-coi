@@ -50,6 +50,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet_action.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
+import 'package:ox_coi/src/contact/contact_list_bloc.dart';
+import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/customer/customer.dart';
 import 'package:ox_coi/src/customer/customer_delegate_change_notifier.dart';
 import 'package:ox_coi/src/data/config.dart';
@@ -224,7 +226,16 @@ extension CustomerDelegatePrivateHelper on CustomerDelegate {
     }
   }
 
-  void _importContacts({BuildContext context}) {}
+  void _importContacts({BuildContext context}) async {
+    bool hasContactPermission = await Permission.contacts.request().isGranted;
+    if (hasContactPermission) {
+      // ignore: close_sinks
+      final contactListBloc = ContactListBloc();
+      contactListBloc.add(PerformImport(shouldUpdateUi: false));
+      contactListBloc.add(MarkContactsAsInitiallyLoaded());
+      navigateToNextPage(context: context);
+    }
+  }
 
   Future<void> _setConfigShowEmailsAsync({int value}) async {
     await _config.setValue(Context.configShowEmails, value);

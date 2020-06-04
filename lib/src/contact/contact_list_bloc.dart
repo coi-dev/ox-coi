@@ -120,11 +120,11 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       await _markContactsAsInitiallyLoadedAsync();
     } else if (event is PerformImport) {
       _systemContacts = await _loadSystemContactsAsync();
-      if (_systemContacts == null) {
+      if (_systemContacts == null && event.shouldUpdateUi) {
         yield* _setupContacts(importState: ContactImportState.fail);
       } else {
         yield ContactListStateLoading();
-        yield* _importSystemContacts();
+        yield* _importSystemContacts(event.shouldUpdateUi);
       }
     }
   }
@@ -272,7 +272,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     }
   }
 
-  Stream<ContactListState> _importSystemContacts() async* {
+  Stream<ContactListState> _importSystemContacts(bool shouldUpdateUi) async* {
     bool googlemailDetected = false;
 
     _systemContacts.forEach((contact) {
@@ -292,11 +292,11 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     if (googlemailDetected) {
       yield GooglemailContactsDetected();
     } else {
-      yield* _addUpdateContactsAsync(changeEmails: false);
+      yield* _addUpdateContactsAsync(changeEmails: false, shouldUpdateUi: shouldUpdateUi);
     }
   }
 
-  Stream<ContactListState> _addUpdateContactsAsync({@required bool changeEmails}) async* {
+  Stream<ContactListState> _addUpdateContactsAsync({@required bool changeEmails, bool shouldUpdateUi = true}) async* {
     final context = Context();
     if (changeEmails) {
       _coreContacts = _coreContacts.replaceAll(googlemailDomain, gmailDomain);
@@ -308,15 +308,18 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       await updateContactExtensions(ids, _phoneNumbers);
     }
 
-    await Future.forEach(_contactRepository.getAll(), (contact) async {
-      await updateAvatar(_systemContacts, contact);
-      await reloadChatName(context, contact.id);
-    });
-
+    if (shouldUpdateUi) {
+      await Future.forEach(_contactRepository.getAll(), (contact) async {
+        await updateAvatar(_systemContacts, contact);
+        await reloadChatName(context, contact.id);
+      });
+    }
     _systemContacts = null;
     _phoneNumbers.clear();
 
-    yield* _setupContacts(importState: ContactImportState.success);
+    if (shouldUpdateUi) {
+      yield* _setupContacts(importState: ContactImportState.success);
+    }
   }
 
   Future<void> reloadChatName(Context context, int contactId) async {

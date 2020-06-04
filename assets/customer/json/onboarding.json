@@ -78,6 +78,48 @@
           "text": {
             "text_style": "title",
             "localizable": {
+              "key": "contactsTitle",
+              "value": "Contacts"
+            }
+          }
+        },
+        {
+          "text": {
+            "text_style": "body1",
+            "padding": [0.0, 24.0, 0.0, 32.0],
+            "localizable": {
+              "key": "contactsDescription",
+              "value": "Do you want to import your contacts?"
+            }
+          }
+        },
+        {
+          "image": {
+            "name": "onboarding_contact_list.png"
+          }
+        },
+        {
+          "button": {
+            "importance": "high",
+            "padding": [48.0, 32.0, 48.0, 16.0],
+            "on_pressed": "contactsImportButtonPressed",
+            "title": {
+              "localizable": {
+                "key": "contactsImportButtonTitle",
+                "value": "Import contacts"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "skipable": true,
+      "components": [
+        {
+          "text": {
+            "text_style": "title",
+            "localizable": {
               "key": "chatSettingsTitle",
               "value": "Chat Settings"
             }
@@ -342,7 +384,7 @@
             "title": {
               "localizable": {
                 "key": "readyButtonTitle",
-                "value": "Lets Go"
+                "value": "Let's Go"
               }
             }
           }
