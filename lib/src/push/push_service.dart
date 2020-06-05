@@ -54,7 +54,7 @@ import 'package:ox_coi/src/utils/http.dart';
 class PushService {
   static PushService _instance;
 
-  var _logger = Logger("push_service");
+  final _logger = Logger("push_service");
   var headers = {"Content-type": "application/json"};
 
   factory PushService() => _instance ??= PushService._internal();

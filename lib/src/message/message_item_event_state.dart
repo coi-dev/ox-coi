@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'dart:ui';
-
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
@@ -229,7 +227,7 @@ class MessageStateData extends Equatable {
       ];
 }
 
-class ChatStateData extends Equatable{
+class ChatStateData extends Equatable {
   final int id;
   final String name;
 

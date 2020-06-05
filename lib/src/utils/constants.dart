@@ -65,6 +65,8 @@ const customerOnboardingConfigPath = "assets/customer/json/onboarding.json";
 const projectUrl = "https://coi.me";
 const issueUrl  = "https://github.com/open-xchange/ox-coi/issues";
 const featureRequestUrl = "https://openxchange.userecho.com/communities/4-ox-coi-messenger";
+const kNotificationChannelMainId = 'com.android.oxcoi.notification.single';
+const kNotificationChannelGroupId = 'com.android.oxcoi.notification.group';
 
 // IMAP https://tools.ietf.org/html/rfc5530
 const imapErrorAuthenticationFailed = '[AUTHENTICATIONFAILED]';

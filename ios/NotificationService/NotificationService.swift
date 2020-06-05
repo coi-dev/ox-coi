@@ -21,7 +21,7 @@
 * Any modifications to this package must retain all copyright notices
 * of the original copyright holder(s) for the original code used.
 *
-* After any such modifications, the original and derivative code shall remain
+* After any such modifications, the original and derivative code shall remainv
 * under the copyright of the copyright holder(s) and/or original author(s) as stated here:
 * https://www.open-xchange.com/legal/. The contributing author shall be
 * given Attribution for the derivative code and a license granting use.
@@ -40,22 +40,36 @@
 * for more details.
 */
 
-import UIKit
-import SwiftyBeaver
+import UserNotifications
 
-let log = SwiftyBeaver.self
+// https://medium.com/@mail2ashislaha/rich-push-notification-with-firebase-cloud-messaging-fcm-and-pusher-in-ios-platform-8b4e9922120
 
-extension UIApplication {
+class NotificationService: UNNotificationServiceExtension {
 
-    // MARK: - Logging
+    var contentHandler: ((UNNotificationContent) -> Void)?
+    var bestAttemptContent: UNMutableNotificationContent?
 
-    class func setupLogging() {
-        // https://docs.swiftybeaver.com/article/20-custom-format
-        let console = ConsoleDestination()
-        console.format = "$Dyyyy-MM-dd HH:mm:ss $N.$F:$l [$L] $M"
-        log.addDestination(console)
+    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        self.contentHandler = contentHandler
+        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+        
+        NSLog("[NotificationService] Received Notification")
 
-        log.debug("Logging Setup: done")
+        if let bestAttemptContent = bestAttemptContent {
+            // Modify the notification content here...
+            bestAttemptContent.title = "[modified] \(bestAttemptContent.title)"
+            bestAttemptContent.body = " [modified] \(bestAttemptContent.body)"
+
+            contentHandler(bestAttemptContent)
+        }
+    }
+
+    override func serviceExtensionTimeWillExpire() {
+        // Called just before the extension will be terminated by the system.
+        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
+        if let contentHandler = contentHandler, let bestAttemptContent = bestAttemptContent {
+            contentHandler(bestAttemptContent)
+        }
     }
 
 }

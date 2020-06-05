@@ -74,7 +74,7 @@ import 'package:ox_coi/src/message_list/message_list_bloc.dart';
 import 'package:ox_coi/src/message_list/message_list_event_state.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/share/shared_data.dart';
+import 'package:ox_coi/src/share/incoming_shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/image.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
@@ -95,7 +95,7 @@ class Chat extends StatefulWidget {
   final String newMessage;
   final String newPath;
   final int newFileType;
-  final SharedData sharedData;
+  final IncomingSharedData sharedData;
   final bool headlessStart;
 
   Chat({@required this.chatId, this.messageId, this.newMessage, this.newPath, this.newFileType, this.sharedData, this.headlessStart = false});

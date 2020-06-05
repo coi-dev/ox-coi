@@ -48,36 +48,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
-
 import java.io.File;
-import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
-import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends FlutterActivity {
     private Map<String, String> sharedData = new HashMap<>();
     private String startString = "";
-    private static final String SHARED_MIME_TYPE = "shared_mime_type";
-    private static final String SHARED_TEXT = "shared_text";
-    private static final String SHARED_PATH = "shared_path";
-    private static final String SHARED_FILE_NAME = "shared_file_name";
-    // TODO create constants for channel methods
-    private static final String INTENT_CHANNEL_NAME = "oxcoi.intent";
-    // TODO create constants for channel methods
-    private static final String SECURITY_CHANNEL_NAME = "oxcoi.security";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handleIntent(getIntent());
+        cacheDataFromPlatform(getIntent());
     }
 
     @Override
@@ -85,70 +74,53 @@ public class MainActivity extends FlutterActivity {
         super.configureFlutterEngine(flutterEngine);
         DartExecutor dartExecutor = flutterEngine.getDartExecutor();
         setupSharingMethodChannel(dartExecutor);
-        SecurityHelper securityHelper = new SecurityHelper(this);
-        setupSecurityMethodChannel(dartExecutor, securityHelper);
+        setupSecurityMethodChannel(dartExecutor);
+    }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        cacheDataFromPlatform(intent);
     }
 
     private void setupSharingMethodChannel(DartExecutor dartExecutor) {
-        new MethodChannel(dartExecutor, INTENT_CHANNEL_NAME).setMethodCallHandler(
+        new io.flutter.plugin.common.MethodChannel(dartExecutor, MethodChannel.Sharing.NAME).setMethodCallHandler(
                 (call, result) -> {
-                    if (call.method.contentEquals("getSharedData")) {
+                    if (call.method.contentEquals(MethodChannel.Sharing.Methods.GET_SHARE_DATA)) {
                         result.success(sharedData);
                         sharedData.clear();
-                    } else if (call.method.contentEquals("getInitialLink")) {
+                    } else if (call.method.contentEquals(MethodChannel.Sharing.Methods.GET_INITIAL_LINK)) {
                         if (startString != null && !startString.isEmpty()) {
                             result.success(startString);
                             startString = "";
                         } else {
                             result.success(null);
                         }
-                    } else if (call.method.contentEquals("sendSharedData")) {
-                        shareFile(call.arguments);
+                    } else if (call.method.contentEquals(MethodChannel.Sharing.Methods.SEND_SHARE_DATA)) {
+                        shareDataWithPlatform(call.arguments);
                         result.success(null);
                     }
                 });
     }
 
-    private void setupSecurityMethodChannel(DartExecutor dartExecutor, SecurityHelper securityHelper) {
-        new MethodChannel(dartExecutor, SECURITY_CHANNEL_NAME).setMethodCallHandler(
+    private void setupSecurityMethodChannel(DartExecutor dartExecutor) {
+        SecurityHelper securityHelper = new SecurityHelper();
+        new io.flutter.plugin.common.MethodChannel(dartExecutor, MethodChannel.Security.NAME).setMethodCallHandler(
                 (call, result) -> {
-                    if (call.method.contentEquals("generateSecrets")) {
-                        KeyPair keyPair = securityHelper.generateKey();
-                        if (keyPair != null) {
-                            securityHelper.persistKeyPair(keyPair);
-                        } else {
-                            throw new IllegalStateException("Key pair is empty");
-                        }
-                        String authSecret = securityHelper.generateAuthSecret();
-                        if (authSecret != null && !authSecret.isEmpty()) {
-                            securityHelper.persisAuthSecret(authSecret);
-                        } else {
-                            throw new IllegalStateException("Auth secret is empty");
-                        }
-                        result.success(null);
-                    } else if (call.method.contentEquals("getKey")) {
-                        String publicKeyBase64 = securityHelper.getPublicKeyBase64();
-                        result.success(publicKeyBase64);
-                    } else if (call.method.contentEquals("getAuthSecret")) {
-                        String authSecret = securityHelper.getAuthSecretFromPersistedData();
-                        result.success(authSecret);
-                    } else if (call.method.contentEquals("decrypt")) {
-                        String input = call.argument("input");
-                        byte[] inputBytes = Base64.decode(input, Base64.DEFAULT);
-                        String decryptMessage = securityHelper.decryptMessage(inputBytes);
+                    if (call.method.contentEquals(MethodChannel.Security.Methods.DECRYPT)) {
+                        String encryptedBase64Content = call.argument(MethodChannel.Security.Arguments.CONTENT);
+                        String privateKeyBase64 = call.argument(MethodChannel.Security.Arguments.PRIVATE_KEY);
+                        String publicKeyBase64 = call.argument(MethodChannel.Security.Arguments.PUBLIC_KEY);
+                        String authBase64 = call.argument(MethodChannel.Security.Arguments.AUTH);
+                        byte[] inputBytes = Base64.decode(encryptedBase64Content, Base64.DEFAULT);
+                        String decryptMessage = securityHelper.decryptMessage(inputBytes, privateKeyBase64, publicKeyBase64, authBase64);
                         result.success(decryptMessage);
                     }
 
                 });
     }
 
-    @Override
-    protected void onNewIntent(@NonNull Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
+    private void cacheDataFromPlatform(Intent intent) {
         String action = intent.getAction();
         String type = intent.getType();
         Uri data = intent.getData();
@@ -156,25 +128,27 @@ public class MainActivity extends FlutterActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("text/")) {
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-                sharedData.put(SHARED_MIME_TYPE, type);
-                sharedData.put(SHARED_TEXT, text);
+                sharedData.put(MethodChannel.Sharing.Arguments.MIME_TYPE, type);
+                sharedData.put(MethodChannel.Sharing.Arguments.TEXT, text);
             } else if (type.startsWith("application/") || type.startsWith("audio/") || type.startsWith("image/") || type.startsWith("video/")) {
                 Uri uri = (Uri) Objects.requireNonNull(getIntent().getExtras()).get(Intent.EXTRA_STREAM);
                 if (uri == null) {
                     ClipData clipData = intent.getClipData();
-                    ClipData.Item item = clipData.getItemAt(0);
-                    uri = item.getUri();
+                    if (clipData != null) {
+                        ClipData.Item item = clipData.getItemAt(0);
+                        uri = item.getUri();
+                    }
                 }
                 if (uri != null) {
                     String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                     ShareHelper shareHelper = new ShareHelper();
                     String uriPath = shareHelper.getFilePathForUri(this, uri);
                     if (text != null && !text.isEmpty()) {
-                        sharedData.put(SHARED_TEXT, text);
+                        sharedData.put(MethodChannel.Sharing.Arguments.TEXT, text);
                     }
-                    sharedData.put(SHARED_MIME_TYPE, type);
-                    sharedData.put(SHARED_PATH, uriPath);
-                    sharedData.put(SHARED_FILE_NAME, shareHelper.getFileName());
+                    sharedData.put(MethodChannel.Sharing.Arguments.MIME_TYPE, type);
+                    sharedData.put(MethodChannel.Sharing.Arguments.PATH, uriPath);
+                    sharedData.put(MethodChannel.Sharing.Arguments.NAME, shareHelper.getFileName());
                 }
             }
         } else if (Intent.ACTION_VIEW.equals(action) && data != null) {
@@ -182,13 +156,13 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    private void shareFile(Object arguments) {
+    private void shareDataWithPlatform(Object arguments) {
         @SuppressWarnings("unchecked")
         HashMap<String, String> argsMap = (HashMap<String, String>) arguments;
-        String title = argsMap.get("title");
-        String path = argsMap.get("path");
-        String mimeType = argsMap.get("mimeType");
-        String text = argsMap.get("text");
+        String title = argsMap.get(MethodChannel.Sharing.Arguments.TITLE);
+        String path = argsMap.get(MethodChannel.Sharing.Arguments.PATH);
+        String mimeType = argsMap.get(MethodChannel.Sharing.Arguments.MIME_TYPE);
+        String text = argsMap.get(MethodChannel.Sharing.Arguments.TEXT);
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType(mimeType);

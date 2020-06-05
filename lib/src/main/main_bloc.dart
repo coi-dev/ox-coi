@@ -125,19 +125,19 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         yield MainStateFailure(error: error.toString());
       }
     } else if (event is AppLoaded) {
-      final bool configured = await _context.isConfigured();
-      if (configured) {
-        await _setupLoggedInAppState();
-      }
+        final bool configured = await _context.isConfigured();
+        if (configured) {
+          await _setupLoggedInAppState();
+        }
 
-      final needsOnboarding = Customer.needsOnboarding;
-      if (needsOnboarding) {
-        await Customer().configureOnboardingAsync();
-      }
+        final needsOnboarding = Customer.needsOnboarding;
+        if (needsOnboarding) {
+          await Customer().configureOnboardingAsync();
+        }
 
       final notificationsActivated = await Permission.notification.isGranted;
       if (!needsOnboarding && notificationsActivated) {
-        LocalNotificationManager().setup();
+        LocalNotificationManager().setup(registerListeners: true);
         if (_config.coiSupported) {
           await PushManager().setup(_pushBloc);
           String pushState = await getPreference(preferenceNotificationsPushStatus);
@@ -189,7 +189,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   Future<void> _initCore() async {
-    await core.init(dbName);
+    await core.setupAsync(dbName: dbName, minimalSetup: false);
   }
 
   Future<void> _setupDefaultValues() async {

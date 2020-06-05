@@ -54,7 +54,7 @@ import 'package:ox_coi/src/utils/http.dart';
 class InviteService {
   static InviteService _instance;
 
-  var _logger = Logger("invite_service");
+  final _logger = Logger("invite_service");
   var headers = {"Content-type": "application/json"};
 
   factory InviteService() => _instance ??= InviteService._internal();

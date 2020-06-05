@@ -55,7 +55,6 @@ import 'package:ox_coi/src/l10n/l10n.dart';
 import 'package:ox_coi/src/main/main_bloc.dart';
 import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root_child.dart';
-import 'package:ox_coi/src/message_list/message_list_bloc.dart';
 import 'package:ox_coi/src/message_list/message_list_flagged.dart';
 import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';

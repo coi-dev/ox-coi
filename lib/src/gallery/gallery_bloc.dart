@@ -40,8 +40,6 @@
  * for more details.
  */
 
-import 'dart:io';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ox_coi/src/gallery/gallery_event_state.dart';
 import 'package:video_player/video_player.dart';

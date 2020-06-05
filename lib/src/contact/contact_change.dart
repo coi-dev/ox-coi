@@ -40,7 +40,7 @@
  * for more details.
  */
 
-import 'package:delta_chat_core/delta_chat_core.dart' as Core;
+import 'package:delta_chat_core/delta_chat_core.dart' as dcc;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +102,7 @@ class _ContactChangeState extends State<ContactChange> {
 
   ContactItemBloc _contactItemBloc = ContactItemBloc();
 
-  Repository<Core.Chat> chatRepository;
+  Repository<dcc.Chat> chatRepository;
 
   @override
   void initState() {
@@ -162,7 +162,7 @@ class _ContactChangeState extends State<ContactChange> {
                     _navigation.pop(context);
                   } else {
                     if (state.contactStateData.id != null) {
-                      Core.Context coreContext = Core.Context();
+                      dcc.Context coreContext = dcc.Context();
                       var chatId = await coreContext.createChatByContactId(state.contactStateData.id);
                       chatRepository.putIfAbsent(id: chatId);
                       _navigation.pushAndRemoveUntil(

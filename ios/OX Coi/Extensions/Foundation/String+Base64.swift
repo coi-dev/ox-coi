@@ -40,65 +40,19 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/share/incoming_shared_data.dart';
+import Foundation
 
-abstract class ShareEvent {}
+extension String {
 
-class RequestChatsAndContacts extends ShareEvent {}
+    var base64DecodedString: String? {
+        guard let data = Data(base64Encoded: self) else {
+            return nil
+        }
+        return String(data: data, encoding: .utf8)
+    }
 
-class ChatsAndContactsLoaded extends ShareEvent {
-  final List<dynamic> chatAndContactList;
-  final int chatListLength;
-  final int contactListLength;
+    var base64EncodedString: String {
+        Data(self.utf8).base64EncodedString()
+    }
 
-  ChatsAndContactsLoaded({
-    @required this.chatAndContactList,
-    @required this.chatListLength,
-    @required this.contactListLength,
-  });
-}
-
-class ForwardMessages extends ShareEvent {
-  final int destinationChatId;
-  final List<int> messageIds;
-
-  ForwardMessages({
-    @required this.destinationChatId,
-    @required this.messageIds,
-  });
-}
-
-class LoadSharedData extends ShareEvent {}
-
-class SharedDataLoaded extends ShareEvent {
-  final IncomingSharedData sharedData;
-
-  SharedDataLoaded({@required this.sharedData});
-}
-
-abstract class ShareState {}
-
-class ShareStateInitial extends ShareState {}
-
-class ShareStateLoading extends ShareState {}
-
-class ShareStateSuccess extends ShareState {
-  final List<dynamic> chatAndContactIds;
-  final int chatIdCount;
-  final int contactIdCount;
-  final IncomingSharedData sharedData;
-
-  ShareStateSuccess({
-    this.chatAndContactIds,
-    this.chatIdCount,
-    this.contactIdCount,
-    this.sharedData,
-  });
-}
-
-class ShareStateFailure extends ShareState {
-  final String error;
-
-  ShareStateFailure({@required this.error});
 }

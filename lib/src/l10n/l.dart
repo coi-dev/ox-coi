@@ -454,6 +454,9 @@ class L {
       "Here you can choose your favorite theme. If you choose '%s', the theme may change automatically. This depends on whether you have selected 'Automatic' in the system preferences or not.");
   static final settingsAppearanceSystemThemeDescription = translationKey("Current System theme is: %s");
 
+  static final notificationChannelTitle = translationKey("Message notifications");
+  static final notificationChannelDescription = translationKey("Notifications for incoming messages");
+
   static final dynamicScreenSkipButtonTitle = L.translationKey("Skip");
   static final dynamicScreenBackButtonTitle = L.translationKey("Back");
   static final dynamicScreenNextButtonTitle = L.translationKey("Next");

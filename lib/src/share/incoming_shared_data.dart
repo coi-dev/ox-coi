@@ -40,65 +40,18 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/share/incoming_shared_data.dart';
+import 'package:ox_coi/src/platform/method_channel.dart';
 
-abstract class ShareEvent {}
+class IncomingSharedData {
+  String mimeType;
+  String text;
+  String path;
+  String fileName;
 
-class RequestChatsAndContacts extends ShareEvent {}
-
-class ChatsAndContactsLoaded extends ShareEvent {
-  final List<dynamic> chatAndContactList;
-  final int chatListLength;
-  final int contactListLength;
-
-  ChatsAndContactsLoaded({
-    @required this.chatAndContactList,
-    @required this.chatListLength,
-    @required this.contactListLength,
-  });
-}
-
-class ForwardMessages extends ShareEvent {
-  final int destinationChatId;
-  final List<int> messageIds;
-
-  ForwardMessages({
-    @required this.destinationChatId,
-    @required this.messageIds,
-  });
-}
-
-class LoadSharedData extends ShareEvent {}
-
-class SharedDataLoaded extends ShareEvent {
-  final IncomingSharedData sharedData;
-
-  SharedDataLoaded({@required this.sharedData});
-}
-
-abstract class ShareState {}
-
-class ShareStateInitial extends ShareState {}
-
-class ShareStateLoading extends ShareState {}
-
-class ShareStateSuccess extends ShareState {
-  final List<dynamic> chatAndContactIds;
-  final int chatIdCount;
-  final int contactIdCount;
-  final IncomingSharedData sharedData;
-
-  ShareStateSuccess({
-    this.chatAndContactIds,
-    this.chatIdCount,
-    this.contactIdCount,
-    this.sharedData,
-  });
-}
-
-class ShareStateFailure extends ShareState {
-  final String error;
-
-  ShareStateFailure({@required this.error});
+  IncomingSharedData(Map<dynamic, dynamic> data) {
+    mimeType = data.containsKey(SharingChannel.kArgumentMimeType) ? data[SharingChannel.kArgumentMimeType] : "";
+    text = data.containsKey(SharingChannel.kArgumentText) ? data[SharingChannel.kArgumentText] : "";
+    path = data.containsKey(SharingChannel.kArgumentPath) ? data[SharingChannel.kArgumentPath] : "";
+    fileName = data.containsKey(SharingChannel.kArgumentFileName) ? data[SharingChannel.kArgumentFileName] : "";
+  }
 }

@@ -53,30 +53,34 @@ class AppDelegate: FlutterAppDelegate {
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        NSLog("[AppDelegate] didFinishLaunchingWithOptions")
         UIApplication.setupLogging()
         UIApplication.setupFirebase()
 
-        UNUserNotificationCenter.current().delegate = self
         GeneratedPluginRegistrant.register(with: self)
 
-        application.setMinimumBackgroundFetchInterval(60 * 5)
+//        application.setMinimumBackgroundFetchInterval(60 * 5)
         setupSharingMethodChannel()
+        setupSecurityMethodChannel()
 
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        NSLog("[AppDelegate] open url")
         startString = url.absoluteString
-        self.setupSharingMethodChannel()
+        setupSharingMethodChannel()
         
         return true
     }
 
     override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        NSLog("[AppDelegate] didRegisterForRemoteNotificationsWithDeviceToken")
         Messaging.messaging().apnsToken = deviceToken
     }
-    
+
     override func applicationDidEnterBackground(_ application: UIApplication) {
+        NSLog("[AppDelegate] applicationDidEnterBackground")
         if UserDefaults.applicationShouldTerminate {
             UserDefaults.applicationShouldTerminate = false
             let sel = Selector(("terminateWithSuccess"))
@@ -87,6 +91,17 @@ class AppDelegate: FlutterAppDelegate {
                 }
             }
         }
+    }
+
+    override func applicationDidBecomeActive(_ application: UIApplication) {
+        NSLog("[AppDelegate] applicationDidBecomeActive")
+        // https://github.com/flutter/flutter/issues/47203#issuecomment-590834018
+        signal(SIGPIPE, SIG_IGN)
+    }
+    
+    override func applicationWillEnterForeground(_ application: UIApplication) {
+        NSLog("[AppDelegate] applicationWillEnterForeground")
+        signal(SIGPIPE, SIG_IGN)
     }
 
 }

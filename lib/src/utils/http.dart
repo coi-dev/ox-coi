@@ -45,7 +45,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 
-bool validateHttpResponse(Response response) {
+bool isHttpResponseValid(Response response) {
   return response.statusCode == 200 || response.statusCode == 201;
 }
 

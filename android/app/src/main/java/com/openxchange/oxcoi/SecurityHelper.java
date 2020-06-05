@@ -43,9 +43,6 @@
 
 package com.openxchange.oxcoi;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Base64;
 
 import com.google.crypto.tink.HybridDecrypt;
@@ -55,87 +52,29 @@ import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.provider.asymmetric.ec.KeyPairGenerator;
 import org.bouncycastle.jce.spec.ECParameterSpec;
 import org.bouncycastle.jce.spec.ECPrivateKeySpec;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
 
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.Security;
-import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 
 
 class SecurityHelper {
 
-    private static final String KEY_PUSH_PRIVATE = "KEY_PUSH_PRIVATE";
-    private static final String KEY_PUSH_PUBLIC = "KEY_PUSH_PUBLIC";
-    private static final String KEY_PUSH_AUTH = "KEY_PUSH_AUTH";
     private static final String CURVE_NAME = "secp256r1";
     private static final String KEY_ALGORITHM = "ECDH";
 
-    private Activity activity;
-
-    SecurityHelper(Activity activity) {
+    SecurityHelper() {
         Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
         Security.addProvider(new BouncyCastleProvider());
-        this.activity = activity;
     }
 
-    String getPublicKeyBase64() {
-        ECPublicKey publicKey = getPublicKeyFromPersistedData();
-        if (publicKey == null) {
-            return null;
-        }
-        return Base64.encodeToString(publicKey.getQ().getEncoded(), Base64.URL_SAFE);
-    }
-
-    KeyPair generateKey() {
-        ECGenParameterSpec params = new ECGenParameterSpec(CURVE_NAME);
-        KeyPairGenerator generator = new KeyPairGenerator.ECDH();
-        try {
-            generator.initialize(params, new SecureRandom());
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        }
-        return generator.generateKeyPair();
-    }
-
-    String generateAuthSecret() {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[16];
-        random.nextBytes(bytes);
-        return Base64.encodeToString(bytes, Base64.URL_SAFE);
-    }
-
-    void persistKeyPair(KeyPair keyPair) {
-        ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
-        ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
-        String publicKeyBase64 = Base64.encodeToString(ecPublicKey.getQ().getEncoded(), Base64.URL_SAFE);
-        String privateKeyBase64 = Base64.encodeToString(ecPrivateKey.getD().toByteArray(), Base64.URL_SAFE);
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(KEY_PUSH_PRIVATE, privateKeyBase64);
-        editor.putString(KEY_PUSH_PUBLIC, publicKeyBase64);
-        editor.apply();
-    }
-
-    void persisAuthSecret(String authSecret) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(KEY_PUSH_AUTH, authSecret);
-        editor.apply();
-    }
-
-    private ECPrivateKey getPrivateKeyFromPersistedData() {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        String privateKeyBase64 = sharedPref.getString(KEY_PUSH_PRIVATE, "");
+    private ECPrivateKey getPrivateKeyFromPersistedData(String privateKeyBase64) {
         byte[] privateKeyBytes = Base64.decode(privateKeyBase64, Base64.URL_SAFE);
         BigInteger privateKeyD = new BigInteger(privateKeyBytes);
 
@@ -152,9 +91,7 @@ class SecurityHelper {
         return null;
     }
 
-    private ECPublicKey getPublicKeyFromPersistedData() {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        String publicKeyBase64 = sharedPref.getString(KEY_PUSH_PUBLIC, "");
+    private ECPublicKey getPublicKeyFromBase64String(String publicKeyBase64) {
         byte[] publicKeyBytes = Base64.decode(publicKeyBase64, Base64.URL_SAFE);
 
         ECParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(CURVE_NAME);
@@ -171,21 +108,16 @@ class SecurityHelper {
         return null;
     }
 
-    String getAuthSecretFromPersistedData() {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getString(KEY_PUSH_AUTH, "");
-    }
-
-    String decryptMessage(byte[] encryptedContent) {
-        ECPrivateKey recipientPrivateKey = getPrivateKeyFromPersistedData();
-        ECPublicKey recipientPublicKey = getPublicKeyFromPersistedData();
+    String decryptMessage(byte[] encryptedContent, String privateKeyBase64, String publicKeyBase64, String authBase64) {
+        ECPrivateKey recipientPrivateKey = getPrivateKeyFromPersistedData(privateKeyBase64);
+        ECPublicKey recipientPublicKey = getPublicKeyFromBase64String(publicKeyBase64);
         try {
             java.security.interfaces.ECPublicKey recipientPublicKeyAsJavaSecurity = (java.security.interfaces.ECPublicKey) recipientPublicKey;
             if (recipientPublicKey == null) {
                 throw new IllegalStateException("Public key is null");
             }
             java.security.interfaces.ECPrivateKey recipientPrivateAsJavaSecurity = (java.security.interfaces.ECPrivateKey) recipientPrivateKey;
-            byte[] authSecret = Base64.decode(getAuthSecretFromPersistedData(), Base64.URL_SAFE);
+            byte[] authSecret = Base64.decode(authBase64, Base64.URL_SAFE);
             HybridDecrypt hybridDecrypt = new WebPushHybridDecrypt.Builder()
                     .withAuthSecret(authSecret)
                     .withRecipientPublicKey(recipientPublicKeyAsJavaSecurity)

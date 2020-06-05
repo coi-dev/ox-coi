@@ -62,7 +62,7 @@ import 'package:ox_coi/src/main/main_event_state.dart';
 import 'package:ox_coi/src/main/root.dart';
 import 'package:ox_coi/src/main/splash.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
-import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/notifications/display_notification_manager.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
 import 'package:ox_coi/src/widgets/view_switcher.dart';
@@ -179,7 +179,7 @@ class _OxCoiState extends State<OxCoi> {
           if (state is MainStateSuccess) {
             _navigation.popUntilRoot(context);
             if (state.configured && !state.needsOnboarding && !state.hasAuthenticationError && state.notificationsActivated) {
-              NotificationManager().setup(context);
+              DisplayNotificationManager().setupAsync(context);
             }
           }
         },

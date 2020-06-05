@@ -44,12 +44,13 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/data/chat_message_repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/notifications/display_notification_manager.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -64,15 +65,22 @@ class LocalNotificationManager {
   final _core = DeltaChatCore();
   final _context = Context();
 
-  NotificationManager _notificationManager;
+  DisplayNotificationManager _notificationManager;
   bool _listenersRegistered = false;
 
   factory LocalNotificationManager() => _instance ??= LocalNotificationManager._internal();
 
   LocalNotificationManager._internal();
 
-  void setup() {
-    _registerListeners();
+  LocalNotificationManager.newInstance() {
+    _instance = LocalNotificationManager._internal();
+  }
+
+  void setup({@required bool registerListeners}) {
+    _notificationManager = DisplayNotificationManager();
+    if (registerListeners) {
+      _registerListeners();
+    }
   }
 
   void tearDown() {
@@ -82,7 +90,6 @@ class LocalNotificationManager {
   void _registerListeners() {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _notificationManager = NotificationManager();
       _messageSubject.listen(_messagesUpdated);
       _core.addListener(eventIdList: [Event.incomingMsg, Event.msgsChanged], streamController: _messageSubject);
     }
@@ -102,11 +109,11 @@ class LocalNotificationManager {
 
   Future<void> triggerNotificationAsync() async {
     _logger.info("Local notification triggered");
-    await createChatNotificationsAsync();
-    await createInviteNotificationsAsync();
+    await _createChatNotificationsAsync();
+    await _createInviteNotificationsAsync();
   }
 
-  Future createChatNotificationsAsync() async {
+  Future<void> _createChatNotificationsAsync() async {
     final HashMap<String, int> notificationHistory = await _getNotificationHistoryAsync();
     final List<int> freshMessages = await _context.getFreshMessages();
     _temporaryMessageRepository.putIfAbsent(ids: freshMessages);
@@ -129,7 +136,7 @@ class LocalNotificationManager {
           final teaser = await message.getSummaryText(200);
           final payload = chatId?.toString();
           _logger.info("Creating chat notification for chat id $chatId with message id $messageId");
-          _notificationManager.showNotificationFromLocal(chatId, title, teaser, payload: payload);
+          _notificationManager.showNotificationFromLocalAsync(chatId, title, teaser, payload: payload);
         }
       }
     });
@@ -161,7 +168,7 @@ class LocalNotificationManager {
     await setPreference(preferenceTarget, notificationHistoryString);
   }
 
-  Future<void> createInviteNotificationsAsync() async {
+  Future<void> _createInviteNotificationsAsync() async {
     final HashMap<String, int> notificationInviteHistory = await _getNotificationHistoryAsync(isInvite: true);
     final List<int> openInvites = await _context.getChatMessages(Chat.typeInvite);
     _temporaryMessageRepository.putIfAbsent(ids: openInvites);
@@ -185,7 +192,7 @@ class LocalNotificationManager {
         final teaser = await message.getSummaryText(200);
         final payload = "${Chat.typeInvite.toString()}_$messageId";
         _logger.info("Creating invite notification for sender id $senderId with message id $messageId");
-        _notificationManager.showNotificationFromLocal(Chat.typeInvite, title, teaser, payload: payload);
+        _notificationManager.showNotificationFromLocalAsync(Chat.typeInvite, title, teaser, payload: payload);
       }
     });
 

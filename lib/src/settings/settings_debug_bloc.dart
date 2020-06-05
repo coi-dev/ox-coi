@@ -72,8 +72,8 @@ class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
 
   void loadDebug() async {
     var pushManager = PushManager();
-    String token = await pushManager.getPushToken();
-    String pushResource = await pushManager.getPushResource();
+    String token = await pushManager.getPushTokenAsync();
+    String pushResource = await pushManager.getPushResourceAsync();
     String endpoint = await getPreference(preferenceNotificationsEndpoint);
     String pushServiceUrl = await getPreference(preferenceNotificationsPushServiceUrl);
     String pushState = await getPreference(preferenceNotificationsPushStatus);

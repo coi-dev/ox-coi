@@ -1,4 +1,4 @@
-platform :ios, '12.4'
+platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -29,6 +29,14 @@ def parse_KV_file(file, separator='=')
     end
   end
   generated_key_values
+end
+
+target 'NotificationService' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'Tink'
+  pod "GMEllipticCurveCrypto"
 end
 
 target 'Runner' do

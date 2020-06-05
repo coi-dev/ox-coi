@@ -6,6 +6,7 @@ const _kilobyte = 1024;
 const _megabyte = 1024 * _kilobyte;
 
 extension Convert on int {
+
   String byteToPrintableSize() {
     String unit;
     double result;

@@ -44,12 +44,19 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:ox_coi/src/security/security_generator.dart';
 import 'package:pointycastle/export.dart';
 import 'package:test/test.dart';
 import 'package:uuid/uuid.dart';
 
-
 void main() {
+  test("secure randoms", () {
+    final bytes = generateRandomBytes();
+    print("Bytes size (16): ${bytes.length}");
+    final bytes32 = generateRandomBytes(32);
+    print("Bytes size (32): ${bytes32.length}");
+  });
+
   test('p256dh', () {
     var domainParameters = ECCurve_secp256r1();
     var params = ECKeyGeneratorParameters(domainParameters);
@@ -57,18 +64,19 @@ void main() {
     generator.init(ParametersWithRandom(params, getSecureRandom()));
     var generateKeyPair = generator.generateKeyPair();
     ECPublicKey publicKey = generateKeyPair.publicKey;
-    print("Point: ${publicKey.Q}");
+    print("Public Point: ${publicKey.Q}");
     var bytes = utf8.encode(publicKey.Q.toString());
-    var base64Str = base64Url.encode(bytes);
-    print("Base64 $base64Str");
+    var base64Str = base64UrlEncode(bytes);
+    ECPrivateKey privateKey = generateKeyPair.privateKey;
+    print("Base64: $base64Str");
+    print("Private Point: ${privateKey.d}");
   });
 
   test('UUID', () {
     var uuid = new Uuid();
-    print("Secret ${uuid.v4()}");
+    print("UUID ${uuid.v4()}");
   });
 }
-
 
 SecureRandom getSecureRandom() {
   var secureRandom = FortunaRandom();
@@ -77,6 +85,6 @@ SecureRandom getSecureRandom() {
   for (int i = 0; i < 32; i++) {
     seeds.add(random.nextInt(255));
   }
-  secureRandom.seed(new KeyParameter(Uint8List.fromList(seeds)));
+  secureRandom.seed(KeyParameter(Uint8List.fromList(seeds)));
   return secureRandom;
 }

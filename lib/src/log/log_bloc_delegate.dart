@@ -48,12 +48,12 @@ class LogBlocDelegate implements BlocDelegate {
 
   @override
   void onEvent(Bloc bloc, Object event) {
-    _logger.info(event.toString());
+    _logger.info('Event { bloc: ${bloc.runtimeType}, event: ${event.toString()} }');
   }
 
   @override
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
-    _logger.warning("Error: $error (Stacktrace: $stacktrace)");
+    _logger.warning('Error { bloc: ${bloc.runtimeType}, error: $error, stacktrace: $stacktrace }');
   }
 
   @override

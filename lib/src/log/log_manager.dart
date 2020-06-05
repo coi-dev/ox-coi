@@ -58,14 +58,17 @@ import 'package:synchronized/extension.dart';
 class LogManager {
   static const _coreLoggerName = "dcc";
   static const _logManagerLoggerName = "logManager";
-  static const _maxLogFileCount = 10;
+  static const _maxLogFileCount = 100;
   static const _logFolder = "logs";
   static LogManager _instance;
 
   final _coreLoggerSubject = PublishSubject<Event>();
   final _core = DeltaChatCore();
 
+  bool _isLogging = false;
   File _logFile;
+
+  bool get isLogging => _isLogging;
 
   factory LogManager() {
     _instance ??= LogManager._internal();
@@ -77,6 +80,10 @@ class LogManager {
   get currentLogFile => _logFile;
 
   Future<void> setup({@required bool logToFile, @required Level logLevel}) async {
+    if (_isLogging) {
+      return;
+    }
+    _isLogging = true;
     BlocSupervisor.delegate = LogBlocDelegate();
     if (logToFile) {
       _logFile = await _setupAndGetLogFile();
@@ -170,7 +177,11 @@ class LogManager {
     final dccLogLevel = event.data2;
     final message = "$dccLogLevel: $dccLogMessage";
     final logRecord = LogRecord(Level.INFO, message, _coreLoggerName);
-    _writeToLogFile(logRecord);
+    if (Platform.isIOS) {
+      _logEntry(logRecord, true); // Enables iOS developers to receive DCC logs during Android Studio sessions
+    } else if (Platform.isAndroid) {
+      _writeToLogFile(logRecord);
+    }
   }
 
   Future<void> logDeviceInfo() async {

@@ -40,22 +40,42 @@
 * for more details.
 */
 
-import UIKit
-import SwiftyBeaver
+import Foundation
 
-let log = SwiftyBeaver.self
+struct MethodChannel {}
 
-extension UIApplication {
+extension MethodChannel {
 
-    // MARK: - Logging
+    struct Sharing {
+        static let Intent = "oxcoi.sharing"
 
-    class func setupLogging() {
-        // https://docs.swiftybeaver.com/article/20-custom-format
-        let console = ConsoleDestination()
-        console.format = "$Dyyyy-MM-dd HH:mm:ss $N.$F:$l [$L] $M"
-        log.addDestination(console)
+        struct Method {
+            static let InitialLink    = "getInitialLink"
+            static let SendSharedData = "sendSharedData"
+            static let GetSharedData  = "getSharedData"
+        }
 
-        log.debug("Logging Setup: done")
+        struct Argument {
+            static let path            = "path"
+            static let text            = "text"
+            static let mimeType        = "text/plain"
+            static let keyPrefixShared = "shared"
+        }
+    }
+    
+    struct Security {
+        static let Name = "oxcoi.security"
+
+        struct Method {
+            static let Decrypt = "decrypt"
+        }
+
+        struct Argument {
+            static let Content    = "encryptedBase64Content"
+            static let PrivateKey = "privateKeyBase64"
+            static let PublicKey  = "publicKeyBase64"
+            static let Auth       = "authBase64"
+        }
     }
 
 }

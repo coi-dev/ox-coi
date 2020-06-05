@@ -54,7 +54,7 @@ import 'package:ox_coi/src/navigation/navigatable.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/share/share_bloc.dart';
 import 'package:ox_coi/src/share/share_event_state.dart';
-import 'package:ox_coi/src/share/shared_data.dart';
+import 'package:ox_coi/src/share/incoming_shared_data.dart';
 import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
@@ -63,7 +63,7 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 class Share extends StatefulWidget {
   final List<int> msgIds;
   final MessageActionTag messageActionTag;
-  final SharedData sharedData;
+  final IncomingSharedData sharedData;
 
   Share({this.msgIds, this.messageActionTag, this.sharedData});
 

@@ -42,23 +42,27 @@
 
 import 'dart:convert';
 
+import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ox_coi/src/data/notification.dart';
+import 'package:logging/logging.dart';
+import 'package:ox_coi/src/data/push.dart';
 import 'package:ox_coi/src/data/push_chat_message.dart';
 import 'package:ox_coi/src/data/push_validation.dart';
 import 'package:ox_coi/src/extensions/string_apis.dart';
-import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/notifications/display_notification_manager.dart';
+import 'package:ox_coi/src/platform/method_channel.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
 import 'package:ox_coi/src/push/push_bloc.dart';
 import 'package:ox_coi/src/push/push_event_state.dart';
+import 'package:ox_coi/src/security/security_manager.dart';
+
+const loggerName = "push_manager";
 
 class PushManager {
-  static const securityChannelName = const MethodChannel("oxcoi.security");
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
-  var _notificationManager = NotificationManager();
+  final _logger = Logger(loggerName);
+  final _firebaseMessaging = FirebaseMessaging();
+  final _notificationManager = DisplayNotificationManager();
+
   PushBloc _pushBloc;
 
   static PushManager _instance;
@@ -69,68 +73,101 @@ class PushManager {
 
   Future<void> setup(PushBloc pushBloc) async {
     this._pushBloc = pushBloc;
-    //firebase setup
+
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-        var notificationData = NotificationData.fromJson(message);
-        if (notificationData.valid) {
-          String decryptedContent = await decrypt(notificationData.content);
-          if (_isValidationPush(decryptedContent)) {
-            var validation = _getPushValidation(decryptedContent).validation;
-            _pushBloc.add(ValidateMetadata(validation: validation));
+        _logger.info("Received: $message");
+        final pushData = Push.fromJson(message);
+        if (pushData.valid) {
+          _logger.info("Data is valid");
+          _logger.info("Decrypt AES started");
+          final decryptedPush = await decryptAesAsync(pushData.content);
+          _logger.info("Decrypt AES done");
+          if (_isValidationPush(decryptedPush)) {
+            _logger.info("Data is validation message");
+            final pushValidationMessage = _getPushValidation(decryptedPush).validation;
+            _logger.info("Decrypted data: $pushValidationMessage");
+            _pushBloc.add(ValidateMetadata(validation: pushValidationMessage));
           } else {
-            var pushChatMessage = _getPushChatMessage(decryptedContent);
-            String fromEmail = pushChatMessage.fromEmail;
-            String body = "I sent you a new chat message";
-            await _notificationManager.showNotificationFromPush(fromEmail, body);
+            _logger.info("Data is chat message");
+            final pushChatMessage = _getPushChatMessage(decryptedPush);
+            final fromEmail = pushChatMessage.fromEmail;
+            _logger.info("Decrypted data: $pushChatMessage for $fromEmail");
+            var contentType = pushChatMessage.contentType;
+            if (contentType.isNullOrEmpty()) {
+              contentType = "text/plain; charset=utf-8";
+              _logger.info("Manually setting content type to avoid null / empty value");
+            }
+            _logger.info("Decrypt PGP started");
+            final decryptedChatMessage = await decryptPgpAsync(contentType, pushChatMessage, fromEmail);
+            _logger.info("Decrypt PGP done");
+            _logger.info(
+                "Decrypted and mapped data: $fromEmail sent in chat ${decryptedChatMessage.chatId} the message '${decryptedChatMessage.content}'");
+            await _notificationManager.showNotificationFromPushAsync(fromEmail, decryptedChatMessage);
           }
+        } else {
+          _logger.info("Data is *NOT* valid");
         }
         return Future(null);
       },
       onResume: (Map<String, dynamic> message) {
         //TODO: Add functionality
-        print('on resume $message');
+        _logger.info("onResume $message");
         return Future(null);
       },
       onLaunch: (Map<String, dynamic> message) {
         //TODO: Add functionality
-        print('on launch $message');
+        _logger.info("onLaunch $message");
         return Future(null);
       },
     );
     _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.getToken().then((token) {
-      //TODO Use in production
-      //_pushBloc.add(PatchPushResource(pushToken: token));
-    });
   }
 
-  Future<String> getPushToken() async {
+  Future<String> getPushTokenAsync() async {
     return await _firebaseMessaging.getToken();
   }
 
-  Future<String> getPushResource() async {
+  Future<String> getPushResourceAsync() async {
     return await getPreference(preferenceNotificationsPush);
   }
 
-  Future<String> decrypt(String base64content) async {
-    return await securityChannelName.invokeMethod('decrypt', {"input": base64content});
+  Future<String> decryptAesAsync(String encryptedBase64Content) async {
+    final privateKey = await getPushPrivateKeyAsync();
+    final publicKey = await getPushPublicKeyAsync();
+    final auth = await getPushAuthAsync();
+
+    _logger.info("PrivateKey: $privateKey");
+    _logger.info("PublicKey: $publicKey");
+    _logger.info("Auth: $auth");
+
+    return await SecurityChannel.instance.invokeMethod(SecurityChannel.kMethodDecrypt, {
+      SecurityChannel.kArgumentContent: encryptedBase64Content,
+      SecurityChannel.kArgumentPrivateKey: privateKey,
+      SecurityChannel.kArgumentPublicKey: publicKey,
+      SecurityChannel.kArgumentAuth: auth,
+    });
+  }
+
+  Future<DecryptedChatMessage> decryptPgpAsync(String contentType, PushChatMessage pushChatMessage, String fromEmail) async {
+    final context = Context();
+    final decrypted = await context.decryptInMemory(contentType, pushChatMessage.content, fromEmail);
+    return DecryptedChatMessage.fromMethodChannel(decrypted);
   }
 
   bool _isValidationPush(String decryptedContent) {
-    var pushValidationMap = jsonDecode(decryptedContent);
-    var pushValidation = PushValidation.fromJson(pushValidationMap);
+    final pushValidationMap = jsonDecode(decryptedContent);
+    final pushValidation = PushValidation.fromJson(pushValidationMap);
     return !pushValidation.validation.isNullOrEmpty();
   }
 
   PushValidation _getPushValidation(String decryptedContent) {
-    var pushValidationMap = jsonDecode(decryptedContent);
+    final pushValidationMap = jsonDecode(decryptedContent);
     return PushValidation.fromJson(pushValidationMap);
   }
 
   PushChatMessage _getPushChatMessage(String decryptedContent) {
-    var pushValidationMap = jsonDecode(decryptedContent);
+    final pushValidationMap = jsonDecode(decryptedContent);
     return PushChatMessage.fromJson(pushValidationMap);
   }
 }

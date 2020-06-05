@@ -40,65 +40,41 @@
  * for more details.
  */
 
-import 'package:meta/meta.dart';
-import 'package:ox_coi/src/share/incoming_shared_data.dart';
+package com.openxchange.oxcoi;
 
-abstract class ShareEvent {}
+class MethodChannel {
 
-class RequestChatsAndContacts extends ShareEvent {}
+    abstract static class Security {
+        static final String NAME = "oxcoi.security";
 
-class ChatsAndContactsLoaded extends ShareEvent {
-  final List<dynamic> chatAndContactList;
-  final int chatListLength;
-  final int contactListLength;
+        abstract static class Methods {
+            static final String DECRYPT = "decrypt";
+        }
 
-  ChatsAndContactsLoaded({
-    @required this.chatAndContactList,
-    @required this.chatListLength,
-    @required this.contactListLength,
-  });
+        abstract static class Arguments {
+            static final String CONTENT = "encryptedBase64Content";
+            static final String PRIVATE_KEY = "privateKeyBase64";
+            static final String PUBLIC_KEY = "publicKeyBase64";
+            static final String AUTH = "authBase64";
+        }
+    }
+
+    abstract static class Sharing {
+        static final String NAME = "oxcoi.sharing";
+
+        abstract static class Methods {
+            static final String GET_SHARE_DATA = "getSharedData";
+            static final String SEND_SHARE_DATA = "sendSharedData";
+            static final String GET_INITIAL_LINK = "getInitialLink";
+        }
+
+        abstract static class Arguments {
+            static final String MIME_TYPE = "mimeType";
+            static final String TEXT = "text";
+            static final String PATH = "path";
+            static final String NAME = "fileName";
+            static final String TITLE = "title";
+        }
+    }
 }
 
-class ForwardMessages extends ShareEvent {
-  final int destinationChatId;
-  final List<int> messageIds;
-
-  ForwardMessages({
-    @required this.destinationChatId,
-    @required this.messageIds,
-  });
-}
-
-class LoadSharedData extends ShareEvent {}
-
-class SharedDataLoaded extends ShareEvent {
-  final IncomingSharedData sharedData;
-
-  SharedDataLoaded({@required this.sharedData});
-}
-
-abstract class ShareState {}
-
-class ShareStateInitial extends ShareState {}
-
-class ShareStateLoading extends ShareState {}
-
-class ShareStateSuccess extends ShareState {
-  final List<dynamic> chatAndContactIds;
-  final int chatIdCount;
-  final int contactIdCount;
-  final IncomingSharedData sharedData;
-
-  ShareStateSuccess({
-    this.chatAndContactIds,
-    this.chatIdCount,
-    this.contactIdCount,
-    this.sharedData,
-  });
-}
-
-class ShareStateFailure extends ShareState {
-  final String error;
-
-  ShareStateFailure({@required this.error});
-}

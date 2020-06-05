@@ -46,7 +46,6 @@ import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:ox_coi/src/data/config.dart';
@@ -58,7 +57,8 @@ import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/invite/invite_service.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/share/shared_data.dart';
+import 'package:ox_coi/src/platform/method_channel.dart';
+import 'package:ox_coi/src/share/outgoing_shared_data.dart';
 import 'package:ox_coi/src/utils/http.dart';
 import 'package:ox_coi/src/utils/image.dart';
 import 'package:path_provider/path_provider.dart';
@@ -68,7 +68,6 @@ import 'invite_event_state.dart';
 class InviteBloc extends Bloc<InviteEvent, InviteState> {
   final Repository<Contact> _contactRepository = RepositoryManager.get(RepositoryType.contact);
   final Repository<Chat> _chatRepository = RepositoryManager.get(RepositoryType.chat);
-  static const platform = const MethodChannel(SharedData.sharingChannelName);
   InviteService inviteService = InviteService();
 
   @override
@@ -92,16 +91,14 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
   Stream<InviteState> createInviteUrl(String message) async* {
     InviteServiceRequest requestInviteService = await _createInviteServiceRequest(message ?? "");
     var response = await inviteService.createInviteUrl(requestInviteService);
-    bool valid = validateHttpResponse(response);
+    bool valid = isHttpResponseValid(response);
     if (valid) {
       InviteServiceResponse responseInviteService = _getInviteResponse(response);
-      Map argsMap = <String, String>{
-        'title': '',
-        'path': '',
-        'mimeType': 'text/*',
-        'text': '${responseInviteService.endpoint} \n ${L10n.get(L.inviteShareText)}'
-      };
-      sendSharedData(argsMap);
+      final shareData = OutgoingSharedData(
+        mimeType: 'text/*',
+        text: '${responseInviteService.endpoint} \n ${L10n.get(L.inviteShareText)}',
+      );
+      sendSharedData(shareData.toMap());
       yield InviteStateSuccess();
     } else {
       yield InviteStateFailure(errorMessage: response.reasonPhrase);
@@ -117,7 +114,7 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
     String id = sharedLink.substring(startIndex);
     if (id.isNotEmpty) {
       Response response = await inviteService.getInvite(id);
-      bool valid = validateHttpResponse(response);
+      bool valid = isHttpResponseValid(response);
       if (valid) {
         InviteServiceResponse responseInviteService = _getInviteResponse(response);
         String imageString = responseInviteService.sender.image;
@@ -204,7 +201,8 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
     return inviteResponse;
   }
 
-  Future<String> _getInitialLink() async => await platform.invokeMethod('getInitialLink');
+  Future<String> _getInitialLink() async => await SharingChannel.instance.invokeMethod(SharingChannel.kMethodGetInitialLink);
 
-  void sendSharedData(Map argsMap) async => await platform.invokeMethod('sendSharedData', argsMap);
+  Future<void> sendSharedData(Map<String, String> shareData) async =>
+      await SharingChannel.instance.invokeMethod(SharingChannel.kMethodSendSharedData, shareData);
 }

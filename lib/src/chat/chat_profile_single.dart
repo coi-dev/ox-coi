@@ -54,7 +54,6 @@ import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/message_list/message_list_bloc.dart';
 import 'package:ox_coi/src/message_list/message_list_flagged.dart';
 import 'package:ox_coi/src/navigation/navigation.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';

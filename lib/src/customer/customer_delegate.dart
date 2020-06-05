@@ -85,12 +85,6 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
   final changeNotifier = CustomerDelegateChangeNotifier();
   final _config = Config();
 
-  MainBloc _mainBloc;
-
-  void dispose() {
-    _mainBloc.close();
-  }
-
   @override
   Future<void> buttonPressedAsync({BuildContext context, data}) async {
     // TODO: NEEDS TO BE DISCUSSED!
@@ -192,8 +186,7 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
     Customer.needsOnboarding = false;
     Navigation().popUntilRoot(context);
 
-    _mainBloc = BlocProvider.of<MainBloc>(context);
-    _mainBloc.add(AppLoaded());
+    BlocProvider.of<MainBloc>(context).add(AppLoaded());
   }
 }
 

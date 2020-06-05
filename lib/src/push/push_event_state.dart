@@ -70,18 +70,6 @@ class ValidateMetadata extends PushEvent {
   ValidateMetadata({@required this.validation});
 }
 
-class PushActionFailed extends PushEvent {
-  final String error;
-
-  PushActionFailed({@required this.error});
-}
-
-class PushActionDone extends PushEvent {
-  final ResponsePushResource responsePushResource;
-
-  PushActionDone({@required this.responsePushResource});
-}
-
 abstract class PushState {}
 
 class PushStateInitial extends PushState {}

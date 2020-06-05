@@ -40,16 +40,35 @@
  * for more details.
  */
 
-class NotificationData {
+import 'dart:io';
+
+class Push {
   String content;
   bool valid;
 
-  NotificationData.fromJson(Map<String, dynamic> json) : content = json['data']['content'] {
-    valid = content != null && content.isNotEmpty;
+  Push.fromJson(Map<String, dynamic> json) {
+    try {
+      content = Platform.isIOS ? json['content'] : json['data']['content'];
+      valid = content != null && content.isNotEmpty;
+    } catch (error) {
+      throw NotificationDataException(error, json: json);
+    }
   }
 
   @override
   String toString() {
     return content;
+  }
+}
+
+class NotificationDataException implements Exception {
+  final Map<String, dynamic> json;
+  final String error;
+
+  NotificationDataException(this.error, {this.json});
+
+  @override
+  String toString() {
+    return "Invalid notification data: '$error'\nJSON: ${json.toString()}";
   }
 }

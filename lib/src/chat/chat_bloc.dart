@@ -52,7 +52,7 @@ import 'package:ox_coi/src/data/repository_stream_handler.dart';
 import 'package:ox_coi/src/extensions/color_apis.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/l10n/l10n.dart';
-import 'package:ox_coi/src/notifications/notification_manager.dart';
+import 'package:ox_coi/src/notifications/display_notification_manager.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final _chatRepository = RepositoryManager.get(RepositoryType.chat);
@@ -207,7 +207,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _removeNotifications() {
-    final notificationManager = NotificationManager();
-    notificationManager.cancelNotification(_chatId);
+    final notificationManager = DisplayNotificationManager();
+    notificationManager.cancelNotificationAsync(_chatId);
   }
 }

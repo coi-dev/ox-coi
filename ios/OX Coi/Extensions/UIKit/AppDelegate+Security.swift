@@ -40,13 +40,45 @@
 * for more details.
 */
 
-import Foundation
-import Firebase
+import UIKit
 
-extension UIApplication {
+extension AppDelegate {
 
-    class func setupFirebase() {
-        FirebaseApp.configure()
+    internal func setupSecurityMethodChannel() {
+        guard let controller = window.rootViewController as? FlutterViewController else {
+            return
+        }
+        
+        let channel = FlutterMethodChannel(name: MethodChannel.Security.Name, binaryMessenger: controller.binaryMessenger)
+        channel.setMethodCallHandler {(call: FlutterMethodCall, result: FlutterResult) -> Void in
+            switch call.method {
+                case MethodChannel.Security.Method.Decrypt:
+                    if let messageDict = call.arguments as? [String: String] {
+//                        do {
+//                            let securityHelper = try SecurityHelper(message: messageDict)
+//                            let decryptedMessage = try securityHelper.getDecryptedMessage()
+//                            result(decryptedMessage)
+//
+//                        } catch {
+//                            throw SecurityHelperError.decryptMessageFailed(error: error.localizedDescription)
+//                        }
+                        return
+                    }
+
+                default:
+                    break
+            }
+            result(nil)
+        }
     }
-
 }
+
+/*
+     String encryptedBase64Content = call.argument(MethodChannels.Security.Arguments.CONTENT);
+     String privateKeyBase64 = call.argument(MethodChannels.Security.Arguments.PRIVATE_KEY);
+     String publicKeyBase64 = call.argument(MethodChannels.Security.Arguments.PUBLIC_KEY);
+     String authBase64 = call.argument(MethodChannels.Security.Arguments.AUTH);
+     byte[] inputBytes = Base64.decode(encryptedBase64Content, Base64.DEFAULT);
+     String decryptMessage = securityHelper.decryptMessage(inputBytes, privateKeyBase64, publicKeyBase64, authBase64);
+     result.success(decryptMessage);
+ */

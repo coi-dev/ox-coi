@@ -59,9 +59,9 @@ const preferenceNeedsOnboarding = "preferenceNeedsOnboarding";
 const preferenceNotificationHistory = "preferenceNotificationHistory";
 const preferenceNotificationInviteHistory = "preferenceNotificationInviteHistory";
 
-const preferenceNotificationsAuth = "preferenceNotificationsAuth"; // Unused
-const preferenceNotificationsP256dhPublic = "preferenceNotificationsP256dhPublic"; // Unused
-const preferenceNotificationsP256dhPrivate = "preferenceNotificationsP256dhPrivate"; // Unused
+const preferenceNotificationsAuth = "preferenceNotificationAuth";
+const preferenceNotificationKeyPublic = "preferenceNotificationKeyPublic";
+const preferenceNotificationKeyPrivate = "preferenceNotificationKeyPrivate";
 
 Future<dynamic> getPreference(String key) async {
   SharedPreferences sharedPreferences = await getSharedPreferences();

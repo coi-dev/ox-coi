@@ -40,22 +40,17 @@
  * for more details.
  */
 
-class SharedData {
-  static const String sharedMimeType = "shared_mime_type";
-  static const String sharedText = "shared_text";
-  static const String sharedPath = "shared_path";
-  static const String sharedFileName = "shared_file_name";
-  static const String sharingChannelName = "oxcoi.intent";
+import 'package:flutter/widgets.dart';
 
-  String mimeType;
-  String text;
-  String path;
-  String fileName;
+class OutgoingSharedData {
+  final String title;
+  final String path;
+  final String mimeType;
+  final String text;
 
-  SharedData(Map<dynamic, dynamic> data) {
-    mimeType = data.containsKey(sharedMimeType) ? data[sharedMimeType] : "";
-    text = data.containsKey(sharedText) ? data[sharedText] : "";
-    path = data.containsKey(sharedPath) ? data[sharedPath] : "";
-    fileName = data.containsKey(sharedFileName) ? data[sharedFileName] : "";
+  OutgoingSharedData({this.title = '', this.path = '', @required this.mimeType, @required this.text});
+
+  Map<String, dynamic> toMap() {
+    return <String, String>{'title': '$text', 'path': '$path', 'mimeType': '$mimeType', 'text': '$text'};
   }
 }
