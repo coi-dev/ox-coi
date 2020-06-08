@@ -279,7 +279,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       if (contact.emails.length != 0) {
         contact.emails.forEach((email) {
           if (email.value.isEmail) {
-            if (!googlemailDetected) {
+            if (shouldUpdateUi && !googlemailDetected) {
               googlemailDetected = email.value.contains(googlemailDomain);
             }
             _coreContacts += getFormattedContactData(contact, email);
