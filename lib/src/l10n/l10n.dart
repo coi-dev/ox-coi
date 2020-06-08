@@ -46,6 +46,7 @@ import 'package:flutter/services.dart';
 import "package:gettext/gettext.dart";
 import "package:gettext_parser/gettext_parser.dart";
 import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/utils/assets.dart';
 import 'package:sprintf/sprintf.dart';
 
 class L10n {
@@ -93,7 +94,7 @@ class L10n {
     if (loadedLocales.contains(localeString)) {
       return;
     }
-    rootBundle.loadString('assets/l10n/$localeString.po').then((data) {
+    loadTextAssetAsStringAsync('assets/l10n/$localeString.po').then((data) {
       _getText.addLocale(po.parse(data));
       loadedLocales.add(localeString);
     }).catchError((error) {});

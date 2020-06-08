@@ -40,31 +40,16 @@
  * for more details.
  */
 
-import 'package:bloc/bloc.dart';
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
-import 'package:ox_coi/src/utils/assets.dart';
-import 'package:ox_coi/src/web/web_asset_event_state.dart';
 
-class WebAssetBloc extends Bloc<WebAssetEvent, WebAssetState> {
-  @override
-  WebAssetState get initialState => WebAssetStateInitial();
+Future<String> loadTextAssetAsStringAsync(String path) async {
+  final ByteData data = await rootBundle.load(path);
+  return utf8.decode(data.buffer.asUint8List());
+}
 
-  @override
-  Stream<WebAssetState> mapEventToState(WebAssetEvent event) async* {
-    if (event is LoadAsset) {
-      yield WebAssetStateLoading();
-      try {
-        _loadAsset(event.asset);
-      } catch (error) {
-        yield WebAssetStateFailure();
-      }
-    }else if(event is AssetLoaded){
-      yield WebAssetStateSuccess(loadedAsset: event.asset);
-    }
-  }
-
-  void _loadAsset(String asset) async{
-    final loadedAsset = await loadTextAssetAsStringAsync(asset);
-    add(AssetLoaded(asset: loadedAsset));
-  }
+Future<Map<String, dynamic>> loadJsonAssetAsMapAsync(String path) async {
+  final jsonContent = await loadTextAssetAsStringAsync(path);
+  return jsonDecode(jsonContent);
 }

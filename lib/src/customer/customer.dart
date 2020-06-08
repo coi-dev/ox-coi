@@ -48,6 +48,7 @@ import 'package:ox_coi/src/customer/model/customer_chat.dart';
 import 'package:ox_coi/src/customer/model/customer_config.dart';
 import 'package:ox_coi/src/dynamic_screen/model/dynamic_screen.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/utils/assets.dart';
 import 'package:ox_coi/src/utils/constants.dart';
 
 class Customer {
@@ -68,7 +69,7 @@ class Customer {
 
   Future<void> configureOnboardingAsync() async {
     try {
-      Map<String, dynamic> jsonFile = await rootBundle.loadString(customerOnboardingConfigPath).then((jsonStr) => jsonDecode(jsonStr));
+      Map<String, dynamic> jsonFile = await loadJsonAssetAsMapAsync(customerOnboardingConfigPath);
       _onboardingModel = DynamicScreenModel.fromJson(jsonFile);
     } catch (error) {
       _logger.shout("[Configure Onboarding] ** ERROR **: ${error.toString()}");
@@ -78,7 +79,7 @@ class Customer {
 
   Future<void> _configureCustomerAsync() async {
     try {
-      Map<String, dynamic> jsonFile = await rootBundle.loadString(customerConfigPath).then((jsonStr) => jsonDecode(jsonStr));
+      Map<String, dynamic> jsonFile = await loadJsonAssetAsMapAsync(customerConfigPath);
       _config = CustomerConfig.fromJson(jsonFile);
       _needsOnboarding = await getPreference(preferenceNeedsOnboarding) as bool ?? true;
 

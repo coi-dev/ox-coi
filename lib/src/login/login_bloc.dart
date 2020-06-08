@@ -41,11 +41,9 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:ox_coi/src/data/config.dart';
 import 'package:ox_coi/src/error/error_bloc.dart';
 import 'package:ox_coi/src/error/error_event_state.dart';
@@ -53,6 +51,7 @@ import 'package:ox_coi/src/extensions/string_apis.dart';
 import 'package:ox_coi/src/login/login_events_state.dart';
 import 'package:ox_coi/src/login/providers.dart';
 import 'package:ox_coi/src/platform/preferences.dart';
+import 'package:ox_coi/src/utils/assets.dart';
 import 'package:ox_coi/src/utils/core.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -200,7 +199,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _loadProviders(ProviderListType type) async {
-    Map<String, dynamic> json = await rootBundle.loadString('assets/customer/json/providers.json').then((jsonStr) => jsonDecode(jsonStr));
+    Map<String, dynamic> json = await loadJsonAssetAsMapAsync('assets/customer/json/providers.json');
 
     Providers providers = Providers.fromJson(json);
     if (type == ProviderListType.register) {
