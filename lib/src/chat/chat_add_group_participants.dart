@@ -88,7 +88,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
     _searchBar = DynamicSearchBar(
       scrollable: false,
       content: DynamicSearchBarContent(
-        onSearch: (text) => _contactListBloc.add(SearchContacts(query: text)),
+        onSearch: (text) => _contactListBloc.add(SearchContacts(query: text, chatId: widget.chatId)),
         isSearchingCallback: (bool isSearching) => setState(() => _isSearching = isSearching),
       ),
     );
@@ -208,7 +208,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
   }
 
   _itemTapped(int id) {
-    _contactListBloc.add(ContactsSelectionChanged(id: id));
+    _contactListBloc.add(ContactsSelectionChanged(id: id, chatId: widget.chatId));
   }
 
   _onSubmit() async {

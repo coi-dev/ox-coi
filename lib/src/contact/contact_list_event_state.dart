@@ -67,16 +67,18 @@ class ContactsChanged extends ContactListEvent {
 
 class ContactsSelectionChanged extends ContactListEvent {
   final int id;
+  final int chatId;
 
-  ContactsSelectionChanged({@required this.id});
+  ContactsSelectionChanged({@required this.id, this.chatId});
 }
 
 class BlockedContactsChanged extends ContactListEvent {}
 
 class SearchContacts extends ContactListEvent {
   final String query;
+  final int chatId;
 
-  SearchContacts({@required this.query});
+  SearchContacts({@required this.query, this.chatId});
 }
 
 class ContactsSearched extends ContactListEvent {
