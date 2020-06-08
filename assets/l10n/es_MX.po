@@ -1,18 +1,23 @@
-# Andrés Herrera <andres@workshop-chapina.com>, 2019.
+# Andrés Herrera <andres@workshop-chapina.com>, 2019, 2020.
+# peri <jalbap@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-08 01:09+0100\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-06-03 00:04+0100\n"
 "Last-Translator: Andrés Herrera <andres@workshop-chapina.com>\n"
 "Language-Team: Spanish <ox7doc@workshop-chapina.com>\n"
-"Language: es_MX\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 2.0\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "%d mensajes más"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -28,6 +33,17 @@ msgstr "%s por mi"
 #, c-format
 msgid "%s copied to clipboard"
 msgstr "%s copiado al portapapeles"
+
+#, c-format
+msgid "%s has invited you to chat."
+msgstr "%s le ha invitado a conversar."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s  le han invitado a conversar."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Por favor, elija una opción para proceder.)"
 
 #, c-format
 msgid "1 contact"
@@ -74,6 +90,9 @@ msgstr "Ajustes avanzados de SMTP"
 msgid "All your contacts are in this chat."
 msgstr "Todos sus contactos están en este chat."
 
+msgid "Allow Notifications"
+msgstr "Permitir notificaciones"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -89,6 +108,10 @@ msgstr "Nombre de la aplicación"
 
 msgid "App version"
 msgstr "Versión de la aplicación"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Apariencia"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Aplicando los nuevos ajustes; puede tardar algunos segundos"
@@ -123,6 +146,9 @@ msgstr "La configuración de Autocrypt se ha modificado satisfactoriamente"
 msgid "Automatic"
 msgstr "Automático"
 
+msgid "Back"
+msgstr "Anterior"
+
 msgid "Base Settings"
 msgstr "Configuración básica"
 
@@ -135,25 +161,42 @@ msgstr "Bloquear contacto"
 msgid "Blocked contacts"
 msgstr "Contactos bloqueados"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Correo y mensajes de chat de cualquier persona."
+
+msgid "Both email and chat messages from known contacts."
+msgstr "Correo y mensajes de chat de contactos conocidos."
+
+msgid "Bug reports"
+msgstr "Informes de errores"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Al utilizar OX COI Messenger acepta nuestros %s y %s"
 
-msgid "Camera"
-msgstr "Cámara"
+msgid "Camera not ready"
+msgstr "Cámara no preparada"
 
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-"No se puede iniciar sesión. Por favor, verifique que la dirección de correo "
-"y la contraseña son correctas."
-
 msgid "Cannot verify contact"
 msgstr "No se puede verificar el contacto"
+
+msgid "Change"
+msgstr "Cambiar"
+
+msgid "Change Push Settings"
+msgstr "Cambiar configuración de Push"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr ""
+"Cambiar la configuración de Push para esta aplicación en sus ajustes del"
+" sistema."
+
+msgid "Change your Signature"
+msgstr "Cambiar su firma"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Configuración de cifrado cambiada para este contacto"
@@ -163,11 +206,38 @@ msgid_plural "Chats"
 msgstr[0] "Chat"
 msgstr[1] "Chats"
 
+msgid "Chat Settings"
+msgstr "Ajustes de chat"
+
+msgid "Check constantly"
+msgstr "Verificar constantemente"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Eche un vistazo a OX COI Messenger - ¡converse por correo electrónico!"
+
+msgid "Check regularly"
+msgstr "Verificar periódicamente"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "Elija un proveedor de la siguiente lista para crear una cuenta nueva"
 
+msgid "Choose from gallery"
+msgstr "Elegir de la galería"
+
+msgid "Code"
+msgstr "Código"
+
 msgid "Configuration change aborted"
 msgstr "Cambio de configuración cancelado"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Enhorabuena, su proveedor de servicios de correo es compatible con COI, por"
+" lo que se le informará de inmediato acerca de nuevos mensajes. ¿Desea"
+" recibir notificaciones sobre nuevos mensajes?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -192,17 +262,23 @@ msgstr "Contacto borrado satisfactoriamente"
 msgid "Contact successfully edited"
 msgstr "Contacto editado satisfactoriamente"
 
+msgid "Contact validation failed"
+msgstr "La validación del contacto ha fallado"
+
 msgid "Contact verified"
 msgstr "Contacto verificado"
 
 msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
+msgid "Copy"
+msgstr "Copiar"
+
 msgid "Copy code"
 msgstr "Copiar código"
 
-msgid "Could not delete contact."
-msgstr "No se pudo borrar el contacto."
+msgid "Could not add contact. Email address already in use."
+msgstr "No se pudo añadir el contacto. La dirección de correo ya está en uso."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
@@ -210,6 +286,13 @@ msgid ""
 msgstr ""
 "No se pudo borrar el contacto. Se han encontrado chats activos con el "
 "contacto. Por favor, elimínelos antes."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"No se pudo borrar el contacto. Es posible que tenga una conversación grupal"
+" con este contacto."
 
 msgid "Create chat"
 msgstr "Crear chat"
@@ -223,6 +306,16 @@ msgid ""
 msgstr ""
 "Crea un mensaje de configuración de Autocrypt que se puede cargar en otros "
 "dispositivos para usar su configuración de cifrado actual."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "El tema actual del sistema es: %s"
+
+msgid "Dark"
+msgstr "Oscuro"
+
+msgid "Data protection"
+msgstr "Protección de datos"
 
 msgid "Debug"
 msgstr "Depurar"
@@ -238,8 +331,20 @@ msgstr[1] "Borrar chats"
 msgid "Delete contact"
 msgstr "Borrar contacto"
 
+msgid "Delete group"
+msgstr "Borrar grupo"
+
+msgid "Delete locally"
+msgstr "Borrar localmente"
+
+msgid "Delete message"
+msgstr "Borrar mensaje"
+
 msgid "Delete push resource"
 msgstr "Borrar recurso push"
+
+msgid "Discard message"
+msgstr "Descartar mensaje"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -259,30 +364,70 @@ msgstr "¿Está seguro de querer borrar %s?"
 msgid "Do you really want to leave the group?"
 msgstr "¿Está seguro de querer dejar el grupo?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"¿Realmente desea cerrar la sesión?\n"
+"\n"
+"Sus ajustes y mensajes serán eliminados de este dispositivo. Después de"
+" cerrar sesión, debe iniciar la aplicación nuevamente para iniciar sesión en"
+" otra cuenta."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "¿Desea chatear con este nuevo contacto?"
 
 msgid "Do you want to delete this chat?"
 msgstr "¿Quiere borrar esta chat?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"¿Desea importar sus claves desde su carpeta de documentos de la aplicación? \n"
+"\n"
+"Si no hay claves en esa carpeta, la operación fallará."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"¿Desea importar sus claves desde su carpeta de la aplicación? \n"
+"\n"
+"Si no hay claves en esa carpeta, la operación fallará."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"¿Quiere importar sus claves de \"%s\"? Si no hay claves en dicha carpeta, la "
-"operación fallará."
+"¿Desea guardar sus claves en la carpeta de la aplicación? \n"
+"\n"
+"La ruta es:\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "¿Quiere guardar sus claves en \"%s\"?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"¿Desea guardar sus claves en la carpeta de documentos de sus dispositivos? \n"
+"\n"
+"Puede acceder a ella a través de la \"Aplicación Archivos\"."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "¿Quiere desbloquear a %s?"
+
+msgid "Don't change"
+msgstr "No cambiar"
 
 msgid "Draft"
 msgstr "Borrador"
@@ -296,14 +441,23 @@ msgstr "Editar perfil"
 msgid "Email"
 msgstr "Correo electrónico"
 
+msgid "Email Settings"
+msgstr "Ajustes de correo"
+
 msgid "Email address"
 msgstr "Dirección de correo electrónico"
+
+msgid "Email signature"
+msgstr "Firma de correo"
 
 msgid "Enable background updates"
 msgstr "Activar actualizaciones en segundo plano"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Habilitar el envío y solicitud de confirmaciones de lectura."
+
+msgid "Encryption"
+msgstr "Cifrado"
 
 msgid "Enter the contact name"
 msgstr "Introduzca el nombre del contacto"
@@ -321,14 +475,23 @@ msgstr "Experto: Importar claves"
 msgid "FCM token"
 msgstr "Token FCM"
 
+msgid "Feature requests"
+msgstr "Peticiones de características"
+
 msgid "Feedback"
 msgstr "Comentario"
 
 msgid "File"
 msgstr "Archivo"
 
+msgid "Flag/Unflag"
+msgstr "Marcar/Desmarcar"
+
 msgid "Flagged"
 msgstr "Marcado"
+
+msgid "Flagged messages"
+msgstr "Mensajes marcados"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -343,8 +506,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Reenviar"
 
-msgid "Gallery"
-msgstr "Galería"
+msgid "Forwarded"
+msgstr "Reenviado"
+
+msgid "General Settings"
+msgstr "Ajustes generales"
+
+msgid "Googlemail account detected"
+msgstr "Cuenta de Google Mail detectada"
 
 msgid "Group image changed"
 msgstr "Imagen de grupo cambiada"
@@ -364,6 +533,16 @@ msgstr "Nombre del grupo cambiado"
 msgid "Hello, I have just created this group for us"
 msgstr "Hola, acabo de crear este grupo para nosotros"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Aquí puede elegir su tema favorito. Si elige '% s', el tema puede cambiar"
+" automáticamente. Esto depende de si seleccionó 'Automático' en las"
+" preferencias del sistema o no."
+
 msgid "IMAP Security"
 msgstr "Seguridad IMAP"
 
@@ -379,12 +558,15 @@ msgstr "Puerto IMAP"
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "Servidor IMAP (por ejemplo imap.coi.me)"
 
+msgid "IMAP/SMTP login names"
+msgstr "Nombres de inicio de sesión IMAP/SMTP"
+
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
 "to get new messages"
 msgstr ""
-"Si está activo, esta configuración permite a la aplicación realizar tareas"
-" periódicas en segundo plano para obtener nuevos mensajes"
+"Si está activo, esta configuración permite a la aplicación realizar tareas "
+"periódicas en segundo plano para obtener nuevos mensajes"
 
 msgid "Image"
 msgstr "Imagen"
@@ -410,8 +592,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Bandeja de entrada"
 
+msgid "Info"
+msgstr "Información"
+
 msgid "Initiate key transfer"
 msgstr "Iniciar transferencia de claves"
+
+msgid "Invitation"
+msgstr "Invitación"
+
+msgid "Invite a friend"
+msgstr "Invitar a un amigo"
 
 msgid "Invites"
 msgstr "Invitaciones"
@@ -428,6 +619,12 @@ msgstr "Acción de clave completada satisfactoriamente"
 msgid "Leave group"
 msgstr "Abandonar grupo"
 
+msgid "Let's Go"
+msgstr "Vamos"
+
+msgid "Light"
+msgstr "Claro"
+
 msgid "Location"
 msgstr "Ubicación"
 
@@ -437,11 +634,29 @@ msgstr "Inicie sesión en OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "Iniciando sesión, puede tardar unos segundos"
 
+msgid "Login"
+msgstr "Inicio de sesión"
+
 msgid "Login failed"
 msgstr "Inicio de sesión fallido"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Error de inicio de sesión. Por favor, compruebe si la dirección de correo"
+" electrónico y la contraseña son correctos."
+
+msgid "Login failed. Please check your password."
+msgstr "Error de inicio de sesión. Por favor, revise su contraseña."
+
+msgid "Logout"
+msgstr "Cerrar sesión"
+
 msgid "Manual Settings"
 msgstr "Configuración manual"
+
+msgid "Maybe later"
+msgstr "Quizás mas tarde"
 
 msgid "Me"
 msgstr "Yo"
@@ -458,6 +673,9 @@ msgstr "Sincronización de mensajes"
 msgid "Messages I sent to myself"
 msgstr "Mensajes que he enviado a mi mismo"
 
+msgid "Messages from unknown contacts"
+msgstr "Mensajes de contactos desconocidos"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -471,17 +689,26 @@ msgstr "Nombre"
 msgid "New contact"
 msgstr "Nuevo contacto"
 
+msgid "Next"
+msgstr "Siguiente"
+
 msgid "No"
 msgstr "No"
 
 msgid "No blocked contacts"
 msgstr "No hay contactos bloqueados"
 
+msgid "No camera permission granted."
+msgstr "No se otorgó permiso para la cámara."
+
 msgid "No flagged messages"
 msgstr "No hay mensajes marcados"
 
 msgid "No messages"
 msgstr "No hay mensajes"
+
+msgid "No other media files available"
+msgstr "No hay otros archivos multimedia disponibles"
 
 msgid "No participants selected. Please select at least one person."
 msgstr ""
@@ -500,10 +727,23 @@ msgstr "No hay firma definida"
 msgid "No username set"
 msgstr "No hay nombre de usuario definido"
 
+msgid "No valid QR code"
+msgstr "No hay un código QR válido"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "No es posible crear el código QR: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Notificación"
 msgstr[1] "Notificaciones"
+
+msgid "Notifications"
+msgstr "Notificaciones"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Messenger"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -532,17 +772,30 @@ msgstr ""
 msgid "Ok"
 msgstr "Aceptar"
 
+msgid "Only chat messages."
+msgstr "Solo mensajes de chat."
+
+msgid "Only check when starting the app"
+msgstr "Verificar solo cuando se inicie la aplicación"
+
 msgid "Only show messages of known contacts"
 msgstr "Mostrar mensajes solo de contactos conocidos"
 
 msgid "Open chat"
 msgstr "Abrir chat"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "O escanee el código QR"
+
 msgid "Other mail provider"
 msgstr "Otro proveedor de correo"
 
 msgid "Outbox"
 msgstr "Bandeja de salida"
+
+msgid "Own Card"
+msgstr "Tarjeta propia"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -551,6 +804,9 @@ msgstr[1] "Participantes"
 
 msgid "Password"
 msgstr "Contraseña"
+
+msgid "Password changed"
+msgstr "Contraseña cambiada"
 
 msgid "Performing key export"
 msgstr "Ejecutando exportación de claves"
@@ -565,8 +821,11 @@ msgid ""
 "Phone numbers can be added or edited via the local address book and imported "
 "afterwards."
 msgstr ""
-"Los números de teléfono se pueden añadir o editar mediante la libreta de"
-" direcciones local e importarse más tarde."
+"Los números de teléfono se pueden añadir o editar mediante la libreta de "
+"direcciones local e importarse más tarde."
+
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr "Por favor, agregue su nombre o apodo y elija una foto de perfil."
 
 msgid "Please check your username and password"
 msgstr "Por favor, compruebe su nombre de usuario y contraseña"
@@ -583,14 +842,25 @@ msgstr "Por favor, indique una dirección de correo electrónico válida"
 msgid "Please enter a valid port (1-65535)"
 msgstr "Por favor, indique un puerto válido (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Por favor, introduzca su nombre"
+
 msgid "Please enter your password"
 msgstr "Por favor, introduzca su contraseña"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Por favor, informe de los errores en GitHub."
 
 msgid "Please select your email provider to sign in"
 msgstr "Por favor, seleccione su proveedor de correo para iniciar sesión"
 
 msgid "Please specify your email server settings."
 msgstr "Por favor, especifique los ajustes de su servidor de correo."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Por favor, sugiera sus ideas en el eco de usuario."
 
 msgid "Please wait a moment."
 msgstr "Por favor, espere un momento."
@@ -600,6 +870,9 @@ msgstr "Protección de privacidad y contra el acoso"
 
 msgid "Profile"
 msgstr "Perfil"
+
+msgid "Profile & Settings"
+msgstr "Perfil y ajustes"
 
 msgid "Profile QR"
 msgstr "QR de perfil"
@@ -618,6 +891,9 @@ msgid_plural "Read receipts"
 msgstr[0] "Confirmación de lectura"
 msgstr[1] "Confirmaciones de lectura"
 
+msgid "Ready!"
+msgstr "¡Listo!"
+
 msgid "Register"
 msgstr "Registrarse"
 
@@ -627,13 +903,18 @@ msgstr "Registrar nuevo recurso push"
 msgid "Remove current image"
 msgstr "Eliminar la imagen actual"
 
+msgid "Remove from group"
+msgstr "Eliminar del grupo"
+
 msgid "Remove participant"
 msgstr "Eliminar participante"
 
 msgid "Rename group"
 msgstr "Renombrar grupo"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Informar de un error"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -647,6 +928,9 @@ msgstr ""
 "Algunos proveedores colocan información adicional en su bandeja de entrada; "
 "puede verificarla, por ejemplo, en su interfaz web. Consulte a su proveedor "
 "o amigos si encuentra problemas."
+
+msgid "Retry"
+msgstr "Reintentar"
 
 msgid "SMTP Security"
 msgstr "Seguridad SMTP"
@@ -666,7 +950,7 @@ msgstr "Servidor SMTP (por ejemplo, smtp.coi.me)"
 msgid "Save"
 msgstr "Guardar"
 
-msgid "Scan QR"
+msgid "Scan QR code"
 msgstr "Escanear código QR"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
@@ -676,17 +960,29 @@ msgstr ""
 "Escanee este código QR para crear un nuevo contacto o verificar un contacto "
 "con %s."
 
+msgid "Search"
+msgstr "Buscar"
+
 msgid "Search contacts"
 msgstr "Buscar contactos"
 
 msgid "Security"
 msgstr "Seguridad"
 
+msgid "Send again"
+msgstr "Enviar de nuevo"
+
+msgid "Send message"
+msgstr "Enviar mensaje"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Enviado con OX COI Messenger"
 
 msgid "Server addresses"
 msgstr "Direcciones de servidores"
+
+msgid "Server settings"
+msgstr "Ajustes del servidor"
 
 msgid "Set a group name"
 msgstr "Asignar un nombre de grupo"
@@ -705,6 +1001,9 @@ msgstr "Mensaje de configuración creado"
 msgid "Share"
 msgstr "Compartir"
 
+msgid "Share invite link"
+msgstr "Compartir enlace de invitación"
+
 msgid "Show QR"
 msgstr "Mostrar código QR"
 
@@ -715,8 +1014,8 @@ msgstr ""
 msgid "Show both chat and email messages from my contacts"
 msgstr "Mostrar los mensajes tanto de chat como de correo de mis contactos"
 
-msgid "Show messages from unknown contacts"
-msgstr "Mostrar mensajes de contactos desconocidos"
+msgid "Show my QR code"
+msgstr "Mostrar mi código QR"
 
 msgid "Show only chat messages "
 msgstr "Mostrar solo mensajes de chat"
@@ -735,13 +1034,33 @@ msgstr "Firma"
 msgid "Simply add one by tapping on a contact."
 msgstr "Simplemente añada uno presionando en un contacto."
 
+msgid "Skip"
+msgstr "Saltar"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Algo salió mal y no pudimos cargar la invitación: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "¿Comenzar un chat con %s?"
 
+msgid "Start chat"
+msgstr "Iniciar chat"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Paso %s de %s"
+
+msgid "System"
+msgstr "Sistema"
+
 msgid "System contacts imported successfully"
 msgstr "Contactos del sistema importados satisfactoriamente"
+
+msgid "Take a picture"
+msgstr "Tomar una foto"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -749,6 +1068,9 @@ msgstr "El código de configuración asociado comienza por: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "El código se puede introducir con o sin el signo menos"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr "La invitación ya estaba borrada. Pídale al remitente que la reenvíe."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "Actualmente no hay mensajes de contactos desconocidos"
@@ -767,11 +1089,20 @@ msgid ""
 "This contact has no phone number. Please edit this contact in your device "
 "address book and add the phone number there."
 msgstr ""
-"Este contacto no tiene número de teléfono. Por favor, edítelo en la libreta"
-" de direcciones de su dispositivo y añada allí el número de teléfono."
+"Este contacto no tiene número de teléfono. Por favor, edítelo en la libreta "
+"de direcciones de su dispositivo y añada allí el número de teléfono."
 
 msgid "This field can not be empty"
 msgstr "Este campo no puede estar vacío"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Esta es una versión beta, por lo tanto tenga en cuenta que la aplicación aún"
+" está en desarrollo. ¿Desea compartir sus comentarios? Puede compartir sus"
+" comentarios en la sección del perfil de la configuración."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Este es un chat nuevo. Envíe un mensaje para conectar."
@@ -847,8 +1178,8 @@ msgstr ""
 msgid "Today"
 msgstr "Hoy"
 
-msgid "Type something..."
-msgstr "Escriba algo..."
+msgid "Type"
+msgstr "Tipo"
 
 msgid "Unblock"
 msgstr "Desbloquear"
@@ -881,16 +1212,26 @@ msgstr "Mensaje de voz"
 msgid "We could not determine all settings automatically."
 msgstr "No hemos podido determinar todos los ajustes automáticamente."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Bienvenido a OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Se ha detectado una dirección de Google Mail. Esto puede provocar chats"
+" rotos. Recomendamos cambiar la dirección de correo a gmail."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "Bienvenido a %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"¡Bienvenido a OX Coi Messenger!\n"
-"Por favor, inicie una nueva conversación presionando el icono de burbuja del"
-" chat."
+"¡Bienvenido a OX COI Messenger!\n"
+"Por favor, comience un nuevo chat presionando el icono de burbuja de chat."
+
+msgid "What kind of message do you want to handle?"
+msgstr "¿Qué tipo de mensaje desea manejar?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "¿Le gustaría importar sus contactos de este dispositivo?"
@@ -900,6 +1241,9 @@ msgstr "Sí"
 
 msgid "Yesterday"
 msgstr "Ayer"
+
+msgid "You're good to go!"
+msgstr "¡Está seleccionado!"
 
 #, c-format
 msgid ""
@@ -916,23 +1260,95 @@ msgstr ""
 "Una vez que haya terminado, su otro dispositivo estará listo para usar "
 "Autocrypt."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Su proveedor de servicios de correo aún no admite COI, pero podemos verificar"
+" si hay nuevos mensajes en segundo plano. ¿Deberíamos buscar nuevos mensajes"
+" periódicamente, o continuamente aunque consume más batería?"
+
 msgid "Your favorite messages"
 msgstr "Sus mensajes favoritos"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Su mensaje enviado a \"%s\" el %s no se pudo enviar. A menudo esto sucede"
+" debido a un archivo demasiado grande. Por favor, borre este mensaje para"
+" desbloquear el envío de mensajes posteriores."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Sus mensajes estarán cifrados a partir de ahora."
 
-msgid "code"
-msgstr "código"
-
-msgid "more messages"
-msgstr "más mensajes"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Su contraseña ha cambiado.\n"
+"Por favor, introduzca la nueva para acceder a sus mensajes."
 
 msgid "privacy declaration"
 msgstr "declaración de privacidad"
 
 msgid "terms & conditions"
 msgstr "términos y condiciones"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr ""
+#~ "No se puede iniciar sesión. Por favor, verifique que la dirección de "
+#~ "correo y la contraseña son correctas."
+
+#~ msgid "Camera"
+#~ msgstr "Cámara"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "No se pudo borrar el contacto."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "¿Quiere importar sus claves de \"%s\"? Si no hay claves en dicha carpeta, "
+#~ "la operación fallará."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "¿Quiere guardar sus claves en \"%s\"?"
+
+#~ msgid "Gallery"
+#~ msgstr "Galería"
+
+#~ msgid "Scan QR"
+#~ msgstr "Escanear código QR"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Mostrar mensajes de contactos desconocidos"
+
+#~ msgid "Type something..."
+#~ msgstr "Escriba algo..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Bienvenido a OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "¡Bienvenido a OX Coi Messenger!\n"
+#~ "Por favor, inicie una nueva conversación pulsando el icono de burbuja del "
+#~ "chat."
+
+#~ msgid "code"
+#~ msgstr "código"
+
+#~ msgid "more messages"
+#~ msgstr "más mensajes"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -944,13 +1360,6 @@ msgstr "términos y condiciones"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Al utilizar OX COI Messenger acepta nuestra"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "¡Bienvenido a OX COI Messenger!\n"
-#~ "Por favor, comience un nuevo chat presionando el icono de burbuja de chat."
 
 #~ msgid "and"
 #~ msgstr "y"

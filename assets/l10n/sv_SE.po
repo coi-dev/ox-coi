@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-05 08:31+0200\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-05-28 18:31+0200\n"
 "Last-Translator: Arve Eriksson <sv@workshop-chapina.com>\n"
 "Language-Team: Swedish <sv@workshop-chapina.com>\n"
 "Language: sv_SE\n"
@@ -12,6 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "%d ytterligare meddelanden"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -27,6 +31,17 @@ msgstr "%s av mig"
 #, c-format
 msgid "%s copied to clipboard"
 msgstr "%s kopierades till klippbord"
+
+#, c-format
+msgid "%s has invited you to chat."
+msgstr "%s har bjudit in dig att chatta."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s har bjudit in dig att chatta."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Välj ett alternativ för att fortsätta.)"
 
 #, c-format
 msgid "1 contact"
@@ -73,6 +88,9 @@ msgstr "Avancerade SMTP-inställningar"
 msgid "All your contacts are in this chat."
 msgstr "Alla dina kontakter finns i denna chatt."
 
+msgid "Allow Notifications"
+msgstr "Tillåt aviseringar"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -88,6 +106,10 @@ msgstr "Programnamn"
 
 msgid "App version"
 msgstr "Programversion"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Utseende"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Verkställer nya inställningar, detta kan ta en stund"
@@ -120,6 +142,9 @@ msgstr "Autocrypt-inställningar ändrades"
 msgid "Automatic"
 msgstr "Automatiskt"
 
+msgid "Back"
+msgstr "Bakåt"
+
 msgid "Base Settings"
 msgstr "Basinställningar"
 
@@ -132,24 +157,41 @@ msgstr "Blockera kontakt"
 msgid "Blocked contacts"
 msgstr "Blockerade kontakter"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Både e-post- och chattmeddelanden från alla."
+
+msgid "Both email and chat messages from known contacts."
+msgstr "Både e-post och chattmeddelanden från kända kontakter."
+
+msgid "Bug reports"
+msgstr "Felrapporter"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Genom att använda OX COI Messenger godtar du vår %s och %s"
 
-msgid "Camera"
-msgstr "Kamera"
+msgid "Camera not ready"
+msgstr "Kameran inte redo"
 
 msgid "Cancel"
 msgstr "Avbryt"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-"Kan inte logga in. Kontrollera att e-postadressen och lösenordet är korrekta."
-
 msgid "Cannot verify contact"
 msgstr "Kan inte verifiera kontakt"
+
+msgid "Change"
+msgstr "Ändra"
+
+msgid "Change Push Settings"
+msgstr "Ändra push-inställningar"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr ""
+"Ändra push-inställningarna för det här programmet i dina systeminställningar."
+
+msgid "Change your Signature"
+msgstr "Ändra din signatur"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Ändrade krypterinsinställningar för den här kontakten"
@@ -159,11 +201,38 @@ msgid_plural "Chats"
 msgstr[0] "Chatt"
 msgstr[1] "Chattar"
 
+msgid "Chat Settings"
+msgstr "Chattinställningar"
+
+msgid "Check constantly"
+msgstr "Kolla konstant"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Testa OX COI Messenger - chatta via e-post!"
+
+msgid "Check regularly"
+msgstr "Kolla regelbundet"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "Välj en leverantör från listan nedanför för att skapa ett nytt konto"
 
+msgid "Choose from gallery"
+msgstr "Välj från galleri"
+
+msgid "Code"
+msgstr "Kod"
+
 msgid "Configuration change aborted"
 msgstr "Konfigurationsändring avbröts"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Grattis, din e-postleverantör kan användas av COI, så du kommer att "
+"informeras omedelbart om nya meddelanden. Vill du få aviseringar om nya "
+"meddelanden?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -188,17 +257,23 @@ msgstr "Kontakt raderades"
 msgid "Contact successfully edited"
 msgstr "Kontakt redigerades"
 
+msgid "Contact validation failed"
+msgstr "Kontaktvalidering misslyckades"
+
 msgid "Contact verified"
 msgstr "Kontakt verifierades"
 
 msgid "Copied to clipboard"
 msgstr "Kopierad till klippbord"
 
+msgid "Copy"
+msgstr "Kopiera"
+
 msgid "Copy code"
 msgstr "Kopiera kod"
 
-msgid "Could not delete contact."
-msgstr "Kunde inte radera kontakt."
+msgid "Could not add contact. Email address already in use."
+msgstr "Kunde inte lägga till kontakt. E-postadressen används redan."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
@@ -206,6 +281,13 @@ msgid ""
 msgstr ""
 "Kunde inte radera kontakt. Aktiva chattar med kontakten hittades, ta bort "
 "dessa chattar först."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"Kunde inte radera kontakt. Du kanske redan har en gruppkonversation med den "
+"här kontakten."
 
 msgid "Create chat"
 msgstr "Skapa chatt"
@@ -219,6 +301,16 @@ msgid ""
 msgstr ""
 "Skapar ett Autocrypt-installationsmeddelande, som du kan läsa in på andra "
 "enheter för att använda din nuvarande krypteringsinstallation."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "Nuvarande systemtema är: %s"
+
+msgid "Dark"
+msgstr "Mörkt"
+
+msgid "Data protection"
+msgstr "Dataskydd"
 
 msgid "Debug"
 msgstr "Felsökning"
@@ -234,8 +326,20 @@ msgstr[1] "Radera chattar"
 msgid "Delete contact"
 msgstr "Ta bort kontakt"
 
+msgid "Delete group"
+msgstr "Radera grupp"
+
+msgid "Delete locally"
+msgstr "Radera lokalt"
+
+msgid "Delete message"
+msgstr "Radera meddelande"
+
 msgid "Delete push resource"
 msgstr "Radera push-resurs"
+
+msgid "Discard message"
+msgstr "Kasta meddelande"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -255,30 +359,70 @@ msgstr "Vill du verkligen radera %s?"
 msgid "Do you really want to leave the group?"
 msgstr "Vill du verkligen lämna gruppen?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"Vill du verkligen logga ut\n"
+"\n"
+"Dina inställningar och meddelanden kommer att tas bort från den här enheten. "
+"Efter att du har loggat ut behöver du starta programmet igen för att logga "
+"in med ett annat konto."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "Vill du chatta med den här nya kontakten?"
 
 msgid "Do you want to delete this chat?"
 msgstr "Vill du radera den här chatten?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Vill du importera dina nycklar från din programdokumentmapp?\n"
+"\n"
+"Om inga nycklar finns i den mappen kommer åtgärden att misslyckas."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Vill du importera dina nycklar från din programmapp?\n"
+"\n"
+"Om inga nycklar finns i den mappen kommer åtgärden att misslyckas."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"Vill du importera dina nycklar från \"%s\"? Om inga nycklar finns i den "
-"mappen kommer åtgärden att misslyckas."
+"Vill du spara dina nycklar i programmappen?\n"
+"\n"
+"Sökvägen är:\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "Vill du spara dina nycklar i \"%s\"?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"Vill du spara dina nycklar i din enhets dokumentmapp?\n"
+"\n"
+"Du kan komma åt den via programmet \"Filer\"."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Vill du avblockera %s?"
+
+msgid "Don't change"
+msgstr "Ändra inte"
 
 msgid "Draft"
 msgstr "Utkast"
@@ -292,14 +436,23 @@ msgstr "Redigera profil"
 msgid "Email"
 msgstr "E-post"
 
+msgid "Email Settings"
+msgstr "E-postinställningar"
+
 msgid "Email address"
 msgstr "E-postadress"
+
+msgid "Email signature"
+msgstr "E-postsignatur"
 
 msgid "Enable background updates"
 msgstr "Aktivera bakgrundsuppdateringar"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Aktivera skickande och mottagning av läskvitton."
+
+msgid "Encryption"
+msgstr "Kryptering"
 
 msgid "Enter the contact name"
 msgstr "Skriv kontaktens namn"
@@ -317,14 +470,23 @@ msgstr "Expert: Importera nycklar"
 msgid "FCM token"
 msgstr "FCM-token"
 
+msgid "Feature requests"
+msgstr "Funktionsönskemål"
+
 msgid "Feedback"
 msgstr "Synpunkter"
 
 msgid "File"
 msgstr "Fil"
 
+msgid "Flag/Unflag"
+msgstr "Flagga/avflagga"
+
 msgid "Flagged"
 msgstr "Flaggat"
+
+msgid "Flagged messages"
+msgstr "Flaggade meddelanden"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -339,8 +501,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Vidarebefordra"
 
-msgid "Gallery"
-msgstr "Galleri"
+msgid "Forwarded"
+msgstr "Vidarebefordrat"
+
+msgid "General Settings"
+msgstr "Allmänna inställningar"
+
+msgid "Googlemail account detected"
+msgstr "Googlemail-konto upptäcktes"
 
 msgid "Group image changed"
 msgstr "Gruppbild ändrad"
@@ -360,6 +528,16 @@ msgstr "Gruppnamnet ändrades"
 msgid "Hello, I have just created this group for us"
 msgstr "Hej, jag har precis skapat den här gruppen åt oss"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Här kan du välja ditt favorittema. Om du väljer '%s' kan temat ändras "
+"automatiskt. Detta beror på om du har valt 'Automatiskt' i "
+"systeminställningarna."
+
 msgid "IMAP Security"
 msgstr "IMAP-säkerhet"
 
@@ -374,6 +552,9 @@ msgstr "IMAP-port"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP-server (t.ex. imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "IMAP-/SMTP-inloggningsnamn"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -406,8 +587,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Inkorg"
 
+msgid "Info"
+msgstr "Info"
+
 msgid "Initiate key transfer"
 msgstr "Initiera nyckelöverföring"
+
+msgid "Invitation"
+msgstr "Inbjudan"
+
+msgid "Invite a friend"
+msgstr "Bjud in en vän"
 
 msgid "Invites"
 msgstr "Inbjudningar"
@@ -424,6 +614,12 @@ msgstr "Nyckelåtgärd slutfördes"
 msgid "Leave group"
 msgstr "Lämna grupp"
 
+msgid "Let's Go"
+msgstr "Nu börjar vi"
+
+msgid "Light"
+msgstr "Ljust"
+
 msgid "Location"
 msgstr "Plats"
 
@@ -433,11 +629,29 @@ msgstr "Logga in på OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "Loggar in, detta kan ta en stund"
 
+msgid "Login"
+msgstr "Logga in"
+
 msgid "Login failed"
 msgstr "Inloggning misslyckades"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Inloggning misslyckades. Kontrollera att e-postadressen och lösenordet "
+"stämmer."
+
+msgid "Login failed. Please check your password."
+msgstr "Inloggning misslyckades. Kontrollera ditt lösenord."
+
+msgid "Logout"
+msgstr "Logga ut"
+
 msgid "Manual Settings"
 msgstr "Manuella inställningar"
+
+msgid "Maybe later"
+msgstr "Kanske senare"
 
 msgid "Me"
 msgstr "Mig"
@@ -454,6 +668,9 @@ msgstr "Meddelandesynkning"
 msgid "Messages I sent to myself"
 msgstr "Meddelanden jag skickat till mig själv"
 
+msgid "Messages from unknown contacts"
+msgstr "Meddelanden från okända kontakter"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -467,17 +684,26 @@ msgstr "Namn"
 msgid "New contact"
 msgstr "Ny kontakt"
 
+msgid "Next"
+msgstr "Nästa"
+
 msgid "No"
 msgstr "Nej"
 
 msgid "No blocked contacts"
 msgstr "Inga blockerade kontakter"
 
+msgid "No camera permission granted."
+msgstr "Inga kamerarättigheter beviljade."
+
 msgid "No flagged messages"
 msgstr "Inga flaggade meddelanden"
 
 msgid "No messages"
 msgstr "Inga meddelanden"
+
+msgid "No other media files available"
+msgstr "Inga andra mediafiler tillgängliga"
 
 msgid "No participants selected. Please select at least one person."
 msgstr "Inga deltagare markerade. Markera minst en person."
@@ -494,10 +720,23 @@ msgstr "Ingen signatur angiven"
 msgid "No username set"
 msgstr "Inget användarnamn angivet"
 
+msgid "No valid QR code"
+msgstr "Ingen giltig QR-kod"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "Inte möjligt att skapa QR-kod: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Avisering"
 msgstr[1] "Aviseringar"
+
+msgid "Notifications"
+msgstr "Aviseringar"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Messenger"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -525,17 +764,30 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
+msgid "Only chat messages."
+msgstr "Endast chattmeddelanden."
+
+msgid "Only check when starting the app"
+msgstr "Kolla endast vid programstart"
+
 msgid "Only show messages of known contacts"
 msgstr "Visa endast meddelanden från kända kontakter"
 
 msgid "Open chat"
 msgstr "Öppna chatt"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "Eller scanna QR-kod"
+
 msgid "Other mail provider"
 msgstr "Annan e-postleverantör"
 
 msgid "Outbox"
 msgstr "Utkorg"
+
+msgid "Own Card"
+msgstr "Eget kort"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -544,6 +796,9 @@ msgstr[1] "Deltagare"
 
 msgid "Password"
 msgstr "Lösenord"
+
+msgid "Password changed"
+msgstr "Lösenord ändrat"
 
 msgid "Performing key export"
 msgstr "Utför nyckelexport"
@@ -561,6 +816,9 @@ msgstr ""
 "Telefonnummer kan läggas till eller redigeras via den lokala adressboken och "
 "därefter importeras."
 
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr "Lägg till ditt namn eller smeknamn och välj en profilbild."
+
 msgid "Please check your username and password"
 msgstr "Kontrollera ditt användarnamn och lösenord"
 
@@ -576,14 +834,25 @@ msgstr "Ange en giltig e-postadress"
 msgid "Please enter a valid port (1-65535)"
 msgstr "Ange en giltig port (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Ange ditt namn"
+
 msgid "Please enter your password"
 msgstr "Ange ditt lösenord"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Rapportera gärna fel på GitHub."
 
 msgid "Please select your email provider to sign in"
 msgstr "Välj din e-postleverantör för att logga in"
 
 msgid "Please specify your email server settings."
 msgstr "Ange dina e-postserverinställningar."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Lämna förslag på user echo."
 
 msgid "Please wait a moment."
 msgstr "Vänta ett ögonblick."
@@ -593,6 +862,9 @@ msgstr "Integritet och Mobbningsskydd"
 
 msgid "Profile"
 msgstr "Profil"
+
+msgid "Profile & Settings"
+msgstr "Profil & inställningar"
 
 msgid "Profile QR"
 msgstr "Profil QR"
@@ -611,6 +883,9 @@ msgid_plural "Read receipts"
 msgstr[0] "Läskvitto"
 msgstr[1] "Läskvitton"
 
+msgid "Ready!"
+msgstr "Redo!"
+
 msgid "Register"
 msgstr "Registrera"
 
@@ -620,13 +895,18 @@ msgstr "Registrera ny push-resurs"
 msgid "Remove current image"
 msgstr "Ta bort nuvarande bild"
 
+msgid "Remove from group"
+msgstr "Ta bort från grupp"
+
 msgid "Remove participant"
 msgstr "Ta bort deltagare"
 
 msgid "Rename group"
 msgstr "Ta bort grupp"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Rapportera ett fel"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -640,6 +920,9 @@ msgstr ""
 "Vissa leverantörer placerar ytterligare information i din inkorg; du kan "
 "kontrollera dessa exempelvis i webbframänden. Kontakta din leverantör eller "
 "dina vänner om du får problem."
+
+msgid "Retry"
+msgstr "Försök igen"
 
 msgid "SMTP Security"
 msgstr "SMTP-säkerhet"
@@ -659,8 +942,8 @@ msgstr "SMTP-server (t.ex. smtp.coi.me)"
 msgid "Save"
 msgstr "Spara"
 
-msgid "Scan QR"
-msgstr "Skanna QR"
+msgid "Scan QR code"
+msgstr "Skanna QR-kod"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
 #, c-format
@@ -669,17 +952,29 @@ msgstr ""
 "Skanna denna QR-kod för att skapa en ny kontakt eller verifiera en kontakt "
 "med %s."
 
+msgid "Search"
+msgstr "Sök"
+
 msgid "Search contacts"
 msgstr "Sök kontakter"
 
 msgid "Security"
 msgstr "Säkerhet"
 
+msgid "Send again"
+msgstr "Skicka igen"
+
+msgid "Send message"
+msgstr "Skicka meddelande"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Skickades med OX COI Messenger"
 
 msgid "Server addresses"
 msgstr "Serveradresser"
+
+msgid "Server settings"
+msgstr "Serverinställningar"
 
 msgid "Set a group name"
 msgstr "Ange ett gruppnamn"
@@ -698,6 +993,9 @@ msgstr "Installationsmeddelande skapades"
 msgid "Share"
 msgstr "Dela"
 
+msgid "Share invite link"
+msgstr "Dela länk till inbjudan"
+
 msgid "Show QR"
 msgstr "Visa QR"
 
@@ -707,8 +1005,8 @@ msgstr "Visa både chatt- och e-postmeddelanden från alla avsändare"
 msgid "Show both chat and email messages from my contacts"
 msgstr "Visa både chatt- och e-postmeddelanden från mina kontakter"
 
-msgid "Show messages from unknown contacts"
-msgstr "Visa meddelanden från okända kontakter"
+msgid "Show my QR code"
+msgstr "Visa min QR-kod"
 
 msgid "Show only chat messages "
 msgstr "Visa endast chattmeddelanden "
@@ -727,13 +1025,33 @@ msgstr "Signatur"
 msgid "Simply add one by tapping on a contact."
 msgstr "Lägg till en enkelt genom att peka på en kontakt."
 
+msgid "Skip"
+msgstr "Hoppa över"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Något gick fel och vi kunde inte ladda inbjudan: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "Inled chatt med %s?"
 
+msgid "Start chat"
+msgstr "Starta chatt"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Steg %s av %s"
+
+msgid "System"
+msgstr "System"
+
 msgid "System contacts imported successfully"
 msgstr "Systemkontakter importerades"
+
+msgid "Take a picture"
+msgstr "Ta en bild"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -741,6 +1059,9 @@ msgstr "Den associerade installationskoden inleds med: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "Koden kan matas in med eller utan minustecken"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr "Inbjudan hade redan raderats. Be avsändaren att skicka den igen."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "Det finns för närvarande inga meddelanden från okända kontakter"
@@ -764,6 +1085,15 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "Detta fält får inte vara tomt"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Detta är en betaversion, så kom ihåg att programmet fortfarande är under "
+"utveckling. Vill du delge oss dina tankar? Du kan lämna åsikter i "
+"profilavsnittet i inställningarna."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Detta är en ny chatt. Skicka ett meddelande för att ansluta."
@@ -839,8 +1169,8 @@ msgstr ""
 msgid "Today"
 msgstr "Idag"
 
-msgid "Type something..."
-msgstr "Skriv något..."
+msgid "Type"
+msgstr "Typ"
 
 msgid "Unblock"
 msgstr "Avblockera"
@@ -873,15 +1203,26 @@ msgstr "Röstmeddelande"
 msgid "We could not determine all settings automatically."
 msgstr "Vi kunde inte bestämma alla inställningar automatiskt."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Välkommen till OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Vi hittade en googlemail-adress. Detta leder till trasiga chattar. Vi "
+"rekommenderar att du ändrar e-postadressen till gmail."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "Välkommen till %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
 "Välkommen till OX COI Messenger!\n"
 "Starta en ny chatt genom att peka på chattbubbleikonen."
+
+msgid "What kind of message do you want to handle?"
+msgstr "Vilken sorts meddelande vill du hantera?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Vill du importera dina kontakter från den här enheten?"
@@ -891,6 +1232,9 @@ msgstr "Ja"
 
 msgid "Yesterday"
 msgstr "Igår"
+
+msgid "You're good to go!"
+msgstr "Du är startklar!"
 
 #, c-format
 msgid ""
@@ -906,23 +1250,95 @@ msgstr ""
 "%s\n"
 "När du är färdig kommer din andra enhet att vara redo att använda Autocrypt."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Din e-postleverantör stödjer ännu inte COI, men vi kan leta efter nya "
+"meddelanden i bakgrunden. Ska vi leta efter nya meddelanden regelbundet, "
+"eller ska vi leta konstant efter nya meddelanden, vilket skulle använda mer "
+"batteri?"
+
 msgid "Your favorite messages"
 msgstr "Dina favoritmeddelanden"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Ditt meddelande som skickades till \"%s\" på %s kunde inte levereras. Detta "
+"händer ofta på grund av en för stor fil. Radera det här meddelandet för att "
+"avblockera sändning av efterföljande meddelanden."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Dina meddelanden krypteras tills vidare."
 
-msgid "code"
-msgstr "kod"
-
-msgid "more messages"
-msgstr "fler meddelanden"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Ditt lösenord har ändrats.\n"
+"Ange ditt nya för att komma åt dina meddelanden."
 
 msgid "privacy declaration"
-msgstr "integritetsdekalration"
+msgstr "integritetsdeklaration"
 
 msgid "terms & conditions"
 msgstr "villkor"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr ""
+#~ "Kan inte logga in. Kontrollera att e-postadressen och lösenordet är "
+#~ "korrekta."
+
+#~ msgid "Camera"
+#~ msgstr "Kamera"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "Kunde inte radera kontakt."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "Vill du importera dina nycklar från \"%s\"? Om inga nycklar finns i den "
+#~ "mappen kommer åtgärden att misslyckas."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "Vill du spara dina nycklar i \"%s\"?"
+
+#~ msgid "Gallery"
+#~ msgstr "Galleri"
+
+#~ msgid "Scan QR"
+#~ msgstr "Skanna QR"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Visa meddelanden från okända kontakter"
+
+#~ msgid "Type something..."
+#~ msgstr "Skriv något..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Välkommen till OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Välkommen till OX COI Messenger!\n"
+#~ "Starta en ny chatt genom att peka på chattbubbleikonen."
+
+#~ msgid "code"
+#~ msgstr "kod"
+
+#~ msgid "more messages"
+#~ msgstr "fler meddelanden"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -934,13 +1350,6 @@ msgstr "villkor"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Genom att använda OX COI Messenger accepterar du vårt"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "Välkommen till OX COI Messenger!\n"
-#~ "Starta en ny chatt genom att peka på chattbubbleikonen."
 
 #~ msgid "and"
 #~ msgstr "och"

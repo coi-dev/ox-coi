@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-10 19:50+0900\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-05-30 16:47+0900\n"
 "Last-Translator: Adi David <adi@workshop-chapina.com>\n"
 "Language-Team: Romanian <ro@workshop-chapina.com>\n"
 "Language: ro_RO\n"
@@ -12,7 +12,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "încă %d mesaje"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -28,6 +32,17 @@ msgstr "%s de mine"
 #, c-format
 msgid "%s copied to clipboard"
 msgstr "%s copiat în clipboard"
+
+#, c-format
+msgid "%s has invited you to chat."
+msgstr "%s v-a invitat să discutați pe chat."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s v-a invitat să discutați pe chat."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Alegeți o opțiune pentru a continua.)"
 
 #, c-format
 msgid "1 contact"
@@ -77,6 +92,9 @@ msgstr "Setări SMTP avansate"
 msgid "All your contacts are in this chat."
 msgstr "Toate contactele dvs. sunt în această conversație."
 
+msgid "Allow Notifications"
+msgstr "Permite notificări"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -92,6 +110,10 @@ msgstr "Nume aplicație"
 
 msgid "App version"
 msgstr "Versiune aplicație"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Aspect"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Setări noi în curs de aplicare, acest lucru poate dura un moment"
@@ -126,6 +148,9 @@ msgstr "Configurarea autocrypt s-a modificat cu succes"
 msgid "Automatic"
 msgstr "Automat"
 
+msgid "Back"
+msgstr "Înapoi"
+
 msgid "Base Settings"
 msgstr "Setări de bază"
 
@@ -138,25 +163,43 @@ msgstr "Blochează contact"
 msgid "Blocked contacts"
 msgstr "Contacte blocate"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Atât e-mail și mesaje de chat de la oricine."
+
+msgid "Both email and chat messages from known contacts."
+msgstr ""
+"Atât mesaje de e-mail, cât și mesaje de chat de la persoane de contact "
+"cunoscute."
+
+msgid "Bug reports"
+msgstr "Rapoarte de bug-uri software"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Prin utilizarea OX COI Messenger sunteți de acord cu %s și %s"
 
-msgid "Camera"
-msgstr "Cameră"
+msgid "Camera not ready"
+msgstr "Camera nu este pregătită"
 
 msgid "Cancel"
 msgstr "Renunță"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-"Autentificarea nu a reușit. Vă rugăm să verificați dacă adresa de e-mail și "
-"parola sunt corecte."
-
 msgid "Cannot verify contact"
 msgstr "Imposibil de verificat contactul"
+
+msgid "Change"
+msgstr "Modifică"
+
+msgid "Change Push Settings"
+msgstr "Modificare setări push"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr ""
+"Modificați setările push pentru această aplicație în setările de sistem."
+
+msgid "Change your Signature"
+msgstr "Modifică semnătura"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Configurarea de criptare a fost modificată pentru acest contact"
@@ -167,11 +210,38 @@ msgstr[0] "Convesație"
 msgstr[1] "Convesații"
 msgstr[2] "Convesații"
 
+msgid "Chat Settings"
+msgstr "Setări chat"
+
+msgid "Check constantly"
+msgstr "Verifică constant"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Încercați OX COI Messenger - chat prin e-mail!"
+
+msgid "Check regularly"
+msgstr "Verifică regulat"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "Alegeți un furnizor din lista de mai jos pentru a crea un cont nou"
 
+msgid "Choose from gallery"
+msgstr "Alegeți din galerie"
+
+msgid "Code"
+msgstr "Cod"
+
 msgid "Configuration change aborted"
 msgstr "Modificarea configurației a fost terminată"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Felicitări, furnizorul de servicii de e-mail este compatibil cu serviciul "
+"COI, astfel încât veți fi informat imediat când primiți mesajele noi. Doriți "
+"să primiți notificări despre mesaje noi?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -199,24 +269,39 @@ msgstr "Contact șters cu succes"
 msgid "Contact successfully edited"
 msgstr "Contact editat cu succes"
 
+msgid "Contact validation failed"
+msgstr "Validarea persoanei de contact nu a reușit"
+
 msgid "Contact verified"
 msgstr "Contact verificat"
 
 msgid "Copied to clipboard"
 msgstr "Copiat în clipboard"
 
+msgid "Copy"
+msgstr "Copiază"
+
 msgid "Copy code"
 msgstr "Copiază cod"
 
-msgid "Could not delete contact."
-msgstr "Imposibil de șters contactul."
+msgid "Could not add contact. Email address already in use."
+msgstr ""
+"Imposibil de adăugat persoana de contact. Adresa de e-mail este deja "
+"folosită."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
 "those chats first."
 msgstr ""
-"Imposibil de șters contactul. Am găsit conversații active, vă rugăm să le "
-"eliminați mai întâi."
+"Imposibil de șters persoana de contact. Am găsit conversații active, vă "
+"rugăm să le eliminați mai întâi."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"Imposibil de șters persoana de contact. Este posibil să fiți într-o "
+"conversație de grup cu această persoană de contact."
 
 msgid "Create chat"
 msgstr "Creează conversație"
@@ -230,6 +315,16 @@ msgid ""
 msgstr ""
 "Creează un mesaj de configurare Autocrypt pe care îl puteți încărca pe alte "
 "dispozitive pentru a utiliza configurația curentă de criptare."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "Tema de sistem curentă este: %s"
+
+msgid "Dark"
+msgstr "Închis"
+
+msgid "Data protection"
+msgstr "Protecția datelor"
 
 msgid "Debug"
 msgstr "Depanare"
@@ -246,8 +341,20 @@ msgstr[2] "Șterge conversațiile"
 msgid "Delete contact"
 msgstr "Șterge contactul"
 
+msgid "Delete group"
+msgstr "Șterge grupul"
+
+msgid "Delete locally"
+msgstr "Ștergere locală"
+
+msgid "Delete message"
+msgstr "Șterge mesajul"
+
 msgid "Delete push resource"
 msgstr "Ștergere resursă push"
+
+msgid "Discard message"
+msgstr "Renunță la messaj"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -267,30 +374,70 @@ msgstr "Sigur doriți să ștergeți %s?"
 msgid "Do you really want to leave the group?"
 msgstr "Sigur doriți să părăsiți grupul?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"Sunteți sigur că vreți să vă deconectați?\n"
+"\n"
+"Setările și mesajele vor fi eliminate de pe acest dispozitiv. După "
+"deconectarea va trebui să reporniți aplicația pentru a vă conecta la alt "
+"cont."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "Doriți să începeți o conversație cu acest contact nou?"
 
 msgid "Do you want to delete this chat?"
 msgstr "Ștergeți această conversație?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Doriți să importați cheile din dosarul de documente al aplicației? \n"
+"\n"
+"Dacă nu există chei în acel dosar, operațiunea nu va reuși."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Doriți să importați cheile din dosarul aplicației? \n"
+"\n"
+"Dacă nu există chei în acel dosar, operațiunea nu va reuși."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"Importați cheile din \"%s\"? Dacă nu există chei în acest folder, "
-"operațiunea nu va reuși."
+"Doriți să salvați cheile în dosarul aplicației? \n"
+"\n"
+"Calea de dosar este:\n"
+"\"%s."
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "Salvați cheile în \"%s\"?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"Doriți să salvați cheile în dosarul de documente al dispozitivului? \n"
+"\n"
+"Puteți accesa acest dosar prin intermediul aplicației \"Fișiere\"."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Doriți să deblocați %s?"
+
+msgid "Don't change"
+msgstr "Nu modifica"
 
 msgid "Draft"
 msgstr "Schiță"
@@ -304,14 +451,23 @@ msgstr "Editează profilul"
 msgid "Email"
 msgstr "E-mail"
 
+msgid "Email Settings"
+msgstr "Setări e-mail"
+
 msgid "Email address"
 msgstr "Adresă de e-mail"
+
+msgid "Email signature"
+msgstr "Semnătură e-mail"
 
 msgid "Enable background updates"
 msgstr "Activați actualizările de fundal"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Activați trimiterea și solicitarea confirmărilor de citire."
+
+msgid "Encryption"
+msgstr "Criptare"
 
 msgid "Enter the contact name"
 msgstr "Introduceți numele contactului"
@@ -329,14 +485,23 @@ msgstr "Expert: import chei"
 msgid "FCM token"
 msgstr "Token FCM"
 
+msgid "Feature requests"
+msgstr "Solicitări de funcții"
+
 msgid "Feedback"
 msgstr "Feedback"
 
 msgid "File"
 msgstr "Fișier"
 
+msgid "Flag/Unflag"
+msgstr "Marchează/Șterge marcajul"
+
 msgid "Flagged"
 msgstr "Marcat"
+
+msgid "Flagged messages"
+msgstr "Mesaje marcate"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -351,8 +516,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Redirecționează"
 
-msgid "Gallery"
-msgstr "Galerie"
+msgid "Forwarded"
+msgstr "Redirecționat"
+
+msgid "General Settings"
+msgstr "Setări generale"
+
+msgid "Googlemail account detected"
+msgstr "Cont Googlemail detectat"
 
 msgid "Group image changed"
 msgstr "Imagine de grup schimbată"
@@ -372,6 +543,15 @@ msgstr "Nume grup schimbat"
 msgid "Hello, I have just created this group for us"
 msgstr "Bună, tocmai am creat acest grup pentru noi"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Aici puteți alege tema preferată. Alegând '%s', tema poate fi modifică "
+"automat, dacă ați selectat \"Automat\" în preferințele de sistem."
+
 msgid "IMAP Security"
 msgstr "Securitate IMAP"
 
@@ -386,6 +566,9 @@ msgstr "Port IMAP"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "Server IMAP (de ex. imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "Nume de conectare IMAP/SMTP"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -418,8 +601,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Mesaje primite"
 
+msgid "Info"
+msgstr "Informații"
+
 msgid "Initiate key transfer"
 msgstr "Inițiază transferul de cheie"
+
+msgid "Invitation"
+msgstr "Invitație"
+
+msgid "Invite a friend"
+msgstr "Invită un prieten"
 
 msgid "Invites"
 msgstr "Invitații"
@@ -436,6 +628,12 @@ msgstr "Acțiunea cheie realizată cu succes"
 msgid "Leave group"
 msgstr "Părăsește grupul"
 
+msgid "Let's Go"
+msgstr "Haidem"
+
+msgid "Light"
+msgstr "Deschis"
+
 msgid "Location"
 msgstr "Loc"
 
@@ -445,11 +643,29 @@ msgstr "Conectează-te la OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "Conectare în curs, acest lucru poate dura un moment"
 
+msgid "Login"
+msgstr "Autentificare"
+
 msgid "Login failed"
-msgstr "Conectarea a eșuat"
+msgstr "Autentificarea a eșuat"
+
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Autentificarea nu a reușit. Vă rugăm să verificați dacă adresa de e-mail și "
+"parola sunt corecte."
+
+msgid "Login failed. Please check your password."
+msgstr "Autentificarea nu a reușit. Vă rugăm să verificați parola."
+
+msgid "Logout"
+msgstr "Deconectare"
 
 msgid "Manual Settings"
 msgstr "Setări manuale"
+
+msgid "Maybe later"
+msgstr "Poate mai târziu"
 
 msgid "Me"
 msgstr "Eu"
@@ -466,6 +682,9 @@ msgstr "Sincronizarea mesajelor"
 msgid "Messages I sent to myself"
 msgstr "Mesaje pe care mi le-am trimis mie"
 
+msgid "Messages from unknown contacts"
+msgstr "Mesaje de la persoane de contact necunoscute"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -479,17 +698,26 @@ msgstr "Nume"
 msgid "New contact"
 msgstr "Contact nou"
 
+msgid "Next"
+msgstr "Continuă"
+
 msgid "No"
 msgstr "Nu"
 
 msgid "No blocked contacts"
 msgstr "Niciun contact blocat"
 
+msgid "No camera permission granted."
+msgstr "Nu s-a permis utilizarea camerei."
+
 msgid "No flagged messages"
 msgstr "Niciun mesaj marcat"
 
 msgid "No messages"
 msgstr "Niciun mesaj"
+
+msgid "No other media files available"
+msgstr "Nu sunt disponibile alte fișiere media"
 
 msgid "No participants selected. Please select at least one person."
 msgstr ""
@@ -507,11 +735,24 @@ msgstr "Nicio semnătură stabilită"
 msgid "No username set"
 msgstr "Niciun nume de utilizator stabilit"
 
+msgid "No valid QR code"
+msgstr "Niciun cod QR valid"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "Imposibil de creat codul QR: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Notificare"
 msgstr[1] "Notificări"
 msgstr[2] "Notificări"
+
+msgid "Notifications"
+msgstr "Notificări"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Messenger"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -539,17 +780,30 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
+msgid "Only chat messages."
+msgstr "Doar mesaje de chat."
+
+msgid "Only check when starting the app"
+msgstr "Verifică doar la pornirea aplicației"
+
 msgid "Only show messages of known contacts"
 msgstr "Afișați numai mesaje de la contacte cunoscute"
 
 msgid "Open chat"
 msgstr "Deschide conversație"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "Sau scanați codul QR"
+
 msgid "Other mail provider"
 msgstr "Alt furnizor de e-mail"
 
 msgid "Outbox"
 msgstr "Căsuța de ieșire"
+
+msgid "Own Card"
+msgstr "Card propriu"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -559,6 +813,9 @@ msgstr[2] "Participanți"
 
 msgid "Password"
 msgstr "Parolă"
+
+msgid "Password changed"
+msgstr "Parolă modificată"
 
 msgid "Performing key export"
 msgstr "Se efectuează exportul cheii"
@@ -576,6 +833,10 @@ msgstr ""
 "Numerele de telefon pot fi adăugate sau editate prin agenda locală și "
 "importate ulterior."
 
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr ""
+"Vă rugăm să vă adăugați numele sau porecla și să alegeți o imagine de profil."
+
 msgid "Please check your username and password"
 msgstr "Vă rugăm să verificați numele de utilizator și parola"
 
@@ -591,14 +852,25 @@ msgstr "Introduceți o adresă de email corectă"
 msgid "Please enter a valid port (1-65535)"
 msgstr "Vă rugăm să introduceți un port valid (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Introduceți numele dvs."
+
 msgid "Please enter your password"
 msgstr "Va rugam sa introduceți parola"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Vă rugăm să raportați bug-uri pe GitHub."
 
 msgid "Please select your email provider to sign in"
 msgstr "Selectați furnizorul de e-mail pentru a vă conecta"
 
 msgid "Please specify your email server settings."
 msgstr "Vă rugăm să specificați setările serverului de e-mail."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Vă rugăm să ne trimiteți ideile dvs. pe user echo."
 
 msgid "Please wait a moment."
 msgstr "Vă rugăm să așteptați un moment."
@@ -608,6 +880,9 @@ msgstr "Protecția confidențialității și împotriva hărțuirii"
 
 msgid "Profile"
 msgstr "Profil"
+
+msgid "Profile & Settings"
+msgstr "Profil și setări"
 
 msgid "Profile QR"
 msgstr "Profil QR"
@@ -627,6 +902,9 @@ msgstr[0] "Confirmare de citire"
 msgstr[1] "Confirmări de citire"
 msgstr[2] "Confirmări de citire"
 
+msgid "Ready!"
+msgstr "Gata!"
+
 msgid "Register"
 msgstr "Înregistrare"
 
@@ -636,13 +914,18 @@ msgstr "Înregistrați noi resurse push"
 msgid "Remove current image"
 msgstr "Elimină imagine curentă"
 
+msgid "Remove from group"
+msgstr "Înlătură din grup"
+
 msgid "Remove participant"
 msgstr "Elimină participantul"
 
 msgid "Rename group"
 msgstr "Redenumește grup"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Raportează o eroare"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -656,6 +939,9 @@ msgstr ""
 "Unii furnizori plasează informații suplimentare în căsuța de primire; le "
 "puteți verifica de exemplu pe pagina web. Consultați-vă furnizorul sau "
 "prietenii dacă aveți probleme."
+
+msgid "Retry"
+msgstr "Încearcă din nou"
 
 msgid "SMTP Security"
 msgstr "Securitate SMTP"
@@ -675,8 +961,8 @@ msgstr "Server SMTP (de ex. smtp.coi.me)"
 msgid "Save"
 msgstr "Salvează"
 
-msgid "Scan QR"
-msgstr "Scanează QR"
+msgid "Scan QR code"
+msgstr "Scanează cod QR"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
 #, c-format
@@ -685,17 +971,29 @@ msgstr ""
 "Scanați acest cod QR pentru a crea un contact nou sau pentru a verifica un "
 "contact cu %s."
 
+msgid "Search"
+msgstr "Caută"
+
 msgid "Search contacts"
 msgstr "Caută în contacte"
 
 msgid "Security"
 msgstr "Securitate"
 
+msgid "Send again"
+msgstr "Trimite din nou"
+
+msgid "Send message"
+msgstr "Trimite mesaj"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Trimis cu OX COI Messenger"
 
 msgid "Server addresses"
 msgstr "Adresele serverului"
+
+msgid "Server settings"
+msgstr "Setări server"
 
 msgid "Set a group name"
 msgstr "Setați un nume de grup"
@@ -715,6 +1013,9 @@ msgstr "Mesaj de instalare creat"
 msgid "Share"
 msgstr "Partajează"
 
+msgid "Share invite link"
+msgstr "Partajează linkul de invitație"
+
 msgid "Show QR"
 msgstr "Afișează QR"
 
@@ -724,8 +1025,8 @@ msgstr "Afișează conversațiile și e-mail-urile de la toți expeditorii"
 msgid "Show both chat and email messages from my contacts"
 msgstr "Afișează conversațiile și e-mail-urile de la toate contactele"
 
-msgid "Show messages from unknown contacts"
-msgstr "Afișează conversațiile de la toate contacte necunoscute"
+msgid "Show my QR code"
+msgstr "Afișează codul QR propriu"
 
 msgid "Show only chat messages "
 msgstr "Afișează doar conversații"
@@ -744,13 +1045,33 @@ msgstr "Semnătură"
 msgid "Simply add one by tapping on a contact."
 msgstr "Adăugați atingând un contact."
 
+msgid "Skip"
+msgstr "Omite"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Ceva nu a funcționat și nu am putut încărca invitația: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "Începeți o conversație cu %s?"
 
+msgid "Start chat"
+msgstr "Începe chat-ul"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Pasul %s din %s"
+
+msgid "System"
+msgstr "Sistem"
+
 msgid "System contacts imported successfully"
 msgstr "Contactele de sistem importate cu succes"
+
+msgid "Take a picture"
+msgstr "Fotografiază"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -758,6 +1079,10 @@ msgstr "Codul de instalare asociat începe cu: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "Codul poate fi introdus cu sau fără semne minus"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr ""
+"Invitația a fost deja ștearsă. Vă rugăm să rugați expeditorul să o retrimită."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "Momentan nu există mesaje de la contacte necunoscute"
@@ -781,6 +1106,15 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "Acest câmp nu poate fi gol"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Aceasta este o versiune beta: vă rugăm să rețineți că aplicația este încă în "
+"dezvoltare. Doriți să vă împărtășiți gândurile? Ne puteți trimite feedback "
+"în secțiunea profil din meniul setări."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Aceasta este o conversație nouă. Trimiteți un mesaj pentru conectare."
@@ -856,8 +1190,8 @@ msgstr ""
 msgid "Today"
 msgstr "Astăzi"
 
-msgid "Type something..."
-msgstr "Tastați ceva..."
+msgid "Type"
+msgstr "Tip"
 
 msgid "Unblock"
 msgstr "Deblochează"
@@ -890,16 +1224,28 @@ msgstr "Mesaj vocal"
 msgid "We could not determine all settings automatically."
 msgstr "Nu am putut determina toate setările în mod automat."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Bun venit la OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Am detectat o adresă googlemail. Acest lucru duce la chat-uri "
+"disfuncționale. Vă recomandăm să modificați adresa de e-mail într-o adresă "
+"gmail."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "Bine ați venit la %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Bine ați venit în OX Coi Messenger!\n"
+"Bine ați venit în OX COI Messenger!\n"
 "Vă rugăm să începeți o nouă conversație atingând pictograma bulă de "
 "conversație."
+
+msgid "What kind of message do you want to handle?"
+msgstr "Ce fel de mesaj doriți să gestionați?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Doriți să importați contactele de pe acest dispozitiv?"
@@ -909,6 +1255,9 @@ msgstr "Da"
 
 msgid "Yesterday"
 msgstr "Ieri"
+
+msgid "You're good to go!"
+msgstr "Totul a fost pregătit!"
 
 #, c-format
 msgid ""
@@ -924,23 +1273,96 @@ msgstr ""
 "%s\n"
 "După ce ați terminat, celălalt dispozitiv va fi gata să utilizeze Autocrypt."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Furnizorul de servicii de e-mail nu este încă compatibil cu serviciul COI, "
+"dar putem verifica dacă există mesaje noi în fundal. Preferați să căutăm "
+"mesaje noi din când în când sau să verificăm în mod constant, ceea ce ar "
+"utiliza mai multă baterie?"
+
 msgid "Your favorite messages"
 msgstr "Mesajele dvs. favorite"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Imposibil de transmis mesajul trimis către \"%s\" prin %s. Adesea, acest "
+"lucru se întâmplă din cauza unui fișier prea mare. Ștergeți acest mesaj "
+"pentru a debloca trimiterea mesajelor ulterioare."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Mesajele dvs. vor fi criptate de acum încolo."
 
-msgid "code"
-msgstr "cod"
-
-msgid "more messages"
-msgstr "mai multe mesaje"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Parola dvs. a fost schimbată.\n"
+"Introduceți noua parolă pentru a vă accesa mesajele."
 
 msgid "privacy declaration"
 msgstr "declarație de confidențialitate"
 
 msgid "terms & conditions"
 msgstr "termeni și condiții"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr ""
+#~ "Autentificarea nu a reușit. Vă rugăm să verificați dacă adresa de e-mail "
+#~ "și parola sunt corecte."
+
+#~ msgid "Camera"
+#~ msgstr "Cameră"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "Imposibil de șters contactul."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "Importați cheile din \"%s\"? Dacă nu există chei în acest folder, "
+#~ "operațiunea nu va reuși."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "Salvați cheile în \"%s\"?"
+
+#~ msgid "Gallery"
+#~ msgstr "Galerie"
+
+#~ msgid "Scan QR"
+#~ msgstr "Scanează QR"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Afișează conversațiile de la toate contacte necunoscute"
+
+#~ msgid "Type something..."
+#~ msgstr "Tastați ceva..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Bun venit la OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Bine ați venit în OX Coi Messenger!\n"
+#~ "Vă rugăm să începeți o nouă conversație atingând pictograma bulă de "
+#~ "conversație."
+
+#~ msgid "code"
+#~ msgstr "cod"
+
+#~ msgid "more messages"
+#~ msgstr "mai multe mesaje"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -953,14 +1375,6 @@ msgstr "termeni și condiții"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Prin utilizarea OX COI Messenger sunteți de acord cu"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "Bine ați venit în OX COI Messenger!\n"
-#~ "Vă rugăm să începeți o nouă conversație atingând pictograma bulă de "
-#~ "conversație."
 
 #~ msgid "and"
 #~ msgstr "și"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-04 23:16+1000\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-05-25 18:15+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -16,7 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "还有 %d 消息"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -32,6 +36,17 @@ msgstr "我进行的 %s"
 #, c-format
 msgid "%s copied to clipboard"
 msgstr "已复制 %s 到剪贴簿"
+
+#, c-format
+msgid "%s has invited you to chat."
+msgstr "%1$s 邀请您聊天。"
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s 已邀请您聊天。"
+
+msgid "(Please choose one option to proceed.)"
+msgstr "（请选择一个选项继续。）"
 
 #, c-format
 msgid "1 contact"
@@ -75,6 +90,9 @@ msgstr "进阶 SMTP 设定"
 msgid "All your contacts are in this chat."
 msgstr "您的所有联系人都在聊天里。"
 
+msgid "Allow Notifications"
+msgstr "允许通知"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -88,6 +106,10 @@ msgstr "应用程序名称"
 
 msgid "App version"
 msgstr "应用程序版本"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "外观"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "套用新设定中，会花一点时间"
@@ -118,6 +140,9 @@ msgstr "已成功更改 Autocrypt 设置"
 msgid "Automatic"
 msgstr "自动"
 
+msgid "Back"
+msgstr "返回"
+
 msgid "Base Settings"
 msgstr "基础设置"
 
@@ -130,23 +155,40 @@ msgstr "屏蔽联系人"
 msgid "Blocked contacts"
 msgstr "已屏蔽联系人"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "来自任何人的电子邮件和聊天消息。"
+
+msgid "Both email and chat messages from known contacts."
+msgstr "来自已知联系人的电子邮件和聊天消息。"
+
+msgid "Bug reports"
+msgstr "错误报告"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "使用 OX COI Messenger 即表示您同意我们的 %s 和 %s"
 
-msgid "Camera"
-msgstr "相机"
+msgid "Camera not ready"
+msgstr "相机未就绪"
 
 msgid "Cancel"
 msgstr "取消"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr "不能登录。请检查电子邮件和密码皆正确。"
-
 msgid "Cannot verify contact"
 msgstr "不能认证联系人"
+
+msgid "Change"
+msgstr "更改"
+
+msgid "Change Push Settings"
+msgstr "更改推送设置"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr "在系统设置中更改此应用的推送设置。"
+
+msgid "Change your Signature"
+msgstr "更改签名"
 
 msgid "Changed encryption setup for this contact"
 msgstr "为此联系人更改加密"
@@ -155,11 +197,37 @@ msgid "Chat"
 msgid_plural "Chats"
 msgstr[0] "聊天"
 
+msgid "Chat Settings"
+msgstr "聊天设置"
+
+msgid "Check constantly"
+msgstr "不断检查"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "查看OX COI即时通信 - 通过电子邮件聊天！"
+
+msgid "Check regularly"
+msgstr "定期检查"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "从以下列表里选择一个提供者以创建一个新户口"
 
+msgid "Choose from gallery"
+msgstr "从相簿选择"
+
+msgid "Code"
+msgstr "码"
+
 msgid "Configuration change aborted"
 msgstr "已放弃配置更改"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"恭喜您，您的电子邮件服务提供商符合 COI 标准，因此您将立即收到有关新信息。是否"
+"要接收有关新邮件的通知？"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -183,22 +251,33 @@ msgstr "已成功删除联系人"
 msgid "Contact successfully edited"
 msgstr "已成功编辑联系人"
 
+msgid "Contact validation failed"
+msgstr "联系人验证失败"
+
 msgid "Contact verified"
 msgstr "已确认联系人"
 
 msgid "Copied to clipboard"
 msgstr "已复制到剪贴板"
 
+msgid "Copy"
+msgstr "复制"
+
 msgid "Copy code"
 msgstr "复制代码"
 
-msgid "Could not delete contact."
-msgstr "不能删除联系人。"
+msgid "Could not add contact. Email address already in use."
+msgstr "无法添加联系人。电子邮件地址正在使用。"
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
 "those chats first."
 msgstr "不能删除联系人。找到联系人的活跃聊天，请先移除那些聊天。"
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr "无法删除联系人。您可能与此联系人进行群聊。"
 
 msgid "Create chat"
 msgstr "创建聊天"
@@ -211,6 +290,16 @@ msgid ""
 "use your current encryption setup."
 msgstr ""
 "创建 Autocrypt 设置消息，您可以在其他设备上加载该消息以使用当前加密设置。"
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "当前系统主题为：%s"
+
+msgid "Dark"
+msgstr "深色"
+
+msgid "Data protection"
+msgstr "数据保护"
 
 msgid "Debug"
 msgstr "调试"
@@ -225,8 +314,20 @@ msgstr[0] "删除聊天"
 msgid "Delete contact"
 msgstr "删除联系人"
 
+msgid "Delete group"
+msgstr "删除组"
+
+msgid "Delete locally"
+msgstr "在本地删除"
+
+msgid "Delete message"
+msgstr "删除消息"
+
 msgid "Delete push resource"
 msgstr "删除推送资源"
+
+msgid "Discard message"
+msgstr "丢弃消息"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -246,28 +347,69 @@ msgstr "您是否真的要删除 %s?"
 msgid "Do you really want to leave the group?"
 msgstr "你真的要离开这个小组吗？"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"您真的想注销吗？\n"
+"\n"
+"您的设置和消息将从此设备中删除。注销后，您需要再次启动应用程序才能登录到其他"
+"户口。"
+
 msgid "Do you want to chat with this new contact?"
 msgstr "您真的要与此新联系人聊天码？"
 
 msgid "Do you want to delete this chat?"
 msgstr "您要删除此聊天吗？"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"是否要从应用程序文档文件夹中导入密钥？\n"
+"\n"
+"如果该文件夹中没有钥，则操作将失败。"
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"是否要从应用程序文件夹中导入密钥？\n"
+"\n"
+"如果该文件夹中没有钥，则操作将失败。"
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
-msgstr "您要从 \"%s\" 导入您的钥吗？如果钥不在那个文件夹里，操作将会失败。"
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
+msgstr ""
+"是否要将密钥保存在应用程序文件夹中？\n"
+"\n"
+"路径为：\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "是否要将密钥保存在 \"%s\" 中？"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"是否要将密钥保存在设备文档文件夹中？\n"
+"\n"
+"您可以通过\"文件应用程序\"访问它。"
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "是否要取消 %s 的屏蔽？"
+
+msgid "Don't change"
+msgstr "不要更改"
 
 msgid "Draft"
 msgstr "草稿"
@@ -281,14 +423,23 @@ msgstr "编辑个人资料"
 msgid "Email"
 msgstr "电子邮件"
 
+msgid "Email Settings"
+msgstr "电子邮件设置"
+
 msgid "Email address"
 msgstr "电子邮件地址"
+
+msgid "Email signature"
+msgstr "电子邮件签名"
 
 msgid "Enable background updates"
 msgstr "启用后台更新"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "启用已读回执的发送和请求。"
+
+msgid "Encryption"
+msgstr "加密"
 
 msgid "Enter the contact name"
 msgstr "输入联系人姓名"
@@ -306,14 +457,23 @@ msgstr "专业：导入密钥"
 msgid "FCM token"
 msgstr "FCM 令牌"
 
+msgid "Feature requests"
+msgstr "功能请求"
+
 msgid "Feedback"
 msgstr "意見反馈"
 
 msgid "File"
 msgstr "文件"
 
+msgid "Flag/Unflag"
+msgstr "标记/取消标记"
+
 msgid "Flagged"
 msgstr "已标记"
+
+msgid "Flagged messages"
+msgstr "已标记的消息"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -326,8 +486,14 @@ msgstr ""
 msgid "Forward"
 msgstr "转发"
 
-msgid "Gallery"
-msgstr "相簿"
+msgid "Forwarded"
+msgstr "已转发"
+
+msgid "General Settings"
+msgstr "常规设置"
+
+msgid "Googlemail account detected"
+msgstr "检测到\"Googlemail\"户口"
 
 msgid "Group image changed"
 msgstr "已更改群图像"
@@ -347,6 +513,15 @@ msgstr "已更改组名称"
 msgid "Hello, I have just created this group for us"
 msgstr "您好，我刚刚为我们创建了这个小组"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"在这里，您可以选择您最喜爱的主题。如果选择\"%s\"，主题可能会自动更改。这取决"
+"于您是否在系统首选项中选择\"自动\"。"
+
 msgid "IMAP Security"
 msgstr "IMAP 安全"
 
@@ -361,6 +536,9 @@ msgstr "IMAP 端口"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP 服务器（例如：imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "IMAP/SMTP 登录名称"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -389,8 +567,17 @@ msgstr "从本地存储导入密钥以更改当前加密设置"
 msgid "Inbox"
 msgstr "收件箱"
 
+msgid "Info"
+msgstr "信息"
+
 msgid "Initiate key transfer"
 msgstr "启动密钥传输"
+
+msgid "Invitation"
+msgstr "邀请"
+
+msgid "Invite a friend"
+msgstr "邀请朋友"
 
 msgid "Invites"
 msgstr "邀请"
@@ -407,6 +594,12 @@ msgstr "成功完成钥动作"
 msgid "Leave group"
 msgstr "退出群组"
 
+msgid "Let's Go"
+msgstr "来吧"
+
+msgid "Light"
+msgstr "浅色"
+
 msgid "Location"
 msgstr "地点"
 
@@ -416,11 +609,27 @@ msgstr "登陆到 OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "登录中，这可能需要一段时间"
 
+msgid "Login"
+msgstr "登录"
+
 msgid "Login failed"
 msgstr "登录失败"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr "登录失败。请检查电子邮件地址和密码是否正确。"
+
+msgid "Login failed. Please check your password."
+msgstr "登录失败。请检查您的密码。"
+
+msgid "Logout"
+msgstr "注销"
+
 msgid "Manual Settings"
 msgstr "手动设定"
+
+msgid "Maybe later"
+msgstr "以后再说"
 
 msgid "Me"
 msgstr "我"
@@ -437,6 +646,9 @@ msgstr "消息同步中"
 msgid "Messages I sent to myself"
 msgstr "我发送给自己的消息"
 
+msgid "Messages from unknown contacts"
+msgstr "来自未知联系人的消息"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -448,17 +660,26 @@ msgstr "名称"
 msgid "New contact"
 msgstr "新联系人"
 
+msgid "Next"
+msgstr "下一个"
+
 msgid "No"
 msgstr "否"
 
 msgid "No blocked contacts"
 msgstr "无已屏蔽联系人"
 
+msgid "No camera permission granted."
+msgstr "未授予相机权限。"
+
 msgid "No flagged messages"
 msgstr "无已标志消息"
 
 msgid "No messages"
 msgstr "没有消息"
+
+msgid "No other media files available"
+msgstr "没有其他可用的媒体文件"
 
 msgid "No participants selected. Please select at least one person."
 msgstr "没有选择参与者。请选择最少一位。"
@@ -475,9 +696,22 @@ msgstr "没有设置签名"
 msgid "No username set"
 msgstr "没有设置用户名称"
 
+msgid "No valid QR code"
+msgstr "无有效的 QR 码"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "不能创建 qr 码：%s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "通知"
+
+msgid "Notifications"
+msgstr "通知"
+
+msgid "OX COI Messenger"
+msgstr "OX COI即时通信"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -502,11 +736,21 @@ msgstr ""
 msgid "Ok"
 msgstr "确定"
 
+msgid "Only chat messages."
+msgstr "仅聊天消息。"
+
+msgid "Only check when starting the app"
+msgstr "仅在启动应用程序时进行检查"
+
 msgid "Only show messages of known contacts"
 msgstr "仅显示已知联系人的消息"
 
 msgid "Open chat"
 msgstr "打开聊天"
+
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "或扫描 QR 码"
 
 msgid "Other mail provider"
 msgstr "其他邮件供应商"
@@ -514,12 +758,18 @@ msgstr "其他邮件供应商"
 msgid "Outbox"
 msgstr "发件箱"
 
+msgid "Own Card"
+msgstr "自有卡"
+
 msgid "Participant"
 msgid_plural "Participants"
 msgstr[0] "参与者"
 
 msgid "Password"
 msgstr "密码"
+
+msgid "Password changed"
+msgstr "已更改密码"
 
 msgid "Performing key export"
 msgstr "进行钥导出中"
@@ -534,6 +784,9 @@ msgid ""
 "Phone numbers can be added or edited via the local address book and imported "
 "afterwards."
 msgstr "电话号码可以通过本地地址簿添加或编辑，然后导入。"
+
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr "请添加您的姓名或昵称，并选择个人档案图片。"
 
 msgid "Please check your username and password"
 msgstr "请检查您的用户名称和密码"
@@ -550,14 +803,25 @@ msgstr "请输入一个有效电子邮件地址"
 msgid "Please enter a valid port (1-65535)"
 msgstr "请输入有效的端口 （1-65535）"
 
+msgid "Please enter your name"
+msgstr "请输入你的姓名"
+
 msgid "Please enter your password"
 msgstr "请输入密码"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "请在 GitHub 上报虫。"
 
 msgid "Please select your email provider to sign in"
 msgstr "请选择您的电子邮件提供商以登录"
 
 msgid "Please specify your email server settings."
 msgstr "请指定您的电子邮件服务器设置。"
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "请提出您对用户回声的想法。"
 
 msgid "Please wait a moment."
 msgstr "请稍等。"
@@ -567,6 +831,9 @@ msgstr "隐私和移动保护"
 
 msgid "Profile"
 msgstr "个人档案"
+
+msgid "Profile & Settings"
+msgstr "个人档案和设置"
 
 msgid "Profile QR"
 msgstr "个人档案 QR"
@@ -584,6 +851,9 @@ msgid "Read receipt"
 msgid_plural "Read receipts"
 msgstr[0] "读取收据"
 
+msgid "Ready!"
+msgstr "准备！"
+
 msgid "Register"
 msgstr "注册"
 
@@ -593,13 +863,18 @@ msgstr "注册新的推送资源"
 msgid "Remove current image"
 msgstr "删除当前图像"
 
+msgid "Remove from group"
+msgstr "从群组中移除"
+
 msgid "Remove participant"
 msgstr "删除参与者"
 
 msgid "Rename group"
 msgstr "重命名组"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "报虫"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -612,6 +887,9 @@ msgstr ""
 "\n"
 "某些提供商在收件箱中放置其他信息;你可以检查它们。在网络前端。如果您遇到问题，"
 "请咨询您的提供商或朋友。"
+
+msgid "Retry"
+msgstr "再试"
 
 msgid "SMTP Security"
 msgstr "SMTP 安全"
@@ -631,13 +909,16 @@ msgstr "SMTP 服务器（例如：smtp.coi.me）"
 msgid "Save"
 msgstr "保存"
 
-msgid "Scan QR"
-msgstr "扫描 QR"
+msgid "Scan QR code"
+msgstr "扫描 QR 码"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
 #, c-format
 msgid "Scan this QR code to create a new contact or verify a contact with %s."
 msgstr "扫描此 QR 代码以创建新联系人或验证具有 %s 的联系人。"
+
+msgid "Search"
+msgstr "搜寻"
 
 msgid "Search contacts"
 msgstr "搜寻联系人"
@@ -645,11 +926,20 @@ msgstr "搜寻联系人"
 msgid "Security"
 msgstr "安全性"
 
+msgid "Send again"
+msgstr "再发送"
+
+msgid "Send message"
+msgstr "发送消息"
+
 msgid "Sent with OX COI Messenger"
 msgstr "以 OX COI Messenger 发送"
 
 msgid "Server addresses"
 msgstr "服务器地址"
+
+msgid "Server settings"
+msgstr "服务器设置"
 
 msgid "Set a group name"
 msgstr "设置一个组名称"
@@ -667,6 +957,9 @@ msgstr "已创建设置消息"
 msgid "Share"
 msgstr "分享"
 
+msgid "Share invite link"
+msgstr "共享邀请链接"
+
 msgid "Show QR"
 msgstr "显示 QR"
 
@@ -676,8 +969,8 @@ msgstr "显示来自所有发件人的聊天和电子邮件"
 msgid "Show both chat and email messages from my contacts"
 msgstr "显示来自我的联系人的聊天和电子邮件"
 
-msgid "Show messages from unknown contacts"
-msgstr "显示来自未知联系人的消息"
+msgid "Show my QR code"
+msgstr "显示我的 QR 码"
 
 msgid "Show only chat messages "
 msgstr "仅显示聊天消息 "
@@ -696,13 +989,33 @@ msgstr "签名"
 msgid "Simply add one by tapping on a contact."
 msgstr "只需点击联系人即可添加一个。"
 
+msgid "Skip"
+msgstr "跳过"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "因为出现某些问题，所以无法加载邀请： %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "开始与 %s 聊天？"
 
+msgid "Start chat"
+msgstr "开始聊天"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "第 %s 步、共 %s 步"
+
+msgid "System"
+msgstr "系统"
+
 msgid "System contacts imported successfully"
 msgstr "已成功导入系统联系人"
+
+msgid "Take a picture"
+msgstr "拍一张照"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -710,6 +1023,9 @@ msgstr "关联的设置代码以此开头：%s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "代码输入时可以带或不带减号"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr "邀请已被删除。请要求发件人重新发送。"
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "当前没有来自未知联系人的消息"
@@ -731,6 +1047,14 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "此字段不能为空白"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"这是一个公测版，因此请记住应用程序仍处于开发中。你想分享你的想法吗？您可以在"
+"设置中的个人档案部分里分享您的反馈。"
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "这是一个新的聊天。发送消息已连接。"
@@ -796,8 +1120,8 @@ msgstr ""
 msgid "Today"
 msgstr "今天"
 
-msgid "Type something..."
-msgstr "输入一些东西……"
+msgid "Type"
+msgstr "类型"
 
 msgid "Unblock"
 msgstr "取消屏蔽"
@@ -828,15 +1152,26 @@ msgstr "语音留言"
 msgid "We could not determine all settings automatically."
 msgstr "我们不能自动确定所有设置。"
 
-msgid "Welcome to OX COI Messenger"
-msgstr "欢迎来到 OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"我们检测到了一个\"googlemail\"地址。这导致聊天中断。我们建议将邮件地址更改为"
+"\"gmail\"。"
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "欢迎到 %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"欢迎来到OX Coi Messenger！\n"
+"欢迎来到OX COI Messenger！\n"
 "请轻点聊天气泡图标以开始新的聊天。"
+
+msgid "What kind of message do you want to handle?"
+msgstr "您要处理哪种消息？"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "您想从此设备导入联系人吗？"
@@ -846,6 +1181,9 @@ msgstr "是"
 
 msgid "Yesterday"
 msgstr "昨天"
+
+msgid "You're good to go!"
+msgstr "您准备好了！"
 
 #, c-format
 msgid ""
@@ -860,23 +1198,88 @@ msgstr ""
 "%s\n"
 "完成后，您的其他设备将可以使用 Autocrypt。"
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"您的电子邮件服务提供商尚不支持 COI，但我们可以在后台检查新消息。我们应该定期"
+"寻找新的消息，还是应该不断检查新消息而使用更多电量？"
+
 msgid "Your favorite messages"
 msgstr "您最喜爱的消息"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"无法传输发送到\"%s\"（在%s上）的消息。通常由于文件太大，导致发生这种情况。请"
+"删除此消息以解封发送后续邮件。"
 
 msgid "Your messages are encrypted from now on."
 msgstr "从现在起，您的邮件将被加密。"
 
-msgid "code"
-msgstr "代码"
-
-msgid "more messages"
-msgstr "更多消息"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"已更改您的密码。\n"
+"请输入您的新密码以访问您的消息。"
 
 msgid "privacy declaration"
 msgstr "隐私声明"
 
 msgid "terms & conditions"
 msgstr "项目及条款"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr "不能登录。请检查电子邮件和密码皆正确。"
+
+#~ msgid "Camera"
+#~ msgstr "相机"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "不能删除联系人。"
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr "您要从 \"%s\" 导入您的钥吗？如果钥不在那个文件夹里，操作将会失败。"
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "是否要将密钥保存在 \"%s\" 中？"
+
+#~ msgid "Gallery"
+#~ msgstr "相簿"
+
+#~ msgid "Scan QR"
+#~ msgstr "扫描 QR"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "显示来自未知联系人的消息"
+
+#~ msgid "Type something..."
+#~ msgstr "输入一些东西……"
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "欢迎来到 OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "欢迎来到OX Coi Messenger！\n"
+#~ "请轻点聊天气泡图标以开始新的聊天。"
+
+#~ msgid "code"
+#~ msgstr "代码"
+
+#~ msgid "more messages"
+#~ msgstr "更多消息"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -887,13 +1290,6 @@ msgstr "项目及条款"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "使用 OX COI Messenger 代表您同意我们的"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "欢迎来到OX COI Messenger！\n"
-#~ "请轻点聊天气泡图标以开始新的聊天。"
 
 #~ msgid "and"
 #~ msgstr "和"

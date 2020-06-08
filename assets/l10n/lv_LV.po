@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-09 11:36+0300\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-06-02 11:57+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: lv_LV\n"
@@ -16,7 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "vēl %d ziņojumi"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -34,6 +38,17 @@ msgid "%s copied to clipboard"
 msgstr "%s nokopēts starpliktuvē"
 
 #, c-format
+msgid "%s has invited you to chat."
+msgstr "%s ir uzaicinājis jūs uz tērzēšasnu."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s ir uzaicinājis jūs uz tērzēšanu."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Lūdzu izvēlieties vienu opciju turpināšanai)"
+
+#, c-format
 msgid "1 contact"
 msgid_plural "%d contacts"
 msgstr[0] "%d kontakts"
@@ -43,9 +58,9 @@ msgstr[2] "%d kontakti"
 #, c-format
 msgid "1 member"
 msgid_plural "%i members"
-msgstr[0] "%i dalībnieks"
-msgstr[1] "%i dalībnieki"
-msgstr[2] "%i dalībnieki"
+msgstr[0] "%i loceklis"
+msgstr[1] "%i locekļi"
+msgstr[2] "%i locekļi"
 
 #, c-format
 msgid "1 participant"
@@ -81,6 +96,9 @@ msgstr "Papildus SMTP iestatījumi"
 msgid "All your contacts are in this chat."
 msgstr "Visi jūsu kontakti ir šajā sarunā."
 
+msgid "Allow Notifications"
+msgstr "Atļaut paziņojumus"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -95,6 +113,10 @@ msgstr "Aplikācijas vārds"
 
 msgid "App version"
 msgstr "Aplikācijas versija"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Izskats"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Jauno iestatījumu piemērošana, tas var prasīt zināmu laiku"
@@ -127,6 +149,9 @@ msgstr "Autocrypt iestatījumi ir veiksmīgi izmainīti"
 msgid "Automatic"
 msgstr "Automātisks"
 
+msgid "Back"
+msgstr "Atpakaļ"
+
 msgid "Base Settings"
 msgstr "Pamata iestatījumi"
 
@@ -139,24 +164,40 @@ msgstr "Bloķēt kontaktu"
 msgid "Blocked contacts"
 msgstr "Bloķēt kontaktus"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Gan e-pasta gan tērzēšanas ziņojumi no ikviena."
+
+msgid "Both email and chat messages from known contacts."
+msgstr "Gan e-pasta gan tērzēšanas ziņojumi no zināmiem kontaktiem."
+
+msgid "Bug reports"
+msgstr "Kļūdu atskaites"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Izmantojot OX COI Messenger, jūs piekrītat mūsu %s un %s"
 
-msgid "Camera"
-msgstr "Kamera"
+msgid "Camera not ready"
+msgstr "Kamera nav gatava"
 
 msgid "Cancel"
 msgstr "Atcelt"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-"Kļūda pieslēdzoties. Lūdzu pārbaudiet e-pasta adreses un paroles pareizību."
-
 msgid "Cannot verify contact"
 msgstr "Nevar pārbaudīt kontaktu"
+
+msgid "Change"
+msgstr "Mainīt"
+
+msgid "Change Push Settings"
+msgstr "Mainīt 'push' iestatījumus"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr "Mainiet šīs lietotnes 'push' iestatījumus sistēmas iestatījumos."
+
+msgid "Change your Signature"
+msgstr "Mainīt parakstu"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Šim kontaktam ir izmainīti šifrēšanas iestatījumi"
@@ -167,13 +208,40 @@ msgstr[0] "Saruna"
 msgstr[1] "Sarunas"
 msgstr[2] "Sarunas"
 
+msgid "Chat Settings"
+msgstr "Sarunu iestatījumi"
+
+msgid "Check constantly"
+msgstr "Pārbaudīt nepārtraukti"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Izmēģiniet OX COI Messenger - tērzēšana, izmantojot e-pastu!"
+
+msgid "Check regularly"
+msgstr "Pārbaudīt regulāri"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr ""
 "Lai izveidotu jaunu kontu, izvēlieties nodrošinātāju no zemāk norādītā "
 "saraksta"
 
+msgid "Choose from gallery"
+msgstr "Izvēlieties no galerijas"
+
+msgid "Code"
+msgstr "Kods"
+
 msgid "Configuration change aborted"
 msgstr "Konfigurācijas izmaiņas ir atceltas"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Apsveicam, jūsu e-pasta servisa nodrošinātājs ir COI saderīgs un jums tiks "
+"tūlītēji paziņots par jauniem ziņojumiem. Vai vēlaties saņemt paziņojumus "
+"par jauniem ziņojumiem?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -199,17 +267,23 @@ msgstr "Kontakts ir veiksmīgi izdzēsts"
 msgid "Contact successfully edited"
 msgstr "Kontakts ir veiksmīgi rediģēts"
 
+msgid "Contact validation failed"
+msgstr "Kontakta pārbaude nesekmīga"
+
 msgid "Contact verified"
 msgstr "Kontakts ir pārbaudīts"
 
 msgid "Copied to clipboard"
 msgstr "Nokopēts starpliktuvē"
 
+msgid "Copy"
+msgstr "Kopēt"
+
 msgid "Copy code"
 msgstr "Kopēt kodu"
 
-msgid "Could not delete contact."
-msgstr "Kontaktu nevar izdzēst."
+msgid "Could not add contact. Email address already in use."
+msgstr "Kontaktu pievienot nevar. E-pasta adrese jau tiek izmantota."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
@@ -217,6 +291,13 @@ msgid ""
 msgstr ""
 "Kontaktu nevar izdzēst. Atrastas aktīvas sarunas ar šo kontaktu. Lūdzu "
 "vispirms noņemiet šīs sarunas."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"Kontaktu dzēst nevar. Pastāv tērzēšanas grupa, kurā šis kontakts ir kā "
+"dalībnieks."
 
 msgid "Create chat"
 msgstr "Izveidot sarunu"
@@ -230,6 +311,16 @@ msgid ""
 msgstr ""
 "Izveidot Autocrypt ziņojumu, kuru jūs varat ielādēt citās ierīcēs, lai "
 "piemērotu jūsu pašreizējos šifrēšanas iestatījumus."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "Pašreizējā sistēmas tēma ir: %s"
+
+msgid "Dark"
+msgstr "Tumšs"
+
+msgid "Data protection"
+msgstr "Datu aizsardzība"
 
 msgid "Debug"
 msgstr "Atkļūdošana"
@@ -246,8 +337,20 @@ msgstr[2] "Dzēst sarunas"
 msgid "Delete contact"
 msgstr "Dzēst kontaktu"
 
+msgid "Delete group"
+msgstr "Dzēst grupu"
+
+msgid "Delete locally"
+msgstr "Dzēst lokāli"
+
+msgid "Delete message"
+msgstr "Dzēst ziņojumu"
+
 msgid "Delete push resource"
 msgstr "Dzēst resursu"
+
+msgid "Discard message"
+msgstr "Atsaukt ziņojumu"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -267,30 +370,69 @@ msgstr "Vai tiešām vēlaties dzēst %s?"
 msgid "Do you really want to leave the group?"
 msgstr "Vai tiešām vēlaties iziet no šīs grupas?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"Vai tiešām vēlaties atslēgties?\n"
+"\n"
+"Jūsu iestatījumi un ziņojumi tiks noņemti no šīs ierīces. Pēc atslēgšanās "
+"jums ir jāpārstartē lietotne, lai pieslēgtos citam kontam."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "Vai vēlaties sarunāties ar šo jauno kontaktu?"
 
 msgid "Do you want to delete this chat?"
 msgstr "Vi vēties izdzēst šo sarunu?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Vai vēlaties importēt atslēgas no jūsu aplikācijas dokumentu mapes? \n"
+"\n"
+"Ja šajā mapē nav atslēgu, operācija neizdosies."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Vai vēlaties importēt atslēgas no jūsu aplikācijas mapes? \n"
+"\n"
+"Ja šajā mapē nav atslēgu, operācija neizdosies."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"Vai vēlaties importēt savas atslēgas no \"%s\"? Ja mapē nav atslēgu, "
-"operācija neizdosies."
+"Vai vēlaties saglabāt atslēgas aplikācijas mapē? \n"
+"\n"
+"Ceļš ir:\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "Vai vēlaties saglabāt savas atslēgas iekš \"%s\"?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"Vai vēlaties saglabāt atslēgas ierīces dokumentu mapē? \n"
+"\n"
+"Jūs tai varat piekļūt izmantojot \"Failu aplikāciju\"."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Vai vēlaties atbloķēt %s?"
+
+msgid "Don't change"
+msgstr "Nemainīt"
 
 msgid "Draft"
 msgstr "Melnraksts"
@@ -304,14 +446,23 @@ msgstr "Rediģēt profilu"
 msgid "Email"
 msgstr "E-pasts"
 
+msgid "Email Settings"
+msgstr "E-pasta iestatījumi"
+
 msgid "Email address"
 msgstr "E-pasta adrese"
+
+msgid "Email signature"
+msgstr "E-pasta paraksts"
 
 msgid "Enable background updates"
 msgstr "Iespējot fona atjauninājumus"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Iespējot lasīšanas paziņojumu sūtīšanu un pieprasīšanu."
+
+msgid "Encryption"
+msgstr "Šifrēšana"
 
 msgid "Enter the contact name"
 msgstr "Ievadiet kontakta vārdu"
@@ -329,14 +480,23 @@ msgstr "Eksperts: Importēt atslēgas"
 msgid "FCM token"
 msgstr "FCM žetons"
 
+msgid "Feature requests"
+msgstr "Funkcionalitātes pieprasījumi"
+
 msgid "Feedback"
 msgstr "Atsauksmes"
 
 msgid "File"
 msgstr "Fails"
 
+msgid "Flag/Unflag"
+msgstr "Iezīmēt/Atsaukt iezīmi"
+
 msgid "Flagged"
 msgstr "Iezīmēts"
+
+msgid "Flagged messages"
+msgstr "Iezīmētie ziņojumi"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -351,8 +511,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Pārsūtīt"
 
-msgid "Gallery"
-msgstr "Galerija"
+msgid "Forwarded"
+msgstr "Pārsūtīts"
+
+msgid "General Settings"
+msgstr "Vispārējie iestatījumi"
+
+msgid "Googlemail account detected"
+msgstr "Atrasts Google pasta konts"
 
 msgid "Group image changed"
 msgstr "Grupas attēls ir izmainīts"
@@ -372,6 +538,16 @@ msgstr "Grupas vārds ir izmainīts"
 msgid "Hello, I have just created this group for us"
 msgstr "Sveicināti, es esmu tikko kā mums izveidojis šo grupu"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Šeit jūs variet izvēlēties sev vēlamo tēmu. Ja izvēlēsities '%s', tēma var "
+"nomainīties automātiski. Tas ir atkarīgs no tā vai sistēmas iestatījumos ir "
+"aktivizēta izvēlne 'Automātiski' vai nē."
+
 msgid "IMAP Security"
 msgstr "IMAP drošība"
 
@@ -386,6 +562,9 @@ msgstr "IMAP ports"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP serveris (kā imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "IMAP/SMTP pieslēgumu vārdi"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -418,8 +597,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Iesūtne"
 
+msgid "Info"
+msgstr "Informācija"
+
 msgid "Initiate key transfer"
 msgstr "Iniciē atslēgu pārvietošanu"
+
+msgid "Invitation"
+msgstr "Uzaicinājums"
+
+msgid "Invite a friend"
+msgstr "Uzaicināt draugu"
 
 msgid "Invites"
 msgstr "Uzaicinājumi"
@@ -436,6 +624,12 @@ msgstr "Atslēgu darbība veiksmīgi pabeigta"
 msgid "Leave group"
 msgstr "Aiziet no grupas"
 
+msgid "Let's Go"
+msgstr "Aiziet"
+
+msgid "Light"
+msgstr "Gaišs"
+
 msgid "Location"
 msgstr "Vieta"
 
@@ -445,11 +639,29 @@ msgstr "Pieslēgties pie OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "Notiek pieslēgšanās. Tas var prasīt zināmu laiku"
 
+msgid "Login"
+msgstr "Pieslēgties"
+
 msgid "Login failed"
 msgstr "Pieslēgšanās nesekmēga"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Pieslēgšanās neizdevās. Lūdzu pārbaudiet vai e-pasta adrese un parole ir "
+"pareizas."
+
+msgid "Login failed. Please check your password."
+msgstr "Pieslēgšanās neizdevās. Lūdzu pārbaudiet paroli."
+
+msgid "Logout"
+msgstr "Atslēgties"
+
 msgid "Manual Settings"
 msgstr "Manuāli iestatījumi"
+
+msgid "Maybe later"
+msgstr "Varbūt vēlāk"
 
 msgid "Me"
 msgstr "Es"
@@ -466,6 +678,9 @@ msgstr "Ziņojumu sinhronizēšana"
 msgid "Messages I sent to myself"
 msgstr "Ziņojumi, kuri ir nosūtīti sev"
 
+msgid "Messages from unknown contacts"
+msgstr "Ziņojumi no nezināmiem kontaktiem"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -479,17 +694,26 @@ msgstr "Vārds"
 msgid "New contact"
 msgstr "Jauns kontakts"
 
+msgid "Next"
+msgstr "Tālāk"
+
 msgid "No"
 msgstr "Nē"
 
 msgid "No blocked contacts"
 msgstr "Nav bloķētu kontaktu"
 
+msgid "No camera permission granted."
+msgstr "Nav puešķirtas kameras tiesības."
+
 msgid "No flagged messages"
 msgstr "Nav iezīmētu ziņojumu"
 
 msgid "No messages"
 msgstr "Nav ziņojumu"
+
+msgid "No other media files available"
+msgstr "Nav citu mediju failu"
 
 msgid "No participants selected. Please select at least one person."
 msgstr ""
@@ -507,11 +731,24 @@ msgstr "Paraksti nav iestatīti"
 msgid "No username set"
 msgstr "Lietotāja vārds nav iestatīts"
 
+msgid "No valid QR code"
+msgstr "Nav derīga QR koda"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "Nevar izveidot QR kodu: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Paziņojums"
 msgstr[1] "Paziņojumi"
 msgstr[2] "Paziņojumi"
+
+msgid "Notifications"
+msgstr "Paziņojumi"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Ziņapmaiņa"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -539,17 +776,30 @@ msgstr ""
 msgid "Ok"
 msgstr "Labi"
 
+msgid "Only chat messages."
+msgstr "Tikai tērzēšanas ziņojumi."
+
+msgid "Only check when starting the app"
+msgstr "Pārbaudīt tikai pie aplikācijas uzsākšanas"
+
 msgid "Only show messages of known contacts"
 msgstr "Rādīt ziņojumus tikai no atpazītiem kontaktiem"
 
 msgid "Open chat"
 msgstr "Atvērt sarunu"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "Vai skenējiet QR kodu"
+
 msgid "Other mail provider"
 msgstr "Cits e-pasta nodrošinātājs"
 
 msgid "Outbox"
 msgstr "Nosūtne"
+
+msgid "Own Card"
+msgstr "Paša karte"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -559,6 +809,9 @@ msgstr[2] "Dalībnieki"
 
 msgid "Password"
 msgstr "Parole"
+
+msgid "Password changed"
+msgstr "Parole ir nomainīta"
 
 msgid "Performing key export"
 msgstr "Notiek atslēgu eksports"
@@ -576,6 +829,9 @@ msgstr ""
 "Telefona numuri var tikt pievienoti vai rediģēti lokālajā adrešu grāmatā un "
 "pēc tam importēti."
 
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr "Lūdzu norādiet savu vārdu un izvēlieties profila attēlu."
+
 msgid "Please check your username and password"
 msgstr "Lūdzu pārbaudiet savu lietotāja vārdu un paroli"
 
@@ -591,14 +847,25 @@ msgstr "Lūdzu ievadiet derīgu e-pasta adresi"
 msgid "Please enter a valid port (1-65535)"
 msgstr "Lūdzu norādiet derīgu portu (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Lūdzu ievadiet savu vārdu"
+
 msgid "Please enter your password"
 msgstr "Lūdzu ievadiet paroli"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Lūdzu ziņojiet par kļūdām GitHub."
 
 msgid "Please select your email provider to sign in"
 msgstr "Lūdzu izvēlieties e-pasta nodrošinātāju pieslēgumam"
 
 msgid "Please specify your email server settings."
 msgstr "Lūdzu norādiet sava e-pasta servera iestatījumus."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Lūdzu iesakiet savas idejas lietotāju atbalsī."
 
 msgid "Please wait a moment."
 msgstr "Lūdzu nedaudz uzgaidiet."
@@ -608,6 +875,9 @@ msgstr "Privātums un aizsardzība"
 
 msgid "Profile"
 msgstr "Profils"
+
+msgid "Profile & Settings"
+msgstr "Profils un iestatījumi"
 
 msgid "Profile QR"
 msgstr "Profila QR"
@@ -627,6 +897,9 @@ msgstr[0] "Lasīšanas apstiprinājums"
 msgstr[1] "Lasīšanas apstiprinājumi"
 msgstr[2] "Lasīšanas apstiprinājumi"
 
+msgid "Ready!"
+msgstr "Gatavs!"
+
 msgid "Register"
 msgstr "Reģistrēties"
 
@@ -636,13 +909,18 @@ msgstr "Reģistrēt jaunu \"push\" resursu"
 msgid "Remove current image"
 msgstr "Noņemt pašreizējo attēlu"
 
+msgid "Remove from group"
+msgstr "Noņemt no grupas"
+
 msgid "Remove participant"
 msgstr "Noņemt dalībnieku"
 
 msgid "Rename group"
 msgstr "Pārdēvēt grupu"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Ziņot pa kļūdu"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -656,6 +934,9 @@ msgstr ""
 "Daži e-pasta nodrošinātāji ievieto papildus informāciju iesūtnē; jūs to "
 "varat pārbaudīt atbilstošajā tīmekļa vietnē. Problēmu gadījumā sazinieties "
 "ar savu e-pasta nodrošinātāju."
+
+msgid "Retry"
+msgstr "Atkārtot"
 
 msgid "SMTP Security"
 msgstr "SMTP drošība"
@@ -675,8 +956,8 @@ msgstr "SMTP serveris (kā smtp.coi.me)"
 msgid "Save"
 msgstr "Saglabāt"
 
-msgid "Scan QR"
-msgstr "Skenēt QR"
+msgid "Scan QR code"
+msgstr "Skenēt QR kodu"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
 #, c-format
@@ -684,17 +965,29 @@ msgid "Scan this QR code to create a new contact or verify a contact with %s."
 msgstr ""
 "Ieskenējiet šo QR kodu lai izveidotu jaunu kontaktu vai pārbaudītu to ar %s."
 
+msgid "Search"
+msgstr "Meklēt"
+
 msgid "Search contacts"
 msgstr "Meklēt kontaktus"
 
 msgid "Security"
 msgstr "Drošība"
 
+msgid "Send again"
+msgstr "Sūtīt vēlreiz"
+
+msgid "Send message"
+msgstr "Sūtīt ziņojumu"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Nosūtīts izmantojot OX COI Messenger"
 
 msgid "Server addresses"
 msgstr "Serveru adreses"
+
+msgid "Server settings"
+msgstr "Servera iestatījumi"
 
 msgid "Set a group name"
 msgstr "Iestatīt grupas vārdu"
@@ -714,6 +1007,9 @@ msgstr "Iestatīšanas ziņojums ir izveidots"
 msgid "Share"
 msgstr "Koplietot"
 
+msgid "Share invite link"
+msgstr "Koplietot uzaicinājuma saiti"
+
 msgid "Show QR"
 msgstr "Rādīt QR"
 
@@ -723,8 +1019,8 @@ msgstr "Rādīt visus sarunu un e-pasta ziņojumus no visiem nosūtītājiem"
 msgid "Show both chat and email messages from my contacts"
 msgstr "Rādīt visus sarunu un e-pasta ziņojumus no saviem kontaktiem"
 
-msgid "Show messages from unknown contacts"
-msgstr "Rādīt ziņojumus no neatpazītiem kontaktiem"
+msgid "Show my QR code"
+msgstr "Rādīt manu QR kodu"
 
 msgid "Show only chat messages "
 msgstr "Rādīt tikai sarunu ziņojumus "
@@ -743,13 +1039,33 @@ msgstr "Paraksts"
 msgid "Simply add one by tapping on a contact."
 msgstr "Vienkārši pievienojiet, noklikšķinot uz kontakta."
 
+msgid "Skip"
+msgstr "Izlaist"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Kaut kas ir nogājis greizi un mēs nevaram ielādēt uzaicinājumu: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "Vai sākt sarunu ar %s?"
 
+msgid "Start chat"
+msgstr "Sākt tērzēšanu"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Solis %s no %s"
+
+msgid "System"
+msgstr "Sistēma"
+
 msgid "System contacts imported successfully"
 msgstr "Sistēmas kontakti ir veiksmīgi importēti"
+
+msgid "Take a picture"
+msgstr "Uzņemt fotoattēlu"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -757,6 +1073,10 @@ msgstr "Saistītais iestatīšanas kods sākas ar: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "Kods var tikt ievadīts ar vai bez mīnusa zīmēm"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr ""
+"Uzaicinājums ir jau izdzēsts. Lūdzu prasiet sūtītājam to nosūtīt atkārtoti."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "Pašlaik nav ziņojumu no neatpazītiem kontaktiem"
@@ -780,6 +1100,15 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "Šis lauks nevar būt tukšs"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Šī ir beta versija un tāpēc, lūdzu, ņemiet vērā, ka darbs pie aplikācijas "
+"joprojām turpinās. Vai vēlaties dalīties ar saviem iespaidiem? Jūs varat dot "
+"savas atsauksmes iestatījumu profila sadaļā."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Šī ir jauna saruna. Lai pieslēgtos, nosūtiet ziņojumu."
@@ -853,8 +1182,8 @@ msgstr ""
 msgid "Today"
 msgstr "Šodien"
 
-msgid "Type something..."
-msgstr "Iedrukājiet kaut ko..."
+msgid "Type"
+msgstr "Tips"
 
 msgid "Unblock"
 msgstr "Atbloķēt"
@@ -887,15 +1216,26 @@ msgstr "Balss ziņojums"
 msgid "We could not determine all settings automatically."
 msgstr "Visi iestatījumi nevar tikt automātiski noteikti."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Esiet sveicināti OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Mēs esam atraduši Google pasta adresi. Tas var radīt kļūmes tērzēšanā. Mēs "
+"iesakām mainīt pasta adresi uz gmail."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "Esiet sveicināti %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Esiet sveicināti OX Coi Messenger!\n"
+"Esiet sveicināti OX COI Messenger!\n"
 "Lūdzu sāciet jaunu sarunu, noklikšķinot uz sarunas ikonas."
+
+msgid "What kind of message do you want to handle?"
+msgstr "Kādu ziņojumu veidu jūs vēlaties izmantot?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Vai vēlaties importēt kontaktus no šīs ierīces?"
@@ -905,6 +1245,9 @@ msgstr "Jā"
 
 msgid "Yesterday"
 msgstr "Vakar"
+
+msgid "You're good to go!"
+msgstr "Viss ir kārtībā!"
 
 #, c-format
 msgid ""
@@ -921,23 +1264,95 @@ msgstr ""
 "Kad iestatīšana būs pabeigta, jūsu cita ierīce būs gatava Autocrypt "
 "izmantošanai."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Jūsu e-pasta servisa nodrošinātājs vēl neatbalsta COI, bet mēs varam "
+"pārbaudīt jaunu ziņojumu esamību fona režīmā. Vai vēlaties lai veicam "
+"pārbaudi regulāri vai nepārtraukti? Nepārtrauktais režīms patērē vairāk "
+"baterijas resursus."
+
 msgid "Your favorite messages"
 msgstr "Jūsu iemīļotie ziņojumi"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Jūsu ziņojums \"%s\" kurš ir sūtīts %s nevar tikt piegādāts. Bieži tam par "
+"iemeslu ir pārāk liels fails. Lūdzu dzēsiet šo ziņojumu, lai atbloķētu "
+"pārējo vēlāko ziņojumu nosūtīšanu."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Sākot no šī brīža jūsu ziņojumi tiek šifrēti."
 
-msgid "code"
-msgstr "kods"
-
-msgid "more messages"
-msgstr "vairāk ziņojumu"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Jūsu parole ir nomainīta.\n"
+"Lai piekļūtu ziņojumiem, lūdzu ievadiet savu jauno paroli."
 
 msgid "privacy declaration"
 msgstr "privātuma deklarācija"
 
 msgid "terms & conditions"
 msgstr "nosacījumi"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr ""
+#~ "Kļūda pieslēdzoties. Lūdzu pārbaudiet e-pasta adreses un paroles "
+#~ "pareizību."
+
+#~ msgid "Camera"
+#~ msgstr "Kamera"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "Kontaktu nevar izdzēst."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "Vai vēlaties importēt savas atslēgas no \"%s\"? Ja mapē nav atslēgu, "
+#~ "operācija neizdosies."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "Vai vēlaties saglabāt savas atslēgas iekš \"%s\"?"
+
+#~ msgid "Gallery"
+#~ msgstr "Galerija"
+
+#~ msgid "Scan QR"
+#~ msgstr "Skenēt QR"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Rādīt ziņojumus no neatpazītiem kontaktiem"
+
+#~ msgid "Type something..."
+#~ msgstr "Iedrukājiet kaut ko..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Esiet sveicināti OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Esiet sveicināti OX Coi Messenger!\n"
+#~ "Lūdzu sāciet jaunu sarunu, noklikšķinot uz sarunas ikonas."
+
+#~ msgid "code"
+#~ msgstr "kods"
+
+#~ msgid "more messages"
+#~ msgstr "vairāk ziņojumu"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -950,13 +1365,6 @@ msgstr "nosacījumi"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Izmantojot OX COI Messenger jūs piekrītat mūsu"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "Esiet sveicināti OX COI Messenger!\n"
-#~ "Lūdzu sāciet jaunu sarunu, noklikšķinot uz sarunas ikonas."
 
 #~ msgid "and"
 #~ msgstr "un"

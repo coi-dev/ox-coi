@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-07 16:43+0200\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-06-08 13:36+0200\n"
 "Last-Translator: Nicky Thomassen <nicky@workshop-chapina.com>\n"
 "Language-Team: Danish <da@workshop-chapina.com>\n"
 "Language: da_DK\n"
@@ -11,7 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.1.1\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "%d flere beskeder"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -27,6 +31,17 @@ msgstr "%s af mig"
 #, c-format
 msgid "%s copied to clipboard"
 msgstr "%s kopieret til udklipsholderen"
+
+#, c-format
+msgid "%s has invited you to chat."
+msgstr "%s har inviteret dig til chat."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s har inviteret dig til chat."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Vælg venligst én mulighed for at fortsætte.)"
 
 #, c-format
 msgid "1 contact"
@@ -73,6 +88,9 @@ msgstr "Avancerede SMTP-indstillinger"
 msgid "All your contacts are in this chat."
 msgstr "Alle dine kontakter er i denne chat."
 
+msgid "Allow Notifications"
+msgstr "Tillad notifikationer"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -87,6 +105,10 @@ msgstr "App-navn"
 
 msgid "App version"
 msgstr "App-version"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Udseende"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Sætter nye indstillinger op. Dette kan tage et øjeblik"
@@ -119,6 +141,9 @@ msgstr "Opsætning af Autocrypt blev ændret med succes"
 msgid "Automatic"
 msgstr "Automatisk"
 
+msgid "Back"
+msgstr "Tilbage"
+
 msgid "Base Settings"
 msgstr "Grundlæggende indstillinger"
 
@@ -131,25 +156,41 @@ msgstr "Blokér kontakt"
 msgid "Blocked contacts"
 msgstr "Blokerede kontakter"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Både e-mails og chatbeskeder fra alle."
+
+msgid "Both email and chat messages from known contacts."
+msgstr "Både e-mails og chatbeskeder fra kendte kontakter."
+
+msgid "Bug reports"
+msgstr "Fejlrapporter"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Ved at bruge OX COI Messenger accepterer du vores %s og %s"
 
-msgid "Camera"
-msgstr "Kamera"
+msgid "Camera not ready"
+msgstr "Kameraet er ikke klart"
 
 msgid "Cancel"
 msgstr "Annullér"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-"Kan ikke logge ind. Tjek venligst om e-mail-adressen og adgangskoden er "
-"korrekte."
-
 msgid "Cannot verify contact"
 msgstr "Kontakt kan ikke verificeres"
+
+msgid "Change"
+msgstr "Ændr"
+
+msgid "Change Push Settings"
+msgstr "Ændr indstillinger for skub"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr ""
+"Ændr indstillinger for skub for denne app i dine indstillinger for systemet."
+
+msgid "Change your Signature"
+msgstr "Ændr din signatur"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Ændrede krypteringsopsætning for denne kontakt"
@@ -159,11 +200,38 @@ msgid_plural "Chats"
 msgstr[0] "Chat"
 msgstr[1] "Chats"
 
+msgid "Chat Settings"
+msgstr "Chatindstillinger"
+
+msgid "Check constantly"
+msgstr "Tjek hele tiden"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Prøv og kig på OX COI Messenger - chat via e-mail!"
+
+msgid "Check regularly"
+msgstr "Tjek reglmæssigt"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "Vælg en udbyder fra listen nedenunder for at lave en ny konto"
 
+msgid "Choose from gallery"
+msgstr "Vælg fra galleri"
+
+msgid "Code"
+msgstr "Kode"
+
 msgid "Configuration change aborted"
 msgstr "Konfigurationensændring annulleret"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Tillykke, din udbyder af e-mail overholder COI-standarden, så du bliver "
+"underrettet med det samme om nye beskeder. Vil du modtage notifikationer om "
+"nye beskeder?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -188,17 +256,23 @@ msgstr "Kontakten blev slettet med succes"
 msgid "Contact successfully edited"
 msgstr "Kontakten blev ændret med succes"
 
+msgid "Contact validation failed"
+msgstr "Validering af kontakten mislykkedes"
+
 msgid "Contact verified"
 msgstr "Kontakt verificeret"
 
 msgid "Copied to clipboard"
 msgstr "Kopieret til udklipsholderen"
 
+msgid "Copy"
+msgstr "Kopiér"
+
 msgid "Copy code"
 msgstr "Kopiér kode"
 
-msgid "Could not delete contact."
-msgstr "Kunne ikke slette kontakt."
+msgid "Could not add contact. Email address already in use."
+msgstr "Kunne ikke tilføje kontakt. E-mail-adressen er allerede i brug."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
@@ -206,6 +280,13 @@ msgid ""
 msgstr ""
 "Kontakten kunne ikke slettes. Der blev fundet aktive chats fra den kontakt, "
 "som skal fjernes først."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"Kunne ikke slette kontakt. Du har muligvis en gruppesamtale med denne "
+"kontakt."
 
 msgid "Create chat"
 msgstr "Opret kontakt"
@@ -219,6 +300,16 @@ msgid ""
 msgstr ""
 "Laver en Autocrypt-besked så du kan indlæse din krypteringsopsætning sikkert "
 "på andre enheder."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "Det nuværende tema for systemet er: %s"
+
+msgid "Dark"
+msgstr "Mørk"
+
+msgid "Data protection"
+msgstr "Databeskyttelse"
 
 msgid "Debug"
 msgstr "Fejlsøg"
@@ -234,8 +325,20 @@ msgstr[1] "Slet chats"
 msgid "Delete contact"
 msgstr "Slet kontakt"
 
+msgid "Delete group"
+msgstr "Slet gruppe"
+
+msgid "Delete locally"
+msgstr "Slet lokalt"
+
+msgid "Delete message"
+msgstr "Slet besked"
+
 msgid "Delete push resource"
 msgstr "Slet skub-resource"
+
+msgid "Discard message"
+msgstr "Kassér besked"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -255,30 +358,70 @@ msgstr "Er du sikker på at du vil slette %s?"
 msgid "Do you really want to leave the group?"
 msgstr "Vil du forlade gruppen?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"Er du sikker på, at du vil logge ud?\n"
+"\n"
+"Dine indstillinger og beskeder vil blive fjernet fra denne enhed. Efter at "
+"du er logget ud, skal app'en startes igen, og der skal logges ind på en "
+"konto."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "Vil du chatte med denne nye kontakt?"
 
 msgid "Do you want to delete this chat?"
 msgstr "Vil du slette denne chat?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Vil du importere dine nøgler fra app'ens dokumentmappe?\n"
+"\n"
+"Hvis der ikke er nogen nøgler i mappen, fejler operationen."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Vil du importere dine nøgler fra programmappen?\n"
+"\n"
+"Hvis der ikke er nogen nøgler i mappen, fejler operationen."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"Vil du importere dine nøgler fra \"%s\"? Hvis der ikke er nogen nøgler i den "
-"mappe, fejler operationen."
+"Vil du gemme dine nøgler i programmappen?\n"
+"\n"
+"Stien er:\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "Vil du gemme dine nøgler i \"%s\"?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"Vil du gemme dine nøgler i enhedens dokumentmappe?\n"
+"\n"
+"Du kan få adgang til mappen med app'en \"Filer\"."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Vil du fjerne blokeringen af %s?"
+
+msgid "Don't change"
+msgstr "Skift ikke"
 
 msgid "Draft"
 msgstr "Klade"
@@ -292,14 +435,23 @@ msgstr "Redigér profil"
 msgid "Email"
 msgstr "E-mail"
 
+msgid "Email Settings"
+msgstr "Indstillinger for e-mail"
+
 msgid "Email address"
 msgstr "E-mail-adresse"
+
+msgid "Email signature"
+msgstr "E-mail underskrift"
 
 msgid "Enable background updates"
 msgstr "Aktivér opdateringer i baggrunden"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Aktivér afsendelse af læsekvitteringer."
+
+msgid "Encryption"
+msgstr "Kryptering"
 
 msgid "Enter the contact name"
 msgstr "Indtast kontaktens navn"
@@ -317,14 +469,23 @@ msgstr "Ekspert: Importér nøgler"
 msgid "FCM token"
 msgstr "FCM symbol"
 
+msgid "Feature requests"
+msgstr "Spørg efter nye funktioner"
+
 msgid "Feedback"
 msgstr "Respons"
 
 msgid "File"
 msgstr "Fil"
 
+msgid "Flag/Unflag"
+msgstr "Markér/afmarkér"
+
 msgid "Flagged"
 msgstr "Markeret"
+
+msgid "Flagged messages"
+msgstr "Markede beskeder"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -339,8 +500,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Videresend"
 
-msgid "Gallery"
-msgstr "Galleri"
+msgid "Forwarded"
+msgstr "Videresendte"
+
+msgid "General Settings"
+msgstr "Generelle indstillinger"
+
+msgid "Googlemail account detected"
+msgstr "Konto hos Googlemail slettet"
 
 msgid "Group image changed"
 msgstr "Gruppebillede ændret"
@@ -360,6 +527,16 @@ msgstr "Gruppenavn ændret"
 msgid "Hello, I have just created this group for us"
 msgstr "Hej, jeg har lige lavet denne gruppe til os"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Her kan du vælge dit favorittema. Hvis du vælger '%s', kan temaet skifte "
+"automatisk. Det kommer an på om du har valgt 'Automatisk' i systemets "
+"indstillinger."
+
 msgid "IMAP Security"
 msgstr "IMAP sikkerhed"
 
@@ -374,6 +551,9 @@ msgstr "IMAP-port"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP-server (fx imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "Logind-navne til IMAP/SMTP"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -406,8 +586,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Indbakke"
 
+msgid "Info"
+msgstr "Info"
+
 msgid "Initiate key transfer"
 msgstr "Start overførelse af nøgle"
+
+msgid "Invitation"
+msgstr "Invitation"
+
+msgid "Invite a friend"
+msgstr "Invitér en ven"
 
 msgid "Invites"
 msgstr "Invitationer"
@@ -424,6 +613,12 @@ msgstr "Handlingen på nøglen blev gennemført med succes"
 msgid "Leave group"
 msgstr "Forlad gruppe"
 
+msgid "Let's Go"
+msgstr "Lad os fortsætte"
+
+msgid "Light"
+msgstr "Lys"
+
 msgid "Location"
 msgstr "Placering"
 
@@ -433,11 +628,28 @@ msgstr "Log ind på OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "Logger ind. Dette kan tage et øjeblik"
 
+msgid "Login"
+msgstr "Log ind"
+
 msgid "Login failed"
 msgstr "Log ind fejlede"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Log ind fejlede. Tjek venligst om e-mail-adressen og kodeordet er korrekt."
+
+msgid "Login failed. Please check your password."
+msgstr "Log ind fejlede. Tjek venligst kodeordet."
+
+msgid "Logout"
+msgstr "Log ud"
+
 msgid "Manual Settings"
 msgstr "Manuelle indstillinger"
+
+msgid "Maybe later"
+msgstr "Måske senere"
 
 msgid "Me"
 msgstr "Mig"
@@ -454,6 +666,9 @@ msgstr "Beskeder synkroniserer"
 msgid "Messages I sent to myself"
 msgstr "Beskeder jeg har sendt til mig selv"
 
+msgid "Messages from unknown contacts"
+msgstr "Beskeder fra ukendte kontakter"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -467,17 +682,26 @@ msgstr "Navn"
 msgid "New contact"
 msgstr "Ny kontakt"
 
+msgid "Next"
+msgstr "Næste"
+
 msgid "No"
 msgstr "Nej"
 
 msgid "No blocked contacts"
 msgstr "Ingen blokerede kontakter"
 
+msgid "No camera permission granted."
+msgstr "Ingen rettigheder givet til kameraet."
+
 msgid "No flagged messages"
 msgstr "Ingen markede beskeder"
 
 msgid "No messages"
 msgstr "Ingen beskeder"
+
+msgid "No other media files available"
+msgstr "Ingen andre filer til rådighed"
 
 msgid "No participants selected. Please select at least one person."
 msgstr "Ingen deltagere valgt. Vælg venligst mindst én anden person."
@@ -494,10 +718,23 @@ msgstr "Ingen signatur sat"
 msgid "No username set"
 msgstr "Intet brugernavn sat"
 
+msgid "No valid QR code"
+msgstr "Ingen gyldig QR-kode"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "QR-koden kunne ikke laves: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Notifikation"
 msgstr[1] "Notifikationer"
+
+msgid "Notifications"
+msgstr "Notifikationer"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Messenger"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -524,17 +761,30 @@ msgstr ""
 msgid "Ok"
 msgstr "OK"
 
+msgid "Only chat messages."
+msgstr "Kun chat beskeder."
+
+msgid "Only check when starting the app"
+msgstr "Tjek kun når app'en starter"
+
 msgid "Only show messages of known contacts"
 msgstr "Vis kun beskeder fra kendte kontakter"
 
 msgid "Open chat"
 msgstr "Åbn chat"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "Eller skan QR-kode"
+
 msgid "Other mail provider"
 msgstr "Anden udbyder af e-mail"
 
 msgid "Outbox"
 msgstr "Udbakke"
+
+msgid "Own Card"
+msgstr "Eget kort"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -543,6 +793,9 @@ msgstr[1] "Deltagere"
 
 msgid "Password"
 msgstr "Adgangskode"
+
+msgid "Password changed"
+msgstr "Adgangskode ændret"
 
 msgid "Performing key export"
 msgstr "Laver eksport af nøgle"
@@ -560,6 +813,9 @@ msgstr ""
 "Telefonnumre kan tilføjes og ændres fra den lokale telefonbog, og så "
 "importeres bagefter."
 
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr "Indtast venligst dit kaldenavn og vælg et profilbillede."
+
 msgid "Please check your username and password"
 msgstr "Tjek venligst dit brugernavn og din adgangskode"
 
@@ -575,14 +831,25 @@ msgstr "Skriv venligst en gyldig e-mail-adresse"
 msgid "Please enter a valid port (1-65535)"
 msgstr "Skriv venligst en gyldig port (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Indtast venligst dit navn"
+
 msgid "Please enter your password"
 msgstr "Indtast venligst din adgangskode"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Rapportér venligst fejl på GitHub."
 
 msgid "Please select your email provider to sign in"
 msgstr "Vælg venligst din udbyder af e-mail for at logge ind"
 
 msgid "Please specify your email server settings."
 msgstr "Angiv venligst dine indstillinger til e-mail-serveren."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Rapportér venligst forslag til forbedringer på user echo."
 
 msgid "Please wait a moment."
 msgstr "Vent venligst et øjeblik."
@@ -592,6 +859,9 @@ msgstr "Beskyttelse af privatliv og mod mobning"
 
 msgid "Profile"
 msgstr "Profil"
+
+msgid "Profile & Settings"
+msgstr "Profil og indstillinger"
 
 msgid "Profile QR"
 msgstr "QR af profil"
@@ -610,6 +880,9 @@ msgid_plural "Read receipts"
 msgstr[0] "Læs-kvittering"
 msgstr[1] "Læs-kvitteringer"
 
+msgid "Ready!"
+msgstr "Klar!"
+
 msgid "Register"
 msgstr "Registrér"
 
@@ -619,13 +892,18 @@ msgstr "Registrér ny skub-resource"
 msgid "Remove current image"
 msgstr "Fjern nuværende billede"
 
+msgid "Remove from group"
+msgstr "Fjern fra gruppe"
+
 msgid "Remove participant"
 msgstr "Fjern deltager"
 
 msgid "Rename group"
 msgstr "Omdøb gruppe"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Rapportér en fejl"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -639,6 +917,9 @@ msgstr ""
 "Nogen udbydere placerer flere oplysninger i din indbakke, som du fx kan "
 "tjekke i web-frontend'en. Rådfør dig med din udbyder eller venner, hvis du "
 "løber ind i problemer."
+
+msgid "Retry"
+msgstr "Prøv igen"
 
 msgid "SMTP Security"
 msgstr "SMTP sikkerhed"
@@ -658,8 +939,8 @@ msgstr "SMTP-server (fx smtp.coi.me)"
 msgid "Save"
 msgstr "Gem"
 
-msgid "Scan QR"
-msgstr "Skan QR"
+msgid "Scan QR code"
+msgstr "Skan QR-kode"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
 #, c-format
@@ -668,17 +949,29 @@ msgstr ""
 "Skan denne QR-kode for at lave en ny kontakt, eller for at bekræfte en "
 "kontakt med %s."
 
+msgid "Search"
+msgstr "Søg"
+
 msgid "Search contacts"
 msgstr "Søg i kontakter"
 
 msgid "Security"
 msgstr "Sikkerhed"
 
+msgid "Send again"
+msgstr "Send igen"
+
+msgid "Send message"
+msgstr "Send besked"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Sent med OX COI Messenger"
 
 msgid "Server addresses"
 msgstr "Server-adresse"
+
+msgid "Server settings"
+msgstr "Serverindstillinger"
 
 msgid "Set a group name"
 msgstr "Sæt et gruppenavn"
@@ -697,6 +990,9 @@ msgstr "Opsætningsbesked lavet"
 msgid "Share"
 msgstr "Del"
 
+msgid "Share invite link"
+msgstr "Del invitationslink"
+
 msgid "Show QR"
 msgstr "Vis QR"
 
@@ -706,8 +1002,8 @@ msgstr "Vis både chat og e-mail-beskeder fra alle afsendere"
 msgid "Show both chat and email messages from my contacts"
 msgstr "Vis både chat og e-mail-beskeder fra mine kontakter"
 
-msgid "Show messages from unknown contacts"
-msgstr "Vis beskeder fra ukendte kontakter"
+msgid "Show my QR code"
+msgstr "Vis min QR-kode"
 
 msgid "Show only chat messages "
 msgstr "Vis kun chat beskeder "
@@ -726,13 +1022,33 @@ msgstr "Underskrift"
 msgid "Simply add one by tapping on a contact."
 msgstr "Tilføj en nemt ved at trykke på en kontakt."
 
+msgid "Skip"
+msgstr "Spring over"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Der gik noget galt, og vi kunne ikke indlæse invitation: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "Start en chat med %s?"
 
+msgid "Start chat"
+msgstr "Start chat"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Skridt %s af %s"
+
+msgid "System"
+msgstr "System"
+
 msgid "System contacts imported successfully"
 msgstr "Systemets kontakter blev importeret med succes"
+
+msgid "Take a picture"
+msgstr "Tag et billede"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -740,6 +1056,11 @@ msgstr "Den tilknyttede kode starter med: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "Denne kode kan indtastes både med og uden minus-tegnet"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr ""
+"Invitationen var allerede slettet. Bed venligst afsenderen om at sende den "
+"igen."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "Der er ingen beskeder fra ukendte kontakter i øjeblikket"
@@ -763,6 +1084,15 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "Dette felt må ikke være tomt"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Det her er en beta-udgave, så husk venligst at app'en stadig er under "
+"udvikling. Vil du dele dine tanker? Du kan dele dine tilbagemeldinger i "
+"profilsektionen i indstillingerne."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Det her er en ny chat. Send en besked for at forbinde."
@@ -836,8 +1166,8 @@ msgstr ""
 msgid "Today"
 msgstr "I dag"
 
-msgid "Type something..."
-msgstr "Indtast noget..."
+msgid "Type"
+msgstr "Type"
 
 msgid "Unblock"
 msgstr "Fjern blokering"
@@ -870,15 +1200,26 @@ msgstr "Talebesked"
 msgid "We could not determine all settings automatically."
 msgstr "Vi kunne ikke bestemme alle indstillingerne automatisk."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Velkommen til OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Vi registerede en googlemail-adresse. Dette fører til ødelagte chats. Vi "
+"anbefaler at skifte e-mail-adressen til gmail."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "Velkommen til %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Velkommen til OX Coi Messenger!\n"
-"Start venligst en ny chat ved at trykke på chattens boble-ikon."
+"Velkommen til OX COI Messenger!\n"
+"Du kan starte en ny chat ved at trykke på bobbel-ikonet."
+
+msgid "What kind of message do you want to handle?"
+msgstr "Hvilken type af besked vil du håndtere?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Vil du importere dine kontakter fra denne enhed?"
@@ -888,6 +1229,9 @@ msgstr "Ja"
 
 msgid "Yesterday"
 msgstr "I går"
+
+msgid "You're good to go!"
+msgstr "Lad os fortsætte!"
 
 #, c-format
 msgid ""
@@ -903,23 +1247,94 @@ msgstr ""
 "%s\n"
 "Når du er færdig, er din anden enhed klar til at bruge Autocrypt."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Din udbyder af e-mail understøtter endnu ikke COI, men vi kan tjekke efter "
+"nye beskeder i baggrunden. Skal vi tjekke efter nye beskeder med reglmæssige "
+"mellemrum, eller skal vi bruge mere strøm, og tjekke hele tiden?"
+
 msgid "Your favorite messages"
 msgstr "Dine ynglings-beskeder"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Din besked sendt til \"%s\" på %s kunne ikke overføres. Ofte sker det som "
+"følge af en for stor fil. Slet venligst denne besked, for ikke at spærre for "
+"efterfølgende beskeder."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Dine beskeder er krypteret fremover."
 
-msgid "code"
-msgstr "kode"
-
-msgid "more messages"
-msgstr "flere beskeder"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Dit kodeord er ændret.\n"
+"Indtast venligst det nye for at få adgang til dine beskeder."
 
 msgid "privacy declaration"
 msgstr "Erklæring om privatliv"
 
 msgid "terms & conditions"
 msgstr "Vilkår og betingelser"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr ""
+#~ "Kan ikke logge ind. Tjek venligst om e-mail-adressen og adgangskoden er "
+#~ "korrekte."
+
+#~ msgid "Camera"
+#~ msgstr "Kamera"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "Kunne ikke slette kontakt."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "Vil du importere dine nøgler fra \"%s\"? Hvis der ikke er nogen nøgler i "
+#~ "den mappe, fejler operationen."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "Vil du gemme dine nøgler i \"%s\"?"
+
+#~ msgid "Gallery"
+#~ msgstr "Galleri"
+
+#~ msgid "Scan QR"
+#~ msgstr "Skan QR"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Vis beskeder fra ukendte kontakter"
+
+#~ msgid "Type something..."
+#~ msgstr "Indtast noget..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Velkommen til OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Velkommen til OX Coi Messenger!\n"
+#~ "Start venligst en ny chat ved at trykke på chattens boble-ikon."
+
+#~ msgid "code"
+#~ msgstr "kode"
+
+#~ msgid "more messages"
+#~ msgstr "flere beskeder"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -931,13 +1346,6 @@ msgstr "Vilkår og betingelser"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Ved at bruge OX COI Messenger accepterer du vores"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "Velkommen til OX COI Messenger!\n"
-#~ "Du kan starte en ny chat ved at trykke på bobbel-ikonet."
 
 #~ msgid "and"
 #~ msgstr "og"

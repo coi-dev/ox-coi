@@ -283,7 +283,7 @@ class L {
   static final loginCheckServer = translationKey("Please specify your email server settings.");
   static final loginErrorWrongCredentials = translationKey("Login failed. Please check if the email-address and the password are correct.");
 
-  // Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+  // Response from server address X with error code Y (e.g. Response from provider.com: Login failed)
   static final loginErrorResponseXY = translationKey(
       "Response from %s: %s\n\nSome providers place additional information in your inbox; you can check them eg. in the web frontend. Consult your provider or friends if you run into problems.");
   static final loginSignIn = translationKey("Sign in");
@@ -314,6 +314,7 @@ class L {
   static final messageActionDeleteFailedMessage = translationKey("Discard message");
   static final messageActionDeleteMessage = translationKey("Delete message");
 
+  // Error message in case of a failed sending attempt, to user X on date Y (e.g Your message sent to "Bob" on 26.01.2020 - 06:14 could not be transmitted.)
   static final messageFailedDialogContentXY = translationKey(
       "Your message sent to \"%s\" on %s could not be transmitted. Often this happens due to a too large file. Please delete this message to unblock sending subsequent messages.");
 

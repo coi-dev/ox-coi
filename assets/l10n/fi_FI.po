@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-11 14:47+0300\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-05-27 12:47+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fi_FI\n"
@@ -16,7 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "vielä %d viestiä "
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -32,6 +36,17 @@ msgstr "%s minä"
 #, c-format
 msgid "%s copied to clipboard"
 msgstr "%s on kopioitu leikepöydälle"
+
+#, c-format
+msgid "%s has invited you to chat."
+msgstr "%s on kutsunut sinut keskustelemaan."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s on kutsunut sinut keskustelemaan."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Jatka valitsemalla yksi vaihtoehto.)"
 
 #, c-format
 msgid "1 contact"
@@ -78,6 +93,9 @@ msgstr "SMTP-lisäasetukset"
 msgid "All your contacts are in this chat."
 msgstr "Kaikki yhteystietosi ovat tässä keskustelussa."
 
+msgid "Allow Notifications"
+msgstr "Salli ilmoitukset"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -92,6 +110,10 @@ msgstr "Sovelluksen nimi"
 
 msgid "App version"
 msgstr "Sovellusversio"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Ulkoasu"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Uusia asetuksia käytetään, odota hetki"
@@ -124,6 +146,9 @@ msgstr "Autocryptin asetuksia on muutettu"
 msgid "Automatic"
 msgstr "Automaattinen"
 
+msgid "Back"
+msgstr "Takaisin"
+
 msgid "Base Settings"
 msgstr "Perusasetukset"
 
@@ -136,24 +161,40 @@ msgstr "Estä yhteystieto"
 msgid "Blocked contacts"
 msgstr "Estetyt yhteystiedot"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Sekä sähköposti- että chat-viestejä keneltä tahansa."
+
+msgid "Both email and chat messages from known contacts."
+msgstr "Tunnettujen yhteystietojen sähköposti- ja chat-viestit."
+
+msgid "Bug reports"
+msgstr "Bugiraportit"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Käyttämällä OX Coi Messengeriä hyväksyt meidän %s ja %s"
 
-msgid "Camera"
-msgstr "Kamera"
+msgid "Camera not ready"
+msgstr "Kamera ei ole valmis"
 
 msgid "Cancel"
 msgstr "Peruuta"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr ""
-"Sisäänkirjautuminen ei onnistu. Tarkista, että sähköpostiosoite ja salasana ovat oikein."
-
 msgid "Cannot verify contact"
 msgstr "Yhteystietoa ei voida varmentaa"
+
+msgid "Change"
+msgstr "Muuta"
+
+msgid "Change Push Settings"
+msgstr "Muuta tarjonta-asetuksia"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr "Muuta sovelluksen tarjonta-asetuksia järjestelmäasetustesi kautta."
+
+msgid "Change your Signature"
+msgstr "Vahda allekirjoituksesi"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Tämän yhteystiedon salausasetuksia on muutettu"
@@ -163,11 +204,38 @@ msgid_plural "Chats"
 msgstr[0] "Keskustelu"
 msgstr[1] "Keskustelut"
 
+msgid "Chat Settings"
+msgstr "Keskusteluasetukset"
+
+msgid "Check constantly"
+msgstr "Tarkista jatkuvasti"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Tutustu OX COI Messengeriin - keskustele sähköpostitse!"
+
+msgid "Check regularly"
+msgstr "Tarkista säännöllisesti"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "Valitse tarjoaja allaolevasta listasta luodaksesi uuden tilin"
 
+msgid "Choose from gallery"
+msgstr "Valitse galleriasta"
+
+msgid "Code"
+msgstr "Koodi"
+
 msgid "Configuration change aborted"
 msgstr "Konfiguraationmuutos keskeytettiin"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Onnittelut. Sähköpostipalveluntarjoajasi on COI-yhteensopiva, joten saat "
+"ilmoituksen uusista viesteistä välittömästi. Haluatko saada ilmoituksia "
+"uusista viesteistä?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -192,17 +260,23 @@ msgstr "Yhteystieto on poistettu"
 msgid "Contact successfully edited"
 msgstr "Yhteystietoa on muokattu"
 
+msgid "Contact validation failed"
+msgstr "Yhteystiedon vahvistaminen epäonnistui"
+
 msgid "Contact verified"
 msgstr "Yhteystieto on vahvistettu"
 
 msgid "Copied to clipboard"
 msgstr "Kopioitu leikepöydälle"
 
+msgid "Copy"
+msgstr "Kopioi"
+
 msgid "Copy code"
 msgstr "Kopioi koodi"
 
-msgid "Could not delete contact."
-msgstr "Yhteystietoa ei voitu poistaa."
+msgid "Could not add contact. Email address already in use."
+msgstr "Yhteystietoa ei voitu lisätä. Sähköpostiosoite on jo käytössä."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
@@ -210,6 +284,13 @@ msgid ""
 msgstr ""
 "Yhteystietoa ei voitu poistaa. Löytyi aktiivisia keskusteluja yhteystiedon "
 "kanssa, poista ne ensin."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"Yhteystietoa ei voitu poistaa. Tämän yhteystiedon kanssa on mahdollista "
+"käydä ryhmäkeskustelua."
 
 msgid "Create chat"
 msgstr "Luo keskustelu"
@@ -223,6 +304,16 @@ msgid ""
 msgstr ""
 "Luo Autocryptin asetusvestin, jonka voit ladata muille laitteille "
 "käyttääksesi nykyisiä salausasetuksiasi."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "Nykyinen järjestelmäteema on: %s"
+
+msgid "Dark"
+msgstr "Tumma"
+
+msgid "Data protection"
+msgstr "Tietosuojaus"
 
 msgid "Debug"
 msgstr "Korjaa viat"
@@ -238,8 +329,20 @@ msgstr[1] "Poista keskustelut"
 msgid "Delete contact"
 msgstr "Poista yhteystieto"
 
+msgid "Delete group"
+msgstr "Poista ryhmä"
+
+msgid "Delete locally"
+msgstr "Poista paikallisesti"
+
+msgid "Delete message"
+msgstr "Poista viesti"
+
 msgid "Delete push resource"
 msgstr "Poista tarjontaresurssi"
+
+msgid "Discard message"
+msgstr "Hylkää viesti"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -259,30 +362,70 @@ msgstr "Haluatko varmasti poistaa käyttäjän \"%s\"?"
 msgid "Do you really want to leave the group?"
 msgstr "Haluatko varmasti jättää ryhmän?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"Haluatko todella kirjautua ulos?\n"
+"\n"
+"Asetuksesi ja viestisi poistetaan tältä laitteelta. Kirjauduttuasi ulos "
+"sovellus täytyy käynnistää uudelleen jos haluat kirjautua sisään toiselle "
+"tilille."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "Haluatko keskustella tämän uuden yhteystiedon kanssa?"
 
 msgid "Do you want to delete this chat?"
 msgstr "Haluatko poistaa tämän keskustelun?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Haluatko tuoda avaimesi sovellusasiakirjakansiostasi? \n"
+"\n"
+"Jos kansiossa ei ole avaimia, toiminto epäonnistuu."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Haluatko tuoda avaimesi sovelluskansiostasi? \n"
+"\n"
+"Jos kansiossa ei ole avaimia, toiminto epäonnistuu."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"Haluatko tuoda avaimesi kansiosta \"%s\"? Jos kansiossa ei ole avaimia, "
-"toiminto epäonnistuu."
+"Haluatko tallentaa avaimesi sovelluskansioon? \n"
+"\n"
+"Polku:\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "Haluatko tallentaa avaimesi kansioon \"%s\"?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"Haluatko tallentaa avaimesi laiitteesi asiakirjakansioon? \n"
+"\n"
+"Pääset sinne Tiedostot-sovelluksen kautta."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Haluatko poistaa käyttäjän %s eston?"
+
+msgid "Don't change"
+msgstr "Älä muuta"
 
 msgid "Draft"
 msgstr "Luonnos"
@@ -296,14 +439,23 @@ msgstr "Muokkaa profiilia"
 msgid "Email"
 msgstr "Sähköposti"
 
+msgid "Email Settings"
+msgstr "Sähköpostiasetukset"
+
 msgid "Email address"
 msgstr "Sähköpostiosoite"
+
+msgid "Email signature"
+msgstr "Sähköpostin allekirjoitus"
 
 msgid "Enable background updates"
 msgstr "Kytke päälle taustalla tapahtuvat päivitykset"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Kytke päälle lukuvahvistuskuittien lähettäminen ja pyyntö."
+
+msgid "Encryption"
+msgstr "Salaus"
 
 msgid "Enter the contact name"
 msgstr "Syötä yhteystiedon nimi"
@@ -321,14 +473,23 @@ msgstr "Lisäasetukset: Tuontiavaimet"
 msgid "FCM token"
 msgstr "FCM-lipuke"
 
+msgid "Feature requests"
+msgstr "Ominaisuuspyynnöt"
+
 msgid "Feedback"
 msgstr "Palaute"
 
 msgid "File"
 msgstr "Tiedosto"
 
+msgid "Flag/Unflag"
+msgstr "Liputa /Poista lippu"
+
 msgid "Flagged"
 msgstr "Merkitty"
+
+msgid "Flagged messages"
+msgstr "Liputetut viestit"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -343,8 +504,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Välitä"
 
-msgid "Gallery"
-msgstr "Galleria"
+msgid "Forwarded"
+msgstr "Välitetty"
+
+msgid "General Settings"
+msgstr "Yleiset asetukset"
+
+msgid "Googlemail account detected"
+msgstr "Googlemail-tili on poistettu"
 
 msgid "Group image changed"
 msgstr "Ryhmän kuva on vaihdettu"
@@ -364,6 +531,16 @@ msgstr "Ryhmän nimi vaihtui"
 msgid "Hello, I have just created this group for us"
 msgstr "Hei, loin meille tämän ryhmän"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Voit valita suosikkiteemasi tässä. Jos valitset  '%s', teema voi vaihtua "
+"automaattisesti riippuen siitä oletko valinnut järjestelmävalinnoista "
+"'Automaattinen'-vaihtoehdon vai et."
+
 msgid "IMAP Security"
 msgstr "IMAP Security"
 
@@ -378,6 +555,9 @@ msgstr "IMAP -portti"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "IMAP -palvelin (esim. imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "IMAP/SMTP-käyttäjätunnukset"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -410,8 +590,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Saapuneet"
 
+msgid "Info"
+msgstr "Info"
+
 msgid "Initiate key transfer"
 msgstr "Aloita avaimen siirto"
+
+msgid "Invitation"
+msgstr "Kutsu"
+
+msgid "Invite a friend"
+msgstr "Kutsu ystävä"
 
 msgid "Invites"
 msgstr "Kutsut"
@@ -428,6 +617,12 @@ msgstr "Avaintoiminto suoritettu"
 msgid "Leave group"
 msgstr "Jätä ryhmä"
 
+msgid "Let's Go"
+msgstr "Mennään!"
+
+msgid "Light"
+msgstr "Vaalea"
+
 msgid "Location"
 msgstr "Sijainti"
 
@@ -437,11 +632,29 @@ msgstr "Kirjaudu OX COI Messengeriin"
 msgid "Logging in, this may take a moment"
 msgstr "Kirjaudutaan sisään, odota hetki"
 
+msgid "Login"
+msgstr "Sisäänkirjautuminen"
+
 msgid "Login failed"
 msgstr "Sisäänkirjautuminen epäonnistui"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Sisäänkirjautuminen epäonnistui. Tarkista, että sähköpostiosoite ja salasana "
+"ovat oikein."
+
+msgid "Login failed. Please check your password."
+msgstr "Sisäänkirjautuminen epäonnistui. Tarkista salasanasi."
+
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
 msgid "Manual Settings"
 msgstr "Manuaaliset asetukset"
+
+msgid "Maybe later"
+msgstr "Ehkä myöhemmin"
 
 msgid "Me"
 msgstr "Minä"
@@ -458,6 +671,9 @@ msgstr "Viestien synkronointi"
 msgid "Messages I sent to myself"
 msgstr "Itse itselleni lähettämäni viestit"
 
+msgid "Messages from unknown contacts"
+msgstr "Viestit tuntemattomilta yhteystiedoilta"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -471,17 +687,26 @@ msgstr "Nimi"
 msgid "New contact"
 msgstr "Uusi yhteystieto"
 
+msgid "Next"
+msgstr "Seuraava"
+
 msgid "No"
 msgstr "Ei"
 
 msgid "No blocked contacts"
 msgstr "Ei estettyjä yhteystietoja"
 
+msgid "No camera permission granted."
+msgstr "Kameralupaa ei ole annettu."
+
 msgid "No flagged messages"
 msgstr "Ei merkittyjä viestejä"
 
 msgid "No messages"
 msgstr "Ei viestejä"
+
+msgid "No other media files available"
+msgstr "Muita mediatiedostoja ei ole saatavilla"
 
 msgid "No participants selected. Please select at least one person."
 msgstr "Ei osallistujia valittuna. Valitse vähintään yksi osallistuja."
@@ -498,10 +723,23 @@ msgstr "Ei allekirjoitusta"
 msgid "No username set"
 msgstr "Käyttäjätunnusta ei ole asetettu"
 
+msgid "No valid QR code"
+msgstr "Ei kelpaavaa QR-koodia"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "Ei mahdollista luoda qr-koodia: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Ilmoitus"
 msgstr[1] "Ilmoitukset"
+
+msgid "Notifications"
+msgstr "Ilmoitukset"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Messenger"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -529,17 +767,30 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
+msgid "Only chat messages."
+msgstr "Vain keskusteluviestit."
+
+msgid "Only check when starting the app"
+msgstr "Tarkista vain sovellusta avattaessa"
+
 msgid "Only show messages of known contacts"
 msgstr "Näytä vain tunnettujen yhteystietojen viestit"
 
 msgid "Open chat"
 msgstr "Avaa keskustelu"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "Tai skannaa QR-koodi"
+
 msgid "Other mail provider"
 msgstr "Muu sähköpostipalveluntarjoaja"
 
 msgid "Outbox"
 msgstr "Lähtevät"
+
+msgid "Own Card"
+msgstr "Oma kortti"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -548,6 +799,9 @@ msgstr[1] "Osallistujat"
 
 msgid "Password"
 msgstr "Salasana"
+
+msgid "Password changed"
+msgstr "Salasana on vaihdettu"
 
 msgid "Performing key export"
 msgstr "Viedään avainta"
@@ -565,6 +819,9 @@ msgstr ""
 "Puhelinnumeroita voidaan lisätä tai muokata paikallisen osoitekirjan kautta "
 "ja tuoda myöhemmin."
 
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr "Kirjoita nimesi tai lempinimesi ja valitse profiilikuva."
+
 msgid "Please check your username and password"
 msgstr "Tarkista käyttäjätunnuksesi ja salasanasi"
 
@@ -580,14 +837,25 @@ msgstr "Anna kelpaava sähköpostiosoite"
 msgid "Please enter a valid port (1-65535)"
 msgstr "Anna kelpaava portti (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Kirjoita nimesi"
+
 msgid "Please enter your password"
 msgstr "Syötä salasanasi"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Ilmoita bugit GitHubissa."
 
 msgid "Please select your email provider to sign in"
 msgstr "Valitse sähköpostitilisi tarjoaja kirjoittautuksesi sisään"
 
 msgid "Please specify your email server settings."
 msgstr "Tarkenna sähköpostipalvelimesi asetukset."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Ehdota ideoita User Echossa."
 
 msgid "Please wait a moment."
 msgstr "Odota hetki."
@@ -598,6 +866,9 @@ msgstr "Yksityisyys- ja mobbaussuoja"
 msgid "Profile"
 msgstr "Profiili"
 
+msgid "Profile & Settings"
+msgstr "Profiili ja asetukset"
+
 msgid "Profile QR"
 msgstr "Profiilin QR-koodi"
 
@@ -605,7 +876,7 @@ msgid "Push data"
 msgstr "Tarjontatiedot"
 
 msgid "Push resource (via push service)"
-msgstr "Tarjontaresurssi (tarjontapavelun kautta)"
+msgstr "Tarjontaresurssi (tarjontapalvelun kautta)"
 
 msgid "Re-importing your contacts will not create duplicates."
 msgstr ""
@@ -616,6 +887,9 @@ msgid_plural "Read receipts"
 msgstr[0] "Lue kuitti"
 msgstr[1] "Lue kuitit"
 
+msgid "Ready!"
+msgstr "Valmis!"
+
 msgid "Register"
 msgstr "Rekisteri"
 
@@ -625,13 +899,18 @@ msgstr "Rekisteröi uusi tarjontaresurssi"
 msgid "Remove current image"
 msgstr "Poista nykyinen kuva"
 
+msgid "Remove from group"
+msgstr "Poista ryhmästä"
+
 msgid "Remove participant"
 msgstr "Poista osallistuja"
 
 msgid "Rename group"
 msgstr "Nimeä ryhmä uudelleen"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Ilmoita bugi"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -645,6 +924,9 @@ msgstr ""
 "Jotkut palveluntarjoajat laittavat lisätietoja saapuvien viestien "
 "laatikkoon; voit tarkistaa asian esim. selainpuolelta. Ongelmatapauksissa "
 "pyydä neuvoa palveluntarjoajaltasi tai ystäviltäsi."
+
+msgid "Retry"
+msgstr "Yritä uudelleen"
 
 msgid "SMTP Security"
 msgstr "SMTP Security"
@@ -664,7 +946,7 @@ msgstr "SMTP -palvelin (esim. smtp.coi.me)"
 msgid "Save"
 msgstr "Tallenna"
 
-msgid "Scan QR"
+msgid "Scan QR code"
 msgstr "Skannaa QR-koodi"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
@@ -674,17 +956,29 @@ msgstr ""
 "Skannaa QR-koodi luodaksesi uusi yhteystieto tai varmentaaksesi yhteystieto "
 "%s."
 
+msgid "Search"
+msgstr "Hae"
+
 msgid "Search contacts"
 msgstr "Hae yhteystiedoista"
 
 msgid "Security"
 msgstr "Suojaus"
 
+msgid "Send again"
+msgstr "Lähetä uudelleen"
+
+msgid "Send message"
+msgstr "Send viiesti"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Lähetetty OX COI Messengeristä"
 
 msgid "Server addresses"
 msgstr "Palvelinosoitteet"
+
+msgid "Server settings"
+msgstr "Palvelinasetukset"
 
 msgid "Set a group name"
 msgstr "Aseta ryhmälle nimi"
@@ -703,6 +997,9 @@ msgstr "Asetusviesti luotu"
 msgid "Share"
 msgstr "Jaa"
 
+msgid "Share invite link"
+msgstr "Jaa kutsulinkki"
+
 msgid "Show QR"
 msgstr "Näytä QR-koodi"
 
@@ -713,8 +1010,8 @@ msgid "Show both chat and email messages from my contacts"
 msgstr ""
 "Näytä sekä keskustelu- että sähköpostiviestit kaikilta yhteystiedoiltani"
 
-msgid "Show messages from unknown contacts"
-msgstr "Näytä tuntemattomien yhteystietojen viestit"
+msgid "Show my QR code"
+msgstr "Jaa QR-koodini"
 
 msgid "Show only chat messages "
 msgstr "Näytä vain keskusteluviestit "
@@ -733,13 +1030,33 @@ msgstr "Allekirjoitus"
 msgid "Simply add one by tapping on a contact."
 msgstr "Lisää yksi napauttamalla yhteystietoa."
 
+msgid "Skip"
+msgstr "Ohita"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Jotain meni pieleen emmekä voineet ladata kutsua: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "Aloita keskustelu käyttäjän %s kanssa?"
 
+msgid "Start chat"
+msgstr "Aloita keskustelu"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Vaihe %s/%s"
+
+msgid "System"
+msgstr "Järjestelmä"
+
 msgid "System contacts imported successfully"
 msgstr "Järjestelmän yhteystietojen tuonti onnistui"
+
+msgid "Take a picture"
+msgstr "Ota kuva"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -747,6 +1064,9 @@ msgstr "Asetuskoodi alkaa seuraavasti: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "Koodin voi syöttää joko miinusmerkeillä tai ilman"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr "Kutsu oli jo poistettu. Pyydä lähettäjää lähettämään se uudelleen."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr ""
@@ -771,6 +1091,15 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "Tätä kenttää ei voi jättää tyhjäksi"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Tämä on beetaversio, joten muistathan, että sovellusta kehitetään vielä. "
+"Haluatko jakaa ajatuksiasi kanssamme? Voit antaa palautetta asetusten "
+"profiiliosiossa."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Tämä on uusi keskustelu. Lähetä viesti yhdistääksesi."
@@ -843,8 +1172,8 @@ msgstr ""
 msgid "Today"
 msgstr "Tänään"
 
-msgid "Type something..."
-msgstr "Kirjoita jotain..."
+msgid "Type"
+msgstr "Tyyppi"
 
 msgid "Unblock"
 msgstr "Poista esto"
@@ -877,15 +1206,26 @@ msgstr "Ääniviesti"
 msgid "We could not determine all settings automatically."
 msgstr "Kaikkia asetuksia ei voitu määrittää automaattisesti."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Terveuloa OX COI Messengeriin"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Havaitsimme googlemail-osoitteen. Se johtaa rikkoutuneisiin keskusteluihin. "
+"Suosittelemme, että vaihdat osoitteen gmail-osoitteeksi."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "%s toivottaa sinut tervetulleeksi!"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Tervetuloa OX Coi Messengeriin!\n"
+"Tervetuloa OX COI Messengeriin!\n"
 "Aloita uusi keskustelu napauttamalla puhekuplaikonia."
+
+msgid "What kind of message do you want to handle?"
+msgstr "Millaista viestiä haluat käsitellä?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Haluatko tuoda yhteystietosi tältä laitteelta?"
@@ -895,6 +1235,9 @@ msgstr "Kyllä"
 
 msgid "Yesterday"
 msgstr "Eilen"
+
+msgid "You're good to go!"
+msgstr "Voimme aloittaa!"
 
 #, c-format
 msgid ""
@@ -910,23 +1253,94 @@ msgstr ""
 "%s\n"
 "Annettuasi koodin toinen laitteesi on valmis käyttämään Autocryptia."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Sähköpostintarjoajasi ei vielä tue COI:ta, mutta voimme tarkistaa uudet "
+"viestit taustalla. Tarkistammeko uudet viestit säännöllisin väliajoin vai "
+"jatkuvasti? Jatkuva taskistaminen kuluttaa enemmän akkua."
+
 msgid "Your favorite messages"
 msgstr "Suosikkiviestisi"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Viestiäsi vastaanottajalle \"%s\" käyttäen %s -sovellusta ei voitu välittää. "
+"Tämä ongelma johtuu usein tiedoston liian suuresta koosta. Poista tämä "
+"viesti, jotta se ei estä uusien viestien lähettämistä."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Viestisi salataan tästä lähtien."
 
-msgid "code"
-msgstr "koodi"
-
-msgid "more messages"
-msgstr "lisää viestejä"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Salasanasi on vaihdettu.\n"
+"Käytä uutta salasanaasi nähdäksesi viestisi."
 
 msgid "privacy declaration"
 msgstr "tietosuojatiedote"
 
 msgid "terms & conditions"
 msgstr "ehdot"
+
+#~ msgid "Camera"
+#~ msgstr "Kamera"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr ""
+#~ "Sisäänkirjautuminen ei onnistu. Tarkista, että sähköpostiosoite ja "
+#~ "salasana ovat oikein."
+
+#~ msgid "Could not delete contact."
+#~ msgstr "Yhteystietoa ei voitu poistaa."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "Haluatko tuoda avaimesi kansiosta \"%s\"? Jos kansiossa ei ole avaimia, "
+#~ "toiminto epäonnistuu."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "Haluatko tallentaa avaimesi kansioon \"%s\"?"
+
+#~ msgid "Gallery"
+#~ msgstr "Galleria"
+
+#~ msgid "Scan QR"
+#~ msgstr "Skannaa QR-koodi"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Näytä tuntemattomien yhteystietojen viestit"
+
+#~ msgid "Type something..."
+#~ msgstr "Kirjoita jotain..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Terveuloa OX COI Messengeriin"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Tervetuloa OX Coi Messengeriin!\n"
+#~ "Aloita uusi keskustelu napauttamalla puhekuplaikonia."
+
+#~ msgid "code"
+#~ msgstr "koodi"
+
+#~ msgid "more messages"
+#~ msgstr "lisää viestejä"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -938,13 +1352,6 @@ msgstr "ehdot"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Käyttämällä OX COI Messengeriä hyväksyt meidän"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "Tervetuloa OX COI Messengeriin!\n"
-#~ "Aloita uusi keskustelu napauttamalla puhekuplaikonia."
 
 #~ msgid "and"
 #~ msgstr "ja"

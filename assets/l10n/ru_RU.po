@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:23+0200\n"
-"PO-Revision-Date: 2019-10-10 13:05+0200\n"
+"POT-Creation-Date: 2020-05-20 13:04+0200\n"
+"PO-Revision-Date: 2020-05-23 17:00+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -17,7 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#, c-format
+msgid "%d more messages"
+msgstr "ещё %d сообщений"
 
 #. Action X performed by user Y (e.g. Login by alice)
 #, c-format
@@ -35,23 +39,34 @@ msgid "%s copied to clipboard"
 msgstr "%s скопировано в буфер"
 
 #, c-format
+msgid "%s has invited you to chat."
+msgstr "%s приглашает Вас в чат."
+
+#, c-format
+msgid "%s/%s has invited you to chat."
+msgstr "%s/%s приглашает Вас в чат."
+
+msgid "(Please choose one option to proceed.)"
+msgstr "(Пожалуйста выберите одну опцию для продолжения.)"
+
+#, c-format
 msgid "1 contact"
 msgid_plural "%d contacts"
-msgstr[0] "1 контакт"
+msgstr[0] "%i контакт"
 msgstr[1] "%d контакта"
 msgstr[2] "%d контактов"
 
 #, c-format
 msgid "1 member"
 msgid_plural "%i members"
-msgstr[0] "1 участник"
+msgstr[0] "%i участник"
 msgstr[1] "%i участника"
 msgstr[2] "%i участников"
 
 #, c-format
 msgid "1 participant"
 msgid_plural "%i participants"
-msgstr[0] "1 участник"
+msgstr[0] "%i участник"
 msgstr[1] "%i участника"
 msgstr[2] "%i участников"
 
@@ -82,6 +97,9 @@ msgstr "Дополнительные параметры SMTP"
 msgid "All your contacts are in this chat."
 msgstr "Все ваши контакты добавлены в чат."
 
+msgid "Allow Notifications"
+msgstr "Разрешить Уведомления"
+
 msgid ""
 "An Autocrypt setup message securely shares your encryption setup with other "
 "Autocrypt-compliant apps. The setup will be secured by a setup code which is "
@@ -96,6 +114,10 @@ msgstr "Название приложения"
 
 msgid "App version"
 msgstr "Версия приложения"
+
+#. Entry in a list of items, opens the appearance settings of the app (e.g. for light / dark mode)
+msgid "Appearance"
+msgstr "Внешний вид"
 
 msgid "Applying new settings, this may take a moment"
 msgstr "Применение настроек. Пожалуйста, подождите"
@@ -128,6 +150,9 @@ msgstr "Конфигурация Autocrypt изменена"
 msgid "Automatic"
 msgstr "Автоматически"
 
+msgid "Back"
+msgstr "Назад"
+
 msgid "Base Settings"
 msgstr "Основные настройки"
 
@@ -140,23 +165,42 @@ msgstr "Заблокировать контакт"
 msgid "Blocked contacts"
 msgstr "Заблокированные контакты"
 
-#. First variable is replaced by: terms and conditions, Second variable is replaced by: privacy declaration
+msgid "Both email and chat messages from anyone."
+msgstr "Электронная почта и сообщения чата от всех."
+
+msgid "Both email and chat messages from known contacts."
+msgstr "Электронная почта и сообщения от списка контактов."
+
+msgid "Bug reports"
+msgstr "Отчеты об ошибках"
+
+#. Will resolve to "By using OX COI Messenger you agree to our terms & conditions and privacy declaration"
 #, c-format
 msgid "By using OX COI Messenger you agree to our %s and %s"
 msgstr "Используя OX COI Messenger вы соглашаетесь на наш %s и %s"
 
-msgid "Camera"
-msgstr "Камера"
+msgid "Camera not ready"
+msgstr "Камера не готова"
 
 msgid "Cancel"
 msgstr "Отмена"
 
-msgid ""
-"Cannot login. Please check if the email-address and the password are correct."
-msgstr "Ошибка авторизации. Проверьте электронный адрес и пароль."
-
 msgid "Cannot verify contact"
 msgstr "Невозможно подтвердить контакт"
+
+msgid "Change"
+msgstr "Изменить"
+
+msgid "Change Push Settings"
+msgstr "Изменить настройки Отправки"
+
+msgid "Change the push settings for this app in your system settings."
+msgstr ""
+"Изменить настройки отправки для этого приложения в Ваших системных "
+"настройках."
+
+msgid "Change your Signature"
+msgstr "Изменить Вашу Подпись"
 
 msgid "Changed encryption setup for this contact"
 msgstr "Настройки шифрования для этого контакта изменились"
@@ -167,11 +211,38 @@ msgstr[0] "Чат"
 msgstr[1] "Чаты"
 msgstr[2] "Чаты"
 
+msgid "Chat Settings"
+msgstr "Настройки Чата"
+
+msgid "Check constantly"
+msgstr "Проверять постоянно"
+
+msgid "Check out OX COI Messenger - chat via email!"
+msgstr "Проверьте OX COI Messenger - чат на основе электронной почты!"
+
+msgid "Check regularly"
+msgstr "Проверять регулярно"
+
 msgid "Choose a provider from the list below to create a new account"
 msgstr "Для создания новой учетной записи выберите поставщика услуг"
 
+msgid "Choose from gallery"
+msgstr "Выбрать из галлерии"
+
+msgid "Code"
+msgstr "Код"
+
 msgid "Configuration change aborted"
 msgstr "Изменения конфигурации были отменены"
+
+msgid ""
+"Congratulations, your email service provider is COI compliant, so you will "
+"be informed immediately about new messages. Do you want to receive "
+"notifications about new messages?"
+msgstr ""
+"Поздравляем, Ваш провайдер электронной почты COI-совместимый, таким образом "
+"вы будете информированы немедленно о поступлении новых сообщений. Вы хотите "
+"получать оповещения о поступлении новых сообщений?"
 
 msgid "Contact"
 msgid_plural "Contacts"
@@ -197,17 +268,24 @@ msgstr "Контакт удален"
 msgid "Contact successfully edited"
 msgstr "Контакт изменен"
 
+msgid "Contact validation failed"
+msgstr "Ошибка валидации контакта"
+
 msgid "Contact verified"
 msgstr "Контакт подтвержден"
 
 msgid "Copied to clipboard"
 msgstr "Скопировано в буфер обмена"
 
+msgid "Copy"
+msgstr "Копировать"
+
 msgid "Copy code"
 msgstr "Копировать код"
 
-msgid "Could not delete contact."
-msgstr "Не удалось удалить контакт."
+msgid "Could not add contact. Email address already in use."
+msgstr ""
+"Не возможно добавить контакт. Адрес электронной почты уже используется."
 
 msgid ""
 "Could not delete contact. Active chats with contact found, please remove "
@@ -215,6 +293,13 @@ msgid ""
 msgstr ""
 "Не удалось удалить контакт. Обнаружены активные чаты, которые надо удалить в "
 "первую очередь."
+
+msgid ""
+"Could not delete contact. You may have a group conversation with this "
+"contact."
+msgstr ""
+"Не возможно удалить контакт. У Вас могут быть групповые цепочки сообщений с "
+"этим контактом."
 
 msgid "Create chat"
 msgstr "Создать чат"
@@ -228,6 +313,16 @@ msgid ""
 msgstr ""
 "Создает сообщение конфигурации Autocrypt, которое можно будет загрузить на "
 "другие устройства для использования текущих настроек шифрования."
+
+#, c-format
+msgid "Current System theme is: %s"
+msgstr "Текущая Системная тема: %s"
+
+msgid "Dark"
+msgstr "Темная"
+
+msgid "Data protection"
+msgstr "Защита данных"
 
 msgid "Debug"
 msgstr "Отладка"
@@ -244,8 +339,20 @@ msgstr[2] "Удалить чаты"
 msgid "Delete contact"
 msgstr "Удалить контакт"
 
+msgid "Delete group"
+msgstr "Удалить группу"
+
+msgid "Delete locally"
+msgstr "Удалить локально"
+
+msgid "Delete message"
+msgstr "Удалить сообщение"
+
 msgid "Delete push resource"
 msgstr "Удалить ресурс отправления"
+
+msgid "Discard message"
+msgstr "Отменить сообщение"
 
 #. Do you really want to block user X with email Y (e.g. Do you really want to block alice (alice@provider.com)?)
 #, c-format
@@ -265,30 +372,70 @@ msgstr "Вы действительно хотите удалить %s?"
 msgid "Do you really want to leave the group?"
 msgstr "Вы действительно хотите покинуть эту группу?"
 
+msgid ""
+"Do you really want to log out?\n"
+"\n"
+"Your settings and messages will be removed from this device. After logging "
+"out you need to start the app again to log into another account."
+msgstr ""
+"ВЫ действительно хотите выполнить выход?\n"
+"\n"
+"Ваши настройки и сообщения будут удалены с этого устройства. После выхода "
+"необходимо запустить приложение заново для выполнения входа в другую учетную "
+"запись."
+
 msgid "Do you want to chat with this new contact?"
 msgstr "Создать чат с новым контактом?"
 
 msgid "Do you want to delete this chat?"
 msgstr "Удалить чат?"
 
-#. Do you want to import your keys from folder X (e.g. Do you want to import your keys from "/home/alice/keys"?)
+msgid ""
+"Do you want to import your keys from your app documents folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Вы хотите импортировать ключи из папки документов? \n"
+"\n"
+"Если ключи не удастся найти в папке, операция не будет выполнена."
+
+msgid ""
+"Do you want to import your keys from your application folder? \n"
+"\n"
+"If no keys are in that folder, the operation will fail."
+msgstr ""
+"Вы хотите импортировать ключи из папки приложения? \n"
+"\n"
+"Если ключи не удастся найти в папке, операция не будет выполнена."
+
 #, c-format
 msgid ""
-"Do you want to import your keys from \"%s\"? If no keys are in that folder, "
-"the operation will fail."
+"Do you want to save your keys in the application folder? \n"
+"\n"
+"The path is:\n"
+"\"%s\""
 msgstr ""
-"Импортировать ключи из «%s»? Если эта папка не содержит ключей, операция "
-"завершится ошибкой."
+"Вы хотите сохранить ключи в папку приложения? \n"
+"\n"
+"Путь:\n"
+"\"%s\""
 
-#. Do you want to export your keys to folder X (e.g. "Do you want to save your keys in "/home/alice/keys"?")
-#, c-format
-msgid "Do you want to save your keys in \"%s\"?"
-msgstr "Сохранить ключи в «%s»?"
+msgid ""
+"Do you want to save your keys in your devices documents folder? \n"
+"\n"
+"You can access it via the \"Files App\"."
+msgstr ""
+"Вы хотите сохранить ключи в папку документов Вашего устройства? \n"
+"\n"
+"Вы можете получить к ней доступ через \"Файлы Приложения\"."
 
 #. Do you really want to unblock user X (e.g. Do you really want to unblock alice?)
 #, c-format
 msgid "Do you want to unblock %s?"
 msgstr "Разблокировать %s?"
+
+msgid "Don't change"
+msgstr "Не изменять"
 
 msgid "Draft"
 msgstr "Черновик"
@@ -302,14 +449,23 @@ msgstr "Изменить профиль"
 msgid "Email"
 msgstr "Email"
 
+msgid "Email Settings"
+msgstr "Настройки электронной почты"
+
 msgid "Email address"
 msgstr "Электронный адрес"
+
+msgid "Email signature"
+msgstr "Подпись электронной почты"
 
 msgid "Enable background updates"
 msgstr "Включить фоновые обновления"
 
 msgid "Enable sending and requesting of read receipts."
 msgstr "Разрешить отправлять и запрашивать уведомления о прочтении."
+
+msgid "Encryption"
+msgstr "Шифрование"
 
 msgid "Enter the contact name"
 msgstr "Введите имя контакта"
@@ -327,14 +483,23 @@ msgstr "Эксперт: Импорт ключей"
 msgid "FCM token"
 msgstr "Токен FCM"
 
+msgid "Feature requests"
+msgstr "Запрос функций"
+
 msgid "Feedback"
 msgstr "Обратная связь"
 
 msgid "File"
 msgstr "Файл"
 
+msgid "Flag/Unflag"
+msgstr "Пометить/Снять пометку"
+
 msgid "Flagged"
 msgstr "Отмеченные"
+
+msgid "Flagged messages"
+msgstr "Помеченные сообщения"
 
 msgid ""
 "For known email providers additional settings are set up automatically.\n"
@@ -349,8 +514,14 @@ msgstr ""
 msgid "Forward"
 msgstr "Переслать"
 
-msgid "Gallery"
-msgstr "Галерея"
+msgid "Forwarded"
+msgstr "Перенаправленные"
+
+msgid "General Settings"
+msgstr "Общие Настройки"
+
+msgid "Googlemail account detected"
+msgstr "Обнаружена учетная запись Googlemail"
 
 msgid "Group image changed"
 msgstr "Групповое изображение изменено"
@@ -370,6 +541,16 @@ msgstr "Имя группы изменено"
 msgid "Hello, I have just created this group for us"
 msgstr "Здравствуйте! Эта группа была создана для нас"
 
+#, c-format
+msgid ""
+"Here you can choose your favorite theme. If you choose '%s', the theme may "
+"change automatically. This depends on whether you have selected 'Automatic' "
+"in the system preferences or not."
+msgstr ""
+"Здесь Вы можете выбрать Вашу любимую тему. Если вы выберите «%s», тема будет "
+"изменена автоматически. Это зависит от того, выбрана ли опция "
+"«Автоматически» в системных настройках."
+
 msgid "IMAP Security"
 msgstr "Безопасность IMAP"
 
@@ -384,6 +565,9 @@ msgstr "Порт IMAP"
 
 msgid "IMAP server (e.g. imap.coi.me)"
 msgstr "Сервер IMAP (например: imap.coi.me)"
+
+msgid "IMAP/SMTP login names"
+msgstr "IMAP/SMTP имена учетных записей"
 
 msgid ""
 "If enabled, this setting allows the app to perform periodic background tasks "
@@ -416,8 +600,17 @@ msgstr ""
 msgid "Inbox"
 msgstr "Входящие"
 
+msgid "Info"
+msgstr "Инфо"
+
 msgid "Initiate key transfer"
 msgstr "Начать передачу ключей"
+
+msgid "Invitation"
+msgstr "Приглашение"
+
+msgid "Invite a friend"
+msgstr "Пригласить друга"
 
 msgid "Invites"
 msgstr "Приглашения"
@@ -434,6 +627,12 @@ msgstr "Действие над ключом завершено"
 msgid "Leave group"
 msgstr "Покинуть группу"
 
+msgid "Let's Go"
+msgstr "Давайте Начнем"
+
+msgid "Light"
+msgstr "Светлая"
+
 msgid "Location"
 msgstr "Расположение"
 
@@ -443,11 +642,28 @@ msgstr "Вход в OX COI Messenger"
 msgid "Logging in, this may take a moment"
 msgstr "Выполняется вход в систему. Пожалуйста, подождите"
 
+msgid "Login"
+msgstr "Логин"
+
 msgid "Login failed"
 msgstr "Не удалось войти"
 
+msgid ""
+"Login failed. Please check if the email-address and the password are correct."
+msgstr ""
+"Ошибка входа. Проверьте корректность адреса электронной почты и пароля."
+
+msgid "Login failed. Please check your password."
+msgstr "Ошибка входа. Проверьте Ваш пароль."
+
+msgid "Logout"
+msgstr "Выход"
+
 msgid "Manual Settings"
 msgstr "Ручные настройки"
+
+msgid "Maybe later"
+msgstr "Может быть позже"
 
 msgid "Me"
 msgstr "Я"
@@ -464,6 +680,9 @@ msgstr "Синхронизация сообщения"
 msgid "Messages I sent to myself"
 msgstr "Сообщения, отправленные себе"
 
+msgid "Messages from unknown contacts"
+msgstr "Сообщения от неизвестных контактов"
+
 msgid ""
 "Messages from unknown contacts do not appear in chats anymore. Instead, you "
 "can access such messages here:"
@@ -477,17 +696,26 @@ msgstr "Имя"
 msgid "New contact"
 msgstr "Новый контакт"
 
+msgid "Next"
+msgstr "Дальше"
+
 msgid "No"
 msgstr "Нет"
 
 msgid "No blocked contacts"
 msgstr "Нет заблокированных контактов"
 
+msgid "No camera permission granted."
+msgstr "Нет разрешений доступа к камере."
+
 msgid "No flagged messages"
 msgstr "Нет отмеченных сообщений"
 
 msgid "No messages"
 msgstr "Нет сообщений"
+
+msgid "No other media files available"
+msgstr "Другие медиа-файлы недоступны"
 
 msgid "No participants selected. Please select at least one person."
 msgstr "Выберите хотя бы одного участника."
@@ -504,11 +732,24 @@ msgstr "Подпись не настроена"
 msgid "No username set"
 msgstr "Имя пользователя не задано"
 
+msgid "No valid QR code"
+msgstr "Нет действующего QR кода"
+
+#, c-format
+msgid "Not possible to create qr code: %s"
+msgstr "Не возможно создать QR код: %s"
+
 msgid "Notification"
 msgid_plural "Notifications"
 msgstr[0] "Уведомление"
 msgstr[1] "Уведомления"
 msgstr[2] "Уведомления"
+
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgid "OX COI Messenger"
+msgstr "OX COI Messenger"
 
 msgid ""
 "OX COI Messenger works with any email provider, but best with COI-compatible "
@@ -537,17 +778,30 @@ msgstr ""
 msgid "Ok"
 msgstr "ОК"
 
+msgid "Only chat messages."
+msgstr "Только сообщения чата."
+
+msgid "Only check when starting the app"
+msgstr "Проверять только при запуске приложения"
+
 msgid "Only show messages of known contacts"
 msgstr "Показывать сообщения только от известных контактов"
 
 msgid "Open chat"
 msgstr "Открыть чат"
 
+#. Text for a section header below the "add contact form". Below the header the "Scan QR code" button is placed
+msgid "Or scan QR code"
+msgstr "Или сканировать QR код"
+
 msgid "Other mail provider"
 msgstr "Другой поставщик"
 
 msgid "Outbox"
 msgstr "Исходящие"
+
+msgid "Own Card"
+msgstr "Собственная Карта"
 
 msgid "Participant"
 msgid_plural "Participants"
@@ -557,6 +811,9 @@ msgstr[2] "Участники"
 
 msgid "Password"
 msgstr "Пароль"
+
+msgid "Password changed"
+msgstr "Пароль изменен"
 
 msgid "Performing key export"
 msgstr "Выполняется экспорт ключа"
@@ -574,6 +831,10 @@ msgstr ""
 "Телефонные номера могут быть добавлены или отредактированы в локальной "
 "адресной книге и затем импортированы."
 
+msgid "Please add your name or nickname and choose a profile picture."
+msgstr ""
+"Пожалуйста добавьте Ваше имя или псевдоним и выберите изображение профиля."
+
 msgid "Please check your username and password"
 msgstr "Проверьте имя пользователя и пароль"
 
@@ -589,14 +850,25 @@ msgstr "Введите действительный электронный ад�
 msgid "Please enter a valid port (1-65535)"
 msgstr "Введите действительный номер порта (1-65535)"
 
+msgid "Please enter your name"
+msgstr "Введите Ваше имя"
+
 msgid "Please enter your password"
 msgstr "Введите пароль"
+
+#. "GitHub" is an own name. Please don't translate it
+msgid "Please report bugs on GitHub."
+msgstr "Отправьте ошибку на GitHub."
 
 msgid "Please select your email provider to sign in"
 msgstr "Выберите поставщика услуг электронной почты"
 
 msgid "Please specify your email server settings."
 msgstr "Укажите настройки почтового сервера."
+
+#. "user echo" is an own name. Please don't translate it
+msgid "Please suggest your ideas on user echo."
+msgstr "Предложите свои идеи через эхо пользователя."
 
 msgid "Please wait a moment."
 msgstr "Пожалуйста, подождите..."
@@ -606,6 +878,9 @@ msgstr "Конфиденциальность и безопасность"
 
 msgid "Profile"
 msgstr "Профиль"
+
+msgid "Profile & Settings"
+msgstr "Настройка и Профиль"
 
 msgid "Profile QR"
 msgstr "QR-код профиля"
@@ -625,6 +900,9 @@ msgstr[0] "Уведомление о прочтении"
 msgstr[1] "Уведомления о прочтении"
 msgstr[2] "Уведомления о прочтении"
 
+msgid "Ready!"
+msgstr "Готово!"
+
 msgid "Register"
 msgstr "Регистрация"
 
@@ -634,13 +912,18 @@ msgstr "Зарегистрировать новый ресурс отправл�
 msgid "Remove current image"
 msgstr "Удалить текущее изображение"
 
+msgid "Remove from group"
+msgstr "Удалить из группы"
+
 msgid "Remove participant"
 msgstr "Удалить участника"
 
 msgid "Rename group"
 msgstr "Переименовать группу"
 
-#. Response from server address X with error code Y (e.g. Response from provide.com: Login failed)
+msgid "Report a bug"
+msgstr "Отправить отчет об ошибке"
+
 #, c-format
 msgid ""
 "Response from %s: %s\n"
@@ -654,6 +937,9 @@ msgstr ""
 "Некоторые поставщики могут размещать дополнительную информацию в папке "
 "входящих. Чтобы это проверить, попробуйте открыть почту в окне веб-браузера."
 "В случае проблем обратитесь к поставщику услуг."
+
+msgid "Retry"
+msgstr "Повторить"
 
 msgid "SMTP Security"
 msgstr "Безопасность SMTP"
@@ -673,8 +959,8 @@ msgstr "Сервер SMTP (например: smtp.coi.me)"
 msgid "Save"
 msgstr "Сохранить"
 
-msgid "Scan QR"
-msgstr "Сканировать QR-код"
+msgid "Scan QR code"
+msgstr "Сканировать QR код"
 
 #. Scan the QR code to add an verify user X (e.g. Scan this QR code to create a new contact or verify a contact with alice.)
 #, c-format
@@ -683,17 +969,29 @@ msgstr ""
 "Отсканируйте QR-код, чтобы создать новый контакт или подтвердить "
 "существующий контакт на %s."
 
+msgid "Search"
+msgstr "Поиск"
+
 msgid "Search contacts"
 msgstr "Поиск контактов"
 
 msgid "Security"
 msgstr "Безопасность"
 
+msgid "Send again"
+msgstr "Отправить снова"
+
+msgid "Send message"
+msgstr "Отправить сообщение"
+
 msgid "Sent with OX COI Messenger"
 msgstr "Отправлено из OX COI Messenger"
 
 msgid "Server addresses"
 msgstr "Адреса сервера"
+
+msgid "Server settings"
+msgstr "Настройки сервера"
 
 msgid "Set a group name"
 msgstr "Настройте имя группы"
@@ -713,6 +1011,9 @@ msgstr "Сообщение конфигурации создано"
 msgid "Share"
 msgstr "Поделиться"
 
+msgid "Share invite link"
+msgstr "Опубликовать ссылку на приглашение"
+
 msgid "Show QR"
 msgstr "Показать QR-код"
 
@@ -722,8 +1023,8 @@ msgstr "Показывать письма и сообщения из чатов 
 msgid "Show both chat and email messages from my contacts"
 msgstr "Показывать письма и сообщения из чатов от моих контактов"
 
-msgid "Show messages from unknown contacts"
-msgstr "Показывать сообщения от незнакомых контактов"
+msgid "Show my QR code"
+msgstr "Показать мой QR код"
 
 msgid "Show only chat messages "
 msgstr "Показывать только сообщения из чатов "
@@ -742,13 +1043,33 @@ msgstr "Подпись"
 msgid "Simply add one by tapping on a contact."
 msgstr "Чтобы добавить, коснитесь контакта."
 
+msgid "Skip"
+msgstr "Пропустить"
+
+#, c-format
+msgid "Something went wrong and we could not load the invite: %s"
+msgstr "Что-то пошло не так и мы не можем загрузить приглашение: %s"
+
 #. Start a chat with a new user (e.g. Start a chat with alice?)
 #, c-format
 msgid "Start a chat with %s?"
 msgstr "Начать чат с %s?"
 
+msgid "Start chat"
+msgstr "НАчать чат"
+
+#, c-format
+msgid "Step %s of %s"
+msgstr "Шаг %s из %s"
+
+msgid "System"
+msgstr "Система"
+
 msgid "System contacts imported successfully"
 msgstr "Системные контакты импортированы успешно"
+
+msgid "Take a picture"
+msgstr "Сделать фото"
 
 #, c-format
 msgid "The associated setup code starts with: %s"
@@ -756,6 +1077,11 @@ msgstr "Соответствующий код начинается с: %s"
 
 msgid "The code can be entered with or without minus signs"
 msgstr "Код можно ввести со знаками дефиса или без"
+
+msgid "The invite was already deleted. Please ask the sender to resend it."
+msgstr ""
+"Приглашение было удалено. Запросите отправителя, выслать приглашение "
+"повторно."
 
 msgid "There are currently no messages from unknown contacts"
 msgstr "Нет сообщений от незнакомых контактов"
@@ -779,6 +1105,15 @@ msgstr ""
 
 msgid "This field can not be empty"
 msgstr "Поле не может быть пустым"
+
+msgid ""
+"This is a beta version, therefore please keep in mind that the app is still "
+"in development. Do you want to share your thoughts? You can share your "
+"feedback in the profile section in the settings."
+msgstr ""
+"Это бета-версия, поэтому, пожалуйста, имейте в виду, что приложение "
+"находится в стадии разработки. Хотите поделиться своими мыслями? Вы можете "
+"поделиться своим отзывом в разделе профиля в настройках."
 
 msgid "This is a new chat. Send a message to connect."
 msgstr "Это новый чат. Отправьте первое сообщение, чтобы начать разговор."
@@ -853,8 +1188,8 @@ msgstr ""
 msgid "Today"
 msgstr "Сегодня"
 
-msgid "Type something..."
-msgstr "Введите текст..."
+msgid "Type"
+msgstr "Тип"
 
 msgid "Unblock"
 msgstr "Разблокировать"
@@ -887,15 +1222,26 @@ msgstr "Голосовое сообщение"
 msgid "We could not determine all settings automatically."
 msgstr "Не удалось автоматически определить все настройки."
 
-msgid "Welcome to OX COI Messenger"
-msgstr "Добро пожаловать в OX COI Messenger"
+msgid ""
+"We detected a googlemail address. This leads to broken chats. We recommend "
+"to change the mail address to gmail."
+msgstr ""
+"Мы обнаружили адрес Googlemail. Это приведет к нарушению чатов. Мы "
+"рекомендуем изменить почтовый адрес на gmail."
+
+#, c-format
+msgid "Welcome to %s"
+msgstr "Добро пожаловать в %s"
 
 msgid ""
-"Welcome to the OX Coi Messenger!\n"
+"Welcome to the OX COI Messenger!\n"
 "Please start a new chat by tapping the chat bubble icon."
 msgstr ""
-"Добро пожаловать в OX Coi Messenger!\n"
-"Начните новый чат нажав на всплывающую иконку."
+"Добро пожаловать в OX COI Messenger!\n"
+"Чтобы начать разговор, нажмите на текстовое облако."
+
+msgid "What kind of message do you want to handle?"
+msgstr "Какой тип сообщения вы хотите обработать?"
 
 msgid "Would you like to import your contacts from this device?"
 msgstr "Импортировать контакты с этого устройства?"
@@ -905,6 +1251,9 @@ msgstr "Да"
 
 msgid "Yesterday"
 msgstr "Вчера"
+
+msgid "You're good to go!"
+msgstr "Всё готово!"
 
 #, c-format
 msgid ""
@@ -920,23 +1269,93 @@ msgstr ""
 "%s\n"
 "После этого вы сможете использовать Autocrypt на новом устройстве."
 
+msgid ""
+"Your email service provider does not yet support COI, but we can check for "
+"new messages in the background. Should we look for new messages regularly, "
+"or should we constantly check for new messages, which uses more battery?"
+msgstr ""
+"Ваш провайдер электронной почты еще не поддерживает COI, но мы можем "
+"проверять наличие новых сообщений в фоновом режиме. Должны ли мы регулярно "
+"искать новые сообщения, или лучше постоянно выполнять проверку новых "
+"сообщений, что использует больше заряда батареи?"
+
 msgid "Your favorite messages"
 msgstr "Избранные сообщения"
+
+#, c-format
+msgid ""
+"Your message sent to \"%s\" on %s could not be transmitted. Often this "
+"happens due to a too large file. Please delete this message to unblock "
+"sending subsequent messages."
+msgstr ""
+"Ваше сообщение, отправленное \"%s\" от %s не может быть передано. Часто "
+"причиной такой ошибки является слишком большой объем вложенного файла. "
+"Удалите это сообщение для разблокировки последующих сообщений."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Ваши сообщения теперь зашифрованы."
 
-msgid "code"
-msgstr "код"
-
-msgid "more messages"
-msgstr "больше сообщений"
+msgid ""
+"Your password has changed.\n"
+"Please enter your new one to access your messages."
+msgstr ""
+"Ваш пароль был изменен.\n"
+"Введите новый пароль для доступа к Вашим сообщениям."
 
 msgid "privacy declaration"
 msgstr "декларация о конфиденциальности"
 
 msgid "terms & conditions"
 msgstr "условия и положения"
+
+#~ msgid ""
+#~ "Cannot login. Please check if the email-address and the password are "
+#~ "correct."
+#~ msgstr "Ошибка авторизации. Проверьте электронный адрес и пароль."
+
+#~ msgid "Camera"
+#~ msgstr "Камера"
+
+#~ msgid "Could not delete contact."
+#~ msgstr "Не удалось удалить контакт."
+
+#~ msgid ""
+#~ "Do you want to import your keys from \"%s\"? If no keys are in that "
+#~ "folder, the operation will fail."
+#~ msgstr ""
+#~ "Импортировать ключи из «%s»? Если эта папка не содержит ключей, операция "
+#~ "завершится ошибкой."
+
+#~ msgid "Do you want to save your keys in \"%s\"?"
+#~ msgstr "Сохранить ключи в «%s»?"
+
+#~ msgid "Gallery"
+#~ msgstr "Галерея"
+
+#~ msgid "Scan QR"
+#~ msgstr "Сканировать QR-код"
+
+#~ msgid "Show messages from unknown contacts"
+#~ msgstr "Показывать сообщения от незнакомых контактов"
+
+#~ msgid "Type something..."
+#~ msgstr "Введите текст..."
+
+#~ msgid "Welcome to OX COI Messenger"
+#~ msgstr "Добро пожаловать в OX COI Messenger"
+
+#~ msgid ""
+#~ "Welcome to the OX Coi Messenger!\n"
+#~ "Please start a new chat by tapping the chat bubble icon."
+#~ msgstr ""
+#~ "Добро пожаловать в OX Coi Messenger!\n"
+#~ "Начните новый чат нажав на всплывающую иконку."
+
+#~ msgid "code"
+#~ msgstr "код"
+
+#~ msgid "more messages"
+#~ msgstr "больше сообщений"
 
 #~ msgid "1 system contact imported"
 #~ msgid_plural "%i system contacts imported"
@@ -949,13 +1368,6 @@ msgstr "условия и положения"
 
 #~ msgid "By using OX COI Messenger you agree to our"
 #~ msgstr "Используя OX COI Messenger, вы принимаете наши"
-
-#~ msgid ""
-#~ "Welcome to the OX COI Messenger!\n"
-#~ "Please start a new chat by tapping the chat bubble icon."
-#~ msgstr ""
-#~ "Добро пожаловать в OX COI Messenger!\n"
-#~ "Чтобы начать разговор, нажмите на текстовое облако."
 
 #~ msgid "and"
 #~ msgstr "и"
