@@ -47,6 +47,7 @@ import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
 import 'package:ox_coi/src/chat/chat_create_group_participants.dart';
 import 'package:ox_coi/src/contact/contact_change.dart';
+import 'package:ox_coi/src/contact/contact_item.dart';
 import 'package:ox_coi/src/contact/contact_list_bloc.dart';
 import 'package:ox_coi/src/contact/contact_list_content.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
@@ -131,7 +132,7 @@ class _ChatCreateState extends State<ChatCreate> {
               final adjustedIndex = index - offset;
               final contactElement = state.contactElements[adjustedIndex];
 
-              return ContactListContent(contactElement: contactElement, hasHeader: true);
+              return ContactListContent(contactElement: contactElement, hasHeader: true, contactItemType: ContactItemType.createChat,);
             }
           }, childCount: state.contactElements.length + offset),
         )
