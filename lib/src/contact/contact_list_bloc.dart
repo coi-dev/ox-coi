@@ -309,12 +309,12 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       await updateContactExtensions(ids, _phoneNumbers);
     }
 
-    if (shouldUpdateUi) {
-      await Future.forEach(_contactRepository.getAll(), (contact) async {
-        await updateAvatar(_systemContacts, contact);
+    await Future.forEach(_contactRepository.getAll(), (contact) async {
+      await updateAvatar(_systemContacts, contact);
+      if (shouldUpdateUi) {
         await reloadChatName(context, contact.id);
-      });
-    }
+      }
+    });
     _systemContacts = null;
     _phoneNumbers.clear();
 
