@@ -54,7 +54,7 @@ import 'setup/test_constants.dart';
 void main() {
   FlutterDriver driver;
   setUpAll(() async {
-    driver = await setupAndGetDriver(isLogin: true);
+    driver = await setupAndGetDriver(isNormalLogin: true);
   });
 
   tearDownAll(() async {

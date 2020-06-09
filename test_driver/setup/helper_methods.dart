@@ -59,6 +59,7 @@ Future catchScreenshot(FlutterDriver driver, String path) async {
   print(path);
 }
 
+/// Navigates to the given UI [pageToNavigate] in the App.
 Future navigateTo(FlutterDriver driver, String pageToNavigate) async {
   if (pageToNavigate == L.getPluralKey(L.contactP)) {
     await driver.tap(contactsFinder);
@@ -69,6 +70,7 @@ Future navigateTo(FlutterDriver driver, String pageToNavigate) async {
   }
 }
 
+///Creates one new contact with the given name [newTestName] and email [newContact].
 Future addNewContact(FlutterDriver driver, String newTestName, String newTestContact) async {
   await driver.tap(contactAddFinder);
   await driver.tap(contactChangeNameInputFinder);
@@ -79,6 +81,7 @@ Future addNewContact(FlutterDriver driver, String newTestName, String newTestCon
   expect(await driver.getText(find.text(newTestName)), newTestName);
 }
 
+/// Deletes one contact with the given name [netTestName].
 Future deleteContact(FlutterDriver driver, String newTestName) async {
   await driver.tap(find.text(newTestName));
   await driver.scroll(find.byValueKey(keyContactDetailOpenChatProfileActionIcon), 0.0, -600, Duration(milliseconds: 500));
@@ -86,6 +89,7 @@ Future deleteContact(FlutterDriver driver, String newTestName) async {
   await driver.tap(find.byValueKey(keyConfirmationDialogPositiveButton));
 }
 
+/// Search one chat in the chat list with [chatName].
 Future chatSearch(FlutterDriver driver, String chatName, String searchString) async {
   final searchBar = find.byValueKey(keySearchBarInput);
   await driver.tap(searchBar);
@@ -95,6 +99,7 @@ Future chatSearch(FlutterDriver driver, String chatName, String searchString) as
   await driver.tap(pageBackFinder);
 }
 
+/// Select one chat [chatName], sends one text message that, and check if the message is really sent using [messageId].
 Future chatTest(FlutterDriver driver, int messageId, String chatName) async {
   await driver.tap(find.text(chatName));
   await writeChatFromChat(driver, messageId);
@@ -106,12 +111,15 @@ Future writeChatFromChat(FlutterDriver driver, int messageId) async {
   await driver.tap(find.byValueKey(KeyChatOnSendTextIcon));
 }
 
+/// Composes and sends audio message in chat.
 Future composeAudio(FlutterDriver driver) async {
   await performLongPress(driver, find.byValueKey(KeyChatComposerMixinVoiceComposeAdaptiveSuperellipse));
   await driver.tap(find.byValueKey(KeyChatComposerPlayComposeAdaptiveSuperellipse));
   sleep(Duration(seconds: 2));
 }
 
+/// Types text message in chat.
+/// Default [inputHelloWorld] will send if no [text] to send in giving.
 Future writeTextInChat(FlutterDriver driver, int messageId, [String text = ""]) async {
   await driver.tap(composeInputFinder);
   if (text.isEmpty) {
@@ -124,15 +132,12 @@ Future writeTextInChat(FlutterDriver driver, int messageId, [String text = ""]) 
   await driver.waitFor(find.byValueKey(messageId));
 }
 
+/// Performs long press of given [target]
 Future<void> performLongPress(FlutterDriver driver, SerializableFinder target) async {
   await driver.waitFor(target);
   await driver.scroll(target, 0, 0, Duration(seconds: 2));
 }
 
-Future callTest(FlutterDriver driver) async {
-  await driver.tap(find.byValueKey(keyChatIconButtonIconPhone));
-  await driver.tap(find.byValueKey(keyInformationDialogPositiveButton));
-}
 
 Future unblockOneContactFromBlockedContacts(FlutterDriver driver, String contactNameToUnblock) async {
   const unblock = 'Unblock';
@@ -158,18 +163,21 @@ Future unflagMessage(FlutterDriver driver,String flagUnFlag, int messageIdToUnFl
 
 }
 
+/// Perform long press on message an tap to flag message
 Future flaggedMessage(FlutterDriver driver, String flagUnFlag, SerializableFinder messageToFlaggedFinder) async {
   sleep(Duration(seconds: 5));
   await performLongPress(driver, messageToFlaggedFinder);
   await driver.tap(find.text(flagUnFlag));
 }
 
+/// Press long and delete message.
 Future deleteMessage(SerializableFinder textToDeleteFinder, FlutterDriver driver) async {
   const deleteLocally = 'Delete locally';
   await performLongPress(driver, textToDeleteFinder);
   await driver.tap(find.text(deleteLocally));
 }
 
+/// Copies the sent message from a chat, pastes it into the reserved placeholder for typing and sends it again.
 Future copyAndPasteMessage(FlutterDriver driver, String copy, String paste) async {
   await performLongPress(driver, finderMessageOne);
   await driver.tap(find.text(copy));
@@ -184,6 +192,10 @@ Future forwardMessageTo(FlutterDriver driver, String contactToForward, String fo
   await driver.tap(find.text(contactToForward));
 }
 
+/// Creates new chat from chat list. This operation is almost the same like to create a new contact
+/// with the difference that you end up directly in the chat.
+/// [chatEmail] is the email where to send the chat.
+/// [chatName] is the name of the recipient.
 Future createNewChat(FlutterDriver driver, String chatEmail, String chatName) async {
   final finderMe = find.text(nameMe);
   final finderNewContact = find.text(L.getKey(L.contactNew));
@@ -216,6 +228,7 @@ Future createNewChat(FlutterDriver driver, String chatEmail, String chatName) as
   }
 }
 
+/// Performs login from the provider interface with given [email] and [password].
 Future logIn(FlutterDriver driver, String email, String password) async {
   final providerEmailFieldFinder = find.byValueKey(keyProviderSignInEmailTextField);
   final providerPasswordFieldFinder = find.byValueKey(keyProviderSignInPasswordTextField);

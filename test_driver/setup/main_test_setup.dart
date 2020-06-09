@@ -63,7 +63,10 @@ const environmentTargetPlatform = 'FLUTTER_TEST_TARGET_PLATFORM';
 const environmentTargetPlatformAndroid = 'android';
 const environmentTargetPlatformIos = 'ios';
 
-Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
+/// Builds all needed setup depending on [isNormalLogin]
+/// Normal login is only for tests with the focus after the authentication and user initialisation.
+Future<FlutterDriver> setupAndGetDriver({bool isNormalLogin = false}) async {
+
   targetPlatform = Platform.environment[environmentTargetPlatform];
   targetProvider = Platform.environment[environmentProvider];
 
@@ -72,6 +75,7 @@ Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
   if (targetPlatform == environmentTargetPlatformAndroid) {
     await setupAndroid();
   }
+  /// Connect driver to the instrumented APP.
   FlutterDriver driver = await FlutterDriver.connect();
   var connected = false;
   while (!connected) {
@@ -80,12 +84,14 @@ Future<FlutterDriver> setupAndGetDriver({bool isLogin = false}) async {
       connected = true;
     } catch (error) {}
   }
-  if (!isLogin) {
+  if (!isNormalLogin) {
     await getAuthentication(driver, targetProvider, providerEmail, providerPassword);
   }
   return driver;
 }
 
+/// Loads provider information from credential.json.
+/// Initialize loaded provider Information.
 Future initProviders() async {
   final providerName1 = "contact1";
   final providerName2 = "contact2";
@@ -109,12 +115,14 @@ Future initProviders() async {
   }
 }
 
+/// Closes provider at the end of the test.
 teardownDriver(FlutterDriver driver) {
   if (driver != null) {
     driver.close();
   }
 }
 
+/// Grants some permission to allow the Flutter driver to access some system functionality for android device.
 Future setupAndroid() async {
   await grantPermission(adbPath, permissionAudio);
   await grantPermission(adbPath, permissionReadStorage);
@@ -123,12 +131,14 @@ Future setupAndroid() async {
   await grantPermission(adbPath, permissionWriteContacts);
 }
 
+/// Grants one permission using [adbPath] and [permission] to grant.
 Future grantPermission(String adbPath, String permission) async {
   String deviceId = Platform.environment[environmentDeviceId];
   String appId = Platform.environment[environmentAppId];
   await Process.run(adbPath, ['-s', deviceId, 'shell', 'pm', 'grant', appId, permission]);
 }
 
+/// Performs authentication in one selected [provider] with the given [email] and [password].
 Future getAuthentication(FlutterDriver driver, String provider, String email, String password) async {
   await getProvider(provider, driver);
   await logIn(driver, email, password);
@@ -136,6 +146,7 @@ Future getAuthentication(FlutterDriver driver, String provider, String email, St
   await driver.tap(find.byValueKey(keyDynamicNavigationSkip));
 }
 
+/// Selects needed [provider] from the provider list.
 Future getProvider(String provider, FlutterDriver driver) async {
   final providerFinder = find.text(provider);
   await driver.tap(signInFinder);
