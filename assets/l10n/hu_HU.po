@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: oxcoi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-20 13:04+0200\n"
-"PO-Revision-Date: 2020-06-08 10:44+0200\n"
+"PO-Revision-Date: 2020-06-09 09:22+0200\n"
 "Last-Translator: Kálmán Kéménczy <kalman@workshop-chapina.com>\n"
 "Language-Team: Hungarian <hu@workshop-chapina.com>\n"
 "Language: hu_HU\n"
@@ -1123,9 +1123,9 @@ msgstr "Az e-mail szolgáltatója még nem támogatja a COI-t, de ellenőrizhetj
 msgid "Your favorite messages"
 msgstr "Kedvenc üzenetei"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Your message sent to \"%s\" on %s could not be transmitted. Often this happens due to a too large file. Please delete this message to unblock sending subsequent messages."
-msgstr "A(z) %s címre küldött üzenetet nem sikerült továbbítani. Ez általában nagy fájlok miatt történik. Kérjük, törölje ezt az üzenetet, hogy el lehessen küldeni a következő üzenetet."
+msgstr "A(z) \"%s\" címre küldött üzenetet nem sikerült továbbítani ezen: %s. Ez általában nagy fájlok miatt történik. Kérjük, törölje ezt az üzenetet, hogy el lehessen küldeni a következő üzenetet."
 
 msgid "Your messages are encrypted from now on."
 msgstr "Az üzeneteit mostantól titkosítottak."
