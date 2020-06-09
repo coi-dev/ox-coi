@@ -179,7 +179,7 @@ class ShareViewController: UIViewController {
     }
 
     private func redirectToHostApp() {
-        let url = URL(string: "coisharing://")
+        let url = URL(string: SharedData.appUrl)
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
     

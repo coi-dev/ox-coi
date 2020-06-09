@@ -9,10 +9,11 @@
 import Foundation
 
 struct SharedData {
-    static let MimeType  = "shared_mime_type"
-    static let Text      = "shared_text"
-    static let Path      = "shared_path"
-    static let FileName  = "shared_file_name"
+    static let MimeType  = "mimeType"
+    static let Text      = "text"
+    static let Path      = "path"
+    static let FileName  = "fileName"
+    static let Title     = "title"
     static let SuiteName = "group.openxchange.oxcoi.dev.sharing"
     static let DataType  = "shared_data_type"
     static let appUrl    = "coisharing://"
