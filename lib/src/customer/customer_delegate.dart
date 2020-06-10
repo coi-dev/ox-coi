@@ -76,6 +76,7 @@ const _kIsCoiEnabled = "isCoiEnabled";
 const _kIsCoiSupported = "isCoiSupported";
 const _kContactsImportButtonPressed = "contactsImportButtonPressed";
 const _kChatSettingsRadioChanged = "chatSettingsRadioChanged";
+const _kNotificationsRadioChanged = "notificationsRadioChanged";
 const _kNotificationsAllowButtonPressed = "notificationsAllowButtonPressed";
 const _kNotificationsAllowLaterButtonPressed = "notificationsAllowLaterButtonPressed";
 const _kAppbarSkipButtonPressed = "appbarSkipButtonPressed";
@@ -99,11 +100,7 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
 
         case _kNotificationsAllowButtonPressed:
           if (await Permission.notification.request().isGranted) {
-            if (_config.coiSupported) {
-              await setPreference(preferenceNotificationsPull, false);
-            } else {
-              await setPreference(preferenceNotificationsPull, true);
-            }
+            await setPreference(preferenceNotificationsPull, false);
           }
           navigateToNextPage(context: context);
           break;
@@ -127,6 +124,12 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
     switch (model.groupKey) {
       case _kChatSettingsRadioChanged:
         await _setConfigShowEmailsAsync(value: newValue as int);
+        break;
+
+      case _kNotificationsRadioChanged:
+        if (await Permission.notification.request().isGranted) {
+          await setPreference(preferenceNotificationsPull, true);
+        }
         break;
     }
   }

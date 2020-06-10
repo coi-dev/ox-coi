@@ -59,7 +59,6 @@ class AppDelegate: FlutterAppDelegate {
 
         GeneratedPluginRegistrant.register(with: self)
 
-//        application.setMinimumBackgroundFetchInterval(60 * 5)
         setupSharingMethodChannel()
         setupSecurityMethodChannel()
 
