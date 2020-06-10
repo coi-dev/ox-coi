@@ -59,6 +59,8 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsNotifications extends StatefulWidget {
+  static get viewTitle => L10n.get(L.settingNotificationP, count: L10n.plural);
+
   @override
   _SettingsNotificationsState createState() => _SettingsNotificationsState();
 }
@@ -78,7 +80,7 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DynamicAppBar(
-          title: L10n.get(L.settingNotificationP, count: L10n.plural),
+          title: SettingsNotifications.viewTitle,
           leading: AppBarBackButton(context: context),
         ),
         body: _buildPreferenceList(context));

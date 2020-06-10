@@ -58,6 +58,8 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsDataProtection extends StatefulWidget {
+  static get viewTitle => L10n.get(L.settingAntiMobbing);
+
   @override
   _DataProtectionState createState() => _DataProtectionState();
 }
@@ -77,7 +79,7 @@ class _DataProtectionState extends State<SettingsDataProtection> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DynamicAppBar(
-          title: L10n.get(L.settingAntiMobbing),
+          title: SettingsDataProtection.viewTitle,
           leading: AppBarBackButton(context: context),
         ),
         body: _buildPreferenceList(context));

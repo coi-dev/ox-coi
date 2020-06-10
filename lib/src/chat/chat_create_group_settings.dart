@@ -67,6 +67,8 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class ChatCreateGroupSettings extends StatefulWidget {
+  static get viewTitle => L10n.get(L.groupCreate);
+
   final List<int> selectedContacts;
 
   ChatCreateGroupSettings({@required this.selectedContacts});
@@ -101,7 +103,7 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: L10n.get(L.groupCreate),
+        title: ChatCreateGroupSettings.viewTitle,
         leading: AppBarBackButton(context: context),
         trailingList: [
           IconButton(

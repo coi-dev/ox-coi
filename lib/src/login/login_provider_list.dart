@@ -68,6 +68,11 @@ enum ProviderListType {
 }
 
 class ProviderList extends StatefulWidget {
+  static get loginViewTitle => L10n.get(L.loginSignIn);
+  static get registerViewTitle => L10n.get(L.register);
+  static get loginViewText => L10n.get(L.chooseProviderLogin);
+  static get registerViewText => L10n.get(L.chooseProviderRegister);
+
   final ProviderListType type;
 
   ProviderList({@required this.type});
@@ -94,11 +99,11 @@ class _ProviderListState extends State<ProviderList> {
   @override
   Widget build(BuildContext context) {
     if (widget.type == ProviderListType.login) {
-      title = L10n.get(L.loginSignIn);
-      text = L10n.get(L.loginChooseProvider);
+      title = ProviderList.loginViewTitle;
+      text = ProviderList.loginViewText;
     } else if (widget.type == ProviderListType.register) {
-      title = L10n.get(L.register);
-      text = L10n.get(L.providerRegisterChoose);
+      title = ProviderList.registerViewTitle;
+      text = ProviderList.registerViewText;
     }
     return Scaffold(
       appBar: DynamicAppBar(

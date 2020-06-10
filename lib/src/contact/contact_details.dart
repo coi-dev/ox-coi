@@ -66,6 +66,8 @@ import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'contact_change.dart';
 
 class ContactDetails extends StatefulWidget {
+  static get viewTitle => L10n.get(L.profile);
+
   final int contactId;
 
   ContactDetails({@required this.contactId});
@@ -113,7 +115,7 @@ class _ContactDetailsState extends State<ContactDetails> with ChatCreateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: L10n.get(L.profile),
+        title: ContactDetails.viewTitle,
         leading: AppBarBackButton(context: context),
       ),
       body: SingleChildScrollView(

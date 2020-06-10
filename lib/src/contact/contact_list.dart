@@ -76,6 +76,7 @@ _showAddContactView(BuildContext context, Navigation navigation) {
 }
 
 class ContactList extends RootChild {
+  static get viewTitle => L10n.get(L.contactP, count: L10n.plural);
   final _navigation = Navigation();
 
   @override
@@ -89,7 +90,7 @@ class ContactList extends RootChild {
     return Platform.isAndroid
         ? FloatingActionButton(
             key: Key(keyContactListAddContactButton),
-            child: new AdaptiveIcon(icon: IconSource.personAdd),
+            child: AdaptiveIcon(icon: IconSource.personAdd),
             onPressed: () {
               _showAddContactView(context, _navigation);
             },
@@ -98,7 +99,7 @@ class ContactList extends RootChild {
   }
 
   @override
-  String getBottomNavigationText() => L10n.get(L.contactP, count: L10n.plural);
+  String getBottomNavigationText() => ContactList.viewTitle;
 
   @override
   IconSource getBottomNavigationIcon() => IconSource.contacts;
@@ -107,7 +108,7 @@ class ContactList extends RootChild {
   DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
     return DynamicAppBar(
       showDivider: false,
-      title: L10n.get(L.contactP, count: L10n.plural),
+      title: ContactList.viewTitle,
       trailingList: [
         IconButton(
           key: Key(keyContactListImportButton),

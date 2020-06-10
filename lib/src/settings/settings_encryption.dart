@@ -62,6 +62,8 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/fullscreen_progress.dart';
 
 class SettingsEncryption extends StatefulWidget {
+  static get viewTitle => L10n.get(L.settingItemEncryptionTitle);
+
   @override
   _SettingsEncryptionState createState() => _SettingsEncryptionState();
 }
@@ -156,7 +158,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
           appBar: DynamicAppBar(
-            title: L10n.get(L.settingItemEncryptionTitle),
+            title: SettingsEncryption.viewTitle,
             leading: AppBarBackButton(context: context),
           ),
           body: _buildPreferenceList(context)),

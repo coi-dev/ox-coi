@@ -63,6 +63,7 @@ import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
 
 class ChatAddGroupParticipants extends StatefulWidget {
+  static get viewTitle => L10n.get(L.participantAdd);
   final int chatId;
   final List<dynamic> contactIds;
 
@@ -99,7 +100,7 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
     return Scaffold(
       appBar: DynamicAppBar(
         showDivider: false,
-        title: L10n.get(L.participantAdd),
+        title: ChatAddGroupParticipants.viewTitle,
         leading: AppBarCloseButton(context: context),
         trailingList: [
           IconButton(

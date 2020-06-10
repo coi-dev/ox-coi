@@ -279,7 +279,7 @@ class L {
   static final loginCheckMail = translationKey("Please enter a valid email address");
   static final loginCheckPort = translationKey("Please enter a valid port (1-65535)");
   static final loginCheckPassword = translationKey("Please enter your password");
-  static final loginChooseProvider = translationKey("Please select your email provider to sign in");
+  static final chooseProviderLogin = translationKey("Please select your email provider to sign in");
   static final loginCheckServer = translationKey("Please specify your email server settings.");
   static final loginErrorWrongCredentials = translationKey("Login failed. Please check if the email-address and the password are correct.");
 
@@ -333,7 +333,7 @@ class L {
   static final inviteGetText404Error = translationKey("The invite was already deleted. Please ask the sender to resend it.");
   static final inviteGetTextGeneralErrorX = translationKey("Something went wrong and we could not load the invite: %s");
 
-  static final providerRegisterChoose = translationKey("Choose a provider from the list below to create a new account");
+  static final chooseProviderRegister = translationKey("Choose a provider from the list below to create a new account");
   static final providerAutocompleteText = translationKey(
       "For known email providers additional settings are set up automatically.\nSometimes IMAP needs to be enabled in the web frontend. Consult your email provider or friends for help.");
   static final providerOtherMailProvider = translationKey("Other mail provider");

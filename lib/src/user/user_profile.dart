@@ -76,6 +76,8 @@ import 'package:ox_coi/src/widgets/settings_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfile extends RootChild {
+  static get viewTitle => L10n.get(L.profileAndSettings);
+
   @override
   _ProfileState createState() => _ProfileState();
 
@@ -101,7 +103,7 @@ class UserProfile extends RootChild {
 
   @override
   DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
-    return DynamicAppBar(title: L10n.get(L.profileAndSettings));
+    return DynamicAppBar(title: UserProfile.viewTitle);
   }
 }
 

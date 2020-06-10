@@ -79,6 +79,7 @@ enum ChatListItemType {
 _showCreateChatView(BuildContext context, Navigation navigation) => navigation.pushNamed(context, Navigation.chatCreate);
 
 class ChatList extends RootChild {
+  static get viewTitle => L10n.get(L.chatP, count: L10n.plural);
   final Navigation _navigation = Navigation();
 
   @override
@@ -101,7 +102,7 @@ class ChatList extends RootChild {
   }
 
   @override
-  String getBottomNavigationText() => L10n.get(L.chatP, count: L10n.plural);
+  String getBottomNavigationText() => ChatList.viewTitle;
 
   @override
   IconSource getBottomNavigationIcon() => IconSource.chat;
@@ -110,7 +111,7 @@ class ChatList extends RootChild {
   DynamicAppBar getAppBar(BuildContext context, StreamController<AppBarAction> appBarActionsStream) {
     return DynamicAppBar(
       showDivider: false,
-      title: L10n.get(L.chatP, count: L10n.plural),
+      title: ChatList.viewTitle,
       trailingList: [
         if (Platform.isIOS)
           IconButton(

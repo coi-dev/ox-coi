@@ -54,6 +54,8 @@ import 'package:ox_coi/src/user/user_event_state.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 class EmailSignature extends StatefulWidget {
+  static get viewTitle => L10n.get(L.settingSignatureTitle);
+
   @override
   _EmailSignatureState createState() => _EmailSignatureState();
 }
@@ -74,7 +76,7 @@ class _EmailSignatureState extends State<EmailSignature> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: L10n.get(L.settingSignatureTitle),
+        title: EmailSignature.viewTitle,
         leading: AppBarCloseButton(context: context),
         trailingList: [
           IconButton(

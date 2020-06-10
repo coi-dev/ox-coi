@@ -66,6 +66,8 @@ import 'user_bloc.dart';
 import 'user_event_state.dart';
 
 class UserAccountSettings extends StatefulWidget {
+  static get viewTitle => L10n.get(L.settingAccount);
+
   @override
   _UserAccountSettingsState createState() => _UserAccountSettingsState();
 }
@@ -158,7 +160,7 @@ class _UserAccountSettingsState extends State<UserAccountSettings> {
           onWillPop: () async => _navigation.allowBackNavigation,
           child: Scaffold(
             appBar: DynamicAppBar(
-              title: L10n.get(L.settingAccount),
+              title: UserAccountSettings.viewTitle,
               leading: AppBarCloseButton(context: context),
               trailingList: [
                 Builder(

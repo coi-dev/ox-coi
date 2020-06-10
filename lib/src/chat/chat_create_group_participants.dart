@@ -62,6 +62,8 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatCreateGroupParticipants extends StatefulWidget {
+  static get viewTitle => L10n.get(L.groupCreate);
+
   @override
   _ChatCreateGroupParticipantsState createState() => _ChatCreateGroupParticipantsState();
 }
@@ -91,7 +93,7 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
     return Scaffold(
       appBar: DynamicAppBar(
         showDivider: false,
-        title: L10n.get(L.groupCreate),
+        title: ChatCreateGroupParticipants.viewTitle,
         leading: AppBarCloseButton(context: context),
         trailingList: [
           IconButton(

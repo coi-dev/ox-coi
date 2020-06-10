@@ -59,6 +59,8 @@ import 'anti_mobbing_list_bloc.dart';
 import 'anti_mobbing_list_event_state.dart';
 
 class AntiMobbingList extends StatefulWidget {
+  static get viewTitle => L10n.get(L.invites);
+
   @override
   _AntiMobbingListState createState() => _AntiMobbingListState();
 }
@@ -84,7 +86,7 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: L10n.get(L.invites),
+        title: AntiMobbingList.viewTitle,
         leading: AppBarBackButton(context: context),
       ),
       body: BlocBuilder(

@@ -59,6 +59,8 @@ import 'package:ox_coi/src/utils/key_generator.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 class ChatProfile extends StatefulWidget {
+  static get viewTitle => L10n.get(L.profile);
+
   final int chatId;
   final int messageId;
 
@@ -90,7 +92,7 @@ class _ChatProfileState extends State<ChatProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: L10n.get(L.profile),
+        title: ChatProfile.viewTitle,
         leading: AppBarBackButton(context: context),
       ),
       body: SingleChildScrollView(
@@ -111,10 +113,10 @@ class _ChatProfileState extends State<ChatProfile> {
                   builder: (context, state) {
                     if (state is ContactListStateSuccess) {
                       final contactId = state.contactElements[1];
-            final key = contactId is String ? ValueKey(contactId) : contactId;
-            var id = extractId(key);
+                      final key = contactId is String ? ValueKey(contactId) : contactId;
+                      var id = extractId(key);
 
-            return ChatProfileSingle(
+                      return ChatProfileSingle(
                         chatId: widget.chatId,
                         isSelfTalk: _isSelfTalk,
                         contactId: id,

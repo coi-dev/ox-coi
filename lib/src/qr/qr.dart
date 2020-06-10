@@ -52,6 +52,8 @@ import 'package:ox_coi/src/ui/dimensions.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 
 class QrCode extends StatefulWidget {
+  static get viewTitle => L10n.get(L.qrProfile);
+
   final int chatId;
   final int initialIndex;
 
@@ -77,7 +79,7 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
         appBar: DynamicAppBar(
-          title: L10n.get(L.qrProfile),
+          title: QrCode.viewTitle,
           leading: AppBarBackButton(context: context),
         ),
         body: buildBody(),

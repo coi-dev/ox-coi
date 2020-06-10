@@ -56,6 +56,8 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class SettingsChat extends StatefulWidget {
+  static get viewTitle => L10n.get(L.chatP);
+
   @override
   _SettingsChatState createState() => _SettingsChatState();
 }
@@ -75,7 +77,7 @@ class _SettingsChatState extends State<SettingsChat> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DynamicAppBar(
-          title: L10n.get(L.chatP),
+          title: SettingsChat.viewTitle,
           leading: AppBarBackButton(context: context),
         ),
         body: _buildPreferenceList(context));

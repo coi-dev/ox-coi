@@ -61,6 +61,9 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class Share extends StatefulWidget {
+  static get forwardViewTitle => L10n.get(L.forward);
+  static get shareViewTitle => L10n.get(L.share);
+
   final List<int> msgIds;
   final MessageActionTag messageActionTag;
   final IncomingSharedData sharedData;
@@ -90,7 +93,7 @@ class _ShareState extends State<Share> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: widget.messageActionTag == MessageActionTag.forward ? L10n.get(L.forward) : L10n.get(L.share),
+        title: widget.messageActionTag == MessageActionTag.forward ? Share.forwardViewTitle : Share.shareViewTitle,
         leading: AppBarBackButton(context: context),
       ),
       body: _buildShareList(),

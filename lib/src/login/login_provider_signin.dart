@@ -65,6 +65,8 @@ import 'login_events_state.dart';
 import 'login_manual_settings.dart';
 
 class ProviderSignIn extends StatefulWidget {
+  static get viewTitle => L10n.get(L.providerOtherMailProvider);
+
   final Provider provider;
 
   ProviderSignIn({this.provider});
@@ -118,7 +120,7 @@ class _ProviderSignInState extends State<ProviderSignIn> {
       onWillPop: () async => _navigation.allowBackNavigation,
       child: Scaffold(
         appBar: DynamicAppBar(
-          title: isOtherProvider ? L10n.get(L.providerOtherMailProvider) : widget.provider.name,
+          title: isOtherProvider ? ProviderSignIn.viewTitle : widget.provider.name,
           leading: AppBarBackButton(context: context),
         ),
         body: MultiBlocListener(

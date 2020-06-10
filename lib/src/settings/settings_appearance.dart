@@ -66,8 +66,6 @@ final _themeItemData = {
 class SettingsAppearance extends StatefulWidget {
   static get viewTitle => L10n.get(L.settingsAppearanceTitle);
 
-  SettingsAppearance();
-
   @override
   _SettingsAppearanceState createState() => _SettingsAppearanceState();
 }

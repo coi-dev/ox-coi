@@ -56,6 +56,7 @@ import 'chat_change_bloc.dart';
 import 'chat_change_event_state.dart';
 
 class EditGroupProfile extends StatefulWidget {
+  static get viewTitle => L10n.get(L.groupRename);
   final int chatId;
 
   EditGroupProfile({@required this.chatId});
@@ -81,7 +82,7 @@ class _EditGroupProfileState extends State<EditGroupProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: DynamicAppBar(
-          title: L10n.get(L.groupRename),
+          title: EditGroupProfile.viewTitle,
           leading: AppBarCloseButton(context: context),
           trailingList: [
             IconButton(

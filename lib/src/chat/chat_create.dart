@@ -62,6 +62,8 @@ import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
 import 'package:ox_coi/src/widgets/state_info.dart';
 
 class ChatCreate extends StatefulWidget {
+  static get viewTitle => L10n.get(L.chatCreate);
+
   @override
   _ChatCreateState createState() => _ChatCreateState();
 }
@@ -98,7 +100,7 @@ class _ChatCreateState extends State<ChatCreate> {
     return Scaffold(
         appBar: DynamicAppBar(
           showDivider: false,
-          title: L10n.get(L.chatCreate),
+          title: ChatCreate.viewTitle,
           leading: AppBarBackButton(context: context),
         ),
         body: buildList());

@@ -57,6 +57,8 @@ import 'package:ox_coi/src/widgets/state_info.dart';
 import 'package:ox_coi/src/widgets/validatable_text_form_field.dart';
 
 class SettingsAutocryptImport extends StatefulWidget {
+  static get viewTitle => L10n.get(L.autocryptImport);
+
   final int chatId;
   final int messageId;
 
@@ -104,7 +106,7 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DynamicAppBar(
-        title: L10n.get(L.autocryptImport),
+        title: SettingsAutocryptImport.viewTitle,
         leading: AppBarBackButton(context: context),
         trailingList: [
           IconButton(

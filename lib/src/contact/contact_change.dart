@@ -75,6 +75,10 @@ enum ContactAction {
 }
 
 class ContactChange extends StatefulWidget {
+  static get editViewTitle => L10n.get(L.contactEdit);
+  static get addViewTitle => L10n.get(L.contactAdd);
+  static get createViewTitle => L10n.get(L.chatCreate);
+
   final ContactAction contactAction;
   final int id;
   final bool createChat;
@@ -129,10 +133,10 @@ class _ContactChangeState extends State<ContactChange> {
   @override
   Widget build(BuildContext context) {
     if (widget.contactAction == ContactAction.add) {
-      title = widget.createChat ? L10n.get(L.chatCreate) : L10n.get(L.contactAdd);
+      title = widget.createChat ? ContactChange.createViewTitle : ContactChange.addViewTitle;
       changeToast = L10n.get(L.contactAddedSuccess);
     } else {
-      title = L10n.get(L.contactEdit);
+      title = ContactChange.editViewTitle;
       changeToast = L10n.get(L.contactEditedSuccess);
     }
     return Scaffold(
