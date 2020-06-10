@@ -201,34 +201,8 @@ class _ContactChangeState extends State<ContactChange> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      Visibility(
-                        visible: widget.contactAction != ContactAction.add,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: changeContactTopPadding),
-                          child: Container(
-                            color: CustomTheme.of(context).surface,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
-                              child: Row(
-                                children: <Widget>[
-                                  AdaptiveIcon(icon: IconSource.mail),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: iconFormPadding),
-                                  ),
-                                  Text(
-                                    _contactData?.email ?? "",
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                       Padding(
-                        padding: widget.contactAction == ContactAction.add
-                            ? const EdgeInsets.only(top: changeContactTopPadding)
-                            : const EdgeInsets.all(zero),
+                        padding: const EdgeInsets.only(top: changeContactTopPadding),
                         child: Container(
                           color: CustomTheme.of(context).surface,
                           child: Padding(
@@ -248,34 +222,59 @@ class _ContactChangeState extends State<ContactChange> {
                         ),
                       ),
                       Visibility(
-                        visible: widget.contactAction != ContactAction.add && _contactData?.phoneNumbers != null,
-                        child: Container(
-                          color: CustomTheme.of(context).surface,
-                          child: Column(
+                        visible: widget.contactAction != ContactAction.add,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: formHorizontalPadding,
+                            top: dimension24dp,
+                            right: formHorizontalPadding,
+                            bottom: formVerticalPadding,
+                          ),
+                          child: Row(
                             children: <Widget>[
-                              for (var phoneNumber in ContactExtension.getPhoneNumberList(_contactData?.phoneNumbers))
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
-                                  child: Row(
-                                    children: <Widget>[
-                                      AdaptiveIcon(icon: IconSource.phone),
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: iconFormPadding),
-                                      ),
-                                      Text(
-                                        phoneNumber,
-                                        style: Theme.of(context).textTheme.subhead,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              AdaptiveIcon(
+                                icon: IconSource.mail,
+                                color: CustomTheme.of(context).onBackground.disabled(),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: iconFormPaddingBig),
+                              ),
+                              Text(
+                                _contactData?.email ?? "",
+                                style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onBackground.disabled()),
+                              ),
                             ],
                           ),
                         ),
                       ),
+                      Visibility(
+                        visible: widget.contactAction != ContactAction.add && hasPhoneNumbers(),
+                        child: Column(
+                          children: <Widget>[
+                            for (var phoneNumber in ContactExtension.getPhoneNumberList(_contactData?.phoneNumbers))
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
+                                child: Row(
+                                  children: <Widget>[
+                                    AdaptiveIcon(
+                                      icon: IconSource.phone,
+                                      color: CustomTheme.of(context).onBackground.disabled(),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: iconFormPaddingBig),
+                                    ),
+                                    Text(
+                                      phoneNumber,
+                                      style: Theme.of(context).textTheme.subhead.apply(color: CustomTheme.of(context).onBackground.disabled()),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(top: dimension32dp, bottom: dimension72dp, left: formVerticalPadding, right: formVerticalPadding),
+                        padding: const EdgeInsets.only(top: dimension32dp, bottom: dimension72dp, left: formVerticalPadding, right: formVerticalPadding),
                         child: Text(
                           L10n.get(L.contactEditPhoneNumberText),
                           style: Theme.of(context).textTheme.caption.apply(color: CustomTheme.of(context).onBackground.half()),
@@ -334,4 +333,8 @@ class _ContactChangeState extends State<ContactChange> {
   String _getName() => _nameField.controller.text;
 
   String _getEmail() => widget.contactAction == ContactAction.add ? _emailField.controller.text : _contactData?.email;
+
+  bool hasPhoneNumbers() {
+    return _contactData != null && _contactData.phoneNumbers != null && _contactData.phoneNumbers.isNotEmpty;
+  }
 }

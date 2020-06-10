@@ -98,6 +98,7 @@ const searchBarVerticalPadding = 10.0;
 const iconTextPadding = dimension4dp;
 const iconTextTopPadding = 10.0;
 const iconFormPadding = dimension8dp;
+const iconFormPaddingBig = dimension16dp;
 const iconSize = 18.0;
 
 // Chat / invite
