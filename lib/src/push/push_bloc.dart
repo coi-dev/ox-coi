@@ -246,11 +246,11 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   Future<bool> _isWebPushAvailableAsync() async {
-    return await _context.isWebPushSupported() == 1;
+    return await _context.isWebPushSupportedAsync() == 1;
   }
 
   Future<String> _getCoiServerPublicKeyAsync() async {
-    return await _context.getWebPushVapidKey();
+    return await _context.getWebPushVapidKeyAsync();
   }
 
   Future<void> _subscribeMetaDataAsync(ResponsePushResource responsePushResource) async {
@@ -276,12 +276,12 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     );
     _registerListeners();
     final encodedBody = json.encode(pushSubscribeMetaData);
-    await _context.subscribeWebPush(clientEndpoint, encodedBody, _subscribeListenerId);
+    await _context.subscribeWebPushAsync(clientEndpoint, encodedBody, _subscribeListenerId);
   }
 
   Future<void> _confirmValidationAsync(String message) async {
     final clientEndpoint = await getPreference(preferenceNotificationsEndpoint);
-    await _context.validateWebPush(clientEndpoint, message, _validateListenerId);
+    await _context.validateWebPushAsync(clientEndpoint, message, _validateListenerId);
   }
 
   void _registerListeners() {

@@ -107,31 +107,31 @@ class Config {
     _instance = Config._internal();
   }
 
-  load() async {
+  loadAsync() async {
     _logger.info('Loading config');
-    username = await _context.getConfigValue(Context.configDisplayName);
-    avatarPath = await _context.getConfigValue(Context.configSelfAvatar);
-    status = await _context.getConfigValue(Context.configSelfStatus);
-    email = await _context.getConfigValue(Context.configAddress);
-    imapLogin = await _context.getConfigValue(Context.configMailUser);
-    imapServer = await _context.getConfigValue(Context.configMailServer);
-    imapPort = await _context.getConfigValue(Context.configMailPort);
-    smtpLogin = await _context.getConfigValue(Context.configSendUser);
-    smtpServer = await _context.getConfigValue(Context.configSendServer);
-    smtpPort = await _context.getConfigValue(Context.configSendPort);
-    imapSecurity = await _context.getConfigValue(Context.configImapSecurity);
-    smtpSecurity = await _context.getConfigValue(Context.configSmtpSecurity);
-    showEmails = await _context.getConfigValue(Context.configShowEmails, ObjectType.int);
-    rfc724MsgIdPrefix = await _context.getConfigValue(Context.configRfc724MsgIdPrefix, ObjectType.int);
-    maxAttachSize = await _context.getConfigValue(Context.configMaxAttachSize, ObjectType.int);
-    mdnsEnabled = await _context.getConfigValue(Context.configMdnsEnabled, ObjectType.int) == 1;
+    username = await _context.getConfigValueAsync(Context.configDisplayName);
+    avatarPath = await _context.getConfigValueAsync(Context.configSelfAvatar);
+    status = await _context.getConfigValueAsync(Context.configSelfStatus);
+    email = await _context.getConfigValueAsync(Context.configAddress);
+    imapLogin = await _context.getConfigValueAsync(Context.configMailUser);
+    imapServer = await _context.getConfigValueAsync(Context.configMailServer);
+    imapPort = await _context.getConfigValueAsync(Context.configMailPort);
+    smtpLogin = await _context.getConfigValueAsync(Context.configSendUser);
+    smtpServer = await _context.getConfigValueAsync(Context.configSendServer);
+    smtpPort = await _context.getConfigValueAsync(Context.configSendPort);
+    imapSecurity = await _context.getConfigValueAsync(Context.configImapSecurity);
+    smtpSecurity = await _context.getConfigValueAsync(Context.configSmtpSecurity);
+    showEmails = await _context.getConfigValueAsync(Context.configShowEmails, ObjectType.int);
+    rfc724MsgIdPrefix = await _context.getConfigValueAsync(Context.configRfc724MsgIdPrefix, ObjectType.int);
+    maxAttachSize = await _context.getConfigValueAsync(Context.configMaxAttachSize, ObjectType.int);
+    mdnsEnabled = await _context.getConfigValueAsync(Context.configMdnsEnabled, ObjectType.int) == 1;
 
-    coiSupported = (await _context.isCoiSupported()) == 1;
-    coiEnabled = (await _context.isCoiEnabled()) == 1;
-    coiMessageFilterEnabled = (await _context.isCoiMessageFilterEnabled()) == 1;
+    coiSupported = (await _context.isCoiSupportedAsync()) == 1;
+    coiEnabled = (await _context.isCoiEnabledAsync()) == 1;
+    coiMessageFilterEnabled = (await _context.isCoiMessageFilterEnabledAsync()) == 1;
   }
 
-  Future<void> setValue(String key, var value) async {
+  Future<void> setValueAsync(String key, var value) async {
     ObjectType type = isTypeInt(key) ? ObjectType.int : ObjectType.String;
     if (type == ObjectType.String && !isEmptyStringValid(key)) {
       value = convertEmptyStringToNull(value);
@@ -184,11 +184,11 @@ class Config {
         throw ReadOnlyConfigValueException(key);
       case ConfigExtension.coiEnabled:
         coiEnabled = (value as int).toBool();
-        await _context.setCoiEnabled(value, 1);
+        await _context.setCoiEnabledAsync(value, 1);
         break;
       case ConfigExtension.coiMessageFilterEnabled:
         coiMessageFilterEnabled = (value as int).toBool();
-        await _context.setCoiMessageFilter(value, 1);
+        await _context.setCoiMessageFilterAsync(value, 1);
         break;
       case Context.configMailPassword:
       case Context.configSendPassword:
@@ -200,7 +200,7 @@ class Config {
         throw InvalidConfigKeyException(key);
     }
     if (shouldPersistsViaContextSetConfig(key)) {
-      await _context.setConfigValue(key, value, type);
+      await _context.setConfigValueAsync(key, value, type);
     }
     _logConfigChange(value, key);
   }

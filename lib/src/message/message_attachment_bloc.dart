@@ -99,14 +99,14 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
 
   void _openFile(int messageId) async {
     Core.ChatMsg message = _getMessage(messageId);
-    OpenFile.open(await message.getFile());
+    OpenFile.open(await message.getFileAsync());
   }
 
   void _shareFile(int messageId) async {
     Core.ChatMsg message = _getMessage(messageId);
-    var text = await message.getText();
-    var filePath = await message.getFile();
-    var mimeType = filePath.isNotEmpty ? await message.getFileMime() : "text/*";
+    var text = await message.getTextAsync();
+    var filePath = await message.getFileAsync();
+    var mimeType = filePath.isNotEmpty ? await message.getFileMimeAsync() : "text/*";
 
     final shareData = OutgoingSharedData(
       title: text,
@@ -168,7 +168,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
   Stream<MessageAttachmentState> getNextPreviousMessageAsync(GetNextPreviousImage event) async* {
     Core.Context context = Core.Context();
 
-    int nextMessageId = await context.getNextMedia(
+    int nextMessageId = await context.getNextMediaAsync(
       event.messageId,
       event.dir,
       messageTypeOne: Core.ChatMsg.typeImage,

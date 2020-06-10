@@ -109,7 +109,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
   void loadMessages() async {
     List<int> dateMakerIds = List();
     Context context = Context();
-    List<int> messageIds = List.from(await context.getChatMessages(Chat.typeInvite, Context.chatListAddDayMarker));
+    List<int> messageIds = List.from(await context.getChatMessagesAsync(Chat.typeInvite, Context.chatListAddDayMarker));
     for (int index = 0; index < messageIds.length; index++) {
       int previousIndex = index - 1;
       if (previousIndex >= 0 && messageIds[previousIndex] == ChatMsg.idDayMarker) {
@@ -123,7 +123,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
     var lastUpdateValues = List<int>();
     await Future.forEach(messageIds, (messageId) async {
       ChatMsg message = _messageListRepository.get(messageId);
-      var contactId = await message.getFromId();
+      var contactId = await message.getFromIdAsync();
       if (!uniqueInviteMap.containsKey(contactId)) {
         uniqueInviteMap.putIfAbsent(contactId, () => messageId);
         lastUpdateValues.add(message.lastUpdate);

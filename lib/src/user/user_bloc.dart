@@ -72,41 +72,41 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Stream<UserState> _setupUserAsync() async* {
     final config = Config();
-    await config.load();
+    await config.loadAsync();
     yield UserStateSuccess(config: config);
   }
 
   Stream<UserState> _saveUserPersonalDataAsync(UserPersonalDataChanged event) async* {
     final config = Config();
-    await config.setValue(Context.configDisplayName, event.username);
-    await config.setValue(Context.configSelfAvatar, event.avatarPath);
+    await config.setValueAsync(Context.configDisplayName, event.username);
+    await config.setValueAsync(Context.configSelfAvatar, event.avatarPath);
     yield* _manuallyChangedData(config);
   }
 
   Stream<UserState> _saveUserSignatureAsync(UserSignatureChanged event) async* {
     final config = Config();
-    await config.setValue(Context.configSelfStatus, event.signature);
+    await config.setValueAsync(Context.configSelfStatus, event.signature);
     yield* _manuallyChangedData(config);
   }
 
   Stream<UserState> _saveUserAvatarAsync(UserAvatarChanged event) async* {
     final config = Config();
-    await config.setValue(Context.configSelfAvatar, event.avatarPath);
+    await config.setValueAsync(Context.configSelfAvatar, event.avatarPath);
     yield* _manuallyChangedData(config);
   }
 
   Stream<UserState> _saveUserAccountDataAsync(UserAccountDataChanged event) async* {
     final config = Config();
-    await config.setValue(Context.configMailUser, event.imapLogin.isNotEmpty ? event.imapLogin : null);
-    await config.setValue(Context.configMailPassword, event.imapPassword);
-    await config.setValue(Context.configMailServer, event.imapServer);
-    await config.setValue(Context.configMailPort, event.imapPort);
-    await config.setValue(Context.configImapSecurity, event.imapSecurity);
-    await config.setValue(Context.configSendUser, event.smtpLogin.isNotEmpty ? event.smtpLogin : null);
-    await config.setValue(Context.configSendPassword, event.smtpPassword);
-    await config.setValue(Context.configSendServer, event.smtpServer);
-    await config.setValue(Context.configSendPort, event.smtpPort);
-    await config.setValue(Context.configSmtpSecurity, event.smtpSecurity);
+    await config.setValueAsync(Context.configMailUser, event.imapLogin.isNotEmpty ? event.imapLogin : null);
+    await config.setValueAsync(Context.configMailPassword, event.imapPassword);
+    await config.setValueAsync(Context.configMailServer, event.imapServer);
+    await config.setValueAsync(Context.configMailPort, event.imapPort);
+    await config.setValueAsync(Context.configImapSecurity, event.imapSecurity);
+    await config.setValueAsync(Context.configSendUser, event.smtpLogin.isNotEmpty ? event.smtpLogin : null);
+    await config.setValueAsync(Context.configSendPassword, event.smtpPassword);
+    await config.setValueAsync(Context.configSendServer, event.smtpServer);
+    await config.setValueAsync(Context.configSendPort, event.smtpPort);
+    await config.setValueAsync(Context.configSmtpSecurity, event.smtpSecurity);
     yield* _manuallyChangedData(config);
   }
 

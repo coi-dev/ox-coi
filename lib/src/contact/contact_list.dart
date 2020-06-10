@@ -207,7 +207,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
             negativeAction: () => _googleMailAddressAction(false),
             navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
             barrierDismissible: false,
-            onWillPop: _onGoogleMailDialogWillPop,
+            onWillPop: _onGoogleMailDialogWillPopAsync,
           );
         }
       },
@@ -286,7 +286,7 @@ class _ContactListState extends State<ContactList> with ChatCreateMixin {
     );
   }
 
-  Future<bool> _onGoogleMailDialogWillPop() {
+  Future<bool> _onGoogleMailDialogWillPopAsync() {
     return Future.value(false);
   }
 

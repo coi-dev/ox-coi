@@ -161,7 +161,7 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
   @override
   Future<void> textfieldEditingCompleteAsync({BuildContext context, String value}) async {
     debugPrint("[Textfield Edit Complete] Value: $value");
-    await _config.setValue(Context.configDisplayName, value);
+    await _config.setValueAsync(Context.configDisplayName, value);
     changeNotifier.userName = value;
   }
 
@@ -213,7 +213,7 @@ extension CustomerDelegatePrivateHelper on CustomerDelegate {
       );
 
       if (croppedAvatar != null) {
-        await _config.setValue(Context.configSelfAvatar, croppedAvatar.path);
+        await _config.setValueAsync(Context.configSelfAvatar, croppedAvatar.path);
         changeNotifier.avatarPath = croppedAvatar.path;
       }
     }
@@ -231,6 +231,6 @@ extension CustomerDelegatePrivateHelper on CustomerDelegate {
   }
 
   Future<void> _setConfigShowEmailsAsync({int value}) async {
-    await _config.setValue(Context.configShowEmails, value);
+    await _config.setValueAsync(Context.configShowEmails, value);
   }
 }

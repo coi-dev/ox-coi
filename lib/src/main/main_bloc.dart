@@ -108,14 +108,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     if (event is PrepareApp) {
       yield MainStateLoading();
       try {
-        await _initCore();
-        await _openExtensionDatabase();
-        await _setupDatabaseExtensions();
+        await _initCoreAsync();
+        await _openExtensionDatabaseAsync();
+        await _setupDatabaseExtensionsAsync();
         String appState = await getPreference(preferenceAppState);
         if (appState == null || appState.isEmpty) {
-          await _setupDefaultValues();
+          await _setupDefaultValuesAsync();
         }
-        await _setupBlocs();
+        await _setupBlocsAsync();
 
         await Customer().configureAsync();
         await UrlPreviewCache().prepareCache();
@@ -125,9 +125,9 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         yield MainStateFailure(error: error.toString());
       }
     } else if (event is AppLoaded) {
-        final bool configured = await _context.isConfigured();
+        final bool configured = await _context.isConfiguredAsync();
         if (configured) {
-          await _setupLoggedInAppState();
+          await _setupLoggedInAppStateAsync();
         }
 
         final needsOnboarding = Customer.needsOnboarding;
@@ -145,11 +145,11 @@ class MainBloc extends Bloc<MainEvent, MainState> {
             _pushBloc.add(RegisterPushResource());
           }
         } else {
-          await setupBackgroundRefreshManager();
+          await setupBackgroundRefreshManagerAsync();
         }
       }
 
-      final bool hasAuthenticationError = await _checkForAuthenticationError();
+      final bool hasAuthenticationError = await _checkForAuthenticationErrorAsync();
       yield MainStateSuccess(
         configured: configured,
         hasAuthenticationError: hasAuthenticationError,
@@ -157,13 +157,13 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         notificationsActivated: notificationsActivated,
       );
     } else if (event is Logout) {
-      await _logout();
+      await _logoutAsync();
     } else if (event is DatabaseDeleteErrorEncountered) {
       yield MainStateFailure(error: event.error);
     }
 
     if (event is UserVisibleErrorEncountered) {
-      final configured = await _context.isConfigured();
+      final configured = await _context.isConfiguredAsync();
       final hasAuthenticationError = event.userVisibleError == UserVisibleError.authenticationFailed;
       yield MainStateSuccess(
         configured: configured,
@@ -174,50 +174,50 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     }
   }
 
-  Future<void> _setupBlocs() async {
+  Future<void> _setupBlocsAsync() async {
     _errorBloc.add(SetupListeners());
   }
 
-  Future<void> _applyCustomerConfig() async {
+  Future<void> _applyCustomerConfigAsync() async {
     if (Customer.chats.length > 0) {
       Context context = Context();
       for (CustomerChat chat in Customer.chats) {
-        int contactId = await context.createContact(chat.name, chat.email);
-        await context.createChatByContactId(contactId);
+        int contactId = await context.createContactAsync(chat.name, chat.email);
+        await context.createChatByContactIdAsync(contactId);
       }
     }
   }
 
-  Future<void> _initCore() async {
+  Future<void> _initCoreAsync() async {
     await core.setupAsync(dbName: dbName, minimalSetup: false);
   }
 
-  Future<void> _setupDefaultValues() async {
-    await _config.setValue(Context.configSelfStatus, "${L10n.get(L.profileDefaultStatus)} - $projectUrl");
-    await _config.setValue(Context.configShowEmails, Context.showEmailsOff);
+  Future<void> _setupDefaultValuesAsync() async {
+    await _config.setValueAsync(Context.configSelfStatus, "${L10n.get(L.profileDefaultStatus)} - $projectUrl");
+    await _config.setValueAsync(Context.configShowEmails, Context.showEmailsOff);
     String version = await getAppVersion();
     await setPreference(preferenceAppVersion, version);
     await setPreference(preferenceAppState, AppState.initialStartDone.toString());
   }
 
-  Future<void> _setupLoggedInAppState() async {
+  Future<void> _setupLoggedInAppStateAsync() async {
     var context = Context();
-    await _config.load();
+    await _config.loadAsync();
     String appState = await getPreference(preferenceAppState);
     if (_config.coiSupported) {
-      await _setupCoi(context);
+      await _setupCoiAsync(context);
     }
     if (isFreshLogin(appState)) {
-      await _setupFreshLoggedInAppState();
+      await _setupFreshLoggedInAppStateAsync();
     }
-    await _config.setValue(Context.configMaxAttachSize, maxAttachmentSize);
+    await _config.setValueAsync(Context.configMaxAttachSize, maxAttachmentSize);
     _logger.info("Setting max attachment size to $maxAttachmentSize");
     preloadContacts();
   }
 
   bool isFreshLogin(String appState) => appState == AppState.initialStartDone.toString();
 
-  Future<void> setupBackgroundRefreshManager() async {
+  Future<void> setupBackgroundRefreshManagerAsync() async {
     bool pullPreference = await getPreference(preferenceNotificationsPull);
     if (pullPreference == null || (pullPreference != null && pullPreference)) {
       var backgroundRefreshManager = BackgroundRefreshManager();
@@ -229,45 +229,45 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     ContactListBloc().add(RequestContacts(typeOrChatId: validContacts));
   }
 
-  Future<void> _setupFreshLoggedInAppState() async {
-    await _config.setValue(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
+  Future<void> _setupFreshLoggedInAppStateAsync() async {
+    await _config.setValueAsync(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
     _logger.info("Setting coi message prefix to 1");
-    await _applyCustomerConfig();
+    await _applyCustomerConfigAsync();
     await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
   }
 
-  Future<void> _setupCoi(Context context) async {
+  Future<void> _setupCoiAsync(Context context) async {
     if (!_config.coiEnabled) {
       _logger.info("Setting coi enable to 1");
-      await _config.setValue(ConfigExtension.coiEnabled, 1);
+      await _config.setValueAsync(ConfigExtension.coiEnabled, 1);
     }
     if (!_config.coiMessageFilterEnabled) {
       _logger.info("Setting coi message filter to 1");
-      await _config.setValue(ConfigExtension.coiMessageFilterEnabled, 1);
+      await _config.setValueAsync(ConfigExtension.coiMessageFilterEnabled, 1);
     }
   }
 
-  Future<bool> isCoiSupported(Context context) async => (await context.isCoiSupported()) == 1;
+  Future<bool> isCoiSupportedAsync(Context context) async => (await context.isCoiSupportedAsync()) == 1;
 
-  Future<bool> isCoiEnabled(Context context) async => (await context.isCoiEnabled()) == 1;
+  Future<bool> isCoiEnabledAsync(Context context) async => (await context.isCoiEnabledAsync()) == 1;
 
-  Future<bool> isCoiMessageFilterEnabled(Context context) async => (await context.isCoiMessageFilterEnabled()) == 1;
+  Future<bool> isCoiMessageFilterEnabledAsync(Context context) async => (await context.isCoiMessageFilterEnabledAsync()) == 1;
 
-  Future<void> _setupDatabaseExtensions() async {
+  Future<void> _setupDatabaseExtensionsAsync() async {
     final contactExtensionProvider = ContactExtensionProvider();
     await contactExtensionProvider.createTable();
   }
 
-  Future<void> _openExtensionDatabase() async {
+  Future<void> _openExtensionDatabaseAsync() async {
     final contactExtensionProvider = ContactExtensionProvider();
     await contactExtensionProvider.open(extensionDbName);
   }
 
-  Future<bool> _checkForAuthenticationError() async {
+  Future<bool> _checkForAuthenticationErrorAsync() async {
     return await getPreference(preferenceHasAuthenticationError) ?? false;
   }
 
-  Future<void> _logout() async {
+  Future<void> _logoutAsync() async {
     await clearPreferences();
 
     try {
@@ -278,7 +278,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       final extensionDbFile = File(contactExtensionProvider.path);
       await extensionDbFile.delete();
 
-      await core.logout();
+      await core.logoutAsync();
 
       if (Platform.isAndroid) {
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');

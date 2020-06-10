@@ -130,11 +130,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
     final ChatMsg message = messageListRepository.get(messageId);
 
-    final contactId = await message.getFromId();
+    final contactId = await message.getFromIdAsync();
     final Contact contact = _contactRepository.get(contactId);
-    final name = await contact.getName();
-    final email = await contact.getAddress();
-    final colorValue = await contact.getColor();
+    final name = await contact.getNameAsync();
+    final email = await contact.getAddressAsync();
+    final colorValue = await contact.getColorAsync();
     final color = colorFromArgb(colorValue);
     yield ChatStateSuccess(
       name: name,
@@ -158,18 +158,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       _chatRepository.putIfAbsent(id: _chatId);
     }
     Chat chat = _chatRepository.get(_chatId);
-    _isGroupChat = await chat.isGroup();
-    final name = await chat.getName();
-    final colorValue = await chat.getColor();
-    final freshMessageCount = await context.getFreshMessageCount(_chatId);
-    final isSelfTalk = await chat.isSelfTalk();
-    final isDeviceTalk = await chat.isDeviceTalk();
-    final isVerified = await chat.isVerified();
+    _isGroupChat = await chat.isGroupAsync();
+    final name = await chat.getNameAsync();
+    final colorValue = await chat.getColorAsync();
+    final freshMessageCount = await context.getFreshMessageCountAsync(_chatId);
+    final isSelfTalk = await chat.isSelfTalkAsync();
+    final isDeviceTalk = await chat.isDeviceTalkAsync();
+    final isVerified = await chat.isVerifiedAsync();
     final color = colorFromArgb(colorValue);
     final chatSummary = chat.get(ChatExtension.chatSummary);
     final chatSummaryState = chatSummary?.state;
-    final chatContacts = await context.getChatContacts(_chatId);
-    String avatarPath = await chat.getProfileImage();
+    final chatContacts = await context.getChatContactsAsync(_chatId);
+    String avatarPath = await chat.getProfileImageAsync();
     var phoneNumbers;
     var isRemoved = false;
     String subTitle;
@@ -186,7 +186,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         subTitle = L10n.get(L.chatMessagesSelf);
       } else if(!isDeviceTalk) {
         final Contact contact = _contactRepository.get(chatContactId);
-        subTitle = await contact.getAddress();
+        subTitle = await contact.getAddressAsync();
       }
     }
     yield ChatStateSuccess(

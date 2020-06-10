@@ -86,25 +86,25 @@ class LogManager {
     _isLogging = true;
     BlocSupervisor.delegate = LogBlocDelegate();
     if (logToFile) {
-      _logFile = await _setupAndGetLogFile();
-      await manageLogFiles();
+      _logFile = await _setupAndGetLogFileAsync();
+      await manageLogFilesAsync();
     }
     setupLogger(logLevel, logToFile);
     setupCoreListener();
-    await logDeviceInfo();
+    await logDeviceInfoAsync();
   }
 
-  Future<File> _setupAndGetLogFile() async {
-    final userVisiblePath = await getUserVisibleDirectoryPath();
+  Future<File> _setupAndGetLogFileAsync() async {
+    final userVisiblePath = await getUserVisibleDirectoryPathAsync();
     final path = userVisiblePath + Platform.pathSeparator + _logFolder;
     final logFile = '$path/log_${getDateTimeFileFormTimestamp()}.txt';
     print('File logging enabled and started. Session is logged in $logFile');
     return File(logFile).create(recursive: true);
   }
 
-  Future manageLogFiles() async {
+  Future manageLogFilesAsync() async {
     final logFiles = <String>[];
-    final List<String> currentLogFiles = await getLogFiles();
+    final List<String> currentLogFiles = await getLogFilesAsync();
     logFiles.addAll(currentLogFiles);
     logFiles.add(_logFile.path);
     if (logFiles.length > _maxLogFileCount) {
@@ -124,7 +124,7 @@ class LogManager {
   void _logEntry(LogRecord logRecord, bool logToFile) {
     debugPrint(_logTemplatePrint(logRecord));
     if (logToFile) {
-      _writeToLogFile(logRecord);
+      _writeToLogFileAsync(logRecord);
     }
   }
 
@@ -136,7 +136,7 @@ class LogManager {
     return '[COI - ${logRecord.loggerName}] ${logRecord.message}$errorInformation';
   }
 
-  Future<void> _writeToLogFile(LogRecord logRecord) async {
+  Future<void> _writeToLogFileAsync(LogRecord logRecord) async {
     final content = _logTemplateFile(logRecord);
     synchronized(() async => await _logFile.writeAsString(content, mode: FileMode.append));
   }
@@ -146,7 +146,7 @@ class LogManager {
   }
 
   void deleteAllLogFiles() async {
-    final List<String> logFiles = await getLogFiles();
+    final List<String> logFiles = await getLogFilesAsync();
     logFiles.forEach((logFile) {
       deleteLogFile(logFile);
     });
@@ -163,7 +163,7 @@ class LogManager {
     } catch (error) {}
   }
 
-  Future<List<String>> getLogFiles() async {
+  Future<List<String>> getLogFilesAsync() async {
     return await getPreference(preferenceLogFiles) ?? <String>[];
   }
 
@@ -180,15 +180,15 @@ class LogManager {
     if (Platform.isIOS) {
       _logEntry(logRecord, true); // Enables iOS developers to receive DCC logs during Android Studio sessions
     } else if (Platform.isAndroid) {
-      _writeToLogFile(logRecord);
+      _writeToLogFileAsync(logRecord);
     }
   }
 
-  Future<void> logDeviceInfo() async {
+  Future<void> logDeviceInfoAsync() async {
     final deviceName = await getDeviceName();
     final deviceOs = await getDeviceOsVersion();
     final message = "Device: $deviceName, $deviceOs";
     final logRecord = LogRecord(Level.INFO, message, _logManagerLoggerName);
-    _writeToLogFile(logRecord);
+    _writeToLogFileAsync(logRecord);
   }
 }

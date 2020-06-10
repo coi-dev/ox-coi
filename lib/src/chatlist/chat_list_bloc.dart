@@ -138,18 +138,18 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     var contactList = LinkedHashMap<int, int>();
     await Future.forEach(state.messageIds, (messageId) async {
       ChatMsg message = _inviteMessageListRepository.get(messageId);
-      var contactId = await message.getFromId();
+      var contactId = await message.getFromIdAsync();
       contactList.putIfAbsent(contactId, () => messageId);
     });
     return contactList;
   }
 
   Future<void> createChatsFromKnownContactsInvites(Context context, LinkedHashMap<int, int> inviteContactList) async {
-    List<int> contacts = await context.getContacts(2, null);
+    List<int> contacts = await context.getContactsAsync(2, null);
     List<int> toRemoveContacts = List<int>();
     await Future.forEach(inviteContactList.keys, (contactId) async {
       if (contacts.contains(contactId)) {
-        int newChatId = await context.createChatByMessageId(inviteContactList[contactId]);
+        int newChatId = await context.createChatByMessageIdAsync(inviteContactList[contactId]);
         _inviteMessageListRepository.clear();
         _chatRepository.putIfAbsent(id: newChatId);
         toRemoveContacts.add(contactId);
@@ -201,7 +201,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         ChatSummary chatSummary = chat.get(ChatExtension.chatSummary);
         var chatTimestamp = chatSummary.timestamp;
         ChatMsg message = getMessage(inviteMessageIds, nextInvite);
-        var inviteTimestamp = await message.getTimestamp();
+        var inviteTimestamp = await message.getTimestampAsync();
         if (chatTimestamp > inviteTimestamp) {
           nextChat = addChatToResult(ids, chat, types, lastUpdateValues, nextChat);
         } else {
@@ -243,17 +243,17 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     var lastUpdateValues = List<int>();
     if (chatListRefreshNeeded) {
       var chatList = ChatList();
-      await chatList.setup(_currentSearch);
-      int chatCount = await chatList.getChatCnt();
+      await chatList.setupAsync(_currentSearch);
+      int chatCount = await chatList.getChatCntAsync();
       Map<int, dynamic> chatSummaries = Map();
       for (int i = 0; i < chatCount; i++) {
-        int chatId = await chatList.getChat(i);
+        int chatId = await chatList.getChatAsync(i);
         chatIds.add(chatId);
-        var summaryData = await chatList.getChatSummary(i);
+        var summaryData = await chatList.getChatSummaryAsync(i);
         var chatSummary = ChatSummary.fromMethodChannel(summaryData);
         chatSummaries.putIfAbsent(chatId, () => chatSummary);
       }
-      await chatList.tearDown();
+      await chatList.tearDownAsync();
       _chatRepository.update(ids: chatIds);
       chatSummaries.forEach((id, chatSummary) {
         var summary = _chatRepository.get(id).get(ChatExtension.chatSummary);

@@ -84,13 +84,13 @@ class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
   void _changeReadReceipts() async {
     Config config = Config();
     bool newMdnsSetting = !config.mdnsEnabled;
-    await config.setValue(Context.configMdnsEnabled, newMdnsSetting ? 1 : 0);
+    await config.setValueAsync(Context.configMdnsEnabled, newMdnsSetting ? 1 : 0);
     add(ChatSettingsActionSuccess(readReceiptsEnabled: newMdnsSetting, inviteSetting: config.showEmails));
   }
 
   void _changeInviteSetting(int newInviteSetting) async {
     Config config = Config();
-    await config.setValue(Context.configShowEmails, newInviteSetting);
+    await config.setValueAsync(Context.configShowEmails, newInviteSetting);
     add(ChatSettingsActionSuccess(inviteSetting: newInviteSetting, readReceiptsEnabled: config.mdnsEnabled));
   }
 }

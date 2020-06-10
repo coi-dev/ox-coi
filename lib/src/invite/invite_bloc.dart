@@ -139,8 +139,8 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
   Stream<InviteState> acceptInvite(InviteServiceResponse inviteServiceResponse, String image) async* {
     Context context = Context();
     String email = inviteServiceResponse.sender.email;
-    int contactId = await context.createContact(inviteServiceResponse.sender.name, email);
-    int chatId = await context.createChatByContactId(contactId);
+    int contactId = await context.createContactAsync(inviteServiceResponse.sender.name, email);
+    int chatId = await context.createChatByContactIdAsync(contactId);
     _chatRepository.putIfAbsent(id: chatId);
     _contactRepository.putIfAbsent(id: contactId);
     if (image != null) {

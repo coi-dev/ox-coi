@@ -167,7 +167,7 @@ class _ContactChangeState extends State<ContactChange> {
                   } else {
                     if (state.contactStateData.id != null) {
                       dcc.Context coreContext = dcc.Context();
-                      var chatId = await coreContext.createChatByContactId(state.contactStateData.id);
+                      var chatId = await coreContext.createChatByContactIdAsync(state.contactStateData.id);
                       chatRepository.putIfAbsent(id: chatId);
                       _navigation.pushAndRemoveUntil(
                         context,
@@ -189,7 +189,7 @@ class _ContactChangeState extends State<ContactChange> {
                   negativeAction: () => _googlemailMailAddressAction(false),
                   navigatable: Navigatable(Type.contactGooglemailDetectedDialog),
                   barrierDismissible: false,
-                  onWillPop: _onGoogleMailDialogWillPop,
+                  onWillPop: _onGoogleMailDialogWillPopAsync,
                 );
               } else if (state is ContactItemStateFailure) {
                 L10n.get(L.contactAddFailedAlreadyExists).showToast();
@@ -323,7 +323,7 @@ class _ContactChangeState extends State<ContactChange> {
     }
   }
 
-  Future<bool> _onGoogleMailDialogWillPop() {
+  Future<bool> _onGoogleMailDialogWillPopAsync() {
     return Future.value(false);
   }
 

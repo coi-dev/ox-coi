@@ -44,11 +44,11 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-Future<String> readFile(File file) async {
+Future<String> readFileAsync(File file) async {
   return await file.readAsString();
 }
 
-Future<String> getUserVisibleDirectoryPath() async {
+Future<String> getUserVisibleDirectoryPathAsync() async {
   var directory;
   if (Platform.isIOS) {
     directory = await getApplicationDocumentsDirectory();

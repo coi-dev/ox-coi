@@ -115,25 +115,25 @@ class LocalNotificationManager {
 
   Future<void> _createChatNotificationsAsync() async {
     final HashMap<String, int> notificationHistory = await _getNotificationHistoryAsync();
-    final List<int> freshMessages = await _context.getFreshMessages();
+    final List<int> freshMessages = await _context.getFreshMessagesAsync();
     _temporaryMessageRepository.putIfAbsent(ids: freshMessages);
     _logger.info("Handling ${freshMessages.length} fresh messages");
 
     await Future.forEach(freshMessages, (int messageId) async {
       final message = _temporaryMessageRepository.get(messageId);
-      final chatId = await message.getChatId();
+      final chatId = await message.getChatIdAsync();
       if (isMessageNew(notificationHistory, chatId, messageId)) {
         notificationHistory.update(chatId.toString(), (value) => messageId, ifAbsent: () => messageId);
         _chatRepository.putIfAbsent(id: chatId);
         final chat = _chatRepository.get(chatId);
-        final isDeviceTalk = await chat.isDeviceTalk();
+        final isDeviceTalk = await chat.isDeviceTalkAsync();
         if(!isDeviceTalk) {
-          String title = await chat.getName();
-          final count = (await _context.getFreshMessageCount(chatId)) - 1;
+          String title = await chat.getNameAsync();
+          final count = (await _context.getFreshMessageCountAsync(chatId)) - 1;
           if (count > 1) {
             title = "$title (+ ${L10n.getFormatted(L.moreMessagesX, [count])})";
           }
-          final teaser = await message.getSummaryText(200);
+          final teaser = await message.getSummaryTextAsync(200);
           final payload = chatId?.toString();
           _logger.info("Creating chat notification for chat id $chatId with message id $messageId");
           _notificationManager.showNotificationFromLocalAsync(chatId, title, teaser, payload: payload);
@@ -170,26 +170,26 @@ class LocalNotificationManager {
 
   Future<void> _createInviteNotificationsAsync() async {
     final HashMap<String, int> notificationInviteHistory = await _getNotificationHistoryAsync(isInvite: true);
-    final List<int> openInvites = await _context.getChatMessages(Chat.typeInvite);
+    final List<int> openInvites = await _context.getChatMessagesAsync(Chat.typeInvite);
     _temporaryMessageRepository.putIfAbsent(ids: openInvites);
     _logger.info("Handling ${openInvites.length} open invites");
 
     await Future.forEach(openInvites.reversed, (int messageId) async {
       final message = _temporaryMessageRepository.get(messageId);
-      final senderId = await message.getFromId();
+      final senderId = await message.getFromIdAsync();
       if (isMessageNew(notificationInviteHistory, senderId, messageId)) {
         notificationInviteHistory.update(senderId.toString(), (value) => messageId, ifAbsent: () => messageId);
         _contactRepository.putIfAbsent(id: senderId);
         final contact = _contactRepository.get(senderId);
-        final contactName = await contact.getName();
-        final contactMail = await contact.getAddress();
+        final contactName = await contact.getNameAsync();
+        final contactMail = await contact.getAddressAsync();
         String title;
         if (contactName.isNotEmpty) {
           title = L10n.getFormatted(L.chatListInviteDialogXY, [contactName, contactMail]);
         } else {
           title = L10n.getFormatted(L.chatListInviteDialogX, [contactMail]);
         }
-        final teaser = await message.getSummaryText(200);
+        final teaser = await message.getSummaryTextAsync(200);
         final payload = "${Chat.typeInvite.toString()}_$messageId";
         _logger.info("Creating invite notification for sender id $senderId with message id $messageId");
         _notificationManager.showNotificationFromLocalAsync(Chat.typeInvite, title, teaser, payload: payload);

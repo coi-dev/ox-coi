@@ -82,7 +82,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is ProviderLoginButtonPressed) {
       yield LoginStateLoading(progress: 0);
       try {
-        await _setupConfigWithProvider(event);
+        await _setupConfigWithProviderAsync(event);
         _registerListeners();
         performLogin();
       } catch (error) {
@@ -91,7 +91,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoginButtonPressed) {
       yield LoginStateLoading(progress: 0);
       try {
-        await _setupConfig(event);
+        await _setupConfigAsync(event);
         _registerListeners();
         performLogin();
       } catch (error) {
@@ -100,7 +100,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoginWithNewPassword) {
       yield LoginStateLoading(progress: 0);
       try {
-        await _setNewPassword(event.password);
+        await _setNewPasswordAsync(event.password);
         _registerListeners();
         performLogin();
       } catch (error) {
@@ -135,7 +135,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void performLogin() {
     errorBloc.add(UpdateHandleErrors(delegateAndHandleErrors: false));
-    _context.configure();
+    _context.configureAsync();
   }
 
   @override
@@ -144,24 +144,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     return super.close();
   }
 
-  Future<void> _setupConfig(LoginButtonPressed event) async {
+  Future<void> _setupConfigAsync(LoginButtonPressed event) async {
     Config config = Config();
-    await config.setValue(Context.configAddress, event.email);
-    await config.setValue(Context.configMailPassword, event.password);
-    await config.setValue(Context.configMailUser, event.imapLogin);
-    await config.setValue(Context.configMailServer, event.imapServer);
-    await config.setValue(Context.configMailPort, event.imapPort);
-    await config.setValue(Context.configSendUser, event.smtpLogin);
-    await config.setValue(Context.configSendPassword, event.smtpPassword);
-    await config.setValue(Context.configSendServer, event.smtpServer);
-    await config.setValue(Context.configSendPort, event.smtpPort);
-    await config.setValue(Context.configSmtpSecurity, event.smtpSecurity);
-    await config.setValue(Context.configImapSecurity, event.imapSecurity);
+    await config.setValueAsync(Context.configAddress, event.email);
+    await config.setValueAsync(Context.configMailPassword, event.password);
+    await config.setValueAsync(Context.configMailUser, event.imapLogin);
+    await config.setValueAsync(Context.configMailServer, event.imapServer);
+    await config.setValueAsync(Context.configMailPort, event.imapPort);
+    await config.setValueAsync(Context.configSendUser, event.smtpLogin);
+    await config.setValueAsync(Context.configSendPassword, event.smtpPassword);
+    await config.setValueAsync(Context.configSendServer, event.smtpServer);
+    await config.setValueAsync(Context.configSendPort, event.smtpPort);
+    await config.setValueAsync(Context.configSmtpSecurity, event.smtpSecurity);
+    await config.setValueAsync(Context.configImapSecurity, event.imapSecurity);
   }
 
   void _updateConfig() {
     Config config = Config();
-    config.load();
+    config.loadAsync();
   }
 
   void _registerListeners() async {
@@ -208,28 +208,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     add(ProvidersLoaded(providers: providers.providerList));
   }
 
-  _setupConfigWithProvider(ProviderLoginButtonPressed event) async {
+  _setupConfigWithProviderAsync(ProviderLoginButtonPressed event) async {
     Config config = Config();
     var provider = event.provider;
     Preset preset = provider.preset;
 
-    await config.setValue(Context.configAddress, event.email);
-    await config.setValue(Context.configMailPassword, event.password);
-    await config.setValue(Context.configMailUser, event.imapLogin);
-    await config.setValue(Context.configMailServer, preset.incomingServer);
-    await config.setValue(Context.configMailPort, preset.incomingPort.toString());
-    await config.setValue(Context.configSendUser, event.smtpLogin);
-    await config.setValue(Context.configSendPassword, event.smtpPassword);
-    await config.setValue(Context.configSendServer, preset.outgoingServer);
-    await config.setValue(Context.configSendPort, preset.outgoingPort.toString());
-    await config.setValue(Context.configImapSecurity, preset.incomingSecurity.toString());
-    await config.setValue(Context.configSmtpSecurity, preset.outgoingSecurity.toString());
+    await config.setValueAsync(Context.configAddress, event.email);
+    await config.setValueAsync(Context.configMailPassword, event.password);
+    await config.setValueAsync(Context.configMailUser, event.imapLogin);
+    await config.setValueAsync(Context.configMailServer, preset.incomingServer);
+    await config.setValueAsync(Context.configMailPort, preset.incomingPort.toString());
+    await config.setValueAsync(Context.configSendUser, event.smtpLogin);
+    await config.setValueAsync(Context.configSendPassword, event.smtpPassword);
+    await config.setValueAsync(Context.configSendServer, preset.outgoingServer);
+    await config.setValueAsync(Context.configSendPort, preset.outgoingPort.toString());
+    await config.setValueAsync(Context.configImapSecurity, preset.incomingSecurity.toString());
+    await config.setValueAsync(Context.configSmtpSecurity, preset.outgoingSecurity.toString());
     await setPreference(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
     await setPreference(preferenceInviteServiceUrl, provider.inviteServiceUrl);
   }
 
-  Future<void> _setNewPassword(String password) async {
+  Future<void> _setNewPasswordAsync(String password) async {
     Config config = Config();
-    await config.setValue(Context.configMailPassword, password);
+    await config.setValueAsync(Context.configMailPassword, password);
   }
 }

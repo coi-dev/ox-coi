@@ -109,7 +109,7 @@ class _SettingsChatState extends State<SettingsChat> {
                   L10n.get(L.settingChooseMessageSyncingType),
                 ),
                 onTap: () {
-                  _buildMessageSyncChooserDialog(state.inviteSetting);
+                  _buildMessageSyncChooserDialogAsync(state.inviteSetting);
                 },
               ),
             ]).toList(),
@@ -125,7 +125,7 @@ class _SettingsChatState extends State<SettingsChat> {
     _settingsChatBloc.add(ChangeReadReceipts());
   }
 
-  Future<void> _buildMessageSyncChooserDialog(int inviteSetting) async {
+  Future<void> _buildMessageSyncChooserDialogAsync(int inviteSetting) async {
     int selectedInviteSetting = await showDialog<int>(
         context: context,
         builder: (BuildContext context) {

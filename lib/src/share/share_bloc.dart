@@ -123,7 +123,7 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
 
   void forwardMessages(int destinationChatId, List<int> messageIds) async {
     Context context = Context();
-    await context.forwardMessages(destinationChatId, messageIds);
+    await context.forwardMessagesAsync(destinationChatId, messageIds);
   }
 
   void loadSharedData() async {

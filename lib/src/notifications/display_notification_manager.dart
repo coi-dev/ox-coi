@@ -136,9 +136,9 @@ class DisplayNotificationManager {
     String name = fromEmail;
     int chatId = decryptedChatMessage.chatId;
     await Future.forEach(contactRepository.getAll(), (dcc.Contact contact) async {
-      final address = await contact.getAddress();
+      final address = await contact.getAddressAsync();
       if (address == fromEmail) {
-        final contactName = await contact.getName();
+        final contactName = await contact.getNameAsync();
         name = contactName.isNotEmpty ? contactName : fromEmail;
       }
     });

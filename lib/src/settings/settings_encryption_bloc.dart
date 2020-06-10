@@ -113,17 +113,17 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
       await _registerListeners();
     }
     var context = Context();
-    String path = await getUserVisibleDirectoryPath();
+    String path = await getUserVisibleDirectoryPathAsync();
     if (type == SettingsEncryptionType.exportKeys) {
-      context.exportKeys(path);
+      context.exportKeysAsync(path);
     } else if (type == SettingsEncryptionType.importKeys) {
-      context.importKeys(path);
+      context.importKeysAsync(path);
     }
   }
 
   void _initiateKeyTransfer() async {
     var context = Context();
-    String setupCode = await context.initiateKeyTransfer();
+    String setupCode = await context.initiateKeyTransferAsync();
     add(ActionSuccess(setupCode: setupCode));
   }
 

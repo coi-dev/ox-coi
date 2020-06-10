@@ -44,17 +44,17 @@ import 'package:delta_chat_core/delta_chat_core.dart';
 import 'package:ox_coi/src/data/contact_repository.dart';
 
 mixin ContactsUpdaterMixin {
-  Future<List<int>> getIds(int typeOrChatId) async {
+  Future<List<int>> getIdsAsync(int typeOrChatId) async {
     var context = Context();
     List<int> contactIds;
     if (typeOrChatId == validContacts) {
-      contactIds = List.from(await context.getContacts(2, null));
+      contactIds = List.from(await context.getContactsAsync(2, null));
     } else if (typeOrChatId == blockedContacts) {
-      contactIds = List.from(await context.getBlockedContacts());
+      contactIds = List.from(await context.getBlockedContactsAsync());
     } else if (typeOrChatId == inviteContacts) {
-      contactIds = List.from(await context.getChatContacts(Chat.typeInvite));
+      contactIds = List.from(await context.getChatContactsAsync(Chat.typeInvite));
     } else if (typeOrChatId != null) {
-      contactIds = List.from(await context.getChatContacts(typeOrChatId));
+      contactIds = List.from(await context.getChatContactsAsync(typeOrChatId));
     }
     return contactIds;
   }

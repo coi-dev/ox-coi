@@ -92,14 +92,14 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
         _currentSearch = null;
         _typeOrChatId = event.typeOrChatId;
         _registerListeners();
-        yield* _setupContacts(chatId: event.chatId);
+        yield* _setupContactsAsync(chatId: event.chatId);
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
     } else if (event is SearchContacts) {
       try {
         _currentSearch = event.query;
-        yield* _searchContacts(chatId: event.chatId);
+        yield* _searchContactsAsync(chatId: event.chatId);
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
       }
@@ -116,16 +116,16 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     } else if (event is AddGoogleContacts) {
       yield* _addUpdateContactsAsync(changeEmails: event.changeEmail);
     } else if (event is ContactsSelectionChanged) {
-      yield* _selectionChanged(event.id, event.chatId);
+      yield* _selectionChangedAsync(event.id, event.chatId);
     } else if (event is MarkContactsAsInitiallyLoaded) {
       await _markContactsAsInitiallyLoadedAsync();
     } else if (event is PerformImport) {
       _systemContacts = await _loadSystemContactsAsync();
       if (_systemContacts == null && event.shouldUpdateUi) {
-        yield* _setupContacts(importState: ContactImportState.fail);
+        yield* _setupContactsAsync(importState: ContactImportState.fail);
       } else {
         yield ContactListStateLoading();
-        yield* _importSystemContacts(event.shouldUpdateUi);
+        yield* _importSystemContactsAsync(event.shouldUpdateUi);
       }
     }
   }
@@ -152,19 +152,19 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
   }
 
   void _onContactsChanged([event]) async {
-    List<int> ids = await getIds(_typeOrChatId);
-    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: ids);
+    List<int> ids = await getIdsAsync(_typeOrChatId);
+    final contactHeaderList = await _mergeHeaderAndContactsAsync(contactIds: ids);
     add(ContactsChanged(ids: contactHeaderList));
   }
 
   void _onContactSelected(int chatId) async {
-    List<int> ids = await getIds(_typeOrChatId);
-    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: ids, chatId: chatId);
+    List<int> ids = await getIdsAsync(_typeOrChatId);
+    final contactHeaderList = await _mergeHeaderAndContactsAsync(contactIds: ids, chatId: chatId);
     add(ContactsChanged(ids: contactHeaderList));
   }
 
-  Stream<ContactListStateSuccess> _setupContacts({int chatId, ContactImportState importState}) async* {
-    List<int> contactIds = await getIds(_typeOrChatId);
+  Stream<ContactListStateSuccess> _setupContactsAsync({int chatId, ContactImportState importState}) async* {
+    List<int> contactIds = await getIdsAsync(_typeOrChatId);
     _contactRepository.update(ids: contactIds);
     var contactExtensionProvider = ContactExtensionProvider();
     await Future.forEach(contactIds, (contactId) async {
@@ -175,7 +175,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       }
     });
 
-    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: contactIds, chatId: chatId);
+    final contactHeaderList = await _mergeHeaderAndContactsAsync(contactIds: contactIds, chatId: chatId);
 
     yield ContactListStateSuccess(
       contactElements: contactHeaderList,
@@ -184,7 +184,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     );
   }
 
-  Future<List<dynamic>> _mergeHeaderAndContacts({List<int> contactIds, int chatId}) async {
+  Future<List<dynamic>> _mergeHeaderAndContactsAsync({List<int> contactIds, int chatId}) async {
     final headerList = List();
     final context = Context();
     List<int> chatParticipants;
@@ -192,7 +192,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     var meContactDetails;
 
     if (chatId != null) {
-      chatParticipants = await context.getChatContacts(chatId);
+      chatParticipants = await context.getChatContactsAsync(chatId);
     }
 
     await Future.forEach(contactIds, (id) async {
@@ -200,8 +200,8 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
         return;
       }
       final Contact contact = _contactRepository.get(id);
-      final String name = await contact.getName();
-      final String email = await contact.getAddress();
+      final String name = await contact.getNameAsync();
+      final String email = await contact.getAddressAsync();
       final int lastUpdate = contact.lastUpdate;
       final index = contactIds.indexOf(id);
       final previousContactId = (index > 0) ? contactIds[index - 1] : null;
@@ -213,9 +213,9 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       String headerText = name.isNullOrEmpty() ? email.getFirstCharacter()?.toUpperCase() : name.getFirstCharacter()?.toUpperCase();
 
       if (previousContactId != null) {
-        String previousName = await _contactRepository.get(previousContactId).getName();
+        String previousName = await _contactRepository.get(previousContactId).getNameAsync();
         if (previousName.isNullOrEmpty()) {
-          previousName = await _contactRepository.get(previousContactId).getAddress();
+          previousName = await _contactRepository.get(previousContactId).getAddressAsync();
         }
 
         if (headerText == previousName.getFirstCharacter()?.toUpperCase()) {
@@ -240,10 +240,10 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     return contactIds.contains(Contact.idSelf) && (chatParticipants == null || !chatParticipants.contains(Contact.idSelf));
   }
 
-  Stream<ContactListStateSuccess> _searchContacts({@required int chatId}) async* {
+  Stream<ContactListStateSuccess> _searchContactsAsync({@required int chatId}) async* {
     Context context = Context();
-    List<int> contactIds = List.from(await context.getContacts(2, _currentSearch));
-    final contactHeaderList = await _mergeHeaderAndContacts(contactIds: contactIds, chatId: chatId);
+    List<int> contactIds = List.from(await context.getContactsAsync(2, _currentSearch));
+    final contactHeaderList = await _mergeHeaderAndContactsAsync(contactIds: contactIds, chatId: chatId);
 
     yield ContactListStateSuccess(
       contactElements: contactHeaderList,
@@ -251,7 +251,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     );
   }
 
-  Stream<ContactListStateSuccess> _selectionChanged(int id, chatId) async* {
+  Stream<ContactListStateSuccess> _selectionChangedAsync(int id, chatId) async* {
     if (_contactsSelected.contains(id)) {
       _contactsSelected.remove(id);
     } else {
@@ -260,7 +260,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     if (_currentSearch.isNullOrEmpty()) {
       _onContactSelected(chatId);
     } else {
-      yield* _searchContacts(chatId: chatId);
+      yield* _searchContactsAsync(chatId: chatId);
     }
   }
 
@@ -282,7 +282,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     }
   }
 
-  Stream<ContactListState> _importSystemContacts(bool shouldUpdateUi) async* {
+  Stream<ContactListState> _importSystemContactsAsync(bool shouldUpdateUi) async* {
     bool googlemailDetected = false;
 
     _systemContacts.forEach((contact) {
@@ -311,32 +311,32 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     if (changeEmails) {
       _coreContacts = _coreContacts.replaceAll(googlemailDomain, gmailDomain);
     }
-    await updateContacts(_coreContacts, context);
+    await _updateContactsAsync(_coreContacts, context);
 
     if (_phoneNumbers.isNotEmpty) {
-      List<int> ids = List.from(await context.getContacts(2, null));
-      await updateContactExtensions(ids, _phoneNumbers);
+      List<int> ids = List.from(await context.getContactsAsync(2, null));
+      await _updateContactExtensionsAsync(ids, _phoneNumbers);
     }
 
     await Future.forEach(_contactRepository.getAll(), (contact) async {
-      await updateAvatar(_systemContacts, contact);
+      await _updateAvatarAsync(_systemContacts, contact);
       if (shouldUpdateUi) {
-        await reloadChatName(context, contact.id);
+        await _reloadChatNameAsync(context, contact.id);
       }
     });
     _systemContacts = null;
     _phoneNumbers.clear();
 
     if (shouldUpdateUi) {
-      yield* _setupContacts(importState: ContactImportState.success);
+      yield* _setupContactsAsync(importState: ContactImportState.success);
     }
   }
 
-  Future<void> reloadChatName(Context context, int contactId) async {
-    int chatId = await context.getChatByContactId(contactId);
+  Future<void> _reloadChatNameAsync(Context context, int contactId) async {
+    int chatId = await context.getChatByContactIdAsync(contactId);
     if (chatId != 0) {
       Chat chat = _chatRepository.get(chatId);
-      chat.reloadValue(Chat.methodChatGetName);
+      chat.reloadValueAsync(Chat.methodChatGetName);
     }
   }
 
@@ -356,9 +356,9 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     }
   }
 
-  Future<void> updateAvatar(Iterable<SystemContacts.Contact> systemContacts, Contact contact) async {
+  Future<void> _updateAvatarAsync(Iterable<SystemContacts.Contact> systemContacts, Contact contact) async {
     final avatarPath = await _avatarPathAsync();
-    final contactEmail = await contact.getAddress();
+    final contactEmail = await contact.getAddressAsync();
     final contactExtensionProvider = ContactExtensionProvider();
     final contactId = contact.id;
 
@@ -388,20 +388,20 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     });
   }
 
-  Future<int> updateContacts(String coreContacts, Context context) async {
+  Future<int> _updateContactsAsync(String coreContacts, Context context) async {
     int changedCount = 0;
     if (coreContacts != null && coreContacts.isNotEmpty) {
-      changedCount = await context.addAddressBook(coreContacts);
+      changedCount = await context.addAddressBookAsync(coreContacts);
     }
     return changedCount;
   }
 
-  Future updateContactExtensions(List<int> contactIds, Map<String, String> phoneNumbers) async {
+  Future _updateContactExtensionsAsync(List<int> contactIds, Map<String, String> phoneNumbers) async {
     var contactExtensionProvider = ContactExtensionProvider();
     _contactRepository.update(ids: contactIds);
     contactIds.forEach((contactId) async {
       var contact = _contactRepository.get(contactId);
-      var mail = await contact.getAddress();
+      var mail = await contact.getAddressAsync();
       var contactPhoneNumbers = phoneNumbers[mail];
       var contactExtension = await contactExtensionProvider.get(contactId: contactId);
       if (contactPhoneNumbers != null && contactPhoneNumbers.isNotEmpty) {

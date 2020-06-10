@@ -79,39 +79,39 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> with Invi
     try {
       if (event is RequestContact) {
         yield ContactItemStateLoading();
-        yield* _setupContact(contactId: event.id, previousContactId: event.previousContactId);
+        yield* _setupContactAsync(contactId: event.id, previousContactId: event.previousContactId);
       } else if (event is ChangeContact) {
-        yield* _changeContact(event.name, event.email, event.contactAction);
+        yield* _changeContactAsync(event.name, event.email, event.contactAction);
       } else if (event is AddGoogleContact) {
         if(event.email.isNullOrEmpty()){
-          yield* _addGoogleContact(event.name, event.email, event.changeEmail);
+          yield* _addGoogleContactAsync(event.name, event.email, event.changeEmail);
         } else {
 
         }
       } else if (event is DeleteContact) {
-        yield* _deleteContact(event.id);
+        yield* _deleteContactAsync(event.id);
       } else if (event is BlockContact) {
-        yield* _blockContact(event.id, event.chatId, event.messageId);
+        yield* _blockContactAsync(event.id, event.chatId, event.messageId);
       } else if (event is UnblockContact) {
-        yield* _unblockContact(event.id);
+        yield* _unblockContactAsync(event.id);
       }
     } catch (error) {
       yield ContactItemStateFailure(error: error.toString());
     }
   }
 
-  Stream<ContactItemState> _setupContact({@required int contactId, @required int previousContactId}) async* {
+  Stream<ContactItemState> _setupContactAsync({@required int contactId, @required int previousContactId}) async* {
     final Contact contact = _contactRepository.get(contactId);
-    final String name = await contact.getName();
-    final String email = await contact.getAddress();
-    final int colorValue = await contact.getColor();
-    final bool isVerified = await contact.isVerified();
+    final String name = await contact.getNameAsync();
+    final String email = await contact.getAddressAsync();
+    final int colorValue = await contact.getColorAsync();
+    final bool isVerified = await contact.isVerifiedAsync();
     final String phoneNumbers = contact.get(ContactExtension.contactPhoneNumber);
     final Color color = colorFromArgb(colorValue);
 
     String imagePath;
     if (Contact.idSelf == contact.id) {
-      imagePath = await contact.getProfileImage();
+      imagePath = await contact.getProfileImageAsync();
     } else {
       imagePath = contact.get(ContactExtension.contactAvatar);
     }
@@ -128,10 +128,10 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> with Invi
     yield ContactItemStateSuccess(contactStateData: contactStateData);
   }
 
-  Stream<ContactItemState> _changeContact(String name, String email, ContactAction contactAction) async* {
+  Stream<ContactItemState> _changeContactAsync(String name, String email, ContactAction contactAction) async* {
     Context context = Context();
     if (contactAction == ContactAction.add) {
-      var contactIdByAddress = await context.getContactIdByAddress(email);
+      var contactIdByAddress = await context.getContactIdByAddressAsync(email);
       if (contactIdByAddress != 0) {
         yield ContactItemStateFailure(error: contactAddGeneric, id: contactIdByAddress);
         return;
@@ -141,16 +141,16 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> with Invi
       yield GoogleContactDetected(name: name, email: email);
     } else {
       if (contactAction == ContactAction.add) {
-        int id = await context.createContact(name, email);
+        int id = await context.createContactAsync(name, email);
         final contactStateData = ContactStateData(id: id, name: name, email: email);
         yield ContactItemStateSuccess(contactStateData: contactStateData, type: ContactChangeType.add, contactHasChanged: true);
       } else {
-        int contactId = await context.getContactIdByAddress(email);
-        int chatId = await context.getChatByContactId(contactId);
+        int contactId = await context.getContactIdByAddressAsync(email);
+        int chatId = await context.getChatByContactIdAsync(contactId);
         if (chatId != 0) {
           _renameChat(chatId, name);
         }
-        await context.createContact(name, email);
+        await context.createContactAsync(name, email);
         Contact contact = _contactRepository.get(contactId);
         contact.set(Contact.methodContactGetName, name);
         final contactStateData = (state as ContactItemStateSuccess).contactStateData.copyWith(name: name);
@@ -164,13 +164,13 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> with Invi
     chat.set(Chat.methodChatGetName, name);
   }
 
-  Stream<ContactItemState> _deleteContact(int id) async* {
+  Stream<ContactItemState> _deleteContactAsync(int id) async* {
     final context = Context();
-    final chatId = await context.getChatByContactId(id);
-    final wasDeleted = await context.deleteContact(id);
+    final chatId = await context.getChatByContactIdAsync(id);
+    final wasDeleted = await context.deleteContactAsync(id);
     if (wasDeleted) {
       _contactRepository.remove(id: id);
-      await _deleteEmptyChat(chatId);
+      await _deleteEmptyChatAsync(chatId);
       yield ContactItemStateSuccess(contactStateData: null, type: ContactChangeType.delete, contactHasChanged: true);
     } else {
       String error = chatId != 0 ? contactDeleteChatExists : contactDeleteGeneric;
@@ -178,23 +178,23 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> with Invi
     }
   }
 
-  Future<void> _deleteEmptyChat(int chatId) async {
+  Future<void> _deleteEmptyChatAsync(int chatId) async {
     if (chatId != 0) {
       _chatRepository.remove(id: chatId);
       final context = Context();
-      await context.deleteChat(chatId);
+      await context.deleteChatAsync(chatId);
     }
   }
 
-  Stream<ContactItemState> _blockContact(int contactId, int chatId, int messageId) async* {
+  Stream<ContactItemState> _blockContactAsync(int contactId, int chatId, int messageId) async* {
     if (contactId == null && messageId != null) {
-      contactId = await getContactIdFromMessage(messageId);
+      contactId = await getContactIdFromMessageAsync(messageId);
     }
     Context context = Context();
     if (chatId == null) {
-      chatId = await context.getChatByContactId(contactId);
+      chatId = await context.getChatByContactIdAsync(contactId);
     }
-    await context.blockContact(contactId);
+    await context.blockContactAsync(contactId);
     if (isInviteChat(chatId)) {
       Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
       messageListRepository.clear();
@@ -215,28 +215,28 @@ class ContactItemBloc extends Bloc<ContactItemEvent, ContactItemState> with Invi
     }
   }
 
-  Stream<ContactItemState> _unblockContact(int id) async* {
+  Stream<ContactItemState> _unblockContactAsync(int id) async* {
     var contact = _contactRepository.get(id);
     Context context = Context();
-    await context.unblockContact(id);
-    var email = await contact.getAddress();
-    var contactId = await context.getContactIdByAddress(email);
+    await context.unblockContactAsync(id);
+    var email = await contact.getAddressAsync();
+    var contactId = await context.getContactIdByAddressAsync(email);
     if (contactId == 0) {
-      var name = await contact.getName();
-      await context.createContact(name, email);
+      var name = await contact.getNameAsync();
+      await context.createContactAsync(name, email);
     }
-    var chatId = await context.getChatByContactId(id);
+    var chatId = await context.getChatByContactIdAsync(id);
     adjustChatListOnBlockUnblock(chatId, block: false);
     yield ContactItemStateSuccess(contactStateData: ContactStateData(id: contactId), type: ContactChangeType.unblock, contactHasChanged: true);
   }
 
-  Stream<ContactItemState> _addGoogleContact(String name, String email, bool changeEmail) async* {
+  Stream<ContactItemState> _addGoogleContactAsync(String name, String email, bool changeEmail) async* {
     Context context = Context();
     if (changeEmail) {
       email = email.replaceAll(googlemailDomain, gmailDomain);
     }
 
-    int id = await context.createContact(name, email);
+    int id = await context.createContactAsync(name, email);
     final contactStateData = ContactStateData(id: id, name: name, email: email);
     yield ContactItemStateSuccess(contactStateData: contactStateData, type: ContactChangeType.add, contactHasChanged: true);
   }

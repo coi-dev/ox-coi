@@ -151,7 +151,7 @@ class PushManager {
 
   Future<DecryptedChatMessage> decryptPgpAsync(String contentType, PushChatMessage pushChatMessage, String fromEmail) async {
     final context = Context();
-    final decrypted = await context.decryptInMemory(contentType, pushChatMessage.content, fromEmail);
+    final decrypted = await context.decryptInMemoryAsync(contentType, pushChatMessage.content, fromEmail);
     return DecryptedChatMessage.fromMethodChannel(decrypted);
   }
 

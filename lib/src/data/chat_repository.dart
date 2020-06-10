@@ -58,27 +58,27 @@ class ChatRepository extends Repository<Chat> {
 
   Future<void> updateChatAndRefreshChatList(int changedChatId) async {
     ChatList chatList = ChatList();
-    await chatList.setup();
-    int chatCount = await chatList.getChatCnt();
+    await chatList.setupAsync();
+    int chatCount = await chatList.getChatCntAsync();
     List<int> chatIds = List();
     ChatSummary chatSummary;
     for (int i = 0; i < chatCount; i++) {
-      int chatId = await chatList.getChat(i);
+      int chatId = await chatList.getChatAsync(i);
       if (changedChatId == chatId) {
-        var summaryData = await chatList.getChatSummary(i);
+        var summaryData = await chatList.getChatSummaryAsync(i);
         chatSummary = ChatSummary.fromMethodChannel(summaryData);
       }
       chatIds.add(chatId);
     }
-    await chatList.tearDown();
+    await chatList.tearDownAsync();
     if (changedChatId != 0 && chatIds.contains(changedChatId)) {
       Chat updatedChat = get(changedChatId);
       if (updatedChat != null) {
         if (chatSummary != null) {
           updatedChat.set(ChatExtension.chatSummary, chatSummary);
         }
-        await updatedChat.reloadValue(Chat.methodChatGetName);
-        await updatedChat.reloadValue(Chat.methodChatGetProfileImage);
+        await updatedChat.reloadValueAsync(Chat.methodChatGetName);
+        await updatedChat.reloadValueAsync(Chat.methodChatGetProfileImage);
       }
     }
     update(ids: chatIds);

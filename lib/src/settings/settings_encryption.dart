@@ -207,7 +207,7 @@ class _SettingsEncryptionState extends State<SettingsEncryption> {
   void _showExportImportDialog(SettingsEncryptionType type) async {
     String title;
     String text;
-    String path = await getUserVisibleDirectoryPath();
+    String path = await getUserVisibleDirectoryPathAsync();
     if (Platform.isAndroid) {
       path = path.substring(path.getIndexAfterLastOf('0'));
     }

@@ -79,7 +79,7 @@ class DebugViewerBloc extends Bloc<DebugViewerEvent, DebugViewerState> {
     LogManager logManager = LogManager();
     File currentLogFile = logManager.currentLogFile;
     if (currentLogFile != null) {
-      String log = await readFile(currentLogFile);
+      String log = await readFileAsync(currentLogFile);
       add(LogLoaded(log: log));
     } else {
       add(LogEmpty());

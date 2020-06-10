@@ -49,9 +49,9 @@ mixin InviteMixin {
 
   bool isInvite(int chatId, int messageId) => isInviteChat(chatId) && messageId != null && messageId != 0;
 
-  Future<int> getContactIdFromMessage(int messageId) async {
+  Future<int> getContactIdFromMessageAsync(int messageId) async {
     Repository<ChatMsg> messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     ChatMsg message = messageListRepository.get(messageId);
-    return await message.getFromId();
+    return await message.getFromIdAsync();
   }
 }

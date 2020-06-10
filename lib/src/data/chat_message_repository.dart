@@ -58,8 +58,8 @@ class ChatMessageRepository extends Repository<ChatMsg> {
   Future<void> updateMessage(int changedMessageId) async {
     ChatMsg chatMsg = get(changedMessageId);
     if (chatMsg != null) {
-      await chatMsg.reloadValue(ChatMsg.methodMessageGetState);
-      await chatMsg.reloadValue(ChatMsg.methodMessageIsStarred);
+      await chatMsg.reloadValueAsync(ChatMsg.methodMessageGetState);
+      await chatMsg.reloadValueAsync(ChatMsg.methodMessageIsStarred);
     }
   }
 

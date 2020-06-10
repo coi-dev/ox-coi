@@ -180,16 +180,16 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   Stream<MessageListState> _setupMessagesAsync() async* {
     final context = Context();
-    final messageIds = List<int>.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
+    final messageIds = List<int>.from(await context.getChatMessagesAsync(_chatId, Context.chatListAddDayMarker));
     final dateMakerIds = _setupDayMarkerList(messageIds);
 
     _messageListRepository.putIfAbsent(ids: messageIds);
     if (isInvite(_chatId, _messageId)) {
       final messageIds = List<int>();
       final lastUpdateValues = List<int>();
-      final inviteContactId = await getContactIdFromMessage(_messageId);
+      final inviteContactId = await getContactIdFromMessageAsync(_messageId);
       await Future.forEach(_messageListRepository.getAll(), (ChatMsg message) async {
-        final contactId = await message.getFromId();
+        final contactId = await message.getFromIdAsync();
         if (inviteContactId == contactId) {
           messageIds.add(message.id);
           lastUpdateValues.add(message.lastUpdate);
@@ -230,8 +230,8 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     final context = Context();
     final flaggedMessageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeStarred);
 
-    final chatMessageList = List.from(await context.getChatMessages(_chatId, Context.chatListAddDayMarker));
-    final flaggedMessageList = List<int>.from(await context.getChatMessages(Chat.typeStarred, Context.chatListAddDayMarker));
+    final chatMessageList = List.from(await context.getChatMessagesAsync(_chatId, Context.chatListAddDayMarker));
+    final flaggedMessageList = List<int>.from(await context.getChatMessagesAsync(Chat.typeStarred, Context.chatListAddDayMarker));
     flaggedMessageListRepository.putIfAbsent(ids: flaggedMessageList.where((id) => id != ChatMsg.idDayMarker).toList());
     flaggedMessageList.removeWhere((id) => !chatMessageList.contains(id));
     final dateMakerIds = _setupDayMarkerList(flaggedMessageList);
@@ -249,7 +249,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
 
   void _submitMessageAsync(String text) async {
     final context = Context();
-    await context.createChatMessage(_chatId, text);
+    await context.createChatMessageAsync(_chatId, text);
   }
 
   void _submitAttachmentMessageAsync(String path, int fileType, bool isShared, [String text]) async {
@@ -264,11 +264,11 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       duration = await getDurationInMilliseconds(path);
     }
 
-    await context.createChatAttachmentMessage(_chatId, path, fileType, mimeType, duration, text);
+    await context.createChatAttachmentMessageAsync(_chatId, path, fileType, mimeType, duration, text);
   }
 
   void _retrySendPendingMessagesAsync() async {
     final context = Context();
-    await context.retrySendingPendingMessages();
+    await context.retrySendingPendingMessagesAsync();
   }
 }

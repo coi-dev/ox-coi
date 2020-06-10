@@ -69,7 +69,7 @@ Future<void> getMessages() async {
   final localNotificationManager = LocalNotificationManager.newInstance();
   localNotificationManager.setup(registerListeners: false);
   final context = Context();
-  await context.interruptIdleForIncomingMessages();
+  await context.interruptIdleForIncomingMessagesAsync();
   await localNotificationManager.triggerNotificationAsync();
 }
 

@@ -141,13 +141,13 @@ class QrBloc extends Bloc<QrEvent, QrState> {
 
   void getQrText(int chatId) async {
     Context context = Context();
-    String qrText = await context.getSecureJoinQr(chatId);
+    String qrText = await context.getSecureJoinQrAsync(chatId);
     add(QrTextLoaded(qrText: qrText));
   }
 
   void checkQr(String qrText) async {
     Context context = Context();
-    var result = await context.checkQr(qrText);
+    var result = await context.checkQrAsync(qrText);
     QrCodeResult qrResult = QrCodeResult.fromMethodChannel(result);
     if (qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup) {
       add(CheckQrDone(qrText: qrText));
@@ -167,7 +167,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
 
   void joinSecurejoin(String qrText) async {
     Context context = Context();
-    int chatId = await context.joinSecurejoinQr(qrText);
+    int chatId = await context.joinSecurejoinQrAsync(qrText);
     if (chatId == 0) {
       add(JoinFailed());
     } else {
@@ -180,17 +180,17 @@ class QrBloc extends Bloc<QrEvent, QrState> {
 
   Future createOrUpdateContact(Context context, int chatId) async {
     var contactRepository = RepositoryManager.get(RepositoryType.contact);
-    var contactIdList = await context.getChatContacts(chatId);
+    var contactIdList = await context.getChatContactsAsync(chatId);
     var contactId = contactIdList?.first;
     if (contactId != null) {
       contactRepository.putIfAbsent(id: contactId);
-      contactRepository.get(contactId).reloadValue(Contact.methodContactIsVerified);
+      contactRepository.get(contactId).reloadValueAsync(Contact.methodContactIsVerified);
     }
   }
 
   void cancelQrProcess() async {
     Context context = Context();
-    await context.stopOngoingProcess();
+    await context.stopOngoingProcessAsync();
     add(RequestQrCamera());
   }
 }
