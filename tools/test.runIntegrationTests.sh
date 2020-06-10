@@ -51,15 +51,18 @@ function setupAndroid {
 }
 
 # Setup
-if [[ "$#" = 0 ]]; then
+if [[ "$#" != 4 ]]; then
     echo "Usage of $0:"
     echo
     echo "1. parameter:     Target [android, ios]"
     echo "2. parameter:     Emulator / device id [One of the devices listed when executing 'flutter devices'. Use one of the entries from the second column.]"
     echo "3. parameter:     App id / bundle identifier"
+    echo "4. parameter:     Provider id [coi_debug_beta, coi_debug_mobile_qa]"
     echo
-    echo "Example android:  ./test.runIntegrationTests.sh android emulator-8888 com.openxchange.oxcoi.dev"
-    echo "Example iOS:      ./test.runIntegrationTests.sh ios abc-simulator-12345 com.openxchange.oxcoi.dev"
+    echo "Example android:  ./test.runIntegrationTests.sh android emulator-8888 com.openxchange.oxcoi.dev coi_debug_beta"
+    echo "Example iOS:      ./test.runIntegrationTests.sh ios abc-simulator-12345 com.openxchange.oxcoi.dev coi_debug_beta"
+    echo
+    echo "Requires a valid test_driver/setup/credential.json file, please see https://github.com/open-xchange/ox-coi/wiki/Testing"
     exit 0
 fi
 
@@ -134,6 +137,7 @@ warnings="No warnings found"
 if grep -i "Exception" ${LOG_FILE} >/dev/null; then
    warnings="Exceptions were found in the generated log (${LOG_FILE})"
 fi
+
 echo "### Test suite finished in $runTime seconds"
 echo "  [All]: $testCount"
 echo "  [OK]: $success successfully finished"

@@ -69,7 +69,7 @@ void main() {
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Test: Add swipe to delete for contacts test', () {
@@ -81,7 +81,7 @@ void main() {
     });
 
     test(': Add one contact.', () async {
-      await addNewContact(driver, name1, email1);
+      await addContactAsync(driver, name1, email1);
     });
 
     test(': Test Swipe one contact.', () async {
@@ -89,7 +89,7 @@ void main() {
     });
 
     test(': Test chat after swiping', () async {
-      await writeChatFromChat(driver, messageIdOne);
+      await composeChatMessagesAsync(driver, messageIdOne);
     });
   });
 }

@@ -56,26 +56,26 @@ void main() {
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Test create chat list', () {
     const searchString = 'Douglas0';
 
     test(': Add three chats.', () async {
-      await createNewChat(driver, providerEmail, nameMe);
-      await createNewChat(driver, email2, name2);
-      await createNewChat(driver, email1, name1);
+      await createNewChatAsync(driver, providerEmail, nameMe);
+      await createNewChatAsync(driver, email2, name2);
+      await createNewChatAsync(driver, email1, name1);
     });
 
     test(': Type something and get it.', () async {
-      await chatTest(driver, messageIdOne, name1);
-     // await callTest(driver);
+      await driver.tap(find.text(name1));
+      await composeChatMessagesAsync(driver, messageIdOne);
       await driver.tap(pageBackFinder);
     });
 
     test(': Search chat.', () async {
-      await chatSearch(driver, name1, searchString);
+      await searchChatAsync(driver, name1, searchString);
     }, timeout: Timeout(Duration(seconds: 60)));
   });
 }

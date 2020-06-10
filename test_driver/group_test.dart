@@ -58,7 +58,7 @@ void main() {
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   const testNameGroup = "TestGroup";
@@ -74,12 +74,12 @@ void main() {
 
   group('Add Contacts.', () {
     test(': Create three cantacts in the conctact list and navigate back to chat.', () async {
-      await navigateTo(driver, L.getPluralKey(L.contactP));
+      await navigateToAsync(driver, L.getPluralKey(L.contactP));
       await driver.tap(cancelFinder);
-      await addNewContact(driver, name1, email1);
-      await addNewContact(driver, name2, email2);
-      await addNewContact(driver, nameNewMe, newTestContact03);
-      navigateTo(driver, L.getPluralKey(L.chatP));
+      await addContactAsync(driver, name1, email1);
+      await addContactAsync(driver, name2, email2);
+      await addContactAsync(driver, nameNewMe, newTestContact03);
+      navigateToAsync(driver, L.getPluralKey(L.chatP));
     });
   });
 
@@ -118,7 +118,8 @@ void main() {
     });
 
     test(': Test chat in group', () async {
-      await chatTest(driver, messageIdTwo, newNameTestGroup);
+      await driver.tap(find.text(newNameTestGroup));
+      await composeChatMessagesAsync(driver, messageIdTwo);
       await driver.tap(pageBackFinder);
     });
 

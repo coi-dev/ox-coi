@@ -199,7 +199,12 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
 
   Stream<ChatComposerState> stopAudioRecorder({bool isAborted = false, bool sendAudio}) async* {
     try {
-      String result = await _flutterSound.stopRecorder();
+      String result;
+      if (_flutterSound.isRecording) {
+        result = await _flutterSound.stopRecorder();
+      } else {
+        result = "Already stopped";
+      }
       print('stopRecorder: $result');
 
       if (_recorderSubscription != null) {
@@ -210,8 +215,8 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
         _recorderDBPeakSubscription.cancel();
         _recorderDBPeakSubscription = null;
       }
-    } catch (err) {
-      print('stopRecorder error: $err');
+    } catch (err, trace) {
+      print('stopRecorder error: $err ($trace)');
     }
 
     if (isAborted) {

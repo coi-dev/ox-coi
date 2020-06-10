@@ -43,11 +43,11 @@
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:ox_coi/src/utils/keyMapping.dart';
 
 import 'helper_methods.dart';
 import 'test_constants.dart';
-import 'test_config_credential.dart';
-import 'package:ox_coi/src/utils/keyMapping.dart';
+import 'test_providers.dart';
 
 const String adbPath = 'adb';
 
@@ -63,19 +63,20 @@ const environmentTargetPlatform = 'FLUTTER_TEST_TARGET_PLATFORM';
 const environmentTargetPlatformAndroid = 'android';
 const environmentTargetPlatformIos = 'ios';
 
-/// Builds all needed setup depending on [isNormalLogin]
-/// Normal login is only for tests with the focus after the authentication and user initialisation.
-Future<FlutterDriver> setupAndGetDriver({bool isNormalLogin = false}) async {
+/// Sets up all required test components, depending on [performLoginInTestCase]
+/// Will automatically perform the authentication and user initialisation per default.
+/// If [performLoginInTestCase] is true the test case must handle the login by itself.
+Future<FlutterDriver> setupAndGetDriver({bool performLoginInTestCase = false}) async {
 
   targetPlatform = Platform.environment[environmentTargetPlatform];
   targetProvider = Platform.environment[environmentProvider];
 
-  await initProviders();
+  await initProvidersAsync();
 
   if (targetPlatform == environmentTargetPlatformAndroid) {
-    await setupAndroid();
+    await setupAndroidAsync();
   }
-  /// Connect driver to the instrumented APP.
+  /// Connects the driver to the instrumented app.
   FlutterDriver driver = await FlutterDriver.connect();
   var connected = false;
   while (!connected) {
@@ -84,70 +85,74 @@ Future<FlutterDriver> setupAndGetDriver({bool isNormalLogin = false}) async {
       connected = true;
     } catch (error) {}
   }
-  if (!isNormalLogin) {
-    await getAuthentication(driver, targetProvider, providerEmail, providerPassword);
+  if (!performLoginInTestCase) {
+    await getAuthenticationAsync(driver, providerName, providerEmail, providerPassword);
   }
   return driver;
 }
 
 /// Loads provider information from credential.json.
-/// Initialize loaded provider Information.
-Future initProviders() async {
-  final providerName1 = "contact1";
-  final providerName2 = "contact2";
+/// Initializes the matching provider given by [targetProvider].
+Future<void> initProvidersAsync() async {
+  final contactId1 = 'contact1';
+  final contactId2 = 'contact2';
 
-  providers = await loadTestProviders();
-  for (var provider in providers) {
-    if (provider.username == targetProvider) {
-      providerEmail = provider.email;
+  final providers = await loadTestProviders();
+  for (final provider in providers) {
+    if (provider.id == targetProvider) {
+      providerName = provider.name;
       realServer = provider.server;
+      providerEmail = provider.email;
       providerPassword = provider.password;
       for (var contact in provider.contacts) {
-        if (contact.id == providerName1) {
+        if (contact.id == contactId1) {
           name1 = contact.username;
           email1 = contact.email;
-        } else if (contact.id == providerName2) {
+        } else if (contact.id == contactId2) {
           name2 = contact.username;
           email2 = contact.email;
         }
       }
     }
   }
+  if (realServer == null || providerEmail == null || providerPassword == null) {
+    throw ArgumentError('Provider lookup for "$targetProvider" failed, please select a valid provider from your test_driver/setup/credential.json');
+  }
 }
 
-/// Closes provider at the end of the test.
-teardownDriver(FlutterDriver driver) {
+/// Closes the driver at the end of the test.
+void teardownDriver(FlutterDriver driver) {
   if (driver != null) {
     driver.close();
   }
 }
 
-/// Grants some permission to allow the Flutter driver to access some system functionality for android device.
-Future setupAndroid() async {
-  await grantPermission(adbPath, permissionAudio);
-  await grantPermission(adbPath, permissionReadStorage);
-  await grantPermission(adbPath, permissionWriteStorage);
-  await grantPermission(adbPath, permissionReadContacts);
-  await grantPermission(adbPath, permissionWriteContacts);
+/// Grants permission to allow the Flutter driver to access system functionality for Android device.
+Future<void> setupAndroidAsync() async {
+  await grantPermissionAsync(adbPath, permissionAudio);
+  await grantPermissionAsync(adbPath, permissionReadStorage);
+  await grantPermissionAsync(adbPath, permissionWriteStorage);
+  await grantPermissionAsync(adbPath, permissionReadContacts);
+  await grantPermissionAsync(adbPath, permissionWriteContacts);
 }
 
 /// Grants one permission using [adbPath] and [permission] to grant.
-Future grantPermission(String adbPath, String permission) async {
+Future<void> grantPermissionAsync(String adbPath, String permission) async {
   String deviceId = Platform.environment[environmentDeviceId];
   String appId = Platform.environment[environmentAppId];
   await Process.run(adbPath, ['-s', deviceId, 'shell', 'pm', 'grant', appId, permission]);
 }
 
-/// Performs authentication in one selected [provider] with the given [email] and [password].
-Future getAuthentication(FlutterDriver driver, String provider, String email, String password) async {
-  await getProvider(provider, driver);
-  await logIn(driver, email, password);
+/// Performs authentication with the selected [provider] with the given [email] and [password].
+Future<void> getAuthenticationAsync(FlutterDriver driver, String provider, String email, String password) async {
+  await selectProviderAsync(driver, provider);
+  await performLoginAsync(driver, email, password);
   await driver.tap(find.byValueKey(keyDynamicNavigationNext));
   await driver.tap(find.byValueKey(keyDynamicNavigationSkip));
 }
 
-/// Selects needed [provider] from the provider list.
-Future getProvider(String provider, FlutterDriver driver) async {
+/// Selects the needed [provider] from the provider list.
+Future<void> selectProviderAsync(FlutterDriver driver, String provider) async {
   final providerFinder = find.text(provider);
   await driver.tap(signInFinder);
   await driver.scroll(find.text(providerMailCom), 0, -600, Duration(milliseconds: 500));

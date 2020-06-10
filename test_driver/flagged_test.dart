@@ -69,14 +69,14 @@ void main() {
   FlutterDriver driver;
   setUpAll(() async {
     driver = await setupAndGetDriver();
-    await createNewChat(driver, email2, name2);
-    await createNewChat(driver, email1, name1);
+    await createNewChatAsync(driver, email2, name2);
+    await createNewChatAsync(driver, email1, name1);
     name2ContactFinder = find.text(name2);
     name3ContactFinder = find.text(name1);
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Flagged messages per chat', () {
@@ -84,10 +84,10 @@ void main() {
 
     test(': Add messages in chat "name2" and flag those.', () async {
       await driver.tap(name2ContactFinder);
-      await writeTextInChat(driver, messageIdOne);
-      await writeTextInChat(driver, messageIdTwo, inputTestMessage);
-      await flaggedMessage(driver, flagUnFlag, finderMessageOne);
-      await flaggedMessage(driver, flagUnFlag, finderMessageTwo);
+      await composeTextAsync(driver, messageIdOne);
+      await composeTextAsync(driver, messageIdTwo, inputTestMessage);
+      await flagMessageAsync(driver, flagUnFlag, finderMessageOne);
+      await flagMessageAsync(driver, flagUnFlag, finderMessageTwo);
       await driver.tap(find.byValueKey(keyChatIconTitleText));
       await driver.tap(find.byValueKey(keyChatProfileSingleIconSourceFlaggedTitle));
       await driver.waitFor(finderMessageOne);
@@ -100,8 +100,8 @@ void main() {
 
     test(': Add message in chat "name3" and flag it', () async {
       await driver.tap(name3ContactFinder);
-      await writeTextInChat(driver, messageIdThree);
-      await flaggedMessage(driver, flagUnFlag, finderMessageThree);
+      await composeTextAsync(driver, messageIdThree);
+      await flagMessageAsync(driver, flagUnFlag, finderMessageThree);
       await driver.tap(find.byValueKey(keyChatIconTitleText));
       await driver.tap(find.byValueKey(keyChatProfileSingleIconSourceFlaggedTitle));
       await driver.waitForAbsent(finderMessageOne);
@@ -116,7 +116,7 @@ void main() {
       await driver.tap(name2ContactFinder);
       await driver.tap(find.byValueKey(keyChatIconTitleText));
       await driver.tap(find.byValueKey(keyChatProfileSingleIconSourceFlaggedTitle));
-      await unflagMessage(driver, flagUnFlag, messageIdTwo);
+      await unflagMessageAsync(driver, flagUnFlag, messageIdTwo);
       await driver.waitFor(finderMessageOne);
       await driver.waitForAbsent(finderMessageTwo);
       await driver.waitForAbsent(finderMessageThree);

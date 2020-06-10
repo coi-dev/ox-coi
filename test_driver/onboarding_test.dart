@@ -63,13 +63,13 @@ import 'setup/test_constants.dart';
 void main() {
   FlutterDriver driver;
   setUpAll(() async {
-    driver = await setupAndGetDriver(isNormalLogin: true);
-    await getProvider(targetProvider, driver);
-    await logIn(driver, providerEmail, providerPassword);
+    driver = await setupAndGetDriver(performLoginInTestCase: true);
+    await selectProviderAsync(driver, providerName);
+    await performLoginAsync(driver, providerEmail, providerPassword);
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Performing onboarding test', () {
@@ -85,7 +85,7 @@ void main() {
       await driver.tap(find.byValueKey(keyDynamicNavigationNext));
       await driver.tap(find.byValueKey(keyDynamicNavigationNext));
 
-      if (targetProvider == providerDemoBetaEnvironment) {
+      if (providerName == providerDemoBetaEnvironment) {
         await driver.tap(find.text(allowNotifications));
       } else {
         await driver.tap(find.byValueKey(keyDynamicNavigationNext));

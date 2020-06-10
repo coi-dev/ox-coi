@@ -55,16 +55,25 @@
 import 'dart:convert';
 import 'dart:io';
 
+const keyContacts = 'contacts';
+const keyId = 'id';
+const keyName = 'name';
+const keyEmail = 'email';
+const keyServer = 'server';
+const keyPassword = 'password';
+const keyProviders = 'providers';
+const keyUsername = 'username';
+
 class Providers {
   List<Provider> providerList;
 
   Providers({this.providerList});
 
   Providers.fromJson(Map<String, dynamic> json) {
-    if (json['providers'] != null) {
+    if (json[keyProviders] != null) {
       providerList = List<Provider>();
-      json['providers'].forEach((v) {
-        providerList.add(Provider.fromJson(v));
+      json[keyProviders].forEach((value) {
+        providerList.add(Provider.fromJson(value));
       });
     }
   }
@@ -72,25 +81,25 @@ class Providers {
 
 class Provider {
   String id;
-  String username;
+  String name;
   String email;
   String server;
   String password;
   List<Contact> contacts;
 
-  Provider({this.id, this.username, this.email, this.server, this.password, this.contacts});
+  Provider({this.id, this.name, this.email, this.server, this.password, this.contacts});
 
   Provider.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    username = json['username'];
-    email = json['email'];
-    server = json['server'];
-    password = json['password'];
+    id = json[keyId];
+    name = json[keyName];
+    email = json[keyEmail];
+    server = json[keyServer];
+    password = json[keyPassword];
 
-    if (json['contacts'] != null) {
+    if (json[keyContacts] != null) {
       contacts = List<Contact>();
-      json['contacts'].forEach((v) {
-        contacts.add(Contact.fromJson(v));
+      json[keyContacts].forEach((value) {
+        contacts.add(Contact.fromJson(value));
       });
     }
   }
@@ -104,15 +113,17 @@ class Contact {
   Contact({this.id, this.username, this.email});
 
   Contact.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    username = json['username'];
-    email = json['email'];
+    id = json[keyId];
+    username = json[keyUsername];
+    email = json[keyEmail];
   }
 }
 
+/// The credential.json file is not part of the repository as it contains login data like emails and passwords. Please lookup the required JSON format
+/// under https://github.com/open-xchange/ox-coi/wiki/Testing
 Future<List<Provider>> loadTestProviders() async {
   final path = 'test_driver/setup/credential.json';
-  Map<String, dynamic> json = await File(path).readAsString().then((jsonStr) => jsonDecode(jsonStr));
+  Map<String, dynamic> json = await File(path).readAsString().then((jsonStr) => jsonDecode(jsonStr)).catchError((error) => throw FileSystemException("Couldn't load credentials file", path));
   Providers providers = Providers.fromJson(json);
   return providers.providerList;
 }

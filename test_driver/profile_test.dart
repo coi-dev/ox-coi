@@ -51,7 +51,6 @@ import 'setup/helper_methods.dart';
 import 'setup/main_test_setup.dart';
 
 const environmentProvider = 'PROVIDER_TO_USE';
-String targetProvider;
 
 void main() {
   FlutterDriver driver;
@@ -61,7 +60,7 @@ void main() {
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Test profile.', () {
@@ -78,7 +77,7 @@ void main() {
     test(': Check profile after change.', () async {
       var actualNewUsername = await driver.getText(find.text(testUserNameUserProfile));
       expect(actualNewUsername, testUserNameUserProfile);
-      await navigateTo(driver, L.getPluralKey(L.chatP));
+      await navigateToAsync(driver, L.getPluralKey(L.chatP));
     });
   });
 }

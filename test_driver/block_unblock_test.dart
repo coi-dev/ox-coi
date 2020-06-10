@@ -56,7 +56,7 @@ void main() {
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Test block unblock functionality', () {
@@ -65,26 +65,26 @@ void main() {
       await driver.tap(cancelFinder);
       var actualMeContact = await driver.getText(find.text(nameMe));
       expect(actualMeContact, nameMe);
-      await navigateTo(driver, L.getPluralKey(L.chatP));
+      await navigateToAsync(driver, L.getPluralKey(L.chatP));
     });
 
     test(': Add two new contacts in the contact list.', () async {
       await driver.tap(contactsFinder);
-      await addNewContact(driver, name1, email1);
+      await addContactAsync(driver, name1, email1);
     });
 
     test(': Block one contact and check the blocking.', () async {
-      await blockOneContactFromContacts(driver, name1);
+      await blockContactAsync(driver, name1);
       await driver.waitForAbsent(find.text(name1));
-      navigateTo(driver, L.getKey(L.profile));
+      navigateToAsync(driver, L.getKey(L.profile));
       await driver.scroll(find.byValueKey(keyUserProfileAppearanceIconSource), 0.0, -600.0, Duration(milliseconds: 500));
       await driver.tap(find.byValueKey(keyUserProfileBlockIconSource));
       expect(await driver.getText(find.text(name1)), name1);
     });
 
     test(': Unblock one contact and check the unblocking.', () async {
-      await unblockOneContactFromBlockedContacts(driver, name1);
-      await navigateTo(driver, L.getPluralKey(L.contactP));
+      await unblockContactAsync(driver, name1);
+      await navigateToAsync(driver, L.getPluralKey(L.contactP));
       await driver.waitFor(find.text(name1));
     });
   });

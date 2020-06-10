@@ -54,11 +54,11 @@ import 'setup/test_constants.dart';
 void main() {
   FlutterDriver driver;
   setUpAll(() async {
-    driver = await setupAndGetDriver(isNormalLogin: true);
+    driver = await setupAndGetDriver(performLoginInTestCase: true);
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   //  Const for the Ox coi welcome and provider page.
@@ -85,25 +85,25 @@ void main() {
 
   group('Performing login without E-Mail or password', () {
     test(': Sign in without E-Mail and password.', () async {
-      await logIn(driver, '', '');
+      await performLoginAsync(driver, '', '');
       var actualErrorMessage = await driver.getText(errorMessage);
       expect(actualErrorMessage, L.getKey(L.loginCheckMail));
     });
 
     test(': Sign in without E-Mail.', () async {
-      await logIn(driver, '', passwordInvalid);
+      await performLoginAsync(driver, '', passwordInvalid);
       var actualErrorMessage = await driver.getText(errorMessage);
       expect(actualErrorMessage, L.getKey(L.loginCheckMail));
     });
 
     test(': Sign in without password.', () async {
-      await logIn(driver, mailInvalid, '');
+      await performLoginAsync(driver, mailInvalid, '');
       var actualErrorMessage = await driver.getText(errorMessage);
       expect(actualErrorMessage, L.getKey(L.loginCheckMail));
     });
 
     test(': Sign in without password but with fake valid E-Mail.', () async {
-      await logIn(driver, email3, '');
+      await performLoginAsync(driver, email3, '');
       var actualPasswordHint = await driver.getText(find.text(L.getKey(L.loginCheckPassword)));
       expect(actualPasswordHint, L.getKey(L.loginCheckPassword));
     });
@@ -111,33 +111,33 @@ void main() {
 
   group('Performing login with fake login information', () {
     test(': Sign in with fake invalid E-Mail and fake password.', () async {
-      await logIn(driver, mailInvalid, passwordInvalid);
+      await performLoginAsync(driver, mailInvalid, passwordInvalid);
       var actualErrorMessage = await driver.getText(errorMessage);
       expect(actualErrorMessage, L.getKey(L.loginCheckMail));
     });
 
     test(': Sign in with fake valid E-Mail and fake password.', () async {
-      await logIn(driver, email3, passwordInvalid);
+      await performLoginAsync(driver, email3, passwordInvalid);
       var actualLoginErrorDialogTitle = await driver.getText(find.text(L.getKey(L.loginFailed)));
       expect(actualLoginErrorDialogTitle, L.getKey(L.loginFailed));
       await driver.tap(find.text(L.getKey(L.ok)));
     }, timeout: Timeout(Duration(seconds: 60)), skip: "The latest DCC version needs multiple minutes to perform this test");
 
     test(': Sign in with fake invalid E-Mail and real password.', () async {
-      await logIn(driver, mailInvalid, providerPassword);
+      await performLoginAsync(driver, mailInvalid, providerPassword);
       var actualErrorMessage = await driver.getText(errorMessage);
       expect(actualErrorMessage, L.getKey(L.loginCheckMail));
     });
 
     test(': Sign in with fake valid E-Mail and real password.', () async {
-      await logIn(driver, email3, providerPassword);
+      await performLoginAsync(driver, email3, providerPassword);
       var actualLoginErrorDialogTitle = await driver.getText(find.text(L.getKey(L.loginFailed)));
       expect(actualLoginErrorDialogTitle, L.getKey(L.loginFailed));
       await driver.tap(find.text(L.getKey(L.ok)));
     }, timeout: Timeout(Duration(seconds: 60)), skip: "The latest DCC version needs multiple minutes to perform this test");
 
     test(': Sign in with real E-Mail and fake password.', () async {
-      await logIn(driver, providerEmail, passwordInvalid);
+      await performLoginAsync(driver, providerEmail, passwordInvalid);
       await driver.tap(find.text(L.getKey(L.ok)));
       var actualWrongPasswordHint = await driver.getText(find.text(L.getKey(L.loginCheckUsernamePassword)));
       expect(actualWrongPasswordHint, L.getKey(L.loginCheckUsernamePassword));
@@ -146,7 +146,7 @@ void main() {
 
   group('Performing the login with real authentication informations', () {
     test(': Login test: Sign in with realEmail and realPassword.', () async {
-      await logIn(driver, providerEmail, providerPassword);
+      await performLoginAsync(driver, providerEmail, providerPassword);
       await driver.tap(find.byValueKey(keyDynamicNavigationNext));
       await driver.tap(find.byValueKey(keyDynamicNavigationSkip));
       expect(await driver.getText(find.text(openXChange)), openXChange);
@@ -185,15 +185,15 @@ Future selectAndTapProvider(FlutterDriver driver) async {
   final emailFieldFinder = find.byValueKey(keyProviderSignInEmailTextField);
   final passwordFieldFinder = find.byValueKey(keyProviderSignInPasswordTextField);
 
-  if (targetProvider == providerCoiDebug) {
-    expect(await driver.getText(find.text(providerCoiDebug)), targetProvider);
+  if (providerName == providerCoiDebug) {
+    expect(await driver.getText(find.text(providerCoiDebug)), providerName);
     loginProviderSignInText = 'Sign in with Debug (mobile-qa)';
-  } else if (targetProvider == providerDemoBetaEnvironment) {
-    expect(await driver.getText(find.text(providerDemoBetaEnvironment)), targetProvider);
+  } else if (providerName == providerDemoBetaEnvironment) {
+    expect(await driver.getText(find.text(providerDemoBetaEnvironment)), providerName);
     loginProviderSignInText = 'Sign in with Demo / Beta Environment';
   }
 
-  await driver.tap(find.text(targetProvider));
+  await driver.tap(find.text(providerName));
   expect(await driver.getText(find.text(loginProviderSignInText)), loginProviderSignInText);
   expect(await driver.getText(find.text(L.getKey(L.loginSignIn))), L.getKey(L.loginSignIn));
   await driver.waitFor(emailFieldFinder);

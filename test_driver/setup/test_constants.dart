@@ -43,11 +43,12 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:ox_coi/src/l10n/l.dart';
 import 'package:ox_coi/src/utils/keyMapping.dart';
 
-import 'test_config_credential.dart';
+import 'test_providers.dart';
 
 // Credentials
 String email2;
 String email1;
+String providerName;
 String providerEmail;
 String providerPassword;
 List<Provider> providers;
@@ -70,7 +71,6 @@ final fakeSMTPCoiServer="fakeIMAPCoiServer";
 // Platform info
 String targetPlatform;
 String targetProvider;
-
 
 // User names
 String name1;

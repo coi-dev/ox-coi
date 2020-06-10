@@ -69,7 +69,7 @@ void main() {
   });
 
   tearDownAll(() async {
-    await teardownDriver(driver);
+    teardownDriver(driver);
   });
 
   group('Test messages fonctionslity', () {
@@ -86,32 +86,32 @@ void main() {
       await driver.tap(cancelFinder);
       var actualMeContact = await driver.getText(meContactFinder);
       expect(actualMeContact, nameMe);
-      await addNewContact(driver, name1, email3);
+      await addContactAsync(driver, name1, email3);
     });
 
     test(': Create chat and write something.', () async {
       await driver.tap(meContactFinder);
       await driver.tap(find.text(L.getKey(L.chatOpen)));
-      await writeChatFromChat(driver, messageIdOne);
+      await composeChatMessagesAsync(driver, messageIdOne);
     });
 
     test(': Flagged messages from  meChat.', () async {
-      await flaggedMessage(driver, flagUnFlag, finderMessageOne);
+      await flagMessageAsync(driver, flagUnFlag, finderMessageOne);
       await driver.tap(pageBackFinder);
-      await navigateTo(driver, L.getKey(L.profile));
+      await navigateToAsync(driver, L.getKey(L.profile));
     });
 
     test(': UnFlagged messages.', () async {
       await driver.tap(find.byValueKey(keyUserProfileFlagIconSource));
-      await unflagMessage(driver, flagUnFlag, messageIdOne);
+      await unflagMessageAsync(driver, flagUnFlag, messageIdOne);
       await driver.waitForAbsent(find.byValueKey(inputHelloWorld));
       await driver.tap(pageBackFinder);
-      await navigateTo(driver, L.getPluralKey(L.chatP));
+      await navigateToAsync(driver, L.getPluralKey(L.chatP));
       await driver.tap(chatSavedMessagesFinder);
     });
 
     test(': Forward message.', () async {
-      await forwardMessageTo(driver, name1, forward);
+      await forwardMessageAsync(driver, name1, forward);
       await driver.waitFor(finderMessageThree);
       await driver.tap(pageBackFinder);
       await driver.tap(chatSavedMessagesFinder);
@@ -119,12 +119,12 @@ void main() {
 
     test(': Copy message from meContact and it paste in meContact.', () async {
       final paste = isAndroid() ? 'PASTE' : 'Paste';
-      await copyAndPasteMessage(driver, copy, paste);
+      await copyAndPasteMessageAsync(driver, copy, paste);
     });
 
     test(': Delete message.', () async {
-      await writeTextInChat(driver, messageIdFour, textToDelete);
-      await deleteMessage(textToDeleteFinder, driver);
+      await composeTextAsync(driver, messageIdFour, textToDelete);
+      await deleteMessageAsync(driver, textToDeleteFinder);
       await driver.waitForAbsent(textToDeleteFinder);
     });
   });
