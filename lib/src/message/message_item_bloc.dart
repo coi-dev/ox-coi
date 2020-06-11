@@ -93,11 +93,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   @override
   Stream<MessageItemState> mapEventToState(MessageItemEvent event) async* {
     if (event is LoadMessage) {
-      yield* _loadMessage(event);
+      yield* _loadMessageAsync(event);
     } else if (event is DeleteMessage) {
-      yield* _deleteMessages(event.id);
+      yield* _deleteMessagesAsync(event.id);
     } else if (event is FlagUnflagMessage) {
-      yield* _flagUnflagMessage(event.id);
+      yield* _flagUnflagMessageAsync(event.id);
     } else if (event is MessageUpdated) {
       yield MessageItemStateSuccess(messageStateData: event.messageStateData);
     }
@@ -109,7 +109,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     return super.close();
   }
 
-  Stream<MessageItemState> _loadMessage(LoadMessage event) async* {
+  Stream<MessageItemState> _loadMessageAsync(LoadMessage event) async* {
     try {
       final chatId = event.chatId;
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
@@ -128,18 +128,18 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
 
       final showContact = isGroup || Chat.typeInvite == chatId;
       if (showContact) {
-        await _setupContact();
+        await _setupContactAsync();
       }
       if (nextMessageId != null) {
-        await _setupNextMessage(nextMessageId);
+        await _setupNextMessageAsync(nextMessageId);
       }
-      await _setupMessage();
+      await _setupMessageAsync();
 
       ChatMsg message = _getMessage(messageId: _messageId);
       final isOutgoing = await message.isOutgoingAsync();
       final state = await message.getStateAsync();
-      bool showTime = await _showTime(nextMessageId);
-      bool encryptionStatusChanged = await _hasEncryptionStatusChanged(nextMessageId);
+      bool showTime = await _showTimeAsync(nextMessageId);
+      bool encryptionStatusChanged = await _hasEncryptionStatusChangedAsync(nextMessageId);
       bool hasFile = await message.hasFileAsync();
       bool isSetupMessage = await message.isSetupMessageAsync();
       String text = await message.getTextAsync();
@@ -183,7 +183,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
       }
 
       // Load possible URL preview data
-      Metadata urlPreviewData = await UrlPreviewCache().getMetadataFor(uri: text.previewUri);
+      Metadata urlPreviewData = await UrlPreviewCache().getMetadataForAsync(uri: text.previewUri);
 
       final messageStateData = MessageStateData(
         isOutgoing: isOutgoing,
@@ -242,7 +242,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     );
   }
 
-  Stream<MessageItemState> _deleteMessages(int id) async* {
+  Stream<MessageItemState> _deleteMessagesAsync(int id) async* {
     final context = Context();
     final messageIds = [id];
 
@@ -251,7 +251,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     yield MessageItemStateSuccess(messageStateData: null);
   }
 
-  Stream<MessageItemState> _flagUnflagMessage(int messageId) async* {
+  Stream<MessageItemState> _flagUnflagMessageAsync(int messageId) async* {
     if (state is MessageItemStateSuccess) {
       final successState = state as MessageItemStateSuccess;
       final isFlagged = !successState.messageStateData.isFlagged;
@@ -278,7 +278,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
   void _registerListeners() {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _messageChangedSubscription ??= _messageChangedStream?.listen(_onMessageStateChanged);
+      _messageChangedSubscription ??= _messageChangedStream?.listen(_onMessageStateChangedAsync);
     }
   }
 
@@ -290,7 +290,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     }
   }
 
-  void _onMessageStateChanged(event) async {
+  Future<void> _onMessageStateChangedAsync(event) async {
     final eventMessageId = event.data2;
     if (_messageId == eventMessageId) {
       if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead)) {
@@ -303,7 +303,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
         final eventMessageState = ChatMsg.messageStateFailed;
         final context = Context();
         final String messageInfo = await context.getMessageInfoAsync(_messageId);
-        await _setupContact();
+        await _setupContactAsync();
         final chatStateData = await _getChatDataAsync();
         final messageStateData = (state as MessageItemStateSuccess).messageStateData.copyWith(
               state: eventMessageState,
@@ -318,7 +318,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     }
   }
 
-  Future<void> _setupMessage() async {
+  Future<void> _setupMessageAsync() async {
     await _getMessage(messageId: _messageId).loadValuesAsync(keys: [
       ChatMsg.methodMessageGetText,
       ChatMsg.methodMessageGetTimestamp,
@@ -335,11 +335,11 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     ]);
   }
 
-  Future<void> _setupNextMessage(int nextMessageId) async {
+  Future<void> _setupNextMessageAsync(int nextMessageId) async {
     await _getMessage(messageId: nextMessageId).loadValueAsync(ChatMsg.methodMessageGetTimestamp);
   }
 
-  Future<void> _setupContact() async {
+  Future<void> _setupContactAsync() async {
     final ChatMsg message = _getMessage(messageId: _messageId);
     _contactId = await message.getFromIdAsync();
     _contactRepository.putIfAbsent(id: _contactId);
@@ -359,7 +359,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     return _contactRepository.get(_contactId);
   }
 
-  Future<bool> _showTime(int nextMessageId) async {
+  Future<bool> _showTimeAsync(int nextMessageId) async {
     if (nextMessageId == null) {
       return true;
     }
@@ -372,7 +372,7 @@ class MessageItemBloc extends Bloc<MessageItemEvent, MessageItemState> {
     return nextTimestamp.getDateAndTimeFromTimestamp() != timestamp.getDateAndTimeFromTimestamp();
   }
 
-  Future<bool> _hasEncryptionStatusChanged(int nextMessageId) async {
+  Future<bool> _hasEncryptionStatusChangedAsync(int nextMessageId) async {
     final ChatMsg chatMsg = _getMessage(messageId: _messageId);
     if (nextMessageId == null) {
       return await chatMsg.showPadlockAsync() == 1;

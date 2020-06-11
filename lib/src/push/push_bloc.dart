@@ -92,21 +92,21 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     final pushAvailable = await _isWebPushAvailableAsync();
     if (!pushAvailable) {
       yield PushStateSuccess(pushAvailable: false, pushSetupState: PushSetupState.initial);
-      _setNotificationPushStatusAsync(PushSetupState.initial);
+      await _setNotificationPushStatusAsync(PushSetupState.initial);
       return;
     }
     if (event is RegisterPushResource) {
-      yield* _registerPushResource();
+      yield* _registerPushResourceAsync();
     } else if (event is GetPushResource) {
-      yield* _getPushResource();
+      yield* _getPushResourceAsync();
     } else if (event is PatchPushResource) {
-      yield* _patchPushResource(event);
+      yield* _patchPushResourceAsync(event);
     } else if (event is DeletePushResource) {
-      yield* _deletePushResource();
+      yield* _deletePushResourceAsync();
     } else if (event is SubscribeMetadata) {
-      yield* _subscribeMetadata(event);
+      yield* _subscribeMetadataAsync(event);
     } else if (event is ValidateMetadata) {
-      yield* _validateMetadata(event);
+      yield* _validateMetadataAsync(event);
     }
   }
 
@@ -116,10 +116,10 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     return super.close();
   }
 
-  Stream<PushState> _registerPushResource() async* {
+  Stream<PushState> _registerPushResourceAsync() async* {
     try {
       final requestPushRegistration = await _createRegistrationRequestAsync();
-      final response = await pushService.registerPush(requestPushRegistration);
+      final response = await pushService.registerPushAsync(requestPushRegistration);
       final valid = isHttpResponseValid(response);
       if (valid) {
         final pushResource = _createPushResource(response);
@@ -136,10 +136,10 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     }
   }
 
-  Stream<PushState> _getPushResource() async* {
+  Stream<PushState> _getPushResourceAsync() async* {
     try {
       final id = await _getIdAsync();
-      final response = await pushService.getPush(id);
+      final response = await pushService.getPushAsync(id);
       final valid = isHttpResponseValid(response);
       if (valid) {
         yield PushStateSuccess(
@@ -152,11 +152,11 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     }
   }
 
-  Stream<PushState> _patchPushResource(PatchPushResource event) async* {
+  Stream<PushState> _patchPushResourceAsync(PatchPushResource event) async* {
     try {
       final id = await _getIdAsync();
       final requestPushPatch = _createPatchRequest(event.pushToken);
-      final response = await pushService.patchPush(id, requestPushPatch);
+      final response = await pushService.patchPushAsync(id, requestPushPatch);
       final valid = isHttpResponseValid(response);
       if (valid) {
         final pushResource = _createPushResource(response);
@@ -173,10 +173,10 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     }
   }
 
-  Stream<PushState> _deletePushResource() async* {
+  Stream<PushState> _deletePushResourceAsync() async* {
     try {
       final id = await _getIdAsync();
-      final response = await pushService.deletePush(id);
+      final response = await pushService.deletePushasync(id);
       final valid = isHttpResponseValid(response);
       if (valid) {
         _removePushResourceAsync();
@@ -191,7 +191,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     }
   }
 
-  Stream<PushState> _subscribeMetadata(SubscribeMetadata event) async* {
+  Stream<PushState> _subscribeMetadataAsync(SubscribeMetadata event) async* {
     await _subscribeMetaDataAsync(event.pushResource);
     yield PushStateSuccess(
       pushAvailable: true,
@@ -200,7 +200,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     _setNotificationPushStatusAsync(PushSetupState.sendMetadataSubscribe);
   }
 
-  Stream<PushState> _validateMetadata(ValidateMetadata event) async* {
+  Stream<PushState> _validateMetadataAsync(ValidateMetadata event) async* {
     await _confirmValidationAsync(event.validation);
     yield PushStateSuccess(
       pushAvailable: true,
@@ -210,7 +210,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   Future<RequestPushRegistration> _createRegistrationRequestAsync() async {
-    final appId = await getPackageName();
+    final appId = await getPackageNameAsync();
     final pushToken = await _pushManager.getPushTokenAsync();
     var publicKey = await _getCoiServerPublicKeyAsync();
     publicKey = publicKey.replaceAll("\n", "");
@@ -220,7 +220,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   RequestPushPatch _createPatchRequest(String pushToken) => RequestPushPatch(pushToken);
 
   Future<String> _getIdAsync() async {
-    final pushResourceJsonString = await getPreference(preferenceNotificationsPush);
+    final pushResourceJsonString = await getPreferenceAsync(preferenceNotificationsPush);
     final pushResourceJsonMap = jsonDecode(pushResourceJsonString);
     final pushResource = ResponsePushResource.fromJson(pushResourceJsonMap);
     return pushResource.id;
@@ -237,12 +237,12 @@ class PushBloc extends Bloc<PushEvent, PushState> {
 
   Future<void> _persistPushResourceAsync(ResponsePushResource pushResource) async {
     if (pushResource != null) {
-      await setPreference(preferenceNotificationsPush, jsonEncode(pushResource));
+      await setPreferenceAsync(preferenceNotificationsPush, jsonEncode(pushResource));
     }
   }
 
   Future<void> _removePushResourceAsync() async {
-    await removePreference(preferenceNotificationsPush);
+    await removePreferenceAsync(preferenceNotificationsPush);
   }
 
   Future<bool> _isWebPushAvailableAsync() async {
@@ -259,10 +259,10 @@ class PushBloc extends Bloc<PushEvent, PushState> {
     await generateAndPersistPushAuthAsync();
     final auth = await getPushAuthAsync();
     final clientEndpoint = generateUuid();
-    await setPreference(preferenceNotificationsEndpoint, clientEndpoint);
+    await setPreferenceAsync(preferenceNotificationsEndpoint, clientEndpoint);
 
-    final client = await getAppName();
-    final device = await getDeviceName();
+    final client = await getAppNameAsync();
+    final device = await getDeviceNameAsync();
     final pushSubscribeMetaData = PushSubscribeMetaData(
       client: client,
       device: device,
@@ -280,7 +280,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   Future<void> _confirmValidationAsync(String message) async {
-    final clientEndpoint = await getPreference(preferenceNotificationsEndpoint);
+    final clientEndpoint = await getPreferenceAsync(preferenceNotificationsEndpoint);
     await _context.validateWebPushAsync(clientEndpoint, message, _validateListenerId);
   }
 
@@ -313,7 +313,7 @@ class PushBloc extends Bloc<PushEvent, PushState> {
   }
 
   Future<void> _setNotificationPushStatusAsync(PushSetupState state) async {
-    await setPreference(preferenceNotificationsPushStatus, describeEnum(state));
+    await setPreferenceAsync(preferenceNotificationsPushStatus, describeEnum(state));
   }
 
 }

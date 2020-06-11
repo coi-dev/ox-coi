@@ -46,13 +46,6 @@ abstract class SettingsAboutEvent {}
 
 class RequestAbout extends SettingsAboutEvent {}
 
-class AboutLoaded extends SettingsAboutEvent {
-  final String name;
-  final String version;
-
-  AboutLoaded({@required this.name, @required this.version});
-}
-
 abstract class SettingsAboutState {}
 
 class SettingsAboutStateInitial extends SettingsAboutState {}

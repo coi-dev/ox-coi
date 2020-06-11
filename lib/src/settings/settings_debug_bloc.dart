@@ -55,34 +55,27 @@ class SettingsDebugBloc extends Bloc<SettingsDebugEvent, SettingsDebugState> {
   Stream<SettingsDebugState> mapEventToState(SettingsDebugEvent event) async* {
     if (event is RequestDebug) {
       try {
-        loadDebug();
+        yield* loadDebugAsync();
       } catch (error) {
         yield SettingsDebugStateFailure();
       }
-    } else if (event is DebugLoaded) {
-      yield SettingsDebugStateSuccess(
-        token: event.token,
-        pushResource: event.pushResource,
-        endpoint: event.endpoint,
-        pushServiceUrl: event.pushServiceUrl,
-        pushState: event.pushState,
-      );
     }
   }
 
-  void loadDebug() async {
-    var pushManager = PushManager();
+  Stream<SettingsDebugState> loadDebugAsync() async* {
+    final pushManager = PushManager();
     String token = await pushManager.getPushTokenAsync();
     String pushResource = await pushManager.getPushResourceAsync();
-    String endpoint = await getPreference(preferenceNotificationsEndpoint);
-    String pushServiceUrl = await getPreference(preferenceNotificationsPushServiceUrl);
-    String pushState = await getPreference(preferenceNotificationsPushStatus);
-    add(DebugLoaded(
+    String endpoint = await getPreferenceAsync(preferenceNotificationsEndpoint);
+    String pushServiceUrl = await getPreferenceAsync(preferenceNotificationsPushServiceUrl);
+    String pushState = await getPreferenceAsync(preferenceNotificationsPushStatus);
+
+    yield SettingsDebugStateSuccess(
       token: token,
       pushResource: pushResource ?? "Not set",
       endpoint: endpoint,
       pushServiceUrl: pushServiceUrl,
       pushState: pushState,
-    ));
+    );
   }
 }

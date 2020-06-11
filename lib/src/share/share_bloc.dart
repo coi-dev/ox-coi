@@ -75,11 +75,9 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
       );
     } else if (event is ForwardMessages) {
       yield ShareStateLoading();
-      forwardMessages(event.destinationChatId, event.messageIds);
+      await forwardMessagesAsync(event.destinationChatId, event.messageIds);
     } else if (event is LoadSharedData) {
-      loadSharedData();
-    } else if (event is SharedDataLoaded) {
-      yield ShareStateSuccess(sharedData: event.sharedData);
+      yield* loadSharedDataAsync();
     }
   }
 
@@ -121,21 +119,21 @@ class ShareBloc extends Bloc<ShareEvent, ShareState> {
     _chatListBloc.add(RequestChatList(showInvites: false));
   }
 
-  void forwardMessages(int destinationChatId, List<int> messageIds) async {
+  Future<void> forwardMessagesAsync(int destinationChatId, List<int> messageIds) async {
     Context context = Context();
     await context.forwardMessagesAsync(destinationChatId, messageIds);
   }
 
-  void loadSharedData() async {
-    var data = await _getSharedData();
+  Stream<ShareState> loadSharedDataAsync() async* {
+    var data = await _getSharedDataAsync();
     if (data == null) {
       return;
     }
     if (data.length > 0) {
       var sharedData = IncomingSharedData(data);
-      add(SharedDataLoaded(sharedData: sharedData));
+      yield ShareStateSuccess(sharedData: sharedData);
     }
   }
 
-  Future<Map> _getSharedData() async => await SharingChannel.instance.invokeMethod(SharingChannel.kMethodGetSharedData);
+  Future<Map> _getSharedDataAsync() async => await SharingChannel.instance.invokeMethod(SharingChannel.kMethodGetSharedData);
 }

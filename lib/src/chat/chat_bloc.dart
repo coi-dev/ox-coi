@@ -74,15 +74,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         _chatId = event.chatId;
         await _registerListeners();
         if (_chatId == Chat.typeInvite) {
-          yield* _setupInviteChat(event.messageId, event.isHeadless);
+          yield* _setupInviteChatAsync(event.messageId, event.isHeadless);
         } else {
-          yield* _setupChat(event.isHeadless);
+          yield* _setupChatAsync(event.isHeadless);
         }
       } catch (error, stackTrace) {
         yield ChatStateFailure(error: error, stackTrace: stackTrace);
       }
     } else if (event is UpdateChat) {
-      yield* _setupChat(false);
+      yield* _setupChatAsync(false);
     } else if (event is ClearNotifications) {
       _removeNotifications();
     }
@@ -105,7 +105,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ],
         _onCoreEvent,
       );
-      _chatRepository.addListener(_repositoryStreamHandler);
+      await _chatRepository.addListenerAsync(_repositoryStreamHandler);
     }
   }
 
@@ -123,7 +123,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  Stream<ChatState> _setupInviteChat(int messageId, bool isHeadless) async* {
+  Stream<ChatState> _setupInviteChatAsync(int messageId, bool isHeadless) async* {
     final messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
     if (isHeadless) {
       messageListRepository.putIfAbsent(id: messageId);
@@ -152,7 +152,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
   }
 
-  Stream<ChatState> _setupChat(bool isHeadless) async* {
+  Stream<ChatState> _setupChatAsync(bool isHeadless) async* {
     final context = Context();
     if (isHeadless) {
       _chatRepository.putIfAbsent(id: _chatId);

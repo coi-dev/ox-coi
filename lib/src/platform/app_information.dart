@@ -43,31 +43,31 @@
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 
-Future<String> getAppVersion() async {
-  PackageInfo packageInfo = await getPackageInfo();
+Future<String> getAppVersionAsync() async {
+  PackageInfo packageInfo = await getPackageInfoAsync();
   String version = packageInfo.version;
   String buildNumber = packageInfo.buildNumber;
   return "$version ($buildNumber)";
 }
 
-Future<PackageInfo> getPackageInfo() async {
+Future<PackageInfo> getPackageInfoAsync() async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   return packageInfo;
 }
 
-Future<String> getAppName() async {
-  PackageInfo packageInfo = await getPackageInfo();
+Future<String> getAppNameAsync() async {
+  PackageInfo packageInfo = await getPackageInfoAsync();
   return packageInfo.appName;
 }
 
-Future<String> getPackageName() async {
-  PackageInfo packageInfo = await getPackageInfo();
+Future<String> getPackageNameAsync() async {
+  PackageInfo packageInfo = await getPackageInfoAsync();
   return packageInfo.packageName;
 }
 
-Future<String> getFullName() async {
-  String appName = await getAppName();
-  String packageName = await getPackageName();
+Future<String> getFullNameAsync() async {
+  String appName = await getAppNameAsync();
+  String packageName = await getPackageNameAsync();
   return "$appName ($packageName)";
 }
 

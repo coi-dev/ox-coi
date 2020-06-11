@@ -10,8 +10,8 @@ Future<void> generateAndPersistPushKeyPairAsync() async {
   final keyPair = generateEcKeyPair();
   final publicKey = _extractBase64PublicEcKey(keyPair);
   final privateKey = _extractBase64PrivateEcKey(keyPair);
-  await setPreference(preferenceNotificationKeyPublic, publicKey);
-  await setPreference(preferenceNotificationKeyPrivate, privateKey);
+  await setPreferenceAsync(preferenceNotificationKeyPublic, publicKey);
+  await setPreferenceAsync(preferenceNotificationKeyPrivate, privateKey);
 }
 
 String _extractBase64PublicEcKey(AsymmetricKeyPair keyPair) {
@@ -29,17 +29,17 @@ String _extractBase64PrivateEcKey(AsymmetricKeyPair keyPair) {
 Future<void> generateAndPersistPushAuthAsync() async {
   final auth = generateRandomBytes();
   final encodedAuth = base64UrlEncode(auth);
-  await setPreference(preferenceNotificationsAuth, encodedAuth);
+  await setPreferenceAsync(preferenceNotificationsAuth, encodedAuth);
 }
 
 Future<String> getPushPrivateKeyAsync() async {
-  return await getPreference(preferenceNotificationKeyPrivate);
+  return await getPreferenceAsync(preferenceNotificationKeyPrivate);
 }
 
 Future<String> getPushPublicKeyAsync() async {
-  return await getPreference(preferenceNotificationKeyPublic);
+  return await getPreferenceAsync(preferenceNotificationKeyPublic);
 }
 
 Future<String> getPushAuthAsync() async {
-  return await getPreference(preferenceNotificationsAuth);
+  return await getPreferenceAsync(preferenceNotificationsAuth);
 }

@@ -55,42 +55,40 @@ class SettingsChatBloc extends Bloc<SettingsChatEvent, SettingsChatState> {
   Stream<SettingsChatState> mapEventToState(SettingsChatEvent event) async* {
     if (event is RequestValues) {
       try {
-        _requestValues();
+        yield* _requestValuesAsync();
       } catch (error) {
         yield SettingsChatStateFailure();
       }
     } else if (event is ChangeReadReceipts) {
       try {
-        _changeReadReceipts();
+        yield* _changeReadReceiptsAsync();
       } catch (error) {
         yield SettingsChatStateFailure();
       }
-    } else if (event is ChatSettingsActionSuccess) {
-      yield SettingsChatStateSuccess(readReceiptsEnabled: event.readReceiptsEnabled, inviteSetting: event.inviteSetting);
     } else if (event is ChangeInviteSetting) {
       try {
-        _changeInviteSetting(event.newInviteSetting);
+        yield* _changeInviteSettingAsync(event.newInviteSetting);
       } catch (error) {
         yield SettingsChatStateFailure();
       }
     }
   }
 
-  void _requestValues() {
+  Stream<SettingsChatState> _requestValuesAsync() async*{
     Config config = Config();
-    add(ChatSettingsActionSuccess(readReceiptsEnabled: config.mdnsEnabled, inviteSetting: config.showEmails));
+    yield SettingsChatStateSuccess(readReceiptsEnabled: config.mdnsEnabled, inviteSetting: config.showEmails);
   }
 
-  void _changeReadReceipts() async {
+  Stream<SettingsChatState> _changeReadReceiptsAsync() async* {
     Config config = Config();
     bool newMdnsSetting = !config.mdnsEnabled;
     await config.setValueAsync(Context.configMdnsEnabled, newMdnsSetting ? 1 : 0);
-    add(ChatSettingsActionSuccess(readReceiptsEnabled: newMdnsSetting, inviteSetting: config.showEmails));
+    yield SettingsChatStateSuccess(readReceiptsEnabled: newMdnsSetting, inviteSetting: config.showEmails);
   }
 
-  void _changeInviteSetting(int newInviteSetting) async {
+  Stream<SettingsChatState> _changeInviteSettingAsync(int newInviteSetting) async* {
     Config config = Config();
     await config.setValueAsync(Context.configShowEmails, newInviteSetting);
-    add(ChatSettingsActionSuccess(inviteSetting: newInviteSetting, readReceiptsEnabled: config.mdnsEnabled));
+    yield SettingsChatStateSuccess(readReceiptsEnabled: config.mdnsEnabled, inviteSetting: newInviteSetting);
   }
 }

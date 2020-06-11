@@ -95,8 +95,8 @@ class UrlPreviewCache {
 
   // Public API
 
-  Future<void> prepareCache() async {
-    final cachePath = await _getCacheDirPath();
+  Future<void> prepareCacheAsync() async {
+    final cachePath = await _getCacheDirPathAsync();
     final directory = Directory(cachePath);
 
     if (! await directory.exists()) {
@@ -105,7 +105,7 @@ class UrlPreviewCache {
     debugPrint("** Cache Path: $cachePath");
     directory.list().listen((entity) async {
       final cacheFile = File(entity.path);
-      final metadata = await _getMetadataFor(file: cacheFile);
+      final metadata = await _getMetadataForAsync(file: cacheFile);
       final key = path.basenameWithoutExtension(cacheFile.path).intValue;
       _buffer[key] = metadata;
     });
@@ -113,9 +113,9 @@ class UrlPreviewCache {
 
   int get numberOfCachedItems => _buffer.length;
 
-  Future<void> getCacheSizeInBytes(Function(int) cacheSize) async {
+  Future<void> getCacheSizeInBytesAsync(Function(int) cacheSize) async {
     int bytes = 0;
-    final cachePath = await _getCacheDirPath();
+    final cachePath = await _getCacheDirPathAsync();
     Directory(cachePath).list().listen((FileSystemEntity item) async {
       final stat = await item.stat();
       bytes += stat.size;
@@ -124,7 +124,7 @@ class UrlPreviewCache {
     });
   }
 
-  Future<void> saveMetadataIfNeededFor({@required Uri uri}) async {
+  Future<void> saveMetadataIfNeededForAsync({@required Uri uri}) async {
     if (uri == null || uri.toString().isEmpty) {
       return;
     }
@@ -145,23 +145,23 @@ class UrlPreviewCache {
 
     _buffer[key] = metadata;
 
-    final cacheFile = await _getCacheFileFor(uri: uri);
+    final cacheFile = await _getCacheFileForAsync(uri: uri);
     await cacheFile.create(recursive: true);
     final json = jsonEncode(metadata);
     await cacheFile.writeAsString(json);
 
-    await getCacheSizeInBytes((bytes) {
+    await getCacheSizeInBytesAsync((bytes) {
       debugPrint("** Cache size: $bytes Bytes");
     });
 
-    _cleanUpIfNeeded();
+    await _cleanUpIfNeededAsync();
   }
 
   /// Returns a [Metadata] object for the given URL if it was already cached
   /// otherwise it performs an implicit call of [saveMetadataIfNeededFor] to
   /// cache metadata for the given URl.
   /// If URL doesn't provide any suitable metadata it returns null.
-  Future<Metadata> getMetadataFor({@required Uri uri}) async {
+  Future<Metadata> getMetadataForAsync({@required Uri uri}) async {
     if (uri == null || uri.toString().isEmpty) {
       return null;
     }
@@ -169,7 +169,7 @@ class UrlPreviewCache {
     final key = uri.toString().hashCode;
     Metadata bufferedData =  _buffer[key];
     if (bufferedData == null) {
-      await saveMetadataIfNeededFor(uri: uri);
+      await saveMetadataIfNeededForAsync(uri: uri);
       bufferedData =  _buffer[key];
     }
 
@@ -178,20 +178,20 @@ class UrlPreviewCache {
 
   // Private Helper
 
-  Future<String> _getCacheDirPath() async {
+  Future<String> _getCacheDirPathAsync() async {
     final tmpDir = await getTemporaryDirectory();
     return path.join(tmpDir.path, _cacheDirName);
   }
 
-  Future<File> _getCacheFileFor({@required Uri uri}) async {
-    final cachePath = await _getCacheDirPath();
+  Future<File> _getCacheFileForAsync({@required Uri uri}) async {
+    final cachePath = await _getCacheDirPathAsync();
     final hash = uri.toString().hashCode;
     final cacheFilePath = path.join(cachePath, "$hash.$_cacheFileExtension");
 
     return File(cacheFilePath);
   }
 
-  Future<Metadata> _getMetadataFor({@required File file}) async {
+  Future<Metadata> _getMetadataForAsync({@required File file}) async {
     final fileExists = await file.exists();
     if (!fileExists) {
       return null;
@@ -202,12 +202,12 @@ class UrlPreviewCache {
     return metadata;
   }
 
-  Future<void> _cleanUpIfNeeded() async {
+  Future<void> _cleanUpIfNeededAsync() async {
     if (numberOfCachedItems <= _maxNumberOfCacheItems) {
       return;
     }
 
-    final cachePath = await _getCacheDirPath();
+    final cachePath = await _getCacheDirPathAsync();
     final fileList = Directory(cachePath).listSync();
     fileList.sort((a, b) => a.statSync().changed.millisecondsSinceEpoch.compareTo(b.statSync().changed.millisecondsSinceEpoch));
     final oldestFiles = fileList.sublist(0, _maxOfOldestFilesToDelete-1);

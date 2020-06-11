@@ -53,26 +53,7 @@ class SettingsManualFormBloc extends Bloc<SettingsManualFormEvent, SettingsManua
   @override
   Stream<SettingsManualFormState> mapEventToState(SettingsManualFormEvent event) async* {
     if (event is SetupSettings) {
-      setupSettings(event.shouldLoadConfig, event.email, event.password);
-    } else if (event is SettingsPrefilled) {
-      if (event.containsConfig) {
-        yield SettingsManualFormStateReady(
-          email: event.email,
-          imapLogin: event.imapLogin,
-          imapServer: event.imapServer,
-          imapPort: event.imapPort,
-          smtpLogin: event.smtpLogin,
-          smtpServer: event.smtpServer,
-          smtpPort: event.smtpPort,
-          imapSecurity: event.imapSecurity,
-          smtpSecurity: event.smtpSecurity,
-        );
-      } else {
-        yield SettingsManualFormStateReady(
-          email: event.email,
-          password: event.password,
-        );
-      }
+      yield* setupSettingsAsync(event.shouldLoadConfig, event.email, event.password);
     } else if (event is RequestValidateSettings) {
       yield SettingsManualFormStateValidation();
     } else if (event is ValidationDone) {
@@ -96,25 +77,28 @@ class SettingsManualFormBloc extends Bloc<SettingsManualFormEvent, SettingsManua
     }
   }
 
-  void setupSettings(bool shouldLoadConfig, String email, String password) {
+  Stream<SettingsManualFormState> setupSettingsAsync(bool shouldLoadConfig, String email, String password) async*{
     if (shouldLoadConfig) {
       var config = Config();
       var imapPort = config.imapPort;
       var smtpPort = config.smtpPort;
-      add(SettingsPrefilled(
-        containsConfig: true,
-        email: config.email,
-        imapLogin: config.imapLogin,
-        imapServer: config.imapServer,
-        imapPort: imapPort == "0" ? "" : imapPort,
-        smtpLogin: config.smtpLogin,
-        smtpServer: config.smtpServer,
-        smtpPort: smtpPort == "0" ? "" : smtpPort,
-        imapSecurity: config.imapSecurity,
-        smtpSecurity: config.smtpSecurity,
-      ));
+
+      yield SettingsManualFormStateReady(
+          email: config.email,
+          imapLogin: config.imapLogin,
+          imapServer: config.imapServer,
+          imapPort: imapPort == "0" ? "" : imapPort,
+          smtpLogin: config.smtpLogin,
+          smtpServer: config.smtpServer,
+          smtpPort: smtpPort == "0" ? "" : smtpPort,
+          imapSecurity: config.imapSecurity,
+          smtpSecurity: config.smtpSecurity,
+      );
     } else {
-      add(SettingsPrefilled(containsConfig: false, email: email, password: password));
+      yield SettingsManualFormStateReady(
+        email: email,
+        password: password,
+      );
     }
   }
 }

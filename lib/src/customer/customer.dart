@@ -40,9 +40,6 @@
  * for more details.
  */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/customer/model/customer_chat.dart';
 import 'package:ox_coi/src/customer/model/customer_config.dart';
@@ -81,7 +78,7 @@ class Customer {
     try {
       Map<String, dynamic> jsonFile = await loadJsonAssetAsMapAsync(customerConfigPath);
       _config = CustomerConfig.fromJson(jsonFile);
-      _needsOnboarding = await getPreference(preferenceNeedsOnboarding) as bool ?? true;
+      _needsOnboarding = await getPreferenceAsync(preferenceNeedsOnboarding) as bool ?? true;
 
     } catch (error) {
       _logger.shout("[Configure Customer] ** ERROR **: ${error.toString()}");
@@ -121,7 +118,7 @@ class Customer {
     return Customer()._needsOnboarding;
   }
   static set needsOnboarding(bool value) {
-    setPreference(preferenceNeedsOnboarding, value);
+    setPreferenceAsync(preferenceNeedsOnboarding, value);
     Customer()._needsOnboarding = value;
   }
 

@@ -61,8 +61,6 @@ class ShareAttachment extends MessageAttachmentEvent {
   ShareAttachment({@required this.chatId, @required this.messageId});
 }
 
-class AttachmentLoaded extends MessageAttachmentEvent {}
-
 class LoadThumbnailAndDuration extends MessageAttachmentEvent {
   final String path;
   final int duration;

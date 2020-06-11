@@ -50,7 +50,6 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/contact/contacts_updater_mixin.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';
@@ -91,7 +90,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       try {
         _currentSearch = null;
         _typeOrChatId = event.typeOrChatId;
-        _registerListeners();
+        await _registerListenersAsync();
         yield* _setupContactsAsync(chatId: event.chatId);
       } catch (error) {
         yield ContactListStateFailure(error: error.toString());
@@ -136,11 +135,11 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     return super.close();
   }
 
-  void _registerListeners() {
+  Future<void> _registerListenersAsync() async{
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChanged);
-      _contactRepository.addListener(_repositoryStreamHandler);
+      _repositoryStreamHandler = RepositoryMultiEventStreamHandler(Type.publish, [Event.contactsChanged, Event.chatModified], _onContactsChangedAsync);
+      await _contactRepository.addListenerAsync(_repositoryStreamHandler);
     }
   }
 
@@ -151,16 +150,19 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     }
   }
 
-  void _onContactsChanged([event]) async {
+  Future<void> _onContactsChangedAsync([event]) async {
     List<int> ids = await getIdsAsync(_typeOrChatId);
     final contactHeaderList = await _mergeHeaderAndContactsAsync(contactIds: ids);
     add(ContactsChanged(ids: contactHeaderList));
   }
 
-  void _onContactSelected(int chatId) async {
+  Stream<ContactListState> _onContactSelectedAsync(int chatId) async* {
     List<int> ids = await getIdsAsync(_typeOrChatId);
     final contactHeaderList = await _mergeHeaderAndContactsAsync(contactIds: ids, chatId: chatId);
-    add(ContactsChanged(ids: contactHeaderList));
+    yield ContactListStateSuccess(
+      contactElements: contactHeaderList,
+      contactsSelected: _contactsSelected,
+    );
   }
 
   Stream<ContactListStateSuccess> _setupContactsAsync({int chatId, ContactImportState importState}) async* {
@@ -168,7 +170,7 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
     _contactRepository.update(ids: contactIds);
     var contactExtensionProvider = ContactExtensionProvider();
     await Future.forEach(contactIds, (contactId) async {
-      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
+      var contactExtension = await contactExtensionProvider.getAsync(contactId: contactId);
       if (contactExtension != null) {
         _contactRepository.get(contactId).set(ContactExtension.contactPhoneNumber, contactExtension.phoneNumbers);
         _contactRepository.get(contactId).set(ContactExtension.contactAvatar, contactExtension.avatar);
@@ -258,19 +260,19 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       _contactsSelected.add(id);
     }
     if (_currentSearch.isNullOrEmpty()) {
-      _onContactSelected(chatId);
+      yield* _onContactSelectedAsync(chatId);
     } else {
       yield* _searchContactsAsync(chatId: chatId);
     }
   }
 
   Future<bool> isInitialContactsOpeningAsync() async {
-    bool systemContactImportShown = await getPreference(preferenceSystemContactsImportShown);
+    bool systemContactImportShown = await getPreferenceAsync(preferenceSystemContactsImportShown);
     return systemContactImportShown == null || !systemContactImportShown;
   }
 
   Future<void> _markContactsAsInitiallyLoadedAsync() async {
-    await setPreference(preferenceSystemContactsImportShown, true);
+    await setPreferenceAsync(preferenceSystemContactsImportShown, true);
   }
 
   Future<Iterable<SystemContacts.Contact>> _loadSystemContactsAsync() async {
@@ -375,13 +377,13 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
             image.evict();
             await file.writeAsBytes(systemContact.avatar);
           }
-          var contactExtension = await contactExtensionProvider.get(contactId: contactId);
+          var contactExtension = await contactExtensionProvider.getAsync(contactId: contactId);
           if (contactExtension == null) {
             contactExtension = ContactExtension(contactId, avatar: filePath);
-            contactExtensionProvider.insert(contactExtension);
+            contactExtensionProvider.insertAsync(contactExtension);
           } else {
             contactExtension.avatar = filePath;
-            contactExtensionProvider.update(contactExtension);
+            contactExtensionProvider.updateAsync(contactExtension);
           }
         }
       });
@@ -403,19 +405,19 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState> with Cont
       var contact = _contactRepository.get(contactId);
       var mail = await contact.getAddressAsync();
       var contactPhoneNumbers = phoneNumbers[mail];
-      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
+      var contactExtension = await contactExtensionProvider.getAsync(contactId: contactId);
       if (contactPhoneNumbers != null && contactPhoneNumbers.isNotEmpty) {
         if (contactExtension == null) {
           contactExtension = ContactExtension(contactId, phoneNumbers: contactPhoneNumbers);
-          contactExtensionProvider.insert(contactExtension);
+          contactExtensionProvider.insertAsync(contactExtension);
         } else {
           contactExtension.phoneNumbers = contactPhoneNumbers;
-          contactExtensionProvider.update(contactExtension);
+          contactExtensionProvider.updateAsync(contactExtension);
         }
       } else {
         if (contactExtension != null) {
           contactExtension.phoneNumbers = "";
-          contactExtensionProvider.update(contactExtension);
+          contactExtensionProvider.updateAsync(contactExtension);
         }
       }
     });

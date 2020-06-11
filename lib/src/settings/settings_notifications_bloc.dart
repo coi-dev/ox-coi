@@ -56,40 +56,41 @@ class SettingsNotificationsBloc extends Bloc<SettingsNotificationsEvent, Setting
   Stream<SettingsNotificationsState> mapEventToState(SettingsNotificationsEvent event) async* {
     if (event is RequestSetting) {
       try {
-        loadSettings();
+        yield* loadSettingsAsync();
       } catch (error) {
         yield SettingsNotificationsStateFailure();
       }
-    } else if (event is SettingLoaded) {
-      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive, coiSupported: event.isCoiSupported);
-    } else if (event is ActionSuccess) {
-      yield SettingsNotificationsStateSuccess(pullActive: event.pullActive, coiSupported: false);
     } else if (event is ChangeSetting) {
-      changeSettings();
+      yield* changeSettingsAsync();
     }
   }
 
-  void loadSettings() async {
-    bool pullPreference = await getPreference(preferenceNotificationsPull);
-    bool isSupportedCoi = _config.coiSupported;
+  Stream<SettingsNotificationsState> loadSettingsAsync() async* {
+    final isSupportedCoi = _config.coiSupported;
+    bool pullPreference = await getPreferenceAsync(preferenceNotificationsPull);
+
     if (pullPreference == null) {
-      bool defaultPullPreference = !isSupportedCoi;
-      await setPreference(preferenceNotificationsPull, defaultPullPreference);
+      final defaultPullPreference = !isSupportedCoi;
+      await setPreferenceAsync(preferenceNotificationsPull, defaultPullPreference);
       pullPreference = defaultPullPreference;
     }
-    add(SettingLoaded(pullActive: pullPreference, isCoiSupported: isSupportedCoi));
+
+    yield SettingsNotificationsStateSuccess(pullActive: pullPreference, coiSupported: isSupportedCoi);
   }
 
-  void changeSettings() async {
-    bool pullPreference = await getPreference(preferenceNotificationsPull);
-    bool newPullPreference = pullPreference == null ? true : !pullPreference;
-    await setPreference(preferenceNotificationsPull, newPullPreference);
-    var backgroundRefreshManager = BackgroundRefreshManager();
+  Stream<SettingsNotificationsState> changeSettingsAsync() async* {
+    final backgroundRefreshManager = BackgroundRefreshManager();
+    final pullPreference = await getPreferenceAsync(preferenceNotificationsPull);
+    final newPullPreference = pullPreference == null ? true : !pullPreference;
+
+    await setPreferenceAsync(preferenceNotificationsPull, newPullPreference);
+
     if (newPullPreference) {
-      backgroundRefreshManager.start();
+      await backgroundRefreshManager.startAsync();
     } else {
       backgroundRefreshManager.stop();
     }
-    add(ActionSuccess(pullActive: newPullPreference));
+
+    yield SettingsNotificationsStateSuccess(pullActive: newPullPreference, coiSupported: false);
   }
 }

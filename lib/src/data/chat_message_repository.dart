@@ -50,12 +50,12 @@ class ChatMessageRepository extends Repository<ChatMsg> {
   onData(Event event) async {
     if (event.hasType(Event.msgDelivered) || event.hasType(Event.msgRead) || event.hasType(Event.msgsChanged)) {
       int msgId = event.data2;
-      await updateMessage(msgId);
+      await updateMessageAsync(msgId);
     }
     super.onData(event);
   }
 
-  Future<void> updateMessage(int changedMessageId) async {
+  Future<void> updateMessageAsync(int changedMessageId) async {
     ChatMsg chatMsg = get(changedMessageId);
     if (chatMsg != null) {
       await chatMsg.reloadValueAsync(ChatMsg.methodMessageGetState);

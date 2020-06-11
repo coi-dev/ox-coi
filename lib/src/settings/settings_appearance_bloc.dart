@@ -52,7 +52,7 @@ class SettingsAppearanceBloc extends Bloc<SettingsAppearanceEvent, SettingsAppea
   @override
   Stream<SettingsAppearanceState> mapEventToState(SettingsAppearanceEvent event) async* {
     if (event is LoadAppearance) {
-      final themeKeyString = await getPreference(preferenceApplicationTheme);
+      final themeKeyString = await getPreferenceAsync(preferenceApplicationTheme);
       final savedThemeKey = CustomTheme.getThemeKeyFor(name: themeKeyString);
       yield SettingsAppearanceStateLoaded(themeKey: savedThemeKey);
     } else if (event is AppearanceChanged) {

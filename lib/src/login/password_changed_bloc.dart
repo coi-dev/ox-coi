@@ -53,16 +53,16 @@ class PasswordChangedBloc extends Bloc<PasswordChangedEvent, PasswordChangedStat
   Stream<PasswordChangedState> mapEventToState(PasswordChangedEvent event) async* {
     if (event is LoadData) {
       try {
-        yield* loadData();
+        yield* loadDataAsync();
       } catch (error) {
         yield PasswordChangedStateFailure();
       }
     } else if (event is ResetAuthenticationError) {
-      await setPreference(preferenceHasAuthenticationError, false);
+      await setPreferenceAsync(preferenceHasAuthenticationError, false);
     }
   }
 
-  Stream<PasswordChangedState> loadData() async* {
+  Stream<PasswordChangedState> loadDataAsync() async* {
     Config config = Config();
     await config.loadAsync();
     yield PasswordChangedDataLoaded(email: config.email);

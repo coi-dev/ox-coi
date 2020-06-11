@@ -47,20 +47,20 @@ import 'package:device_info/device_info.dart';
 IosDeviceInfo iosInfo;
 AndroidDeviceInfo androidInfo;
 
-Future<String> getDeviceName() async {
-  await getDeviceInfo();
+Future<String> getDeviceNameAsync() async {
+  await getDeviceInfoAsync();
   final physicalDevice = Platform.isIOS ? iosInfo.isPhysicalDevice : androidInfo.isPhysicalDevice;
   return Platform.isIOS ? "${iosInfo.utsname.machine} (real device: $physicalDevice)" : "${androidInfo.model} (real device: $physicalDevice)";
 }
 
-Future<String> getDeviceOsVersion() async {
-  await getDeviceInfo();
+Future<String> getDeviceOsVersionAsync() async {
+  await getDeviceInfoAsync();
   return Platform.isIOS
       ? "OS: ${iosInfo.systemName} - Version: ${iosInfo.systemVersion} - Kernel: ${iosInfo.utsname.version}"
       : "OS: ${androidInfo.version.baseOS} - Release: ${androidInfo.version.release} (${androidInfo.version.codename}) - SDK: ${androidInfo.version.sdkInt}";
 }
 
-Future<void> getDeviceInfo() async {
+Future<void> getDeviceInfoAsync() async {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   if (Platform.isIOS) {
     iosInfo ??= await deviceInfo.iosInfo;

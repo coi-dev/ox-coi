@@ -76,13 +76,13 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
       _currentSearch = null;
       yield ChatListStateLoading();
       try {
-        _registerListeners();
-        bool antiMobbingActivated = await getPreference(preferenceAntiMobbing);
+        await _registerListenersAsync();
+        bool antiMobbingActivated = await getPreferenceAsync(preferenceAntiMobbing);
         _showInvites = event.showInvites ?  (antiMobbingActivated == null || !antiMobbingActivated) : false;
         if (_showInvites) {
-          setupInvites();
+          await setupInvitesAsync();
         } else {
-          setupChatList(true);
+          yield* setupChatListAsync(true);
         }
       } catch (error) {
         yield ChatListStateFailure(error: error.toString());
@@ -90,12 +90,12 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     } else if (event is SearchChatList) {
       try {
         _currentSearch = event.query;
-        setupChatList(true);
+        yield* setupChatListAsync(true);
       } catch (error) {
         yield ChatListStateFailure(error: error.toString());
       }
     } else if (event is InvitesPrepared) {
-      setupChatList(true, event.messageIds);
+      yield* setupChatListAsync(true, event.messageIds);
     } else if (event is ChatListModified) {
       yield ChatListStateSuccess(
         chatListItemWrapper: event.chatListItemWrapper,
@@ -110,17 +110,17 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     return super.close();
   }
 
-  void _registerListeners() async {
+  Future<void> _registerListenersAsync() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       _repositoryStreamHandler =
-          RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChanged);
-      _chatRepository.addListener(_repositoryStreamHandler);
+          RepositoryMultiEventStreamHandler(Type.publish, [Event.chatModified, Event.incomingMsg, Event.msgsChanged], _onChatListChangedAsync);
+      await _chatRepository.addListenerAsync(_repositoryStreamHandler);
       _messageListBloc.listen((state) async {
         if (state is MessageListStateSuccess) {
           Context context = Context();
-          var inviteContactList = await getInviteContactList(state);
-          await createChatsFromKnownContactsInvites(context, inviteContactList);
+          var inviteContactList = await getInviteContactListAsync(state);
+          await createChatsFromKnownContactsInvitesAsync(context, inviteContactList);
           add(InvitesPrepared(messageIds: inviteContactList.values.toList(growable: false)));
         }
       });
@@ -134,7 +134,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  Future<LinkedHashMap<int, int>> getInviteContactList(MessageListStateSuccess state) async {
+  Future<LinkedHashMap<int, int>> getInviteContactListAsync(MessageListStateSuccess state) async {
     var contactList = LinkedHashMap<int, int>();
     await Future.forEach(state.messageIds, (messageId) async {
       ChatMsg message = _inviteMessageListRepository.get(messageId);
@@ -144,7 +144,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     return contactList;
   }
 
-  Future<void> createChatsFromKnownContactsInvites(Context context, LinkedHashMap<int, int> inviteContactList) async {
+  Future<void> createChatsFromKnownContactsInvitesAsync(Context context, LinkedHashMap<int, int> inviteContactList) async {
     List<int> contacts = await context.getContactsAsync(2, null);
     List<int> toRemoveContacts = List<int>();
     await Future.forEach(inviteContactList.keys, (contactId) async {
@@ -160,9 +160,9 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  Future<void> _onChatListChanged(event) async {
+  Future<void> _onChatListChangedAsync(event) async {
     if (_showInvites) {
-      setupInvites();
+     await setupInvitesAsync();
     } else {
       add(ChatListModified(
         chatListItemWrapper: createChatListItemWrapper(_chatRepository.getAllIds(), _chatRepository.getAllLastUpdateValues()),
@@ -170,7 +170,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     }
   }
 
-  Future setupInvites() async {
+  Future setupInvitesAsync() async {
     _messageListBloc.add(RequestMessageList(chatId: Chat.typeInvite));
   }
 
@@ -183,7 +183,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     );
   }
 
-  Future<ChatListItemWrapper> mergeInvitesAndChats(List<int> chatIds, List<int> inviteMessageIds) async {
+  Future<ChatListItemWrapper> mergeInvitesAndChatsAsync(List<int> chatIds, List<int> inviteMessageIds) async {
     var ids = List<int>();
     var types = List<ChatListWidget.ChatListItemType>();
     var lastUpdateValues = List<int>();
@@ -237,7 +237,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     return nextInvite;
   }
 
-  Future<void> setupChatList(bool chatListRefreshNeeded, [List<int> inviteMessageIds]) async {
+  Stream<ChatListState> setupChatListAsync(bool chatListRefreshNeeded, [List<int> inviteMessageIds]) async* {
     var ids = List<int>();
     List<int> chatIds = List();
     var lastUpdateValues = List<int>();
@@ -282,8 +282,8 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
         lastUpdateValues: lastUpdateValues,
       );
     } else {
-      chatListItemWrapper = await mergeInvitesAndChats(ids, inviteMessageIds);
+      chatListItemWrapper = await mergeInvitesAndChatsAsync(ids, inviteMessageIds);
     }
-    add(ChatListModified(chatListItemWrapper: chatListItemWrapper));
+    yield ChatListStateSuccess(chatListItemWrapper: chatListItemWrapper);
   }
 }

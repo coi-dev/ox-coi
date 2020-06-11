@@ -52,34 +52,6 @@ class SetupSettings extends SettingsManualFormEvent {
   SetupSettings({@required this.shouldLoadConfig, this.email, this.password});
 }
 
-class SettingsPrefilled extends SettingsManualFormEvent {
-  final bool containsConfig;
-  final String email;
-  final String imapLogin;
-  final String imapServer;
-  final String imapPort;
-  final String smtpLogin;
-  final String smtpServer;
-  final String smtpPort;
-  final String imapSecurity;
-  final String smtpSecurity;
-  final String password;
-
-  SettingsPrefilled({
-    @required this.containsConfig,
-    this.email,
-    this.imapLogin,
-    this.imapServer,
-    this.imapPort,
-    this.smtpLogin,
-    this.smtpServer,
-    this.smtpPort,
-    this.imapSecurity,
-    this.smtpSecurity,
-    this.password,
-  });
-}
-
 class RequestValidateSettings extends SettingsManualFormEvent {}
 
 class ValidationDone extends SettingsManualFormEvent {

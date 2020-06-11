@@ -53,31 +53,10 @@ class RequestQrText extends QrEvent {
 
 class RequestQrCamera extends QrEvent {}
 
-class QrTextLoaded extends QrEvent {
-  final String qrText;
-  final int chatId;
-
-  QrTextLoaded({this.qrText, this.chatId});
-}
-
-class JoinDone extends QrEvent {
-  final int chatId;
-
-  JoinDone({@required this.chatId});
-}
-
-class JoinFailed extends QrEvent {}
-
 class CheckQr extends QrEvent {
   final String qrText;
 
   CheckQr({@required this.qrText});
-}
-
-class CheckQrDone extends QrEvent {
-  final String qrText;
-
-  CheckQrDone({@required this.qrText});
 }
 
 class QrJoinInviteProgress extends QrEvent {

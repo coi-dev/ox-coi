@@ -46,20 +46,7 @@ abstract class SettingsNotificationsEvent {}
 
 class RequestSetting extends SettingsNotificationsEvent {}
 
-class SettingLoaded extends SettingsNotificationsEvent {
-  final bool pullActive;
-  final bool isCoiSupported;
-
-  SettingLoaded({@required this.pullActive, @required this.isCoiSupported});
-}
-
 class ChangeSetting extends SettingsNotificationsEvent {}
-
-class ActionSuccess extends SettingsNotificationsEvent {
-  final bool pullActive;
-
-  ActionSuccess({@required this.pullActive});
-}
 
 abstract class SettingsNotificationsState {}
 

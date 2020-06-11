@@ -114,12 +114,6 @@ class LoginProgress extends LoginEvent {
   LoginProgress({@required this.progress, this.error});
 }
 
-class ProvidersLoaded extends LoginEvent {
-  List<Provider> providers;
-
-  ProvidersLoaded({@required this.providers});
-}
-
 abstract class LoginState extends ProgressState {
   LoginState({progress}) : super(progress: progress);
 }

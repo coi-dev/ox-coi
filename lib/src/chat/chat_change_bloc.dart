@@ -59,13 +59,13 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
   @override
   Stream<ChatChangeState> mapEventToState(ChatChangeEvent event) async* {
     if (event is RequestChatData) {
-     yield* _requestChatData(event.chatId);
+     yield* _requestChatDataAsync(event.chatId);
     }
     else if (event is CreateChat) {
       yield CreateChatStateLoading();
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
-        _createChat(
+        yield* _createChatAsync(
             contactId: event.contactId,
             messageId: event.messageId,
             verified: event.verified,
@@ -75,37 +75,35 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
       } catch (error) {
         yield CreateChatStateFailure(error: error.toString());
       }
-    } else if (event is ChatCreated) {
-      yield CreateChatStateSuccess(chatId: event.chatId);
     } else if (event is DeleteChat) {
-      _deleteChat(event.chatId);
+      await _deleteChatAsync(event.chatId);
     } else if (event is DeleteChats) {
-      _deleteChats(event.chatIds);
+      await _deleteChatsAsync(event.chatIds);
     } else if (event is LeaveGroupChat) {
-      _leaveGroupChat(event.chatId);
+      await _leaveGroupChatAsync(event.chatId);
     } else if (event is ChatMarkNoticed) {
-      _markNoticedChat(event.chatId);
+      await _markNoticedChatAsync(event.chatId);
     } else if (event is ChatMarkMessagesSeen) {
-      _markMessagesSeen(event.messageIds);
+      await _markMessagesSeenAsync(event.messageIds);
     } else if (event is ChatAddParticipants) {
-      _addParticipants(event.chatId, event.contactIds);
+      await _addParticipantsAsync(event.chatId, event.contactIds);
     } else if (event is ChatRemoveParticipant) {
-      _removeParticipant(event.chatId, event.contactId);
+      await _removeParticipantAsync(event.chatId, event.contactId);
     } else if (event is ChangeChatData) {
-      yield* _changeChatData(event.chatId, event.chatName, event.avatarPath);
+      yield* _changeChatDataAsync(event.chatId, event.chatName, event.avatarPath);
     } else if (event is SetImagePath) {
-      _setProfileImage(event.chatId, event.newPath);
+      await _setProfileImageAsync(event.chatId, event.newPath);
     }
   }
 
-  Stream<ChatChangeState> _requestChatData(int chatId) async* {
+  Stream<ChatChangeState> _requestChatDataAsync(int chatId) async* {
     var chat = _chatRepository.get(chatId);
     String chatName = await chat.getNameAsync();
     String chatAvatarPath = await chat.getProfileImageAsync();
     yield ChatDataLoaded(chatName: chatName, avatarPath: chatAvatarPath);
   }
 
-  void _createChat({int contactId, int messageId, bool verified, String name, List<int> contacts, String imagePath}) async {
+  Stream<ChatChangeState> _createChatAsync({int contactId, int messageId, bool verified, String name, List<int> contacts, String imagePath}) async* {
     Context context = Context();
     var chatId;
     if (contactId != null) {
@@ -121,14 +119,14 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
         context.addContactToChatAsync(chatId, contacts[i]);
       }
       if (!imagePath.isNullOrEmpty()) {
-        _setProfileImage(chatId, imagePath);
+        _setProfileImageAsync(chatId, imagePath);
       }
     }
     _chatRepository.putIfAbsent(id: chatId);
-    add(ChatCreated(chatId: chatId));
+    yield CreateChatStateSuccess(chatId: chatId);
   }
 
-  void _deleteChat(int chatId) async {
+  Future<void> _deleteChatAsync(int chatId) async {
     Context context = Context();
     if(_messageListRepository != null) {
       _messageListRepository.clear();
@@ -137,21 +135,21 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     await context.deleteChatAsync(chatId);
   }
 
-  void _deleteChats(List<int> chatIds) async {
+  Future<void> _deleteChatsAsync(List<int> chatIds) async {
     Context context = Context();
     for (int chatId in chatIds) {
       _chatRepository.remove(id: chatId);
-      _leaveGroupChat(chatId);
+      await _leaveGroupChatAsync(chatId);
       await context.deleteChatAsync(chatId);
     }
   }
 
-  void _leaveGroupChat(int chatId) async {
+  Future<void> _leaveGroupChatAsync(int chatId) async {
     Context context = Context();
     await context.removeContactFromChatAsync(chatId, Contact.idSelf);
   }
 
-  void _markNoticedChat(int chatId) async {
+  Future<void> _markNoticedChatAsync(int chatId) async {
     Context context = Context();
     await context.markNoticedChatAsync(chatId);
     if (!_chatRepository.contains(chatId)) {
@@ -160,32 +158,32 @@ class ChatChangeBloc extends Bloc<ChatChangeEvent, ChatChangeState> {
     _chatRepository.get(chatId).setLastUpdate();
   }
 
-  void _markMessagesSeen(List<int> messageIds) async {
+  Future<void> _markMessagesSeenAsync(List<int> messageIds) async {
     Context context = Context();
     await context.markSeenMessagesAsync(messageIds);
   }
 
-  void _addParticipants(int chatId, List<int> contactIds) async {
+  Future<void> _addParticipantsAsync(int chatId, List<int> contactIds) async {
     Context context = Context();
     for (int i = 0; i < contactIds.length; i++) {
       await context.addContactToChatAsync(chatId, contactIds[i]);
     }
   }
 
-  void _removeParticipant(int chatId, int contactId) async {
+  Future<void> _removeParticipantAsync(int chatId, int contactId) async {
     Context context = Context();
     await context.removeContactFromChatAsync(chatId, contactId);
   }
 
-  Stream<ChatChangeState> _changeChatData(int chatId, String chatName, String chatAvatarPath) async* {
+  Stream<ChatChangeState> _changeChatDataAsync(int chatId, String chatName, String chatAvatarPath) async* {
     Context context = Context();
     await context.setChatNameAsync(chatId, chatName);
     RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetName, chatName);
-    await _setProfileImage(chatId, chatAvatarPath);
+    await _setProfileImageAsync(chatId, chatAvatarPath);
     yield(ChatChangeStateSuccess());
   }
 
-  Future<void> _setProfileImage(int chatId, String chatAvatarPath) async {
+  Future<void> _setProfileImageAsync(int chatId, String chatAvatarPath) async {
     Context context = Context();
     await context.setChatProfileImageAsync(chatId, chatAvatarPath);
     RepositoryManager.get(RepositoryType.chat).get(chatId).set(Chat.methodChatGetProfileImage, chatAvatarPath);

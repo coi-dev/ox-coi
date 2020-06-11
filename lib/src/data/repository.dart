@@ -142,7 +142,7 @@ abstract class Repository<T extends Base> {
     return _items.containsKey(id);
   }
 
-  Future<void> addListener(BaseRepositoryEventStreamHandler streamHandler) async {
+  Future<void> addListenerAsync(BaseRepositoryEventStreamHandler streamHandler) async {
     if (streamHandler is RepositoryEventStreamHandler) {
       _core.addListener(eventId: streamHandler.eventId, streamController: streamHandler.streamController);
     } else if (streamHandler is RepositoryMultiEventStreamHandler) {

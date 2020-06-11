@@ -75,7 +75,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is RequestProviders) {
       try {
-        _loadProviders(event.type);
+        yield* _loadProvidersAsync(event.type);
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
       }
@@ -83,7 +83,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginStateLoading(progress: 0);
       try {
         await _setupConfigWithProviderAsync(event);
-        _registerListeners();
+        await _registerListenersAsync();
         performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
@@ -92,7 +92,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginStateLoading(progress: 0);
       try {
         await _setupConfigAsync(event);
-        _registerListeners();
+        await _registerListenersAsync();
         performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
@@ -101,7 +101,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginStateLoading(progress: 0);
       try {
         await _setNewPasswordAsync(event.password);
-        _registerListeners();
+        await _registerListenersAsync();
         performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
@@ -109,7 +109,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is EditButtonPressed) {
       yield LoginStateLoading(progress: 0);
       try {
-        _registerListeners();
+        await _registerListenersAsync();
         performLogin();
       } catch (error) {
         yield LoginStateFailure(error: error.toString());
@@ -128,8 +128,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         yield LoginStateLoading(progress: event.progress);
       }
-    } else if (event is ProvidersLoaded) {
-      yield LoginStateProvidersLoaded(providers: event.providers);
     }
   }
 
@@ -164,10 +162,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     config.loadAsync();
   }
 
-  void _registerListeners() async {
+  Future<void> _registerListenersAsync() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      _loginSubject.listen(_successCallback, onError: _errorCallback);
+      _loginSubject.listen(_successCallback, onError: _errorCallbackAsync);
       _core.addListener(eventId: Event.configureProgress, streamController: _loginSubject);
       _core.addListener(eventId: Event.errorNoNetwork, streamController: _errorSubject);
     }
@@ -194,21 +192,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     add(LoginProgress(progress: progress));
   }
 
-  void _errorCallback(error) async {
+  Future<void> _errorCallbackAsync(error) async {
     add(LoginProgress(progress: 0, error: error));
   }
 
-  void _loadProviders(ProviderListType type) async {
+  Stream<LoginState> _loadProvidersAsync(ProviderListType type) async* {
     Map<String, dynamic> json = await loadJsonAssetAsMapAsync('assets/customer/json/providers.json');
 
     Providers providers = Providers.fromJson(json);
     if (type == ProviderListType.register) {
       providers.providerList.removeWhere((provider) => provider.registerLink.isNullOrEmpty());
     }
-    add(ProvidersLoaded(providers: providers.providerList));
+    yield LoginStateProvidersLoaded(providers: providers.providerList);
   }
 
-  _setupConfigWithProviderAsync(ProviderLoginButtonPressed event) async {
+  Future<void> _setupConfigWithProviderAsync(ProviderLoginButtonPressed event) async {
     Config config = Config();
     var provider = event.provider;
     Preset preset = provider.preset;
@@ -224,8 +222,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     await config.setValueAsync(Context.configSendPort, preset.outgoingPort.toString());
     await config.setValueAsync(Context.configImapSecurity, preset.incomingSecurity.toString());
     await config.setValueAsync(Context.configSmtpSecurity, preset.outgoingSecurity.toString());
-    await setPreference(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
-    await setPreference(preferenceInviteServiceUrl, provider.inviteServiceUrl);
+    await setPreferenceAsync(preferenceNotificationsPushServiceUrl, provider.pushServiceUrl);
+    await setPreferenceAsync(preferenceInviteServiceUrl, provider.inviteServiceUrl);
   }
 
   Future<void> _setNewPasswordAsync(String password) async {

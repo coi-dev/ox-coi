@@ -60,7 +60,7 @@ class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
   Stream<ErrorState> mapEventToState(ErrorEvent event) async* {
     if (event is SetupListeners) {
       try {
-        yield* setupListeners();
+        yield* setupListenersAsync();
       } catch (error) {
         yield ErrorStateFailure();
       }
@@ -78,12 +78,12 @@ class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
     return super.close();
   }
 
-  Stream<ErrorState> setupListeners() async* {
-    _registerListeners();
+  Stream<ErrorState> setupListenersAsync() async* {
+    await _registerListenersAsync();
     yield ErrorStateSetupDone();
   }
 
-  void _registerListeners() async {
+  Future<void> _registerListenersAsync() async {
     if (!_listenersRegistered) {
       _errorSubject.listen(_errorCallback);
       _core.addListener(eventIdList: Event.allErrorsList, streamController: _errorSubject);
@@ -98,17 +98,17 @@ class ErrorBloc extends Bloc<ErrorEvent, ErrorState> {
     }
   }
 
-  void _errorCallback(Event event) {
+  Future<void> _errorCallback(Event event) async {
     if (_delegateAndHandleErrors) {
       if (isAuthenticationError(event)) {
         _delegateAndHandleErrors = false;
-        delegateAndHandleAuthenticationError();
+        await delegateAndHandleAuthenticationErrorAsync();
       }
     }
   }
 
-  void delegateAndHandleAuthenticationError() async {
-    await setPreference(preferenceHasAuthenticationError, true);
+  Future<void> delegateAndHandleAuthenticationErrorAsync() async {
+    await setPreferenceAsync(preferenceHasAuthenticationError, true);
     add(DelegateUserVisibleError(userVisibleError: UserVisibleError.authenticationFailed));
   }
 

@@ -60,29 +60,24 @@ class DebugViewerBloc extends Bloc<DebugViewerEvent, DebugViewerState> {
   Stream<DebugViewerState> mapEventToState(DebugViewerEvent event) async* {
     if (event is RequestLog) {
       try {
-        loadLog();
+        yield* loadLogAsync();
       } catch (error) {
         yield DebugViewerStateFailure();
       }
-    } else if (event is LogLoaded) {
-      _data = event.log;
-      yield DebugViewerStateSuccess(data: _data);
-    } else if (event is LogEmpty) {
-      yield DebugViewerStateSuccess(data: "Empty log found");
     } else if (event is InputLoaded) {
       _data = event.input;
       yield DebugViewerStateSuccess(data: _data);
     }
   }
 
-  void loadLog() async {
+  Stream<DebugViewerState> loadLogAsync() async* {
     LogManager logManager = LogManager();
     File currentLogFile = logManager.currentLogFile;
     if (currentLogFile != null) {
-      String log = await readFileAsync(currentLogFile);
-      add(LogLoaded(log: log));
+      _data = await readFileAsync(currentLogFile);
+      yield DebugViewerStateSuccess(data: _data);
     } else {
-      add(LogEmpty());
+      yield DebugViewerStateSuccess(data: "Empty log found");
     }
   }
 }

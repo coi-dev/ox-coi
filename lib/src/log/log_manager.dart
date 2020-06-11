@@ -79,7 +79,7 @@ class LogManager {
 
   get currentLogFile => _logFile;
 
-  Future<void> setup({@required bool logToFile, @required Level logLevel}) async {
+  Future<void> setupAsync({@required bool logToFile, @required Level logLevel}) async {
     if (_isLogging) {
       return;
     }
@@ -111,7 +111,7 @@ class LogManager {
       deleteLogFile(logFiles[0]);
       logFiles.removeAt(0);
     }
-    setPreference(preferenceLogFiles, logFiles);
+    setPreferenceAsync(preferenceLogFiles, logFiles);
   }
 
   void setupLogger(Level logLevel, bool logToFile) {
@@ -145,13 +145,13 @@ class LogManager {
     return '${logRecord.time} ${logRecord.level.name} [${logRecord.loggerName}] ${logRecord.message}\n';
   }
 
-  void deleteAllLogFiles() async {
+  Future<void> deleteAllLogFilesAsync() async {
     final List<String> logFiles = await getLogFilesAsync();
     logFiles.forEach((logFile) {
       deleteLogFile(logFile);
     });
     logFiles.clear();
-    await setPreference(preferenceLogFiles, logFiles);
+    await setPreferenceAsync(preferenceLogFiles, logFiles);
   }
 
   void deleteLogFile(String logFile) {
@@ -164,7 +164,7 @@ class LogManager {
   }
 
   Future<List<String>> getLogFilesAsync() async {
-    return await getPreference(preferenceLogFiles) ?? <String>[];
+    return await getPreferenceAsync(preferenceLogFiles) ?? <String>[];
   }
 
   void setupCoreListener() {
@@ -185,8 +185,8 @@ class LogManager {
   }
 
   Future<void> logDeviceInfoAsync() async {
-    final deviceName = await getDeviceName();
-    final deviceOs = await getDeviceOsVersion();
+    final deviceName = await getDeviceNameAsync();
+    final deviceOs = await getDeviceOsVersionAsync();
     final message = "Device: $deviceName, $deviceOs";
     final logRecord = LogRecord(Level.INFO, message, _logManagerLoggerName);
     _writeToLogFileAsync(logRecord);

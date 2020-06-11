@@ -100,9 +100,9 @@ class CustomerDelegate with DynamicScreenCustomerDelegate {
         case _kNotificationsAllowButtonPressed:
           if (await Permission.notification.request().isGranted) {
             if (_config.coiSupported) {
-              await setPreference(preferenceNotificationsPull, false);
+              await setPreferenceAsync(preferenceNotificationsPull, false);
             } else {
-              await setPreference(preferenceNotificationsPull, true);
+              await setPreferenceAsync(preferenceNotificationsPull, true);
             }
           }
           navigateToNextPage(context: context);

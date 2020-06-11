@@ -64,17 +64,14 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
     if (event is RequestMessages) {
       try {
         _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-        _registerListeners();
-        loadMessages();
+        await _registerListenersAsync();
+        yield* _loadMessagesAsync();
       } catch (error) {
         yield AntiMobbingListStateFailure();
       }
-    } else if (event is MessagesLoaded) {
-      yield AntiMobbingListStateSuccess(
-          messageIds: event.messageIds, messageLastUpdateValues: event.messageLastUpdateValues, dateMarkerIds: event.dateMarkerIds);
     } else if (event is UpdateMessages) {
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, Chat.typeInvite);
-      loadMessages();
+      yield* _loadMessagesAsync();
     }
   }
 
@@ -84,7 +81,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
     return super.close();
   }
 
-  void _registerListeners() async {
+  Future<void> _registerListenersAsync() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       _repositoryStreamHandler = RepositoryMultiEventStreamHandler(
@@ -92,7 +89,7 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
         [Event.incomingMsg, Event.msgsChanged, Event.msgDelivered, Event.msgRead],
         _onMessagesChanged,
       );
-      _messageListRepository.addListener(_repositoryStreamHandler);
+      await _messageListRepository.addListenerAsync(_repositoryStreamHandler);
     }
   }
 
@@ -100,13 +97,12 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
     if (_listenersRegistered) {
       _listenersRegistered = false;
       _messageListRepository?.removeListener(_repositoryStreamHandler);
-
     }
   }
 
   void _onMessagesChanged(event) => add(UpdateMessages());
 
-  void loadMessages() async {
+  Stream<AntiMobbingListState> _loadMessagesAsync() async* {
     List<int> dateMakerIds = List();
     Context context = Context();
     List<int> messageIds = List.from(await context.getChatMessagesAsync(Chat.typeInvite, Context.chatListAddDayMarker));
@@ -130,9 +126,10 @@ class AntiMobbingListBloc extends Bloc<AntiMobbingListEvent, AntiMobbingListStat
       }
     });
 
-    add(MessagesLoaded(
-        messageIds: uniqueInviteMap.values.toList(growable: false),
-        messageLastUpdateValues: lastUpdateValues.toList(growable: false),
-        dateMarkerIds: dateMakerIds));
+    yield AntiMobbingListStateSuccess(
+      messageIds: uniqueInviteMap.values.toList(growable: false),
+      messageLastUpdateValues: lastUpdateValues.toList(growable: false),
+      dateMarkerIds: dateMakerIds,
+    );
   }
 }

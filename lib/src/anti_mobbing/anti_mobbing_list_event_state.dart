@@ -46,14 +46,6 @@ abstract class AntiMobbingListEvent {}
 
 class RequestMessages extends AntiMobbingListEvent {}
 
-class MessagesLoaded extends AntiMobbingListEvent {
-  final List<int> messageIds;
-  final List<int> messageLastUpdateValues;
-  final List<int> dateMarkerIds;
-
-  MessagesLoaded({@required this.messageIds, @required this.messageLastUpdateValues, this.dateMarkerIds});
-}
-
 class UpdateMessages extends AntiMobbingListEvent {}
 
 abstract class AntiMobbingListState {}

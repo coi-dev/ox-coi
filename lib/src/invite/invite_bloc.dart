@@ -77,20 +77,20 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
   Stream<InviteState> mapEventToState(InviteEvent event) async* {
     if (event is CreateInviteUrl) {
       try {
-        yield* createInviteUrl(event.message);
+        yield* createInviteUrlAsync(event.message);
       } catch (error) {
         yield InviteStateFailure();
       }
     } else if (event is HandleSharedInviteLink) {
-      yield* handleSharedInviteLink();
+      yield* handleSharedInviteLinkAsync();
     } else if (event is AcceptInvite) {
-      yield* acceptInvite(event.inviteServiceResponse, event.base64Image);
+      yield* acceptInviteAsync(event.inviteServiceResponse, event.base64Image);
     }
   }
 
-  Stream<InviteState> createInviteUrl(String message) async* {
-    InviteServiceRequest requestInviteService = await _createInviteServiceRequest(message ?? "");
-    var response = await inviteService.createInviteUrl(requestInviteService);
+  Stream<InviteState> createInviteUrlAsync(String message) async* {
+    InviteServiceRequest requestInviteService = await _createInviteServiceRequestAsync(message ?? "");
+    var response = await inviteService.createInviteUrlAsync(requestInviteService);
     bool valid = isHttpResponseValid(response);
     if (valid) {
       InviteServiceResponse responseInviteService = _getInviteResponse(response);
@@ -98,22 +98,22 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
         mimeType: 'text/*',
         text: '${responseInviteService.endpoint} \n ${L10n.get(L.inviteShareText)}',
       );
-      sendSharedData(shareData.toMap());
+      await sendSharedDataAsync(shareData.toMap());
       yield InviteStateSuccess();
     } else {
       yield InviteStateFailure(errorMessage: response.reasonPhrase);
     }
   }
 
-  Stream<InviteState> handleSharedInviteLink() async* {
-    String sharedLink = await _getInitialLink();
+  Stream<InviteState> handleSharedInviteLinkAsync() async* {
+    String sharedLink = await _getInitialLinkAsync();
     if (sharedLink == null) {
       return;
     }
     int startIndex = sharedLink.getIndexAfterLastOf('/');
     String id = sharedLink.substring(startIndex);
     if (id.isNotEmpty) {
-      Response response = await inviteService.getInvite(id);
+      Response response = await inviteService.getInviteAsync(id);
       bool valid = isHttpResponseValid(response);
       if (valid) {
         InviteServiceResponse responseInviteService = _getInviteResponse(response);
@@ -136,7 +136,7 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
     }
   }
 
-  Stream<InviteState> acceptInvite(InviteServiceResponse inviteServiceResponse, String image) async* {
+  Stream<InviteState> acceptInviteAsync(InviteServiceResponse inviteServiceResponse, String image) async* {
     Context context = Context();
     String email = inviteServiceResponse.sender.email;
     int contactId = await context.createContactAsync(inviteServiceResponse.sender.name, email);
@@ -150,27 +150,27 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
       Uint8List imageBytes = base64Decode(image);
       await file.writeAsBytes(imageBytes);
       var contactExtensionProvider = ContactExtensionProvider();
-      var contactExtension = await contactExtensionProvider.get(contactId: contactId);
+      var contactExtension = await contactExtensionProvider.getAsync(contactId: contactId);
       if (contactExtension == null) {
         contactExtension = ContactExtension(contactId, avatar: file.path);
-        contactExtensionProvider.insert(contactExtension);
+        contactExtensionProvider.insertAsync(contactExtension);
       } else {
         contactExtension.avatar = file.path;
-        contactExtensionProvider.update(contactExtension);
+        contactExtensionProvider.updateAsync(contactExtension);
       }
     }
 
-    await inviteService.deleteInvite(inviteServiceResponse.id);
+    await inviteService.deleteInviteAsync(inviteServiceResponse.id);
     yield CreateInviteChatSuccess(chatId: chatId);
   }
 
-  Future<InviteServiceRequest> _createInviteServiceRequest(String message) async {
-    var sender = await _createInviteServiceSender();
+  Future<InviteServiceRequest> _createInviteServiceRequestAsync(String message) async {
+    var sender = await _createInviteServiceSenderAsync();
     var requestPushRegistration = InviteServiceRequest(message: "", sender: sender);
     return requestPushRegistration;
   }
 
-  Future<InviteServiceSender> _createInviteServiceSender() async {
+  Future<InviteServiceSender> _createInviteServiceSenderAsync() async {
     Config config = Config();
     String email = config.email;
     String name = config.username != null && config.username.isNotEmpty ? config.username : config.email;
@@ -201,8 +201,8 @@ class InviteBloc extends Bloc<InviteEvent, InviteState> {
     return inviteResponse;
   }
 
-  Future<String> _getInitialLink() async => await SharingChannel.instance.invokeMethod(SharingChannel.kMethodGetInitialLink);
+  Future<String> _getInitialLinkAsync() async => await SharingChannel.instance.invokeMethod(SharingChannel.kMethodGetInitialLink);
 
-  Future<void> sendSharedData(Map<String, String> shareData) async =>
+  Future<void> sendSharedDataAsync(Map<String, String> shareData) async =>
       await SharingChannel.instance.invokeMethod(SharingChannel.kMethodSendSharedData, shareData);
 }

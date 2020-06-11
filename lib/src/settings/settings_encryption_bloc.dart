@@ -68,8 +68,8 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
     if (event is ExportKeys) {
       yield SettingsEncryptionStateLoading(type: SettingsEncryptionType.exportKeys);
       try {
-        if (await _checkPermissions()) {
-          _exportImportKeys(SettingsEncryptionType.exportKeys);
+        if (await _checkPermissionsAsync()) {
+          await _exportImportKeysAsync(SettingsEncryptionType.exportKeys);
         }
       } catch (error) {
         yield SettingsEncryptionStateFailure(error: error);
@@ -77,17 +77,15 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
     } else if (event is ImportKeys) {
       yield SettingsEncryptionStateLoading(type: SettingsEncryptionType.importKeys);
       try {
-        if (await _checkPermissions()) {
-          _exportImportKeys(SettingsEncryptionType.importKeys);
+        if (await _checkPermissionsAsync()) {
+          await _exportImportKeysAsync(SettingsEncryptionType.importKeys);
         }
       } catch (error) {
         yield SettingsEncryptionStateFailure(error: error);
       }
     } else if (event is InitiateKeyTransfer) {
       yield SettingsEncryptionStateLoading(type: SettingsEncryptionType.initiateKeyTransfer);
-      _initiateKeyTransfer();
-    } else if (event is ActionSuccess) {
-      yield SettingsEncryptionStateSuccess(setupCode: event.setupCode);
+      yield* _initiateKeyTransferAsync();
     } else if (event is ActionFailed) {
       yield SettingsEncryptionStateFailure(error: event.error);
     }
@@ -99,7 +97,7 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
     return super.close();
   }
 
-  Future<bool> _checkPermissions() async {
+  Future<bool> _checkPermissionsAsync() async {
     bool hasFilesPermission = await Permission.storage.request().isGranted;
     if (!hasFilesPermission) {
       add(ActionFailed(error: SettingsEncryptionStateError.missingStoragePermission));
@@ -107,10 +105,10 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
     return hasFilesPermission;
   }
 
-  void _exportImportKeys(SettingsEncryptionType type) async {
+  Future<void> _exportImportKeysAsync(SettingsEncryptionType type) async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
-      await _registerListeners();
+      await _registerListenersAsync();
     }
     var context = Context();
     String path = await getUserVisibleDirectoryPathAsync();
@@ -121,13 +119,14 @@ class SettingsEncryptionBloc extends Bloc<SettingsEncryptionEvent, SettingsEncry
     }
   }
 
-  void _initiateKeyTransfer() async {
-    var context = Context();
+  Stream<SettingsEncryptionState> _initiateKeyTransferAsync() async* {
+    final context = Context();
     String setupCode = await context.initiateKeyTransferAsync();
-    add(ActionSuccess(setupCode: setupCode));
+
+    yield SettingsEncryptionStateSuccess(setupCode: setupCode);
   }
 
-  Future<void> _registerListeners() async {
+  Future<void> _registerListenersAsync() async {
     _keyActionSubject.listen(_successCallback, onError: _errorCallback);
    _core.addListener(eventId: Event.imexProgress, streamController: _keyActionSubject);
   }

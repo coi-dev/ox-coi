@@ -54,18 +54,16 @@ class SettingsAboutBloc extends Bloc<SettingsAboutEvent, SettingsAboutState> {
   Stream<SettingsAboutState> mapEventToState(SettingsAboutEvent event) async* {
     if (event is RequestAbout) {
       try {
-        loadAbout();
+        yield* loadAboutAsync();
       } catch (error) {
         yield SettingsAboutStateFailure();
       }
-    } else if (event is AboutLoaded) {
-      yield SettingsAboutStateSuccess(name: event.name, version: event.version);
     }
   }
 
-  void loadAbout() async {
-    String name = await getFullName();
-    String version = await getAppVersion();
-    add(AboutLoaded(name: name, version: version));
+  Stream<SettingsAboutState> loadAboutAsync() async* {
+    String name = await getFullNameAsync();
+    String version = await getAppVersionAsync();
+    yield SettingsAboutStateSuccess(name: name, version: version);
   }
 }

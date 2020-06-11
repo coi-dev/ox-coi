@@ -68,29 +68,17 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     if (event is RequestQrText) {
       yield QrStateLoading(progress: 0);
       try {
-        _registerListeners();
-        getQrText(event.chatId);
+        await _registerListenersAsync();
+        yield* getQrTextAsync(event.chatId);
       } catch (error) {
         yield QrStateFailure(error: error.toString());
       }
     } else if (event is RequestQrCamera) {
       bool hasCameraPermission = await Permission.camera.request().isGranted;
       yield QrStateCameraRequested(successfullyLoaded: hasCameraPermission);
-    } else if (event is QrTextLoaded) {
-      yield QrStateSuccess(qrText: event.qrText);
-    } else if (event is JoinDone) {
-      yield QrStateSuccess(chatId: event.chatId);
-    } else if (event is JoinFailed) {
-      yield QrStateFailure(error: L10n.get(L.qrValidationFailed));
     } else if (event is CheckQr) {
       yield QrStateLoading(progress: 0);
-      checkQr(event.qrText);
-    } else if (event is CheckQrDone) {
-      if (event.qrText == null) {
-        yield QrStateFailure(error: L10n.get(L.qrNoValidCode));
-      } else {
-        joinSecurejoin(event.qrText);
-      }
+      yield* checkQrAsync(event.qrText);
     } else if (event is QrJoinInviteProgress) {
       if (_joinInviteSuccess(event.progress)) {
         yield QrStateVerificationFinished();
@@ -104,7 +92,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
         yield QrStateLoading(progress: event.progress);
       }
     } else if (event is CancelQrProcess) {
-      cancelQrProcess();
+      await cancelQrProcessAsync();
     }
   }
 
@@ -122,7 +110,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     return super.close();
   }
 
-  void _registerListeners() async {
+  Future<void> _registerListenersAsync() async {
     if (!_listenersRegistered) {
       _qrSubject.listen(_successCallback, onError: _errorCallback);
       _core.addListener(eventIdList: [Event.secureJoinInviterProgress, Event.secureJoinJoinerProgress], streamController: _qrSubject);
@@ -139,20 +127,20 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     }
   }
 
-  void getQrText(int chatId) async {
+  Stream<QrState> getQrTextAsync(int chatId) async* {
     Context context = Context();
     String qrText = await context.getSecureJoinQrAsync(chatId);
-    add(QrTextLoaded(qrText: qrText));
+    yield QrStateSuccess(qrText: qrText);
   }
 
-  void checkQr(String qrText) async {
+  Stream<QrState> checkQrAsync(String qrText) async* {
     Context context = Context();
     var result = await context.checkQrAsync(qrText);
     QrCodeResult qrResult = QrCodeResult.fromMethodChannel(result);
     if (qrResult.state == Context.qrAskVerifyContact || qrResult.state == Context.qrAskVerifyGroup) {
-      add(CheckQrDone(qrText: qrText));
+        yield* joinSecurejoin(qrText);
     } else {
-      add(CheckQrDone(qrText: null));
+      yield QrStateFailure(error: L10n.get(L.qrNoValidCode));
     }
   }
 
@@ -161,24 +149,24 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     add(QrJoinInviteProgress(progress: progress));
   }
 
-  void _errorCallback(error) async {
+  void _errorCallback(error) {
     add(QrJoinInviteProgress(progress: 0, error: error));
   }
 
-  void joinSecurejoin(String qrText) async {
+  Stream<QrState> joinSecurejoin(String qrText) async* {
     Context context = Context();
     int chatId = await context.joinSecurejoinQrAsync(qrText);
     if (chatId == 0) {
-      add(JoinFailed());
+      yield QrStateFailure(error: L10n.get(L.qrValidationFailed));
     } else {
       Repository<Chat> chatRepository = RepositoryManager.get(RepositoryType.chat);
       chatRepository.putIfAbsent(id: chatId);
-      await createOrUpdateContact(context, chatId);
-      add(JoinDone(chatId: chatId));
+      await createOrUpdateContactAsync(context, chatId);
+      yield QrStateSuccess(chatId: chatId);
     }
   }
 
-  Future createOrUpdateContact(Context context, int chatId) async {
+  Future createOrUpdateContactAsync(Context context, int chatId) async {
     var contactRepository = RepositoryManager.get(RepositoryType.contact);
     var contactIdList = await context.getChatContactsAsync(chatId);
     var contactId = contactIdList?.first;
@@ -188,7 +176,7 @@ class QrBloc extends Bloc<QrEvent, QrState> {
     }
   }
 
-  void cancelQrProcess() async {
+  Future<void> cancelQrProcessAsync() async {
     Context context = Context();
     await context.stopOngoingProcessAsync();
     add(RequestQrCamera());

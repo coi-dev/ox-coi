@@ -160,7 +160,7 @@ class _SettingsDebugState extends State<SettingsDebug> {
                   subtitle: TextField(
                     // TODO remove
                     onSubmitted: (text) async {
-                      await setPreference(preferenceNotificationsPushServiceUrl, text);
+                      await setPreferenceAsync(preferenceNotificationsPushServiceUrl, text);
                       "$text was set as push service URL".showToast();
                       _settingsDebugBloc.add(RequestDebug());
                     },

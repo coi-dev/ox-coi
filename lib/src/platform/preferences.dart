@@ -63,8 +63,8 @@ const preferenceNotificationsAuth = "preferenceNotificationAuth";
 const preferenceNotificationKeyPublic = "preferenceNotificationKeyPublic";
 const preferenceNotificationKeyPrivate = "preferenceNotificationKeyPrivate";
 
-Future<dynamic> getPreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
+Future<dynamic> getPreferenceAsync(String key) async {
+  SharedPreferences sharedPreferences = await getSharedPreferencesAsync();
   var preference = sharedPreferences.get(key);
   if (preference is List) {
     return List<String>.from(preference);
@@ -72,12 +72,12 @@ Future<dynamic> getPreference(String key) async {
   return preference;
 }
 
-Future<SharedPreferences> getSharedPreferences() async {
+Future<SharedPreferences> getSharedPreferencesAsync() async {
   return await SharedPreferences.getInstance();
 }
 
-Future<void> setPreference(String key, value) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
+Future<void> setPreferenceAsync(String key, value) async {
+  SharedPreferences sharedPreferences = await getSharedPreferencesAsync();
   if (value is bool) {
     sharedPreferences.setBool(key, value);
   } else if (value is int) {
@@ -91,12 +91,12 @@ Future<void> setPreference(String key, value) async {
   }
 }
 
-Future<void> removePreference(String key) async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
+Future<void> removePreferenceAsync(String key) async {
+  SharedPreferences sharedPreferences = await getSharedPreferencesAsync();
   sharedPreferences.remove(key);
 }
 
-Future<void> clearPreferences() async {
-  SharedPreferences sharedPreferences = await getSharedPreferences();
+Future<void> clearPreferencesAsync() async {
+  SharedPreferences sharedPreferences = await getSharedPreferencesAsync();
   await sharedPreferences.clear();
 }

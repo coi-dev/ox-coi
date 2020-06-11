@@ -77,11 +77,11 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       try {
         if (event is RequestMessageList) {
           _handlesFlaggedMessages = false;
-          _setupBloc(event.chatId, event.messageId);
+          await _setupBlocAsync(event.chatId, event.messageId);
           yield* _setupMessagesAsync();
         } else if (event is RequestFlaggedMessageList) {
           _handlesFlaggedMessages = true;
-          _setupBloc(event.chatId);
+          await _setupBlocAsync(event.chatId);
           yield* _setupFlaggedMessagesAsync();
         }
       } catch (error) {
@@ -117,16 +117,16 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
     return super.close();
   }
 
-  void _setupBloc(int chatId, [int messageId]) {
+  Future<void> _setupBlocAsync(int chatId, [int messageId]) async {
     _chatId = chatId;
     _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, _chatId);
     if (isInvite(_chatId, messageId)) {
       _messageId = messageId;
     }
-    _registerListeners();
+    await _registerListenersAsync();
   }
 
-  void _registerListeners() {
+  Future<void> _registerListenersAsync() async {
     if (!_listenersRegistered) {
       _listenersRegistered = true;
       _messageListRepositoryStreamHandler = RepositoryMultiEventStreamHandler(
@@ -134,13 +134,13 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
         [Event.incomingMsg, Event.msgsChanged, Event.msgFailed],
         _onMessageListChanged,
       );
-      _messageListRepository.addListener(_messageListRepositoryStreamHandler);
+      await _messageListRepository.addListenerAsync(_messageListRepositoryStreamHandler);
       _messageRepositoryStreamHandler = RepositoryMultiEventStreamHandler(
         Type.replay,
         [Event.msgDelivered, Event.msgRead, Event.msgFailed, Event.msgsChanged],
         _onMessageChanged,
       );
-      _messageListRepository.addListener(_messageRepositoryStreamHandler);
+      await _messageListRepository.addListenerAsync(_messageRepositoryStreamHandler);
     }
   }
 
@@ -261,7 +261,7 @@ class MessageListBloc extends Bloc<MessageListEvent, MessageListState> with Invi
       _cacheFilePath = path;
     }
     if (fileType == ChatMsg.typeVideo) {
-      duration = await getDurationInMilliseconds(path);
+      duration = await getDurationInMillisecondsAsync(path);
     }
 
     await context.createChatAttachmentMessageAsync(_chatId, path, fileType, mimeType, duration, text);

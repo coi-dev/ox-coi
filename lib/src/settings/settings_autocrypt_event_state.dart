@@ -58,16 +58,6 @@ class ContinueKeyTransfer extends SettingsAutocryptEvent {
   ContinueKeyTransfer({@required this.messageId, @required this.setupCode});
 }
 
-class KeyTransferPrepared extends SettingsAutocryptEvent {
-  final String setupCodeStart;
-
-  KeyTransferPrepared({@required this.setupCodeStart});
-}
-
-class KeyTransferDone extends SettingsAutocryptEvent {}
-
-class KeyTransferFailed extends SettingsAutocryptEvent {}
-
 abstract class SettingsAutocryptState {}
 
 class SettingsAutocryptStateInitial extends SettingsAutocryptState {}

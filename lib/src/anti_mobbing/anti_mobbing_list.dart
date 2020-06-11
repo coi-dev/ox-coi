@@ -117,12 +117,12 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
                 ),
               );
             }
-          } else if (state is! MessagesLoaded) {
-            return StateInfo(showLoading: true);
-          } else {
+          } else if (state is AntiMobbingListStateFailure) {
             return AdaptiveIcon(
               icon: IconSource.error,
             );
+          } else {
+            return StateInfo(showLoading: true);
           }
         },
       ),

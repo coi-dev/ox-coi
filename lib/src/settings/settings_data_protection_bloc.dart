@@ -52,33 +52,29 @@ class SettingsDataProtectionBloc extends Bloc<SettingsDataProtectionEvent, Setti
   Stream<SettingsDataProtectionState> mapEventToState(SettingsDataProtectionEvent event) async* {
     if (event is RequestSettings) {
       try {
-        loadSettings();
+        yield* loadSettingsAsync();
       } catch (error) {
         yield SettingsDataProtectionStateFailure();
       }
-    } else if (event is SettingsLoaded) {
-      yield SettingsDataProtectionStateSuccess(antiMobbingActive: event.antiMobbingActive);
-    } else if (event is ActionSuccess) {
-      yield SettingsDataProtectionStateSuccess(antiMobbingActive: event.antiMobbingActive);
     } else if (event is ChangeSettings) {
-      changeSettings();
+      yield* changeSettingsAsync();
     }
   }
 
-  void loadSettings() async {
-    bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
+  Stream<SettingsDataProtectionState> loadSettingsAsync() async* {
+    bool antiMobbingPreference = await getPreferenceAsync(preferenceAntiMobbing);
 
     if (antiMobbingPreference == null) {
-      await setPreference(preferenceAntiMobbing, false);
+      await setPreferenceAsync(preferenceAntiMobbing, false);
       antiMobbingPreference = false;
     }
 
-    add(SettingsLoaded(antiMobbingActive: antiMobbingPreference));
+    yield SettingsDataProtectionStateSuccess(antiMobbingActive: antiMobbingPreference);
   }
 
-  void changeSettings() async {
-    bool antiMobbingPreference = await getPreference(preferenceAntiMobbing);
-    await setPreference(preferenceAntiMobbing, !antiMobbingPreference);
-    add(ActionSuccess(antiMobbingActive: !antiMobbingPreference));
+  Stream<SettingsDataProtectionState> changeSettingsAsync() async* {
+    bool antiMobbingPreference = await getPreferenceAsync(preferenceAntiMobbing);
+    await setPreferenceAsync(preferenceAntiMobbing, !antiMobbingPreference);
+    yield SettingsDataProtectionStateSuccess(antiMobbingActive: !antiMobbingPreference);
   }
 }

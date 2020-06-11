@@ -50,12 +50,6 @@ class LoadAsset extends WebAssetEvent {
   LoadAsset({@required this.asset});
 }
 
-class AssetLoaded extends WebAssetEvent {
-  final String asset;
-
-  AssetLoaded({@required this.asset});
-}
-
 abstract class WebAssetState {}
 
 class WebAssetStateInitial extends WebAssetState {}

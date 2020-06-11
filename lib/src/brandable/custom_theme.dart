@@ -190,13 +190,13 @@ class CustomThemeState extends State<CustomTheme> with WidgetsBindingObserver {
   }
 
   Future<void> _checkSavedTheme() async {
-    var savedThemeKeyString = await getPreference(preferenceApplicationTheme);
+    var savedThemeKeyString = await getPreferenceAsync(preferenceApplicationTheme);
 
     ThemeKey savedThemeKey;
     if (savedThemeKeyString == null) {
       savedThemeKey = ThemeKey.system;
       savedThemeKeyString = savedThemeKey.stringValue;
-      await setPreference(preferenceApplicationTheme, savedThemeKeyString);
+      await setPreferenceAsync(preferenceApplicationTheme, savedThemeKeyString);
     }
 
     ThemeKey newThemeKey;
@@ -215,7 +215,7 @@ class CustomThemeState extends State<CustomTheme> with WidgetsBindingObserver {
       _theme = CustomerThemes.getThemeFromKey(themeKey);
 
       if (!preservePreference) {
-        setPreference(preferenceApplicationTheme, themeKey.stringValue);
+        setPreferenceAsync(preferenceApplicationTheme, themeKey.stringValue);
       }
 
       SystemUiOverlayStyle overlayStyle;

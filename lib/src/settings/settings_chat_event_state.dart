@@ -48,19 +48,6 @@ class RequestValues extends SettingsChatEvent {}
 
 class ChangeReadReceipts extends SettingsChatEvent {}
 
-class ChatSettingsActionSuccess extends SettingsChatEvent {
-  bool readReceiptsEnabled;
-  int inviteSetting;
-
-  ChatSettingsActionSuccess({this.readReceiptsEnabled, this.inviteSetting});
-}
-
-class ChatSettingsActionFailed extends SettingsChatEvent {
-  final ChatSettingsActionFailed error;
-
-  ChatSettingsActionFailed({@required this.error});
-}
-
 class ChangeInviteSetting extends SettingsChatEvent {
   int newInviteSetting;
 
@@ -70,8 +57,6 @@ class ChangeInviteSetting extends SettingsChatEvent {
 abstract class SettingsChatState {}
 
 class SettingsChatStateInitial extends SettingsChatState {}
-
-class SettingsChatStateLoading extends SettingsChatState {}
 
 class SettingsChatStateSuccess extends SettingsChatState {
   bool readReceiptsEnabled;

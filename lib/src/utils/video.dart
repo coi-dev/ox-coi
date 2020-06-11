@@ -44,7 +44,7 @@ import 'dart:io';
 
 import 'package:video_player/video_player.dart';
 
-Future<int> getDurationInMilliseconds(String path) async {
+Future<int> getDurationInMillisecondsAsync(String path) async {
   int duration = 0;
   VideoPlayerController fileVideoController = VideoPlayerController.file(File(path));
   await fileVideoController.initialize();

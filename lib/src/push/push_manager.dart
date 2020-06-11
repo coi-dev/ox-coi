@@ -129,7 +129,7 @@ class PushManager {
   }
 
   Future<String> getPushResourceAsync() async {
-    return await getPreference(preferenceNotificationsPush);
+    return await getPreferenceAsync(preferenceNotificationsPush);
   }
 
   Future<String> decryptAesAsync(String encryptedBase64Content) async {

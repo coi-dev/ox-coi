@@ -80,19 +80,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     final config = Config();
     await config.setValueAsync(Context.configDisplayName, event.username);
     await config.setValueAsync(Context.configSelfAvatar, event.avatarPath);
-    yield* _manuallyChangedData(config);
+    yield* _manuallyChangedDataAsync(config);
   }
 
   Stream<UserState> _saveUserSignatureAsync(UserSignatureChanged event) async* {
     final config = Config();
     await config.setValueAsync(Context.configSelfStatus, event.signature);
-    yield* _manuallyChangedData(config);
+    yield* _manuallyChangedDataAsync(config);
   }
 
   Stream<UserState> _saveUserAvatarAsync(UserAvatarChanged event) async* {
     final config = Config();
     await config.setValueAsync(Context.configSelfAvatar, event.avatarPath);
-    yield* _manuallyChangedData(config);
+    yield* _manuallyChangedDataAsync(config);
   }
 
   Stream<UserState> _saveUserAccountDataAsync(UserAccountDataChanged event) async* {
@@ -107,10 +107,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     await config.setValueAsync(Context.configSendServer, event.smtpServer);
     await config.setValueAsync(Context.configSendPort, event.smtpPort);
     await config.setValueAsync(Context.configSmtpSecurity, event.smtpSecurity);
-    yield* _manuallyChangedData(config);
+    yield* _manuallyChangedDataAsync(config);
   }
 
-  Stream<UserState> _manuallyChangedData(Config config) async* {
+  Stream<UserState> _manuallyChangedDataAsync(Config config) async* {
     yield UserStateSuccess(
       config: config,
       manuallyChanged: true,

@@ -98,7 +98,7 @@ class ContactExtensionProvider {
 
   ContactExtensionProvider._internal();
 
-  Future<void> open(String name) async {
+  Future<void> openAsync(String name) async {
     final applicationSupportDir = await getApplicationSupportDirectory();
     final dbPath = "${applicationSupportDir.path}/$name";
     _db = await openDatabase(dbPath);
@@ -114,12 +114,12 @@ class ContactExtensionProvider {
         ''');
   }
 
-  Future<ContactExtension> insert(ContactExtension contactExtension) async {
+  Future<ContactExtension> insertAsync(ContactExtension contactExtension) async {
     contactExtension.id = await _db.insert(_tableContactExtension, contactExtension.toMap());
     return contactExtension;
   }
 
-  Future<int> update(ContactExtension contactExtension) async {
+  Future<int> updateAsync(ContactExtension contactExtension) async {
     return await _db.update(
       _tableContactExtension,
       contactExtension.toMap(),
@@ -128,7 +128,7 @@ class ContactExtensionProvider {
     );
   }
 
-  Future<int> delete({int id = -1, int contactId = -1}) async {
+  Future<int> deleteAsync({int id = -1, int contactId = -1}) async {
     final whereColumn = _getWhereColumn(id, contactId);
     final whereId = _getWhereId(id, contactId);
     if (whereId <= 0) {
@@ -137,7 +137,7 @@ class ContactExtensionProvider {
     return await _db.delete(_tableContactExtension, where: '$whereColumn = ?', whereArgs: [whereId]);
   }
 
-  Future<ContactExtension> get({int id = -1, int contactId = -1}) async {
+  Future<ContactExtension> getAsync({int id = -1, int contactId = -1}) async {
     final whereColumn = _getWhereColumn(id, contactId);
     final whereId = _getWhereId(id, contactId);
     if (whereId <= 0) {
@@ -164,5 +164,5 @@ class ContactExtensionProvider {
     return contactId > 0 ? contactId : id;
   }
 
-  Future close() async => _db.close();
+  Future closeAsync() async => _db.close();
 }

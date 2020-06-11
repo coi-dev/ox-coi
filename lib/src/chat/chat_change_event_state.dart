@@ -70,12 +70,6 @@ class CreateChat extends ChatChangeEvent {
   });
 }
 
-class ChatCreated extends ChatChangeEvent {
-  final int chatId;
-
-  ChatCreated({this.chatId});
-}
-
 class DeleteChat extends ChatChangeEvent {
   final int chatId;
 

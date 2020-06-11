@@ -49,23 +49,23 @@ import 'package:ox_coi/src/utils/constants.dart';
 
 const loggerName = "background_refresh_manager";
 
-void backgroundHeadlessTask(String taskId) async {
+Future<void> backgroundHeadlessTaskAsync(String taskId) async {
   final logManager = LogManager();
-  await logManager.setup(logToFile: true, logLevel: Level.INFO);
+  await logManager.setupAsync(logToFile: true, logLevel: Level.INFO);
   final logger = Logger(loggerName);
   logger.info("Callback (background) triggered");
   var core = DeltaChatCore();
   var isSetup = await core.setupAsync(dbName: dbName, minimalSetup: true);
   if (isSetup) {
     logger.info("Callback (background) checking for new messages");
-    await getMessages();
+    await getMessagesAsync();
     await core.tearDownAsync();
   }
   logger.info("Callback (background) finishing");
   BackgroundFetch.finish(taskId);
 }
 
-Future<void> getMessages() async {
+Future<void> getMessagesAsync() async {
   final localNotificationManager = LocalNotificationManager.newInstance();
   localNotificationManager.setup(registerListeners: false);
   final context = Context();
@@ -85,7 +85,7 @@ class BackgroundRefreshManager {
   BackgroundRefreshManager._internal();
 
   setupAndStart() {
-    BackgroundFetch.registerHeadlessTask(backgroundHeadlessTask).then((value) {
+    BackgroundFetch.registerHeadlessTask(backgroundHeadlessTaskAsync).then((value) {
       _logger.info("Register headless task");
     });
     BackgroundFetch.configure(
@@ -106,7 +106,7 @@ class BackgroundRefreshManager {
     });
   }
 
-  void start() async {
+  Future<void> startAsync() async {
     if (_running) {
       return;
     }

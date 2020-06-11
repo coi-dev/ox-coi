@@ -158,14 +158,14 @@ class LocalNotificationManager {
 
   Future<HashMap<String, int>> _getNotificationHistoryAsync({bool isInvite = false}) async {
     final preferenceTarget = isInvite ? preferenceNotificationInviteHistory : preferenceNotificationHistory;
-    final notificationHistoryString = await getPreference(preferenceTarget);
+    final notificationHistoryString = await getPreferenceAsync(preferenceTarget);
     return notificationHistoryString != null ? HashMap<String, int>.from(json.decode(notificationHistoryString)) : HashMap<String, int>();
   }
 
   Future<void> _setNotificationHistoryAsync(HashMap<String, int> notificationHistory, {bool isInvite = false}) async {
     final preferenceTarget = isInvite ? preferenceNotificationInviteHistory : preferenceNotificationHistory;
     final notificationHistoryString = json.encode(notificationHistory);
-    await setPreference(preferenceTarget, notificationHistoryString);
+    await setPreferenceAsync(preferenceTarget, notificationHistoryString);
   }
 
   Future<void> _createInviteNotificationsAsync() async {

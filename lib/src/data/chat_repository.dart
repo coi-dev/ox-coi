@@ -51,12 +51,12 @@ class ChatRepository extends Repository<Chat> {
   onData(Event event) async {
     if (event.hasType(Event.incomingMsg) || event.hasType(Event.chatModified) || event.hasType(Event.msgsChanged)) {
       int chatId = event.data1;
-      await updateChatAndRefreshChatList(chatId);
+      await updateChatAndRefreshChatListAsync(chatId);
     }
     super.onData(event);
   }
 
-  Future<void> updateChatAndRefreshChatList(int changedChatId) async {
+  Future<void> updateChatAndRefreshChatListAsync(int changedChatId) async {
     ChatList chatList = ChatList();
     await chatList.setupAsync();
     int chatCount = await chatList.getChatCntAsync();

@@ -46,22 +46,6 @@ abstract class SettingsDebugEvent {}
 
 class RequestDebug extends SettingsDebugEvent {}
 
-class DebugLoaded extends SettingsDebugEvent {
-  final String token;
-  final String pushResource;
-  final String endpoint;
-  final String pushServiceUrl;
-  final String pushState;
-
-  DebugLoaded({
-    @required this.token,
-    @required this.pushResource,
-    @required this.endpoint,
-    @required this.pushServiceUrl,
-    @required this.pushState,
-  });
-}
-
 abstract class SettingsDebugState {}
 
 class SettingsDebugStateInitial extends SettingsDebugState {}

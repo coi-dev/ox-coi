@@ -111,14 +111,14 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         await _initCoreAsync();
         await _openExtensionDatabaseAsync();
         await _setupDatabaseExtensionsAsync();
-        String appState = await getPreference(preferenceAppState);
+        String appState = await getPreferenceAsync(preferenceAppState);
         if (appState == null || appState.isEmpty) {
           await _setupDefaultValuesAsync();
         }
         await _setupBlocsAsync();
 
         await Customer().configureAsync();
-        await UrlPreviewCache().prepareCache();
+        await UrlPreviewCache().prepareCacheAsync();
 
         add(AppLoaded());
       } catch (error) {
@@ -140,7 +140,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         LocalNotificationManager().setup(registerListeners: true);
         if (_config.coiSupported) {
           await PushManager().setup(_pushBloc);
-          String pushState = await getPreference(preferenceNotificationsPushStatus);
+          String pushState = await getPreferenceAsync(preferenceNotificationsPushStatus);
           if (pushState == null) {
             _pushBloc.add(RegisterPushResource());
           }
@@ -195,15 +195,15 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   Future<void> _setupDefaultValuesAsync() async {
     await _config.setValueAsync(Context.configSelfStatus, "${L10n.get(L.profileDefaultStatus)} - $projectUrl");
     await _config.setValueAsync(Context.configShowEmails, Context.showEmailsOff);
-    String version = await getAppVersion();
-    await setPreference(preferenceAppVersion, version);
-    await setPreference(preferenceAppState, AppState.initialStartDone.toString());
+    String version = await getAppVersionAsync();
+    await setPreferenceAsync(preferenceAppVersion, version);
+    await setPreferenceAsync(preferenceAppState, AppState.initialStartDone.toString());
   }
 
   Future<void> _setupLoggedInAppStateAsync() async {
     var context = Context();
     await _config.loadAsync();
-    String appState = await getPreference(preferenceAppState);
+    String appState = await getPreferenceAsync(preferenceAppState);
     if (_config.coiSupported) {
       await _setupCoiAsync(context);
     }
@@ -218,7 +218,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   bool isFreshLogin(String appState) => appState == AppState.initialStartDone.toString();
 
   Future<void> setupBackgroundRefreshManagerAsync() async {
-    bool pullPreference = await getPreference(preferenceNotificationsPull);
+    bool pullPreference = await getPreferenceAsync(preferenceNotificationsPull);
     if (pullPreference == null || (pullPreference != null && pullPreference)) {
       var backgroundRefreshManager = BackgroundRefreshManager();
       backgroundRefreshManager.setupAndStart();
@@ -233,7 +233,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     await _config.setValueAsync(Context.configRfc724MsgIdPrefix, Context.enableChatPrefix);
     _logger.info("Setting coi message prefix to 1");
     await _applyCustomerConfigAsync();
-    await setPreference(preferenceAppState, AppState.initialLoginDone.toString());
+    await setPreferenceAsync(preferenceAppState, AppState.initialLoginDone.toString());
   }
 
   Future<void> _setupCoiAsync(Context context) async {
@@ -260,15 +260,15 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   Future<void> _openExtensionDatabaseAsync() async {
     final contactExtensionProvider = ContactExtensionProvider();
-    await contactExtensionProvider.open(extensionDbName);
+    await contactExtensionProvider.openAsync(extensionDbName);
   }
 
   Future<bool> _checkForAuthenticationErrorAsync() async {
-    return await getPreference(preferenceHasAuthenticationError) ?? false;
+    return await getPreferenceAsync(preferenceHasAuthenticationError) ?? false;
   }
 
   Future<void> _logoutAsync() async {
-    await clearPreferences();
+    await clearPreferencesAsync();
 
     try {
       final dbFile = File(core.dbPath);

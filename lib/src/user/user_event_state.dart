@@ -97,8 +97,6 @@ abstract class UserState {}
 
 class UserStateInitial extends UserState {}
 
-class UserStateLoading extends UserState {}
-
 class UserStateSuccess extends UserState {
   final Config config;
   final bool manuallyChanged;

@@ -61,38 +61,38 @@ class PushService {
 
   PushService._internal();
 
-  Future<Response> registerPush(RequestPushRegistration requestRegistration) async {
+  Future<Response> registerPushAsync(RequestPushRegistration requestRegistration) async {
     String encodedBody = json.encode(requestRegistration);
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Register ($url): $encodedBody");
     IOClient ioClient = createIOClient();
     return await ioClient.put(url, headers: headers, body: encodedBody);
   }
 
-  Future<Response> getPush(String id) async {
+  Future<Response> getPushAsync(String id) async {
     IOClient ioClient = createIOClient();
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Get ($url): $id");
     return await ioClient.get(url + id, headers: headers);
   }
 
-  Future<Response> patchPush(String id, RequestPushPatch requestPushPatch) async {
+  Future<Response> patchPushAsync(String id, RequestPushPatch requestPushPatch) async {
     IOClient ioClient = createIOClient();
     String encodedBody = json.encode(requestPushPatch);
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Patch ($url): $id - $encodedBody");
     return await ioClient.patch(url + id, headers: headers, body: encodedBody);
   }
 
-  Future<Response> deletePush(String id) async {
+  Future<Response> deletePushasync(String id) async {
     IOClient ioClient = createIOClient();
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Delete ($url): $id");
     return await ioClient.delete(url + id, headers: headers);
   }
 
-  Future<String> getUrl() async {
-    String url = await getPreference(preferenceNotificationsPushServiceUrl);
+  Future<String> getUrlAsync() async {
+    String url = await getPreferenceAsync(preferenceNotificationsPushServiceUrl);
     if (url.isNullOrEmpty()) {
       url = defaultCoiPushServiceUrl;
     }

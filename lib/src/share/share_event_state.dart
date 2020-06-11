@@ -71,12 +71,6 @@ class ForwardMessages extends ShareEvent {
 
 class LoadSharedData extends ShareEvent {}
 
-class SharedDataLoaded extends ShareEvent {
-  final IncomingSharedData sharedData;
-
-  SharedDataLoaded({@required this.sharedData});
-}
-
 abstract class ShareState {}
 
 class ShareStateInitial extends ShareState {}

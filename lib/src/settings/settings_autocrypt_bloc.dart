@@ -55,37 +55,31 @@ class SettingsAutocryptBloc extends Bloc<SettingsAutocryptEvent, SettingsAutocry
   @override
   Stream<SettingsAutocryptState> mapEventToState(SettingsAutocryptEvent event) async* {
     if (event is PrepareKeyTransfer) {
-      _prepareKeyTransfer(event.chatId, event.messageId);
-    } else if (event is KeyTransferPrepared) {
-      yield SettingsAutocryptStatePrepared(setupCodeStart: event.setupCodeStart);
+      yield* _prepareKeyTransferAsync(event.chatId, event.messageId);
     } else if (event is ContinueKeyTransfer) {
       yield SettingsAutocryptStateLoading();
       try {
-        _continueKeyTransfer(event.messageId, event.setupCode);
+        yield* _continueKeyTransferAsync(event.messageId, event.setupCode);
       } catch (error) {
         yield SettingsAutocryptStateFailure();
       }
-    } else if (event is KeyTransferDone) {
-      yield SettingsAutocryptStateSuccess();
-    } else if (event is KeyTransferFailed) {
-      yield SettingsAutocryptStateFailure();
     }
   }
 
-  void _prepareKeyTransfer(int chatId, int messageId) async {
+  Stream<SettingsAutocryptState> _prepareKeyTransferAsync(int chatId, int messageId) async* {
     ChatMessageRepository messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, chatId);
     ChatMsg chatMsg = messageListRepository.get(messageId);
     String setupCodeBegin = await chatMsg.getSetupCodeBeginAsync();
-    add(KeyTransferPrepared(setupCodeStart: setupCodeBegin));
+    yield SettingsAutocryptStatePrepared(setupCodeStart: setupCodeBegin);
   }
 
-  void _continueKeyTransfer(int messageId, String setupCode) async {
+  Stream<SettingsAutocryptState> _continueKeyTransferAsync(int messageId, String setupCode) async* {
     Context context = Context();
     bool transferSuccess = await context.continueKeyTransferAsync(messageId, setupCode);
     if (transferSuccess) {
-      add(KeyTransferDone());
+      yield SettingsAutocryptStateSuccess();
     } else {
-      add(KeyTransferFailed());
+      yield SettingsAutocryptStateFailure();
     }
   }
 }

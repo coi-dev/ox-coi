@@ -60,7 +60,7 @@ class LifecycleBloc extends Bloc<LifecycleEvent, LifecycleState> {
   Stream<LifecycleState> mapEventToState(LifecycleEvent event) async* {
     if (event is ListenerSetup) {
       try {
-        setup();
+        yield* setupAsync();
       } catch (error) {
         yield LifecycleStateFailure();
       }
@@ -70,11 +70,12 @@ class LifecycleBloc extends Bloc<LifecycleEvent, LifecycleState> {
     }
   }
 
-  void setup() {
+  Stream<LifecycleState> setupAsync() async*{
     SystemChannels.lifecycle.setMessageHandler((state) async {
       add(StateChange(state: state));
       return state;
     });
-    add(StateChange(state: AppLifecycleState.resumed.toString()));
+    _currentBackgroundState = AppLifecycleState.resumed.toString();
+    yield LifecycleStateSuccess(state: _currentBackgroundState);
   }
 }

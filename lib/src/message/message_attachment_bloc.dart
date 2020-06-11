@@ -73,8 +73,7 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
       yield MessageAttachmentStateLoading();
       try {
-        _openFile(event.messageId);
-        add(AttachmentLoaded());
+        yield* _openFileAsync(event.messageId);
       } catch (error) {
         yield MessageAttachmentStateFailure(error: error.toString());
       }
@@ -83,26 +82,24 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       _messageListRepository = RepositoryManager.get(RepositoryType.chatMessage, event.chatId);
       yield MessageAttachmentStateLoading();
       try {
-        _shareFile(event.messageId);
-        add(AttachmentLoaded());
+        yield* _shareFileAsync(event.messageId);
       } catch (error) {
         yield MessageAttachmentStateFailure(error: error.toString());
       }
-    } else if (event is AttachmentLoaded) {
-      yield MessageAttachmentStateSuccess();
     } else if (event is LoadThumbnailAndDuration) {
-      yield* loadThumbnailAndDuration(event.path, event.duration);
+      yield* loadThumbnailAndDurationAsync(event.path, event.duration);
     } else if (event is GetNextPreviousImage) {
       yield* getNextPreviousMessageAsync(event);
     }
   }
 
-  void _openFile(int messageId) async {
+  Stream<MessageAttachmentState> _openFileAsync(int messageId) async* {
     Core.ChatMsg message = _getMessage(messageId);
     OpenFile.open(await message.getFileAsync());
+    yield MessageAttachmentStateSuccess();
   }
 
-  void _shareFile(int messageId) async {
+  Stream<MessageAttachmentState> _shareFileAsync(int messageId) async* {
     Core.ChatMsg message = _getMessage(messageId);
     var text = await message.getTextAsync();
     var filePath = await message.getFileAsync();
@@ -115,20 +112,21 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
       text: text,
     );
     await SharingChannel.instance.invokeMethod(SharingChannel.kMethodSendSharedData, shareData.toMap());
+    yield MessageAttachmentStateSuccess();
   }
 
   Core.ChatMsg _getMessage(int messageId) {
     return _messageListRepository.get(messageId);
   }
 
-  Stream<MessageAttachmentState> loadThumbnailAndDuration(String videoPath, int duration) async* {
-    String thumbnailPath = await setupAndGetThumbnailPath(videoPath, duration);
-    String durationString = await getVideoTime(videoPath, duration);
+  Stream<MessageAttachmentState> loadThumbnailAndDurationAsync(String videoPath, int duration) async* {
+    String thumbnailPath = await setupAndGetThumbnailPathAsync(videoPath, duration);
+    String durationString = await getVideoTimeAsync(videoPath, duration);
 
     yield MessageAttachmentStateSuccess(path: thumbnailPath, duration: durationString);
   }
 
-  Future<String> setupAndGetThumbnailPath(String videoPath, int duration) async {
+  Future<String> setupAndGetThumbnailPathAsync(String videoPath, int duration) async {
     String thumbnailPath = _getThumbnailPath(videoPath);
     File file = File(thumbnailPath);
     bool fileExists = await file.exists();
@@ -157,9 +155,9 @@ class MessageAttachmentBloc extends Bloc<MessageAttachmentEvent, MessageAttachme
     return "$videoDirectory/$thumbnailName";
   }
 
-  Future<String> getVideoTime(String path, int duration) async {
+  Future<String> getVideoTimeAsync(String path, int duration) async {
     if (duration == 0) {
-      duration = await getDurationInMilliseconds(path);
+      duration = await getDurationInMillisecondsAsync(path);
     }
 
     return duration.getVideoTimeFromTimestamp();

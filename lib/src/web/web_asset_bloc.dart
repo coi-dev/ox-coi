@@ -41,7 +41,6 @@
  */
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/services.dart';
 import 'package:ox_coi/src/utils/assets.dart';
 import 'package:ox_coi/src/web/web_asset_event_state.dart';
 
@@ -54,17 +53,15 @@ class WebAssetBloc extends Bloc<WebAssetEvent, WebAssetState> {
     if (event is LoadAsset) {
       yield WebAssetStateLoading();
       try {
-        _loadAsset(event.asset);
+        yield* _loadAssetAsync(event.asset);
       } catch (error) {
         yield WebAssetStateFailure();
       }
-    }else if(event is AssetLoaded){
-      yield WebAssetStateSuccess(loadedAsset: event.asset);
     }
   }
 
-  void _loadAsset(String asset) async{
+  Stream<WebAssetState> _loadAssetAsync(String asset) async* {
     final loadedAsset = await loadTextAssetAsStringAsync(asset);
-    add(AssetLoaded(asset: loadedAsset));
+    yield WebAssetStateSuccess(loadedAsset: loadedAsset);
   }
 }

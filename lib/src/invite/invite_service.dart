@@ -61,30 +61,30 @@ class InviteService {
 
   InviteService._internal();
 
-  Future<Response> createInviteUrl(InviteServiceRequest requestInviteService) async {
+  Future<Response> createInviteUrlAsync(InviteServiceRequest requestInviteService) async {
     IOClient ioClient = createIOClient();
     String encodedBody = json.encode(requestInviteService);
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Create ($url): $encodedBody");
     return await ioClient.put(url, headers: headers, body: encodedBody);
   }
 
-  Future<Response> getInvite(String id) async {
+  Future<Response> getInviteAsync(String id) async {
     IOClient ioClient = createIOClient();
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Get ($url): $id");
     return await ioClient.get("$url$id", headers: headers);
   }
 
-  Future<Response> deleteInvite(String id) async {
+  Future<Response> deleteInviteAsync(String id) async {
     IOClient ioClient = createIOClient();
-    var url = await getUrl();
+    var url = await getUrlAsync();
     _logger.info("Delete ($url): $id");
     return await ioClient.delete("$url$id", headers: headers);
   }
 
-  Future<String> getUrl() async {
-    String url = await getPreference(preferenceInviteServiceUrl);
+  Future<String> getUrlAsync() async {
+    String url = await getPreferenceAsync(preferenceInviteServiceUrl);
     if (url.isNullOrEmpty()) {
       url = defaultCoiInviteServiceUrl;
     }

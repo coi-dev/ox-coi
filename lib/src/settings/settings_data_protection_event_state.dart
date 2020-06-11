@@ -46,19 +46,7 @@ abstract class SettingsDataProtectionEvent {}
 
 class RequestSettings extends SettingsDataProtectionEvent {}
 
-class SettingsLoaded extends SettingsDataProtectionEvent {
-  final bool antiMobbingActive;
-
-  SettingsLoaded({@required this.antiMobbingActive});
-}
-
 class ChangeSettings extends SettingsDataProtectionEvent {}
-
-class ActionSuccess extends SettingsDataProtectionEvent {
-  final bool antiMobbingActive;
-
-  ActionSuccess({@required this.antiMobbingActive});
-}
 
 abstract class SettingsDataProtectionState {}
 

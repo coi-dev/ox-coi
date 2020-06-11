@@ -76,7 +76,7 @@ void main() {
   final pushBloc = PushBloc();
 
   WidgetsFlutterBinding.ensureInitialized(); // Required to allow plugin calls prior runApp() (performed by LogManager.setup())
-  _logManager.setup(logToFile: true, logLevel: Level.INFO).then((value) => runApp(
+  _logManager.setupAsync(logToFile: true, logLevel: Level.INFO).then((value) => runApp(
         MultiBlocProvider(
           providers: [
             BlocProvider<LifecycleBloc>(

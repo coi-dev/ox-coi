@@ -46,14 +46,6 @@ abstract class DebugViewerEvent {}
 
 class RequestLog extends DebugViewerEvent {}
 
-class LogLoaded extends DebugViewerEvent {
-  final String log;
-
-  LogLoaded({@required this.log});
-}
-
-class LogEmpty extends DebugViewerEvent {}
-
 class InputLoaded extends DebugViewerEvent {
   final String input;
 
