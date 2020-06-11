@@ -80,38 +80,35 @@ class _SettingsAboutState extends State<SettingsAbout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DynamicAppBar(
-          title: SettingsAbout.viewTitle,
-          leading: AppBarBackButton(context: context),
-        ),
-        body: _buildPreferenceList(context));
-  }
-
-  Widget _buildPreferenceList(BuildContext context) {
-    return BlocBuilder(
-      bloc: _settingsAboutBloc,
-      builder: (context, state) {
-        if (state is SettingsAboutStateInitial) {
-          return StateInfo(showLoading: true);
-        } else if (state is SettingsAboutStateSuccess) {
-          return ListView(
-            children: ListTile.divideTiles(context: context, tiles: [
-              ListTile(
-                title: Text(L10n.get(L.appName)),
-                subtitle: Text(state.name),
-              ),
-              ListTile(
-                title: Text(L10n.get(L.appVersion)),
-                subtitle: Text(state.version),
-              ),
-            ]).toList(),
-          );
-        } else {
-          return Center(
-            child: AdaptiveIcon(icon: IconSource.error),
-          );
-        }
-      },
+      appBar: DynamicAppBar(
+        title: SettingsAbout.viewTitle,
+        leading: AppBarBackButton(context: context),
+      ),
+      body: BlocBuilder(
+        bloc: _settingsAboutBloc,
+        builder: (context, state) {
+          if (state is SettingsAboutStateInitial) {
+            return StateInfo(showLoading: true);
+          } else if (state is SettingsAboutStateSuccess) {
+            return ListView(
+              children: ListTile.divideTiles(context: context, tiles: [
+                ListTile(
+                  title: Text(L10n.get(L.appName)),
+                  subtitle: Text(state.name),
+                ),
+                ListTile(
+                  title: Text(L10n.get(L.appVersion)),
+                  subtitle: Text(state.version),
+                ),
+              ]).toList(),
+            );
+          } else {
+            return Center(
+              child: AdaptiveIcon(icon: IconSource.error),
+            );
+          }
+        },
+      ),
     );
   }
 }

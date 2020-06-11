@@ -96,85 +96,81 @@ class _ShareState extends State<Share> {
         title: widget.messageActionTag == MessageActionTag.forward ? Share.forwardViewTitle : Share.shareViewTitle,
         leading: AppBarBackButton(context: context),
       ),
-      body: _buildShareList(),
-    );
-  }
-
-  Widget _buildShareList() {
-    return BlocBuilder(
-      bloc: _shareBloc,
-      builder: (context, state) {
-        if (state is ShareStateSuccess) {
-          if (state.chatAndContactIds.length > 0) {
-            return ListView.builder(
-              padding: const EdgeInsets.only(top: listItemPadding),
-              itemCount: state.chatAndContactIds.length,
-              itemBuilder: (BuildContext context, int index) {
-                var chatAndContactIds = state.chatAndContactIds;
-                if (state.chatIdCount > 0 && index < state.chatIdCount) {
-                  var chatId = chatAndContactIds[index];
-                  var key = createKeyFromId(chatId);
-                  if (index == 0) {
+      body: BlocBuilder(
+        bloc: _shareBloc,
+        builder: (context, state) {
+          if (state is ShareStateSuccess) {
+            if (state.chatAndContactIds.length > 0) {
+              return ListView.builder(
+                padding: const EdgeInsets.only(top: listItemPadding),
+                itemCount: state.chatAndContactIds.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var chatAndContactIds = state.chatAndContactIds;
+                  if (state.chatIdCount > 0 && index < state.chatIdCount) {
+                    var chatId = chatAndContactIds[index];
                     var key = createKeyFromId(chatId);
-                    return Container(
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            L10n.get(L.chatP, count: L10n.plural),
-                            style: Theme.of(context).textTheme.headline,
-                          ),
-                          ChatListItem(
-                            chatId: chatId,
-                            onTap: chatItemTapped,
-                            switchMultiSelect: null,
-                            isMultiSelect: false,
-                            isShareItem: true,
-                            key: key,
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return ChatListItem(
-                      chatId: chatId,
-                      onTap: chatItemTapped,
-                      switchMultiSelect: null,
-                      isMultiSelect: false,
-                      isShareItem: true,
-                      key: key,
-                    );
+                    if (index == 0) {
+                      var key = createKeyFromId(chatId);
+                      return Container(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              L10n.get(L.chatP, count: L10n.plural),
+                              style: Theme.of(context).textTheme.headline,
+                            ),
+                            ChatListItem(
+                              chatId: chatId,
+                              onTap: chatItemTapped,
+                              switchMultiSelect: null,
+                              isMultiSelect: false,
+                              isShareItem: true,
+                              key: key,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return ChatListItem(
+                        chatId: chatId,
+                        onTap: chatItemTapped,
+                        switchMultiSelect: null,
+                        isMultiSelect: false,
+                        isShareItem: true,
+                        key: key,
+                      );
+                    }
+                  } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
+                    var contactId = chatAndContactIds[index];
+                    if (index == state.chatIdCount) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: listItemPadding),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              L10n.get(L.contactP, count: L10n.plural),
+                              style: Theme.of(context).textTheme.headline,
+                            ),
+                            ContactListContent(contactElement: contactId, contactItemType: ContactItemType.forward, callback: chatItemTapped,)
+                          ],
+                        ),
+                      );
+                    } else {
+                      return ContactListContent(contactElement: contactId, contactItemType: ContactItemType.forward, callback: chatItemTapped);
+                    }
                   }
-                } else if (state.contactIdCount > 0 && index >= state.chatIdCount) {
-                  var contactId = chatAndContactIds[index];
-                  if (index == state.chatIdCount) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: listItemPadding),
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            L10n.get(L.contactP, count: L10n.plural),
-                            style: Theme.of(context).textTheme.headline,
-                          ),
-                          ContactListContent(contactElement: contactId, contactItemType: ContactItemType.forward, callback: chatItemTapped,)
-                        ],
-                      ),
-                    );
-                  } else {
-                    return ContactListContent(contactElement: contactId, contactItemType: ContactItemType.forward, callback: chatItemTapped);
-                  }
-                }
-                return Container();
-              },
-            );
+                  return Container();
+                },
+              );
+            } else {
+              return Container();
+            }
+          } else if (state is ShareStateLoading) {
+            return StateInfo(showLoading: true);
           } else {
-            return Container();
+            return AdaptiveIcon(icon: IconSource.error);
           }
-        } else if (state is ShareStateLoading) {
-          return StateInfo(showLoading: true);
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
-        }
-      },
+        },
+      ),
     );
   }
 

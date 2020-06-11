@@ -119,7 +119,26 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
         bloc: _settingsAutocryptBloc,
         builder: (context, state) {
           if (state is SettingsAutocryptStatePrepared || state is SettingsAutocryptStateFailure) {
-            return buildForm();
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: formVerticalPadding),
+                      child: Text(L10n.get(L.autocryptCompleteImport)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: formVerticalPadding),
+                      child: Text(L10n.getFormatted(L.autocryptImportHintX, [setupCodeStart])),
+                    ),
+                    _setupCodeField,
+                  ],
+                ),
+              ),
+            );
           } else {
             return StateInfo(showLoading: true);
           }
@@ -132,28 +151,5 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
     if (_formKey.currentState.validate()) {
       _settingsAutocryptBloc.add(ContinueKeyTransfer(messageId: widget.messageId, setupCode: _setupCodeField.controller.text));
     }
-  }
-
-  Widget buildForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: formVerticalPadding),
-              child: Text(L10n.get(L.autocryptCompleteImport)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: formVerticalPadding),
-              child: Text(L10n.getFormatted(L.autocryptImportHintX, [setupCodeStart])),
-            ),
-            _setupCodeField,
-          ],
-        ),
-      ),
-    );
   }
 }

@@ -115,83 +115,84 @@ class _ChatCreateGroupSettingsState extends State<ChatCreateGroupSettings> with 
           )
         ],
       ),
-      body: SingleChildScrollView(child: buildBody()),
-    );
-  }
-
-  Widget buildBody() {
-    return BlocBuilder(
-      bloc: _contactListBloc,
-      builder: (context, state) {
-        if (state is ContactListStateSuccess) {
-          final contactElements = state.contactElements;
-          contactElements.removeWhere((contactElement) {
-            final key = getKeyFromContactElement(contactElement);
-            final idOrHeader = extractId(key);
-            return !widget.selectedContacts.contains(idOrHeader);
-          });
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Align(
-                  alignment: Alignment.center,
-                  child: ProfileData(
-                    imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
-                    imageActionCallback: _setAvatar,
-                    avatarPath: _avatar,
-                    child: ProfileHeader(),
-                  )),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: formHorizontalPadding,
-                  right: formHorizontalPadding,
-                  top: formVerticalPadding,
-                ),
-                child: Text(
-                  L10n.get(L.groupName),
-                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
-                child: Form(
-                  key: _formKey,
-                  child: _groupNameField,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: formHorizontalPadding,
-                  right: formHorizontalPadding,
-                  top: formVerticalPadding,
-                ),
-                child: Text(
-                  L10n.get(L.participantP, count: L10n.plural),
-                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: listItemPadding),
-                child: Divider(height: 1),
-              ),
-              Column(
+      body: SingleChildScrollView(
+        child: BlocBuilder(
+          bloc: _contactListBloc,
+          builder: (context, state) {
+            if (state is ContactListStateSuccess) {
+              final contactElements = state.contactElements;
+              contactElements.removeWhere((contactElement) {
+                final key = getKeyFromContactElement(contactElement);
+                final idOrHeader = extractId(key);
+                return !widget.selectedContacts.contains(idOrHeader);
+              });
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  for (var index = 0; index < contactElements.length; index++)
-                    ContactListContent(contactElement: contactElements[index], hasHeader: false,)
+                  Align(
+                      alignment: Alignment.center,
+                      child: ProfileData(
+                        imageBackgroundColor: CustomTheme.of(context).onBackground.barely(),
+                        imageActionCallback: _setAvatar,
+                        avatarPath: _avatar,
+                        child: ProfileHeader(),
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: formHorizontalPadding,
+                      right: formHorizontalPadding,
+                      top: formVerticalPadding,
+                    ),
+                    child: Text(
+                      L10n.get(L.groupName),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: formHorizontalPadding, right: formHorizontalPadding),
+                    child: Form(
+                      key: _formKey,
+                      child: _groupNameField,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: formHorizontalPadding,
+                      right: formHorizontalPadding,
+                      top: formVerticalPadding,
+                    ),
+                    child: Text(
+                      L10n.get(L.participantP, count: L10n.plural),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).primary),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: listItemPadding),
+                    child: Divider(height: 1),
+                  ),
+                  Column(
+                    children: <Widget>[
+                      for (var index = 0; index < contactElements.length; index++)
+                        ContactListContent(
+                          contactElement: contactElements[index],
+                          hasHeader: false,
+                        )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: listItemPaddingSmall),
+                    child: Divider(height: 1),
+                  ),
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: listItemPaddingSmall),
-                child: Divider(height: 1),
-              ),
-            ],
-          );
-        } else if (state is! ContactListStateFailure) {
-          return StateInfo(showLoading: true);
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
-        }
-      },
+              );
+            } else if (state is! ContactListStateFailure) {
+              return StateInfo(showLoading: true);
+            } else {
+              return AdaptiveIcon(icon: IconSource.error);
+            }
+          },
+        ),
+      ),
     );
   }
 

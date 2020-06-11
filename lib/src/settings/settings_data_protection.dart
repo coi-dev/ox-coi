@@ -78,50 +78,47 @@ class _DataProtectionState extends State<SettingsDataProtection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DynamicAppBar(
-          title: SettingsDataProtection.viewTitle,
-          leading: AppBarBackButton(context: context),
-        ),
-        body: _buildPreferenceList(context));
-  }
-
-  Widget _buildPreferenceList(BuildContext context) {
-    return BlocBuilder(
-      bloc: _settingsDataProtectionBloc,
-      builder: (context, state) {
-        if (state is SettingsDataProtectionStateInitial) {
-          return StateInfo(showLoading: true);
-        } else if (state is SettingsDataProtectionStateSuccess) {
-          return ListView(
-            children: ListTile.divideTiles(context: context, tiles: [
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
-                title: Text(L10n.get(L.settingAntiMobbing)),
-                subtitle: Text(L10n.get(L.settingAntiMobbingText)),
-                trailing: Switch.adaptive(
-                  value: state.antiMobbingActive,
-                  onChanged: (value) => _changeAntiMobbingSetting(),
-                  activeColor: CustomTheme.of(context).accent,
+      appBar: DynamicAppBar(
+        title: SettingsDataProtection.viewTitle,
+        leading: AppBarBackButton(context: context),
+      ),
+      body: BlocBuilder(
+        bloc: _settingsDataProtectionBloc,
+        builder: (context, state) {
+          if (state is SettingsDataProtectionStateInitial) {
+            return StateInfo(showLoading: true);
+          } else if (state is SettingsDataProtectionStateSuccess) {
+            return ListView(
+              children: ListTile.divideTiles(context: context, tiles: [
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
+                  title: Text(L10n.get(L.settingAntiMobbing)),
+                  subtitle: Text(L10n.get(L.settingAntiMobbingText)),
+                  trailing: Switch.adaptive(
+                    value: state.antiMobbingActive,
+                    onChanged: (value) => _changeAntiMobbingSetting(),
+                    activeColor: CustomTheme.of(context).accent,
+                  ),
                 ),
-              ),
-              Visibility(
-                  visible: state.antiMobbingActive,
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: listItemPadding),
-                    title: Text(L10n.get(L.settingChatMessagesUnknownShow)),
-                    onTap: () {
-                      _showAntiMobbingList();
-                    },
-                    trailing: Platform.isIOS ? AdaptiveIcon(icon: IconSource.iosChevron) : null,
-                  )),
-            ]).toList(),
-          );
-        } else {
-          return Center(
-            child: AdaptiveIcon(icon: IconSource.error),
-          );
-        }
-      },
+                Visibility(
+                    visible: state.antiMobbingActive,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: listItemPadding),
+                      title: Text(L10n.get(L.settingChatMessagesUnknownShow)),
+                      onTap: () {
+                        _showAntiMobbingList();
+                      },
+                      trailing: Platform.isIOS ? AdaptiveIcon(icon: IconSource.iosChevron) : null,
+                    )),
+              ]).toList(),
+            );
+          } else {
+            return Center(
+              child: AdaptiveIcon(icon: IconSource.error),
+            );
+          }
+        },
+      ),
     );
   }
 

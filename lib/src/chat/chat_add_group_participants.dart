@@ -117,10 +117,52 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
         builder: (context, state) {
           if (state is ContactListStateSuccess) {
             if (_isSearching || (state.contactElements.length != widget.contactIds.length)) {
+              final selectedContacts = state.contactsSelected;
+
               return Column(
                 children: <Widget>[
                   _searchBar,
-                  _buildSelectedParticipantList(state.contactsSelected),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: listItemPadding,
+                          right: listItemPadding,
+                          top: listItemPadding,
+                          bottom: listItemPaddingSmall,
+                        ),
+                        child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 4.0),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(),
+                          ),
+                        ),
+                        width: double.infinity,
+                        height: dimension40dp,
+                        child: selectedContacts.isNotEmpty
+                            ? ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: selectedContacts.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var selectedContactId = selectedContacts[index];
+                              return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
+                            })
+                            : Container(
+                          padding: EdgeInsets.only(
+                            left: listItemPadding,
+                            right: listItemPadding,
+                            top: listItemPadding,
+                          ),
+                          child: Text(L10n.get(L.groupAddContactAdd)),
+                        ),
+                      ),
+                    ],
+                  ),
                   Flexible(
                     child: _buildListItems(state),
                   ),
@@ -161,50 +203,6 @@ class _ChatAddGroupParticipantsState extends State<ChatAddGroupParticipants> {
           return Container();
         }
       },
-    );
-  }
-
-  Widget _buildSelectedParticipantList(List<int> selectedContacts) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            left: listItemPadding,
-            right: listItemPadding,
-            top: listItemPadding,
-            bottom: listItemPaddingSmall,
-          ),
-          child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
-        ),
-        Container(
-          padding: EdgeInsets.only(bottom: 4.0),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(),
-            ),
-          ),
-          width: double.infinity,
-          height: dimension40dp,
-          child: selectedContacts.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: selectedContacts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var selectedContactId = selectedContacts[index];
-                    return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
-                  })
-              : Container(
-                  padding: EdgeInsets.only(
-                    left: listItemPadding,
-                    right: listItemPadding,
-                    top: listItemPadding,
-                  ),
-                  child: Text(L10n.get(L.groupAddContactAdd)),
-                ),
-        ),
-      ],
     );
   }
 

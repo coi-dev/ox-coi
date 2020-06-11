@@ -94,7 +94,18 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
         builder: (context, state) {
           if (state is AntiMobbingListStateSuccess) {
             if (state.messageIds.length > 0) {
-              return buildListViewItems(state.messageIds, state.messageLastUpdateValues);
+              final messageIds = state.messageIds;
+              final messageLastUpdateValues = state.messageLastUpdateValues;
+
+              return ListView.builder(
+                padding: EdgeInsets.only(top: listItemPadding),
+                itemCount: messageIds.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var messageId = messageIds[index];
+                  var key = createKeyFromId(messageId, [messageLastUpdateValues[index]]);
+                  return InviteItem(chatId: Chat.typeInvite, messageId: messageId, key: key);
+                },
+              );
             } else {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -115,18 +126,6 @@ class _AntiMobbingListState extends State<AntiMobbingList> {
           }
         },
       ),
-    );
-  }
-
-  Widget buildListViewItems(List<int> messageIds, List<int> messageLastUpdateValues) {
-    return ListView.builder(
-      padding: EdgeInsets.only(top: listItemPadding),
-      itemCount: messageIds.length,
-      itemBuilder: (BuildContext context, int index) {
-        var messageId = messageIds[index];
-        var key = createKeyFromId(messageId, [messageLastUpdateValues[index]]);
-        return InviteItem(chatId: Chat.typeInvite, messageId: messageId, key: key);
-      },
     );
   }
 }

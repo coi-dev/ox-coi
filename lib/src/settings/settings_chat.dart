@@ -76,48 +76,45 @@ class _SettingsChatState extends State<SettingsChat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DynamicAppBar(
-          title: SettingsChat.viewTitle,
-          leading: AppBarBackButton(context: context),
-        ),
-        body: _buildPreferenceList(context));
-  }
-
-  Widget _buildPreferenceList(BuildContext context) {
-    return BlocBuilder(
-      bloc: _settingsChatBloc,
-      builder: (context, state) {
-        if (state is SettingsChatStateSuccess) {
-          return ListView(
-            children: ListTile.divideTiles(context: context, tiles: [
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
-                title: Text(L10n.get(L.settingReadReceiptP, count: L10n.plural)),
-                subtitle: Text(L10n.get(L.settingReadReceiptText)),
-                trailing: Switch.adaptive(
-                  value: state.readReceiptsEnabled,
-                  onChanged: (value) => _changeReadReceipts(),
-                  activeColor: CustomTheme.of(context).accent,
+      appBar: DynamicAppBar(
+        title: SettingsChat.viewTitle,
+        leading: AppBarBackButton(context: context),
+      ),
+      body: BlocBuilder(
+        bloc: _settingsChatBloc,
+        builder: (context, state) {
+          if (state is SettingsChatStateSuccess) {
+            return ListView(
+              children: ListTile.divideTiles(context: context, tiles: [
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
+                  title: Text(L10n.get(L.settingReadReceiptP, count: L10n.plural)),
+                  subtitle: Text(L10n.get(L.settingReadReceiptText)),
+                  trailing: Switch.adaptive(
+                    value: state.readReceiptsEnabled,
+                    onChanged: (value) => _changeReadReceipts(),
+                    activeColor: CustomTheme.of(context).accent,
+                  ),
                 ),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
-                title: Text(
-                  L10n.get(L.settingMessageSyncing),
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
+                  title: Text(
+                    L10n.get(L.settingMessageSyncing),
+                  ),
+                  subtitle: Text(
+                    L10n.get(L.settingChooseMessageSyncingType),
+                  ),
+                  onTap: () {
+                    _buildMessageSyncChooserDialogAsync(state.inviteSetting);
+                  },
                 ),
-                subtitle: Text(
-                  L10n.get(L.settingChooseMessageSyncingType),
-                ),
-                onTap: () {
-                  _buildMessageSyncChooserDialogAsync(state.inviteSetting);
-                },
-              ),
-            ]).toList(),
-          );
-        } else {
-          return StateInfo(showLoading: true);
-        }
-      },
+              ]).toList(),
+            );
+          } else {
+            return StateInfo(showLoading: true);
+          }
+        },
+      ),
     );
   }
 

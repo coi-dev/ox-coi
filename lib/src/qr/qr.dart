@@ -82,45 +82,41 @@ class _QrCodeState extends State<QrCode> with SingleTickerProviderStateMixin {
           title: QrCode.viewTitle,
           leading: AppBarBackButton(context: context),
         ),
-        body: buildBody(),
-      ),
-    );
-  }
-
-  Widget buildBody() {
-    return Column(
-      children: <Widget>[
-        PhysicalModel(
-          elevation: appBarElevationDefault,
-          color: CustomTheme.of(context).primary,
-          child: TabBar(
-            tabs: <Widget>[
-              Tab(
-                child: Text(
-                  L10n.get(L.qrShow),
-                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onPrimary),
-                ),
+        body: Column(
+          children: <Widget>[
+            PhysicalModel(
+              elevation: appBarElevationDefault,
+              color: CustomTheme.of(context).primary,
+              child: TabBar(
+                tabs: <Widget>[
+                  Tab(
+                    child: Text(
+                      L10n.get(L.qrShow),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onPrimary),
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      L10n.get(L.qrScan),
+                      style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onPrimary),
+                    ),
+                  ),
+                ],
+                controller: controller,
               ),
-              Tab(
-                child: Text(
-                  L10n.get(L.qrScan),
-                  style: Theme.of(context).textTheme.body2.apply(color: CustomTheme.of(context).onPrimary),
-                ),
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: controller,
+                children: <Widget>[
+                  ShowQr(widget.chatId),
+                  ScanQr(),
+                ],
               ),
-            ],
-            controller: controller,
-          ),
+            )
+          ],
         ),
-        Expanded(
-          child: TabBarView(
-            controller: controller,
-            children: <Widget>[
-              ShowQr(widget.chatId),
-              ScanQr(),
-            ],
-          ),
-        )
-      ],
+      ),
     );
   }
 }

@@ -105,95 +105,90 @@ class _ChatCreateGroupParticipantsState extends State<ChatCreateGroupParticipant
           )
         ],
       ),
-      body: buildList(),
-    );
-  }
+      body: BlocBuilder(
+        bloc: _contactListBloc,
+        builder: (context, state) {
+          if (state is ContactListStateSuccess) {
+            final selectedContacts = state.contactsSelected;
+            final contactElements = state.contactElements;
 
-  Widget buildList() {
-    return BlocBuilder(
-      bloc: _contactListBloc,
-      builder: (context, state) {
-        if (state is ContactListStateSuccess) {
-          return Column(
-            children: <Widget>[
-              _searchBar,
-              _buildSelectedParticipantList(state.contactsSelected),
-              Flexible(
-                child: buildListItems(state),
-              ),
-            ],
-          );
-        } else if (state is! ContactListStateFailure) {
-          return StateInfo(showLoading: true);
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
-        }
-      },
-    );
-  }
+            return Column(
+              children: <Widget>[
+                _searchBar,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: listItemPadding,
+                        right: listItemPadding,
+                        top: listItemPadding,
+                        bottom: listItemPaddingSmall,
+                      ),
+                      child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(bottom: dimension4dp),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(),
+                        ),
+                      ),
+                      width: double.infinity,
+                      height: dimension40dp,
+                      child: selectedContacts.isNotEmpty
+                          ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: selectedContacts.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var selectedContactId = selectedContacts[index];
+                            return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
+                          })
+                          : Container(
+                        padding: EdgeInsets.only(
+                          left: listItemPadding,
+                          right: listItemPadding,
+                          top: listItemPadding,
+                        ),
+                        child: Text(L10n.get(L.groupAddContactAdd)),
+                      ),
+                    ),
+                  ],
+                ),
+                Flexible(
+                  child: ListView.custom(
+                    controller: _scrollController,
+                    childrenDelegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        final contactElement = contactElements[index];
 
-  ListView buildListItems(ContactListStateSuccess state) {
-    var contactIds = state.contactElements;
-
-    return ListView.custom(
-      controller: _scrollController,
-      childrenDelegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final contactElement = state.contactElements[index];
-
-          return ContactListContent(contactElement: contactElement, hasHeader: true, isSelectable: true, selectedContacts: state.contactsSelected, callback: _itemTapped,);
-        },
-        childCount: contactIds.length,
-        findChildIndexCallback: (Key key) {
-          final ValueKey valueKey = key;
-          final id = extractId(valueKey);
-          return (contactIds.contains(id) ? contactIds.indexOf(id) : null);
+                        return ContactListContent(
+                          contactElement: contactElement,
+                          hasHeader: true,
+                          isSelectable: true,
+                          selectedContacts: state.contactsSelected,
+                          callback: _itemTapped,
+                        );
+                      },
+                      childCount: contactElements.length,
+                      findChildIndexCallback: (Key key) {
+                        final ValueKey valueKey = key;
+                        final id = extractId(valueKey);
+                        return (contactElements.contains(id) ? contactElements.indexOf(id) : null);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else if (state is! ContactListStateFailure) {
+            return StateInfo(showLoading: true);
+          } else {
+            return AdaptiveIcon(icon: IconSource.error);
+          }
         },
       ),
-    );
-  }
-
-  Widget _buildSelectedParticipantList(List<int> selectedContacts) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            left: listItemPadding,
-            right: listItemPadding,
-            top: listItemPadding,
-            bottom: listItemPaddingSmall,
-          ),
-          child: Text("${selectedContacts.length} ${L10n.get(L.participantP, count: L10n.plural)}"),
-        ),
-        Container(
-          padding: EdgeInsets.only(bottom: dimension4dp),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(),
-            ),
-          ),
-          width: double.infinity,
-          height: dimension40dp,
-          child: selectedContacts.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: selectedContacts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var selectedContactId = selectedContacts[index];
-                    return ContactItemChip(contactId: selectedContactId, itemTapped: () => _itemTapped(selectedContactId));
-                  })
-              : Container(
-                  padding: EdgeInsets.only(
-                    left: listItemPadding,
-                    right: listItemPadding,
-                    top: listItemPadding,
-                  ),
-                  child: Text(L10n.get(L.groupAddContactAdd)),
-                ),
-        ),
-      ],
     );
   }
 

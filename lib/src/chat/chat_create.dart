@@ -98,86 +98,81 @@ class _ChatCreateState extends State<ChatCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DynamicAppBar(
-          showDivider: false,
-          title: ChatCreate.viewTitle,
-          leading: AppBarBackButton(context: context),
-        ),
-        body: buildList());
-  }
+      appBar: DynamicAppBar(
+        showDivider: false,
+        title: ChatCreate.viewTitle,
+        leading: AppBarBackButton(context: context),
+      ),
+      body: BlocBuilder(
+        bloc: _contactListBloc,
+        builder: (context, state) {
+          if (state is ContactListStateSuccess) {
+            final offset = !_isSearching ? 1 : 0;
+            final contactElements = state.contactElements;
 
-  Widget buildList() {
-    return BlocBuilder(
-      bloc: _contactListBloc,
-      builder: (context, state) {
-        if (state is ContactListStateSuccess) {
-          int offset = !_isSearching ? 1 : 0;
-          return buildListItems(!_isSearching, state, offset);
-        } else if (state is! ContactListStateFailure) {
-          return StateInfo(showLoading: true);
-        } else {
-          return AdaptiveIcon(icon: IconSource.error);
-        }
-      },
-    );
-  }
+            return CustomScrollView(
+              slivers: <Widget>[
+                _searchBar,
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                    if (!_isSearching && index == 0) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          ListTile(
+                            leading: AdaptiveIcon(
+                              icon: IconSource.personAdd,
+                              color: CustomTheme.of(context).accent,
+                            ),
+                            title: Text(
+                              L10n.get(L.contactNew),
+                              style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
+                            ),
+                            onTap: newContactTapped,
+                            key: Key(keyChatCreatePersonAddIcon),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(),
+                              ),
+                            ),
+                            child: ListTile(
+                              leading: AdaptiveIcon(
+                                icon: IconSource.groupAdd,
+                                color: CustomTheme.of(context).accent,
+                              ),
+                              title: Text(
+                                L10n.get(L.groupCreate),
+                                style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
+                              ),
+                              onTap: createGroupTapped,
+                              key: Key(keyChatCreateGroupAddIcon),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      final adjustedIndex = index - offset;
+                      final contactElement = contactElements[adjustedIndex];
 
-  Widget buildListItems(bool showNewContactAndAddGroup, ContactListStateSuccess state, int offset) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        _searchBar,
-        SliverList(
-          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-            if (showNewContactAndAddGroup && index == 0) {
-              return buildNewContactAndAddGroup();
-            } else {
-              final adjustedIndex = index - offset;
-              final contactElement = state.contactElements[adjustedIndex];
-
-              return ContactListContent(contactElement: contactElement, hasHeader: true, contactItemType: ContactItemType.createChat,);
-            }
-          }, childCount: state.contactElements.length + offset),
-        )
-      ],
-    );
-  }
-
-  Column buildNewContactAndAddGroup() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        ListTile(
-          leading: AdaptiveIcon(
-            icon: IconSource.personAdd,
-            color: CustomTheme.of(context).accent,
-          ),
-          title: Text(
-            L10n.get(L.contactNew),
-            style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
-          ),
-          onTap: newContactTapped,
-          key: Key(keyChatCreatePersonAddIcon),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(),
-            ),
-          ),
-          child: ListTile(
-            leading: AdaptiveIcon(
-              icon: IconSource.groupAdd,
-              color: CustomTheme.of(context).accent,
-            ),
-            title: Text(
-              L10n.get(L.groupCreate),
-              style: Theme.of(context).textTheme.subhead.merge(getAccentW500TextStyle(context)),
-            ),
-            onTap: createGroupTapped,
-            key: Key(keyChatCreateGroupAddIcon),
-          ),
-        ),
-      ],
+                      return ContactListContent(
+                        contactElement: contactElement,
+                        hasHeader: true,
+                        contactItemType: ContactItemType.createChat,
+                      );
+                    }
+                  }, childCount: contactElements.length + offset),
+                )
+              ],
+            );
+          } else if (state is! ContactListStateFailure) {
+            return StateInfo(showLoading: true);
+          } else {
+            return AdaptiveIcon(icon: IconSource.error);
+          }
+        },
+      ),
     );
   }
 

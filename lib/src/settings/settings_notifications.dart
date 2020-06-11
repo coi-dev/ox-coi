@@ -79,53 +79,50 @@ class _SettingsNotificationsState extends State<SettingsNotifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: DynamicAppBar(
-          title: SettingsNotifications.viewTitle,
-          leading: AppBarBackButton(context: context),
-        ),
-        body: _buildPreferenceList(context));
-  }
-
-  Widget _buildPreferenceList(BuildContext context) {
-    return BlocBuilder(
-      bloc: _settingsNotificationsBloc,
-      builder: (context, state) {
-        if (state is SettingsNotificationsStateInitial) {
-          return StateInfo(showLoading: true);
-        } else if (state is SettingsNotificationsStateSuccess) {
-          return ListView(
-            children: ListTile.divideTiles(context: context, tiles: [
-              Visibility(
-                visible: !state.coiSupported,
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
-                  title: Text(L10n.get(L.settingNotificationPull)),
-                  subtitle: Text(L10n.get(L.settingNotificationPullText)),
-                  trailing: Switch.adaptive(
-                    value: state.pullActive,
-                    onChanged: (value) => _changeNotificationsSetting(),
-                    activeColor: CustomTheme.of(context).accent,
+      appBar: DynamicAppBar(
+        title: SettingsNotifications.viewTitle,
+        leading: AppBarBackButton(context: context),
+      ),
+      body: BlocBuilder(
+        bloc: _settingsNotificationsBloc,
+        builder: (context, state) {
+          if (state is SettingsNotificationsStateInitial) {
+            return StateInfo(showLoading: true);
+          } else if (state is SettingsNotificationsStateSuccess) {
+            return ListView(
+              children: ListTile.divideTiles(context: context, tiles: [
+                Visibility(
+                  visible: !state.coiSupported,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
+                    title: Text(L10n.get(L.settingNotificationPull)),
+                    subtitle: Text(L10n.get(L.settingNotificationPullText)),
+                    trailing: Switch.adaptive(
+                      value: state.pullActive,
+                      onChanged: (value) => _changeNotificationsSetting(),
+                      activeColor: CustomTheme.of(context).accent,
+                    ),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: state.coiSupported,
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
-                  title: Text(L10n.get(L.settingNotificationPush)),
-                  subtitle: Text(L10n.get(L.settingNotificationPushText)),
-                  trailing: Platform.isIOS ? AdaptiveIcon(icon: IconSource.iosChevron) : AdaptiveIcon(icon: IconSource.arrowForward),
-                  onTap: () => {AppSettings.openAppSettings()},
-                ),
-              )
-            ]).toList(),
-          );
-        } else {
-          return Center(
-            child: AdaptiveIcon(icon: IconSource.error),
-          );
-        }
-      },
+                Visibility(
+                  visible: state.coiSupported,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: listItemPadding, horizontal: listItemPadding),
+                    title: Text(L10n.get(L.settingNotificationPush)),
+                    subtitle: Text(L10n.get(L.settingNotificationPushText)),
+                    trailing: Platform.isIOS ? AdaptiveIcon(icon: IconSource.iosChevron) : AdaptiveIcon(icon: IconSource.arrowForward),
+                    onTap: () => {AppSettings.openAppSettings()},
+                  ),
+                )
+              ]).toList(),
+            );
+          } else {
+            return Center(
+              child: AdaptiveIcon(icon: IconSource.error),
+            );
+          }
+        },
+      ),
     );
   }
 
