@@ -82,8 +82,8 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/utils/vibration.dart';
 import 'package:ox_coi/src/widgets/avatar.dart';
 import 'package:ox_coi/src/widgets/button.dart';
-import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/dynamic_appbar.dart';
+import 'package:ox_coi/src/widgets/modal_builder.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 import 'package:path/path.dart' as Path;
 import 'package:url_launcher/url_launcher.dart';
@@ -105,7 +105,7 @@ class Chat extends StatefulWidget {
   _ChatState createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteMixin {
+class _ChatState extends State<Chat> with ChatComposerComponents, ChatCreateMixin, InviteMixin {
   final _navigation = Navigation();
   final _chatBloc = ChatBloc();
   final _messageListBloc = MessageListBloc();
@@ -114,136 +114,36 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
 
-  bool _isComposingText = false;
-  bool _isLocked = false;
-  bool _isStopped = false;
-  bool _isPlaying = false;
-  bool _hasPermissions = false;
-  String _composingAudioTimer;
-  List<double> _dbPeakList;
-  int _replayTime = 0;
-  String _filePath = "";
-  int _knownType;
-  FileType _selectedFileType;
-  String _selectedExtension = "";
-  String _fileName = "";
-
   @override
   void initState() {
     super.initState();
     _navigation.current = Navigatable(Type.chat, params: [widget.chatId]);
     _chatBloc.add(RequestChat(chatId: widget.chatId, isHeadless: widget.headlessStart, messageId: widget.messageId));
     _chatBloc.add(ClearNotifications());
-    _chatComposerBloc.listen((state) => handleChatComposer(state));
+    _handleSharingData();
+  }
+
+  void _handleSharingData() {
     if (widget.sharedData != null) {
-      if (widget.sharedData.path.isEmpty && widget.sharedData.mimeType.contains("text/")) {
-        _textController.text = widget.sharedData.text;
-        setState(() {
-          _isComposingText = true;
-        });
-      } else {
-        setFileData();
-        if (widget.sharedData.text.isNotEmpty) {
-          _textController.text = widget.sharedData.text;
-          setState(() {
-            _isComposingText = true;
-          });
+      if (widget.sharedData.path.isNotEmpty || !widget.sharedData.mimeType.contains("text/")) {
+        final path = widget.sharedData.path;
+        FileType type;
+        if (widget.sharedData.mimeType.startsWith("image/")) {
+          type = FileType.image;
+        } else if (widget.sharedData.mimeType.startsWith("audio/")) {
+          type = FileType.audio;
+        } else if (widget.sharedData.mimeType.startsWith("video/")) {
+          type = FileType.video;
+        } else {
+          type = FileType.any;
         }
+        _chatComposerBloc.add(AttachFile(filePath: path, fileType: type));
+      }
+      if (widget.sharedData.text.isNotEmpty) {
+        _textController.text = widget.sharedData.text;
+        _chatComposerBloc.add(Typing(text: _textController.text));
       }
     }
-  }
-
-  void setFileData() {
-    final path = widget.sharedData.path;
-    FileType type;
-    if (widget.sharedData.mimeType.startsWith("image/")) {
-      type = FileType.image;
-    } else if (widget.sharedData.mimeType.startsWith("audio/")) {
-      type = FileType.audio;
-    } else if (widget.sharedData.mimeType.startsWith("video/")) {
-      type = FileType.video;
-    } else {
-      type = FileType.any;
-    }
-
-    setState(() {
-      _filePath = path;
-      _selectedFileType = type;
-      _fileName = widget.sharedData.fileName;
-      _isComposingText = true;
-    });
-  }
-
-  void handleChatComposer(ChatComposerState state) {
-    if (state is ChatComposerRecordingAudio) {
-      setState(() {
-        _composingAudioTimer = state.timer;
-      });
-    } else if (state is ChatComposerDBPeakUpdated) {
-      setState(() {
-        _dbPeakList = state.dbPeakList;
-      });
-    } else if (state is ChatComposerPermissionsAccepted) {
-      setState(() {
-        _hasPermissions = true;
-      });
-    } else if (state is ChatComposerRecordingAudioStopped) {
-      if (state.filePath != null) {
-        _filePath = state.filePath;
-        _knownType = ChatMsg.typeVoice;
-      }
-      setState(() {
-        _dbPeakList = state.dbPeakList;
-        _isStopped = true;
-      });
-
-      if (state.sendAudio) {
-        _onPrepareMessageSend();
-      }
-    } else if (state is ChatComposerRecordingAudioAborted) {
-      _clearAudioComposer();
-    } else if (state is ChatComposerReplayStopped) {
-      setState(() {
-        _isPlaying = false;
-        _replayTime = 0;
-      });
-    } else if (state is ChatComposerReplayTimeUpdated) {
-      setState(() {
-        _dbPeakList = state.dbPeakList;
-        _replayTime = state.replayTime;
-      });
-    } else if (state is ChatComposerRecordingImageOrVideoStopped) {
-      if (state.type != 0 && state.filePath != null) {
-        _filePath = state.filePath;
-        _knownType = state.type;
-        _onPrepareMessageSend();
-      }
-    } else if (state is ChatComposerRecordingFailed) {
-      _composingAudioTimer = null;
-      _dbPeakList = null;
-      String chatComposeFailed;
-      if (state.error == ChatComposerStateError.missingMicrophonePermission) {
-        setState(() {
-          _hasPermissions = false;
-        });
-        chatComposeFailed = L10n.get(L.chatAudioRecordingFailed);
-      } else if (state.error == ChatComposerStateError.missingCameraPermission) {
-        chatComposeFailed = L10n.get(L.chatVideoRecordingFailed);
-      }
-      chatComposeFailed.showToast();
-    }
-  }
-
-  _clearAudioComposer() async {
-    await Future.delayed(Duration(microseconds: 100));
-    setState(() {
-      _dbPeakList?.clear();
-      _composingAudioTimer = null;
-      _isStopped = false;
-      _isLocked = false;
-      _isPlaying = false;
-      _replayTime = 0;
-    });
   }
 
   @override
@@ -291,7 +191,32 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               _chatChangeBloc.add(ChatMarkMessagesSeen(messageIds: state.messageIds));
             }
           },
-        )
+        ),
+        BlocListener(
+          bloc: _chatComposerBloc,
+          listener: (BuildContext context, state) {
+            if (state is ChatComposerComposing && state.state == ComposerState.prepareSending) {
+              _onPrepareMessageSend();
+            } else if (state is ChatComposerComposing && state.error != null) {
+              String chatComposeFailed;
+              switch (state.error) {
+                case ChatComposerError.missingMicrophonePermission:
+                  chatComposeFailed = L10n.get(L.chatAudioRecordingFailed);
+                  break;
+                case ChatComposerError.missingCameraPermission:
+                  chatComposeFailed = L10n.get(L.chatVideoRecordingFailed);
+                  break;
+                case ChatComposerError.missingFilesPermission:
+                  chatComposeFailed = L10n.get(L.chatAttachmentAccessingFailed);
+                  break;
+                case ChatComposerError.playerNotStarted:
+                  chatComposeFailed = "TODO BROKEN STUFF";
+                  break;
+              }
+              chatComposeFailed.showToast();
+            }
+          },
+        ),
       ],
       child: BlocBuilder(
         bloc: _chatBloc,
@@ -362,28 +287,35 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                         chatId: widget.chatId,
                         emptyListTextTranslation: L.chatNewPlaceholder,
                       ),
-                      Visibility(
-                        visible: _composingAudioTimer != null,
-                        child: Positioned(
-                          bottom: dimension8dp,
-                          right: dimension8dp,
-                          child: Container(
-                            decoration: ShapeDecoration(
-                              shape: getSuperEllipseShape(dimension32dp),
-                              color: CustomTheme.of(context).surface,
-                            ),
-                            child: IconButton(
-                              icon: SuperellipseIcon(
-                                icon: IconSource.send,
-                                iconSize: dimension20dp,
-                                color: CustomTheme.of(context).accent,
-                                iconColor: CustomTheme.of(context).white,
+                      BlocBuilder(
+                        bloc: _chatComposerBloc,
+                        builder: (BuildContext context, state) {
+                          return Visibility(
+                            visible: state is ChatComposerComposing && state.voiceRecordingTimer != null,
+                            child: Positioned(
+                              bottom: dimension8dp,
+                              right: dimension8dp,
+                              child: Container(
+                                decoration: ShapeDecoration(
+                                  shape: getSuperEllipseShape(dimension32dp),
+                                  color: CustomTheme.of(context).surface,
+                                ),
+                                child: IconButton(
+                                  icon: SuperellipseIcon(
+                                    icon: IconSource.send,
+                                    iconSize: dimension20dp,
+                                    color: CustomTheme.of(context).accent,
+                                    iconColor: CustomTheme.of(context).white,
+                                  ),
+                                  onPressed: () => state is ChatComposerComposing && state.voiceState == ComposerVoiceState.locked
+                                      ? _chatComposerBloc.add(StopAudioRecording(send: true))
+                                      : _chatComposerBloc.add(PrepareMessageForSending()),
+                                ),
+                                key: Key(KeyChatOnSendTextIcon),
                               ),
-                              onPressed: () => _isLocked ? _chatComposerBloc.add(StopAudioRecording(sendAudio: true)) : _onPrepareMessageSend(),
                             ),
-                            key: Key(KeyChatOnSendTextIcon),
-                          ),
-                        ),
+                          );
+                        },
                       ),
                     ]),
                   ),
@@ -393,19 +325,97 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
                     chatId: widget.chatId,
                     messageId: widget.messageId,
                   ),
-                if (_filePath.isNotEmpty && _knownType != ChatMsg.typeVoice)
-                  ChatAttachmentPreview(
-                    filePath: _filePath,
-                    fileType: _selectedFileType,
-                    onClose: _closePreview,
-                    extension: _selectedExtension,
-                    fileName: _fileName,
-                  ),
+                BlocBuilder(
+                  bloc: _chatComposerBloc,
+                  builder: (BuildContext context, state) {
+                    return Visibility(
+                      visible: state is ChatComposerComposing && !state.filePath.isNullOrEmpty() && state.fileType != ChatMsg.typeVoice,
+                      child: ChatAttachmentPreview(
+                        filePath: state.filePath,
+                        fileType: state.fileType,
+                        onClose: _closePreview,
+                      ),
+                    );
+                  },
+                ),
                 Divider(height: dividerHeight),
                 if (state is ChatStateSuccess && !state.isRemoved)
                   Container(
                     decoration: BoxDecoration(color: CustomTheme.of(context).surface),
-                    child: SafeArea(child: _buildTextComposer()),
+                    child: SafeArea(
+                      child: BlocBuilder(
+                        bloc: _chatComposerBloc,
+                        builder: (BuildContext context, ChatComposerState state) {
+                          if (state is ChatComposerComposing) {
+                            final voicePermissionGranted = state.voicePermissionGranted ?? false;
+                            final type = state.state;
+                            final List<Widget> widgets = List();
+                            if (type != ComposerState.isVoiceRecording) {
+                              widgets.add(buildLeftComposerPart(
+                                context: context,
+                                type: type,
+                                onShowAttachmentChooser: _showAttachmentChooser,
+                                onAudioRecordingAbort: _onAudioRecordingAbort,
+                              ));
+                            } else if (state.voiceState == ComposerVoiceState.locked || state.voiceState == ComposerVoiceState.stopped) {
+                              widgets.add(buildLeftComposerPart(
+                                context: context,
+                                type: type,
+                                onShowAttachmentChooser: _showAttachmentChooser,
+                                onAudioRecordingAbort: _onAudioRecordingAbort,
+                              ));
+                            } else {
+                              widgets.add(Padding(
+                                padding: const EdgeInsets.only(left: dimension48dp),
+                              ));
+                            }
+                            widgets.add(buildCenterComposerPart(
+                              context: context,
+                              type: type,
+                              textController: _textController,
+                              onTextChanged: _onInputTextChanged,
+                              peakList: state.voicePeakList,
+                              replayTime: state.voiceReplayTimer,
+                              isStopped: state.voiceState == ComposerVoiceState.stopped,
+                              isPlaying: state.voiceState == ComposerVoiceState.playing,
+                            ));
+                            widgets.addAll(buildRightComposerPart(
+                              context: context,
+                              onRecordAudioPressed: voicePermissionGranted ? _onRecordAudioPressed : null,
+                              onRecordAudioStopped: voicePermissionGranted ? _onAudioRecordingStopped : null,
+                              onRecordAudioStoppedLongPress: _onAudioRecordingStoppedLongPress,
+                              onRecordAudioLocked: _onAudioRecordingLocked,
+                              onAudioPlaying: _onAudioPlaying,
+                              onAudioPlayingStopped: _onAudioPlayingStopped,
+                              onRecordVideoPressed: _onRecordVideoPressed,
+                              onCaptureImagePressed: _onCaptureImagePressed,
+                              onMicTapDown: _onMicTapDown,
+                              type: type,
+                              onSendText: _onPrepareMessageSend,
+                              text: "${state.voiceRecordingTimer}",
+                              isLocked: state.voiceState == ComposerVoiceState.locked,
+                              isStopped: state.voiceState == ComposerVoiceState.stopped,
+                              isPlaying: state.voiceState == ComposerVoiceState.playing,
+                            ));
+
+                            return IconTheme(
+                              data: IconThemeData(color: CustomTheme.of(context).accent),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: dimension8dp),
+                                child: BlocProvider.value(
+                                  value: _chatComposerBloc,
+                                  child: Row(
+                                    children: widgets,
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container(); //TODO
+                          }
+                        },
+                      ),
+                    ),
                   ),
               ],
             ),
@@ -415,89 +425,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     );
   }
 
-  Widget _buildTextComposer() {
-    final List<Widget> widgets = List();
-    if (_getComposerType() != ComposerModeType.isVoiceRecording) {
-      widgets.add(buildLeftComposerPart(
-        context: context,
-        type: _getComposerType(),
-        onShowAttachmentChooser: _showAttachmentChooser,
-        onAudioRecordingAbort: _onAudioRecordingAbort,
-      ));
-    } else if (_isLocked || _isStopped) {
-      widgets.add(buildLeftComposerPart(
-        context: context,
-        type: _getComposerType(),
-        onShowAttachmentChooser: _showAttachmentChooser,
-        onAudioRecordingAbort: _onAudioRecordingAbort,
-      ));
-    } else {
-      widgets.add(Padding(
-        padding: const EdgeInsets.only(left: dimension48dp),
-      ));
-    }
-    widgets.add(buildCenterComposerPart(
-      context: context,
-      type: _getComposerType(),
-      textController: _textController,
-      onTextChanged: _onInputTextChanged,
-      dbPeakList: _dbPeakList,
-      replayTime: _replayTime,
-      isStopped: _isStopped,
-      isPlaying: _isPlaying,
-    ));
-    widgets.addAll(buildRightComposerPart(
-      context: context,
-      onRecordAudioPressed: _onRecordAudioPressed,
-      onRecordAudioStopped: _onAudioRecordingStopped,
-      onRecordAudioStoppedLongPress: _onAudioRecordingStoppedLongPress,
-      onRecordAudioLocked: _onAudioRecordingLocked,
-      onAudioPlaying: _onAudioPlaying,
-      onAudioPlayingStopped: _onAudioPlayingStopped,
-      onRecordVideoPressed: _onRecordVideoPressed,
-      onCaptureImagePressed: _onCaptureImagePressed,
-      onMicTapDown: _onMicTapDown,
-      type: _getComposerType(),
-      onSendText: _onPrepareMessageSend,
-      text: _composingAudioTimer,
-      isLocked: _isLocked,
-      isStopped: _isStopped,
-      isPlaying: _isPlaying,
-    ));
-
-    return IconTheme(
-      data: IconThemeData(color: CustomTheme.of(context).accent),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: dimension8dp),
-        child: BlocProvider.value(
-          value: _chatComposerBloc,
-          child: Row(
-            children: widgets,
-          ),
-        ),
-      ),
-    );
-  }
-
-  ComposerModeType _getComposerType() {
-    if (_isComposingText) {
-      return ComposerModeType.isComposing;
-    } else {
-      if (_composingAudioTimer != null) {
-        return ComposerModeType.isVoiceRecording;
-      }
-    }
-    return ComposerModeType.compose;
-  }
-
   void _onInputTextChanged(String text) {
-    setState(() {
-      _isComposingText = isComposingText();
-    });
-  }
-
-  bool isComposingText() {
-    return _textController.text.trim().length > 0;
+    _chatComposerBloc.add(Typing(text: text));
   }
 
   void _onPrepareMessageSend() {
@@ -513,14 +442,15 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   _handleCreateChatSuccess(int chatId) {
+    final composerSendState = (_chatComposerBloc.state as ChatComposerComposing);
     _navigation.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => Chat(
           chatId: chatId,
           newMessage: _textController.text,
-          newPath: _filePath,
-          newFileType: getType(),
+          newPath: composerSendState.filePath,
+          newFileType: composerSendState.fileType,
         ),
       ),
       ModalRoute.withName(Navigation.root),
@@ -529,88 +459,38 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
   }
 
   void _onMessageSend() {
+    final composerSendState = (_chatComposerBloc.state as ChatComposerComposing);
     final String text = _textController.text;
     _textController.clear();
-    if (_filePath.isEmpty) {
+    if (composerSendState.filePath.isNullOrEmpty()) {
       if (text.isNotEmpty) {
         _messageListBloc.add(SendMessage(text: text));
       }
     } else {
-      int type = getType();
-      if (type == ChatMsg.typeVoice) _onAudioRecordingAbort();
-      _messageListBloc.add(SendMessage(path: _filePath, fileType: type, text: text, isShared: widget.sharedData != null));
+      _messageListBloc
+          .add(SendMessage(path: composerSendState.filePath, fileType: composerSendState.fileType, text: text, isShared: widget.sharedData != null));
     }
-
     _closePreview();
-    _clearAudioComposer();
-    setState(() {
-      _knownType = null;
-      _isComposingText = false;
-    });
-  }
-
-  int getType() {
-    int type = 0;
-    if (_knownType == null) {
-      switch (_selectedFileType) {
-        case FileType.image:
-          type = ChatMsg.typeImage;
-          break;
-        case FileType.video:
-          type = ChatMsg.typeVideo;
-          break;
-        case FileType.audio:
-          type = ChatMsg.typeAudio;
-          break;
-        case FileType.custom:
-          if (_selectedExtension == "gif") {
-            type = ChatMsg.typeGif;
-          } else {
-            type = ChatMsg.typeFile;
-          }
-          break;
-        case FileType.any:
-          type = ChatMsg.typeFile;
-          break;
-      }
-    } else {
-      type = _knownType;
-    }
-    return type;
+    _chatComposerBloc.add(ResetComposer());
   }
 
   double startLongPressDx;
   double startLongPressDy;
 
   _onRecordAudioPressed(LongPressStartDetails details) async {
-    if (!_hasPermissions) return;
-
     startLongPressDx = details.localPosition.dx;
     startLongPressDy = details.localPosition.dy;
-
-    if (!_isStopped) {
-      _chatComposerBloc.add(StartAudioRecording());
-      setState(() {
-        _isStopped = false;
-        _isPlaying = false;
-      });
-    }
+    _chatComposerBloc.add(StartAudioRecording());
   }
 
   _onAudioRecordingStoppedLongPress(LongPressEndDetails details) {
-    if (!_hasPermissions) return;
-
     double dxDifference = startLongPressDx - details.localPosition.dx;
     double dyDifference = startLongPressDy - details.localPosition.dy;
 
     if (dyDifference > 50.0) {
-      if (_dbPeakList != null && _dbPeakList.length > 0) {
-        _chatComposerBloc.add(StopAudioRecording(sendAudio: true));
-      }
+      _chatComposerBloc.add(StopAudioRecording(send: true));
     } else if (dxDifference > 45.0) {
-      setState(() {
-        _isLocked = true;
-      });
+      _onAudioRecordingLocked();
     } else {
       _chatComposerBloc.add(StopAudioRecording());
     }
@@ -621,42 +501,19 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     _chatComposerBloc.add(CheckPermissions());
   }
 
-  _onAudioRecordingStopped() {
-    _chatComposerBloc.add(StopAudioRecording());
-  }
+  _onAudioRecordingStopped() => _chatComposerBloc.add(StopAudioRecording());
 
-  _onAudioRecordingLocked() {
-    setState(() {
-      _isLocked = true;
-    });
-  }
+  _onAudioRecordingLocked() => _chatComposerBloc.add(LockAudioRecording());
 
-  _onAudioPlaying() {
-    setState(() {
-      _isPlaying = true;
-    });
-    _chatComposerBloc.add(ReplayAudio());
-  }
+  _onAudioPlaying() => _chatComposerBloc.add(ReplayAudio());
 
-  _onAudioPlayingStopped() {
-    setState(() {
-      _replayTime = 0;
-      _isPlaying = false;
-    });
-    _chatComposerBloc.add(StopAudioReplay());
-  }
+  _onAudioPlayingStopped() => _chatComposerBloc.add(StopAudioReplay());
 
-  _onAudioRecordingAbort() {
-    _chatComposerBloc.add(AbortAudioRecording());
-  }
+  _onAudioRecordingAbort() => _chatComposerBloc.add(StopAudioRecording(aborted: true));
 
-  _onCaptureImagePressed() {
-    _chatComposerBloc.add(StartImageOrVideoRecording(pickImage: true));
-  }
+  _onCaptureImagePressed() => _chatComposerBloc.add(StartImageOrVideoRecording(type: ChatMsg.typeImage));
 
-  _onRecordVideoPressed() {
-    _chatComposerBloc.add(StartImageOrVideoRecording(pickImage: false));
-  }
+  _onRecordVideoPressed() => _chatComposerBloc.add(StartImageOrVideoRecording(type: ChatMsg.typeVideo));
 
   void _showAttachmentChooser() {
     showNavigatableBottomSheet(
@@ -668,67 +525,37 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
               key: Key(keyAttachmentAddImage),
               title: Text(L10n.get(L.image)),
               leading: AdaptiveIcon(icon: IconSource.image),
-              onPressed: () => _getFilePath(FileType.image),
+              onPressed: () => _addAttachment(FileType.image),
             ),
             AdaptiveBottomSheetAction(
               key: Key(keyAttachmentAddVideo),
               title: Text(L10n.get(L.video)),
               leading: AdaptiveIcon(icon: IconSource.videoLibrary),
-              onPressed: () => _getFilePath(FileType.video),
+              onPressed: () => _addAttachment(FileType.video),
             ),
             AdaptiveBottomSheetAction(
               key: Key(keyAttachmentAddPdf),
               title: Text(pdf),
               leading: AdaptiveIcon(icon: IconSource.pictureAsPdf),
-              onPressed: () => _getFilePath(FileType.custom, "pdf"),
+              onPressed: () => _addAttachment(FileType.custom, "pdf"),
             ),
             AdaptiveBottomSheetAction(
               key: Key(keyAttachmentAddFile),
               title: Text(L10n.get(L.file)),
               leading: AdaptiveIcon(icon: IconSource.insertDriveFile),
-              onPressed: () => _getFilePath(FileType.any),
+              onPressed: () => _addAttachment(FileType.any),
             ),
           ],
         ));
   }
 
-  _getFilePath(FileType fileType, [String extension]) async {
+  _addAttachment(FileType fileType, [String extension]) async {
     _navigation.pop(context);
-
-    String filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
-    if (filePath == null) {
-      return;
-    }
-
-    if (fileType == FileType.video && Platform.isIOS) {
-      final ext = Path.extension(filePath);
-      final videoFileName = "${filePath.hashCode}$ext";
-      final videoFileDir = Path.dirname(filePath);
-      final videoFilePath = "$videoFileDir${Platform.pathSeparator}$videoFileName";
-      final videoFile = File(filePath);
-      await videoFile.rename(videoFilePath);
-      filePath = videoFilePath;
-    }
-
-    _fileName = Path.basename(filePath);
-
-    _selectedFileType = fileType;
-    _selectedExtension = extension;
-    setState(() {
-      _filePath = filePath != null ? filePath : "";
-      _isComposingText = _filePath.isNotEmpty;
-    });
+    _chatComposerBloc.add(AttachFile(fileType: fileType, extension: extension));
   }
 
   void _closePreview() {
-    setState(() {
-      if (widget.sharedData != null) {
-        _messageListBloc.add(DeleteCacheFile(path: _filePath));
-      }
-      _filePath = "";
-      _selectedExtension = "";
-      _isComposingText = isComposingText();
-    });
+    _chatComposerBloc.add(DetachFile());
   }
 
   _chatTitleTapped() {
@@ -910,17 +737,16 @@ class ChatInviteChoice extends StatelessWidget with ChatCreateMixin {
 }
 
 class ChatAttachmentPreview extends StatelessWidget {
-  final FileType fileType;
+  final int fileType;
   final String filePath;
   final Function onClose;
-  final String extension;
-  final String fileName;
+  final bool showName;
 
-  const ChatAttachmentPreview({Key key, @required this.fileType, @required this.filePath, @required this.onClose, this.extension, this.fileName})
-      : super(key: key);
+  const ChatAttachmentPreview({Key key, @required this.fileType, @required this.filePath, @required this.onClose, this.showName = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final fileName = Path.basename(filePath);
     return Column(
       children: <Widget>[
         Divider(height: dividerHeight),
@@ -931,7 +757,7 @@ class ChatAttachmentPreview extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Center(
-                child: fileType == FileType.image || extension == "gif"
+                child: fileType == ChatMsg.typeImage
                     ? Image.file(File(filePath))
                     : AdaptiveIcon(
                         icon: IconSource.insertDriveFile,
@@ -959,10 +785,11 @@ class ChatAttachmentPreview extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(dimension4dp),
-          child: Text(fileName),
-        )
+        if (showName)
+          Padding(
+            padding: const EdgeInsets.all(dimension4dp),
+            child: Text(fileName, textAlign: TextAlign.center),
+          )
       ],
     );
   }

@@ -50,7 +50,6 @@ import 'package:flutter/material.dart';
 import 'package:ox_coi/src/contact/contact_list_event_state.dart';
 import 'package:ox_coi/src/contact/contacts_updater_mixin.dart';
 import 'package:ox_coi/src/data/contact_extension.dart';
-import 'package:ox_coi/src/data/contact_repository.dart';
 import 'package:ox_coi/src/data/repository.dart';
 import 'package:ox_coi/src/data/repository_manager.dart';
 import 'package:ox_coi/src/data/repository_stream_handler.dart';

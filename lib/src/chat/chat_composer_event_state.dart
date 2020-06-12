@@ -40,45 +40,60 @@
  * for more details.
  */
 
+import 'package:file_picker/file_picker.dart';
 import 'package:meta/meta.dart';
+import 'package:ox_coi/src/chat/chat_composer_mixin.dart';
+
+enum ChatComposerError {
+  missingMicrophonePermission,
+  missingCameraPermission,
+  missingFilesPermission,
+  playerNotStarted,
+}
 
 abstract class ChatComposerEvent {}
 
-class StartAudioRecording extends ChatComposerEvent {}
+class Typing extends ChatComposerEvent {
+  final String text;
+
+  Typing({@required this.text});
+}
 
 class CheckPermissions extends ChatComposerEvent {}
 
-class UpdateAudioRecording extends ChatComposerEvent {
-  final String timer;
-
-  UpdateAudioRecording({@required this.timer});
-}
-
-class UpdateAudioDBPeak extends ChatComposerEvent {
-  final List<double> dbPeakList;
-
-  UpdateAudioDBPeak({@required this.dbPeakList});
-}
-
-class RemoveFirstAudioDBPeak extends ChatComposerEvent {
-  final bool removeFirstEntry;
-  final int cutoffValue;
-
-  RemoveFirstAudioDBPeak({@required this.removeFirstEntry, @required this.cutoffValue});
-}
+class StartAudioRecording extends ChatComposerEvent {}
 
 class StopAudioRecording extends ChatComposerEvent {
-  final bool sendAudio;
+  final bool send;
+  final bool aborted;
 
-  StopAudioRecording({this.sendAudio = false});
+  StopAudioRecording({this.send = false, this.aborted = false});
 }
 
-class AbortAudioRecording extends ChatComposerEvent {}
+class LockAudioRecording extends ChatComposerEvent {}
+
+class UpdateVoiceRecordingTimer extends ChatComposerEvent {
+  final String timer;
+
+  UpdateVoiceRecordingTimer({@required this.timer});
+}
+
+class UpdateVoiceRecordingPeak extends ChatComposerEvent {
+  final List<double> peakList;
+
+  UpdateVoiceRecordingPeak({@required this.peakList});
+}
+
+class RemoveFirstAudioPeak extends ChatComposerEvent {
+  final int cutoffValue;
+
+  RemoveFirstAudioPeak({@required this.cutoffValue});
+}
 
 class StartImageOrVideoRecording extends ChatComposerEvent {
-  final bool pickImage;
+  final int type;
 
-  StartImageOrVideoRecording({@required this.pickImage});
+  StartImageOrVideoRecording({@required this.type});
 }
 
 class StopImageOrVideoRecording extends ChatComposerEvent {
@@ -112,57 +127,87 @@ class UpdateReplayTime extends ChatComposerEvent {
   UpdateReplayTime({@required this.replayTime});
 }
 
-enum ChatComposerStateError {
-  missingMicrophonePermission,
-  missingCameraPermission,
+class AttachFile extends ChatComposerEvent {
+  final String filePath;
+  final FileType fileType;
+  final String extension;
+
+  AttachFile({@required this.fileType, this.filePath, this.extension});
 }
+
+class DetachFile extends ChatComposerEvent {}
+
+class PrepareMessageForSending extends ChatComposerEvent {}
+
+class ResetComposer extends ChatComposerEvent {}
 
 abstract class ChatComposerState {}
 
-class ChatComposerInitial extends ChatComposerState {}
-
-class ChatComposerPermissionsAccepted extends ChatComposerState {}
-
-class ChatComposerRecordingAudio extends ChatComposerState {
-  String timer;
-
-  ChatComposerRecordingAudio({@required this.timer});
-}
-
-class ChatComposerDBPeakUpdated extends ChatComposerState {
-  List<double> dbPeakList;
-
-  ChatComposerDBPeakUpdated({@required this.dbPeakList});
-}
-
 class ChatComposerRecordingAudioStopped extends ChatComposerState {
   String filePath;
-  List<double> dbPeakList;
+  List<double> peakList;
   bool sendAudio;
 
-  ChatComposerRecordingAudioStopped({@required this.filePath, @required this.dbPeakList, @required this.sendAudio});
-}
-
-class ChatComposerRecordingAudioAborted extends ChatComposerState {}
-
-class ChatComposerRecordingFailed extends ChatComposerState {
-  ChatComposerStateError error;
-
-  ChatComposerRecordingFailed({@required this.error});
+  ChatComposerRecordingAudioStopped({@required this.filePath, @required this.peakList, @required this.sendAudio});
 }
 
 class ChatComposerReplayStopped extends ChatComposerState {}
 
-class ChatComposerReplayTimeUpdated extends ChatComposerState {
-  final List<double> dbPeakList;
-  final int replayTime;
+class ChatComposerPrepared extends ChatComposerState {}
 
-  ChatComposerReplayTimeUpdated({@required this.dbPeakList, @required this.replayTime});
-}
+class ChatComposerComposing extends ChatComposerState {
+  final ComposerState state;
+  final ComposerVoiceState voiceState;
+  final String text;
+  final String filePath;
+  final int fileType;
+  final bool voicePermissionGranted;
+  final int voiceRecordingTimer;
+  final int voiceReplayTimer;
+  final List<double> voicePeakList;
+  final List<double> voiceVisiblePeakList;
+  final ChatComposerError error;
 
-class ChatComposerRecordingImageOrVideoStopped extends ChatComposerState {
-  String filePath;
-  int type;
+  ChatComposerComposing({
+    this.state,
+    this.voiceState,
+    this.text,
+    this.filePath,
+    this.fileType,
+    this.voicePermissionGranted,
+    this.voiceRecordingTimer,
+    this.voiceReplayTimer,
+    this.voicePeakList,
+    this.voiceVisiblePeakList,
+    this.error,
+  });
 
-  ChatComposerRecordingImageOrVideoStopped({@required this.filePath, @required this.type});
+  ChatComposerComposing copyWith({
+    ComposerState state,
+    ComposerVoiceState voiceState,
+    String text,
+    String filePath,
+    int fileType,
+    bool voicePermissionGranted,
+    String voiceRecordingTimer,
+    int voiceReplayTimer,
+    List<double> voicePeakList,
+    List<double> voiceVisiblePeakList,
+    ChatComposerError error,
+
+  }) {
+    return ChatComposerComposing(
+      state: state ?? this.state,
+      voiceState: voiceState ?? this.voiceState,
+      text: text ?? this.text,
+      filePath: filePath ?? this.filePath,
+      fileType: fileType ?? this.fileType,
+      voicePermissionGranted: voicePermissionGranted ?? this.voicePermissionGranted,
+      voiceRecordingTimer: voiceRecordingTimer ?? this.voiceRecordingTimer,
+      voiceReplayTimer: voiceReplayTimer ?? this.voiceReplayTimer,
+      voicePeakList: voicePeakList ?? this.voicePeakList,
+      voiceVisiblePeakList: voiceVisiblePeakList ?? this.voiceVisiblePeakList,
+      error: error ?? null,
+    );
+  }
 }

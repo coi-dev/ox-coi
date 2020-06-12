@@ -41,7 +41,6 @@
  */
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/services.dart';
 import 'package:ox_coi/src/utils/assets.dart';
 import 'package:ox_coi/src/web/web_asset_event_state.dart';
 

@@ -39,31 +39,3 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public License 2.0
  * for more details.
  */
-
-import 'dart:io';
-
-import 'package:path/path.dart' as Path;
-import 'package:video_player/video_player.dart';
-
-Future<String> getVideoPathFromFilePickerInputAsync(String filePath) async {
-  if (Platform.isIOS) {
-    final ext = Path.extension(filePath);
-    final videoFileName = "${filePath.hashCode}$ext";
-    final videoFileDir = Path.dirname(filePath);
-    final videoFilePath = "$videoFileDir${Platform.pathSeparator}$videoFileName";
-    final videoFile = File(filePath);
-    await videoFile.rename(videoFilePath);
-    filePath = videoFilePath;
-  }
-  return filePath;
-}
-
-Future<int> getDurationInMilliseconds(String path) async {
-  int duration = 0;
-  VideoPlayerController fileVideoController = VideoPlayerController.file(File(path));
-  await fileVideoController.initialize();
-  if (fileVideoController.value.duration != null) {
-    duration = fileVideoController.value.duration.inMilliseconds;
-  }
-  return duration;
-}

@@ -45,159 +45,129 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:delta_chat_core/delta_chat_core.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ox_coi/src/chat/chat_composer_event_state.dart';
+import 'package:ox_coi/src/chat/chat_composer_mixin.dart';
 import 'package:ox_coi/src/extensions/numbers_apis.dart';
+import 'package:ox_coi/src/extensions/string_apis.dart';
+import 'package:ox_coi/src/utils/video.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
   StreamSubscription<RecordStatus> _recorderSubscription;
-  StreamSubscription<double> _recorderDBPeakSubscription;
+  StreamSubscription<double> _recorderPeakSubscription;
   StreamSubscription<PlayStatus> _playerSubscription;
   FlutterSound _flutterSound = FlutterSound();
-  String _audioPath;
-  bool _removeFirstEntry;
   int _cutoffValue;
-  int _replayTime;
   bool _isSeeking;
-  List<double> _dbPeakList = List<double>();
 
   @override
-  ChatComposerState get initialState => ChatComposerInitial();
+  ChatComposerState get initialState => ChatComposerComposing(state: ComposerState.readyToCompose);
 
   @override
   Stream<ChatComposerState> mapEventToState(ChatComposerEvent event) async* {
     if (event is CheckPermissions) {
       bool hasMicPermission = await Permission.microphone.request().isGranted;
       bool hasFilesPermission = await Permission.storage.request().isGranted;
-
-      if (hasMicPermission && hasFilesPermission) {
-        yield ChatComposerPermissionsAccepted();
-      } else {
-        yield ChatComposerRecordingFailed(error: ChatComposerStateError.missingMicrophonePermission);
+      if (!hasMicPermission || !hasFilesPermission) {
+        yield composingState.copyWith(error: ChatComposerError.missingMicrophonePermission);
       }
     } else if (event is StartAudioRecording) {
       try {
-        _removeFirstEntry = false;
-        _cutoffValue = 1;
-        _replayTime = 0;
-        _isSeeking = false;
-        _dbPeakList = List<double>();
-
-        await startAudioRecorder();
+        yield* startAudioRecorder();
       } catch (err) {
         print('startRecorder error: $err');
-        yield ChatComposerRecordingAudioStopped(filePath: null, dbPeakList: null, sendAudio: false);
+        yield composingState.copyWith(error: ChatComposerError.playerNotStarted);
       }
-    } else if (event is UpdateAudioRecording) {
-      yield ChatComposerRecordingAudio(timer: event.timer);
-    } else if (event is UpdateAudioDBPeak) {
-      yield ChatComposerDBPeakUpdated(dbPeakList: event.dbPeakList);
-    } else if (event is RemoveFirstAudioDBPeak) {
-      if (_removeFirstEntry != event.removeFirstEntry) {
-        _removeFirstEntry = event.removeFirstEntry;
+    } else if (event is UpdateVoiceRecordingTimer) {
+      if (state is ChatComposerComposing) {
+        yield composingState.copyWith(voiceRecordingTimer: event.timer);
       }
-
+    } else if (event is UpdateVoiceRecordingPeak) {
+      if (state is ChatComposerComposing) {
+        final visiblePeakList = event.peakList;
+        if (_cutoffValue > 0) {
+          visiblePeakList.removeRange(0, _cutoffValue);
+        }
+        yield composingState.copyWith(voicePeakList: event.peakList, voiceVisiblePeakList: visiblePeakList);
+      }
+    } else if (event is RemoveFirstAudioPeak) {
       _cutoffValue = event.cutoffValue;
     } else if (event is StopAudioRecording) {
-      yield* stopAudioRecorder(sendAudio: event.sendAudio);
-    } else if (event is AbortAudioRecording) {
-      yield* stopAudioRecorder(isAborted: true);
+      yield* stopAudioRecorder(sendAudio: event.send, isAborted: event.aborted);
     } else if (event is StartImageOrVideoRecording) {
       bool hasCameraPermission = await Permission.camera.request().isGranted;
-
       if (hasCameraPermission) {
-        startImageOrVideoRecorder(event.pickImage);
+        yield* startImageOrVideoCapture(event.type);
       } else {
-        yield ChatComposerRecordingFailed(error: ChatComposerStateError.missingCameraPermission);
-      }
-    } else if (event is StopImageOrVideoRecording) {
-      if (!_wasImageOrVideoRecordingCanceled(event.filePath, event.type)) {
-        yield ChatComposerRecordingImageOrVideoStopped(filePath: event.filePath, type: event.type);
+        yield composingState.copyWith(error: ChatComposerError.missingCameraPermission);
       }
     } else if (event is ReplayAudio) {
-      _replayAudio();
+      yield* _startAudioPlayer();
     } else if (event is ReplayAudioStopped) {
       yield ChatComposerReplayStopped();
     } else if (event is ReplayAudioTimeUpdate) {
-      yield ChatComposerReplayTimeUpdated(dbPeakList: _dbPeakList, replayTime: event.replayTime);
+      yield composingState.copyWith(voiceReplayTimer: event.replayTime);
     } else if (event is ReplayAudioSeek) {
       _seekAudioPlayer(event.seekValue);
     } else if (event is UpdateReplayTime) {
       _isSeeking = true;
-      _replayTime = event.replayTime;
-      yield ChatComposerReplayTimeUpdated(dbPeakList: _dbPeakList, replayTime: _replayTime);
+      yield composingState.copyWith(voiceReplayTimer: event.replayTime);
     } else if (event is StopAudioReplay) {
-      _stopAudio();
+      yield* _stopAudioPlayer();
+    } else if (event is AttachFile) {
+      final filePath = event.filePath;
+      if (filePath.isNullOrEmpty()) {
+        yield* _addAttachment(event.fileType, event.extension);
+      } else {
+        yield composingState.copyWith(filePath: filePath, fileType: _getDccFileType(event.fileType));
+      }
+    } else if (event is PrepareMessageForSending) {
+      yield composingState.copyWith(state: ComposerState.prepareSending);
+    } else if (event is DetachFile) {
+      yield composingState.copyWith(filePath: "", fileType: null);
+    } else if (event is Typing) {
+      bool isTyping = event.text.trim().isNotEmpty;
+      yield composingState.copyWith(state: isTyping ? ComposerState.isComposing : ComposerState.readyToCompose, text: event.text);
+    } else if (event is ResetComposer) {
+      yield ChatComposerComposing(state: ComposerState.readyToCompose);
     }
   }
 
-  Future<void> startAudioRecorder() async {
-    _dbPeakList = List<double>();
-    final shortPeakList = List<double>();
-
-    _audioPath = await _flutterSound.startRecorder(null, bitRate: 64000, numChannels: 1);
-
+  Stream<ChatComposerState> startAudioRecorder() async* {
+    final peakList = <double>[];
     _flutterSound.setDbLevelEnabled(true);
     _flutterSound.setDbPeakLevelUpdate(1.0);
 
-    _recorderDBPeakSubscription = _flutterSound.onRecorderDbPeakChanged.listen((newDBPeak) {
-      var newPeak = (newDBPeak / 5);
-      _dbPeakList.add(newPeak);
-      shortPeakList.add((newPeak));
-      if (_removeFirstEntry) {
-        shortPeakList.removeRange(0, _cutoffValue);
-      }
-      add(UpdateAudioDBPeak(dbPeakList: shortPeakList));
-    });
+    final voiceFilePath = await _flutterSound.startRecorder(null, bitRate: 64000, numChannels: 1);
 
-    _recorderSubscription = _flutterSound.onRecorderStateChanged.listen((e) {
-      String timer = e.currentPosition.toInt().getTimerFromTimestamp();
-      add(UpdateAudioRecording(timer: timer));
-    });
-  }
-
-  _seekAudioPlayer(int seekValue) async {
-    _isSeeking = false;
-    _replayTime = seekValue;
-    int milliSeconds = (seekValue * 1000);
-
-    add(ReplayAudioTimeUpdate(replayTime: _replayTime));
-
-    await _flutterSound.seekToPlayer(milliSeconds);
-  }
-
-  _replayAudio() async {
-    _replayTime = 0;
-
-    await _flutterSound.startPlayer(_audioPath);
-
-    _playerSubscription = _flutterSound.onPlayerStateChanged.listen((data) {
-      if (data?.duration != data?.currentPosition) {
-        int currentTimer = (data.currentPosition / 1000).round();
-        if (currentTimer > _replayTime && _replayTime <= _dbPeakList.length && !_isSeeking) {
-          _replayTime = currentTimer;
-          add(ReplayAudioTimeUpdate(replayTime: _replayTime));
-        }
-      } else {
-        add(ReplayAudioStopped());
+    _recorderPeakSubscription = _flutterSound.onRecorderDbPeakChanged.listen((newPeak) {
+      peakList.add(newPeak / 5);
+      if (state is ChatComposerComposing) {
+        add(UpdateVoiceRecordingPeak(peakList: peakList));
       }
     });
+
+    _recorderSubscription = _flutterSound.onRecorderStateChanged.listen((event) {
+      if (state is ChatComposerComposing) {
+        String timer = event.currentPosition.toInt().getTimerFromTimestamp();
+        add(UpdateVoiceRecordingTimer(timer: timer));
+      }
+    });
+
+    yield ChatComposerComposing(
+      state: ComposerState.isVoiceRecording,
+      voiceState: ComposerVoiceState.recording,
+      voiceVisiblePeakList: peakList,
+      voiceRecordingTimer: 0,
+      filePath: voiceFilePath,
+      fileType: ChatMsg.typeVoice,
+    );
   }
 
-  _stopAudio() async {
-    await _flutterSound.stopPlayer();
-
-    _isSeeking = false;
-
-    if (_playerSubscription != null) {
-      _playerSubscription.cancel();
-      _playerSubscription = null;
-    }
-  }
-
-  Stream<ChatComposerState> stopAudioRecorder({bool isAborted = false, bool sendAudio}) async* {
+  Stream<ChatComposerState> stopAudioRecorder({bool isAborted, bool sendAudio}) async* {
     try {
       String result;
       if (_flutterSound.isRecording) {
@@ -206,48 +176,117 @@ class ChatComposerBloc extends Bloc<ChatComposerEvent, ChatComposerState> {
         result = "Already stopped";
       }
       print('stopRecorder: $result');
-
-      if (_recorderSubscription != null) {
-        _recorderSubscription.cancel();
-        _recorderSubscription = null;
-      }
-      if (_recorderDBPeakSubscription != null) {
-        _recorderDBPeakSubscription.cancel();
-        _recorderDBPeakSubscription = null;
-      }
+      _recorderSubscription?.cancel();
+      _recorderSubscription = null;
+      _recorderPeakSubscription?.cancel();
+      _recorderPeakSubscription = null;
     } catch (err, trace) {
       print('stopRecorder error: $err ($trace)');
     }
 
     if (isAborted) {
-      if(_flutterSound.isPlaying){
+      if (_flutterSound.isPlaying) {
         await _flutterSound.stopPlayer();
       }
-      yield ChatComposerRecordingAudioAborted();
+      yield ChatComposerPrepared();
     } else {
-      yield ChatComposerRecordingAudioStopped(filePath: _audioPath, dbPeakList: _dbPeakList, sendAudio: sendAudio);
+      if (sendAudio) {
+        yield composingState.copyWith(fileType: ChatMsg.typeVoice);
+      } else {
+        yield composingState.copyWith(voiceState: ComposerVoiceState.stopped);
+      }
     }
   }
 
-  Future<void> startImageOrVideoRecorder(bool pickImage) async {
-    File file;
-    int type;
-    
-    if (pickImage) {
-      file = await ImagePicker.pickImage(source: ImageSource.camera);
-      type = ChatMsg.typeImage;
-    } else {
-      file = await ImagePicker.pickVideo(source: ImageSource.camera);
-      type = ChatMsg.typeVideo;
-    }
+  Stream<ChatComposerState> _startAudioPlayer() async* {
+    int replayTime = 0;
+    final filePath = composingState.filePath;
+    await _flutterSound.startPlayer(filePath);
+
+    _playerSubscription = _flutterSound.onPlayerStateChanged.listen((data) {
+      if (data?.duration != data?.currentPosition) {
+        int currentTimer = (data.currentPosition / 1000).round();
+        final dbPeakList = composingState.voicePeakList;
+        if (currentTimer > replayTime && replayTime <= dbPeakList.length && !_isSeeking) {
+          replayTime = currentTimer;
+          add(ReplayAudioTimeUpdate(replayTime: replayTime));
+        }
+      } else {
+        add(ReplayAudioStopped());
+      }
+    });
+  }
+
+  Future<void> _seekAudioPlayer(int seekValue) async {
+    _isSeeking = false;
+    int milliSeconds = (seekValue * 1000);
+
+    add(ReplayAudioTimeUpdate(replayTime: seekValue));
+
+    await _flutterSound.seekToPlayer(milliSeconds);
+  }
+
+  Stream<ChatComposerState> _stopAudioPlayer() async* {
+    await _flutterSound.stopPlayer();
+    _isSeeking = false;
+    _playerSubscription?.cancel();
+    _playerSubscription = null;
+    yield composingState.copyWith(voiceState: ComposerVoiceState.stopped);
+  }
+
+  Stream<ChatComposerState> startImageOrVideoCapture(int type) async* {
+    File file = ChatMsg.typeImage == type ? await ImagePicker.pickImage(source: ImageSource.camera) : await ImagePicker.pickVideo(source: ImageSource.camera);
     if (file != null) {
-      add(StopImageOrVideoRecording(filePath: file.path, type: type));
+      final filePath = file.path;
+      if (filePath != null) {
+        yield composingState.copyWith(filePath: filePath, fileType: type);
+      }
     } else {
-      add(StopImageOrVideoRecording(filePath: null, type: 0));
+      yield ChatComposerPrepared();
     }
   }
 
-  bool _wasImageOrVideoRecordingCanceled(String filePath, int type) {
-    return filePath == null && type == 0;
+  ChatComposerComposing get composingState => (state as ChatComposerComposing);
+
+  Stream<ChatComposerState> _addAttachment(FileType fileType, [String extension]) async* {
+    String filePath;
+    try {
+      filePath = await FilePicker.getFilePath(type: fileType, fileExtension: extension);
+    } catch (error) {
+      yield composingState.copyWith(error: ChatComposerError.missingFilesPermission);
+    }
+    if (filePath == null) {
+      return;
+    }
+    if (fileType == FileType.video) {
+      filePath = await getVideoPathFromFilePickerInputAsync(filePath);
+    }
+    yield composingState.copyWith(filePath: filePath, fileType: _getDccFileType(fileType));
+  }
+
+  int _getDccFileType(FileType selectedFilePickerType, [int knownType]) {
+    int type = 0;
+    if (knownType == null) {
+      switch (selectedFilePickerType) {
+        case FileType.image:
+          type = ChatMsg.typeImage;
+          break;
+        case FileType.video:
+          type = ChatMsg.typeVideo;
+          break;
+        case FileType.audio:
+          type = ChatMsg.typeAudio;
+          break;
+        case FileType.custom:
+          type = ChatMsg.typeFile;
+          break;
+        case FileType.any:
+          type = ChatMsg.typeFile;
+          break;
+      }
+    } else {
+      type = knownType;
+    }
+    return type;
   }
 }

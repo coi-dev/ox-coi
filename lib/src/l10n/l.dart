@@ -164,6 +164,8 @@ class L {
       translationKey("Audio recording failed, please grant the permissions to record audio in the app settings on your device.");
   static final chatVideoRecordingFailed =
       translationKey("Video recording failed, please grant the permissions to record video in the app settings on your device.");
+  static final chatAttachmentAccessingFailed =
+      translationKey("Accessing files failed, please grant the necessary permissions to access files in the app settings.");
   static final chatFavoriteMessages = translationKey("Your favorite messages");
   static final chatFlagged = translationKey("Flagged");
   static final chatEncryptionStatusChanged = translationKey("Your messages are encrypted from now on.");

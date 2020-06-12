@@ -40,9 +40,6 @@
  * for more details.
  */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:ox_coi/src/customer/model/customer_chat.dart';
 import 'package:ox_coi/src/customer/model/customer_config.dart';

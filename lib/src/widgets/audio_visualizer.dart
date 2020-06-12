@@ -190,7 +190,7 @@ class _VoicePainterState extends State<VoicePainter> {
     );
   }
 
-  callback(bool removeFirstEntry, int cutoffValue) {
-    BlocProvider.of<ChatComposerBloc>(context)?.add(RemoveFirstAudioDBPeak(removeFirstEntry: removeFirstEntry, cutoffValue: cutoffValue));
+  callback(int cutoffValue) {
+    BlocProvider.of<ChatComposerBloc>(context)?.add(RemoveFirstAudioPeak(cutoffValue: cutoffValue));
   }
 }

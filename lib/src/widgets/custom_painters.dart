@@ -99,9 +99,9 @@ class BarPainter extends CustomPainter {
 
       int cutoffIndex = (cutoff / (barWidth + barPainterSpaceWidth)).round();
 
-      callback(true, cutoffIndex);
+      callback(cutoffIndex);
     } else {
-      callback(false, 1);
+      callback(0);
     }
   }
 

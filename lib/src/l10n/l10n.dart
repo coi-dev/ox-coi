@@ -42,7 +42,6 @@
 
 import 'dart:ui';
 
-import 'package:flutter/services.dart';
 import "package:gettext/gettext.dart";
 import "package:gettext_parser/gettext_parser.dart";
 import 'package:ox_coi/src/extensions/string_apis.dart';

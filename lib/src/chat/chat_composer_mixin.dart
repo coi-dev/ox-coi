@@ -54,15 +54,24 @@ import 'package:ox_coi/src/utils/keyMapping.dart';
 import 'package:ox_coi/src/widgets/audio_visualizer.dart';
 import 'package:ox_coi/src/widgets/superellipse_icon.dart';
 
-enum ComposerModeType {
-  compose,
+enum ComposerState {
+  readyToCompose,
   isComposing,
   isVoiceRecording,
+  prepareSending,
 }
 
-mixin ChatComposer {
+enum ComposerVoiceState {
+  recording,
+  locked,
+  stopped,
+  playing,
+  seeking,
+}
+
+mixin ChatComposerComponents {
   Widget buildLeftComposerPart({
-    @required ComposerModeType type,
+    @required ComposerState type,
     @required Function onShowAttachmentChooser,
     @required Function onAudioRecordingAbort,
     @required BuildContext context,
@@ -70,7 +79,7 @@ mixin ChatComposer {
     SuperellipseIcon icon;
     Function onPressed;
     switch (type) {
-      case ComposerModeType.compose:
+      case ComposerState.readyToCompose:
         icon = SuperellipseIcon(
           icon: IconSource.add,
           color: CustomTheme.of(context).onSurface.barely(),
@@ -78,7 +87,8 @@ mixin ChatComposer {
         );
         onPressed = onShowAttachmentChooser;
         break;
-      case ComposerModeType.isComposing:
+      case ComposerState.prepareSending:
+      case ComposerState.isComposing:
         icon = SuperellipseIcon(
           icon: IconSource.add,
           color: CustomTheme.of(context).onSurface.barely(),
@@ -86,7 +96,7 @@ mixin ChatComposer {
         );
         onPressed = null;
         break;
-      case ComposerModeType.isVoiceRecording:
+      case ComposerState.isVoiceRecording:
         icon = SuperellipseIcon(
           icon: IconSource.delete,
           color: CustomTheme.of(context).onSurface.barely(),
@@ -103,26 +113,26 @@ mixin ChatComposer {
 
   Widget buildCenterComposerPart(
       {@required BuildContext context,
-      @required ComposerModeType type,
+      @required ComposerState type,
       @required TextEditingController textController,
       @required Function onTextChanged,
       @required bool isStopped,
       @required bool isPlaying,
       int replayTime = 0,
-      List<double> dbPeakList}) {
+      List<double> peakList}) {
     Widget child;
-    if (ComposerModeType.isVoiceRecording == type) {
+    if (ComposerState.isVoiceRecording == type) {
       if (!isPlaying && !isStopped) {
         child = LayoutBuilder(builder: (context, constraints) {
           return VoicePainter(
-            dbPeakList: dbPeakList,
+            dbPeakList: peakList,
             color: CustomTheme.of(context).onSurface,
             withChild: true,
             width: constraints.maxWidth,
           );
         });
       } else {
-        child = AudioPlayback(dbPeakList: dbPeakList, replayTime: replayTime);
+        child = AudioPlayback(dbPeakList: peakList, replayTime: replayTime);
       }
     } else {
       child = getInputTextField(textController, onTextChanged, context);
@@ -162,7 +172,7 @@ mixin ChatComposer {
   }
 
   List<Widget> buildRightComposerPart({
-    @required ComposerModeType type,
+    @required ComposerState type,
     @required Function onSendText,
     @required Function onRecordAudioPressed,
     @required Function onRecordAudioStopped,
@@ -180,9 +190,9 @@ mixin ChatComposer {
     @required bool isPlaying,
   }) {
     List<Widget> widgets = List();
-    if (type != ComposerModeType.isComposing) {
+    if (type != ComposerState.isComposing) {
       widgets.add(Visibility(
-        visible: type == ComposerModeType.compose,
+        visible: type == ComposerState.readyToCompose,
         child: Row(
           children: <Widget>[
             IconButton(
@@ -205,7 +215,7 @@ mixin ChatComposer {
         ),
       ));
       widgets.add(Visibility(
-        visible: type != ComposerModeType.compose,
+        visible: type != ComposerState.readyToCompose,
         child: SizedBox(
           width: voiceRecordingRecordTextContainerWidth,
           child: Row(
@@ -241,13 +251,13 @@ mixin ChatComposer {
         onTapDown: onMicTapDown,
         child: Container(
           decoration: BoxDecoration(
-            color: isLocked || isStopped || type == ComposerModeType.compose ? Colors.transparent : CustomTheme.of(context).onSurface.barely(),
+            color: isLocked || isStopped || type == ComposerState.readyToCompose ? Colors.transparent : CustomTheme.of(context).onSurface.barely(),
             borderRadius: BorderRadius.all(Radius.circular(voiceRecordingStopLockBackgroundRadius)),
           ),
           child: Row(
             children: <Widget>[
               Visibility(
-                visible: type == ComposerModeType.isVoiceRecording && !isStopped,
+                visible: type == ComposerState.isVoiceRecording && !isStopped,
                 child: IconButton(
                   icon: SuperellipseIcon(
                     icon: isLocked ? IconSource.lock : IconSource.openLock,
@@ -260,7 +270,7 @@ mixin ChatComposer {
                 key: Key(KeyChatComposerMixinVoiceComposeAdaptiveSuperellipse),
               ),
               Visibility(
-                visible: type == ComposerModeType.compose,
+                visible: type == ComposerState.readyToCompose,
                 child: IconButton(
                   icon: SuperellipseIcon(
                     icon: IconSource.mic,
@@ -271,7 +281,7 @@ mixin ChatComposer {
                 ),
               ),
               Visibility(
-                visible: type == ComposerModeType.isVoiceRecording && !isStopped,
+                visible: type == ComposerState.isVoiceRecording && !isStopped,
                 child: IconButton(
                   icon: SuperellipseIcon(
                     icon: IconSource.stopPlay,
@@ -282,7 +292,7 @@ mixin ChatComposer {
                 ),
               ),
               Visibility(
-                visible: type == ComposerModeType.isVoiceRecording && isStopped,
+                visible: type == ComposerState.isVoiceRecording && isStopped,
                 child: Container(
                     padding: EdgeInsets.only(left: voiceRecordingStopPlayLeftPadding),
                     child: Row(
