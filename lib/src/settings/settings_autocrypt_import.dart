@@ -115,34 +115,36 @@ class _SettingsAutocryptImportState extends State<SettingsAutocryptImport> {
           )
         ],
       ),
-      body: BlocBuilder(
-        bloc: _settingsAutocryptBloc,
-        builder: (context, state) {
-          if (state is SettingsAutocryptStatePrepared || state is SettingsAutocryptStateFailure) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: formVerticalPadding),
-                      child: Text(L10n.get(L.autocryptCompleteImport)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: formVerticalPadding),
-                      child: Text(L10n.getFormatted(L.autocryptImportHintX, [setupCodeStart])),
-                    ),
-                    _setupCodeField,
-                  ],
+      body: SingleChildScrollView(
+        child: BlocBuilder(
+          bloc: _settingsAutocryptBloc,
+          builder: (context, state) {
+            if (state is SettingsAutocryptStatePrepared || state is SettingsAutocryptStateFailure) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: formHorizontalPadding, vertical: formVerticalPadding),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: formVerticalPadding),
+                        child: Text(L10n.get(L.autocryptCompleteImport)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: formVerticalPadding),
+                        child: Text(L10n.getFormatted(L.autocryptImportHintX, [setupCodeStart])),
+                      ),
+                      _setupCodeField,
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return StateInfo(showLoading: true);
-          }
-        },
+              );
+            } else {
+              return StateInfo(showLoading: true);
+            }
+          },
+        ),
       ),
     );
   }
