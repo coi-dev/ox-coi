@@ -44,6 +44,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_dialog_action.dart';
 import 'package:ox_coi/src/l10n/l.dart';
@@ -55,7 +56,7 @@ import '../utils/keyMapping.dart';
 
 showNavigatableBottomSheet({
   @required BuildContext context,
-  @required Widget bottomSheet,
+  @required AdaptiveBottomSheet bottomSheet,
   @required Navigatable navigatable,
   Navigatable previousNavigatable,
 }) {

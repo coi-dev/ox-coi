@@ -47,6 +47,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet.dart';
 import 'package:ox_coi/src/adaptive_widgets/adaptive_bottom_sheet_action.dart';
 import 'package:ox_coi/src/brandable/brandable_icon.dart';
 import 'package:ox_coi/src/brandable/custom_theme.dart';
@@ -661,9 +662,8 @@ class _ChatState extends State<Chat> with ChatComposer, ChatCreateMixin, InviteM
     showNavigatableBottomSheet(
         context: context,
         navigatable: Navigatable(Type.addAttachmentModal),
-        bottomSheet: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+        bottomSheet: AdaptiveBottomSheet(
+          actions: <Widget>[
             AdaptiveBottomSheetAction(
               key: Key(keyAttachmentAddImage),
               title: Text(L10n.get(L.image)),
