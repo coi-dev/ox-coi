@@ -143,16 +143,6 @@ class ResetComposer extends ChatComposerEvent {}
 
 abstract class ChatComposerState {}
 
-class ChatComposerRecordingAudioStopped extends ChatComposerState {
-  String filePath;
-  List<double> peakList;
-  bool sendAudio;
-
-  ChatComposerRecordingAudioStopped({@required this.filePath, @required this.peakList, @required this.sendAudio});
-}
-
-class ChatComposerReplayStopped extends ChatComposerState {}
-
 class ChatComposerPrepared extends ChatComposerState {}
 
 class ChatComposerComposing extends ChatComposerState {
@@ -162,7 +152,7 @@ class ChatComposerComposing extends ChatComposerState {
   final String filePath;
   final int fileType;
   final bool voicePermissionGranted;
-  final int voiceRecordingTimer;
+  final String voiceRecordingTimer;
   final int voiceReplayTimer;
   final List<double> voicePeakList;
   final List<double> voiceVisiblePeakList;
@@ -194,7 +184,6 @@ class ChatComposerComposing extends ChatComposerState {
     List<double> voicePeakList,
     List<double> voiceVisiblePeakList,
     ChatComposerError error,
-
   }) {
     return ChatComposerComposing(
       state: state ?? this.state,

@@ -381,15 +381,15 @@ class _ChatState extends State<Chat> with ChatComposerComponents, ChatCreateMixi
                             ));
                             widgets.addAll(buildRightComposerPart(
                               context: context,
-                              onRecordAudioPressed: voicePermissionGranted ? _onRecordAudioPressed : null,
+                              onRecordAudioPressed: _onRecordAudioPressed,
                               onRecordAudioStopped: voicePermissionGranted ? _onAudioRecordingStopped : null,
-                              onRecordAudioStoppedLongPress: _onAudioRecordingStoppedLongPress,
+                              onRecordAudioStoppedLongPress: voicePermissionGranted ? _onAudioRecordingStoppedLongPress : null,
                               onRecordAudioLocked: _onAudioRecordingLocked,
                               onAudioPlaying: _onAudioPlaying,
                               onAudioPlayingStopped: _onAudioPlayingStopped,
                               onRecordVideoPressed: _onRecordVideoPressed,
                               onCaptureImagePressed: _onCaptureImagePressed,
-                              onMicTapDown: _onMicTapDown,
+                              onMicTap: _onMicTap,
                               type: type,
                               onSendText: _onPrepareMessageSend,
                               text: "${state.voiceRecordingTimer}",
@@ -496,7 +496,7 @@ class _ChatState extends State<Chat> with ChatComposerComponents, ChatCreateMixi
     }
   }
 
-  _onMicTapDown(TapDownDetails details) {
+  _onMicTap([TapDownDetails details]) {
     vibrateMedium();
     _chatComposerBloc.add(CheckPermissions());
   }

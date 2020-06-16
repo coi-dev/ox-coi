@@ -182,7 +182,7 @@ mixin ChatComposerComponents {
     @required Function onAudioPlayingStopped,
     @required Function onRecordVideoPressed,
     @required Function onCaptureImagePressed,
-    @required Function onMicTapDown,
+    @required Function onMicTap,
     @required BuildContext context,
     @required String text,
     @required bool isLocked,
@@ -248,7 +248,6 @@ mixin ChatComposerComponents {
       widgets.add(GestureDetector(
         onLongPressStart: onRecordAudioPressed,
         onLongPressEnd: onRecordAudioStoppedLongPress,
-        onTapDown: onMicTapDown,
         child: Container(
           decoration: BoxDecoration(
             color: isLocked || isStopped || type == ComposerState.readyToCompose ? Colors.transparent : CustomTheme.of(context).onSurface.barely(),
@@ -277,7 +276,7 @@ mixin ChatComposerComponents {
                     color: CustomTheme.of(context).onSurface.barely(),
                     iconColor: CustomTheme.of(context).accent,
                   ),
-                  onPressed: () {},
+                  onPressed: onMicTap,
                 ),
               ),
               Visibility(
