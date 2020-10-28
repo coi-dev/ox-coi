@@ -1,3 +1,7 @@
+# Project on hold for now
+**Please note that the OX COI Messenger project is currently not active.** 
+In the past this project was hindered by the lack of Rust expertise on side of the project maintainers. Work is underway to create a new approach which also allows users to manage normal email messages. If and when we have something to announce, we will update this section. For now, we keep this reference for interested developers. 
+
 # OX COI Messenger
 
 OX COI Messenger is a mail based chat app. This app provides the user interface for an IMAP / SMTP based chat on Android and iOS.
